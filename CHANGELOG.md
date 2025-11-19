@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.0...v1.3.1) (2025-11-19)
+
+### Bug Fixes
+
+* **e2e:** remove custom page fixture to prevent event loop conflict ([571595a](https://github.com/terrylica/gapless-crypto-clickhouse/commit/571595a31d88becdf12abd6c94c0c197257f2f0f)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+
 ## [1.3.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.2.1...v1.3.0) (2025-11-19)
 
 ### Features
