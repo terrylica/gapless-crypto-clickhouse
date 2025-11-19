@@ -11,11 +11,13 @@ Implemented (2025-11-18)
 ADR-0008 validation (VALIDATION_REPORT.md) identified a port conflict preventing CH-UI web interface from starting:
 
 **Current State**:
+
 - ClickHouse container: `gapless-clickhouse` running on non-standard ports (9001 native, 8124 HTTP)
 - QuestDB container: `gapless-questdb` occupying standard port 9000
 - CH-UI container: `gapless-ch-ui` not started, expects ClickHouse at standard port 8123
 
 **Impact**:
+
 - CH-UI web interface unavailable (4/5 visualization tools operational, 1/5 blocked)
 - ADR-0008 implementation incomplete (CH-UI documented but not functional)
 - Non-standard ports require manual configuration for future tools
@@ -28,11 +30,13 @@ ADR-0008 validation (VALIDATION_REPORT.md) identified a port conflict preventing
 **Branch**: main-clickhouse (ClickHouse-only, QuestDB removed in v4.0.0)
 
 **Database Status**:
+
 - ✅ ClickHouse: Primary database (v24.1-alpine), functional on ports 9001/8124
 - ⚠️ QuestDB: Legacy container still running (v7.4.3), **no longer used** in v4.0.0
 - ❌ CH-UI: Not started due to port configuration mismatch
 
 **Container State**:
+
 ```bash
 $ docker ps | grep -E "clickhouse|questdb|ch-ui"
 gapless-clickhouse   Up 7 hours   0.0.0.0:9001->9000/tcp, 0.0.0.0:8124->8123/tcp
@@ -55,19 +59,23 @@ gapless-questdb      Up 33 hours  0.0.0.0:9000->9000/tcp
 ### Implementation Strategy
 
 **Phase 1: Stop QuestDB** (no data loss, container preserved)
+
 - Stop QuestDB container to free port 9000
 - Container and volumes remain intact (can be restarted if needed)
 
 **Phase 2: Reconfigure ClickHouse** (minimal downtime)
+
 - Stop existing ClickHouse container (gapless-clickhouse)
 - Remove container (volumes persist, no data loss)
 - Start ClickHouse via docker-compose.yml (standard ports 9000/8123)
 
 **Phase 3: Start CH-UI** (immediate benefit)
+
 - Start CH-UI via docker-compose.yml
 - Connects to ClickHouse at standard port 8123 (internal Docker network)
 
 **Phase 4: Validation** (comprehensive checks)
+
 - Run validation script (should pass without port auto-detection)
 - Verify CH-UI accessible at http://localhost:5521
 - Confirm all 5 visualization tools operational
@@ -142,6 +150,7 @@ bash scripts/validate-clickhouse-tools.sh
 ```
 
 **Validation Criteria**:
+
 - ✅ ClickHouse on standard ports (9000/8123)
 - ✅ CH-UI accessible at http://localhost:5521
 - ✅ All visualization tools pass validation (6/6 critical tests)
@@ -152,22 +161,28 @@ bash scripts/validate-clickhouse-tools.sh
 ### Automated Validation Suite
 
 **Port Verification**:
+
 ```bash
 docker port gapless-clickhouse 9000 | grep -q "0.0.0.0:9000"
 docker port gapless-clickhouse 8123 | grep -q "0.0.0.0:8123"
 ```
+
 **Expected**: Both commands succeed (standard ports active)
 
 **CH-UI Accessibility**:
+
 ```bash
 curl -sf http://localhost:5521 | grep -q "CH-UI"
 ```
+
 **Expected**: Exit code 0 (CH-UI responsive)
 
 **Comprehensive Validation**:
+
 ```bash
 bash scripts/validate-clickhouse-tools.sh
 ```
+
 **Expected**: 6/6 critical tests passed (was 5/5 before, now includes CH-UI)
 
 ### Manual Review Checklist
@@ -207,10 +222,12 @@ bash scripts/validate-clickhouse-tools.sh
 **Implementation**: Manually configure CH-UI environment variables to use port 8124.
 
 **Pros**:
+
 - No ClickHouse downtime
 - QuestDB remains accessible
 
 **Cons**:
+
 - Non-standard ports complicate future tool integration
 - Manual configuration for every tool
 - Validation scripts need permanent port auto-detection
@@ -223,9 +240,11 @@ bash scripts/validate-clickhouse-tools.sh
 **Implementation**: Map ClickHouse to different external ports (e.g., 9002/8125), update CH-UI config.
 
 **Pros**:
+
 - Both QuestDB and ClickHouse accessible simultaneously
 
 **Cons**:
+
 - Unnecessary complexity (QuestDB not used in v4.0.0)
 - Non-standard ports persist
 - Requires docker-compose.yml modification
@@ -238,9 +257,11 @@ bash scripts/validate-clickhouse-tools.sh
 **Implementation**: Modify docker-compose.yml to use non-standard ports for ClickHouse.
 
 **Pros**:
+
 - QuestDB and ClickHouse coexist
 
 **Cons**:
+
 - Permanently commits to non-standard ports
 - Requires documentation updates
 - Complicates v4.0.0 release (should use standard ports)

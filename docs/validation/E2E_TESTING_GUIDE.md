@@ -11,10 +11,12 @@
 This guide covers end-to-end (E2E) testing of ClickHouse web interfaces using Playwright 1.56+ and pytest 8.x. E2E tests validate actual user workflows with screenshot evidence for visual regression detection.
 
 **Test Targets**:
+
 - CH-UI Dashboard (localhost:5521)
 - ClickHouse Play (localhost:8123/play)
 
 **SLOs**:
+
 - **Correctness**: Validates actual UI workflows (no mocks)
 - **Observability**: Screenshots captured for all test states
 - **Maintainability**: Accessibility-first locators resist UI changes
@@ -74,11 +76,11 @@ tests/e2e/
 
 ### Test Categories
 
-| Category | Marker | Purpose |
-|----------|--------|---------|
-| E2E | `@pytest.mark.e2e` | End-to-end browser automation tests |
-| Async | `@pytest.mark.asyncio` | Async test execution (required for Playwright) |
-| Timeout | `@pytest.mark.timeout(N)` | Explicit timeout override (default: 300s) |
+| Category | Marker                                       | Purpose                                                                  |
+| -------- | -------------------------------------------- | ------------------------------------------------------------------------ |
+| E2E      | `@pytest.mark.e2e`                           | End-to-end browser automation tests                                      |
+| Async    | `@pytest.mark.asyncio(loop_scope="session")` | Async test execution with session-scoped event loop (pytest-playwright-asyncio) |
+| Timeout  | `@pytest.mark.timeout(N)`                    | Explicit timeout override (default: 300s)                                |
 
 ---
 
@@ -92,7 +94,7 @@ from playwright.async_api import Page, expect
 from pathlib import Path
 
 @pytest.mark.e2e
-@pytest.mark.asyncio
+@pytest.mark.asyncio(loop_scope="session")
 async def test_example(page: Page, screenshot_dir: Path):
     """
     Test description.
@@ -126,9 +128,31 @@ async def test_example(page: Page, screenshot_dir: Path):
     assert await input_field.is_enabled()
 ```
 
+### pytest-asyncio Configuration
+
+pytest-playwright-asyncio requires session-scoped event loop configuration in `pytest.ini`:
+
+```ini
+# pytest.ini
+asyncio_mode = auto
+asyncio_default_fixture_loop_scope = session
+```
+
+**Why session scope?**
+- pytest-playwright-asyncio provides async fixtures (e.g., `page`) that expect a session-scoped event loop
+- Function-scoped loops cause `RuntimeError: Runner.run() cannot be called from a running event loop`
+- All E2E tests must use `@pytest.mark.asyncio(loop_scope="session")` for compatibility
+
+**Package Requirements**:
+- `pytest-playwright-asyncio>=0.7.1` (official async support, replaces `pytest-playwright`)
+- `pytest-asyncio>=0.26.0` (required version for session-scoped fixtures)
+
+See `pyproject.toml` dev dependencies for exact versions.
+
 ### Locator Strategies (Priority Order)
 
 1. **Accessibility-first** (recommended):
+
    ```python
    # By role and name
    button = page.get_by_role("button", name="Execute")
@@ -137,6 +161,7 @@ async def test_example(page: Page, screenshot_dir: Path):
    ```
 
 2. **Fallback to CSS selectors**:
+
    ```python
    # When accessibility attributes not available
    input = page.locator("textarea, input[type=text]").first
@@ -144,6 +169,7 @@ async def test_example(page: Page, screenshot_dir: Path):
    ```
 
 3. **Avoid fragile selectors**:
+
    ```python
    # ❌ Brittle - breaks on DOM changes
    button = page.locator("div > div > button:nth-child(3)")
@@ -178,6 +204,7 @@ playwright show-trace tmp/validation-artifacts/traces/test-name-trace.zip
 ```
 
 Trace viewer shows:
+
 - Network requests/responses
 - Console logs
 - DOM snapshots at each step
@@ -191,11 +218,13 @@ Trace viewer shows:
 **Symptom**: `TimeoutError: Timeout 5000ms exceeded`
 
 **Causes**:
+
 1. Element selector incorrect
 2. Page still loading (need to wait for networkidle)
 3. Element hidden/disabled
 
 **Fix**:
+
 ```python
 # Wait for page load
 await page.goto("http://localhost:5521", wait_until="networkidle")
@@ -213,11 +242,13 @@ if await page.locator("button").is_visible():
 **Symptom**: Test passes sometimes, fails other times
 
 **Causes**:
+
 1. Race conditions (async operations)
 2. Network timing variability
 3. Animation/transition interference
 
 **Fix**:
+
 ```python
 # Use Playwright's auto-waiting
 await expect(page.locator(".result")).to_be_visible()  # Retries until visible
@@ -251,7 +282,7 @@ element = page.locator(".result-table")
 await element.screenshot(path="element.png")
 
 # Screenshot on failure (automatic via conftest.py)
-# No manual capture needed - pytest-playwright handles it
+# No manual capture needed - pytest-playwright-asyncio handles it
 ```
 
 ---
@@ -280,6 +311,22 @@ test-e2e:
 **Browser Caching**: Playwright browsers (~150MB) cached for 30-60s speedup.
 
 **Artifacts**: Screenshots and traces uploaded on failure (retention: 7 days).
+
+### CI Test Execution
+
+**CI Scope** (GitHub Actions):
+- ✅ Runs: `tests/e2e/test_clickhouse_play.py` (6 tests) - ClickHouse Play interface validation
+- ❌ Skips: `tests/e2e/test_ch_ui_dashboard.py` (6 tests) - CH-UI requires interactive configuration
+
+**Rationale**: CH-UI requires web-based connection configuration (not CI-friendly). ClickHouse Play provides sufficient E2E framework validation and async event loop testing.
+
+**Local Testing** (full 12-test suite):
+```bash
+docker-compose up -d
+uv run pytest tests/e2e/ -v
+```
+
+See `.github/workflows/ci.yml` lines 131-132 for CI configuration details.
 
 ### Scheduled Validation
 
@@ -318,6 +365,7 @@ Comprehensive E2E validation runs every 6 hours via `.github/workflows/e2e-valid
 **Error**: `Environment Error: Docker daemon not running`
 
 **Fix**:
+
 ```bash
 docker compose up -d
 ```
@@ -327,6 +375,7 @@ docker compose up -d
 **Error**: `ClickHouse container not healthy`
 
 **Fix**:
+
 ```bash
 # Check container status
 docker ps --filter name=clickhouse
@@ -343,6 +392,7 @@ docker compose restart clickhouse
 **Error**: `Playwright executable doesn't exist`
 
 **Fix**:
+
 ```bash
 # Install browsers with OS dependencies
 uv run playwright install chromium --with-deps
@@ -353,6 +403,7 @@ uv run playwright install chromium --with-deps
 **Error**: `Port 8123 not accessible`
 
 **Fix**:
+
 ```bash
 # Check what's using the port
 lsof -i :8123
@@ -366,12 +417,12 @@ lsof -i :8123
 
 ### Test Execution Times
 
-| Layer | Tests | Duration | Parallelizable |
-|-------|-------|----------|----------------|
-| Static | - | ~5s | No |
-| Unit | 71 | ~5-10s | Yes |
-| Integration | ~10 | ~20-30s | Limited |
-| E2E | ~12 | ~30-60s | Limited |
+| Layer       | Tests | Duration | Parallelizable |
+| ----------- | ----- | -------- | -------------- |
+| Static      | -     | ~5s      | No             |
+| Unit        | 71    | ~5-10s   | Yes            |
+| Integration | ~10   | ~20-30s  | Limited        |
+| E2E         | ~12   | ~30-60s  | Limited        |
 
 ### Optimization Strategies
 

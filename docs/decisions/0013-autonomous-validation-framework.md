@@ -71,7 +71,7 @@ Current validation gaps for ClickHouse integration (v1.0.0):
 
 **Pros**:
 
-- **Native Python integration** (pytest-playwright)
+- **Native Python integration** (pytest-playwright-asyncio)
 - **AI-powered test agents** (Planner, Generator, Healer in 1.56+)
 - **Auto-waiting mechanisms** (eliminates flaky tests)
 - **Screenshot validation** with Pixelmatch
@@ -107,7 +107,7 @@ Current validation gaps for ClickHouse integration (v1.0.0):
 
 2. **PEP 723 Self-Contained Bootstrap**:
    - `scripts/run_validation.py` with inline dependencies
-   - Auto-installs: playwright, pytest, pytest-playwright, pytest-cov
+   - Auto-installs: playwright, pytest, pytest-playwright-asyncio, pytest-asyncio>=0.26.0, pytest-cov
    - Zero manual setup (uv handles everything)
 
 3. **Comprehensive Test Coverage**:

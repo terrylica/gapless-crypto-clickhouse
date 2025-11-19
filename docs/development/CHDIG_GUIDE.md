@@ -14,27 +14,32 @@
 ## Installation
 
 ### Homebrew (macOS)
+
 ```bash
 brew install chdig
 ```
 
 ### Scoop (Windows)
+
 ```bash
 scoop bucket add extras
 scoop install extras/chdig
 ```
 
 ### AUR (Arch Linux)
+
 ```bash
 yay -S chdig-latest-bin
 ```
 
 ### Cargo (All Platforms)
+
 ```bash
 cargo install chdig
 ```
 
 ### Verify Installation
+
 ```bash
 which chdig
 # Output: /opt/homebrew/bin/chdig (or similar)
@@ -46,6 +51,7 @@ chdig --version
 ## Quick Start
 
 ### Basic Usage
+
 ```bash
 # Monitor local ClickHouse instance
 chdig --host localhost --port 9000
@@ -58,6 +64,7 @@ chdig --cluster my_cluster
 ```
 
 ### Connection via Docker
+
 ```bash
 # Monitor Docker ClickHouse
 chdig --host localhost --port 9000
@@ -84,6 +91,7 @@ Press keys to switch views:
 **What it shows**: CPU/memory usage broken down by query stages
 
 **How to use**:
+
 1. Press `f` to open flamegraph view
 2. Navigate with arrow keys
 3. Press `Enter` to zoom into section
@@ -91,6 +99,7 @@ Press keys to switch views:
 5. Press `q` to exit flamegraph
 
 **Use cases**:
+
 - Identify slow query stages (JOINs, aggregations, filters)
 - Spot memory-hungry operations
 - Optimize query performance
@@ -98,9 +107,11 @@ Press keys to switch views:
 ### Query Monitoring
 
 #### Slow Queries View (`q`)
+
 Shows queries exceeding configured threshold.
 
 **Columns**:
+
 - Query ID
 - User
 - Elapsed time
@@ -114,9 +125,11 @@ Shows queries exceeding configured threshold.
 **Action**: Identify and optimize slow queries
 
 #### Recent Queries View (`r`)
+
 Shows last N executed queries.
 
 **Columns**:
+
 - Timestamp
 - Query ID
 - Elapsed time
@@ -128,6 +141,7 @@ Shows last N executed queries.
 ### Cluster Monitoring (`s`)
 
 **Shows**:
+
 - Server hostname
 - Status (healthy/degraded)
 - CPU usage
@@ -140,6 +154,7 @@ Shows last N executed queries.
 ## Configuration
 
 ### Connection Options
+
 ```bash
 # Host and port
 chdig --host clickhouse.example.com --port 9000
@@ -155,6 +170,7 @@ chdig --host secure-ch.example.com --secure
 ```
 
 ### Monitoring Options
+
 ```bash
 # Slow query threshold (seconds)
 chdig --slow-query-threshold 5.0
@@ -167,6 +183,7 @@ chdig --history --from '2024-01-01' --to '2024-01-31'
 ```
 
 ### Cluster Mode
+
 ```bash
 # Monitor entire cluster
 chdig --cluster production_cluster
@@ -183,6 +200,7 @@ chdig --cluster production_cluster --shard 1 --replica 2
 ### Development
 
 #### Monitor Ingestion Performance
+
 ```bash
 # Terminal 1: Run chdig
 chdig --host localhost --port 9000
@@ -197,6 +215,7 @@ python -m gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader
 ```
 
 #### Optimize Queries
+
 ```bash
 # Run chdig
 chdig --host localhost --port 9000
@@ -220,6 +239,7 @@ docker exec gapless-clickhouse clickhouse-client --query "
 ### Debugging
 
 #### Identify Memory Leaks
+
 1. Start chdig: `chdig --host localhost --port 9000`
 2. Press `p` for query processors view
 3. Watch memory column during query execution
@@ -227,6 +247,7 @@ docker exec gapless-clickhouse clickhouse-client --query "
 5. Identify stages consuming excessive memory
 
 #### Find Long-Running Queries
+
 1. Start chdig
 2. Press `r` for recent queries
 3. Look for queries with high elapsed time
@@ -248,29 +269,31 @@ chdig --host prod-clickhouse --port 9000 --secure --user monitor --password $MON
 
 ## Keyboard Shortcuts
 
-| Key | Action |
-|-----|--------|
-| `q` | Slow queries view |
-| `r` | Recent queries view |
-| `p` | Query processors view |
-| `b` | Backups status |
-| `n` | Replicas status |
-| `s` | Servers list (cluster) |
-| `f` | Flamegraph visualization |
-| `h` | Help (shortcuts) |
-| `↑`/`↓` | Navigate list |
-| `Enter` | Zoom in (flamegraph) |
-| `Esc` | Zoom out (flamegraph) |
-| `Ctrl+C` or `q` | Quit |
+| Key             | Action                   |
+| --------------- | ------------------------ |
+| `q`             | Slow queries view        |
+| `r`             | Recent queries view      |
+| `p`             | Query processors view    |
+| `b`             | Backups status           |
+| `n`             | Replicas status          |
+| `s`             | Servers list (cluster)   |
+| `f`             | Flamegraph visualization |
+| `h`             | Help (shortcuts)         |
+| `↑`/`↓`         | Navigate list            |
+| `Enter`         | Zoom in (flamegraph)     |
+| `Esc`           | Zoom out (flamegraph)    |
+| `Ctrl+C` or `q` | Quit                     |
 
 ## Flamegraph Interpretation
 
 ### CPU Flamegraph
+
 - **Wide boxes**: Operations consuming most CPU time
 - **Deep stacks**: Complex nested operations
 - **Hot paths**: Wide boxes at top of stack (optimization targets)
 
 **Example**:
+
 ```
 ┌────────────────────────────────────────────┐
 │          Aggregation (50%)                 │  <- Optimize this
@@ -279,13 +302,16 @@ chdig --host prod-clickhouse --port 9000 --secure --user monitor --password $MON
 │   (10%)   │        (40%)                   │
 └───────────┴────────────────────────────────┘
 ```
+
 **Interpretation**: JOIN consumes 40% of CPU, aggregation 50% → Optimize JOIN first, then aggregation
 
 ### Memory Flamegraph
+
 - **Wide boxes**: Operations allocating most memory
 - **Persistent boxes**: Memory not freed (potential leak)
 
 **Example**:
+
 ```
 ┌────────────────────────────────────────────┐
 │      HashTable (80%)                       │  <- High memory usage
@@ -293,11 +319,13 @@ chdig --host prod-clickhouse --port 9000 --secure --user monitor --password $MON
 │      GROUP BY                              │
 └────────────────────────────────────────────┘
 ```
+
 **Interpretation**: GROUP BY hash table consuming 80% memory → Consider using LIMIT or pre-aggregation
 
 ## Troubleshooting
 
 ### Connection Failed
+
 ```bash
 # Check ClickHouse running
 docker ps | grep clickhouse
@@ -311,9 +339,11 @@ chdig --host localhost --port 8123  # ❌ Wrong (HTTP port)
 ```
 
 ### No Data Displayed
+
 **Cause**: ClickHouse 21.2+ required
 
 **Solution**:
+
 ```bash
 # Check ClickHouse version
 docker exec gapless-clickhouse clickhouse-client --query "SELECT version()"
@@ -323,35 +353,40 @@ image: clickhouse/clickhouse-server:24.1-alpine  # ✅ Supported
 ```
 
 ### Flamegraph Empty
+
 **Cause**: No queries running or system.query_log disabled
 
 **Solution**:
+
 1. Run a query in another terminal
 2. Immediately switch to chdig and press `f`
 3. Ensure `system.query_log` enabled (default in Docker)
 
 ### Pre-Alpha Warnings
+
 **Issue**: Interface may change in future versions
 
 **Mitigation**:
+
 - Pin version in Homebrew: `brew pin chdig`
 - Test updates in non-production first
 - Monitor changelog: https://github.com/azat/chdig/releases
 
 ## Comparison with Other Tools
 
-| Feature | chdig | CH-UI | clickhouse-client |
-|---------|-------|-------|-------------------|
-| Interface | TUI | Web | CLI |
-| Flamegraph | ✅ Yes | ❌ No | ❌ No |
-| Real-time Metrics | ✅ Yes | ✅ Yes | ❌ No |
-| Query Execution | ❌ No | ✅ Yes | ✅ Yes |
-| Cluster View | ✅ Yes | ⚠️ Limited | ❌ No |
-| Best For | Monitoring | Exploration | Automation |
+| Feature           | chdig      | CH-UI       | clickhouse-client |
+| ----------------- | ---------- | ----------- | ----------------- |
+| Interface         | TUI        | Web         | CLI               |
+| Flamegraph        | ✅ Yes     | ❌ No       | ❌ No             |
+| Real-time Metrics | ✅ Yes     | ✅ Yes      | ❌ No             |
+| Query Execution   | ❌ No      | ✅ Yes      | ✅ Yes            |
+| Cluster View      | ✅ Yes     | ⚠️ Limited  | ❌ No             |
+| Best For          | Monitoring | Exploration | Automation        |
 
 ## Integration with Other Tools
 
 ### chdig + clickhouse-client Workflow
+
 ```bash
 # Terminal 1: Monitor performance
 chdig --host localhost --port 9000
@@ -367,6 +402,7 @@ docker exec -it gapless-clickhouse clickhouse-client
 ```
 
 ### chdig + CH-UI Workflow
+
 ```bash
 # Start chdig
 chdig --host localhost --port 9000
@@ -381,18 +417,21 @@ open http://localhost:5521
 ## Best Practices
 
 ### Development
+
 - ✅ Run chdig during ingestion testing
 - ✅ Use flamegraph to identify slow stages
 - ✅ Monitor memory usage for large queries
 - ❌ Don't rely on chdig for query execution (use clickhouse-client)
 
 ### Performance Tuning
+
 - ✅ Identify slow queries first (`q` view)
 - ✅ Use flamegraph to pinpoint bottlenecks
 - ✅ Test optimization impact (before/after flamegraphs)
 - ❌ Don't optimize queries without profiling first
 
 ### Production (Future)
+
 - ⚠️ Test interface stability before deploying
 - ✅ Use tmux/screen for persistent monitoring
 - ✅ Set up alerts based on slow query threshold

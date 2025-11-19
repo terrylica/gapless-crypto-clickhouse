@@ -13,6 +13,7 @@ Screenshot baselines provide visual regression detection for ClickHouse web inte
 **Purpose**: Evidence-based validation - screenshots prove correct UI rendering across releases.
 
 **SLOs**:
+
 - **Correctness**: Visual regressions caught before production
 - **Maintainability**: Clear baseline update process
 - **Observability**: Screenshot diffs for all detected changes
@@ -83,11 +84,13 @@ Examples:
 ### When to Update
 
 Update baselines when:
+
 - ✅ **Intentional UI changes**: New features, redesigns, UX improvements
 - ✅ **Dependency updates**: ClickHouse UI library updates changing appearance
 - ✅ **Bug fixes**: Correcting visual defects
 
 DO NOT update baselines for:
+
 - ❌ **Test flakiness**: Random pixel differences (fix test instead)
 - ❌ **Unintentional regressions**: Visual bugs (fix code instead)
 - ❌ **CI vs local differences**: Environment-specific rendering (fix environment)
@@ -107,6 +110,7 @@ uv run scripts/run_validation.py --e2e-only
 #### Step 2: Visual Review
 
 Open both screenshots side-by-side:
+
 ```bash
 # Example: Compare CH-UI landing page
 open tmp/validation-artifacts/screenshots/ch-ui-landing.png
@@ -114,6 +118,7 @@ open tests/e2e/screenshots/ch-ui-landing.png
 ```
 
 **Review Checklist**:
+
 - [ ] UI elements aligned correctly
 - [ ] Text readable and properly formatted
 - [ ] Colors/styles consistent with design
@@ -161,6 +166,7 @@ git commit -m "chore(e2e): update all baselines after ClickHouse UI v2.0 upgrade
 **Behavior**: E2E tests capture screenshots for evidence, but **do not automatically compare** against baselines yet.
 
 **Rationale**: Manual review provides:
+
 - Context-aware decision making
 - Flexibility for acceptable variations
 - Clear audit trail via git commits
@@ -168,12 +174,14 @@ git commit -m "chore(e2e): update all baselines after ClickHouse UI v2.0 upgrade
 ### Future Enhancement: Automated Comparison
 
 **Planned** (future ADR):
+
 - Playwright's `expect(page).to_have_screenshot()` for automated comparison
 - Pixel difference thresholds (`maxDiffPixels`, `threshold`)
 - Automatic diff image generation
 - CI warnings (not failures) for visual changes
 
 Example future implementation:
+
 ```python
 # Future: Automated comparison
 await expect(page).to_have_screenshot(
@@ -252,6 +260,7 @@ await page.screenshot(path="stable.png")
 ### Baseline Consistency
 
 **Challenge**: Screenshots may differ between local and CI environments due to:
+
 - Font rendering differences (OS-specific)
 - Browser version differences
 - GPU/rendering engine variations
@@ -307,11 +316,13 @@ When visual regressions detected in CI:
 **Symptom**: Test passes locally but fails in CI (or vice versa).
 
 **Causes**:
+
 - Font rendering differences (macOS vs Linux)
 - Browser version mismatch
 - Viewport size mismatch
 
 **Fix**:
+
 ```bash
 # Regenerate baselines in CI
 # Download CI artifacts
@@ -323,6 +334,7 @@ When visual regressions detected in CI:
 **Symptom**: Minor pixel differences causing false positives.
 
 **Future Fix** (when automated comparison enabled):
+
 ```python
 # Allow small pixel differences
 await expect(page).to_have_screenshot(
@@ -337,6 +349,7 @@ await expect(page).to_have_screenshot(
 **Symptom**: Git repository growing due to large screenshots.
 
 **Fix**:
+
 - Use PNG optimization: `optipng tests/e2e/screenshots/*.png`
 - Capture element screenshots instead of full page
 - Use Git LFS for binary files (if needed)

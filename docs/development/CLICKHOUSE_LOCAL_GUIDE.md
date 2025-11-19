@@ -5,12 +5,14 @@
 `clickhouse-local` is an embedded ClickHouse engine that queries local and remote files using full ClickHouse SQL without requiring a running server. Perfect for file validation, format conversion, and ad-hoc analysis.
 
 **Use Cases**:
+
 - Pre-ingestion CSV/Parquet validation
 - Format conversion (CSV ↔ JSON ↔ Parquet)
 - Ad-hoc file analysis without database
 - ETL preprocessing and validation
 
 **NOT Suitable For**:
+
 - gapless-crypto-data primary database (requires persistent ReplacingMergeTree)
 - Production workloads (no persistence by default)
 - Multi-user access (single-process, local-only)
@@ -18,12 +20,14 @@
 ## Installation
 
 ### Via Docker (Bundled)
+
 ```bash
 # Already available in ClickHouse container
 docker exec gapless-clickhouse clickhouse-local --version
 ```
 
 ### Native Binary
+
 ```bash
 # Download single binary
 curl https://clickhouse.com/ | sh
@@ -38,6 +42,7 @@ chmod +x ./clickhouse
 ## Quick Start
 
 ### Query Local Files
+
 ```bash
 # CSV file
 clickhouse-local --query "SELECT * FROM file('data.csv', CSV) LIMIT 10"
@@ -53,6 +58,7 @@ clickhouse-local --query "SELECT * FROM file('data/*.csv', CSV)"
 ```
 
 ### Query Remote Files
+
 ```bash
 # S3 (no download required)
 clickhouse-local --query "
@@ -73,6 +79,7 @@ clickhouse-local --query "
 ### Format Conversion
 
 #### CSV to Parquet
+
 ```bash
 clickhouse-local \
   --input-format CSV \
@@ -82,6 +89,7 @@ clickhouse-local \
 ```
 
 #### JSON to CSV
+
 ```bash
 clickhouse-local \
   --input-format JSONEachRow \
@@ -91,6 +99,7 @@ clickhouse-local \
 ```
 
 #### Parquet to JSON
+
 ```bash
 clickhouse-local --query "
   SELECT * FROM file('data.parquet', Parquet)
@@ -101,6 +110,7 @@ clickhouse-local --query "
 ### Data Validation
 
 #### CSV Schema Inference
+
 ```bash
 # Infer column types
 clickhouse-local --query "
@@ -114,6 +124,7 @@ clickhouse-local --query "
 ```
 
 #### Check for Duplicates
+
 ```bash
 clickhouse-local --query "
   SELECT
@@ -125,6 +136,7 @@ clickhouse-local --query "
 ```
 
 #### Find Nulls/Invalid Data
+
 ```bash
 clickhouse-local --query "
   SELECT
@@ -138,6 +150,7 @@ clickhouse-local --query "
 ### Pre-Ingestion Validation
 
 #### Validate CSV Before ClickHouse Ingestion
+
 ```bash
 # 1. Check schema matches expected
 clickhouse-local --query "
@@ -182,6 +195,7 @@ clickhouse-local --query "
 ### Aggregation and Analysis
 
 #### Summary Statistics
+
 ```bash
 clickhouse-local --query "
   SELECT
@@ -196,6 +210,7 @@ clickhouse-local --query "
 ```
 
 #### Time-Series Aggregation
+
 ```bash
 # Daily aggregation from hourly data
 clickhouse-local --query "
@@ -213,6 +228,7 @@ clickhouse-local --query "
 ```
 
 #### Join Multiple Files
+
 ```bash
 # Join price data with metadata
 clickhouse-local --query "
@@ -233,6 +249,7 @@ clickhouse-local --query "
 ## Advanced Features
 
 ### Create Persistent Database
+
 ```bash
 # Create local database directory
 mkdir -p /tmp/clickhouse_local_db
@@ -257,6 +274,7 @@ clickhouse-local --path /tmp/clickhouse_local_db --query "SELECT * FROM mydb.tes
 ```
 
 ### Stream Processing
+
 ```bash
 # Process large files without loading into memory
 cat large_file.csv | clickhouse-local --input-format CSV --query "
@@ -269,6 +287,7 @@ cat large_file.csv | clickhouse-local --input-format CSV --query "
 ```
 
 ### Complex Transformations
+
 ```bash
 # Calculate returns, volatility, technical indicators
 clickhouse-local --query "
@@ -286,6 +305,7 @@ clickhouse-local --query "
 ## File Formats
 
 ### Supported Input Formats
+
 - CSV / TSV / CSVWithNames / TabSeparated
 - JSON / JSONEachRow / JSONCompact
 - Parquet / Arrow / ORC
@@ -294,6 +314,7 @@ clickhouse-local --query "
 - Values (INSERT format)
 
 ### Format Detection
+
 ```bash
 # Automatic format detection by extension
 clickhouse-local --query "SELECT * FROM file('data.csv')"  # Auto-detects CSV
@@ -306,22 +327,23 @@ clickhouse-local --query "SELECT * FROM file('data.txt', CSV)"
 
 ## Comparison with clickhouse-client
 
-| Feature | clickhouse-local | clickhouse-client |
-|---------|-----------------|-------------------|
-| Server Required | ❌ No | ✅ Yes |
-| File Queries | ✅ Native | ⚠️ Via external tables |
-| S3/HTTP Queries | ✅ Direct | ✅ Direct |
-| Persistent DB | ⚠️ Optional | ✅ Always |
-| Table Engines | ⚠️ Limited | ✅ All |
-| ReplacingMergeTree | ❌ No | ✅ Yes |
-| Deduplication | ❌ No | ✅ Yes |
-| Best For | File analysis | Database queries |
+| Feature            | clickhouse-local | clickhouse-client      |
+| ------------------ | ---------------- | ---------------------- |
+| Server Required    | ❌ No            | ✅ Yes                 |
+| File Queries       | ✅ Native        | ⚠️ Via external tables |
+| S3/HTTP Queries    | ✅ Direct        | ✅ Direct              |
+| Persistent DB      | ⚠️ Optional      | ✅ Always              |
+| Table Engines      | ⚠️ Limited       | ✅ All                 |
+| ReplacingMergeTree | ❌ No            | ✅ Yes                 |
+| Deduplication      | ❌ No            | ✅ Yes                 |
+| Best For           | File analysis    | Database queries       |
 
 ## Use Cases for gapless-crypto-data
 
 ### ✅ Recommended Uses
 
 1. **Pre-Ingestion Validation**
+
    ```bash
    # Validate Binance CSV before ingesting to ClickHouse
    clickhouse-local --query "
@@ -335,6 +357,7 @@ clickhouse-local --query "SELECT * FROM file('data.txt', CSV)"
    ```
 
 2. **Format Conversion**
+
    ```bash
    # Convert Binance data to Parquet for faster loading
    clickhouse-local --query "
@@ -364,6 +387,7 @@ clickhouse-local --query "SELECT * FROM file('data.txt', CSV)"
 ## Troubleshooting
 
 ### File Not Found
+
 ```bash
 # Use absolute paths
 clickhouse-local --query "SELECT * FROM file('/full/path/to/data.csv', CSV)"
@@ -374,6 +398,7 @@ clickhouse-local --query "SELECT * FROM file('data.csv', CSV)"
 ```
 
 ### Schema Mismatch
+
 ```bash
 # Inspect inferred schema
 clickhouse-local --query "DESCRIBE TABLE file('data.csv', CSV)"
@@ -385,6 +410,7 @@ clickhouse-local --query "
 ```
 
 ### Memory Limits
+
 ```bash
 # Increase memory limit
 clickhouse-local --max_memory_usage 10000000000 --query "SELECT * FROM file('large.csv', CSV)"

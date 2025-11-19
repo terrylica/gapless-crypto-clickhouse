@@ -31,21 +31,22 @@ Gapless Crypto Data produces CSV files in 11-column microstructure format, provi
 
 **Important**: CSV files use `date` for the timestamp column, but the ClickHouse database uses `timestamp`. The conversion happens automatically during ingestion.
 
-| CSV Column Name | Database Column Name | Type | Conversion |
-|----------------|---------------------|------|------------|
-| `date` | `timestamp` | DateTime64(3) | Renamed during ingestion |
-| `open` | `open` | Float64 | Direct mapping |
-| `high` | `high` | Float64 | Direct mapping |
-| `low` | `low` | Float64 | Direct mapping |
-| `close` | `close` | Float64 | Direct mapping |
-| `volume` | `volume` | Float64 | Direct mapping |
-| `close_time` | `close_time` | DateTime64(3) | Direct mapping |
-| `quote_asset_volume` | `quote_asset_volume` | Float64 | Direct mapping |
-| `number_of_trades` | `number_of_trades` | Int64 | Direct mapping |
-| `taker_buy_base_asset_volume` | `taker_buy_base_asset_volume` | Float64 | Direct mapping |
-| `taker_buy_quote_asset_volume` | `taker_buy_quote_asset_volume` | Float64 | Direct mapping |
+| CSV Column Name                | Database Column Name           | Type          | Conversion               |
+| ------------------------------ | ------------------------------ | ------------- | ------------------------ |
+| `date`                         | `timestamp`                    | DateTime64(3) | Renamed during ingestion |
+| `open`                         | `open`                         | Float64       | Direct mapping           |
+| `high`                         | `high`                         | Float64       | Direct mapping           |
+| `low`                          | `low`                          | Float64       | Direct mapping           |
+| `close`                        | `close`                        | Float64       | Direct mapping           |
+| `volume`                       | `volume`                       | Float64       | Direct mapping           |
+| `close_time`                   | `close_time`                   | DateTime64(3) | Direct mapping           |
+| `quote_asset_volume`           | `quote_asset_volume`           | Float64       | Direct mapping           |
+| `number_of_trades`             | `number_of_trades`             | Int64         | Direct mapping           |
+| `taker_buy_base_asset_volume`  | `taker_buy_base_asset_volume`  | Float64       | Direct mapping           |
+| `taker_buy_quote_asset_volume` | `taker_buy_quote_asset_volume` | Float64       | Direct mapping           |
 
 **Additional Database Columns** (not present in CSV):
+
 - `symbol` (String): Trading pair identifier
 - `timeframe` (String): Candle interval
 - `instrument_type` (String): Market type ("spot" or "um")
@@ -56,12 +57,14 @@ Gapless Crypto Data produces CSV files in 11-column microstructure format, provi
 ### Supported Timeframes
 
 **Standard Timeframes** (13 total):
+
 - **Second**: 1s
 - **Minute**: 1m, 3m, 5m, 15m, 30m
 - **Hour**: 1h, 2h, 4h, 6h, 8h, 12h
 - **Day**: 1d
 
 **Exotic Timeframes** (3 additional, ClickHouse bulk loader only):
+
 - **3d**: Three-day candles
 - **1w**: Weekly candles
 - **1mo**: Monthly candles (30-day approximation)

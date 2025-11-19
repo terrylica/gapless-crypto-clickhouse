@@ -63,7 +63,7 @@ pip install gapless-crypto-clickhouse
 
 ### Database Setup (ClickHouse)
 
-For persistent storage and advanced query capabilities, you can optionally set up ClickHouse:
+For persistent storage and advanced query capabilities, set up ClickHouse:
 
 ```bash
 # Start ClickHouse using Docker Compose
@@ -76,7 +76,7 @@ docker-compose ps
 docker-compose logs -f clickhouse
 ```
 
-See [Database Integration](#database-integration-optional) for complete setup guide and usage examples.
+See [Database Integration](#database-integration) for complete setup guide and usage examples.
 
 ### Python API (Recommended)
 
@@ -122,36 +122,7 @@ gap_filler = UniversalGapFiller()
 gaps = gap_filler.detect_all_gaps(csv_file, "1h")
 ```
 
-### CLI Removed in v4.0.0
-
-> **Breaking Change**: The CLI interface was removed in v4.0.0.
-> Please use the Python API instead (see examples above).
-
-```bash
-# Collect data for multiple timeframes (all 13 timeframes supported)
-gapless-crypto-clickhouse --symbol SOLUSDT --timeframes 1s,1m,5m,1h,4h,1d
-
-# Ultra-high frequency data collection (1-second intervals)
-gapless-crypto-clickhouse --symbol BTCUSDT --timeframes 1s,1m,3m
-
-# Extended timeframes with intelligent fallback
-gapless-crypto-clickhouse --symbol ETHUSDT --timeframes 6h,8h,12h,1d
-
-# Collect multiple symbols at once (native multi-symbol support)
-gapless-crypto-clickhouse --symbol BTCUSDT,ETHUSDT,SOLUSDT --timeframes 1h,4h,1d
-
-# Collect specific date range with custom output directory
-gapless-crypto-clickhouse --symbol BTCUSDT --timeframes 1h --start 2023-01-01 --end 2023-12-31 --output-dir ./crypto_data
-
-# Multi-symbol with custom settings
-gapless-crypto-clickhouse --symbol BTCUSDT,ETHUSDT --timeframes 5m,1h --start 2024-01-01 --end 2024-06-30 --output-dir ./crypto_data
-
-# Fill gaps in existing data
-gapless-crypto-clickhouse --fill-gaps --directory ./data
-
-# Help
-gapless-crypto-clickhouse --help
-```
+> **Note**: This package never included a CLI interface (unlike parent package `gapless-crypto-data`). It provides a Python API only for programmatic access. See examples above for usage patterns.
 
 ## Data Structure
 
@@ -205,14 +176,14 @@ Gap Detection → UniversalGapFiller → Authentic API-First Validation
 AtomicCSVOperations → Final Gapless Dataset with Order Flow Metrics
 ```
 
-## 🗄️ Database Integration (Optional)
+## 🗄️ Database Integration
 
-**v4.0.0+**: ClickHouse database support for persistent storage, advanced queries, and multi-symbol analysis.
+ClickHouse is a **required component** for this package. The database-first architecture enables persistent storage, advanced query capabilities, and multi-symbol analysis.
 
 **When to use**:
 
 - **File-based approach**: Simple workflows, single symbols, CSV output compatibility
-- **Database approach**: Multi-symbol analysis, time-series queries, aggregations, production pipelines
+- **Database approach**: Multi-symbol analysis, time-series queries, aggregations, production pipelines (recommended)
 
 ### Quick Start with Docker Compose
 
@@ -548,7 +519,7 @@ for gap in gaps:
 result = gap_filler.process_file("BTCUSDT_1h.csv", "1h")
 ```
 
-### Database Query Examples (v4.0.0+)
+### Database Query Examples
 
 For users leveraging ClickHouse database integration:
 
@@ -863,16 +834,19 @@ uv run playwright --version
 ```
 
 **Test Targets**:
+
 - **CH-UI Dashboard**: localhost:5521
 - **ClickHouse Play**: localhost:8123/play
 
 **Features**:
+
 - Zero manual intervention (PEP 723 self-contained)
 - Screenshot capture for visual regression detection
 - Comprehensive coverage (happy path, errors, edge cases, timeouts)
 - CI/CD optimized with browser caching (30-60s speedup)
 
 **Documentation**:
+
 - [E2E Testing Guide](docs/validation/E2E_TESTING_GUIDE.md)
 - [Screenshot Baseline Management](docs/validation/SCREENSHOT_BASELINE.md)
 - [ADR-0013: Autonomous Validation Framework](docs/decisions/0013-autonomous-validation-framework.md)

@@ -5,18 +5,21 @@ Non-containerized Python deployment using uv package manager for gapless-crypto-
 ## Advantages Over Docker Python
 
 **Performance**:
+
 - 40% faster CI/CD pipelines vs Docker Python
 - No 200-800MB Python base image overhead
 - 10x faster dependency resolution vs pip
 - Zero container layer overhead
 
 **Simplicity**:
+
 - Single `uv run` command execution
 - No Dockerfile maintenance
 - No image registry required
 - Direct git pull + uv sync deployment
 
 **Cost**:
+
 - Lower storage costs (no images)
 - Lower network costs (smaller dependencies)
 - Faster deployments (no image pull)
@@ -24,11 +27,13 @@ Non-containerized Python deployment using uv package manager for gapless-crypto-
 ## Prerequisites
 
 **System Requirements**:
+
 - Linux (Ubuntu 22.04 LTS, Debian 12, or equivalent)
 - macOS 13+ (Ventura or later)
 - Python 3.12+ (installed and available in PATH)
 
 **Not Required**:
+
 - Docker
 - Python virtual environment managers (venv, virtualenv, conda)
 - pip, setuptools, poetry (uv handles everything)
@@ -38,6 +43,7 @@ Non-containerized Python deployment using uv package manager for gapless-crypto-
 ### Install uv
 
 **Linux/macOS (Recommended)**:
+
 ```bash
 # Install uv using official installer
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -50,12 +56,14 @@ uv --version
 ```
 
 **Alternative (Homebrew on macOS)**:
+
 ```bash
 brew install uv
 uv --version
 ```
 
 **Alternative (pip)**:
+
 ```bash
 # Not recommended, but works
 pip install uv
@@ -65,6 +73,7 @@ uv --version
 ### Install Python 3.12+
 
 **Linux (Ubuntu/Debian)**:
+
 ```bash
 # Install Python 3.12
 sudo apt update
@@ -75,6 +84,7 @@ python3.12 --version
 ```
 
 **macOS**:
+
 ```bash
 # Install via Homebrew
 brew install python@3.12
@@ -102,6 +112,7 @@ uv run python -c "import gapless_crypto_clickhouse; print('OK')"
 ### Running Commands
 
 **Execute Python scripts**:
+
 ```bash
 # Run Python module
 uv run python -m gapless_crypto_clickhouse.collectors.questdb_bulk_loader
@@ -114,6 +125,7 @@ uv run python
 ```
 
 **Execute without installation (uvx)**:
+
 ```bash
 # Run tool without installing
 uvx pytest
@@ -157,11 +169,13 @@ git commit -m "chore: update dependencies"
 ### Deployment Architecture
 
 **Recommended setup**:
+
 - Python code: Native (uv-managed, no container)
 - QuestDB: Native systemd service OR Docker container
 - Deployment: git pull + uv sync + systemctl restart
 
 **Not using Docker for Python**:
+
 - Faster deployment (no image build/push/pull)
 - Lower resource usage (no container overhead)
 - Simpler debugging (direct process access)
@@ -169,6 +183,7 @@ git commit -m "chore: update dependencies"
 ### Deployment Steps
 
 **Initial deployment**:
+
 ```bash
 # 1. Create deployment user
 sudo useradd -r -s /bin/bash -d /opt/gapless-crypto-data gapless
@@ -196,6 +211,7 @@ sudo systemctl start gapless-crypto-collector
 ```
 
 **Zero-downtime updates**:
+
 ```bash
 # 1. Pull latest code
 cd /opt/gapless-crypto-data
@@ -250,6 +266,7 @@ WantedBy=multi-user.target
 ```
 
 **Commands**:
+
 ```bash
 # Install service
 sudo cp deployment/systemd/gapless-crypto-collector.service \
@@ -305,6 +322,7 @@ jobs:
 ```
 
 **Performance comparison** (typical Python project):
+
 - **Docker Python**: 3-5 minutes (image build + dependency install)
 - **uv**: 1-2 minutes (dependency install only)
 - **Speedup**: 40-60% faster
@@ -323,6 +341,7 @@ repos:
 ```
 
 **Setup**:
+
 ```bash
 # Install pre-commit
 uv add --dev pre-commit
@@ -339,12 +358,14 @@ uv run pre-commit run --all-files
 ### uv.lock File
 
 **Purpose**:
+
 - Reproducible builds across environments
 - Pins exact versions and hashes
 - Committed to git (unlike node_modules/)
 - Cross-platform compatible
 
 **Workflow**:
+
 ```bash
 # Developer updates dependencies
 uv add questdb@latest
@@ -355,6 +376,7 @@ uv sync --frozen --no-dev  # No dependency resolution
 ```
 
 **Benefits**:
+
 - Deterministic builds
 - Faster CI/CD (no dependency resolution)
 - Audit trail (git blame on uv.lock)
@@ -414,6 +436,7 @@ LOG_FORMAT=json
 ```
 
 **Security**:
+
 ```bash
 # Restrict .env permissions
 chmod 600 .env
@@ -427,6 +450,7 @@ echo ".env" >> .gitignore
 ### Dependency Resolution
 
 **Cache location**:
+
 ```bash
 # Default cache: ~/.cache/uv/
 # Configure:
@@ -434,6 +458,7 @@ export UV_CACHE_DIR=/path/to/cache
 ```
 
 **Parallel downloads**:
+
 ```bash
 # uv automatically uses parallel downloads (10x faster than pip)
 # No configuration needed
@@ -442,6 +467,7 @@ export UV_CACHE_DIR=/path/to/cache
 ### Virtual Environment
 
 **Location**:
+
 ```bash
 # Default: .venv in project root
 # Configure:
@@ -449,6 +475,7 @@ export UV_VENV=/path/to/venv
 ```
 
 **Python version**:
+
 ```bash
 # Use specific Python version
 uv venv --python 3.12
@@ -462,6 +489,7 @@ uv venv --python python3.12
 ### uv Command Not Found
 
 **Solution**:
+
 ```bash
 # Add to PATH
 export PATH="$HOME/.local/bin:$PATH"
@@ -471,6 +499,7 @@ which uv
 ```
 
 **Permanent fix**:
+
 ```bash
 # Add to ~/.bashrc or ~/.zshrc
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
@@ -480,6 +509,7 @@ source ~/.bashrc
 ### Dependency Resolution Fails
 
 **Diagnosis**:
+
 ```bash
 # Verbose output
 uv sync -v
@@ -492,6 +522,7 @@ cat uv.lock
 ```
 
 **Solutions**:
+
 ```bash
 # Clear cache
 rm -rf ~/.cache/uv
@@ -509,6 +540,7 @@ uv sync --python 3.12
 **Symptom**: `ModuleNotFoundError: No module named 'gapless_crypto_clickhouse'`
 
 **Solution**:
+
 ```bash
 # Install dependencies
 uv sync
@@ -523,6 +555,7 @@ uv venv --show
 ### Slow Dependency Install
 
 **Diagnosis**:
+
 ```bash
 # Check network
 curl -I https://pypi.org
@@ -532,6 +565,7 @@ ls -lh ~/.cache/uv
 ```
 
 **Solutions**:
+
 ```bash
 # Use frozen lockfile (no resolution)
 uv sync --frozen
@@ -556,6 +590,7 @@ uv sync
 ```
 
 **Benefits**:
+
 - 10-100x faster
 - Automatic virtual environment management
 - Reproducible builds via lockfile
@@ -571,6 +606,7 @@ uv sync
 ```
 
 **Migration**:
+
 ```bash
 # Convert pyproject.toml (manual)
 # uv uses PEP 621 format, poetry uses custom format

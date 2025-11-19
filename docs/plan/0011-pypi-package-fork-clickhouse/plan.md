@@ -13,6 +13,7 @@
 Fork `main-clickhouse` branch as independent `gapless-crypto-clickhouse` PyPI package with separate repository, full module rename, and version reset to 1.0.0. Enable external user feedback for ClickHouse implementation without disrupting mature `gapless-crypto-data` (v3.3.0).
 
 **Scope**:
+
 - New GitHub repository: `terrylica/gapless-crypto-clickhouse`
 - Module rename: `gapless_crypto_clickhouse` → `gapless_crypto_clickhouse`
 - Package rename: `gapless-crypto-data` → `gapless-crypto-clickhouse`
@@ -20,6 +21,7 @@ Fork `main-clickhouse` branch as independent `gapless-crypto-clickhouse` PyPI pa
 - ~150 files updated (source, tests, examples, documentation)
 
 **Out of Scope**:
+
 - Migration guide for v3.3.0 users (no migration needed - fork for new users)
 - Deprecation of original package (both packages actively maintained)
 - Cross-package dependencies (accept code duplication)
@@ -32,13 +34,13 @@ Fork `main-clickhouse` branch as independent `gapless-crypto-clickhouse` PyPI pa
 
 Current `main-clickhouse` branch (v4.0.0) diverged 44 commits from `origin/main` (v3.3.0) with incompatible architecture:
 
-| Aspect | origin/main (v3.3.0) | main-clickhouse (v4.0.0) |
-|--------|----------------------|---------------------------|
-| **Database** | None (CSV-only) | ClickHouse ReplacingMergeTree |
-| **Python** | 3.9-3.13 | 3.12-3.13 only |
-| **CLI** | Present | Removed |
+| Aspect           | origin/main (v3.3.0)  | main-clickhouse (v4.0.0)           |
+| ---------------- | --------------------- | ---------------------------------- |
+| **Database**     | None (CSV-only)       | ClickHouse ReplacingMergeTree      |
+| **Python**       | 3.9-3.13              | 3.12-3.13 only                     |
+| **CLI**          | Present               | Removed                            |
 | **Dependencies** | httpx, pandas, duckdb | + clickhouse-driver, python-dotenv |
-| **Futures** | No | Yes (USDT-margined) |
+| **Futures**      | No                    | Yes (USDT-margined)                |
 
 Publishing both as `gapless-crypto-data` creates package identity collision on PyPI.
 
@@ -65,12 +67,14 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 **Approach**: Separate repository (`terrylica/gapless-crypto-clickhouse`)
 
 **Rationale**:
+
 - Clearest separation of concerns (file-based vs database-first)
 - Standard GitHub workflow (no custom CI/CD logic)
 - Independent stars, issues, releases
 - Simpler PyPI Trusted Publishing configuration
 
 **Alternatives Rejected**:
+
 - Monorepo: Complex CI/CD triggers, path-based workflow detection
 - Git worktree: Package name collision, shared `.gitignore`, manual lifecycle management
 
@@ -79,11 +83,13 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 **Approach**: Full rename `gapless_crypto_clickhouse` → `gapless_crypto_clickhouse`
 
 **Rationale**:
+
 - Matches PyPI name convention (kebab → snake_case)
 - Prevents import confusion between packages
 - Clear ClickHouse branding in code
 
 **Breaking Change**: All import paths change
+
 - Before: `import gapless_crypto_clickhouse as gcd`
 - After: `import gapless_crypto_clickhouse as gcc`
 
@@ -92,6 +98,7 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 **Approach**: Reset to v1.0.0 (fresh start)
 
 **Rationale**:
+
 - New package identity = new version lifecycle
 - Independent semantic versioning (no coupling to v3.x/v4.x)
 - Industry standard for forks/spinoffs
@@ -102,12 +109,14 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 **Approach**: Copy shared utilities, accept duplication
 
 **Shared Code** (~4 files, ~800 lines):
+
 - `api.py` (function-based API)
 - `utils/` (etag_cache, error_handling, etc.)
 - `gap_filling/` (universal gap filler)
 - `collectors/binance_public_data_collector.py`
 
 **Rationale**:
+
 - No cross-package dependencies
 - Simpler deployment (no version coupling)
 - Faster iteration (no coordinated releases)
@@ -124,11 +133,13 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 **Objective**: Create new repository structure in separate directory
 
 **Steps**:
+
 1. Create directory: `/Users/terryli/eon/gapless-crypto-clickhouse/`
 2. Copy all files from `main-clickhouse` branch
 3. Initialize git: `git init && git remote add origin git@github.com:terrylica/gapless-crypto-clickhouse.git`
 
 **Deliverables**:
+
 - New directory with complete codebase copy
 - Git initialized (not yet pushed)
 
@@ -143,6 +154,7 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 **Steps**:
 
 1. **Rename directory**:
+
    ```bash
    mv src/gapless_crypto_clickhouse src/gapless_crypto_clickhouse
    ```
@@ -160,10 +172,12 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
    - Files: All `.py` files in `examples/`
 
 **Deliverables**:
+
 - Renamed module directory: `src/gapless_crypto_clickhouse/`
 - All import statements updated
 
 **Validation**:
+
 ```bash
 # Check no old imports remain
 grep -r "from gapless_crypto_clickhouse" src/ tests/ examples/
@@ -179,17 +193,18 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 
 **Changes**:
 
-| Field | Before | After |
-|-------|--------|-------|
-| `name` | `gapless-crypto-data` | `gapless-crypto-clickhouse` |
-| `version` | `4.0.0` | `1.0.0` |
-| `description` | Generic crypto data | ClickHouse-based cryptocurrency data collection |
-| `keywords` | crypto, binance, data | clickhouse, crypto, binance, database, time-series |
-| `packages` | `["src/gapless_crypto_clickhouse"]` | `["src/gapless_crypto_clickhouse"]` |
-| GitHub URLs | `gapless-crypto-data` | `gapless-crypto-clickhouse` |
-| `known-first-party` | `["gapless_crypto_clickhouse"]` | `["gapless_crypto_clickhouse"]` |
+| Field               | Before                              | After                                              |
+| ------------------- | ----------------------------------- | -------------------------------------------------- |
+| `name`              | `gapless-crypto-data`               | `gapless-crypto-clickhouse`                        |
+| `version`           | `4.0.0`                             | `1.0.0`                                            |
+| `description`       | Generic crypto data                 | ClickHouse-based cryptocurrency data collection    |
+| `keywords`          | crypto, binance, data               | clickhouse, crypto, binance, database, time-series |
+| `packages`          | `["src/gapless_crypto_clickhouse"]` | `["src/gapless_crypto_clickhouse"]`                |
+| GitHub URLs         | `gapless-crypto-data`               | `gapless-crypto-clickhouse`                        |
+| `known-first-party` | `["gapless_crypto_clickhouse"]`     | `["gapless_crypto_clickhouse"]`                    |
 
 **Dependencies** (keep minimal for ClickHouse focus):
+
 - Keep: `clickhouse-driver`, `pandas`, `pyarrow`, `python-dotenv`
 - Consider removing: `duckdb` (validation only), `httpx` (not core to ClickHouse)
 
@@ -224,11 +239,13 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
    - Package name throughout
 
 **Medium-Priority Files** (~100 files in `docs/`):
+
 - All ADRs referencing package name
 - All guides (`docs/guides/`)
 - All development docs (`docs/development/`)
 
 **Low-Priority Files**:
+
 - `CHANGELOG.md`: Consider fresh start or fork history
 - Milestone docs: Selectively apply relevant history
 
@@ -261,6 +278,7 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
    - Publishes to https://test.pypi.org
 
 **Deliverables**:
+
 - Updated deployment configs
 - New TestPyPI workflow
 
@@ -275,22 +293,28 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 **Automated Checks**:
 
 1. **Grep validation** (zero old references):
+
    ```bash
    grep -r "gapless-crypto-data" . --exclude-dir=.git --exclude-dir=.venv --exclude-dir=node_modules
    grep -r "gapless_crypto_clickhouse" . --exclude-dir=.git --exclude-dir=.venv
    ```
+
    Expected: Only historical references in CHANGELOGs/ADRs
 
 2. **Import validation**:
+
    ```bash
    python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__version__)"
    ```
+
    Expected: `1.0.0`
 
 3. **Test suite**:
+
    ```bash
    uv run pytest tests/ -v
    ```
+
    Expected: All tests pass
 
 4. **Build validation**:
@@ -301,6 +325,7 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
    Expected: `gapless_crypto_clickhouse-1.0.0-py3-none-any.whl`
 
 **Manual Checks**:
+
 - [ ] README renders correctly (check Markdown)
 - [ ] All example code runs without errors
 - [ ] ClickHouse integration works (`docker-compose up -d` → ingest → query)
@@ -316,6 +341,7 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 **Steps**:
 
 1. **Create GitHub repository** (Web UI or `gh` CLI):
+
    ```bash
    gh repo create terrylica/gapless-crypto-clickhouse --public \
      --description "ClickHouse-based cryptocurrency data collection with zero-gap guarantee"
@@ -341,6 +367,7 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
    ```
 
 **Deliverables**:
+
 - GitHub repository live
 - PyPI Trusted Publishers registered
 - Code pushed to GitHub
@@ -358,11 +385,13 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 1. **Monitor GitHub Actions**: Workflow `publish-testpypi.yml` runs on push to main
 
 2. **Install from TestPyPI**:
+
    ```bash
    pip install -i https://test.pypi.org/simple/ gapless-crypto-clickhouse
    ```
 
 3. **Test installation**:
+
    ```bash
    python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__version__)"
    # Expected: 1.0.0
@@ -385,6 +414,7 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 **Steps**:
 
 1. **Create git tag**:
+
    ```bash
    git tag -a v1.0.0 -m "feat: initial release of gapless-crypto-clickhouse
 
@@ -415,6 +445,7 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 **Deliverables**: v1.0.0 published to PyPI
 
 **Validation**:
+
 ```bash
 pip install gapless-crypto-clickhouse
 python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__version__)"
@@ -431,6 +462,7 @@ python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__v
 
 1. **Update original package README** (in `terrylica/gapless-crypto-data`):
    Add section:
+
    ```markdown
    ## Related Packages
 
@@ -446,6 +478,7 @@ python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__v
    - Verify all classifiers accurate
 
 **Deliverables**:
+
 - Cross-reference in original package
 - Announcement published
 
@@ -522,6 +555,7 @@ python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__v
 ## Validation Checklist
 
 **Pre-Publish** (Phase 6):
+
 - [ ] `grep -r "gapless-crypto-data"` returns only historical references
 - [ ] `grep -r "gapless_crypto_clickhouse"` returns only historical references
 - [ ] `python -c "import gapless_crypto_clickhouse"` succeeds
@@ -529,17 +563,20 @@ python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__v
 - [ ] `uv build` creates `gapless_crypto_clickhouse-1.0.0-py3-none-any.whl`
 
 **TestPyPI** (Phase 8):
+
 - [ ] `pip install -i https://test.pypi.org/simple/ gapless-crypto-clickhouse` succeeds
 - [ ] TestPyPI README renders correctly
 - [ ] TestPyPI metadata accurate
 
 **Production PyPI** (Phase 9):
+
 - [ ] `pip install gapless-crypto-clickhouse` succeeds
 - [ ] PyPI README renders correctly
 - [ ] Package metadata accurate
 - [ ] GitHub release created
 
 **Post-Publish** (Phase 10):
+
 - [ ] Original package README updated with cross-reference
 - [ ] Announcement published
 - [ ] Both packages clearly positioned
@@ -569,18 +606,18 @@ python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__v
 
 ## Estimated Timeline
 
-| Phase | Duration | Dependencies |
-|-------|----------|--------------|
-| 1. Repository Creation | 15 min | None |
-| 2. Module Rename | 30 min | Phase 1 |
-| 3. Package Metadata | 15 min | Phase 2 |
-| 4. Documentation | 60 min | Phase 3 |
-| 5. Configs | 15 min | Phase 4 |
-| 6. Validation | 30 min | Phase 5 |
-| 7. PyPI Setup | 15 min | Phase 6 |
-| 8. TestPyPI | 20 min | Phase 7 |
-| 9. Production | 10 min | Phase 8 |
-| 10. Announcement | 10 min | Phase 9 |
+| Phase                  | Duration | Dependencies |
+| ---------------------- | -------- | ------------ |
+| 1. Repository Creation | 15 min   | None         |
+| 2. Module Rename       | 30 min   | Phase 1      |
+| 3. Package Metadata    | 15 min   | Phase 2      |
+| 4. Documentation       | 60 min   | Phase 3      |
+| 5. Configs             | 15 min   | Phase 4      |
+| 6. Validation          | 30 min   | Phase 5      |
+| 7. PyPI Setup          | 15 min   | Phase 6      |
+| 8. TestPyPI            | 20 min   | Phase 7      |
+| 9. Production          | 10 min   | Phase 8      |
+| 10. Announcement       | 10 min   | Phase 9      |
 
 **Total**: ~3.5 hours (recommend single work session for atomicity)
 
@@ -589,6 +626,7 @@ python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__v
 ## Success Criteria
 
 **Definition of Done**:
+
 1. ✅ New repository `terrylica/gapless-crypto-clickhouse` live on GitHub
 2. ✅ Package `gapless-crypto-clickhouse==1.0.0` published to PyPI
 3. ✅ Zero `gapless-crypto-data` references in codebase (excluding historical docs)
@@ -599,6 +637,7 @@ python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__v
 8. ✅ PyPI Trusted Publishing configured (no API tokens)
 
 **Acceptance Test**:
+
 ```bash
 # From clean environment
 pip install gapless-crypto-clickhouse

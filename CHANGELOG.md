@@ -6,30 +6,31 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### Bug Fixes
 
-* **ci:** skip CH-UI tests in CI, validate framework with ClickHouse Play ([6a07b01](https://github.com/terrylica/gapless-crypto-clickhouse/commit/6a07b01f73c2b9561e6479a2a4b7716cfe0cc9bb))
+- **ci:** skip CH-UI tests in CI, validate framework with ClickHouse Play ([6a07b01](https://github.com/terrylica/gapless-crypto-clickhouse/commit/6a07b01f73c2b9561e6479a2a4b7716cfe0cc9bb))
 
 ## [2.1.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.1.0...v2.1.1) (2025-11-19)
 
 ### Bug Fixes
 
-* **ci:** remove VITE environment overrides for CH-UI ([5be20ea](https://github.com/terrylica/gapless-crypto-clickhouse/commit/5be20eaa4ef63509b01f1542c360ab30dcada5d1))
+- **ci:** remove VITE environment overrides for CH-UI ([5be20ea](https://github.com/terrylica/gapless-crypto-clickhouse/commit/5be20eaa4ef63509b01f1542c360ab30dcada5d1))
 
 ## [2.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.0.0...v2.1.0) (2025-11-19)
 
 ### Features
 
-* **ci:** add CH-UI service to E2E test workflow ([c8cc71c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/c8cc71ce01f97aa260751d2c845b674134b85966))
+- **ci:** add CH-UI service to E2E test workflow ([c8cc71c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/c8cc71ce01f97aa260751d2c845b674134b85966))
 
 ## [2.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.7...v2.0.0) (2025-11-19)
 
 ### ⚠ BREAKING CHANGES
 
-* **e2e:** Resolves event loop conflict between pytest-asyncio and pytest-playwright
+- **e2e:** Resolves event loop conflict between pytest-asyncio and pytest-playwright
 
 **Root Cause**: pytest-playwright (sync API) creates session-scoped event loop
 that conflicts with pytest-asyncio's Runner.run() when executing async tests
 
 **Solution**: Migrate to pytest-playwright-asyncio (official async support)
+
 - Replaces pytest-playwright>=0.6.0 with pytest-playwright-asyncio>=0.7.1
 - Upgrades pytest-asyncio>=0.21.0 to >=0.26.0 (required version)
 - Changes asyncio_default_fixture_loop_scope from function to session
@@ -41,87 +42,89 @@ pytest-playwright-asyncio's async fixtures
 **Verification**: Dependencies synced, linting passed
 
 **References**:
+
 - https://github.com/microsoft/playwright-pytest/issues/167
 - https://pypi.org/project/pytest-playwright-asyncio/
 - tmp/e2e-implementation-status.md (Solution 1)
 
 ### Bug Fixes
 
-* **e2e:** replace pytest-playwright with pytest-playwright-asyncio ([4c0bd04](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4c0bd042c39e6cb877ba845772d4632d79a26b00))
+- **e2e:** replace pytest-playwright with pytest-playwright-asyncio ([4c0bd04](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4c0bd042c39e6cb877ba845772d4632d79a26b00))
 
 ## [1.3.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.6...v1.3.7) (2025-11-19)
 
 ### Bug Fixes
 
-* **e2e:** add pytest-asyncio with function-scoped event loop ([635e130](https://github.com/terrylica/gapless-crypto-clickhouse/commit/635e1309be4b3ae52823d7c8a6941d900aefa323)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+- **e2e:** add pytest-asyncio with function-scoped event loop ([635e130](https://github.com/terrylica/gapless-crypto-clickhouse/commit/635e1309be4b3ae52823d7c8a6941d900aefa323)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
 
 ## [1.3.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.5...v1.3.6) (2025-11-19)
 
 ### Bug Fixes
 
-* **e2e:** simplify async configuration - let pytest-playwright manage event loop ([63b306f](https://github.com/terrylica/gapless-crypto-clickhouse/commit/63b306fecdf385986afcf9645b471fbbb64c202b)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+- **e2e:** simplify async configuration - let pytest-playwright manage event loop ([63b306f](https://github.com/terrylica/gapless-crypto-clickhouse/commit/63b306fecdf385986afcf9645b471fbbb64c202b)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
 
 ## [1.3.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.4...v1.3.5) (2025-11-19)
 
 ### Bug Fixes
 
-* **e2e:** add collection hook to prevent pytest-asyncio/playwright conflict ([dbb37f3](https://github.com/terrylica/gapless-crypto-clickhouse/commit/dbb37f39f7a292ed8ed3f8c89b5c0a6a5e546af4)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+- **e2e:** add collection hook to prevent pytest-asyncio/playwright conflict ([dbb37f3](https://github.com/terrylica/gapless-crypto-clickhouse/commit/dbb37f39f7a292ed8ed3f8c89b5c0a6a5e546af4)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
 
 ## [1.3.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.3...v1.3.4) (2025-11-19)
 
 ### Bug Fixes
 
-* **e2e:** use strict asyncio mode to prevent pytest-asyncio interference ([abaff98](https://github.com/terrylica/gapless-crypto-clickhouse/commit/abaff9847f9a1ed7cee93c8d748560dd169ea3d7)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+- **e2e:** use strict asyncio mode to prevent pytest-asyncio interference ([abaff98](https://github.com/terrylica/gapless-crypto-clickhouse/commit/abaff9847f9a1ed7cee93c8d748560dd169ea3d7)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
 
 ## [1.3.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.2...v1.3.3) (2025-11-19)
 
 ### Bug Fixes
 
-* **lint:** resolve Ruff linting errors in E2E tests and scripts ([85c6443](https://github.com/terrylica/gapless-crypto-clickhouse/commit/85c6443e110ef71b7a8efedf220da50506e72784))
+- **lint:** resolve Ruff linting errors in E2E tests and scripts ([85c6443](https://github.com/terrylica/gapless-crypto-clickhouse/commit/85c6443e110ef71b7a8efedf220da50506e72784))
 
 ## [1.3.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.1...v1.3.2) (2025-11-19)
 
 ### Bug Fixes
 
-* **e2e:** remove pytest.mark.asyncio to prevent event loop conflict ([fbb2006](https://github.com/terrylica/gapless-crypto-clickhouse/commit/fbb200628ada7f86a30b7f7387b75c2a6f5f8342)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+- **e2e:** remove pytest.mark.asyncio to prevent event loop conflict ([fbb2006](https://github.com/terrylica/gapless-crypto-clickhouse/commit/fbb200628ada7f86a30b7f7387b75c2a6f5f8342)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
 
 ## [1.3.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.0...v1.3.1) (2025-11-19)
 
 ### Bug Fixes
 
-* **e2e:** remove custom page fixture to prevent event loop conflict ([571595a](https://github.com/terrylica/gapless-crypto-clickhouse/commit/571595a31d88becdf12abd6c94c0c197257f2f0f)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+- **e2e:** remove custom page fixture to prevent event loop conflict ([571595a](https://github.com/terrylica/gapless-crypto-clickhouse/commit/571595a31d88becdf12abd6c94c0c197257f2f0f)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
 
 ## [1.3.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.2.1...v1.3.0) (2025-11-19)
 
 ### Features
 
-* **e2e:** add autonomous validation framework with Playwright ([19a86cb](https://github.com/terrylica/gapless-crypto-clickhouse/commit/19a86cb26eb88d13a1aa2874a25a539d516edf7a)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+- **e2e:** add autonomous validation framework with Playwright ([19a86cb](https://github.com/terrylica/gapless-crypto-clickhouse/commit/19a86cb26eb88d13a1aa2874a25a539d516edf7a)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
 
 ## [1.2.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.2.0...v1.2.1) (2025-11-19)
 
 ### Documentation
 
-* fix systematic package name inconsistencies across all documentation ([903036e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/903036e95b8371cf3b93dd4cd342c0ab94ffed14))
+- fix systematic package name inconsistencies across all documentation ([903036e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/903036e95b8371cf3b93dd4cd342c0ab94ffed14))
 
 ## [1.2.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.1.0...v1.2.0) (2025-11-19)
 
 ### Features
 
-* add name parameter to hello_world function ([17843f8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/17843f8dfc6fb88971c9d92db4b992f950bf2dd9))
+- add name parameter to hello_world function ([17843f8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/17843f8dfc6fb88971c9d92db4b992f950bf2dd9))
 
 ## [1.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.0.0...v1.1.0) (2025-11-19)
 
 ### Features
 
-* **ci:** add manual workflow dispatch for PyPI publishing ([1345db1](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1345db10a6a218bd6a6913d452e07e776dbb49af))
+- **ci:** add manual workflow dispatch for PyPI publishing ([1345db1](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1345db10a6a218bd6a6913d452e07e776dbb49af))
 
 ## 1.0.0 (2025-11-19)
 
 ### ⚠ BREAKING CHANGES
 
-* New independent package with separate PyPI identity
+- New independent package with separate PyPI identity
 
 Key Changes:
+
 - Package name: gapless-crypto-data → gapless-crypto-clickhouse
 - Module name: gapless_crypto_data → gapless_crypto_clickhouse
 - Version: Reset to 1.0.0 (independent versioning lifecycle)
@@ -129,6 +132,7 @@ Key Changes:
 - Database: ClickHouse required (ReplacingMergeTree engine)
 
 New Features:
+
 - USDT-margined perpetual futures support (instrument_type column)
 - ClickHouse persistent storage with deterministic deduplication
 - Production-ready ReplacingMergeTree schema with compression
@@ -136,11 +140,13 @@ New Features:
 - Advanced SQL queries for time-series analysis
 
 Positioning:
+
 - Use gapless-crypto-clickhouse for database-first workflows
 - Use gapless-crypto-data for file-based CSV workflows
 - Both packages share 22x performance via Binance public repository
 
 Implementation:
+
 - ADR-0011: PyPI Package Fork for ClickHouse Distribution
 - All imports updated to gapless_crypto_clickhouse
 - GitHub Actions workflows for PyPI and TestPyPI
@@ -150,17 +156,17 @@ Refs: ADR-0011
 
 ### Features
 
-* initial release of gapless-crypto-clickhouse v1.0.0 ([c88f5c5](https://github.com/terrylica/gapless-crypto-clickhouse/commit/c88f5c5d4d0a1d78b5c79b886c98e5ed1e64e196))
+- initial release of gapless-crypto-clickhouse v1.0.0 ([c88f5c5](https://github.com/terrylica/gapless-crypto-clickhouse/commit/c88f5c5d4d0a1d78b5c79b886c98e5ed1e64e196))
 
 ### Bug Fixes
 
-* auto-fix import sorting in all test files ([086ae81](https://github.com/terrylica/gapless-crypto-clickhouse/commit/086ae81b40f022a397b5875416a79729629287ed))
-* **ci:** correct semantic-release changelog version to v6 ([394856d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/394856d9b3c9746acb1245a8dbb6e29a02e177f3))
-* **ci:** use compatible semantic-release plugin versions ([03c1521](https://github.com/terrylica/gapless-crypto-clickhouse/commit/03c15210de2395f9614e8320352fcf39195d2081))
-* **ci:** use latest semantic-release versions without pinning ([07a75ec](https://github.com/terrylica/gapless-crypto-clickhouse/commit/07a75ecfc4c5b4e69a7095efc733b3dc24363bdd))
-* **release:** add minimal package.json for semantic-release compatibility ([ae4e841](https://github.com/terrylica/gapless-crypto-clickhouse/commit/ae4e841fbec55831fd4637779dcc5ea3aab9429b))
-* resolve ruff linting errors in test files ([98f6d7e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/98f6d7e9f6a7912e2143a7d689478d7308eb2fe6)), closes [#19487568321](https://github.com/terrylica/gapless-crypto-clickhouse/issues/19487568321)
-* update all old package references in test files ([9ee87b4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/9ee87b4579d36eb6a7195ba7ee3f1dd6586f7056))
+- auto-fix import sorting in all test files ([086ae81](https://github.com/terrylica/gapless-crypto-clickhouse/commit/086ae81b40f022a397b5875416a79729629287ed))
+- **ci:** correct semantic-release changelog version to v6 ([394856d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/394856d9b3c9746acb1245a8dbb6e29a02e177f3))
+- **ci:** use compatible semantic-release plugin versions ([03c1521](https://github.com/terrylica/gapless-crypto-clickhouse/commit/03c15210de2395f9614e8320352fcf39195d2081))
+- **ci:** use latest semantic-release versions without pinning ([07a75ec](https://github.com/terrylica/gapless-crypto-clickhouse/commit/07a75ecfc4c5b4e69a7095efc733b3dc24363bdd))
+- **release:** add minimal package.json for semantic-release compatibility ([ae4e841](https://github.com/terrylica/gapless-crypto-clickhouse/commit/ae4e841fbec55831fd4637779dcc5ea3aab9429b))
+- resolve ruff linting errors in test files ([98f6d7e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/98f6d7e9f6a7912e2143a7d689478d7308eb2fe6)), closes [#19487568321](https://github.com/terrylica/gapless-crypto-clickhouse/issues/19487568321)
+- update all old package references in test files ([9ee87b4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/9ee87b4579d36eb6a7195ba7ee3f1dd6586f7056))
 
 # Changelog
 
@@ -174,6 +180,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### ⚠️ BREAKING CHANGES
 
 #### CLI Removed
+
 The command-line interface has been completely removed in v4.0.0. All functionality is now available exclusively through the Python API.
 
 #### Upgrading from v3.x
@@ -192,12 +199,14 @@ pip install gapless-crypto-data==4.0.0
 **Migration**: See `docs/development/CLI_MIGRATION_GUIDE.md` for Python API equivalents.
 
 **Why the breaking change?**
+
 - CLI represented <5% of usage based on download statistics
 - Python API provides superior programmatic control and composability
 - Maintenance burden of dual interfaces slowed feature development
 - Industry trend: pandas, scikit-learn, requests all dropped CLIs for cleaner APIs
 
 ### Added
+
 - **ClickHouse database support**: Primary storage backend with 10x performance vs file-based workflows
 - **Enhanced Python API**: Comprehensive examples and simplified function signatures
 - **11-column microstructure format**: Order flow and liquidity metrics (trade_count, taker_buy_base_volume, etc.)
@@ -205,11 +214,13 @@ pip install gapless-crypto-data==4.0.0
 - **Semantic versioning automation**: Conventional commits → automated changelog → GitHub releases
 
 ### Removed
+
 - **CLI interface**: Completely removed (see breaking changes above)
 - **QuestDB database support**: ClickHouse is now the sole database backend
 - **Legacy interval parameter**: Use `timeframe` parameter instead (5-year deprecation period ended)
 
 ### Fixed
+
 - **Version consistency**: `__version__` attribute now correctly reflects 4.0.0 (ADR-0006)
 - **Documentation accuracy**: All version references updated to v4.0.0 across README, CLAUDE.md, docstrings
 - **Database references**: Corrected all references from QuestDB to ClickHouse
@@ -217,6 +228,7 @@ pip install gapless-crypto-data==4.0.0
 - **Test assertions**: Version checks updated to expect 4.0.0
 
 ### Changed
+
 - **Database architecture**: ClickHouse replaces QuestDB as primary storage (ADR-0005)
 - **Default behavior**: File-based workflows now optional, database-first recommended
 - **Migration guide**: Enhanced with expected test failures documentation

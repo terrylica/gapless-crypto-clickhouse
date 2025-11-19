@@ -124,6 +124,7 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
 **Columns** (17 total):
 
 **Metadata** (5 columns):
+
 - `symbol` (String): Trading pair (e.g., "BTCUSDT")
 - `timeframe` (String): Candle interval (e.g., "1m", "1h")
 - `instrument_type` (String): Market type ("spot" or "um" for USDT-margined futures)
@@ -131,6 +132,7 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
 - `timestamp` (DateTime64(3)): Candle open time in UTC with millisecond precision
 
 **OHLCV** (5 columns):
+
 - `open` (Float64): Opening price
 - `high` (Float64): Highest price in period
 - `low` (Float64): Lowest price in period
@@ -138,6 +140,7 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
 - `volume` (Float64): Base asset volume
 
 **Microstructure** (5 columns):
+
 - `close_time` (DateTime64(3)): Candle close time
 - `quote_asset_volume` (Float64): Quote asset volume
 - `number_of_trades` (Int64): Trade count in period
@@ -145,6 +148,7 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
 - `taker_buy_quote_asset_volume` (Float64): Taker buy quote volume
 
 **Deduplication** (2 columns):
+
 - `_version` (UInt64): Deterministic version for ReplacingMergeTree (SHA-256 hash of row data)
 - `_sign` (Int8): Row operation indicator (1=insert, -1=delete for manual cleanup)
 
@@ -186,14 +190,14 @@ Binance Public Repository (monthly/daily ZIPs)
 
 ### ClickHouse vs File-Based Workflows
 
-| Aspect | ClickHouse Mode | File-Based Mode |
-|--------|----------------|-----------------|
-| **Storage** | Database (persistent) | CSV files (stateless) |
-| **Querying** | SQL, millisecond latency | Pandas/Polars file reads |
-| **Multi-symbol** | Single query across symbols | Load multiple CSV files |
-| **Deduplication** | Automatic (ReplacingMergeTree) | Manual merge logic |
-| **Production Use** | Database administration required | Simple file management |
-| **Best For** | Production pipelines, analytics | Exploratory analysis, backups |
+| Aspect             | ClickHouse Mode                  | File-Based Mode               |
+| ------------------ | -------------------------------- | ----------------------------- |
+| **Storage**        | Database (persistent)            | CSV files (stateless)         |
+| **Querying**       | SQL, millisecond latency         | Pandas/Polars file reads      |
+| **Multi-symbol**   | Single query across symbols      | Load multiple CSV files       |
+| **Deduplication**  | Automatic (ReplacingMergeTree)   | Manual merge logic            |
+| **Production Use** | Database administration required | Simple file management        |
+| **Best For**       | Production pipelines, analytics  | Exploratory analysis, backups |
 
 ## Data Flow Architecture
 

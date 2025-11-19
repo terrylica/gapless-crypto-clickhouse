@@ -15,6 +15,7 @@ ADR-0003 validated the QuestDB schema's production-readiness at 53.7M row scale 
 **User requirement**: "Extend gapless-crypto-data to support Binance USDT-margined (UM) perpetual futures with same zero-gap guarantee and 22x CloudFront CDN speedup."
 
 **Validated findings from ADR-0003**:
+
 - ✅ Schema PRODUCTION-READY at 53.7M row scale
 - ✅ Zero DEDUP collisions, optimal partition strategy
 - ✅ All 16 timeframes validated (including "1mo")
@@ -24,6 +25,7 @@ ADR-0003 validated the QuestDB schema's production-readiness at 53.7M row scale 
 ### Current State
 
 **Spot-only support** (v2.x):
+
 - Data source: `https://data.binance.vision/data/spot/monthly/klines/`
 - CSV format: 11 columns, no header
 - Timeframes: 16 (1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1mo)
@@ -31,6 +33,7 @@ ADR-0003 validated the QuestDB schema's production-readiness at 53.7M row scale 
 - DEDUP key: `(timestamp, symbol, timeframe)`
 
 **Futures support gap**:
+
 - ❌ Futures data source not accessible (URL hardcoded to `/data/spot/`)
 - ❌ Futures CSV format incompatible (12 columns with header vs 11 columns no header)
 - ❌ Cannot distinguish spot vs futures rows (no `instrument_type` column)
@@ -64,6 +67,7 @@ ALTER TABLE ohlcv DEDUP ENABLE UPSERT KEYS(timestamp, symbol, timeframe, instrum
 ```
 
 **Rationale**:
+
 - **Capacity**: Only 2 values needed ('spot', 'futures') - minimal memory overhead
 - **CACHE enabled**: Most queries filter by instrument_type (frequent access)
 - **DEDUP safety**: Prevents collisions between spot and futures with same symbol/timeframe/timestamp
@@ -72,6 +76,7 @@ ALTER TABLE ohlcv DEDUP ENABLE UPSERT KEYS(timestamp, symbol, timeframe, instrum
 ### Code Changes
 
 **1. URL Parameterization** (`src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py`):
+
 ```python
 class QuestDBBulkLoader:
     SPOT_BASE_URL = "https://data.binance.vision/data/spot"
@@ -86,6 +91,7 @@ class QuestDBBulkLoader:
 ```
 
 **2. CSV Parser Extension** (`src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py:_parse_csv()`):
+
 ```python
 def _parse_csv(self, csv_path: Path, symbol: str, timeframe: str) -> pd.DataFrame:
     # Detect header presence (futures has header, spot doesn't)
@@ -105,6 +111,7 @@ def _parse_csv(self, csv_path: Path, symbol: str, timeframe: str) -> pd.DataFram
 ```
 
 **3. ILP Ingestion Update** (`src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py:_ingest_dataframe()`):
+
 ```python
 sender.dataframe(
     df_ingest,
@@ -115,6 +122,7 @@ sender.dataframe(
 ```
 
 **4. Query API Extension** (`src/gapless_crypto_clickhouse/query.py`):
+
 ```python
 def get_ohlcv(
     self,
@@ -133,6 +141,7 @@ def get_ohlcv(
 ```
 
 **5. CLI Flag Addition** (`src/gapless_crypto_clickhouse/cli.py`):
+
 ```python
 @click.option(
     "--instrument-type",
@@ -149,12 +158,14 @@ def main(symbol, timeframe, start_date, end_date, instrument_type):
 **Breaking change**: Requires v3.0.0 major version bump
 
 **Migration steps** (in-place, no data loss):
+
 1. **Backup**: `SELECT * FROM ohlcv INTO BACKUP 'ohlcv_pre_v3_migration'`
 2. **Schema migration**: Run `docs/migrations/0004-add-instrument-type-column.sql`
 3. **Verification**: Check `SELECT COUNT(*) FROM ohlcv` unchanged, `instrument_type` column present
 4. **Code deployment**: Update to v3.0.0 with `--instrument-type` flag
 
 **Backwards compatibility**:
+
 - ✅ Existing queries work unchanged (no `instrument_type` filter defaults to all data)
 - ✅ CLI defaults to `--instrument-type spot` (existing commands work)
 - ❌ New writes require `instrument_type` parameter (raises error if missing)
@@ -187,10 +198,12 @@ def main(symbol, timeframe, start_date, end_date, instrument_type):
 ### Alternative 1: Separate `gapless-futures-data` Package
 
 **Pros**:
+
 - No breaking changes to existing package
 - Architectural isolation
 
 **Cons**:
+
 - 80% code duplication (collectors, query API, CLI)
 - Maintenance burden (bug fixes ported to both packages)
 - Fragmented ecosystem (users install 2 packages)
@@ -202,10 +215,12 @@ def main(symbol, timeframe, start_date, end_date, instrument_type):
 ### Alternative 2: Multi-table Approach (separate `ohlcv_spot`, `ohlcv_futures`)
 
 **Pros**:
+
 - Table isolation
 - No DEDUP key modification needed
 
 **Cons**:
+
 - Query API complexity (which table to query?)
 - Cross-instrument queries require UNION
 - Doubles partition management overhead
@@ -218,6 +233,7 @@ def main(symbol, timeframe, start_date, end_date, instrument_type):
 See `docs/plan/0004-futures-support/plan.yaml` for detailed implementation timeline.
 
 **Phases**:
+
 1. **Phase 1**: Schema migration script (1 hour)
 2. **Phase 2**: CSV parser extension (2 hours)
 3. **Phase 3**: URL parameterization (1 hour)

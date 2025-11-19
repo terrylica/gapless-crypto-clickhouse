@@ -11,11 +11,13 @@ Implemented (2025-11-18)
 ADR-0008 (ClickHouse Local Visualization Toolchain) documented chdig as an optional Tier 2 tool for performance monitoring and profiling. Current validation shows 6/6 critical tools operational, but chdig remains uninstalled despite being documented as available.
 
 **Current State**:
+
 - Validation script checks for chdig but shows warning: "chdig not installed (optional)"
 - Performance monitoring capability documented but not enabled
 - Development environment lacks TUI-based query profiling and flamegraph visualization
 
 **Impact**:
+
 - Incomplete tooling setup (documented but not installed)
 - No local performance profiling capability for slow query investigation
 - Developers must use SQL-based system table queries for performance analysis
@@ -25,6 +27,7 @@ ADR-0008 (ClickHouse Local Visualization Toolchain) documented chdig as an optio
 ### Documented Tool (ADR-0008)
 
 **chdig** (ClickHouse Dig):
+
 - Rust-based TUI for ClickHouse performance monitoring
 - Features: flamegraph visualization, slow query analysis, live metrics, cluster support
 - License: MIT
@@ -72,6 +75,7 @@ bash scripts/validate-clickhouse-tools.sh
 ```
 
 **Expected Change**:
+
 - Before: `⚠️ WARN: chdig not installed (optional)`
 - After: `✅ PASS: chdig installed and operational`
 - Test count: 6/6 → 7/7
@@ -87,6 +91,7 @@ chdig --host localhost --port 9000
 ```
 
 **Use Cases**:
+
 - Investigate slow queries during development
 - Profile query execution plans
 - Monitor system resource usage
@@ -97,21 +102,27 @@ chdig --host localhost --port 9000
 ### Automated Validation
 
 **Installation Check**:
+
 ```bash
 command -v chdig && echo "✅ Installed"
 ```
+
 **Expected**: Exit code 0
 
 **Functional Check**:
+
 ```bash
 chdig --version
 ```
+
 **Expected**: Version output
 
 **Integration Check**:
+
 ```bash
 bash scripts/validate-clickhouse-tools.sh | grep chdig
 ```
+
 **Expected**: `✅ PASS: chdig installed and operational`
 
 ### Manual Validation Checklist
@@ -150,6 +161,7 @@ bash scripts/validate-clickhouse-tools.sh | grep chdig
 **Pros**: No additional dependencies, simpler setup
 
 **Cons**:
+
 - Documentation-implementation mismatch (tool documented but not installed)
 - Missing performance monitoring capability
 - Validation script perpetually shows warning
@@ -161,6 +173,7 @@ bash scripts/validate-clickhouse-tools.sh | grep chdig
 **Pros**: Sync documentation with current state
 
 **Cons**:
+
 - Loses valuable observability tool
 - Degrades developer experience
 - chdig is actively maintained and stable enough for local use
@@ -172,6 +185,7 @@ bash scripts/validate-clickhouse-tools.sh | grep chdig
 **Pros**: Avoid pre-alpha risk
 
 **Cons**:
+
 - Indefinite wait (no v1.0 timeline)
 - Pre-alpha acceptable for local optional tool
 - Current version functional and stable

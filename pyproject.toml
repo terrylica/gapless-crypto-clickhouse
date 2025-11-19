@@ -1,5 +1,8 @@
 [project]
 name = "gapless-crypto-clickhouse"
+# NOTE: semantic-release does not update this field (uses git tags instead)
+# Latest release version is tracked via git tags (e.g., v2.1.2)
+# See .releaserc.json - @semantic-release/npm only updates package.json, not pyproject.toml
 version = "1.0.0"
 description = "ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x faster via Binance public repository with persistent database storage, USDT-margined futures support, and production-ready ReplacingMergeTree schema."
 readme = { file = "README.md", content-type = "text/markdown" }
@@ -50,8 +53,8 @@ Repository = "https://github.com/terrylica/gapless-crypto-clickhouse.git"
 Issues = "https://github.com/terrylica/gapless-crypto-clickhouse/issues"
 Changelog = "https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/CHANGELOG.md"
 
-# [project.scripts] section removed in v4.0.0
-# Machine interface only - use Python API for programmatic access
+# No CLI - machine interface only (use Python API for programmatic access)
+# This package never had a CLI, unlike parent package gapless-crypto-data
 
 [build-system]
 requires = ["hatchling"]

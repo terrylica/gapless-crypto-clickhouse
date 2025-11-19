@@ -11,6 +11,7 @@
 ## Quick Start
 
 ### Via Docker (Recommended)
+
 ```bash
 # Interactive mode
 docker exec -it gapless-clickhouse clickhouse-client
@@ -24,6 +25,7 @@ docker exec -it gapless-clickhouse clickhouse-client \
 ```
 
 ### Shell Aliases (Recommended)
+
 Add to your `.zshrc` or `.bashrc`:
 
 ```bash
@@ -42,6 +44,7 @@ alias ch-parquet='docker exec -it gapless-clickhouse clickhouse-client --format 
 ## Features
 
 ### Core Capabilities
+
 - ✅ **70+ output formats** (CSV, JSON, Parquet, Arrow, ORC, Markdown, etc.)
 - ✅ **Progress bar** with real-time metrics (rows/sec, bytes, execution time)
 - ✅ **Query parameters** for SQL injection prevention
@@ -54,12 +57,14 @@ alias ch-parquet='docker exec -it gapless-clickhouse clickhouse-client --format 
 ### Interactive Mode vs Batch Mode
 
 **Interactive Mode**:
+
 - Default format: `PrettyCompact` (human-readable tables)
 - Progress bar enabled
 - Query history navigation (Ctrl+R)
 - Tab completion
 
 **Batch Mode** (non-TTY):
+
 - Default format: `TabSeparated` (machine-parseable)
 - No progress bar
 - Optimized for piping/redirection
@@ -69,6 +74,7 @@ alias ch-parquet='docker exec -it gapless-clickhouse clickhouse-client --format 
 ### Common Formats
 
 #### CSV
+
 ```bash
 # Export to CSV
 chq "SELECT * FROM ohlcv FINAL LIMIT 1000 FORMAT CSV" > data.csv
@@ -78,6 +84,7 @@ ch-csv "INSERT INTO ohlcv FORMAT CSV" < data.csv
 ```
 
 #### JSON
+
 ```bash
 # JSONEachRow (one JSON object per line)
 chq "SELECT * FROM ohlcv FINAL LIMIT 100 FORMAT JSONEachRow" > data.jsonl
@@ -90,6 +97,7 @@ chq "SELECT * FROM ohlcv FINAL LIMIT 100 FORMAT JSON" > data.json
 ```
 
 #### Parquet
+
 ```bash
 # Export to Parquet (columnar, compressed)
 chq "SELECT * FROM ohlcv FINAL FORMAT Parquet" > data.parquet
@@ -99,12 +107,14 @@ chq "INSERT INTO ohlcv FORMAT Parquet" < data.parquet
 ```
 
 #### Markdown
+
 ```bash
 # Pretty tables for documentation
 chq "SELECT symbol, count() as bars FROM ohlcv FINAL GROUP BY symbol FORMAT Markdown"
 ```
 
 #### Arrow / ORC
+
 ```bash
 # Apache Arrow (in-memory columnar)
 chq "SELECT * FROM ohlcv FINAL FORMAT Arrow" > data.arrow
@@ -138,6 +148,7 @@ ch --query "SELECT * FROM ohlcv FINAL FORMAT Null"
 ## Query Parameters (SQL Injection Prevention)
 
 ### Parameterized Queries
+
 ```bash
 # Safe parameter substitution
 chq --param_symbol="BTCUSDT" --param_start="2024-01-01" \
@@ -157,6 +168,7 @@ chq \
 ```
 
 ### Parameter Types
+
 - `{name:String}` - Text
 - `{name:Int64}` - Integer
 - `{name:Float64}` - Decimal
@@ -168,6 +180,7 @@ chq \
 ## AI-Powered Query Generation
 
 ### OpenAI Integration
+
 ```bash
 # Set API key
 export OPENAI_API_KEY="sk-..."
@@ -185,6 +198,7 @@ ch
 ```
 
 ### Anthropic Integration
+
 ```bash
 # Set API key
 export ANTHROPIC_API_KEY="sk-ant-..."
@@ -197,6 +211,7 @@ ch
 ## Keyboard Shortcuts
 
 ### Interactive Mode
+
 - **Alt+Shift+E**: Open query in external editor ($EDITOR or vim)
 - **Ctrl+R**: Search query history
 - **Ctrl+C**: Interrupt running query
@@ -205,6 +220,7 @@ ch
 - **Up/Down**: Navigate query history
 
 ### Editor Integration
+
 ```bash
 # Set preferred editor
 export EDITOR=code  # VSCode
@@ -217,6 +233,7 @@ export EDITOR=nano  # Nano
 ## Configuration
 
 ### Config File
+
 Create `~/.clickhouse-client/config.yaml`:
 
 ```yaml
@@ -224,7 +241,7 @@ Create `~/.clickhouse-client/config.yaml`:
 host: localhost
 port: 9000
 user: default
-password: ''
+password: ""
 database: default
 
 # Output settings
@@ -239,6 +256,7 @@ highlight: true
 ```
 
 ### Connection Strings
+
 ```bash
 # Name connections in config
 # ~/.clickhouse-client/config.yaml
@@ -261,6 +279,7 @@ ch --connection prod
 ## Advanced Usage
 
 ### Multiquery Mode
+
 ```bash
 # Run multiple queries (semicolon-separated)
 ch --multiquery --query "
@@ -271,6 +290,7 @@ ch --multiquery --query "
 ```
 
 ### Progress Tracking
+
 ```bash
 # Enable detailed progress (rows/sec, bytes, time)
 ch --query "SELECT * FROM ohlcv FINAL" --progress
@@ -280,6 +300,7 @@ ch --query "SELECT * FROM ohlcv FINAL" --progress
 ```
 
 ### External Tables (Join with Files)
+
 ```bash
 # Join ClickHouse table with local CSV
 ch --query "
@@ -290,6 +311,7 @@ ch --query "
 ```
 
 ### Streaming Large Results
+
 ```bash
 # Stream to stdout (memory-efficient)
 ch --query "SELECT * FROM ohlcv FINAL FORMAT JSONEachRow" | gzip > data.jsonl.gz
@@ -303,6 +325,7 @@ done
 ## Common Workflows
 
 ### Data Export
+
 ```bash
 # Full table export
 chq "SELECT * FROM ohlcv FINAL FORMAT Parquet" > ohlcv_backup.parquet
@@ -319,6 +342,7 @@ chq "SELECT * FROM ohlcv FINAL FORMAT JSONEachRow" | gzip > ohlcv.jsonl.gz
 ```
 
 ### Data Import
+
 ```bash
 # CSV import
 chq "INSERT INTO ohlcv FORMAT CSV" < data.csv
@@ -331,6 +355,7 @@ chq "INSERT INTO ohlcv FORMAT Parquet" < data.parquet
 ```
 
 ### Schema Management
+
 ```bash
 # Show all tables
 chq "SHOW TABLES FROM default"
@@ -351,6 +376,7 @@ chq "SELECT
 ```
 
 ### Performance Analysis
+
 ```bash
 # EXPLAIN query plan
 ch --query "EXPLAIN PLAN SELECT * FROM ohlcv WHERE symbol = 'BTCUSDT'" --format Pretty
@@ -367,6 +393,7 @@ ch --query "EXPLAIN AST SELECT * FROM ohlcv FINAL" --format Pretty
 ### Connection Issues
 
 **Problem**: `Connection refused`
+
 ```bash
 # Check ClickHouse status
 docker ps | grep clickhouse
@@ -379,6 +406,7 @@ nc -zv localhost 9000
 ```
 
 **Problem**: `Authentication failed`
+
 ```bash
 # Verify credentials
 ch --user default --password ''
@@ -390,6 +418,7 @@ docker exec gapless-clickhouse clickhouse-client --query "SELECT currentUser()"
 ### Query Issues
 
 **Problem**: `Memory limit exceeded`
+
 ```bash
 # Increase memory limit
 ch --max_memory_usage 10000000000 --query "SELECT * FROM ohlcv"
@@ -399,6 +428,7 @@ ch --query "SELECT * FROM ohlcv FORMAT JSONEachRow" | head -n 1000
 ```
 
 **Problem**: `Syntax error`
+
 ```bash
 # Check query with EXPLAIN
 ch --query "EXPLAIN AST SELECT ..." --format Pretty
@@ -411,17 +441,20 @@ ch
 ## Best Practices
 
 ### Performance
+
 - ✅ Use `FORMAT Null` for row counts (no data transfer)
 - ✅ Use `LIMIT` for exploration (faster results)
 - ✅ Use Parquet/Arrow for large exports (compressed, columnar)
 - ❌ Avoid `SELECT *` on large tables without LIMIT
 
 ### Security
+
 - ✅ Use query parameters to prevent SQL injection
 - ✅ Use named connections (credentials in config, not CLI)
 - ❌ Never pass user input directly in `--query`
 
 ### Automation
+
 - ✅ Use batch mode for scripts (`--query` flag)
 - ✅ Set `--format` explicitly (don't rely on defaults)
 - ✅ Check exit codes (`$?` in bash)
@@ -429,15 +462,15 @@ ch
 
 ## Comparison with Other Tools
 
-| Feature | clickhouse-client | CH-UI | Play UI |
-|---------|------------------|-------|---------|
-| Output Formats | 70+ | Table only | Table only |
-| Progress Bar | ✅ Yes | ✅ Yes | ❌ No |
-| Scripting | ✅ Excellent | ❌ No | ❌ No |
-| Query History | ✅ Persistent | ✅ LocalStorage | ⚠️ URL only |
-| AI Assistance | ✅ Yes | ❌ No | ❌ No |
-| Autocomplete | ✅ SQL + Tables | ✅ Full | ❌ No |
-| Best For | Automation | Exploration | Quick checks |
+| Feature        | clickhouse-client | CH-UI           | Play UI      |
+| -------------- | ----------------- | --------------- | ------------ |
+| Output Formats | 70+               | Table only      | Table only   |
+| Progress Bar   | ✅ Yes            | ✅ Yes          | ❌ No        |
+| Scripting      | ✅ Excellent      | ❌ No           | ❌ No        |
+| Query History  | ✅ Persistent     | ✅ LocalStorage | ⚠️ URL only  |
+| AI Assistance  | ✅ Yes            | ❌ No           | ❌ No        |
+| Autocomplete   | ✅ SQL + Tables   | ✅ Full         | ❌ No        |
+| Best For       | Automation        | Exploration     | Quick checks |
 
 ## Next Steps
 

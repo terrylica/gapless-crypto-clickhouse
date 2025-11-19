@@ -5,6 +5,7 @@ Native QuestDB and Python deployment for maximum performance. Recommended for pr
 ## Architecture
 
 **Zero container overhead**:
+
 - QuestDB: Native binary (systemd service)
 - Python: uv-managed (systemd service)
 - Performance: 2-5% faster than Docker
@@ -13,12 +14,14 @@ Native QuestDB and Python deployment for maximum performance. Recommended for pr
 ## Prerequisites
 
 **System Requirements**:
+
 - Linux kernel 5.10+ (Ubuntu 22.04 LTS, Debian 12, or equivalent)
 - 16GB+ RAM (64GB+ recommended for production)
 - 500GB+ SSD/NVMe storage (XFS or ext4 filesystem)
 - Java 17+ (OpenJDK or equivalent)
 
 **Network Requirements**:
+
 - Outbound HTTPS (443) for Binance API and CloudFront
 - Inbound ports (if remote access needed):
   - 9000: QuestDB Web Console
@@ -129,11 +132,11 @@ sudo systemctl enable questdb
 **Memory configuration** (edit in `questdb.service`):
 
 | System RAM | Xms (min heap) | Xmx (max heap) |
-|-----------|----------------|----------------|
-| 16GB      | 8g             | 12g            |
-| 32GB      | 16g            | 24g            |
-| 64GB      | 24g            | 48g            |
-| 128GB     | 48g            | 96g            |
+| ---------- | -------------- | -------------- |
+| 16GB       | 8g             | 12g            |
+| 32GB       | 16g            | 24g            |
+| 64GB       | 24g            | 48g            |
+| 128GB      | 48g            | 96g            |
 
 ### gapless-crypto-data systemd Service
 
@@ -151,6 +154,7 @@ sudo -u gapless nano /opt/gapless-crypto-clickhouse/.env
 ```
 
 **Environment configuration** (`.env`):
+
 ```bash
 # QuestDB connection
 QUESTDB_HOST=localhost
@@ -318,11 +322,12 @@ curl http://localhost:9003/metrics
 ```
 
 **Prometheus scrape configuration** (`prometheus.yml`):
+
 ```yaml
 scrape_configs:
-  - job_name: 'questdb'
+  - job_name: "questdb"
     static_configs:
-      - targets: ['localhost:9003']
+      - targets: ["localhost:9003"]
 ```
 
 ## Maintenance
@@ -428,6 +433,7 @@ vm.dirty_background_ratio = 5
 ```
 
 Apply settings:
+
 ```bash
 sudo sysctl -p
 ```
@@ -453,11 +459,13 @@ sudo systemctl restart questdb
 ### QuestDB Fails to Start
 
 **Check logs**:
+
 ```bash
 sudo journalctl -u questdb -n 100
 ```
 
 **Common issues**:
+
 - Insufficient memory: Reduce Xmx in questdb.service
 - Port already in use: Check with `sudo lsof -i :9000`
 - Permission denied: Verify ownership of /var/lib/questdb
@@ -465,11 +473,13 @@ sudo journalctl -u questdb -n 100
 ### Collector Fails to Start
 
 **Check logs**:
+
 ```bash
 sudo journalctl -u gapless-crypto-collector -n 100
 ```
 
 **Common issues**:
+
 - QuestDB not running: Start questdb service first
 - Invalid .env file: Check syntax in /opt/gapless-crypto-clickhouse/.env
 - Python dependencies: Run `sudo -u gapless uv sync --frozen`
@@ -477,6 +487,7 @@ sudo journalctl -u gapless-crypto-collector -n 100
 ### Slow Ingestion Performance
 
 **Diagnosis**:
+
 ```bash
 # Check disk I/O wait
 iostat -x 1
@@ -487,6 +498,7 @@ psql -h localhost -p 8812 -U admin -d qdb \
 ```
 
 **Solutions**:
+
 - Enable WAL mode (see schema.sql)
 - Use faster storage (NVMe SSD)
 - Increase batch size in collector
@@ -494,6 +506,7 @@ psql -h localhost -p 8812 -U admin -d qdb \
 ### High Memory Usage
 
 **Check memory**:
+
 ```bash
 # QuestDB heap usage
 curl http://localhost:9003/metrics | grep heap
@@ -503,6 +516,7 @@ free -h
 ```
 
 **Solutions**:
+
 - Reduce Xmx in questdb.service
 - Increase system RAM
 - Enable disk-based caching
@@ -540,6 +554,7 @@ acl.enabled=true
 ```
 
 **Create users**:
+
 ```bash
 # Access QuestDB Web Console
 # Navigate to Settings > Users
@@ -553,7 +568,7 @@ acl.enabled=true
 **400 symbols × 13 timeframes × 1 year**:
 
 | Resource | Minimum | Recommended |
-|----------|---------|-------------|
+| -------- | ------- | ----------- |
 | CPU      | 8 cores | 16+ cores   |
 | RAM      | 32GB    | 64GB+       |
 | Storage  | 500GB   | 1TB SSD     |

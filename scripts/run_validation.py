@@ -4,7 +4,7 @@
 # dependencies = [
 #     "playwright>=1.56.0",
 #     "pytest>=8.4.2",
-#     "pytest-playwright>=0.6.0",
+#     "pytest-playwright-asyncio>=0.7.1",
 #     "pytest-cov>=7.0.0",
 #     "pytest-timeout>=2.3.1",
 #     "pytest-html>=4.1.1",

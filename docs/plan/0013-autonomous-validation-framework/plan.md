@@ -13,6 +13,7 @@
 ### Problem Statement
 
 Current validation gaps for ClickHouse integration (v1.0.0):
+
 - No E2E validation for web interfaces (CH-UI dashboard, ClickHouse Play)
 - Manual testing required for UI validation
 - No screenshot evidence of correct rendering
@@ -102,6 +103,7 @@ Layer 5: Benchmarking (performance regression detection) [FUTURE]
 **Purpose**: Self-contained autonomous execution with zero manual setup.
 
 **Exit Codes**:
+
 - `0`: All validations passed
 - `1`: Test failures detected
 - `2`: Environment setup failed (Docker not running, port conflicts)
@@ -147,13 +149,13 @@ tests/e2e/
 
 **Test Coverage Matrix** (per interface):
 
-| Category | Count | Examples |
-|----------|-------|----------|
-| Happy Path | 5 | Landing page load, simple query, complex query, result display, export |
-| Error Cases | 4 | Invalid SQL, non-existent table, network failure, timeout |
-| Edge Cases | 4 | Empty results, large dataset (10K rows), special characters, concurrent queries |
-| Visual Regression | 2 | Screenshot baseline comparison (landing, results) |
-| **Total** | **15** | **× 2 interfaces = 30 tests** (expandable to 48 with all scenarios) |
+| Category          | Count  | Examples                                                                        |
+| ----------------- | ------ | ------------------------------------------------------------------------------- |
+| Happy Path        | 5      | Landing page load, simple query, complex query, result display, export          |
+| Error Cases       | 4      | Invalid SQL, non-existent table, network failure, timeout                       |
+| Edge Cases        | 4      | Empty results, large dataset (10K rows), special characters, concurrent queries |
+| Visual Regression | 2      | Screenshot baseline comparison (landing, results)                               |
+| **Total**         | **15** | **× 2 interfaces = 30 tests** (expandable to 48 with all scenarios)             |
 
 **Locator Strategy**: Accessibility-first (`get_by_role()`, `get_by_label()`) for stability.
 
@@ -185,6 +187,7 @@ jobs:
 ```
 
 **Optimizations**:
+
 - Playwright browser caching: 30-60s speedup per run
 - Concurrency groups: Prevent duplicate runs on rapid pushes
 - Parallel jobs: Unit tests run separately from E2E (faster feedback)
@@ -234,12 +237,14 @@ jobs:
 ### Observability
 
 **SLO: Observability**:
+
 - All test execution logged with timestamps
 - Artifact paths printed to stdout
 - Failure diagnostics include: test name, duration, error type, stack trace, screenshot path
 - CI artifacts accessible via GitHub Actions UI (retention: 7 days)
 
 **Metrics** (CI execution):
+
 - Test duration per layer (static, unit, integration, e2e)
 - Screenshot count
 - Artifact size
@@ -248,12 +253,14 @@ jobs:
 ### Maintainability
 
 **SLO: Maintainability**:
+
 - **Accessibility-first locators**: Resist UI changes (get_by_role > CSS selectors)
 - **PEP 723 inline dependencies**: No pyproject.toml coordination needed for standalone script
 - **Clear abstractions**: Bootstrap script separates environment validation, test execution, artifact collection
 - **Documentation**: Comprehensive guides for test authoring, debugging, screenshot management
 
 **Test Maintenance**:
+
 - New E2E tests follow template pattern (see E2E_TESTING_GUIDE.md)
 - Screenshot baselines updated via documented process (see SCREENSHOT_BASELINE.md)
 - CI failures debuggable via traces (playwright show-trace trace.zip)
@@ -261,6 +268,7 @@ jobs:
 ### Availability
 
 **SLO: Availability**:
+
 - Bootstrap script validates environment before execution (fail-fast on missing dependencies)
 - Docker health checks prevent tests from running against unhealthy services
 - CI timeout: 15 minutes (prevents hung tests from blocking pipeline)
@@ -269,6 +277,7 @@ jobs:
 ### Correctness
 
 **SLO: Correctness**:
+
 - E2E tests validate actual user workflows (not mocked)
 - Screenshot evidence provides visual proof of correct rendering
 - Comprehensive coverage: happy + error + edge + timeout + malformed paths
@@ -281,6 +290,7 @@ jobs:
 ### Phase 1: Infrastructure (2-3 hours)
 
 **Deliverables**:
+
 - [ ] `scripts/run_validation.py` PEP 723 script functional
 - [ ] Environment validation working (Docker, port checks)
 - [ ] Playwright browser auto-installation working
@@ -291,6 +301,7 @@ jobs:
 ### Phase 2: Test Suite (3-4 hours)
 
 **Deliverables**:
+
 - [ ] `tests/e2e/conftest.py` with Playwright fixtures
 - [ ] `tests/e2e/test_ch_ui_dashboard.py` with 15+ tests
 - [ ] `tests/e2e/test_clickhouse_play.py` with 15+ tests
@@ -301,6 +312,7 @@ jobs:
 ### Phase 3: CI/CD Integration (2 hours)
 
 **Deliverables**:
+
 - [ ] `.github/workflows/ci.yml` updated with E2E job
 - [ ] `.github/workflows/e2e-validation.yml` created (scheduled runs)
 - [ ] Playwright browser caching functional
@@ -311,6 +323,7 @@ jobs:
 ### Phase 4: Documentation (1-2 hours)
 
 **Deliverables**:
+
 - [ ] `docs/validation/E2E_TESTING_GUIDE.md` (running, debugging, authoring)
 - [ ] `docs/validation/SCREENSHOT_BASELINE.md` (baseline management)
 - [ ] `README.md` updated with E2E validation section

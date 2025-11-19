@@ -11,23 +11,25 @@
 ### What's Changed in v4.0.0
 
 **Major Changes**:
+
 - **NEW**: Optional ClickHouse database support for persistent storage and advanced queries
 - **BREAKING**: QuestDB support removed (was development-only, never released)
 - **UNCHANGED**: File-based API (`gcd.download()`, `gcd.fetch_data()`) remains fully supported
 - **UNCHANGED**: 11-column microstructure format, 13 timeframe support, zero-gap guarantee
 
 **Version Strategy**:
+
 - **v3.x**: File-based storage only (CSV/Parquet output)
 - **v4.0.0**: File-based (default) + optional ClickHouse database
 - **Rollback path**: v3.3.0 remains available if issues arise
 
 ### Who Needs to Migrate?
 
-| User Type | Migration Required? | Reason |
-|-----------|---------------------|--------|
-| **File-based workflows** (CSV output only) | ❌ No | API unchanged, drop-in replacement |
-| **Database users** (QuestDB in v3.x dev builds) | ⚠️ Yes | QuestDB deprecated, must migrate to ClickHouse |
-| **New database adopters** | ✅ Optional | ClickHouse offers persistent storage, advanced queries |
+| User Type                                       | Migration Required? | Reason                                                 |
+| ----------------------------------------------- | ------------------- | ------------------------------------------------------ |
+| **File-based workflows** (CSV output only)      | ❌ No               | API unchanged, drop-in replacement                     |
+| **Database users** (QuestDB in v3.x dev builds) | ⚠️ Yes              | QuestDB deprecated, must migrate to ClickHouse         |
+| **New database adopters**                       | ✅ Optional         | ClickHouse offers persistent storage, advanced queries |
 
 **Summary**: Most users can upgrade without code changes. Database migration only needed for QuestDB users or new database adopters.
 
@@ -40,6 +42,7 @@
 **Who's Affected**: Users who tested QuestDB features in v3.x development builds
 
 **Migration Path**:
+
 ```python
 # v3.x (QuestDB - REMOVED)
 from gapless_crypto_clickhouse.questdb import QuestDBConnection
@@ -55,10 +58,12 @@ from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHou
 ### 2. Dependency Changes
 
 **Removed Dependencies** (v4.0.0):
+
 - `questdb>=2.0.0` (QuestDB Python client)
 - `psycopg[binary]>=3.2.0` (PostgreSQL client for QuestDB wire protocol)
 
 **Added Dependencies** (v4.0.0):
+
 - `clickhouse-driver>=0.2.9` (ClickHouse native protocol client)
 
 **Package Size**: Reduced by ~8-10 MB (22% reduction from 9 to 7 dependencies)
@@ -82,6 +87,7 @@ uv pip install --upgrade gapless-crypto-data
 ```
 
 **Verify upgrade**:
+
 ```python
 import gapless_crypto_clickhouse as gcd
 
@@ -94,6 +100,7 @@ print(f"Downloaded {len(df)} bars")  # Zero code changes
 ```
 
 **Rollback** (if issues arise):
+
 ```bash
 # Downgrade to v3.3.0
 pip install gapless-crypto-data==3.3.0
@@ -104,6 +111,7 @@ pip install gapless-crypto-data==3.3.0
 **For users who**: Want to start using database features for persistent storage, advanced queries
 
 **Prerequisites**:
+
 - Docker & Docker Compose installed
 - 2 GB free disk space (ClickHouse image + data)
 - Ports 9000 and 8123 available
@@ -132,6 +140,7 @@ docker-compose logs clickhouse | grep "Ready for connections"
 ```
 
 **What happens**:
+
 - Downloads ClickHouse 24.1-alpine image (~200 MB)
 - Creates `ohlcv` table with ReplacingMergeTree engine (auto-initialized from `schema.sql`)
 - Configures compression (DoubleDelta for timestamps, Gorilla for OHLCV)
@@ -214,6 +223,7 @@ with ClickHouseConnection() as conn:
 **For users who**: Used QuestDB features in v3.x development builds
 
 **Prerequisites**:
+
 - QuestDB database accessible (for data export)
 - ClickHouse setup completed (see Path 2)
 
@@ -304,6 +314,7 @@ tar -czf questdb_backup_$(date +%Y%m%d).tar.gz /path/to/questdb/data
 After upgrading to v4.0.0, the following tests are expected to fail due to CLI removal:
 
 **Failing Test Files**:
+
 - `tests/test_cli.py` - Entire file (CLI removed in v4.0.0)
 - `tests/test_cli_integration.py` - CLI integration tests
 
@@ -311,17 +322,20 @@ After upgrading to v4.0.0, the following tests are expected to fail due to CLI r
 The CLI interface was removed in v4.0.0 (pyproject.toml removed `[project.scripts]` section). Tests that invoke CLI commands or test CLI functionality will fail with import errors or missing command errors.
 
 **Action Required**:
+
 - **For maintainers**: Remove these test files in a follow-up PR
 - **For users**: These failures are expected and can be ignored if not using CLI features
 
 **Workaround**:
 Run tests while ignoring CLI test files:
+
 ```bash
 pytest tests/ --ignore=tests/test_cli.py --ignore=tests/test_cli_integration.py
 ```
 
 **Alternative**:
 Run only non-CLI tests:
+
 ```bash
 pytest tests/ -k "not cli"
 ```
@@ -331,6 +345,7 @@ pytest tests/ -k "not cli"
 ### Environment Variables
 
 **v3.x (QuestDB - REMOVED)**:
+
 ```bash
 QUESTDB_HOST=localhost
 QUESTDB_ILP_PORT=9009
@@ -341,6 +356,7 @@ QUESTDB_PG_DATABASE=qdb
 ```
 
 **v4.0.0 (ClickHouse - NEW)**:
+
 ```bash
 CLICKHOUSE_HOST=localhost
 CLICKHOUSE_PORT=9000              # Native protocol (default: 9000)
@@ -361,8 +377,8 @@ services:
   clickhouse:
     image: clickhouse/clickhouse-server:24.1-alpine
     ports:
-      - "9000:9000"   # Native protocol
-      - "8123:8123"   # HTTP interface
+      - "9000:9000" # Native protocol
+      - "8123:8123" # HTTP interface
     volumes:
       - clickhouse-data:/var/lib/clickhouse
       - ./src/gapless_crypto_clickhouse/clickhouse/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
@@ -376,13 +392,13 @@ services:
 
 ## API Compatibility Matrix
 
-| Feature | v3.x File-Based | v3.x QuestDB (Dev) | v4.0.0 File-Based | v4.0.0 ClickHouse |
-|---------|-----------------|--------------------|--------------------|-------------------|
-| **Data Collection** | ✅ `gcd.download()` | ✅ Same API | ✅ **Unchanged** | ✅ New API |
-| **Gap Filling** | ✅ `gcd.fill_gaps()` | ✅ Same API | ✅ **Unchanged** | ✅ New API |
-| **Query Interface** | ❌ N/A | ✅ `OHLCVQuery` (QuestDB) | ❌ N/A | ✅ `OHLCVQuery` (ClickHouse) |
-| **Bulk Ingestion** | ❌ N/A | ✅ `QuestDBBulkLoader` | ❌ N/A | ✅ `ClickHouseBulkLoader` |
-| **Futures Support** | ❌ Not supported | ❌ Not supported | ❌ Not supported | ✅ `instrument_type` param |
+| Feature             | v3.x File-Based      | v3.x QuestDB (Dev)        | v4.0.0 File-Based | v4.0.0 ClickHouse            |
+| ------------------- | -------------------- | ------------------------- | ----------------- | ---------------------------- |
+| **Data Collection** | ✅ `gcd.download()`  | ✅ Same API               | ✅ **Unchanged**  | ✅ New API                   |
+| **Gap Filling**     | ✅ `gcd.fill_gaps()` | ✅ Same API               | ✅ **Unchanged**  | ✅ New API                   |
+| **Query Interface** | ❌ N/A               | ✅ `OHLCVQuery` (QuestDB) | ❌ N/A            | ✅ `OHLCVQuery` (ClickHouse) |
+| **Bulk Ingestion**  | ❌ N/A               | ✅ `QuestDBBulkLoader`    | ❌ N/A            | ✅ `ClickHouseBulkLoader`    |
+| **Futures Support** | ❌ Not supported     | ❌ Not supported          | ❌ Not supported  | ✅ `instrument_type` param   |
 
 **API Signature Changes**: **NONE** for file-based workflows. Database APIs have identical signatures (drop-in replacement).
 
@@ -426,12 +442,12 @@ with ClickHouseConnection() as conn:
 
 ### Common Migration Issues
 
-| Issue | Symptom | Solution |
-|-------|---------|----------|
-| **Import Error** | `ModuleNotFoundError: No module named 'gapless_crypto_clickhouse.questdb'` | Expected (QuestDB removed). Update imports to use `clickhouse` instead |
-| **Connection Refused** | `clickhouse_driver.errors.NetworkError: Connection refused` | Start ClickHouse: `docker-compose up -d` |
-| **Port Conflict** | `Error starting ClickHouse: port 9000 already in use` | Change port in `docker-compose.yml` or stop conflicting service |
-| **Schema Not Found** | `clickhouse_driver.errors.ServerException: Table ohlcv doesn't exist` | Restart container to trigger schema init: `docker-compose restart clickhouse` |
+| Issue                  | Symptom                                                                    | Solution                                                                      |
+| ---------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Import Error**       | `ModuleNotFoundError: No module named 'gapless_crypto_clickhouse.questdb'` | Expected (QuestDB removed). Update imports to use `clickhouse` instead        |
+| **Connection Refused** | `clickhouse_driver.errors.NetworkError: Connection refused`                | Start ClickHouse: `docker-compose up -d`                                      |
+| **Port Conflict**      | `Error starting ClickHouse: port 9000 already in use`                      | Change port in `docker-compose.yml` or stop conflicting service               |
+| **Schema Not Found**   | `clickhouse_driver.errors.ServerException: Table ohlcv doesn't exist`      | Restart container to trigger schema init: `docker-compose restart clickhouse` |
 
 ## Rollback Procedure
 
@@ -476,6 +492,7 @@ If rollback was necessary, please report the issue:
 - **Email**: terry@eonlabs.com
 
 Include:
+
 - Error message (full traceback)
 - Migration path attempted (Path 1/2/3)
 - Operating system and Python version
@@ -528,6 +545,7 @@ A: Follow the rollback procedure (downgrade to v3.3.0) and report the issue on G
 - **Email**: terry@eonlabs.com
 
 **Before posting**:
+
 - Check FAQ section above
 - Search existing issues for similar problems
 - Provide error messages and reproduction steps

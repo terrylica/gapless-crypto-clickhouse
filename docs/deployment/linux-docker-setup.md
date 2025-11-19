@@ -5,6 +5,7 @@ Docker-based QuestDB deployment for Linux production. Alternative to native depl
 ## Architecture
 
 **Hybrid approach**:
+
 - QuestDB: Docker container (easier deployment and updates)
 - Python: Native uv-managed (systemd service, no container overhead)
 - Performance: ~10% disk I/O overhead vs native (acceptable trade-off)
@@ -13,17 +14,20 @@ Docker-based QuestDB deployment for Linux production. Alternative to native depl
 ## When to Use Docker
 
 **Advantages**:
+
 - Easier deployment (no manual binary installation)
 - Consistent environment across systems
 - Simpler updates (pull new image)
 - Better isolation
 
 **Disadvantages**:
+
 - ~2.67% CPU overhead
 - ~10% disk I/O overhead
 - Additional layer complexity
 
 **Recommendation**: Use Docker if:
+
 - Containerized infrastructure is standard
 - Ease of deployment > maximum performance
 - Running multiple services in containers
@@ -33,6 +37,7 @@ Otherwise, use native deployment (see `linux-native-setup.md`).
 ## Prerequisites
 
 **System Requirements**:
+
 - Linux kernel 5.10+ (Ubuntu 22.04 LTS, Debian 12, or equivalent)
 - 16GB+ RAM (64GB+ recommended for production)
 - 500GB+ SSD/NVMe storage
@@ -40,6 +45,7 @@ Otherwise, use native deployment (see `linux-native-setup.md`).
 - Docker Compose v2.20+
 
 **Network Requirements**:
+
 - Outbound HTTPS (443) for Docker Hub, Binance API, CloudFront
 - Inbound ports (if remote access needed):
   - 9000: QuestDB Web Console
@@ -146,8 +152,9 @@ sudo -u gapless nano deployment/docker-compose.linux.yml
 ```
 
 **Optimized `docker-compose.linux.yml`**:
+
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   questdb:
@@ -155,10 +162,10 @@ services:
     container_name: gapless-questdb
 
     ports:
-      - "9000:9000"   # HTTP REST API & Web Console
-      - "8812:8812"   # PostgreSQL wire protocol
-      - "9009:9009"   # InfluxDB Line Protocol
-      - "9003:9003"   # Prometheus metrics
+      - "9000:9000" # HTTP REST API & Web Console
+      - "8812:8812" # PostgreSQL wire protocol
+      - "9009:9009" # InfluxDB Line Protocol
+      - "9003:9003" # Prometheus metrics
 
     # Named volume (optimal for Linux)
     volumes:
@@ -192,10 +199,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '8.0'
+          cpus: "8.0"
           memory: 64G
         reservations:
-          cpus: '4.0'
+          cpus: "4.0"
           memory: 32G
 
     # Logging
@@ -274,6 +281,7 @@ sudo nano /etc/systemd/system/gapless-crypto-collector.service
 ```
 
 **Modified service** (remove `Requires=questdb.service`):
+
 ```ini
 [Unit]
 Description=Gapless Crypto Data Collector
@@ -297,6 +305,7 @@ sudo -u gapless nano /opt/gapless-crypto-clickhouse/.env
 ```
 
 **Environment configuration**:
+
 ```bash
 # QuestDB connection (Docker container)
 QUESTDB_HOST=localhost
@@ -470,11 +479,13 @@ docker compose -f deployment/docker-compose.linux.yml up -d
 ### Container Fails to Start
 
 **Check logs**:
+
 ```bash
 docker logs gapless-questdb
 ```
 
 **Common issues**:
+
 - Port already in use: `sudo lsof -i :9000`
 - Insufficient memory: Reduce Xmx in docker-compose.linux.yml
 - Volume permission errors: Check volume ownership
@@ -482,6 +493,7 @@ docker logs gapless-questdb
 ### Collector Cannot Connect to QuestDB
 
 **Diagnosis**:
+
 ```bash
 # Check if QuestDB is reachable
 telnet localhost 9009
@@ -491,6 +503,7 @@ docker network inspect gapless-network
 ```
 
 **Solution**:
+
 - Ensure QuestDB container is running: `docker ps`
 - Verify ports are exposed: `docker port gapless-questdb`
 - Check firewall rules: `sudo ufw status`
@@ -498,6 +511,7 @@ docker network inspect gapless-network
 ### Slow Performance
 
 **Diagnosis**:
+
 ```bash
 # Check Docker stats
 docker stats gapless-questdb
@@ -510,18 +524,19 @@ docker volume inspect gapless-crypto-data_questdb_data
 ```
 
 **Solutions**:
+
 - Use overlay2 storage driver (default)
 - Mount volume on fast SSD/NVMe
 - Consider native deployment for maximum performance
 
 ## Performance Comparison
 
-| Metric | Docker (Linux) | Native (Linux) | Difference |
-|--------|---------------|----------------|------------|
-| CPU overhead | 2.67% | 0% | +2.67% |
-| Disk I/O | 90% | 100% | -10% |
-| Ingestion rate | 90-180K rows/sec | 100-200K rows/sec | -10% |
-| Query latency | <1.1s | <1s | +10% |
+| Metric         | Docker (Linux)   | Native (Linux)    | Difference |
+| -------------- | ---------------- | ----------------- | ---------- |
+| CPU overhead   | 2.67%            | 0%                | +2.67%     |
+| Disk I/O       | 90%              | 100%              | -10%       |
+| Ingestion rate | 90-180K rows/sec | 100-200K rows/sec | -10%       |
+| Query latency  | <1.1s            | <1s               | +10%       |
 
 **Verdict**: Docker overhead is acceptable for most workloads. Use native if maximum performance is critical.
 
@@ -582,7 +597,7 @@ sudo systemctl is-enabled gapless-crypto-collector
 **Production workload (400 symbols × 13 timeframes × 1 year)**:
 
 | Resource | Minimum | Recommended |
-|----------|---------|-------------|
+| -------- | ------- | ----------- |
 | CPU      | 8 cores | 16+ cores   |
 | RAM      | 32GB    | 64GB+       |
 | Storage  | 500GB   | 1TB SSD     |

@@ -5,12 +5,14 @@ Colima-optimized QuestDB deployment for macOS development environment.
 ## Prerequisites
 
 **Required**:
+
 - macOS 13+ (Ventura or later, for VirtioFS support)
 - Homebrew package manager
 - 8GB+ available RAM
 - 20GB+ available disk space
 
 **Not Required**:
+
 - Docker Desktop (explicitly NOT used)
 
 ## Installation
@@ -45,6 +47,7 @@ colima status
 ```
 
 **Expected output**:
+
 ```
 INFO colima is running using QEMU
 arch: aarch64
@@ -78,6 +81,7 @@ docker ps
 ```
 
 **Expected output**:
+
 ```
 CONTAINER ID   IMAGE                    STATUS         PORTS
 abc123...      questdb/questdb:9.2.0    Up 10 seconds  0.0.0.0:9000->9000/tcp, ...
@@ -104,6 +108,7 @@ psql -h localhost -p 8812 -U admin -d qdb -c "SELECT 1;"
 Open browser to http://localhost:9000
 
 **Test query**:
+
 ```sql
 SELECT * FROM ohlcv LIMIT 10;
 ```
@@ -121,6 +126,7 @@ psql -h localhost -p 8812 -U admin -d qdb \
 ```
 
 **Expected output**:
+
 ```
                    Table "ohlcv"
         Column              |  Type     | Nullable
@@ -169,6 +175,7 @@ nano .env
 ```
 
 **Required settings** (`.env`):
+
 ```bash
 # QuestDB connection
 QUESTDB_HOST=localhost
@@ -292,6 +299,7 @@ colima stop
 **Symptom**: `colima start` fails with QEMU errors
 
 **Solution**:
+
 ```bash
 # Delete existing VM
 colima delete
@@ -305,6 +313,7 @@ colima start --arch aarch64 --vm-type=qemu --mount-type virtiofs
 **Symptom**: Ingestion rate <10K rows/sec
 
 **Diagnosis**:
+
 ```bash
 # Check mount type
 colima status | grep mountType
@@ -314,6 +323,7 @@ colima status | grep mountType
 ```
 
 **Solution**:
+
 ```bash
 colima delete
 colima start --mount-type virtiofs
@@ -324,6 +334,7 @@ colima start --mount-type virtiofs
 **Symptom**: `docker ps` fails with "Cannot connect to Docker daemon"
 
 **Solution**:
+
 ```bash
 # Check DOCKER_HOST environment variable
 echo $DOCKER_HOST
@@ -342,6 +353,7 @@ source ~/.zshrc
 **Symptom**: Container status shows "unhealthy"
 
 **Diagnosis**:
+
 ```bash
 # Check container logs
 docker logs gapless-questdb
@@ -353,6 +365,7 @@ docker logs gapless-questdb
 ```
 
 **Solution**:
+
 ```bash
 # Increase memory in docker-compose.macos.yml
 # Change: JAVA_OPTS=-Xms1g -Xmx2g
@@ -367,6 +380,7 @@ docker-compose -f deployment/docker-compose.macos.yml up -d --force-recreate
 **Symptom**: `Bind for 0.0.0.0:9000 failed: port is already allocated`
 
 **Solution**:
+
 ```bash
 # Find process using port 9000
 lsof -i :9000
@@ -398,11 +412,11 @@ lsof -i :9000
 
 ### I/O Benchmarks
 
-| Configuration | IOPS | Latency |
-|--------------|------|---------|
-| VirtioFS (recommended) | 2,786 | 3.5ms |
-| gRPC-FUSE (legacy) | 1,545 | 6.2ms |
-| Docker Desktop | 1,000 | 9.5ms |
+| Configuration          | IOPS  | Latency |
+| ---------------------- | ----- | ------- |
+| VirtioFS (recommended) | 2,786 | 3.5ms   |
+| gRPC-FUSE (legacy)     | 1,545 | 6.2ms   |
+| Docker Desktop         | 1,000 | 9.5ms   |
 
 ### Ingestion Performance
 

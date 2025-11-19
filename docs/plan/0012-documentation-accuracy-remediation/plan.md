@@ -13,6 +13,7 @@
 Systematic remediation of documentation accuracy failures discovered by 5-agent parallel audit. Restore 75 broken Python examples, add missing ClickHouse architecture docs, and establish empirical validation to prevent future drift.
 
 **Scope**:
+
 - **15 high-priority files** (python-api.md, DATA_COLLECTION.md, OVERVIEW.md, etc.)
 - **Global find-and-replace**: `gapless_crypto_clickhouse` → `gapless_crypto_clickhouse`
 - **Architecture additions**: ClickHouse integration documentation
@@ -20,6 +21,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 - **Empirical validation**: Test 10 representative examples
 
 **Out of Scope**:
+
 - Backward compatibility (this is v1.0.0, no legacy needed)
 - Historical documentation (ADRs, CHANGELOGs preserve parent package refs)
 - Cache directory rename (intentionally keeps `~/.cache/gapless-crypto-data/`)
@@ -32,15 +34,16 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 
 **5-Agent Documentation Audit Results** (2025-11-19):
 
-| Investigation Area | Critical Issues | Broken Examples | Root Cause |
-|-------------------|----------------|-----------------|------------|
-| Python API Examples | Package name mismatch | 75/75 (100%) | Fork from gapless-crypto-data incomplete |
-| Architecture Claims | Wrong paths, missing ClickHouse docs | 6 major | Documentation not updated during ADR-0011 |
-| CLI Documentation | Obsolete v3→v4 timeline | All examples | Inherited parent package history |
-| Data Format Spec | Column/timeframe discrepancies | 2 issues | CSV vs DB naming undocumented |
-| Validation System | Wrong paths (API accurate) | 36/109 refs | Path references not updated |
+| Investigation Area  | Critical Issues                      | Broken Examples | Root Cause                                |
+| ------------------- | ------------------------------------ | --------------- | ----------------------------------------- |
+| Python API Examples | Package name mismatch                | 75/75 (100%)    | Fork from gapless-crypto-data incomplete  |
+| Architecture Claims | Wrong paths, missing ClickHouse docs | 6 major         | Documentation not updated during ADR-0011 |
+| CLI Documentation   | Obsolete v3→v4 timeline              | All examples    | Inherited parent package history          |
+| Data Format Spec    | Column/timeframe discrepancies       | 2 issues        | CSV vs DB naming undocumented             |
+| Validation System   | Wrong paths (API accurate)           | 36/109 refs     | Path references not updated               |
 
 **Impact**:
+
 - **Unusable documentation**: All Python examples fail with `ModuleNotFoundError`
 - **Missing critical docs**: ClickHouse integration (primary feature) undocumented
 - **User confusion**: References to non-existent v3.x/v4.x versions
@@ -67,11 +70,13 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 **Approach**: Fix critical issues systematically with empirical validation at each phase
 
 **Rationale**:
+
 - Faster than full rewrite (~2 hours vs ~10 hours)
 - Preserves existing explanations and context
 - Automated validation prevents regression
 
 **Alternatives Rejected**:
+
 - Partial fix (examples only): Leaves ClickHouse undocumented
 - Full regeneration: Loses context, massive effort
 - Compatibility layer: Confusing, violates v1.0.0 clean slate
@@ -93,12 +98,14 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 **Objective**: Restore all 75 broken Python examples
 
 **Deliverables**:
+
 - 15 high-priority files with corrected imports
 - Zero `gapless_crypto_clickhouse` references (except cache, ADRs, CHANGELOG)
 
 **Steps**:
 
 1. **Global find-and-replace in documentation**:
+
    ```bash
    # Python imports
    find docs/ examples/ -type f \( -name "*.md" -o -name "*.py" \) \
@@ -123,6 +130,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    ```
 
 **Files Affected** (15 high-priority):
+
 - `docs/guides/python-api.md` (15 examples)
 - `docs/guides/DATA_COLLECTION.md` (9 examples)
 - `docs/api/quick-start.md` (6 examples)
@@ -136,6 +144,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 - `examples/cli_usage_examples.sh` (will be deleted in Phase 3)
 
 **Validation**:
+
 - ✅ All Python imports use `gapless_crypto_clickhouse`
 - ✅ All file paths reference correct project directory
 - ✅ Cache directory preserved as `~/.cache/gapless-crypto-data/`
@@ -147,6 +156,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 **Objective**: Add missing ClickHouse docs, fix version confusion
 
 **Deliverables**:
+
 - ClickHouse architecture section in OVERVIEW.md
 - Version references updated to v1.0.0
 - Network architecture accurately documented
@@ -157,12 +167,14 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 1. **Add ClickHouse section** to `docs/architecture/OVERVIEW.md`:
 
    Insert after existing core components section:
+
    ```markdown
    ## ClickHouse Integration (Primary Storage Mode)
 
    ### Overview
 
    ClickHouse serves as the primary storage backend, providing:
+
    - Persistent OHLCV data storage across sessions
    - Multi-symbol querying with millisecond latency
    - Deduplication via ReplacingMergeTree with versioning
@@ -171,21 +183,25 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    ### Components
 
    #### ClickHouseConnection
+
    **Location**: `src/gapless_crypto_clickhouse/clickhouse/connection.py`
 
    **Purpose**: Manages ClickHouse database connections with automatic reconnection
 
    **Key Methods**:
+
    - `connect()`: Establish connection with config validation
    - `execute()`: Run queries with error handling
    - `close()`: Clean connection shutdown
 
    #### ClickHouseConfig
+
    **Location**: `src/gapless_crypto_clickhouse/clickhouse/config.py`
 
    **Purpose**: Configuration management from environment variables
 
    **Environment Variables**:
+
    - `CLICKHOUSE_HOST`: Database host (default: localhost)
    - `CLICKHOUSE_PORT`: Database port (default: 9000)
    - `CLICKHOUSE_DATABASE`: Database name (default: crypto_data)
@@ -193,11 +209,13 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    - `CLICKHOUSE_PASSWORD`: Password
 
    #### ClickHouseBulkLoader
+
    **Location**: `src/gapless_crypto_clickhouse/collectors/clickhouse_bulk_loader.py`
 
    **Purpose**: High-performance bulk data ingestion
 
    **Features**:
+
    - Batch processing (100K rows/batch)
    - Idempotent inserts via ReplacingMergeTree
    - Automatic deduplication with deterministic versioning
@@ -210,12 +228,14 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    **Schema Definition**: `src/gapless_crypto_clickhouse/clickhouse/schema.sql`
 
    **Columns** (17 total):
+
    - **Metadata**: symbol, timeframe, instrument_type, data_source, timestamp
    - **OHLCV**: open, high, low, close, volume
    - **Microstructure**: close_time, quote_asset_volume, number_of_trades, taker volumes
-   - **Deduplication**: _version (deterministic), _sign (1=insert, -1=delete)
+   - **Deduplication**: \_version (deterministic), \_sign (1=insert, -1=delete)
 
    **Indexes**:
+
    - Primary: (symbol, timeframe, timestamp)
    - Sorting: timestamp DESC for time-series queries
 
@@ -235,24 +255,28 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    ```
 
 2. **Fix version references** in `docs/CURRENT_ARCHITECTURE_STATUS.yaml`:
+
    ```yaml
    # Change line 26
-   canonical_version: "v1.0.0"  # was: "v3.0.0"
+   canonical_version: "v1.0.0" # was: "v3.0.0"
    ```
 
 3. **Update network architecture** in `CLAUDE.md`:
 
    Replace lines 65-68:
+
    ```markdown
    ## Network Architecture
 
    **Data Source**: AWS S3 + CloudFront CDN (400+ edge locations, 99.99% SLA)
 
    **Download Strategy**:
+
    - **Monthly/Daily files**: urllib (simple, 2x faster for single files)
    - **Concurrent downloads**: httpx with connection pooling (max 30 connections)
 
    **Connection Pooling**:
+
    - Used for concurrent API requests (gap filling)
    - NOT used for CloudFront downloads (different edge servers per request)
    - Configuration: `max_keepalive_connections=20, max_connections=30`
@@ -270,8 +294,10 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    - "regression detection (PyOD ensemble)"
 
    Replace with:
+
    ```markdown
    **Current Features (v1.0.0)**:
+
    - ClickHouse database integration (ReplacingMergeTree)
    - Dual data source strategy (CDN + REST API)
    - Idempotent ingestion with deduplication
@@ -279,6 +305,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    ```
 
 **Validation**:
+
 - ✅ ClickHouse components documented with file locations
 - ✅ Version references show v1.0.0 (not v3.0.0)
 - ✅ Network architecture matches actual implementation
@@ -291,6 +318,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 **Objective**: Remove confusion from obsolete CLI documentation
 
 **Deliverables**:
+
 - `examples/cli_usage_examples.sh` deleted
 - CLI migration guide retitled and rewritten
 - Source code docstring clarified
@@ -298,14 +326,15 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 **Steps**:
 
 1. **Delete obsolete file**:
+
    ```bash
    rm /Users/terryli/eon/gapless-crypto-clickhouse/examples/cli_usage_examples.sh
    ```
 
 2. **Rewrite** `docs/development/CLI_MIGRATION_GUIDE.md`:
-
    - **Retitle**: "Migrating from gapless-crypto-data to gapless-crypto-clickhouse"
    - **Add preamble**:
+
      ```markdown
      # Migrating from gapless-crypto-data to gapless-crypto-clickhouse
 
@@ -317,16 +346,17 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 
      ## Key Differences
 
-     | Aspect | gapless-crypto-data (v3.x) | gapless-crypto-clickhouse (v1.x) |
-     |--------|---------------------------|----------------------------------|
-     | Storage | CSV files only | ClickHouse database (primary) |
-     | Python | 3.9-3.13 | 3.12-3.13 |
-     | CLI | Present | Never existed |
-     | Package | `gapless-crypto-data` | `gapless-crypto-clickhouse` |
-     | Module | `gapless_crypto_clickhouse` | `gapless_crypto_clickhouse` |
+     | Aspect  | gapless-crypto-data (v3.x)  | gapless-crypto-clickhouse (v1.x) |
+     | ------- | --------------------------- | -------------------------------- |
+     | Storage | CSV files only              | ClickHouse database (primary)    |
+     | Python  | 3.9-3.13                    | 3.12-3.13                        |
+     | CLI     | Present                     | Never existed                    |
+     | Package | `gapless-crypto-data`       | `gapless-crypto-clickhouse`      |
+     | Module  | `gapless_crypto_clickhouse` | `gapless_crypto_clickhouse`      |
      ```
 
    - **Fix all import statements** (14 occurrences):
+
      ```python
      # Before (WRONG for this package)
      import gapless_crypto_clickhouse as gcd
@@ -338,15 +368,18 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    - **Remove v3.x → v4.0.0 timeline** (lines 408-414)
 
    - **Add decision matrix**:
+
      ```markdown
      ## Should You Migrate?
 
      **Use gapless-crypto-data (v3.x)** if:
+
      - You need file-based workflows (CSV/Parquet)
      - You're on Python 3.9-3.11
      - You prefer stateless data collection
 
      **Use gapless-crypto-clickhouse (v1.x)** if:
+
      - You need persistent database storage
      - You're querying multiple symbols/timeframes
      - You need sub-second query latency
@@ -356,6 +389,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 3. **Update source docstring** in `src/gapless_crypto_clickhouse/__init__.py`:
 
    Replace lines 66-71:
+
    ```python
    """
    gapless-crypto-clickhouse: ClickHouse-based cryptocurrency data collection
@@ -367,6 +401,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    ```
 
 **Validation**:
+
 - ✅ `cli_usage_examples.sh` deleted
 - ✅ Migration guide uses correct imports
 - ✅ No v3→v4 timeline references
@@ -379,6 +414,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 **Objective**: Document CSV vs database column naming
 
 **Deliverables**:
+
 - Column name mapping table in DATA_FORMAT.md
 - Timeframe count resolved (13 vs 16)
 
@@ -387,33 +423,35 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 1. **Add column mapping table** to `docs/architecture/DATA_FORMAT.md`:
 
    Insert after column definitions section:
+
    ```markdown
    ## Column Naming: CSV vs Database
 
    CSV files use `date` for the timestamp column, but the ClickHouse database uses `timestamp`.
    The conversion happens automatically during ingestion.
 
-   | CSV Column Name | Database Column Name | Type | Conversion |
-   |----------------|---------------------|------|------------|
-   | `date` | `timestamp` | DateTime64(3) | Renamed during ingestion |
-   | `open` | `open` | Float64 | Direct mapping |
-   | `high` | `high` | Float64 | Direct mapping |
-   | `low` | `low` | Float64 | Direct mapping |
-   | `close` | `close` | Float64 | Direct mapping |
-   | `volume` | `volume` | Float64 | Direct mapping |
-   | `close_time` | `close_time` | DateTime64(3) | Direct mapping |
-   | `quote_asset_volume` | `quote_asset_volume` | Float64 | Direct mapping |
-   | `number_of_trades` | `number_of_trades` | Int64 | Direct mapping |
-   | `taker_buy_base_asset_volume` | `taker_buy_base_asset_volume` | Float64 | Direct mapping |
-   | `taker_buy_quote_asset_volume` | `taker_buy_quote_asset_volume` | Float64 | Direct mapping |
+   | CSV Column Name                | Database Column Name           | Type          | Conversion               |
+   | ------------------------------ | ------------------------------ | ------------- | ------------------------ |
+   | `date`                         | `timestamp`                    | DateTime64(3) | Renamed during ingestion |
+   | `open`                         | `open`                         | Float64       | Direct mapping           |
+   | `high`                         | `high`                         | Float64       | Direct mapping           |
+   | `low`                          | `low`                          | Float64       | Direct mapping           |
+   | `close`                        | `close`                        | Float64       | Direct mapping           |
+   | `volume`                       | `volume`                       | Float64       | Direct mapping           |
+   | `close_time`                   | `close_time`                   | DateTime64(3) | Direct mapping           |
+   | `quote_asset_volume`           | `quote_asset_volume`           | Float64       | Direct mapping           |
+   | `number_of_trades`             | `number_of_trades`             | Int64         | Direct mapping           |
+   | `taker_buy_base_asset_volume`  | `taker_buy_base_asset_volume`  | Float64       | Direct mapping           |
+   | `taker_buy_quote_asset_volume` | `taker_buy_quote_asset_volume` | Float64       | Direct mapping           |
 
    **Note**: The database schema includes additional metadata columns (symbol, timeframe,
-   instrument_type, data_source, _version, _sign) that are not present in CSV files.
+   instrument_type, data_source, \_version, \_sign) that are not present in CSV files.
    ```
 
 2. **Resolve timeframe discrepancy**:
 
    **Option A**: Update `src/gapless_crypto_clickhouse/utils/timeframe_constants.py`:
+
    ```python
    TIMEFRAME_TO_MINUTES: Dict[str, float] = {
        "1s": 1 / 60,
@@ -437,16 +475,19 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    ```
 
    **Option B**: Document in DATA_FORMAT.md:
+
    ```markdown
    ## Supported Timeframes
 
    **Standard Timeframes** (13):
+
    - Second: 1s
    - Minute: 1m, 3m, 5m, 15m, 30m
    - Hour: 1h, 2h, 4h, 6h, 8h, 12h
    - Day: 1d
 
    **Exotic Timeframes** (3 additional, ClickHouse bulk loader only):
+
    - 3d (three-day)
    - 1w (weekly)
    - 1mo (monthly)
@@ -458,6 +499,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    **Recommendation**: Use Option B (documentation-only, no code changes)
 
 **Validation**:
+
 - ✅ CSV↔DB column mapping documented
 - ✅ Timeframe count discrepancy resolved (13 standard + 3 exotic)
 
@@ -468,25 +510,27 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 **Objective**: Validate all fixes work end-to-end
 
 **Deliverables**:
+
 - 10 representative examples tested with `uv run`
 - Validation report confirming fixes
 
 **Steps**:
 
 1. **Create validation workspace**:
+
    ```bash
    mkdir -p /tmp/doc-audit/validation/
    cd /tmp/doc-audit/validation/
    ```
 
 2. **Extract representative examples** (10 total):
-
    - 3 from `docs/guides/python-api.md` (basic API, collectors, validation)
    - 2 from `docs/guides/DATA_COLLECTION.md` (collection, gap filling)
    - 3 from `docs/validation/QUERY_PATTERNS.md` (queries, exports)
    - 2 from `docs/api/quick-start.md` (quick start examples)
 
 3. **Create test runner**:
+
    ```bash
    cat > /tmp/doc-audit/validation/run_tests.sh <<'EOF'
    #!/usr/bin/env bash
@@ -515,11 +559,13 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    ```
 
 4. **Run validation**:
+
    ```bash
    /tmp/doc-audit/validation/run_tests.sh
    ```
 
 5. **Generate validation report**:
+
    ```bash
    cat > /tmp/doc-audit/validation/REPORT.md <<EOF
    # Documentation Validation Report
@@ -558,6 +604,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    ```
 
 **Validation Metrics**:
+
 - ✅ All imports resolve
 - ✅ Syntax is valid
 - ✅ Basic execution succeeds
@@ -585,6 +632,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 **Validation**: Grep checks + empirical testing
 
 **Current Accuracy** (by category):
+
 - Python API Examples: 0% → 100% (target)
 - Architecture Claims: 60% → 95% (target)
 - CLI Documentation: 0% → 100% (target)
@@ -694,30 +742,31 @@ Fixes: #N/A (internal audit, no GitHub issue)
 **Expected Release**: Patch version (v1.0.1) - documentation-only changes
 
 **Changelog Entry**:
+
 ```markdown
 ## [1.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.0.0...v1.0.1) (2025-11-19)
 
 ### Bug Fixes
 
-* **docs**: fix systematic package name inconsistencies across all documentation ([commit-hash])
+- **docs**: fix systematic package name inconsistencies across all documentation ([commit-hash])
 
 ### BREAKING CHANGES
 
-* **docs**: Documentation examples now use correct gapless_crypto_clickhouse imports.
+- **docs**: Documentation examples now use correct gapless_crypto_clickhouse imports.
 ```
 
 ---
 
 ## Estimated Timeline
 
-| Phase | Duration | Dependencies |
-|-------|----------|--------------|
-| 1. Package Name Fixes | 20 min | None |
-| 2. Architecture Updates | 30 min | Phase 1 |
-| 3. CLI Cleanup | 15 min | Phase 1 |
-| 4. Data Format Clarifications | 15 min | Phase 1 |
-| 5. Empirical Validation | 30 min | Phases 1-4 |
-| **Total** | **110 min** | Sequential |
+| Phase                         | Duration    | Dependencies |
+| ----------------------------- | ----------- | ------------ |
+| 1. Package Name Fixes         | 20 min      | None         |
+| 2. Architecture Updates       | 30 min      | Phase 1      |
+| 3. CLI Cleanup                | 15 min      | Phase 1      |
+| 4. Data Format Clarifications | 15 min      | Phase 1      |
+| 5. Empirical Validation       | 30 min      | Phases 1-4   |
+| **Total**                     | **110 min** | Sequential   |
 
 **Recommendation**: Execute in single session for atomicity
 
@@ -726,6 +775,7 @@ Fixes: #N/A (internal audit, no GitHub issue)
 ## Success Criteria
 
 **Definition of Done**:
+
 1. ✅ Zero `ModuleNotFoundError` in any documentation example
 2. ✅ ClickHouse architecture section added to OVERVIEW.md
 3. ✅ All version references show v1.0.0 (not v3.0.0 or v4.0.0)
@@ -735,6 +785,7 @@ Fixes: #N/A (internal audit, no GitHub issue)
 7. ✅ Grep validation shows zero old package references (except historical)
 
 **Acceptance Test**:
+
 ```bash
 # From clean environment
 cd /tmp/doc-audit/validation/

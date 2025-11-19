@@ -18,6 +18,7 @@ ClickHouse has mature support across major development environments, with JetBra
 **Install:** `code --install-extension ultram4rine.sqltools-clickhouse-driver`
 
 #### Stats
+
 - **Downloads:** 47,273
 - **Rating:** 3.5/5 (2 reviews)
 - **Last Updated:** November 17, 2025
@@ -25,6 +26,7 @@ ClickHouse has mature support across major development environments, with JetBra
 - **License:** Free/Open Source
 
 #### Features
+
 - Explore tables and views
 - Run SQL queries with results display
 - Auto-completion for ClickHouse keywords
@@ -32,21 +34,25 @@ ClickHouse has mature support across major development environments, with JetBra
 - Integration with SQLTools ecosystem
 
 #### Requirements
+
 - SQLTools extension (dependency)
 - VS Code 1.42.0+
 - ClickHouse server 24.8+
 
 #### Limitations
+
 - **No FORMAT clause** - driver automatically applies JSON formatting
 - **Single query execution only** - cannot run multiple queries at once
 - Older ClickHouse versions may work but lack keyword completion
 
 #### Pros
+
 - Most actively maintained ClickHouse extension for VSCode
 - Part of popular SQLTools ecosystem
 - Cross-platform support
 
 #### Cons
+
 - Limited reviews/feedback
 - Single query limitation may hinder workflow
 - Requires understanding of SQLTools architecture
@@ -60,28 +66,34 @@ ClickHouse has mature support across major development environments, with JetBra
 **Install:** `code --install-extension LinJun.clickhouse-support`
 
 #### Stats
+
 - **Downloads:** 3,484
 - **Rating:** 5/5 (1 review)
 - **Last Updated:** June 4, 2025
 - **Version:** 1.0.6
 
 #### Features
+
 - Database Explorer panel with connection configuration
 - Support for ClickHouse connections
 - SQLite file support
 - Works on Web, Linux, macOS, Windows
 
 #### Dependencies
+
 Bundles two extensions:
+
 - `cweijan.vscode-database-client2` (Database Client)
 - `cweijan.dbclient-jdbc` (JDBC driver support)
 
 #### Pros
+
 - Extension pack - easier setup
 - High rating (though limited sample)
 - Multi-platform including web
 
 #### Cons
+
 - Lower download count suggests less adoption
 - Limited documentation
 - Unclear feature differentiation from base Database Client
@@ -94,6 +106,7 @@ Bundles two extensions:
 **Extension ID:** `cweijan.vscode-database-client2`
 
 #### Features
+
 - Multi-database support (MySQL, PostgreSQL, Redis, ClickHouse, etc.)
 - SQL editor with syntax highlighting
 - Schema browser
@@ -101,12 +114,14 @@ Bundles two extensions:
 - Query history
 
 #### ClickHouse-Specific Features
+
 - Connect via HTTP/HTTPS
 - Browse ClickHouse schemas
 - Execute queries with result visualization
 - Export query results
 
 #### Notes
+
 - Bundled in "Clickhouse Support" extension pack
 - General-purpose database tool, not ClickHouse-specific
 
@@ -118,6 +133,7 @@ Bundles two extensions:
 **Type:** Commercial VSCode extension
 
 #### Features
+
 - SQL query editor with ClickHouse syntax highlighting
 - Data exploration with quick sample viewing
 - Schema browsing
@@ -129,17 +145,20 @@ Bundles two extensions:
 - AI-powered copilot tools
 
 #### Connection Setup
+
 1. Open DBCode extension
 2. Click "Add Connection" → Select ClickHouse
 3. Enter: host, port (8123), username, password, database
 4. Save to connect
 
 #### Pros
+
 - Comprehensive feature set
 - Modern UI
 - AI copilot integration
 
 #### Cons
+
 - Commercial product (pricing unclear)
 - Less community adoption than open-source alternatives
 
@@ -151,10 +170,12 @@ Bundles two extensions:
 **Repository:** https://github.com/fanruten/ClickHouseLight
 
 #### Features
+
 - Credentials stored in `.clickhouse_settings` file (workspace root)
 - Basic query execution
 
 #### Status
+
 - Limited information available
 - Appears less actively maintained
 - Minimal marketplace presence
@@ -167,10 +188,12 @@ Bundles two extensions:
 **Extension ID:** `JoshFerge.clickhouse-query-formatter`
 
 #### Features
+
 - Formats ClickHouse queries
 - Syntax-aware formatting
 
 #### Use Case
+
 - Utility extension for query formatting
 - Complements other database extensions
 
@@ -185,6 +208,7 @@ Bundles two extensions:
 **Documentation:** https://clickhouse.com/docs/integrations/datagrip
 
 #### Setup
+
 1. Open Data Sources and Drivers dialog
 2. Select ClickHouse from Complete Support list
 3. Choose "Latest stable driver" from Provided Driver
@@ -192,24 +216,30 @@ Bundles two extensions:
 5. Configure connection parameters
 
 #### Connection Parameters
+
 - **Host:** hostname (no protocol prefix)
 - **Port:** 8123 (HTTP) or 8443 (HTTPS/Cloud)
 - **Authentication:** User & Password OR No auth
 - **Database:** database name
 
 #### JDBC URL Format
+
 ```
 jdbc:clickhouse://<host>:<port>/<database>
 ```
 
 #### Cloud Connection (CRITICAL)
+
 **ClickHouse Cloud REQUIRES SSL:**
+
 ```
 jdbc:clickhouse://your-host.clickhouse.cloud:8443/default?ssl=true
 ```
+
 Omitting `?ssl=true` causes "Connection reset" errors.
 
 #### Features
+
 - Browse tables, views, table data
 - Run queries with full SQL editor
 - **Very fast code completion**
@@ -225,22 +255,26 @@ Omitting `?ssl=true` causes "Connection reset" errors.
 - Type deduction for map literals
 
 #### Limitations
+
 - Cannot export data
 - Cannot modify tables (DDL limitations)
 - Manual driver installation required
 
 #### Pros
+
 - Most comprehensive ClickHouse IDE integration
 - Native ClickHouse dialect support
 - Professional-grade features
 - Actively maintained by JetBrains
 
 #### Cons
+
 - Paid product (subscription required)
 - Standalone app (not integrated with code editor)
 - Driver not pre-shipped (manual download)
 
 #### First Released
+
 - Version 2018.2.2 (August 2018)
 - Continuous updates through 2025
 
@@ -253,30 +287,37 @@ Omitting `?ssl=true` causes "Connection reset" errors.
 **Note:** Database Tools plugin available only in PyCharm Pro
 
 #### Features
+
 Same database integration as DataGrip (embedded):
+
 - ClickHouse connection support
 - SQL editor with ClickHouse syntax
 - Code completion and navigation
 - Data viewing and editing
 
 #### Connection Setup
+
 1. Database tool window → New → Data Source → ClickHouse
 2. Enter port (default 8123)
 3. Choose authentication: User & Password OR No auth
 4. Test connection
 
 #### Use Case
+
 Ideal for Python developers who:
+
 - Need both Python IDE and database tools
 - Already have PyCharm Pro license
 - Want integrated workflow
 
 #### Pros
+
 - Integrated with Python development
 - Same DataGrip engine
 - Single IDE for code + data
 
 #### Cons
+
 - Requires Pro version (not Community)
 - Same limitations as DataGrip for ClickHouse
 
@@ -288,11 +329,13 @@ Ideal for Python developers who:
 **Pricing:** Paid (subscription-based)
 
 #### Features
+
 - Same embedded DataGrip functionality
 - ClickHouse connection support
 - Full SQL editor with ClickHouse dialect
 
 #### Use Case
+
 For Java/Kotlin/Scala developers needing ClickHouse access
 
 ---
@@ -306,27 +349,32 @@ For Java/Kotlin/Scala developers needing ClickHouse access
 **Status:** Production-ready, community-maintained
 
 #### Installation
+
 ```bash
 pip install jupysql clickhouse-sqlalchemy
 ```
 
 Or in notebook:
+
 ```python
 %pip install --quiet jupysql clickhouse-sqlalchemy
 ```
 
 #### Setup
+
 ```python
 %load_ext sql
 %config SqlMagic.autocommit=False
 ```
 
 #### Connection String Format
+
 ```
 clickhouse://user:password@host:port/database
 ```
 
 **Example (local):**
+
 ```
 clickhouse://default:@localhost:8123/default
 ```
@@ -334,14 +382,16 @@ clickhouse://default:@localhost:8123/default
 #### Usage Examples
 
 **SQL Magic (inline):**
+
 ```python
 %sql SELECT count() FROM my_table
 ```
 
 **SQL Cell:**
+
 ```python
 %%sql
-SELECT 
+SELECT
     toDate(trip_date) as date,
     avg(trip_distance) as avg_distance
 FROM trips
@@ -351,12 +401,14 @@ ORDER BY date
 ```
 
 **DataFrame Conversion:**
+
 ```python
 result = %sql SELECT * FROM my_table
 df = result.DataFrame()
 ```
 
 #### Features
+
 - Execute SQL queries with `%sql` and `%%sql` magic commands
 - SQL plotting functionality:
   - Histogram generation with customizable bins
@@ -370,17 +422,20 @@ df = result.DataFrame()
   - Window functions
 
 #### Limitations
+
 - Community-maintained (limited official ClickHouse support)
 - Relies on clickhouse_sqlalchemy driver
 - Historical issue: some versions added `COMMIT` after queries (violates ClickHouse API)
 
 #### Pros
+
 - Native Jupyter integration
 - Familiar magic command syntax
 - Visualization support
 - Pandas/DataFrame workflow
 
 #### Cons
+
 - Requires clickhouse-sqlalchemy layer
 - Community support only
 - Past compatibility issues
@@ -390,6 +445,7 @@ df = result.DataFrame()
 ### Alternative: Direct Python Drivers in Notebooks
 
 #### clickhouse-connect (Official)
+
 ```python
 import clickhouse_connect
 
@@ -408,6 +464,7 @@ client.insert_df('my_table', df)
 ```
 
 **Features:**
+
 - Official ClickHouse Python driver
 - Native pandas integration via `query_df()` and `insert_df()`
 - Support for: Pandas (numpy/arrow-backed), NumPy, PyArrow, Polars
@@ -415,12 +472,14 @@ client.insert_df('my_table', df)
 - Python 3.9+ required
 
 **Pros:**
+
 - Official support
 - High performance
 - Direct DataFrame support
 - No SQLAlchemy layer
 
 **Cons:**
+
 - No SQL magic commands
 - Imperative code (not declarative SQL)
 - Different workflow than JupySQL
@@ -428,6 +487,7 @@ client.insert_df('my_table', df)
 ---
 
 #### clickhouse-driver (Community)
+
 ```python
 from clickhouse_driver import Client
 
@@ -436,11 +496,13 @@ result = client.execute('SELECT * FROM my_table')
 ```
 
 **Features:**
+
 - Native protocol (TCP)
 - Faster than HTTP for large datasets
 - NumPy/Pandas compatibility via `query_dataframe()`
 
 **Use Case:**
+
 - High-performance scenarios
 - Large data transfers
 
@@ -452,12 +514,14 @@ result = client.execute('SELECT * FROM my_table')
 **Documentation:** https://www.jetbrains.com/help/dataspell/clickhouse.html
 
 #### Features
+
 - Jupyter notebook support
 - Embedded DataGrip database tools
 - ClickHouse connection support
 - SQL cells with ClickHouse syntax
 
 #### Use Case
+
 For data scientists wanting integrated notebook + database IDE
 
 ---
@@ -474,42 +538,51 @@ For data scientists wanting integrated notebook + database IDE
 **Language:** Emacs Lisp
 
 #### Features
+
 - Adds ClickHouse as product type to built-in `sql-mode`
 - Syntax highlighting for ClickHouse SQL
 - Database communication via `clickhouse-client` CLI
 - Uses Emacs `comint` interface for CLI interaction
 
 #### Installation
+
 Available on MELPA:
+
 ```elisp
 (use-package sql-clickhouse
   :ensure t)
 ```
 
 #### Configuration
+
 **Important:** CLI produces status updates every 100ms in comint, causing accumulation. Workaround:
+
 ```sql
 SET interactive_delay = 10000000;  -- Update every 10 seconds
 ```
 
 #### Repository Stats
+
 - **Stars:** 6
 - **Forks:** 5
 - **Commits:** 29
 - **Files:** 4 (sql-clickhouse.el, README.org, LICENSE, .gitignore)
 
 #### Pros
+
 - Native Emacs integration
 - Uses built-in sql-mode
 - MELPA distribution
 
 #### Cons
+
 - **ARCHIVED** - No longer maintained
 - Verbose CLI output in comint
 - Requires manual workaround for output flooding
 - Limited community adoption
 
 #### Alternative
+
 Use generic SQL mode with ClickHouse CLI via Emacs shell/terminal buffers.
 
 ---
@@ -519,17 +592,21 @@ Use generic SQL mode with ClickHouse CLI via Emacs shell/terminal buffers.
 **Status:** No dedicated ClickHouse plugin found
 
 #### Current Support
+
 - ClickHouse CLI client allows opening queries in editor via `Alt+Shift+E`
 - Default editor: vim (configurable via `$EDITOR` environment variable)
 - Generic SQL syntax highlighting available
 
 #### Workarounds
+
 1. **Generic SQL Syntax:**
+
    ```vim
    :set filetype=sql
    ```
 
 2. **ClickHouse CLI Integration:**
+
    ```bash
    export EDITOR=nvim
    clickhouse-client
@@ -541,7 +618,9 @@ Use generic SQL mode with ClickHouse CLI via Emacs shell/terminal buffers.
    - Limited ClickHouse dialect support
 
 #### Community Interest
+
 GitHub issue #56637 requests ClickHouse LSP with:
+
 - Auto-complete
 - Error checking
 - Documentation on hover
@@ -549,6 +628,7 @@ GitHub issue #56637 requests ClickHouse LSP with:
 **Status:** Feature request (Nov 2023), no implementation yet
 
 #### Recommendation
+
 Use generic SQL syntax highlighting + ClickHouse CLI workflow. For advanced features, consider VSCode or JetBrains tools.
 
 ---
@@ -558,16 +638,19 @@ Use generic SQL syntax highlighting + ClickHouse CLI workflow. For advanced feat
 **Status:** No dedicated ClickHouse plugin found
 
 #### Current Support
+
 - Generic SQL syntax highlighting
 - SQLTools package (generic SQL client)
 - No ClickHouse-specific extensions on Package Control
 
 #### Workarounds
+
 1. Use generic SQL syntax
 2. External ClickHouse CLI client
 3. Custom syntax definition (advanced users)
 
 #### Recommendation
+
 For ClickHouse-specific work, consider VSCode or JetBrains tools. Sublime Text suitable for casual SQL editing with external client.
 
 ---
@@ -579,31 +662,37 @@ For ClickHouse-specific work, consider VSCode or JetBrains tools. Sublime Text s
 ### Generic SQL Language Servers
 
 #### 1. sqls
+
 **Repository:** https://github.com/sqls-server/sqls  
 **Language:** Go  
 **Status:** Appears unmaintained
 
 **Features:**
+
 - Generic SQL LSP implementation
 - Auto-completion
 - Hover documentation
 - Basic error checking
 
 **Limitations:**
+
 - No ClickHouse-specific syntax support
 - May not recognize ClickHouse extensions (arrays, nested columns, table engines)
 
 ---
 
 #### 2. sql-language-server
+
 **Repository:** https://github.com/joe-re/sql-language-server  
 **Configuration:** Requires `.sqllsrc.json`
 
 **Features:**
+
 - Generic SQL language features
 - Must restart after config changes
 
 **Limitations:**
+
 - Generic SQL only
 - Limited ClickHouse support
 
@@ -616,6 +705,7 @@ For ClickHouse-specific work, consider VSCode or JetBrains tools. Sublime Text s
 **Status:** Open feature request
 
 **Requested Features:**
+
 - Auto-complete for ClickHouse functions/syntax
 - Error checking for ClickHouse SQL
 - Hover documentation for ClickHouse-specific features
@@ -623,6 +713,7 @@ For ClickHouse-specific work, consider VSCode or JetBrains tools. Sublime Text s
 
 **Challenge:**
 ClickHouse uses extended SQL with:
+
 - Arrays and nested data structures
 - ClickHouse-specific functions (approximate, URI functions)
 - Custom table engines
@@ -642,6 +733,7 @@ While not IDE integrations, these tools are worth mentioning for completeness:
 **License:** Open source (Community) / Commercial (Ultimate)
 
 #### Features
+
 - Universal database tool (supports 80+ databases)
 - JDBC/ODBC connectivity
 - SQL editor with syntax highlighting
@@ -652,16 +744,19 @@ While not IDE integrations, these tools are worth mentioning for completeness:
 - AI chat (Ultimate)
 
 #### ClickHouse Support
+
 - Native ClickHouse driver
 - Clusters, partitions, materialized views
 
 #### Pros
+
 - Free tier includes ClickHouse
 - Cross-platform
 - Comprehensive features
 - Multi-database support
 
 #### Cons
+
 - Java-based (high RAM usage)
 - UI can lag on wide result sets
 - Overwhelming for beginners
@@ -676,18 +771,21 @@ While not IDE integrations, these tools are worth mentioning for completeness:
 **ClickHouse Support:** Added early 2025
 
 #### Features
+
 - Multi-database GUI
 - SQL query editor with real-time feedback
 - Simple, clean interface
 - Native application (fast)
 
 #### Pros
+
 - Blazing fast performance
 - Lightweight
 - Intuitive UI
 - Affordable pricing
 
 #### Cons
+
 - No built-in AI tools
 - No team workspaces
 - Less feature-rich than DBeaver Ultimate
@@ -700,6 +798,7 @@ While not IDE integrations, these tools are worth mentioning for completeness:
 **License:** Open source / Commercial (Ultimate)
 
 #### Features
+
 - Modern SQL editor
 - Cross-platform
 - ClickHouse support
@@ -720,6 +819,7 @@ Based on research findings, here's the optimal ClickHouse IDE setup for Python d
 ### Primary Environment: VSCode
 
 **Extensions to Install:**
+
 ```bash
 # Core database extension
 code --install-extension ultram4rine.sqltools-clickhouse-driver
@@ -731,6 +831,7 @@ code --install-extension cweijan.vscode-database-client2
 **Configuration Example (SQLTools):**
 
 Create `.vscode/settings.json`:
+
 ```json
 {
   "sqltools.connections": [
@@ -762,11 +863,13 @@ Create `.vscode/settings.json`:
 ### Jupyter Integration
 
 **Install Packages:**
+
 ```bash
 pip install jupysql clickhouse-sqlalchemy clickhouse-connect
 ```
 
 **Notebook Setup:**
+
 ```python
 # Option 1: JupySQL (SQL-first workflow)
 %load_ext sql
@@ -784,10 +887,12 @@ df = client.query_df("SELECT * FROM my_table")
 ### Optional: JetBrains Tools
 
 **For Database-Heavy Work:**
+
 - **DataGrip:** Standalone database IDE (best ClickHouse integration)
 - **PyCharm Pro:** Python IDE + embedded DataGrip
 
 **Connection Setup:**
+
 1. Data Sources → New → ClickHouse
 2. Port: 8123 (local) or 8443 (cloud)
 3. For cloud: Add `?ssl=true` to JDBC URL
@@ -797,18 +902,22 @@ df = client.query_df("SELECT * FROM my_table")
 ### Workflow Recommendations
 
 **Scenario 1: Exploratory Data Analysis**
+
 - **Tool:** Jupyter notebook with clickhouse-connect
 - **Workflow:** Query → DataFrame → pandas/visualization
 
 **Scenario 2: SQL Development**
+
 - **Tool:** VSCode with SQLTools ClickHouse Driver
 - **Workflow:** Write SQL → Execute → Refine
 
 **Scenario 3: Production ETL Pipeline**
+
 - **Tool:** VSCode for Python code + clickhouse-connect library
 - **Workflow:** Python scripts with embedded SQL
 
 **Scenario 4: Database Design/Migration**
+
 - **Tool:** DataGrip or PyCharm Pro
 - **Workflow:** Schema design → DDL → data migration → validation
 
@@ -819,6 +928,7 @@ df = client.query_df("SELECT * FROM my_table")
 ### VSCode SQLTools Connection
 
 **Workspace Settings (`.vscode/settings.json`):**
+
 ```json
 {
   "sqltools.connections": [
@@ -838,6 +948,7 @@ df = client.query_df("SELECT * FROM my_table")
 ```
 
 **Usage:**
+
 1. Open Command Palette (Cmd+Shift+P)
 2. "SQLTools: Connect" → Select connection
 3. Write SQL in `.sql` file
@@ -848,6 +959,7 @@ df = client.query_df("SELECT * FROM my_table")
 ### Jupyter Notebook Connection Snippet
 
 **JupySQL Approach:**
+
 ```python
 # Cell 1: Setup
 %pip install --quiet jupysql clickhouse-sqlalchemy
@@ -859,7 +971,7 @@ df = client.query_df("SELECT * FROM my_table")
 
 # Cell 3: Query
 %%sql
-SELECT 
+SELECT
     toStartOfMonth(event_time) as month,
     count() as events
 FROM events
@@ -869,6 +981,7 @@ ORDER BY month
 ```
 
 **clickhouse-connect Approach:**
+
 ```python
 # Cell 1: Setup
 import clickhouse_connect
@@ -884,7 +997,7 @@ client = clickhouse_connect.get_client(
 
 # Cell 3: Query to DataFrame
 query = """
-SELECT 
+SELECT
     toStartOfMonth(event_time) as month,
     count() as events
 FROM events
@@ -903,16 +1016,19 @@ df.plot(x='month', y='events', kind='bar')
 ### DataGrip/PyCharm Connection
 
 **JDBC URL (Local):**
+
 ```
 jdbc:clickhouse://localhost:8123/default
 ```
 
 **JDBC URL (Cloud with SSL):**
+
 ```
 jdbc:clickhouse://your-host.clickhouse.cloud:8443/default?ssl=true
 ```
 
 **Settings:**
+
 - **Host:** localhost (or cloud hostname)
 - **Port:** 8123 (HTTP) or 8443 (HTTPS)
 - **User:** default
@@ -925,6 +1041,7 @@ jdbc:clickhouse://your-host.clickhouse.cloud:8443/default?ssl=true
 ### Python clickhouse-connect Configuration
 
 **Connection Class:**
+
 ```python
 import clickhouse_connect
 from typing import Optional
@@ -947,15 +1064,15 @@ class ClickHouseClient:
             database=database,
             secure=secure
         )
-    
+
     def query_df(self, query: str):
         """Execute query and return pandas DataFrame"""
         return self.client.query_df(query)
-    
+
     def insert_df(self, table: str, df):
         """Insert pandas DataFrame into table"""
         self.client.insert_df(table, df)
-    
+
     def execute(self, query: str):
         """Execute query without return"""
         self.client.command(query)
@@ -969,20 +1086,21 @@ df = ch.query_df("SELECT * FROM my_table LIMIT 10")
 
 ## Summary Matrix
 
-| Tool | Type | ClickHouse Support | Best For | Cost | Rating |
-|------|------|-------------------|----------|------|--------|
-| **DataGrip** | Standalone IDE | Native | Database design, complex queries | Paid | ⭐⭐⭐⭐⭐ |
-| **PyCharm Pro** | Python IDE | Embedded DataGrip | Python + database workflows | Paid | ⭐⭐⭐⭐⭐ |
-| **VSCode SQLTools** | Editor Extension | Driver | SQL development, lightweight | Free | ⭐⭐⭐⭐ |
-| **VSCode Database Client** | Editor Extension | Via extension pack | Multi-DB management | Free | ⭐⭐⭐ |
-| **DBCode** | Editor Extension | Native | Feature-rich, AI tools | Paid | ⭐⭐⭐⭐ |
-| **JupySQL** | Jupyter Extension | Via SQLAlchemy | Notebooks, data analysis | Free | ⭐⭐⭐⭐ |
-| **clickhouse-connect** | Python Library | Official | Production pipelines | Free | ⭐⭐⭐⭐⭐ |
-| **Emacs sql-clickhouse** | Editor Plugin | Basic | Emacs users only | Free | ⭐⭐ (archived) |
-| **Vim** | Editor | None | N/A (use CLI) | Free | ⭐ |
-| **Sublime Text** | Editor | None | N/A (use CLI) | Free | ⭐ |
+| Tool                       | Type              | ClickHouse Support | Best For                         | Cost | Rating          |
+| -------------------------- | ----------------- | ------------------ | -------------------------------- | ---- | --------------- |
+| **DataGrip**               | Standalone IDE    | Native             | Database design, complex queries | Paid | ⭐⭐⭐⭐⭐      |
+| **PyCharm Pro**            | Python IDE        | Embedded DataGrip  | Python + database workflows      | Paid | ⭐⭐⭐⭐⭐      |
+| **VSCode SQLTools**        | Editor Extension  | Driver             | SQL development, lightweight     | Free | ⭐⭐⭐⭐        |
+| **VSCode Database Client** | Editor Extension  | Via extension pack | Multi-DB management              | Free | ⭐⭐⭐          |
+| **DBCode**                 | Editor Extension  | Native             | Feature-rich, AI tools           | Paid | ⭐⭐⭐⭐        |
+| **JupySQL**                | Jupyter Extension | Via SQLAlchemy     | Notebooks, data analysis         | Free | ⭐⭐⭐⭐        |
+| **clickhouse-connect**     | Python Library    | Official           | Production pipelines             | Free | ⭐⭐⭐⭐⭐      |
+| **Emacs sql-clickhouse**   | Editor Plugin     | Basic              | Emacs users only                 | Free | ⭐⭐ (archived) |
+| **Vim**                    | Editor            | None               | N/A (use CLI)                    | Free | ⭐              |
+| **Sublime Text**           | Editor            | None               | N/A (use CLI)                    | Free | ⭐              |
 
 **Legend:**
+
 - ⭐⭐⭐⭐⭐ Excellent ClickHouse support
 - ⭐⭐⭐⭐ Good support with minor limitations
 - ⭐⭐⭐ Basic support, usable

@@ -17,6 +17,7 @@ After completing QuestDB schema validation (ADR-0003, 53.7M rows) and futures su
 **User requirement**: "Migrate to ClickHouse for future-proofing - more robust ecosystem, broader adoption, higher scalability ceiling for long-term growth."
 
 **Validated findings from QuestDB implementation**:
+
 - ✅ Schema PRODUCTION-READY at 53.7M row scale (ADR-0003)
 - ✅ Zero DEDUP collisions, optimal partition strategy
 - ✅ All 16 timeframes validated (including "1mo")
@@ -27,6 +28,7 @@ After completing QuestDB schema validation (ADR-0003, 53.7M rows) and futures su
 ### Current State
 
 **QuestDB implementation** (v3.x, development/prototype):
+
 - Database: QuestDB 9.2.0 (time-series optimized)
 - Schema: `ohlcv` table with DEDUP ENABLE UPSERT KEYS
 - Zero-gap guarantee: ✅ PROVEN (immediate consistency)
@@ -36,6 +38,7 @@ After completing QuestDB schema validation (ADR-0003, 53.7M rows) and futures su
 - Status: Development/prototype (no production deployment yet)
 
 **Migration drivers**:
+
 - ✅ **Ecosystem maturity**: ClickHouse has 300+ contributors, Fortune 500 adoption
 - ✅ **Scalability ceiling**: Proven at petabyte scale (1000x current projection)
 - ✅ **Feature richness**: Advanced analytics (window functions, ML, materialized views)
@@ -92,6 +95,7 @@ SETTINGS index_granularity = 8192;
 ```
 
 **Type mappings** (QuestDB → ClickHouse):
+
 - `SYMBOL` → `LowCardinality(String)` (space-efficient for low-cardinality columns)
 - `DOUBLE` → `Float64`
 - `LONG` → `Int64`
@@ -99,8 +103,9 @@ SETTINGS index_granularity = 8192;
 - `PARTITION BY DAY` → `PARTITION BY toYYYYMMDD(timestamp)`
 
 **Rationale**:
+
 - **ReplacingMergeTree**: Handles duplicates via background merges (eventual consistency)
-- **_version column**: Deterministic hash ensures identical writes → identical versions
+- **\_version column**: Deterministic hash ensures identical writes → identical versions
 - **ORDER BY composite key**: Optimizes queries for (timestamp, symbol, timeframe, instrument_type)
 - **LowCardinality**: ClickHouse equivalent to QuestDB SYMBOL (compression + indexing)
 
@@ -130,6 +135,7 @@ def _prepare_clickhouse_row(row: Dict) -> Dict:
 ```
 
 **Why this preserves zero-gap guarantee**:
+
 - ✅ Duplicate writes produce identical `_version` values
 - ✅ ReplacingMergeTree keeps row with highest `_version` (deterministic)
 - ✅ Queries with `FINAL` keyword return deduplicated results
@@ -217,12 +223,14 @@ class OHLCVQuery:
 **Approach**: Clean break (no dual-write), full re-validation
 
 **Migration steps**:
+
 1. **Schema creation**: Deploy ClickHouse schema
 2. **Code deployment**: Update to v4.0.0 with ClickHouse implementation
 3. **Validation**: Re-run ADR-0003 validation suite (53.7M rows)
 4. **Futures support**: Adapt ADR-0004 implementation for ClickHouse
 
 **Backwards compatibility**:
+
 - ❌ **Breaking change**: Database engine changed (QuestDB → ClickHouse)
 - ✅ **API preserved**: `get_range()`, `get_latest()`, `get_multi_symbol()` signatures unchanged
 - ✅ **instrument_type parameter**: Preserved from ADR-0004
@@ -255,11 +263,13 @@ class OHLCVQuery:
 ### Alternative 1: Keep QuestDB (Rejected)
 
 **Pros**:
+
 - Zero-gap guarantee preserved (immediate consistency)
 - No migration effort
 - Simpler operations
 
 **Cons**:
+
 - Smaller ecosystem (13K vs 26K GitHub stars)
 - Single-node scaling limits (may require clustering at 1B+ rows)
 - Fewer advanced analytics features
@@ -270,11 +280,13 @@ class OHLCVQuery:
 ### Alternative 2: Hybrid Approach - Abstraction Layer
 
 **Pros**:
+
 - Database-agnostic code
 - Can switch between QuestDB/ClickHouse via config
 - Lower risk (can validate ClickHouse before full migration)
 
 **Cons**:
+
 - Engineering overhead (abstraction layer complexity)
 - Lowest common denominator features
 - Dual maintenance burden
@@ -286,6 +298,7 @@ class OHLCVQuery:
 See `docs/plan/0005-clickhouse-migration/plan.yaml` for detailed implementation timeline.
 
 **Phases**:
+
 1. **Phase 1**: ClickHouse schema design (3 hours)
 2. **Phase 2**: Connection layer implementation (4 hours)
 3. **Phase 3**: Ingestion rewrite with deduplication (10 hours)
@@ -311,7 +324,7 @@ See `docs/plan/0005-clickhouse-migration/plan.yaml` for detailed implementation 
 ## Compliance
 
 - **Error handling**: raise-and-propagate (no fallback, no retry, no silent failures)
-- **SLOs**: availability (ClickHouse 99.9%), correctness (zero-gap via deterministic versioning), observability (_version tracking), maintainability (ClickHouse ecosystem)
+- **SLOs**: availability (ClickHouse 99.9%), correctness (zero-gap via deterministic versioning), observability (\_version tracking), maintainability (ClickHouse ecosystem)
 - **OSS preference**: Reuse clickhouse-driver, pandas (no custom ingestion protocol)
 - **Auto-validation**: Re-run ADR-0003 6-agent validation suite with ClickHouse
 - **Semantic release**: Conventional commits → v4.0.0 tag → GitHub release → changelog

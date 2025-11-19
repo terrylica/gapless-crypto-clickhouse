@@ -11,6 +11,7 @@
 **Verdict**: ✅ **GO** (with documented tech debt)
 
 **Rationale**:
+
 - Ruff linting: ✅ PASS (all checks passed)
 - Ruff formatting: ✅ PASS (64 files formatted)
 - Pre-commit hooks: ✅ PASS (1 auto-fixed whitespace issue)
@@ -21,6 +22,7 @@
 ## Checks Run
 
 ### 1. Ruff Linting
+
 - **Status**: ✅ PASS
 - **Output**: "All checks passed!"
 - **Files Checked**: All Python files in project
@@ -28,12 +30,14 @@
 - **Evidence**: `/tmp/full-validation/code-quality/ruff-check.txt`
 
 ### 2. Ruff Formatting
+
 - **Status**: ✅ PASS
 - **Output**: "64 files already formatted"
 - **Config**: pyproject.toml lines 92-94
 - **Evidence**: `/tmp/full-validation/code-quality/ruff-format.txt`
 
 ### 3. Pre-commit Hooks
+
 - **Status**: ✅ PASS
 - **Hooks Run**:
   - ✅ trim trailing whitespace - Passed
@@ -47,6 +51,7 @@
 - **Evidence**: `/tmp/full-validation/code-quality/pre-commit.txt`
 
 ### 4. MyPy Type Checking
+
 - **Status**: ⚠️ WARNING (49 errors, 13 in SDK entry points)
 - **Files Checked**: 29 source files
 - **Config**: pyproject.toml lines 96-127
@@ -59,11 +64,13 @@
 ### Critical: SDK Entry Point Type Errors (13 errors)
 
 **Context from SDK Quality Standards** (`docs/sdk-quality-standards.yaml`):
+
 - Lines 16-24: `disallow_untyped_defs: true` marked as **"status: pending"**
 - Lines 104-108: v3.2.0 evolution plan includes strict mode enforcement
 - **Interpretation**: Type safety is aspirational, not release-blocking
 
 #### api.py (8 errors)
+
 ```
 Line 125: Incompatible return value type (got "str | None", expected "str")
 Line 177: Incompatible return value type (got "tuple[str | None, str | None]", expected "tuple[str, str]")
@@ -76,7 +83,8 @@ Line 537: Unsupported left operand type for / ("object")
 
 **Assessment**: Type annotations present but return types don't match reality. Likely safe runtime behavior.
 
-#### __probe__.py (5 errors)
+#### **probe**.py (5 errors)
+
 ```
 Line 35: Function is missing a return type annotation
 Line 46: Returning Any from function declared to return "dict[str, Any]"
@@ -91,6 +99,7 @@ Line 300: Function is missing a type annotation for one or more arguments
 ### Medium: Core Implementation Type Errors (32 errors)
 
 #### Distribution by File:
+
 - `collectors/httpx_downloader.py`: 6 errors (async/None handling)
 - `collectors/concurrent_collection_orchestrator.py`: 5 errors (callable type, result type mismatches)
 - `validation/storage.py`: 4 errors (tuple indexing, type mismatches)
@@ -107,6 +116,7 @@ Line 300: Function is missing a type annotation for one or more arguments
 ### Low: External Dependency Issues (4 errors)
 
 #### clickhouse_driver (4 errors)
+
 ```
 clickhouse/connection.py:23-24: Missing library stubs or py.typed marker
 clickhouse_query.py:53: Missing library stubs
@@ -118,15 +128,15 @@ clickhouse_query.py:53: Missing library stubs
 
 ## Code Quality Metrics Summary
 
-| Metric | Status | Details |
-|--------|--------|---------|
-| Ruff Linting | ✅ PASS | All checks passed |
-| Ruff Formatting | ✅ PASS | 64 files formatted |
-| Pre-commit Hooks | ✅ PASS | 1 auto-fix applied |
-| MyPy Type Checking | ⚠️ WARNING | 49 errors (details below) |
-| - SDK Entry Points | ⚠️ 13 errors | Status: pending per ADR |
-| - Core Implementation | ⚠️ 32 errors | Global disallow_untyped_defs=false |
-| - External Dependencies | ⚠️ 4 errors | clickhouse-driver lacks stubs |
+| Metric                  | Status       | Details                            |
+| ----------------------- | ------------ | ---------------------------------- |
+| Ruff Linting            | ✅ PASS      | All checks passed                  |
+| Ruff Formatting         | ✅ PASS      | 64 files formatted                 |
+| Pre-commit Hooks        | ✅ PASS      | 1 auto-fix applied                 |
+| MyPy Type Checking      | ⚠️ WARNING   | 49 errors (details below)          |
+| - SDK Entry Points      | ⚠️ 13 errors | Status: pending per ADR            |
+| - Core Implementation   | ⚠️ 32 errors | Global disallow_untyped_defs=false |
+| - External Dependencies | ⚠️ 4 errors  | clickhouse-driver lacks stubs      |
 
 ---
 
@@ -161,7 +171,7 @@ clickhouse_query.py:53: Missing library stubs
 
 ### Recommended Follow-up Actions (Post-Release)
 
-1. **High Priority**: Fix SDK entry point type errors (api.py, __probe__.py)
+1. **High Priority**: Fix SDK entry point type errors (api.py, **probe**.py)
    - Required for downstream type checker users
    - 13 errors to address
 
@@ -182,6 +192,7 @@ clickhouse_query.py:53: Missing library stubs
 ## Evidence Files
 
 All validation artifacts stored in:
+
 ```
 /Users/terryli/eon/gapless-crypto-data/tmp/full-validation/code-quality/
 ├── ruff-check.txt          # Ruff linting output
@@ -198,7 +209,8 @@ All validation artifacts stored in:
 
 **Code Quality Agent**: ✅ Recommends GO for v4.0.0 release
 
-**Reasoning**: 
+**Reasoning**:
+
 - All code quality checks pass
 - Type errors are documented tech debt per SDK Quality Standards
 - No release-blocking issues found

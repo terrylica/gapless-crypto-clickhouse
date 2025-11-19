@@ -11,6 +11,7 @@ Accepted (2025-11-19)
 Comprehensive 5-agent documentation audit (2025-11-19) revealed **systematic accuracy failures** across all documentation categories due to incomplete fork transition from `gapless-crypto-data` to `gapless-crypto-clickhouse`:
 
 **Critical Findings**:
+
 - **100% of Python examples broken** (75/75 examples fail with `ModuleNotFoundError`)
 - **121 files** contain incorrect `gapless-crypto-data` references
 - **All file paths** in architecture docs point to non-existent locations
@@ -19,13 +20,13 @@ Comprehensive 5-agent documentation audit (2025-11-19) revealed **systematic acc
 
 **Agent Investigation Results**:
 
-| Agent | Focus | Critical Issues | Accuracy |
-|-------|-------|----------------|----------|
-| Python API Examples | Code-doc alignment | Package name mismatch in all imports | 0% |
-| Architecture Claims | Implementation verification | Wrong paths, missing ClickHouse docs | 60% |
-| CLI Documentation | Migration guide accuracy | Obsolete v3→v4 timeline, wrong imports | 0% |
-| Data Format Spec | 11-column format validation | Column name discrepancy, timeframe count | 92% |
-| Validation System | API/schema verification | Wrong paths, but API/schema 100% accurate | 67% |
+| Agent               | Focus                       | Critical Issues                           | Accuracy |
+| ------------------- | --------------------------- | ----------------------------------------- | -------- |
+| Python API Examples | Code-doc alignment          | Package name mismatch in all imports      | 0%       |
+| Architecture Claims | Implementation verification | Wrong paths, missing ClickHouse docs      | 60%      |
+| CLI Documentation   | Migration guide accuracy    | Obsolete v3→v4 timeline, wrong imports    | 0%       |
+| Data Format Spec    | 11-column format validation | Column name discrepancy, timeframe count  | 92%      |
+| Validation System   | API/schema verification     | Wrong paths, but API/schema 100% accurate | 67%      |
 
 **Root Cause**: Documentation inherited from parent package (`gapless-crypto-data`) without systematic find-and-replace during ADR-0011 fork implementation.
 
@@ -70,6 +71,7 @@ Comprehensive 5-agent documentation audit (2025-11-19) revealed **systematic acc
 **Objective**: Restore 75 broken Python examples
 
 **Scope**:
+
 ```bash
 # Find-and-replace in documentation
 find docs/ examples/ -name "*.md" -o -name "*.py" | \
@@ -80,6 +82,7 @@ find docs/ -name "*.md" | \
 ```
 
 **Files Affected** (15 high-priority):
+
 - `docs/guides/python-api.md` (15 examples)
 - `docs/guides/DATA_COLLECTION.md` (9 examples)
 - `docs/api/quick-start.md` (6 examples)
@@ -92,6 +95,7 @@ find docs/ -name "*.md" | \
 **Exception**: Preserve `~/.cache/gapless-crypto-data/` (cache dir intentional)
 
 **Validation**:
+
 ```bash
 # Zero matches expected (except cache dir and historical ADRs)
 grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
@@ -103,62 +107,74 @@ grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
 ### Phase 2: Architecture Documentation Updates
 
 **2.1 Fix Version References**
+
 - `docs/CURRENT_ARCHITECTURE_STATUS.yaml`: v3.0.0 → v1.0.0
 - Remove v3.x → v4.0.0 timeline references
 
 **2.2 Add ClickHouse Architecture Section** to `docs/architecture/OVERVIEW.md`:
+
 ```markdown
 ## ClickHouse Integration (Primary Mode)
 
 ### Components
+
 - **ClickHouseConnection** (`clickhouse/connection.py`)
 - **ClickHouseConfig** (`clickhouse/config.py`)
 - **ClickHouseBulkLoader** (`collectors/clickhouse_bulk_loader.py`)
 
 ### Schema
+
 - Engine: ReplacingMergeTree with deterministic versioning
 - Deduplication: `(_version, _sign)` for idempotent ingestion
 - Schema: `clickhouse/schema.sql` (17 columns)
 ```
 
 **2.3 Update Network Architecture** in `CLAUDE.md`:
+
 - Document actual httpx+pooling implementation (not just urllib claims)
 - Clarify dual download strategy: urllib (monthly/daily) + httpx (concurrent)
 
 **2.4 Remove Obsolete Features** from `CLAUDE.md`:
+
 - Delete joblib, polars, pyod references (removed 2025-01-19)
 
 ### Phase 3: CLI Documentation Cleanup
 
 **3.1 Delete Obsolete File**:
+
 - `examples/cli_usage_examples.sh` (135 lines of invalid commands)
 
 **3.2 Rewrite Migration Guide** (`docs/development/CLI_MIGRATION_GUIDE.md`):
+
 - Retitle: "Migrating from gapless-crypto-data to gapless-crypto-clickhouse"
 - Fix all imports: `gapless_crypto_clickhouse` → `gapless_crypto_clickhouse`
 - Clarify: For **parent package users** migrating to ClickHouse fork
 - Remove: v3.x → v4.0.0 timeline (doesn't apply to this fork)
 
 **3.3 Update Source Docstring** (`src/gapless_crypto_clickhouse/__init__.py`):
+
 - Remove v4.0.0 references (this package never had that version)
 - Clarify CLI never existed in this fork
 
 ### Phase 4: Data Format Clarifications
 
 **4.1 Add Column Name Mapping** to `docs/architecture/DATA_FORMAT.md`:
+
 ```markdown
 ### Column Naming (CSV vs Database)
 
-| CSV Column | Database Column | Type | Notes |
-|------------|----------------|------|-------|
-| `date` | `timestamp` | DateTime64(3) | Converted during ingestion |
-| `open` | `open` | Float64 | Direct mapping |
+| CSV Column | Database Column | Type          | Notes                      |
+| ---------- | --------------- | ------------- | -------------------------- |
+| `date`     | `timestamp`     | DateTime64(3) | Converted during ingestion |
+| `open`     | `open`          | Float64       | Direct mapping             |
+
 ...
 ```
 
 **4.2 Resolve Timeframe Discrepancy**:
 
 **Option A** (Recommended): Update `utils/timeframe_constants.py`:
+
 ```python
 TIMEFRAME_TO_MINUTES: Dict[str, float] = {
     # ... existing 13 ...
@@ -175,6 +191,7 @@ TIMEFRAME_TO_MINUTES: Dict[str, float] = {
 **Objective**: Validate fixes work end-to-end
 
 **Test Suite** (`/tmp/doc-audit/validation/`):
+
 ```bash
 # Extract 10 representative examples
 for doc in python-api.md DATA_COLLECTION.md QUERY_PATTERNS.md; do
@@ -189,6 +206,7 @@ done
 ```
 
 **Validation Metrics**:
+
 - ✅ All imports resolve
 - ✅ Syntax is valid
 - ✅ Basic execution succeeds (or fails gracefully with clear errors)
@@ -198,6 +216,7 @@ done
 ### Automated Checks
 
 **Package Name Validation**:
+
 ```bash
 # Zero old references (except cache dir, ADRs, CHANGELOG)
 grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
@@ -207,15 +226,17 @@ grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
 ```
 
 **Import Validation**:
-```bash
+
+````bash
 # Extract all Python code blocks from docs
 find docs/ -name "*.md" -exec \
   grep -Pzo '```python\n\K.*?(?=\n```)' {} \; | \
   python -m py_compile -
 # Expected: No SyntaxError
-```
+````
 
 **Test Suite**:
+
 ```bash
 uv run pytest tests/ -v
 # Expected: All tests pass
@@ -288,6 +309,7 @@ uv run pytest tests/ -v
 ### Error Handling
 
 **Policy**: Raise and propagate (no silent failures)
+
 - **Broken examples**: Fail validation, block commit
 - **Import errors**: Explicit `ModuleNotFoundError` (no fallback imports)
 - **Path errors**: Grep validation catches incorrect paths
@@ -308,6 +330,7 @@ uv run pytest tests/ -v
 ### Auto-Validation
 
 **CI/CD Integration** (future enhancement):
+
 ```yaml
 # .github/workflows/docs-validation.yml
 - name: Validate documentation examples
@@ -319,6 +342,7 @@ uv run pytest tests/ -v
 ### Semantic Release
 
 **Commit Message**:
+
 ```
 docs: fix systematic package name inconsistencies across all documentation
 

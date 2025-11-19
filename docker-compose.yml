@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   clickhouse:
-    image: clickhouse/clickhouse-server:24.1-alpine
+    image: clickhouse/clickhouse-server:24.11-alpine
     container_name: gapless-clickhouse
     ports:
       - "9000:9000"   # Native protocol (for clickhouse-driver)

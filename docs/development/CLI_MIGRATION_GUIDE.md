@@ -13,24 +13,26 @@ supersedes: []
 
 ## Package Comparison
 
-| Aspect | gapless-crypto-data (v3.x) | gapless-crypto-clickhouse (v1.x) |
-|--------|---------------------------|----------------------------------|
-| **Storage** | CSV files only | ClickHouse database (primary) + optional CSV |
-| **Python** | 3.9-3.13 | 3.12-3.13 only |
-| **CLI** | Present (v3.x) | Never existed |
-| **Package Name** | `gapless-crypto-data` | `gapless-crypto-clickhouse` |
-| **Module Name** | `gapless_crypto_data` | `gapless_crypto_clickhouse` |
-| **PyPI** | https://pypi.org/project/gapless-crypto-data/ | https://pypi.org/project/gapless-crypto-clickhouse/ |
+| Aspect           | gapless-crypto-data (v3.x)                    | gapless-crypto-clickhouse (v1.x)                    |
+| ---------------- | --------------------------------------------- | --------------------------------------------------- |
+| **Storage**      | CSV files only                                | ClickHouse database (primary) + optional CSV        |
+| **Python**       | 3.9-3.13                                      | 3.12-3.13 only                                      |
+| **CLI**          | Present (v3.x)                                | Never existed                                       |
+| **Package Name** | `gapless-crypto-data`                         | `gapless-crypto-clickhouse`                         |
+| **Module Name**  | `gapless_crypto_data`                         | `gapless_crypto_clickhouse`                         |
+| **PyPI**         | https://pypi.org/project/gapless-crypto-data/ | https://pypi.org/project/gapless-crypto-clickhouse/ |
 
 ## Should You Migrate?
 
 **Use gapless-crypto-data (v3.x)** if you:
+
 - Need file-based workflows (CSV/Parquet)
 - Are on Python 3.9-3.11
 - Prefer stateless data collection
 - Use the CLI for simple collection tasks
 
 **Use gapless-crypto-clickhouse (v1.x)** if you:
+
 - Need persistent database storage
 - Are querying multiple symbols/timeframes together
 - Need sub-second query latency
@@ -51,11 +53,13 @@ supersedes: []
 ## Installation
 
 **Before (gapless-crypto-data)**:
+
 ```bash
 pip install gapless-crypto-data
 ```
 
 **After (gapless-crypto-clickhouse)**:
+
 ```bash
 pip install gapless-crypto-clickhouse
 
@@ -68,6 +72,7 @@ docker run -d -p 9000:9000 -p 8123:8123 clickhouse/clickhouse-server
 **All imports must change**:
 
 **Before**:
+
 ```python
 import gapless_crypto_data as gcd
 from gapless_crypto_data import BinancePublicDataCollector, UniversalGapFiller
@@ -75,6 +80,7 @@ from gapless_crypto_data.validation import CSVValidator, ValidationStorage
 ```
 
 **After**:
+
 ```python
 import gapless_crypto_clickhouse as gcc  # Note: Different alias convention
 from gapless_crypto_clickhouse import BinancePublicDataCollector, UniversalGapFiller
@@ -464,16 +470,6 @@ class TestDataCollection(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 ```
-
----
-
-## Migration Timeline
-
-- **v3.3.0** (Current): CLI deprecated with warnings
-- **v3.4.0 - v3.9.x** (2025 Q1-Q2): CLI continues to work with deprecation warnings
-- **v4.0.0** (2025 Q2): CLI removed completely
-
-We recommend migrating to the Python API as soon as possible to ensure compatibility with future releases.
 
 ---
 

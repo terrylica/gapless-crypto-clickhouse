@@ -15,6 +15,7 @@ ADR-0001 implemented QuestDB as single source of truth (Phases 1-3 complete). Be
 - SLO targets met (availability, correctness, observability, maintainability)
 
 **User Requirements** (2025-11-15):
+
 - E2E validation in branch before PR
 - Comprehensive testing (edge cases + error scenarios)
 - Real Binance CloudFront data (small dataset)
@@ -22,6 +23,7 @@ ADR-0001 implemented QuestDB as single source of truth (Phases 1-3 complete). Be
 - Reuse existing test artifacts to reduce context-token usage
 
 **Constraints**:
+
 - Phase 4 (Migration Tooling) skipped - deferred to post-v4.0.0
 - Phase 5 (Testing & Validation) skipped - this e2e validation fills gap
 - Phase 6 (Documentation) skipped - deployment guides already complete
@@ -34,6 +36,7 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 ### Validation Architecture
 
 **Parallel Agent Strategy**:
+
 1. **Environment Setup Agent**: Colima + QuestDB + schema + .env
 2. **Bulk Loader Agent**: CloudFront → QuestDB ingestion validation
 3. **Query Interface Agent**: All query methods + edge cases
@@ -43,12 +46,14 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 7. **Integration Agent**: Full pipeline end-to-end
 
 **Dynamic writeTodo Flow**:
+
 - Each agent starts with ONE initial writeTodo
 - Complete → Analyze findings → CREATE next writeTodo(s)
 - Mark completed → Execute next → Repeat until validated
 - Non-pre-defined tiers - writeTodos emerge from discoveries
 
 **Reusable Artifacts** (reduce context-token usage):
+
 - `tests/conftest.py` - Real Binance data download fixture (`real_btcusdt_1h_sample`)
 - `tests/test_error_handling.py` - Error propagation testing patterns
 - `tests/test_gap_filler.py` - Gap detection logic (adapt for QuestDB)
@@ -57,6 +62,7 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 ### Validation Scope
 
 **In Scope**:
+
 - ✅ QuestDB deployment (docker-compose.macos.yml via Colima)
 - ✅ Schema application and validation (schema.sql)
 - ✅ Bulk loader (CloudFront → QuestDB, 1-2 months BTCUSDT 1m data)
@@ -68,6 +74,7 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 - ✅ Full pipeline integration (realistic scenario)
 
 **Out of Scope**:
+
 - ❌ Linux native deployment (validated via documentation review only)
 - ❌ Linux Docker deployment (validated via documentation review only)
 - ❌ Migration tooling (Phase 4 deferred)
@@ -77,18 +84,21 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 ### Test Data Strategy
 
 **Real Binance Data** (not synthetic):
+
 - Download from CloudFront: BTCUSDT 1m, Jan-Feb 2024 (~2 months)
 - Rationale: Tests real-world data format, parsing, CloudFront reliability
 - Size: ~5-10MB download (acceptable for comprehensive validation)
 - Reuse pattern from `conftest.py` fixture
 
 **Additional Symbols** (for multi-symbol testing):
+
 - ETHUSDT 1m, Jan 2024 (1 month)
 - Verify no cross-contamination between symbols
 
 ### Error Handling Validation
 
 **Compliance with ADR-0001 Policy**:
+
 - ✅ Connection failures → ConnectionError (propagate to caller)
 - ✅ Invalid inputs → ValueError (propagate with context)
 - ✅ API failures → httpx.HTTPStatusError (propagate with status code)
@@ -98,6 +108,7 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 - ❌ No silent failures (explicitly test absence)
 
 **Test Patterns** (reuse from `test_error_handling.py`):
+
 - Stop QuestDB → attempt query → assert ConnectionError
 - Invalid symbol (special chars) → assert ValueError
 - Non-existent CloudFront month → assert HTTPError 404
@@ -133,22 +144,26 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 ### SLOs
 
 **Availability**:
+
 - QuestDB deployment health checks validated (systemd/Docker)
 - Connection failure handling validated (raise ConnectionError)
 - No silent fallbacks (explicitly tested)
 
 **Correctness**:
+
 - Zero-gap guarantee validated via SQL gap detection
 - Deduplication validated via UPSERT semantics
 - Data authenticity validated (CloudFront source tracking)
 - 11-column microstructure format validated
 
 **Observability**:
+
 - INFO/DEBUG logging validated (connection lifecycle, ingestion metrics)
 - Prometheus metrics endpoint validated (/metrics on port 9003)
 - Data lineage tracking validated (data_source column)
 
 **Maintainability**:
+
 - Standard PostgreSQL protocol validated (psycopg3 queries)
 - pandas DataFrame return type validated (backward compatibility)
 - Documentation accuracy validated (deployment guides)
@@ -156,6 +171,7 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 ### Error Handling
 
 **Policy Compliance** (raise-and-propagate):
+
 - ✅ All connection failures raise ConnectionError
 - ✅ All validation failures raise ValueError
 - ✅ All API failures raise httpx.HTTPStatusError
@@ -167,6 +183,7 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 ### OSS Libraries
 
 All validation uses OSS tools:
+
 - **pytest**: Test framework (existing in dev dependencies)
 - **psycopg**: PostgreSQL client (already in dependencies)
 - **pandas**: DataFrame validation (already in dependencies)
@@ -176,12 +193,14 @@ All validation uses OSS tools:
 ### Auto-Validation
 
 **Validation Artifacts**:
+
 - Validation report: `tmp/e2e-validation/VALIDATION_REPORT.md`
 - Agent logs: `tmp/e2e-validation/agent-N-*.log`
 - QuestDB logs: Docker container logs
 - Performance metrics: Ingestion rate, query latency measurements
 
 **Success Criteria** (auto-validated):
+
 - All agents report success (no failures)
 - Ingestion rate >100K rows/sec
 - Query latency <1s for typical OHLCV ranges
@@ -219,6 +238,7 @@ All validation uses OSS tools:
 See `docs/plan/0002-e2e-validation/plan.yaml` for detailed execution plan.
 
 **Phases**:
+
 1. Environment Setup (Agent 1)
 2. Parallel Validation (Agents 2-6)
 3. Integration Testing (Agent 7)

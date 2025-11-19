@@ -17,6 +17,7 @@ gapless-crypto-data v3.x uses file-based storage (CSV/Parquet) for OHLCV cryptoc
 - **Storage fragmentation**: 5,200+ files (400 symbols × 13 timeframes) complicate management
 
 **User Requirements** (2025-11-15):
+
 - Machine interface only (Python API, no CLI)
 - macOS development with Colima (not Docker Desktop)
 - Linux production with native QuestDB (no Docker overhead)
@@ -24,6 +25,7 @@ gapless-crypto-data v3.x uses file-based storage (CSV/Parquet) for OHLCV cryptoc
 - Support for concurrent data sources (CloudFront bulk + WebSocket real-time + REST API gap-fill)
 
 **Constraints**:
+
 - Must preserve CloudFront CDN 22x speedup advantage for bulk historical data
 - Must support 400+ Binance symbols with 13 timeframes (1s to 1d)
 - Must maintain 11-column microstructure format (OHLCV + order flow metrics)
@@ -36,6 +38,7 @@ Replace file-based storage with **QuestDB time-series database** as the single s
 ### Architecture
 
 **Single unified table** (not 5,200 separate tables):
+
 ```sql
 CREATE TABLE ohlcv (
     timestamp TIMESTAMP,
@@ -73,6 +76,7 @@ CREATE TABLE ohlcv (
    - ~10% disk I/O overhead vs native
 
 **Data Flow**:
+
 ```
 CloudFront ZIPs → Extract → Pandas → ILP → QuestDB (preserve 22x speedup)
 Binance WebSocket → Parse → ILP → QuestDB (new capability)
@@ -108,21 +112,25 @@ Binance REST API → Parse → ILP → QuestDB (gap filling)
 ### SLOs
 
 **Availability**:
+
 - QuestDB uptime: 99.9% (CloudFront SLA) for data source
 - Deployment health checks: systemd/Docker health monitoring
 - Data source failover: CloudFront → REST API fallback
 
 **Correctness**:
+
 - Zero-gap guarantee: Maintained through concurrent CloudFront + REST API ingestion
 - Authentic data only: No synthetic values, direct from Binance sources
 - Deduplication: UPSERT semantics prevent duplicate timestamps
 
 **Observability**:
+
 - Prometheus metrics: QuestDB /metrics endpoint (port 9003)
 - systemd journal logging: All services log to journalctl
 - Data lineage tracking: `data_source` column in ohlcv table
 
 **Maintainability**:
+
 - Single table schema: Simpler than 5,200 files
 - Standard SQL queries: Familiar interface for data retrieval
 - Documented deployment: 3 options (Colima, native, Docker) with guides
@@ -147,6 +155,7 @@ Binance REST API → Parse → ILP → QuestDB (gap filling)
 
 **Pros**: Already used for ValidationStorage, familiar
 **Cons**:
+
 - Single-process write lock (cannot handle concurrent CloudFront + WebSocket + API)
 - Not a time-series database (no designated timestamp, partitioning)
 - Empirical testing showed 7,500x slower single-threaded writes vs Parquet
@@ -157,6 +166,7 @@ Binance REST API → Parse → ILP → QuestDB (gap filling)
 
 **Pros**: Production-proven in crypto (Coinhall, Longbridge), excellent analytics
 **Cons**:
+
 - Requires batch ingestion (1-second batches, not tick-by-tick)
 - 22x slower OHLCV queries than QuestDB (547ms vs 25ms)
 - Higher operational complexity (MergeTree engines, partition tuning)
@@ -167,6 +177,7 @@ Binance REST API → Parse → ILP → QuestDB (gap filling)
 
 **Pros**: Sub-ms real-time queries, low cost ($55/mo)
 **Cons**:
+
 - Dual storage complexity (hot/cold split)
 - Redis memory limits (400 symbols × 13 timeframes = high memory usage)
 - Query federation layer required
@@ -177,6 +188,7 @@ Binance REST API → Parse → ILP → QuestDB (gap filling)
 
 **Pros**: No migration, zero deployment complexity
 **Cons**:
+
 - Cannot add real-time WebSocket capability
 - Cannot support concurrent writes
 - Fragmented storage (5,200+ files)
@@ -188,6 +200,7 @@ Binance REST API → Parse → ILP → QuestDB (gap filling)
 See `docs/plan/0001-questdb-refactor/plan.yaml` for detailed implementation timeline.
 
 **Phases**:
+
 1. Infrastructure & Documentation (Week 1-2)
 2. Python API Refactoring (Week 3-5)
 3. uv Dependency Management (Week 6)

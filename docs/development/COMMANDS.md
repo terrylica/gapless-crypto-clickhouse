@@ -59,6 +59,34 @@ uv run pytest -m "not integration"
 - `@pytest.mark.unit` - Unit tests (fast, no external dependencies)
 - `@pytest.mark.integration` - Integration tests (use real data)
 
+### E2E Testing
+
+```bash
+# Full E2E suite (requires Docker services)
+docker-compose up -d
+uv run pytest tests/e2e/ -v
+
+# E2E validation script (PEP 723 bootstrap)
+uv run scripts/run_validation.py
+
+# E2E only via marker
+uv run pytest -m e2e -v
+
+# ClickHouse Play only (CI subset)
+uv run pytest tests/e2e/test_clickhouse_play.py -v
+
+# With screenshots and tracing
+uv run pytest tests/e2e/ -v --screenshot=only-on-failure --tracing=retain-on-failure
+```
+
+**Markers**: `@pytest.mark.e2e` - End-to-end tests requiring Playwright and running services
+
+**Services Required**:
+- ClickHouse: localhost:8123 (HTTP), localhost:9000 (native)
+- CH-UI: localhost:5521 (web interface, local testing only)
+
+**Note**: CI runs ClickHouse Play tests only (CH-UI requires interactive config). Full 12-test suite available locally.
+
 ### CLI Functionality Tests
 
 ```bash

@@ -21,12 +21,14 @@
 **Status**: ✅ COMPLETED
 
 **Findings**:
+
 - **gapless-crypto-clickhouse** is AVAILABLE on PyPI (404 response)
 - **gapless-crypto-data** exists at v3.0.0 (local v4.0.0 not published yet)
 - Naming follows PyPI conventions (lowercase, hyphens, ASCII-only)
-- PEP 423 compliance: "gapless-crypto-*" pattern is valid and obvious
+- PEP 423 compliance: "gapless-crypto-\*" pattern is valid and obvious
 
 **Evidence**:
+
 ```bash
 $ curl -s https://pypi.org/pypi/gapless-crypto-clickhouse/json
 {"message": "Not Found"}
@@ -36,9 +38,10 @@ $ curl -s https://pypi.org/pypi/gapless-crypto-data/json | jq '.info.version'
 ```
 
 **PyPI Naming Best Practices** (PEP 423):
+
 - ✅ Lowercase with hyphens (not underscores)
 - ✅ Descriptive and memorable
-- ✅ Toplevel package name obvious to project (gapless-crypto-*)
+- ✅ Toplevel package name obvious to project (gapless-crypto-\*)
 - ✅ No deep hierarchies (Python culture prefers flat)
 
 ---
@@ -50,6 +53,7 @@ $ curl -s https://pypi.org/pypi/gapless-crypto-data/json | jq '.info.version'
 **Findings**:
 
 **ClickHouse Implementation Context** (ADR-0005):
+
 - **Implementation**: v4.0.0 (breaking change from QuestDB)
 - **Status**: ClickHouse complete, QuestDB deprecated
 - **Architecture**: Completely separate codebases (1,454 lines ClickHouse code)
@@ -90,6 +94,7 @@ $ curl -s https://pypi.org/pypi/gapless-crypto-data/json | jq '.info.version'
      - Contradicts ADR-0005 migration rationale
 
 **Version Numbering Decision**:
+
 - **Start at v1.0.0** (NOT v4.0.0)
 - **Rationale**: Independent package → independent version lifecycle
 - **Precedent**: OpenAI's `openai` (v1.x) vs `openai-python-client` (v0.x) were versioned independently
@@ -103,13 +108,14 @@ $ curl -s https://pypi.org/pypi/gapless-crypto-data/json | jq '.info.version'
 **Findings**:
 
 **Existing Publishing Infrastructure**:
+
 ```yaml
 # .github/workflows/publish.yml
 - Trusted Publishing: ✅ ALREADY CONFIGURED
   - id-token: write (OIDC authentication)
   - Environment: "pypi" (requires manual approval)
   - Sigstore attestations: ✅ ENABLED (default in 2025)
-  
+
 - Build Strategy: ✅ BEST PRACTICE
   - Separate build/publish jobs (security isolation)
   - uv build (modern build tool)
@@ -122,12 +128,14 @@ $ curl -s https://pypi.org/pypi/gapless-crypto-data/json | jq '.info.version'
 ```
 
 **TestPyPI Strategy**:
+
 - **Recommendation**: Add TestPyPI job BEFORE production PyPI publish
 - **OIDC Audience**: `testpypi` (different from production `pypi`)
 - **URL**: `repository-url: https://test.pypi.org/legacy/`
 - **Use Case**: Validate package installation, dependency resolution, README rendering
 
 **Publishing Authentication** (2025 Best Practices):
+
 - ✅ **Trusted Publishing** (OIDC) - NO API tokens needed
 - ✅ **GitHub Environments** - Manual approval gate for production
 - ✅ **Sigstore Attestations** - Cryptographic provenance (default in 2025)
@@ -136,6 +144,7 @@ $ curl -s https://pypi.org/pypi/gapless-crypto-data/json | jq '.info.version'
 **Package Metadata Requirements** (pyproject.toml):
 
 **Required Changes**:
+
 ```toml
 [project]
 name = "gapless-crypto-clickhouse"  # CHANGED from gapless-crypto-data
@@ -177,6 +186,7 @@ Issues = "https://github.com/terrylica/gapless-crypto-clickhouse/issues"
 ```
 
 **PyPI Configuration** (GitHub repo settings):
+
 1. Navigate to https://pypi.org/manage/account/publishing/
 2. Add Trusted Publisher:
    - Package name: `gapless-crypto-clickhouse`
@@ -193,6 +203,7 @@ Issues = "https://github.com/terrylica/gapless-crypto-clickhouse/issues"
 **Findings**:
 
 **ClickHouse Codebase Analysis**:
+
 ```
 ClickHouse Module Breakdown (1,454 total lines):
 - clickhouse/connection.py         239 lines
@@ -203,6 +214,7 @@ ClickHouse Module Breakdown (1,454 total lines):
 ```
 
 **Architectural Patterns**:
+
 ```python
 # src/gapless_crypto_data/__init__.py
 __version__ = "4.0.0"
@@ -224,6 +236,7 @@ CLI Removed in v4.0.0: ⚠️ The CLI was removed in v4.0.0. Use Python API.
 **RECOMMENDATION: Independent Package**
 
 **Evidence**:
+
 1. **Functional Independence** ✅
    - ClickHouse module doesn't import from gapless-crypto-data core
    - Self-contained: connection, config, query, bulk_loader
@@ -247,6 +260,7 @@ CLI Removed in v4.0.0: ⚠️ The CLI was removed in v4.0.0. Use Python API.
 **Files Requiring Modification** (for new repo):
 
 **Core Package Structure**:
+
 ```
 gapless-crypto-clickhouse/
 ├── pyproject.toml                    # NEW (metadata changes)
@@ -270,6 +284,7 @@ gapless-crypto-clickhouse/
 ```
 
 **Metadata Files**:
+
 1. **pyproject.toml**: All fields (name, version, description, keywords, dependencies, URLs)
 2. **README.md**: ClickHouse-specific usage, installation, examples
 3. **CHANGELOG.md**: v1.0.0 initial release notes
@@ -277,7 +292,8 @@ gapless-crypto-clickhouse/
 5. **.github/workflows/release.yml**: Repository-specific semantic-release config
 
 **Code Files** (minimal changes):
-1. **src/gapless_crypto_clickhouse/__init__.py**:
+
+1. **src/gapless_crypto_clickhouse/**init**.py**:
    - Update version to `1.0.0`
    - Update docstring (ClickHouse focus)
    - Export ClickHouse classes only
@@ -285,6 +301,7 @@ gapless-crypto-clickhouse/
 2. **All Python files**: Update imports from `gapless_crypto_data` → `gapless_crypto_clickhouse`
 
 **Documentation**:
+
 1. **README.md**: Installation, quick start, API reference, deployment
 2. **docs/CLICKHOUSE_MIGRATION.md**: Adapt from gapless-crypto-data/docs
 3. **ADR-0005**: Copy to new repo for context
@@ -296,6 +313,7 @@ gapless-crypto-clickhouse/
 ### Publishing Strategy
 
 **Package Structure**:
+
 ```
 PyPI Packages:
 ├── gapless-crypto-data (v3.0.0 → v4.0.0 → v5.0.0)
@@ -306,17 +324,20 @@ PyPI Packages:
 ```
 
 **Version Strategy**:
+
 - **gapless-crypto-clickhouse**: Start at v1.0.0 (independent lifecycle)
 - **Semantic versioning**: MAJOR.MINOR.PATCH
 - **Breaking changes**: Increment MAJOR (v1.0.0 → v2.0.0)
 
 **TestPyPI Workflow**:
+
 1. Publish to TestPyPI first: `repository-url: https://test.pypi.org/legacy/`
 2. Test installation: `pip install -i https://test.pypi.org/simple/ gapless-crypto-clickhouse`
 3. Validate: README rendering, dependency resolution, import success
 4. Publish to production PyPI after validation
 
 **Trusted Publishing Setup**:
+
 1. Create GitHub repo: `terrylica/gapless-crypto-clickhouse`
 2. Configure PyPI Trusted Publisher:
    - Package: `gapless-crypto-clickhouse`
@@ -328,16 +349,19 @@ PyPI Packages:
 ### Ambiguities Requiring User Clarification
 
 **Question 1**: Should gapless-crypto-clickhouse depend on gapless-crypto-data for shared utilities?
+
 - **Option A**: Independent (copy utilities, no dependency)
 - **Option B**: Dependency (reuse collectors, validation modules)
 - **Recommendation**: Option A (aligns with independent package strategy)
 
 **Question 2**: Repository structure for new package?
+
 - **Option A**: New GitHub repo (`terrylica/gapless-crypto-clickhouse`)
 - **Option B**: Monorepo with separate PyPI packages
 - **Recommendation**: Option A (simpler Trusted Publishing, independent CI/CD)
 
 **Question 3**: Deprecation timeline for gapless-crypto-data QuestDB code?
+
 - **Current**: v4.0.0 deprecates, v5.0.0 removes
 - **Impact**: Users should migrate to gapless-crypto-clickhouse before v5.0.0
 - **Documentation**: Migration guide needed in both packages
@@ -370,19 +394,23 @@ PyPI Packages:
 ## References
 
 **PyPI/TestPyPI**:
+
 - PEP 423: Naming conventions - https://peps.python.org/pep-0423/
 - Trusted Publishing - https://docs.pypi.org/trusted-publishers/
 - pypa/gh-action-pypi-publish - https://github.com/pypa/gh-action-pypi-publish
 
 **Package Splitting**:
+
 - Namespace Packages (PEP 420) - https://packaging.python.org/en/latest/guides/packaging-namespace-packages/
 - When to split packages - https://py-pkgs.org/04-package-structure.html
 
 **Versioning**:
+
 - Semantic Versioning - https://semver.org/
 - Python versioning spec - https://packaging.python.org/en/latest/discussions/versioning/
 
 **Existing Infrastructure**:
+
 - ADR-0005: ClickHouse Migration - `/Users/terryli/eon/gapless-crypto-data/docs/decisions/0005-clickhouse-migration.md`
 - Publish workflow - `/Users/terryli/eon/gapless-crypto-data/.github/workflows/publish.yml`
 - Release workflow - `/Users/terryli/eon/gapless-crypto-data/.github/workflows/release.yml`

@@ -15,6 +15,7 @@ The gapless-crypto-data package uses a single centralized QuestDB database (`ohl
 **User requirement (2025-01-15)**: "Ensure the canonical way [the database] is being constructed, named and prepared is future-proof enough and representative enough to all sorts of different scenarios."
 
 **Specific validation scenarios requested**:
+
 - Multiple symbols (10 symbols: 5 spot + 5 futures)
 - Multiple timeframes (all 13 Binance spot timeframes, potentially expanding to 16)
 - Two instrument types: spot and UM perpetual futures (USDT-margined)
@@ -23,6 +24,7 @@ The gapless-crypto-data package uses a single centralized QuestDB database (`ohl
 ### Current State
 
 **Existing schema** (`src/gapless_crypto_clickhouse/questdb/schema.sql`):
+
 - Single unified table: `ohlcv`
 - 13 data columns + 1 designated timestamp
 - DEDUP enabled on composite key: `(timestamp, symbol, timeframe)`
@@ -31,6 +33,7 @@ The gapless-crypto-data package uses a single centralized QuestDB database (`ohl
 - No `instrument_type` or `market_type` column
 
 **Current validation coverage**:
+
 - ✅ Single symbol: BTCUSDT
 - ✅ Single timeframe: 1m
 - ✅ Single instrument: spot
@@ -44,6 +47,7 @@ The gapless-crypto-data package uses a single centralized QuestDB database (`ohl
 ### Critical Limitation Discovered
 
 **Futures support blocker** (vision-futures-explorer branch investigation):
+
 - Futures CSV format: 12 columns with header row (vs spot: 11 columns, no header)
 - Futures URL pattern: `/data/futures/um/` (vs spot: `/data/spot/`)
 - Current code hardcoded for spot-only (`BinancePublicDataCollector.base_url`)
@@ -97,6 +101,7 @@ Based on lessons learned from Phase 1 spot validation:
 5. Re-run comprehensive validation with 10 instrument-pairs (5 spot + 5 futures)
 
 **Deferral rationale**:
+
 - Spot validation provides 90% of required robustness evidence
 - Empirical insights from 54M-row spot dataset inform better futures design
 - Avoids premature schema changes without data-driven justification
@@ -109,11 +114,13 @@ Based on lessons learned from Phase 1 spot validation:
 ### Critical Discovery: 16 Timeframes Available (Not 13)
 
 **Timeframe Spectrum Agent** empirically validated via HTTP HEAD requests to `data.binance.vision`:
+
 - ✅ All **16 timeframes** available for Binance spot data (including 3d, 1w, 1M)
 - ❌ `QuestDBBulkLoader.SUPPORTED_TIMEFRAMES` only listed 13 timeframes (missing 3d, 1w, 1M)
 - ✅ **Code updated** (2025-01-15): Added exotic timeframes to `SUPPORTED_TIMEFRAMES` constant
 
 **Code change** (questdb_bulk_loader.py:105-123):
+
 ```python
 SUPPORTED_TIMEFRAMES = [
     "1s", "1m", "3m", "5m", "15m", "30m",
@@ -128,14 +135,15 @@ SUPPORTED_TIMEFRAMES = [
 
 **Production Readiness Verdict**: PRODUCTION-READY with zero modifications needed
 
-| Finding | Status | Evidence |
-|---------|--------|----------|
-| DEDUP collision risk | ✅ ZERO | Composite key `(timestamp, symbol, timeframe)` guarantees uniqueness across 80 combinations |
-| SYMBOL capacity headroom | ✅ EXCELLENT | 507 slots remaining (97.66% headroom for future expansion) |
-| Partition strategy | ✅ ACCEPTABLE | 122 DAY partitions, 400K rows/partition (within QuestDB's 100K-1M range) |
-| Timeframe capacity | ⚠️ FULL | 16/16 slots used (100% utilization, but covers all Binance timeframes) |
+| Finding                  | Status        | Evidence                                                                                    |
+| ------------------------ | ------------- | ------------------------------------------------------------------------------------------- |
+| DEDUP collision risk     | ✅ ZERO       | Composite key `(timestamp, symbol, timeframe)` guarantees uniqueness across 80 combinations |
+| SYMBOL capacity headroom | ✅ EXCELLENT  | 507 slots remaining (97.66% headroom for future expansion)                                  |
+| Partition strategy       | ✅ ACCEPTABLE | 122 DAY partitions, 400K rows/partition (within QuestDB's 100K-1M range)                    |
+| Timeframe capacity       | ⚠️ FULL       | 16/16 slots used (100% utilization, but covers all Binance timeframes)                      |
 
 **Deliverables**: `tmp/schema-robustness/schema-extensibility/`
+
 - `schema_analysis.py` (PEP 723 script)
 - `SCHEMA_EXTENSIBILITY_REPORT.md` (comprehensive findings)
 - `SUMMARY.txt` (quick reference)
@@ -144,14 +152,15 @@ SUPPORTED_TIMEFRAMES = [
 
 **Production Readiness Verdict**: PRODUCTION-READY for concurrent multi-symbol ingestion
 
-| Finding | Status | Evidence |
-|---------|--------|----------|
-| CLI multi-symbol capability | ✅ NATIVE | Comma-separated list support (cli.py:77, 186, 256-310) |
-| Checkpoint isolation | ✅ VERIFIED | Session-based naming prevents collisions, atomic writes prevent corruption |
-| DEDUP uniqueness | ✅ GUARANTEED | QuestDB WAL mode + ILP auto-commit ensures consistency, UPSERT semantics prevent duplicates |
-| Processing model | ✅ SEQUENTIAL | One symbol at a time with per-symbol error handling (optimal for reliability) |
+| Finding                     | Status        | Evidence                                                                                    |
+| --------------------------- | ------------- | ------------------------------------------------------------------------------------------- |
+| CLI multi-symbol capability | ✅ NATIVE     | Comma-separated list support (cli.py:77, 186, 256-310)                                      |
+| Checkpoint isolation        | ✅ VERIFIED   | Session-based naming prevents collisions, atomic writes prevent corruption                  |
+| DEDUP uniqueness            | ✅ GUARANTEED | QuestDB WAL mode + ILP auto-commit ensures consistency, UPSERT semantics prevent duplicates |
+| Processing model            | ✅ SEQUENTIAL | One symbol at a time with per-symbol error handling (optimal for reliability)               |
 
 **Deliverables**: `tmp/schema-robustness/multi-symbol/`
+
 - `stress_test_design.py` (PEP 723 script with 3 test scenarios)
 - `MULTI_SYMBOL_STRESS_REPORT.md` (comprehensive findings)
 
@@ -159,13 +168,14 @@ SUPPORTED_TIMEFRAMES = [
 
 **Critical Discovery**: All 8 temporal boundaries cross QuestDB DAY partition boundaries (midnight UTC splits)
 
-| Boundary Type | Count | Risk Level | Example |
-|---------------|-------|------------|---------|
-| Year transition | 1 | **CRITICAL** | 2023-12-31 23:59:59 → 2024-01-01 00:00:00 |
-| Leap year entry/exit | 2 | **CRITICAL/HIGH** | Feb 28 → Feb 29, Feb 29 → Mar 1 |
-| Month boundaries | 5 | **MEDIUM-CRITICAL** | Jan 31 → Feb 1, etc. |
+| Boundary Type        | Count | Risk Level          | Example                                   |
+| -------------------- | ----- | ------------------- | ----------------------------------------- |
+| Year transition      | 1     | **CRITICAL**        | 2023-12-31 23:59:59 → 2024-01-01 00:00:00 |
+| Leap year entry/exit | 2     | **CRITICAL/HIGH**   | Feb 28 → Feb 29, Feb 29 → Mar 1           |
+| Month boundaries     | 5     | **MEDIUM-CRITICAL** | Jan 31 → Feb 1, etc.                      |
 
 **Expected row counts** (1m timeframe, single symbol):
+
 - November 2023: 43,200 rows (30 days)
 - December 2023: 44,640 rows (31 days)
 - January 2024: 44,640 rows (31 days)
@@ -173,6 +183,7 @@ SUPPORTED_TIMEFRAMES = [
 - **TOTAL**: 174,240 rows per symbol (122 days)
 
 **Deliverables**: `tmp/schema-robustness/temporal-boundary/`
+
 - `boundary_calculator.py` (PEP 723 script)
 - `boundary_test_cases.py` (8 test cases with SQL queries)
 - `test_cases.json` (machine-readable export)
@@ -182,23 +193,26 @@ SUPPORTED_TIMEFRAMES = [
 
 **All 16 timeframes empirically validated** via HTTP HEAD requests to Binance CDN:
 
-| Category | Timeframes | Bars/Day Range | Availability | QuestDB Support |
-|----------|-----------|----------------|--------------|-----------------|
-| **Standard** | 1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d | 86,400 → 1 | ✅ VERIFIED | ✅ UPDATED |
-| **Exotic** | 3d, 1w, 1M | 0.33 → 0.03 | ✅ VERIFIED | ✅ UPDATED |
+| Category     | Timeframes                                            | Bars/Day Range | Availability | QuestDB Support |
+| ------------ | ----------------------------------------------------- | -------------- | ------------ | --------------- |
+| **Standard** | 1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d | 86,400 → 1     | ✅ VERIFIED  | ✅ UPDATED      |
+| **Exotic**   | 3d, 1w, 1M                                            | 0.33 → 0.03    | ✅ VERIFIED  | ✅ UPDATED      |
 
 **Exotic timeframe edge cases identified**:
+
 1. **1s**: 10.5M rows per symbol (ultra-high frequency stress test)
 2. **3d**: Month boundary issues (31-day month = 10.33 bars, partial bars)
 3. **1w**: ISO 8601 week numbering complexity
 4. **1M**: Variable month length (28-31 days), leap year handling
 
 **Cross-timeframe consistency tests designed**:
+
 - 1s → 1m: 60 consecutive 1s bars = 1m bar (exact match)
 - 1m → 1h: 60 consecutive 1m bars = 1h bar (exact match)
 - 1h → 1d: 24 consecutive 1h bars = 1d bar (exact match)
 
 **Deliverables**: `tmp/schema-robustness/timeframe-spectrum/`
+
 - `spectrum_validation.py` (PEP 723 script)
 - `spectrum_validation_results.json` (machine-readable results)
 - `TIMEFRAME_SPECTRUM_REPORT.md` (comprehensive findings)
@@ -206,6 +220,7 @@ SUPPORTED_TIMEFRAMES = [
 ### Phase 1.1 Summary
 
 **All acceptance criteria met**:
+
 - ✅ Schema can handle 5 concurrent symbols (507 slots headroom)
 - ✅ All 16 timeframes validated and code updated
 - ✅ 8 temporal boundary test cases defined
@@ -214,6 +229,7 @@ SUPPORTED_TIMEFRAMES = [
 - ✅ Production-readiness confirmed for spot-only validation
 
 **Code changes made**:
+
 1. `questdb_bulk_loader.py:105-123` - Added 3d, 1w, 1mo to `SUPPORTED_TIMEFRAMES`
 
 **Next phase**: Phase 1.2 Data Ingestion (TRUNCATE + ingest 5 symbols × 16 timeframes × 122 days)
@@ -225,6 +241,7 @@ SUPPORTED_TIMEFRAMES = [
 ### Initial Ingestion Summary
 
 **Comprehensive dataset attempted**:
+
 - **5 symbols**: BTCUSDT, ETHUSDT, BNBUSDT, ADAUSDT, DOGEUSDT (diversified market cap)
 - **15 timeframes successful**: 1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w
 - **1 timeframe failed**: "1M" (HTTP 404 errors)
@@ -235,6 +252,7 @@ SUPPORTED_TIMEFRAMES = [
 ### Bug Discovery: Incorrect Timeframe Notation
 
 **Timeframe URL path bug**:
+
 - ❌ **Used "1M" in code**: `SUPPORTED_TIMEFRAMES = [..., "1M"]`
 - ✅ **Binance expects "1mo"**: CloudFront URL path uses `/data/spot/monthly/klines/{symbol}/1mo/`
 - **Root cause**: Binance uses "1mo" (not "1M") for monthly timeframe in URL paths
@@ -242,6 +260,7 @@ SUPPORTED_TIMEFRAMES = [
 - **Impact**: 75/80 combinations ingested (93.75% coverage), 5 "1M" combinations failed with HTTP 404
 
 **Deliverables**: `tmp/schema-robustness/ingestion/`
+
 - `clear_database.py` - TRUNCATE existing data
 - `ingest_comprehensive.py` - Ingest 5 symbols × 16 timeframes × 122 days (with bug)
 - `ingestion_log.txt` - Complete ingestion log showing "1M" failures
@@ -253,6 +272,7 @@ SUPPORTED_TIMEFRAMES = [
 ### Bug Fix Implementation
 
 **Code changes** (3 files corrected):
+
 1. `src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py:122` - Changed "1M" → "1mo"
 2. `tmp/schema-robustness/ingestion/ingest_comprehensive.py:43` - Changed "1M" → "1mo"
 3. `tmp/schema-robustness/validation/04_timeframe_spectrum_agent.py:20` - Changed "1M" → "1mo"
@@ -260,6 +280,7 @@ SUPPORTED_TIMEFRAMES = [
 ### Re-ingestion Results
 
 **Corrected comprehensive dataset ingested**:
+
 - **5 symbols**: BTCUSDT, ETHUSDT, BNBUSDT, ADAUSDT, DOGEUSDT (diversified market cap)
 - **16 timeframes**: 1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, **1mo**
 - **Date range**: 2023-11-01 to 2024-02-29 (122 days)
@@ -269,6 +290,7 @@ SUPPORTED_TIMEFRAMES = [
 ### Ingestion Performance
 
 **ILP (InfluxDB Line Protocol) performance validated**:
+
 - Average ingestion rate: ~92K rows/second (re-ingestion with DEDUP overhead)
 - Peak timeframe (1s): 52.3M rows across 5 symbols
 - Monthly timeframe (1mo): 20 rows (5 symbols × 4 months)
@@ -276,6 +298,7 @@ SUPPORTED_TIMEFRAMES = [
 - QuestDB WAL mode: Zero ingestion errors, DEDUP working correctly
 
 **Deliverables**: `tmp/schema-robustness/ingestion/`
+
 - `clear_database.py` - TRUNCATE existing data
 - `ingest_comprehensive.py` - Ingest 5 symbols × 16 timeframes × 122 days (corrected)
 - `ingest_1mo_only.py` - Targeted ingestion for "1mo" only (development artifact)
@@ -289,14 +312,14 @@ SUPPORTED_TIMEFRAMES = [
 
 **Agents executed in parallel** (6 validation agents):
 
-| Agent | Status | Key Finding | Report |
-|-------|--------|-------------|--------|
-| **Schema Extensibility** | ✅ PASS | Zero DEDUP collisions across 53.7M rows, optimal partition strategy | SCHEMA_EXTENSIBILITY_VALIDATION.md |
-| **Multi-Symbol Stress** | ✅ PASS | All 5 symbols present (10.7M rows each), zero race conditions | MULTI_SYMBOL_STRESS_VALIDATION.md |
-| **Temporal Boundary** | ✅ PASS | Year transition, leap year, all month boundaries validated | TEMPORAL_BOUNDARY_VALIDATION.md |
-| **Data Quality** | ✅ PASS | Zero OHLC violations, zero NULLs, zero negative volumes | DATA_QUALITY_VALIDATION.md |
-| **Timeframe Spectrum** | ✅ PASS | All 16/16 timeframes present (including "1mo") | TIMEFRAME_SPECTRUM_VALIDATION.md |
-| **Query Performance** | ⚠️ FINDINGS | 3 SLO violations (queries >1s on 53.7M rows) - expected at scale | QUERY_PERFORMANCE_VALIDATION.md |
+| Agent                    | Status      | Key Finding                                                         | Report                             |
+| ------------------------ | ----------- | ------------------------------------------------------------------- | ---------------------------------- |
+| **Schema Extensibility** | ✅ PASS     | Zero DEDUP collisions across 53.7M rows, optimal partition strategy | SCHEMA_EXTENSIBILITY_VALIDATION.md |
+| **Multi-Symbol Stress**  | ✅ PASS     | All 5 symbols present (10.7M rows each), zero race conditions       | MULTI_SYMBOL_STRESS_VALIDATION.md  |
+| **Temporal Boundary**    | ✅ PASS     | Year transition, leap year, all month boundaries validated          | TEMPORAL_BOUNDARY_VALIDATION.md    |
+| **Data Quality**         | ✅ PASS     | Zero OHLC violations, zero NULLs, zero negative volumes             | DATA_QUALITY_VALIDATION.md         |
+| **Timeframe Spectrum**   | ✅ PASS     | All 16/16 timeframes present (including "1mo")                      | TIMEFRAME_SPECTRUM_VALIDATION.md   |
+| **Query Performance**    | ⚠️ FINDINGS | 3 SLO violations (queries >1s on 53.7M rows) - expected at scale    | QUERY_PERFORMANCE_VALIDATION.md    |
 
 **Note**: Phase 1.3 results initially showed "1M" timeframe missing. After Phase 1.5 bug fix ("1M" → "1mo"), re-validation confirmed all 16 timeframes present.
 
@@ -304,16 +327,17 @@ SUPPORTED_TIMEFRAMES = [
 
 **Production Readiness Verdict**: PRODUCTION-READY at 53.7M row scale
 
-| Metric | Actual | Expected | Status |
-|--------|--------|----------|--------|
-| DEDUP collisions | **0** | 0 | ✅ PASS |
-| DEDUP uniqueness | **100%** | 100% | ✅ PASS |
-| Symbol capacity used | **5/512 (0.98%)** | <50% | ✅ EXCELLENT |
-| Timeframe capacity used | **16/16 (100%)** | 100% | ✅ PERFECT |
-| Partition count | **121 DAY partitions** | 122 expected | ✅ OPTIMAL |
-| Avg rows/partition | **444,070** | 100K-1M | ✅ OPTIMAL |
+| Metric                  | Actual                 | Expected     | Status       |
+| ----------------------- | ---------------------- | ------------ | ------------ |
+| DEDUP collisions        | **0**                  | 0            | ✅ PASS      |
+| DEDUP uniqueness        | **100%**               | 100%         | ✅ PASS      |
+| Symbol capacity used    | **5/512 (0.98%)**      | <50%         | ✅ EXCELLENT |
+| Timeframe capacity used | **16/16 (100%)**       | 100%         | ✅ PERFECT   |
+| Partition count         | **121 DAY partitions** | 122 expected | ✅ OPTIMAL   |
+| Avg rows/partition      | **444,070**            | 100K-1M      | ✅ OPTIMAL   |
 
 **Evidence**:
+
 - `COUNT(*) = COUNT(DISTINCT (timestamp, symbol, timeframe))` = 53,726,725 (zero duplicates)
 - Symbol headroom: 507 unused slots (99.0% capacity remaining)
 - Timeframe coverage: All 16 Binance spot timeframes validated (including "1mo")
@@ -323,15 +347,16 @@ SUPPORTED_TIMEFRAMES = [
 
 **Production Readiness Verdict**: PRODUCTION-READY for concurrent multi-symbol ingestion
 
-| Symbol | Rows Ingested | Expected | Status |
-|--------|---------------|----------|--------|
-| BTCUSDT | **10,745,341** | ~10.7M | ✅ PASS |
-| ETHUSDT | **10,745,341** | ~10.7M | ✅ PASS |
-| BNBUSDT | **10,745,341** | ~10.7M | ✅ PASS |
-| ADAUSDT | **10,745,341** | ~10.7M | ✅ PASS |
-| DOGEUSDT | **10,745,341** | ~10.7M | ✅ PASS |
+| Symbol   | Rows Ingested  | Expected | Status  |
+| -------- | -------------- | -------- | ------- |
+| BTCUSDT  | **10,745,341** | ~10.7M   | ✅ PASS |
+| ETHUSDT  | **10,745,341** | ~10.7M   | ✅ PASS |
+| BNBUSDT  | **10,745,341** | ~10.7M   | ✅ PASS |
+| ADAUSDT  | **10,745,341** | ~10.7M   | ✅ PASS |
+| DOGEUSDT | **10,745,341** | ~10.7M   | ✅ PASS |
 
 **Key findings**:
+
 - ✅ All 5 symbols present with identical row counts (perfect distribution)
 - ✅ 75 symbol-timeframe combinations validated (5 symbols × 15 available timeframes)
 - ✅ All timestamps sequential (no race conditions detected)
@@ -341,14 +366,14 @@ SUPPORTED_TIMEFRAMES = [
 
 **Production Readiness Verdict**: PRODUCTION-READY for all temporal edge cases
 
-| Boundary Type | Rows Spanning | Validation | Status |
-|---------------|---------------|------------|--------|
-| **Year transition** (2023→2024) | **37,065** | Data exists across boundary | ✅ PASS |
-| **Leap year** (Feb 29, 2024) | **65 combos** | 2024-02-29 00:00:00 to 23:59:59 | ✅ PASS |
-| **Nov → Dec** | **37,055** | Continuous across month boundary | ✅ PASS |
-| **Dec → Jan (year)** | **37,065** | Continuous across year+month boundary | ✅ PASS |
-| **Jan → Feb** | **37,055** | Continuous across month boundary | ✅ PASS |
-| **Feb → Mar (leap)** | **18,495** | Continuous across leap month boundary | ✅ PASS |
+| Boundary Type                   | Rows Spanning | Validation                            | Status  |
+| ------------------------------- | ------------- | ------------------------------------- | ------- |
+| **Year transition** (2023→2024) | **37,065**    | Data exists across boundary           | ✅ PASS |
+| **Leap year** (Feb 29, 2024)    | **65 combos** | 2024-02-29 00:00:00 to 23:59:59       | ✅ PASS |
+| **Nov → Dec**                   | **37,055**    | Continuous across month boundary      | ✅ PASS |
+| **Dec → Jan (year)**            | **37,065**    | Continuous across year+month boundary | ✅ PASS |
+| **Jan → Feb**                   | **37,055**    | Continuous across month boundary      | ✅ PASS |
+| **Feb → Mar (leap)**            | **18,495**    | Continuous across leap month boundary | ✅ PASS |
 
 **Critical validation**: QuestDB DAY partitioning handles midnight UTC splits correctly for all 8 temporal boundaries.
 
@@ -356,14 +381,15 @@ SUPPORTED_TIMEFRAMES = [
 
 **Production Readiness Verdict**: PRODUCTION-READY with zero data integrity issues
 
-| Check | Violations | Expected | Status |
-|-------|------------|----------|--------|
-| **OHLC constraints** | **0** | 0 | ✅ PASS |
-| **NULL values** (critical columns) | **0** | 0 | ✅ PASS |
-| **Negative volumes** | **0** | 0 | ✅ PASS |
-| **Data continuity** | **75 combos validated** | 75 | ✅ PASS |
+| Check                              | Violations              | Expected | Status  |
+| ---------------------------------- | ----------------------- | -------- | ------- |
+| **OHLC constraints**               | **0**                   | 0        | ✅ PASS |
+| **NULL values** (critical columns) | **0**                   | 0        | ✅ PASS |
+| **Negative volumes**               | **0**                   | 0        | ✅ PASS |
+| **Data continuity**                | **75 combos validated** | 75       | ✅ PASS |
 
 **OHLC constraints validated** (zero violations across 53.7M rows):
+
 - `high >= low` (no high < low violations)
 - `high >= open` (no high < open violations)
 - `high >= close` (no high < close violations)
@@ -374,13 +400,14 @@ SUPPORTED_TIMEFRAMES = [
 
 **Production Impact**: ⚠️ **NON-BLOCKING** - '1M' timeframe not used in production scenarios
 
-| Finding | Status | Implication |
-|---------|--------|-------------|
-| **15/16 timeframes present** | ✅ ACCEPTABLE | All standard and exotic timeframes validated except 1M |
-| **'1M' timeframe missing** | ❌ FAIL | Binance does not provide monthly kline data via CDN |
-| **Production impact** | ✅ MINIMAL | Monthly aggregations can be computed from daily (1d) data |
+| Finding                      | Status        | Implication                                               |
+| ---------------------------- | ------------- | --------------------------------------------------------- |
+| **15/16 timeframes present** | ✅ ACCEPTABLE | All standard and exotic timeframes validated except 1M    |
+| **'1M' timeframe missing**   | ❌ FAIL       | Binance does not provide monthly kline data via CDN       |
+| **Production impact**        | ✅ MINIMAL    | Monthly aggregations can be computed from daily (1d) data |
 
 **Timeframes validated** (15/16):
+
 - ✅ Standard: 1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d
 - ✅ Exotic: 3d, 1w
 - ❌ Missing: 1M (HTTP 404 from Binance CDN)
@@ -391,21 +418,23 @@ SUPPORTED_TIMEFRAMES = [
 
 **Production Impact**: ⚠️ **ATTENTION REQUIRED** - 3 queries exceed <1s SLO on 53.7M rows
 
-| Query Type | Duration | Result | SLO (<1s) | Status |
-|------------|----------|--------|-----------|--------|
-| **Full table COUNT(*)** | **4,776ms** | 53.7M rows | ❌ FAIL | Query optimization needed |
-| **Multi-symbol WHERE IN** | **6,221ms** | 32.2M rows | ❌ FAIL | SYMBOL index performance issue |
-| **Multi-timeframe WHERE IN** | **387ms** | 886K rows | ✅ PASS | SYMBOL index effective |
-| **GROUP BY symbol, timeframe** | **3,592ms** | 75 groups | ❌ FAIL | Aggregation optimization needed |
-| **Time range filter (1 month)** | **179ms** | 13.8M rows | ✅ PASS | Timestamp index effective |
+| Query Type                      | Duration    | Result     | SLO (<1s) | Status                          |
+| ------------------------------- | ----------- | ---------- | --------- | ------------------------------- |
+| **Full table COUNT(\*)**        | **4,776ms** | 53.7M rows | ❌ FAIL   | Query optimization needed       |
+| **Multi-symbol WHERE IN**       | **6,221ms** | 32.2M rows | ❌ FAIL   | SYMBOL index performance issue  |
+| **Multi-timeframe WHERE IN**    | **387ms**   | 886K rows  | ✅ PASS   | SYMBOL index effective          |
+| **GROUP BY symbol, timeframe**  | **3,592ms** | 75 groups  | ❌ FAIL   | Aggregation optimization needed |
+| **Time range filter (1 month)** | **179ms**   | 13.8M rows | ✅ PASS   | Timestamp index effective       |
 
 **Analysis**:
+
 - ✅ **Timestamp-based queries**: Fast (<200ms) - designated timestamp index effective
 - ✅ **Timeframe filters**: Fast (<400ms) - SYMBOL column index effective for low cardinality
 - ❌ **Symbol filters**: Slow (>6s) - SYMBOL column index ineffective for multi-value WHERE IN on large datasets
 - ❌ **Aggregations**: Slow (>3.5s) - GROUP BY performance degrades on 53.7M rows without optimization
 
 **Recommendation**:
+
 1. **Immediate**: Document query performance characteristics in production guidance
 2. **Future**: Investigate QuestDB-specific optimizations (index hints, query rewriting)
 3. **Workaround**: Use time-bound queries (always include timestamp filter to reduce scan size)
@@ -413,6 +442,7 @@ SUPPORTED_TIMEFRAMES = [
 ### Phase 1.3 Summary
 
 **Acceptance criteria met**:
+
 - ✅ Schema handles 53.7M rows with zero DEDUP collisions
 - ✅ All 5 symbols ingested correctly with zero race conditions
 - ✅ All temporal boundaries validated (year, leap year, month boundaries)
@@ -421,6 +451,7 @@ SUPPORTED_TIMEFRAMES = [
 - ⚠️ Query performance SLO violations on full table scans (expected at 53.7M row scale)
 
 **Production readiness verdict**: **PRODUCTION-READY for spot-only scenarios** with documented limitations:
+
 - '1M' timeframe not supported (Binance CDN limitation)
 - Full table scans require query optimization or time-bound filters
 
@@ -459,8 +490,8 @@ SUPPORTED_TIMEFRAMES = [
 
 6. **Query Performance Agent**
    - Benchmark queries with 54M rows against <1s SLO
-   - Test multi-symbol queries (e.g., SELECT * WHERE symbol IN (…))
-   - Test multi-timeframe queries (e.g., SELECT * WHERE timeframe IN (…))
+   - Test multi-symbol queries (e.g., SELECT \* WHERE symbol IN (…))
+   - Test multi-timeframe queries (e.g., SELECT \* WHERE timeframe IN (…))
    - Validate QuestDB SYMBOL indexing provides expected speedup
 
 ### Data Flow
@@ -542,11 +573,13 @@ phases:
 ### SLOs
 
 #### Availability
+
 - **Target**: 100% data availability during validation period (Nov 2023 - Feb 2024)
 - **Measurement**: CloudFront CDN availability for historical data (expected: 99.99% SLA)
 - **Validation**: All 5 symbols × 16 timeframes × 122 days successfully downloaded with zero 404 errors
 
 #### Correctness
+
 - **Target**: 100% zero-gap guarantee across all 80 symbol-timeframe combinations
 - **Measurement**: `OHLCVQuery.detect_gaps()` returns zero gaps for all combinations
 - **Validation**: Data Quality Agent verifies:
@@ -556,6 +589,7 @@ phases:
   - 0 missing timestamps within expected ranges
 
 #### Observability
+
 - **Target**: Full data lineage tracking for all 54M ingested rows
 - **Measurement**: `data_source` column populated for 100% of rows (expected: 'cloudfront')
 - **Validation**: Validation agents log:
@@ -565,6 +599,7 @@ phases:
   - Validation failure details with row-level context
 
 #### Maintainability
+
 - **Target**: Validation scripts reusable for future schema investigations
 - **Measurement**: All validation agents documented with clear responsibilities and reproducible queries
 - **Validation**:
@@ -653,6 +688,7 @@ This ADR does NOT trigger a semantic release (documentation-only change).
 - **Phase 2 completion** (if futures implemented): `feat: add futures support with instrument_type column` → **minor release** (breaking schema change would require migration guide)
 
 **Conventional commit types**:
+
 - `docs(adr): add ADR-0003 for schema robustness validation` → no release
 - `docs(plan): add plan 0003-questdb-schema-robustness` → no release
 - `test: add 6-agent schema validation suite` → no release
@@ -665,11 +701,13 @@ This ADR does NOT trigger a semantic release (documentation-only change).
 **Description**: Test 5 spot symbols × 16 timeframes × 122 days immediately, never implement futures support.
 
 **Pros**:
+
 - Fastest execution (2-3 hours total)
 - Lower risk (no schema changes)
 - Immediate validation of current schema
 
 **Cons**:
+
 - Ignores user requirement for futures validation
 - Defers futures indefinitely (no concrete plan)
 - May result in schema incompatibility discovery late in production
@@ -683,11 +721,13 @@ This ADR does NOT trigger a semantic release (documentation-only change).
 **Description**: Implement full futures support (schema changes, CSV parser, URL parameterization), then test 10 instrument-pairs × 16 timeframes × 122 days.
 
 **Pros**:
+
 - Complete validation of spot+futures coexistence
 - Tests realistic multi-instrument scenarios
 - Comprehensive robustness evidence (108M rows)
 
 **Cons**:
+
 - High upfront cost (4-8 hours coding before validation)
 - Schema breaking change without empirical justification
 - Risk of premature architecture commitment
@@ -703,6 +743,7 @@ This ADR does NOT trigger a semantic release (documentation-only change).
 **Description**: Validate spot scenarios comprehensively (Phase 1), then design futures support based on empirical insights (Phase 2).
 
 **Pros**:
+
 - Incremental risk (validate known scenarios first)
 - Data-driven futures design (informed by 54M-row spot validation)
 - Faster time-to-value (2-3 hours for Phase 1)
@@ -710,6 +751,7 @@ This ADR does NOT trigger a semantic release (documentation-only change).
 - Preserves option for separate futures package
 
 **Cons**:
+
 - Two-phase execution (requires approval checkpoint)
 - Potential schema refactoring if futures requires `instrument_type` column
 
@@ -720,6 +762,7 @@ This ADR does NOT trigger a semantic release (documentation-only change).
 See detailed plan: [docs/plan/0003-questdb-schema-robustness/plan.yaml](../plan/0003-questdb-schema-robustness/plan.yaml)
 
 **High-level timeline**:
+
 - Phase 1: Schema Investigation (30 min)
 - Phase 2: Data Ingestion (1-2 hours)
 - Phase 3: Comprehensive Validation (30-60 min)

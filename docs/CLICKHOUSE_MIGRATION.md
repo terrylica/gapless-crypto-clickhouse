@@ -5,6 +5,7 @@ QuestDB → ClickHouse migration guide for gapless-crypto-data v4.0.0+.
 **Status**: ClickHouse implementation complete (ADR-0005). QuestDB deprecated as of v4.0.0, will be removed in v5.0.0.
 
 **Related Documents**:
+
 - [ADR-0005: ClickHouse Migration](decisions/0005-clickhouse-migration.md) - Decision rationale
 - [Plan: ClickHouse Migration](plan/0005-clickhouse-migration/plan.yaml) - Implementation plan
 
@@ -13,12 +14,14 @@ QuestDB → ClickHouse migration guide for gapless-crypto-data v4.0.0+.
 **Decision**: Migrate from QuestDB to ClickHouse for future-proofing and ecosystem maturity.
 
 **Key Drivers**:
+
 1. **Ecosystem Maturity**: ClickHouse has larger ecosystem, more integrations, enterprise support
 2. **Scalability Ceiling**: ClickHouse supports distributed deployments (ClickHouse Cloud, Kubernetes)
 3. **Query Capabilities**: Advanced analytics, window functions, materialized views
 4. **Future-Proofing**: Reduce risk of dependency on niche time-series database
 
 **Trade-offs Accepted**:
+
 - Eventual consistency via ReplacingMergeTree (vs immediate DEDUP in QuestDB)
 - FINAL keyword overhead (10-30%) for queries requiring deduplication
 - Slightly more complex setup (Docker Compose vs single binary)
@@ -28,6 +31,7 @@ QuestDB → ClickHouse migration guide for gapless-crypto-data v4.0.0+.
 ### Database Engine
 
 **Before (QuestDB)**:
+
 ```
 Engine: QuestDB with DEDUP ENABLE UPSERT KEYS
 Protocol: PostgreSQL wire (queries) + ILP (ingestion)
@@ -36,6 +40,7 @@ Performance: 92K-208K rows/sec (ILP), <1s queries
 ```
 
 **After (ClickHouse)**:
+
 ```
 Engine: ClickHouse with ReplacingMergeTree
 Protocol: Native protocol (port 9000) for all operations
@@ -45,18 +50,19 @@ Performance: 1,180 rows/sec (bulk insert), FINAL query overhead 10-30%
 
 ### Schema Mapping
 
-| QuestDB Column | ClickHouse Column | Type Mapping |
-|----------------|-------------------|--------------|
-| `symbol` (SYMBOL) | `symbol` (LowCardinality(String)) | Space-efficient string |
-| `timeframe` (SYMBOL) | `timeframe` (LowCardinality(String)) | Space-efficient string |
-| `instrument_type` (SYMBOL) | `instrument_type` (LowCardinality(String)) | ADR-0004 futures support |
-| `timestamp` (TIMESTAMP) | `timestamp` (DateTime64(3)) | Millisecond precision |
-| `open`, `high`, `low`, `close`, `volume` (DOUBLE) | Float64 | Same precision |
-| `number_of_trades` (LONG) | Int64 | Same precision |
-| N/A | `_version` (UInt64) | Deterministic hash for deduplication |
-| N/A | `_sign` (Int8) | ReplacingMergeTree merge strategy |
+| QuestDB Column                                    | ClickHouse Column                          | Type Mapping                         |
+| ------------------------------------------------- | ------------------------------------------ | ------------------------------------ |
+| `symbol` (SYMBOL)                                 | `symbol` (LowCardinality(String))          | Space-efficient string               |
+| `timeframe` (SYMBOL)                              | `timeframe` (LowCardinality(String))       | Space-efficient string               |
+| `instrument_type` (SYMBOL)                        | `instrument_type` (LowCardinality(String)) | ADR-0004 futures support             |
+| `timestamp` (TIMESTAMP)                           | `timestamp` (DateTime64(3))                | Millisecond precision                |
+| `open`, `high`, `low`, `close`, `volume` (DOUBLE) | Float64                                    | Same precision                       |
+| `number_of_trades` (LONG)                         | Int64                                      | Same precision                       |
+| N/A                                               | `_version` (UInt64)                        | Deterministic hash for deduplication |
+| N/A                                               | `_sign` (Int8)                             | ReplacingMergeTree merge strategy    |
 
 **Compression**:
+
 - Timestamps: DoubleDelta codec (time-series optimization)
 - OHLCV floats: Gorilla codec (financial data optimization)
 - Strings: ZSTD(3) codec (general compression)
@@ -66,16 +72,19 @@ Performance: 1,180 rows/sec (bulk insert), FINAL query overhead 10-30%
 ### Deduplication Strategy
 
 **QuestDB Approach** (Immediate):
+
 ```sql
 CREATE TABLE ohlcv (
     ...
 ) TIMESTAMP(timestamp) PARTITION BY MONTH
 DEDUP ENABLE UPSERT KEYS(timestamp, symbol, timeframe, instrument_type);
 ```
+
 - Duplicates rejected at write time
 - No query-time overhead
 
 **ClickHouse Approach** (Eventual):
+
 ```sql
 CREATE TABLE ohlcv (
     ...
@@ -84,11 +93,13 @@ CREATE TABLE ohlcv (
 ) ENGINE = ReplacingMergeTree(_version)
 ORDER BY (timestamp, symbol, timeframe, instrument_type)
 ```
+
 - Duplicates written, merged asynchronously
 - Query with `FINAL` keyword to force deduplication
 - Deterministic `_version` ensures identical data → identical hash → consistent merge outcome
 
 **Zero-Gap Guarantee Preserved**:
+
 ```python
 # Application-level deterministic versioning
 def _compute_version_hash(row):
@@ -102,6 +113,7 @@ def _compute_version_hash(row):
 ### Connection
 
 **Before (QuestDB)**:
+
 ```python
 from gapless_crypto_clickhouse.questdb import QuestDBConnection
 
@@ -111,6 +123,7 @@ with QuestDBConnection() as conn:
 ```
 
 **After (ClickHouse)**:
+
 ```python
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
@@ -120,12 +133,14 @@ with ClickHouseConnection() as conn:
 ```
 
 **Environment Variables**:
+
 - QuestDB: `QUESTDB_HOST`, `QUESTDB_HTTP_PORT`, `QUESTDB_PG_PORT`
 - ClickHouse: `CLICKHOUSE_HOST`, `CLICKHOUSE_PORT`, `CLICKHOUSE_HTTP_PORT`
 
 ### Bulk Ingestion
 
 **Before (QuestDB)**:
+
 ```python
 from gapless_crypto_clickhouse.collectors.questdb_bulk_loader import QuestDBBulkLoader
 
@@ -135,6 +150,7 @@ with QuestDBConnection() as conn:
 ```
 
 **After (ClickHouse)**:
+
 ```python
 from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 
@@ -148,6 +164,7 @@ with ClickHouseConnection() as conn:
 ### Query API
 
 **Before (QuestDB)**:
+
 ```python
 from gapless_crypto_clickhouse.query import OHLCVQuery
 
@@ -157,6 +174,7 @@ with QuestDBConnection() as conn:
 ```
 
 **After (ClickHouse)**:
+
 ```python
 from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 
@@ -174,14 +192,15 @@ with ClickHouseConnection() as conn:
 ### Local Development
 
 **Docker Compose**:
+
 ```yaml
 # docker-compose.yml
 services:
   clickhouse:
     image: clickhouse/clickhouse-server:24.1-alpine
     ports:
-      - "9000:9000"   # Native protocol
-      - "8123:8123"   # HTTP interface
+      - "9000:9000" # Native protocol
+      - "8123:8123" # HTTP interface
     volumes:
       - clickhouse-data:/var/lib/clickhouse
       - ./src/gapless_crypto_clickhouse/clickhouse/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
@@ -192,12 +211,14 @@ services:
 ```
 
 **Start**:
+
 ```bash
 docker-compose up -d
 docker-compose logs -f  # View logs
 ```
 
 **Schema Initialization**:
+
 ```bash
 # Automatic via initdb.d
 # Or manual:
@@ -207,16 +228,19 @@ docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_clickho
 ### Production
 
 **ClickHouse Cloud** (recommended):
+
 1. Create cluster at https://clickhouse.cloud
 2. Copy connection details to environment variables
 3. Run schema.sql via `clickhouse-client`
 
 **Self-Hosted**:
+
 - Kubernetes: Use ClickHouse operator
 - Docker Swarm: Use Docker Compose with volumes
 - Bare metal: Follow ClickHouse docs for your OS
 
 **Security**:
+
 - Set `CLICKHOUSE_PASSWORD` (empty password for localhost dev only)
 - Enable TLS for production
 - Configure access control lists (ACLs)
@@ -225,21 +249,21 @@ docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_clickho
 
 ### Ingestion
 
-| Metric | QuestDB (ILP) | ClickHouse (Bulk) |
-|--------|---------------|-------------------|
-| Single month (744 rows) | 0.3-0.5s | 0.6-0.8s |
-| Throughput | 92K-208K rows/sec | 1,180 rows/sec |
-| Network protocol | ILP (custom) | Native (columnar) |
+| Metric                  | QuestDB (ILP)     | ClickHouse (Bulk) |
+| ----------------------- | ----------------- | ----------------- |
+| Single month (744 rows) | 0.3-0.5s          | 0.6-0.8s          |
+| Throughput              | 92K-208K rows/sec | 1,180 rows/sec    |
+| Network protocol        | ILP (custom)      | Native (columnar) |
 
 **Note**: ClickHouse throughput is lower for small batches, but scales better for large batches due to columnar format.
 
 ### Query
 
-| Query Type | QuestDB | ClickHouse (FINAL) |
-|------------|---------|---------------------|
-| `get_latest(limit=10)` | <100ms | <150ms (+50% overhead) |
-| `get_range(1 month)` | <500ms | <650ms (+30% overhead) |
-| `get_multi_symbol(3 symbols)` | <1s | <1.3s (+30% overhead) |
+| Query Type                    | QuestDB | ClickHouse (FINAL)     |
+| ----------------------------- | ------- | ---------------------- |
+| `get_latest(limit=10)`        | <100ms  | <150ms (+50% overhead) |
+| `get_range(1 month)`          | <500ms  | <650ms (+30% overhead) |
+| `get_multi_symbol(3 symbols)` | <1s     | <1.3s (+30% overhead)  |
 
 **FINAL Overhead**: 10-30% query time increase due to on-demand deduplication merge.
 
@@ -288,6 +312,7 @@ with ClickHouseConnection() as conn:
 ### Validation Scripts
 
 Located in `tmp/`:
+
 - `tmp/clickhouse_quick_validation.py` - Basic functionality (5 tests)
 - `tmp/clickhouse_futures_validation.py` - ADR-0004 futures support (5 tests)
 
@@ -327,6 +352,7 @@ uv run --active python tmp/clickhouse_futures_validation.py
 **Cause**: ClickHouse not running or port conflict (e.g., QuestDB also uses 9000)
 
 **Solution**:
+
 ```bash
 # Check if ClickHouse running
 docker ps | grep clickhouse
@@ -343,6 +369,7 @@ CLICKHOUSE_PORT=9001 docker-compose up -d
 **Cause**: Schema not initialized
 
 **Solution**:
+
 ```bash
 docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_clickhouse/clickhouse/schema.sql
 ```
@@ -352,6 +379,7 @@ docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_clickho
 **Cause**: ReplacingMergeTree has many unmerged parts
 
 **Solution**:
+
 ```sql
 -- Force merge to reduce FINAL overhead
 OPTIMIZE TABLE ohlcv FINAL;
@@ -368,6 +396,7 @@ GROUP BY table;
 **Cause**: ReplacingMergeTree uses eventual consistency
 
 **Solution**:
+
 ```sql
 -- Query with FINAL to force deduplication
 SELECT * FROM ohlcv FINAL WHERE ...;

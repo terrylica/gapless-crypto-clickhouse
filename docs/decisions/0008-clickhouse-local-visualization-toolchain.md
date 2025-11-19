@@ -11,6 +11,7 @@ Implemented (2025-11-17)
 Developers working with gapless-crypto-data v4.0.0 need idiomatic, production-ready tools to visualize and explore ClickHouse data locally. The package collects high-frequency cryptocurrency market data (1s-1d timeframes, 11-column microstructure format) into ClickHouse, but lacks comprehensive guidance on local visualization and database management tools.
 
 **User Requirements** (from multi-agent research):
+
 - Primary use case: Development + Data exploration + Database administration (all three)
 - Interface preference: Mixed tooling (GUI + CLI + IDE integration)
 - Current setup: ClickHouse running via Docker + Colima (Alpine native ARM64)
@@ -19,6 +20,7 @@ Developers working with gapless-crypto-data v4.0.0 need idiomatic, production-re
 ### Current State
 
 **Existing Infrastructure**:
+
 - ClickHouse 24.1-alpine running in Docker via Colima
 - Native protocol: `localhost:9000` (clickhouse-driver)
 - HTTP interface: `localhost:8123` (client queries, web UIs)
@@ -27,6 +29,7 @@ Developers working with gapless-crypto-data v4.0.0 need idiomatic, production-re
 **Gap**: No documented visualization stack, developers rely on ad-hoc solutions
 
 **Research Methodology**: 5-agent parallel investigation covering:
+
 1. Local ClickHouse deployment options
 2. GUI/Web visualization tools (11 tools analyzed)
 3. CLI tools (7 tools analyzed)
@@ -40,28 +43,30 @@ Developers working with gapless-crypto-data v4.0.0 need idiomatic, production-re
 ### Selected Toolchain
 
 **Tier 1: Essential Tools (Required)**
+
 1. **CH-UI** - Modern web interface for interactive exploration
 2. **clickhouse-client** - Official CLI for scripting and automation
 3. **ClickHouse Play** - Built-in web UI for quick queries
 
-**Tier 2: Advanced Tools (Optional)**
-4. **chdig** - TUI performance monitoring and profiling
-5. **clickhouse-local** - File-based analysis without server
+**Tier 2: Advanced Tools (Optional)** 4. **chdig** - TUI performance monitoring and profiling 5. **clickhouse-local** - File-based analysis without server
 
 ### Selection Criteria
 
 **Web Interface Decision**: CH-UI over alternatives
+
 - Rejected: Tabix (unmaintained since 2022), LightHouse (archived 2024), HouseOps (2018)
 - Rejected: ClickHouse-Mate (minimal maintenance, AGPLv3 license)
 - Selected: CH-UI (508 stars, TypeScript, active development, Apache 2.0)
 
 **CLI Decision**: Official clickhouse-client over third-party
+
 - Rejected: clickhouse-cli (HTTP-only, limited session support)
 - Rejected: chc (low adoption, Windows limitations)
 - Rejected: usql (generic, not ClickHouse-optimized)
 - Selected: clickhouse-client (70+ formats, AI assistance, production-proven)
 
 **Monitoring Decision**: chdig over alternatives
+
 - No mature alternatives found (HouseOps unmaintained)
 - Selected: chdig (Rust, flamegraph support, pre-alpha but actively developed)
 
@@ -83,7 +88,7 @@ services:
     environment:
       VITE_CLICKHOUSE_URL: http://localhost:8123
       VITE_CLICKHOUSE_USER: default
-      VITE_CLICKHOUSE_PASS: ''
+      VITE_CLICKHOUSE_PASS: ""
     depends_on:
       clickhouse:
         condition: service_healthy
@@ -95,6 +100,7 @@ services:
 **Access**: `http://localhost:5521`
 
 **Features**:
+
 - TypeScript UI with IntelliSense
 - Multi-tab SQL editor with syntax highlighting
 - Real-time performance dashboard
@@ -113,6 +119,7 @@ services:
 **Access**: `http://localhost:8123/play`
 
 **Features**:
+
 - Zero installation (built-in)
 - Query execution with results display
 - Query history via URL base64 encoding
@@ -129,6 +136,7 @@ services:
 **File**: `docs/development/CLICKHOUSE_CLIENT_GUIDE.md`
 
 **Setup**:
+
 ```bash
 # Via Docker (recommended for gapless-crypto-data)
 alias ch='docker exec -it gapless-clickhouse clickhouse-client'
@@ -142,6 +150,7 @@ alias ch-json='docker exec -it gapless-clickhouse clickhouse-client --format JSO
 ```
 
 **Features**:
+
 - 70+ output formats (CSV, JSON, Parquet, Arrow, Markdown, etc.)
 - Progress bar with real-time metrics (rows/sec, bytes, execution time)
 - Query parameters for SQL injection prevention
@@ -158,11 +167,13 @@ alias ch-json='docker exec -it gapless-clickhouse clickhouse-client --format JSO
 **Integration**: Homebrew installation + validation script
 
 **Installation**:
+
 ```bash
 brew install chdig
 ```
 
 **Usage**:
+
 ```bash
 # Monitor local instance
 chdig --host localhost --port 9000
@@ -172,6 +183,7 @@ chdig --cluster my_cluster
 ```
 
 **Features**:
+
 - Top-like interactive TUI
 - Flamegraph visualization (CPU, memory, live metrics)
 - Multiple views: slow queries, recent queries, processors, backups, replicas
@@ -192,6 +204,7 @@ chdig --cluster my_cluster
 **File**: `docs/development/CLICKHOUSE_LOCAL_GUIDE.md`
 
 **Usage**:
+
 ```bash
 # Query local CSV files
 clickhouse-local --query "SELECT * FROM file('data.csv', CSV) LIMIT 10"
@@ -210,6 +223,7 @@ clickhouse-local --query "
 ```
 
 **Features**:
+
 - Embedded ClickHouse engine (no server required)
 - Query local/remote files with full ClickHouse SQL
 - Same core as ClickHouse server (all formats/engines supported)
@@ -231,12 +245,14 @@ clickhouse-local --query "
 **Tests**:
 
 1. **Docker Health Checks**:
+
    ```bash
    docker ps | grep -q gapless-clickhouse && echo "✅ ClickHouse running"
    docker ps | grep -q gapless-ch-ui && echo "✅ CH-UI running"
    ```
 
 2. **HTTP Endpoint Checks**:
+
    ```bash
    curl -s http://localhost:8123/ping && echo "✅ ClickHouse HTTP"
    curl -s http://localhost:5521 | grep -q "CH-UI" && echo "✅ CH-UI web"
@@ -244,11 +260,13 @@ clickhouse-local --query "
    ```
 
 3. **CLI Functionality**:
+
    ```bash
    docker exec gapless-clickhouse clickhouse-client --query "SELECT 1" | grep -q "1" && echo "✅ clickhouse-client"
    ```
 
 4. **chdig Installation**:
+
    ```bash
    which chdig && echo "✅ chdig installed"
    chdig --version && echo "✅ chdig operational"
@@ -312,6 +330,7 @@ clickhouse-local --query "
 **Pros**: Unified interface, less cognitive overhead
 
 **Cons**:
+
 - DataGrip commercial license for business use
 - DBeaver feels heavyweight for simple tasks
 - Desktop apps don't address CLI/automation needs
@@ -327,6 +346,7 @@ clickhouse-local --query "
 **Pros**: Best-in-class UX, comprehensive features
 
 **Cons**:
+
 - Cost barrier ($100-780/year)
 - Violates OSS preference principle
 - Not all users need commercial features
@@ -340,6 +360,7 @@ clickhouse-local --query "
 **Pros**: Simplest to document, single tool to learn
 
 **Cons**:
+
 - No CLI for automation/scripting
 - No performance monitoring
 - No file validation capabilities
@@ -355,6 +376,7 @@ clickhouse-local --query "
 **Pros**: Programmable, version-controlled dashboards
 
 **Cons**:
+
 - Requires Python coding for simple queries
 - Not suitable for ad-hoc exploration
 - Higher barrier to entry
