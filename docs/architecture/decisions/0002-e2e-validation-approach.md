@@ -249,7 +249,7 @@ See `docs/development/plan/0002-e2e-validation/plan.yaml` for detailed execution
 ## References
 
 - [ADR-0001: QuestDB as Single Source of Truth](0001-questdb-single-source-truth.md)
-- [Implementation Plan Phase 1-3](../plan/0001-questdb-refactor/plan.yaml)
+- [Implementation Plan Phase 1-3](../../development/plan/0001-questdb-refactor/plan.yaml)
 - [Deployment Guide: macOS Colima](../deployment/macos-colima-setup.md)
 - [Test Fixtures](../../tests/conftest.py)
 

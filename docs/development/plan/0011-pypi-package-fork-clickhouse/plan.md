@@ -4,7 +4,7 @@
 **Created**: 2025-11-18
 **Updated**: 2025-11-18
 **Status**: Implementation
-**ADR**: [ADR-0011](../../decisions/0011-pypi-package-fork-clickhouse.md) (adr-id=0011)
+**ADR**: [ADR-0011](../../../architecture/decisions/0011-pypi-package-fork-clickhouse.md) (adr-id=0011)
 
 ---
 
@@ -654,7 +654,7 @@ assert 'gapless_crypto_clickhouse' in gcc.__name__
 
 ## References
 
-- **ADR-0011**: [PyPI Package Fork for ClickHouse Distribution](../../decisions/0011-pypi-package-fork-clickhouse.md)
+- **ADR-0011**: [PyPI Package Fork for ClickHouse Distribution](../../../architecture/decisions/0011-pypi-package-fork-clickhouse.md)
 - **Agent Reports**: `tmp/pypi-package-split/` (5-agent parallel investigation)
 - **ADR-0005**: ClickHouse Migration (context for v4.0.0)
 - **PyPI Trusted Publishing**: https://docs.pypi.org/trusted-publishers/

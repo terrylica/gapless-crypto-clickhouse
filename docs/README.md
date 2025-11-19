@@ -44,7 +44,7 @@ For new users, we recommend starting with:
 For users leveraging ClickHouse database features:
 
 1. **[ClickHouse Migration Guide](CLICKHOUSE_MIGRATION.md)** - Migrating from v3.x file-based to v4.0.0 database integration
-2. **[ADR-0005: ClickHouse Migration Decision](decisions/0005-clickhouse-migration.md)** - Technical rationale and implementation details
+2. **[ADR-0005: ClickHouse Migration Decision](architecture/decisions/0005-clickhouse-migration.md)** - Technical rationale and implementation details
 3. **[Docker Compose Setup](../docker-compose.yml)** - Production-ready ClickHouse container configuration
 
 **Breaking Changes**: v4.0.0 introduces optional ClickHouse database support. File-based workflows remain supported for backward compatibility.

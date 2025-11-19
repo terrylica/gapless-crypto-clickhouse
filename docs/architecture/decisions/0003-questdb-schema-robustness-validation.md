@@ -759,7 +759,7 @@ This ADR does NOT trigger a semantic release (documentation-only change).
 
 ## Implementation Plan
 
-See detailed plan: [docs/development/plan/0003-questdb-schema-robustness/plan.yaml](../plan/0003-questdb-schema-robustness/plan.yaml)
+See detailed plan: [docs/development/plan/0003-questdb-schema-robustness/plan.yaml](../../development/plan/0003-questdb-schema-robustness/plan.yaml)
 
 **High-level timeline**:
 
@@ -774,11 +774,11 @@ See detailed plan: [docs/development/plan/0003-questdb-schema-robustness/plan.ya
 
 - [ADR-0001: QuestDB Single Source of Truth](./0001-questdb-single-source-truth.md) - Established single unified table design
 - [ADR-0002: E2E Validation Approach](./0002-e2e-validation-approach.md) - Defined validation pipeline structure
-- [Architecture Overview](../architecture/OVERVIEW.md) - SLO definitions and data flow
-- [Data Format Specification](../architecture/DATA_FORMAT.md) - 11-column OHLCV format
+- [Architecture Overview](../OVERVIEW.md) - SLO definitions and data flow
+- [Data Format Specification](../DATA_FORMAT.md) - 11-column OHLCV format
 - [Vision Futures Explorer Report](../../scratch/vision-futures-explorer/EXPLORATION_REPORT.md) - Futures compatibility investigation
-- [Validation Storage Specification](../validation/STORAGE.md) - DuckDB persistence for validation results
-- [Current Architecture Status](../CURRENT_ARCHITECTURE_STATUS.yaml) - v2.5.0 production state
+- [Validation Storage Specification](../../validation/STORAGE.md) - DuckDB persistence for validation results
+- [Current Architecture Status](../../CURRENT_ARCHITECTURE_STATUS.yaml) - v2.5.0 production state
 
 ## Metadata
 
@@ -786,7 +786,7 @@ See detailed plan: [docs/development/plan/0003-questdb-schema-robustness/plan.ya
 - **Date**: 2025-01-15
 - **Authors**: gapless-crypto-data team
 - **Status**: Proposed
-- **Related Plans**: [docs/development/plan/0003-questdb-schema-robustness/plan.yaml](../plan/0003-questdb-schema-robustness/plan.yaml)
+- **Related Plans**: [docs/development/plan/0003-questdb-schema-robustness/plan.yaml](../../development/plan/0003-questdb-schema-robustness/plan.yaml)
 - **Depends On**: ADR-0001 (QuestDB single table design), ADR-0002 (validation pipeline)
 - **Supersedes**: None
 - **Superseded By**: None

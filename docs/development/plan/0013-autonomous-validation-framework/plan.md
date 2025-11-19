@@ -1,6 +1,6 @@
 # Implementation Plan: Autonomous Validation Framework
 
-**ADR**: [ADR-0013](../../decisions/0013-autonomous-validation-framework.md) (adr-id=0013)
+**ADR**: [ADR-0013](../../../architecture/decisions/0013-autonomous-validation-framework.md) (adr-id=0013)
 **Status**: In Progress
 **Created**: 2025-11-19
 **Last Updated**: 2025-11-19
@@ -370,7 +370,7 @@ If E2E validation proves problematic (>20% failure rate over 1 week):
 
 ## References
 
-- [ADR-0013: Autonomous Validation Framework](../../decisions/0013-autonomous-validation-framework.md)
+- [ADR-0013: Autonomous Validation Framework](../../../architecture/decisions/0013-autonomous-validation-framework.md)
 - [Playwright 1.56 Release Notes](https://playwright.dev/docs/release-notes)
 - [PEP 723: Inline Script Metadata](https://peps.python.org/pep-0723/)
 - [pytest 8.x Documentation](https://docs.pytest.org/)

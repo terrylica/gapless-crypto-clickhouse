@@ -393,7 +393,7 @@ await expect(page).to_have_screenshot(
 ## Related Documentation
 
 - [E2E Testing Guide](./E2E_TESTING_GUIDE.md)
-- [ADR-0013: Autonomous Validation Framework](../decisions/0013-autonomous-validation-framework.md)
+- [ADR-0013: Autonomous Validation Framework](../architecture/decisions/0013-autonomous-validation-framework.md)
 - [Playwright Screenshot Testing Docs](https://playwright.dev/docs/test-snapshots)
 
 ---

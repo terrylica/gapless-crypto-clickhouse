@@ -6,8 +6,8 @@ QuestDB → ClickHouse migration guide for gapless-crypto-data v4.0.0+.
 
 **Related Documents**:
 
-- [ADR-0005: ClickHouse Migration](decisions/0005-clickhouse-migration.md) - Decision rationale
-- [Plan: ClickHouse Migration](plan/0005-clickhouse-migration/plan.yaml) - Implementation plan
+- [ADR-0005: ClickHouse Migration](architecture/decisions/0005-clickhouse-migration.md) - Decision rationale
+- [Plan: ClickHouse Migration](development/plan/0005-clickhouse-migration/plan.yaml) - Implementation plan
 
 ## Migration Rationale
 
@@ -409,6 +409,6 @@ OPTIMIZE TABLE ohlcv FINAL;
 
 - [ClickHouse Documentation](https://clickhouse.com/docs/en/)
 - [ReplacingMergeTree Engine](https://clickhouse.com/docs/en/engines/table-engines/mergetree-family/replacingmergetree)
-- [ADR-0003: QuestDB Schema Robustness Validation](decisions/0003-questdb-schema-robustness-validation.md) - Original QuestDB implementation
-- [ADR-0004: Futures Support Implementation](decisions/0004-futures-support-implementation.md) - Dual instrument type support
-- [ADR-0005: ClickHouse Migration](decisions/0005-clickhouse-migration.md) - This migration decision
+- [ADR-0003: QuestDB Schema Robustness Validation](architecture/decisions/0003-questdb-schema-robustness-validation.md) - Original QuestDB implementation
+- [ADR-0004: Futures Support Implementation](architecture/decisions/0004-futures-support-implementation.md) - Dual instrument type support
+- [ADR-0005: ClickHouse Migration](architecture/decisions/0005-clickhouse-migration.md) - This migration decision

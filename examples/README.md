@@ -102,23 +102,6 @@ uv run python examples/gap_filling_example.py
 uv run python examples/complete_workflow.py
 ```
 
-### 4. [cli_usage_examples.sh](cli_usage_examples.sh)
-
-**Demonstrates:** CLI usage patterns
-
-**Key Features:**
-
-- Various CLI command examples
-- Performance optimization tips
-- Batch processing workflows
-- Production use cases
-
-**View it:**
-
-```bash
-bash examples/cli_usage_examples.sh
-```
-
 ## 🎯 Example Workflows
 
 ### Quick Demo (2-3 minutes)

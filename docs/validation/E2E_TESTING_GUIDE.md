@@ -439,7 +439,7 @@ lsof -i :8123
 
 ## Related Documentation
 
-- [ADR-0013: Autonomous Validation Framework](../decisions/0013-autonomous-validation-framework.md)
+- [ADR-0013: Autonomous Validation Framework](../architecture/decisions/0013-autonomous-validation-framework.md)
 - [Screenshot Baseline Guide](./SCREENSHOT_BASELINE.md)
 - [Validation Overview](./OVERVIEW.md)
 - [Playwright Python Docs](https://playwright.dev/python/docs/intro)

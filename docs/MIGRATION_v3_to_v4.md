@@ -53,7 +53,7 @@ from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 ```
 
-**Rationale**: See [ADR-0005: ClickHouse Migration](decisions/0005-clickhouse-migration.md) for technical decision rationale (ecosystem maturity, scalability, future-proofing).
+**Rationale**: See [ADR-0005: ClickHouse Migration](architecture/decisions/0005-clickhouse-migration.md) for technical decision rationale (ecosystem maturity, scalability, future-proofing).
 
 ### 2. Dependency Changes
 
@@ -531,7 +531,7 @@ A: Follow the rollback procedure (downgrade to v3.3.0) and report the issue on G
 ## Additional Resources
 
 - **[ClickHouse Migration Guide](CLICKHOUSE_MIGRATION.md)** - Technical deep-dive on ClickHouse implementation
-- **[ADR-0005: ClickHouse Migration](decisions/0005-clickhouse-migration.md)** - Decision rationale and architecture details
+- **[ADR-0005: ClickHouse Migration](architecture/decisions/0005-clickhouse-migration.md)** - Decision rationale and architecture details
 - **[Docker Compose Reference](../docker-compose.yml)** - Production-ready ClickHouse configuration
 - **[GitHub Discussions](https://github.com/terrylica/gapless-crypto-clickhouse/discussions)** - Community support
 - **[Release Notes](release-notes.md)** - Complete v4.0.0 changelog
