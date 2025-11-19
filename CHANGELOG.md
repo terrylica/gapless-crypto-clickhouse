@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.1.0...v1.2.0) (2025-11-19)
+
+### Features
+
+* add name parameter to hello_world function ([17843f8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/17843f8dfc6fb88971c9d92db4b992f950bf2dd9))
+
 ## [1.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.0.0...v1.1.0) (2025-11-19)
 
 ### Features
