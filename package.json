@@ -1,0 +1,11 @@
+{
+  "name": "gapless-crypto-clickhouse",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClickHouse-based cryptocurrency data collection with zero-gap guarantee",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/terrylica/gapless-crypto-clickhouse.git"
+  },
+  "license": "MIT"
+}
