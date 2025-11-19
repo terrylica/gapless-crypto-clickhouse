@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.6...v1.3.7) (2025-11-19)
+
+### Bug Fixes
+
+* **e2e:** add pytest-asyncio with function-scoped event loop ([635e130](https://github.com/terrylica/gapless-crypto-clickhouse/commit/635e1309be4b3ae52823d7c8a6941d900aefa323)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+
 ## [1.3.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.5...v1.3.6) (2025-11-19)
 
 ### Bug Fixes
