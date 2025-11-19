@@ -69,7 +69,7 @@ class TestAtomicCSVOperations:
         """Test reading header comments from CSV with comments."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as temp_file:
             # Write CSV with header comments
-            temp_file.write("# Binance Spot Market Data v4.0.0\n")
+            temp_file.write("# Binance Spot Market Data v1.0.0\n")
             temp_file.write("# Generated: 2025-01-01T00:00:00Z\n")
             temp_file.write("# Source: Binance Public Data Repository\n")
             temp_file.write("date,open,high,low,close,volume\n")
@@ -82,7 +82,7 @@ class TestAtomicCSVOperations:
             headers = atomic_ops.read_header_comments()
 
             assert len(headers) == 3
-            assert headers[0] == "# Binance Spot Market Data v4.0.0"
+            assert headers[0] == "# Binance Spot Market Data v1.0.0"
             assert headers[1] == "# Generated: 2025-01-01T00:00:00Z"
             assert headers[2] == "# Source: Binance Public Data Repository"
 

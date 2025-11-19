@@ -33,7 +33,7 @@ def project_root():
 @pytest.fixture
 def sample_data_dir():
     """Path to sample data directory in source."""
-    return Path(__file__).parent.parent / "src" / "gapless_crypto_data" / "sample_data"
+    return Path(__file__).parent.parent / "src" / "gapless_crypto_clickhouse" / "sample_data"
 
 
 @pytest.fixture(scope="session")

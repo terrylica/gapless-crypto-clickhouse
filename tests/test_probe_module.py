@@ -247,7 +247,7 @@ class TestProbeUVCLIGeneration:
         assert len(phase_0) == 2  # discover + capabilities
         for cmd in phase_0:
             assert cmd.startswith("uv run --active")
-            assert "gapless_crypto_data" in cmd
+            assert "gapless_crypto_clickhouse" in cmd
 
     def test_generate_uv_cli_tasks_phase_1(self):
         """Test phase 1 commands."""

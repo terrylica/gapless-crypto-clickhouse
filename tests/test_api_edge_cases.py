@@ -181,7 +181,7 @@ class TestGetInfo:
     def test_get_info_structure(self):
         """Test get_info returns expected structure."""
         info = gcd.get_info()
-        assert info["version"] == "4.0.0"
+        assert info["version"] == "1.0.0"
         assert info["name"] == "gapless-crypto-data"
         assert "description" in info
         assert "supported_symbols" in info

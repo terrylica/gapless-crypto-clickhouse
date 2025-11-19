@@ -77,7 +77,7 @@ class TestStandardLogger:
         """Test logger creation with module name."""
         logger = get_standard_logger("test_module")
         assert isinstance(logger, logging.Logger)
-        assert logger.name == "gapless_crypto_data.test_module"
+        assert logger.name == "gapless_crypto_clickhouse.test_module"
 
     def test_get_standard_logger_has_handler(self):
         """Test logger has StreamHandler configured."""

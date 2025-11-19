@@ -119,7 +119,7 @@ class Test1sGapFilling:
         finally:
             os.unlink(temp_file)
 
-    @patch("gapless_crypto_data.gap_filling.universal_gap_filler.httpx.get")
+    @patch("gapless_crypto_clickhouse.gap_filling.universal_gap_filler.httpx.get")
     def test_1s_gap_filling_api_call(self, mock_get):
         """Test that 1s gap filling makes correct API calls."""
         gap_filler = UniversalGapFiller()
@@ -363,7 +363,7 @@ class Test1dGapFilling:
         finally:
             os.unlink(temp_file)
 
-    @patch("gapless_crypto_data.gap_filling.universal_gap_filler.httpx.get")
+    @patch("gapless_crypto_clickhouse.gap_filling.universal_gap_filler.httpx.get")
     def test_1d_gap_filling_api_call(self, mock_get):
         """Test that 1d gap filling makes correct API calls."""
         gap_filler = UniversalGapFiller()

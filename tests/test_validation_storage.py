@@ -47,7 +47,7 @@ class TestValidationStorageEndToEnd:
     @pytest.fixture
     def sample_csv_files(self):
         """Get list of real sample CSV files for testing."""
-        sample_data_dir = Path("src/gapless_crypto_data/sample_data")
+        sample_data_dir = Path("src/gapless_crypto_clickhouse/sample_data")
         csv_files = list(sample_data_dir.glob("*.csv"))
 
         # Filter to get a representative sample
