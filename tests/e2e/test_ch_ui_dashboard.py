@@ -24,9 +24,10 @@ SLOs:
     - Maintainability: Accessibility-first locators (get_by_role)
 """
 
+from pathlib import Path
+
 import pytest
 from playwright.async_api import Page, expect
-from pathlib import Path
 
 
 @pytest.mark.e2e

@@ -16,8 +16,9 @@ SLOs:
     - Correctness: No fallback configurations, explicit settings only
 """
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 
 @pytest.fixture(scope="session")

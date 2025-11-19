@@ -377,7 +377,7 @@ class ValidationBootstrap:
         base_args = [
             "-v",  # Verbose output
             "--tb=short",  # Concise tracebacks
-            f"--cov=src/gapless_crypto_clickhouse",
+            "--cov=src/gapless_crypto_clickhouse",
             "--cov-report=term",
             "--cov-append",  # Append to existing coverage
             f"--html={self.artifacts_dir / f'{layer}-report.html'}",
