@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.3...v1.3.4) (2025-11-19)
+
+### Bug Fixes
+
+* **e2e:** use strict asyncio mode to prevent pytest-asyncio interference ([abaff98](https://github.com/terrylica/gapless-crypto-clickhouse/commit/abaff9847f9a1ed7cee93c8d748560dd169ea3d7)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+
 ## [1.3.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.2...v1.3.3) (2025-11-19)
 
 ### Bug Fixes
