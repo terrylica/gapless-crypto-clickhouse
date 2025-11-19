@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.0.0...v2.1.0) (2025-11-19)
+
+### Features
+
+* **ci:** add CH-UI service to E2E test workflow ([c8cc71c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/c8cc71ce01f97aa260751d2c845b674134b85966))
+
 ## [2.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.7...v2.0.0) (2025-11-19)
 
 ### ⚠ BREAKING CHANGES
