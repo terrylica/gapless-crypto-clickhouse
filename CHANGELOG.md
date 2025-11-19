@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.5...v1.3.6) (2025-11-19)
+
+### Bug Fixes
+
+* **e2e:** simplify async configuration - let pytest-playwright manage event loop ([63b306f](https://github.com/terrylica/gapless-crypto-clickhouse/commit/63b306fecdf385986afcf9645b471fbbb64c202b)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+
 ## [1.3.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.4...v1.3.5) (2025-11-19)
 
 ### Bug Fixes
