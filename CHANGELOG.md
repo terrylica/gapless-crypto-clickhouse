@@ -1,5 +1,56 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 1.0.0 (2025-11-19)
+
+### ⚠ BREAKING CHANGES
+
+* New independent package with separate PyPI identity
+
+Key Changes:
+- Package name: gapless-crypto-data → gapless-crypto-clickhouse
+- Module name: gapless_crypto_data → gapless_crypto_clickhouse
+- Version: Reset to 1.0.0 (independent versioning lifecycle)
+- Python: 3.12+ required (was 3.9-3.13)
+- Database: ClickHouse required (ReplacingMergeTree engine)
+
+New Features:
+- USDT-margined perpetual futures support (instrument_type column)
+- ClickHouse persistent storage with deterministic deduplication
+- Production-ready ReplacingMergeTree schema with compression
+- 12-column format for futures (11-column for spot)
+- Advanced SQL queries for time-series analysis
+
+Positioning:
+- Use gapless-crypto-clickhouse for database-first workflows
+- Use gapless-crypto-data for file-based CSV workflows
+- Both packages share 22x performance via Binance public repository
+
+Implementation:
+- ADR-0011: PyPI Package Fork for ClickHouse Distribution
+- All imports updated to gapless_crypto_clickhouse
+- GitHub Actions workflows for PyPI and TestPyPI
+- Docker Compose configuration for local development
+
+Refs: ADR-0011
+
+### Features
+
+* initial release of gapless-crypto-clickhouse v1.0.0 ([c88f5c5](https://github.com/terrylica/gapless-crypto-clickhouse/commit/c88f5c5d4d0a1d78b5c79b886c98e5ed1e64e196))
+
+### Bug Fixes
+
+* auto-fix import sorting in all test files ([086ae81](https://github.com/terrylica/gapless-crypto-clickhouse/commit/086ae81b40f022a397b5875416a79729629287ed))
+* **ci:** correct semantic-release changelog version to v6 ([394856d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/394856d9b3c9746acb1245a8dbb6e29a02e177f3))
+* **ci:** use compatible semantic-release plugin versions ([03c1521](https://github.com/terrylica/gapless-crypto-clickhouse/commit/03c15210de2395f9614e8320352fcf39195d2081))
+* **ci:** use latest semantic-release versions without pinning ([07a75ec](https://github.com/terrylica/gapless-crypto-clickhouse/commit/07a75ecfc4c5b4e69a7095efc733b3dc24363bdd))
+* **release:** add minimal package.json for semantic-release compatibility ([ae4e841](https://github.com/terrylica/gapless-crypto-clickhouse/commit/ae4e841fbec55831fd4637779dcc5ea3aab9429b))
+* resolve ruff linting errors in test files ([98f6d7e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/98f6d7e9f6a7912e2143a7d689478d7308eb2fe6)), closes [#19487568321](https://github.com/terrylica/gapless-crypto-clickhouse/issues/19487568321)
+* update all old package references in test files ([9ee87b4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/9ee87b4579d36eb6a7195ba7ee3f1dd6586f7056))
+
+# Changelog
+
 All notable changes to gapless-crypto-data will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
