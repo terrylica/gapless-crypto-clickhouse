@@ -30,9 +30,9 @@ jobs:
       - name: Install semantic-release
         run: |
           npm install --global \
-            semantic-release@25 \
+            semantic-release@24 \
             @semantic-release/changelog@6 \
-            @semantic-release/commit-analyzer@14 \
+            @semantic-release/commit-analyzer@13 \
             @semantic-release/release-notes-generator@14 \
             @semantic-release/github@11 \
             @semantic-release/git@11 \
