@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.5.0...v3.0.0) (2025-11-19)
+
+### ⚠ BREAKING CHANGES
+
+* **api:** None (validation is additive, improves error clarity)
+
+### Features
+
+* **api:** add upfront input validation with actionable error messages ([96c167d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/96c167df669e09d9ecf0d09c1dc8af894608c3f1)), closes [#4](https://github.com/terrylica/gapless-crypto-clickhouse/issues/4)
+
 ## [2.5.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.4.0...v2.5.0) (2025-11-19)
 
 ### Features
 
-* **api:** add parameter aliases for date range parameters ([958a39b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/958a39bf9c0e3be1655f2aa90b4576a29d7b908c)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
+- **api:** add parameter aliases for date range parameters ([958a39b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/958a39bf9c0e3be1655f2aa90b4576a29d7b908c)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
 
 ## [2.4.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.3.0...v2.4.0) (2025-11-19)
 
