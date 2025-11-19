@@ -7,7 +7,8 @@ of ClickHouse web interfaces (CH-UI dashboard, ClickHouse Play).
 Fixtures:
     - browser_context_args: Browser context configuration (viewport, video recording)
     - screenshot_dir: Artifact directory for test screenshots
-    - page: Enhanced page fixture with automatic failure handling
+
+Note: Uses pytest-playwright's built-in 'page' fixture (no custom override needed)
 
 SLOs:
     - Observability: All page interactions logged, screenshots on failure
@@ -17,7 +18,6 @@ SLOs:
 
 import pytest
 from pathlib import Path
-from playwright.async_api import Browser, BrowserContext, Page
 
 
 @pytest.fixture(scope="session")
@@ -63,32 +63,6 @@ def browser_context_args(browser_context_args):
         # Video disabled - use tracing for debugging (smaller artifacts)
         "record_video_dir": None,
     }
-
-
-@pytest.fixture
-async def page(context: BrowserContext) -> Page:
-    """
-    Enhanced page fixture with automatic screenshot on failure.
-
-    Yields:
-        Page: Playwright page instance
-
-    Observability:
-        - Page creation logged
-        - Automatic screenshot capture on test failure
-        - Traces preserved on failure (retain-on-failure mode)
-
-    SLOs:
-        - Observability: All failures captured visually
-        - Maintainability: Consistent page setup across all tests
-    """
-    page = await context.new_page()
-    print(f"  📄 New page created: {page.url}")
-
-    yield page
-
-    # Cleanup handled by pytest-playwright automatically
-    await page.close()
 
 
 # Markers configuration
