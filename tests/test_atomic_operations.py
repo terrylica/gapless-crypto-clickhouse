@@ -8,7 +8,10 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
-from gapless_crypto_clickhouse.gap_filling.safe_file_operations import AtomicCSVOperations, SafeCSVMerger
+from gapless_crypto_clickhouse.gap_filling.safe_file_operations import (
+    AtomicCSVOperations,
+    SafeCSVMerger,
+)
 
 
 class TestAtomicCSVOperations:

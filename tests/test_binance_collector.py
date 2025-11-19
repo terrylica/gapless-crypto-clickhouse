@@ -6,7 +6,9 @@ from unittest.mock import Mock, patch
 import pandas as pd
 import pytest
 
-from gapless_crypto_clickhouse.collectors.binance_public_data_collector import BinancePublicDataCollector
+from gapless_crypto_clickhouse.collectors.binance_public_data_collector import (
+    BinancePublicDataCollector,
+)
 from gapless_crypto_clickhouse.utils.timestamp_format_analyzer import TimestampFormatAnalyzer
 from gapless_crypto_clickhouse.validation import CSVValidator
 

@@ -7,7 +7,9 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from gapless_crypto_clickhouse.collectors.binance_public_data_collector import BinancePublicDataCollector
+from gapless_crypto_clickhouse.collectors.binance_public_data_collector import (
+    BinancePublicDataCollector,
+)
 from gapless_crypto_clickhouse.gap_filling.universal_gap_filler import UniversalGapFiller
 from gapless_crypto_clickhouse.validation import CSVValidator
 
@@ -229,7 +231,9 @@ class TestEndToEndIntegration:
                     assert result == non_none_results[0]
 
             # Test atomic operations under concurrent access
-            from gapless_crypto_clickhouse.gap_filling.safe_file_operations import AtomicCSVOperations
+            from gapless_crypto_clickhouse.gap_filling.safe_file_operations import (
+                AtomicCSVOperations,
+            )
 
             atomic_ops = AtomicCSVOperations(csv_file)
 

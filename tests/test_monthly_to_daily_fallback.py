@@ -11,7 +11,9 @@ from unittest.mock import patch
 
 import pytest
 
-from gapless_crypto_clickhouse.collectors.binance_public_data_collector import BinancePublicDataCollector
+from gapless_crypto_clickhouse.collectors.binance_public_data_collector import (
+    BinancePublicDataCollector,
+)
 
 
 class TestMonthlyToDailyFallback:

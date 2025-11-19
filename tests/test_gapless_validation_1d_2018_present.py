@@ -18,7 +18,9 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from gapless_crypto_clickhouse.collectors.binance_public_data_collector import BinancePublicDataCollector
+from gapless_crypto_clickhouse.collectors.binance_public_data_collector import (
+    BinancePublicDataCollector,
+)
 from gapless_crypto_clickhouse.gap_filling.universal_gap_filler import UniversalGapFiller
 
 
