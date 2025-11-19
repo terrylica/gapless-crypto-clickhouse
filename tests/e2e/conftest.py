@@ -66,6 +66,19 @@ def browser_context_args(browser_context_args):
     }
 
 
+# pytest-asyncio compatibility hook
+# Prevents pytest-asyncio from managing E2E tests (let playwright handle async)
+def pytest_collection_modifyitems(items):
+    """Remove asyncio markers from E2E tests to avoid event loop conflicts."""
+    for item in items:
+        if "e2e" in item.keywords:
+            # Remove asyncio marker - pytest-playwright will handle async execution
+            item.own_markers = [
+                marker for marker in item.own_markers
+                if marker.name != "asyncio"
+            ]
+
+
 # Markers configuration
 def pytest_configure(config):
     """Register custom markers for E2E tests."""
