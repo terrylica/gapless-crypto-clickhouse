@@ -195,16 +195,12 @@ class ValidationBootstrap:
                 timeout=5,
             )
             if result.returncode != 0:
-                raise EnvironmentError(
-                    "Docker daemon not running. Fix: docker compose up -d"
-                )
+                raise EnvironmentError("Docker daemon not running. Fix: docker compose up -d")
             print("  ✓ Docker daemon running")
         except FileNotFoundError:
             raise EnvironmentError("Docker not installed. Fix: Install Docker Desktop")
         except subprocess.TimeoutExpired:
-            raise EnvironmentError(
-                "Docker daemon not responding. Fix: Restart Docker"
-            )
+            raise EnvironmentError("Docker daemon not responding. Fix: Restart Docker")
 
         # Check ClickHouse container health (if E2E tests will run)
         try:
@@ -233,7 +229,9 @@ class ValidationBootstrap:
                 if result == 0:
                     print(f"  ✓ Port {port} accessible ({service})")
                 else:
-                    print(f"  ⚠ Port {port} not accessible ({service}) - service may not be running")
+                    print(
+                        f"  ⚠ Port {port} not accessible ({service}) - service may not be running"
+                    )
             finally:
                 sock.close()
 
@@ -272,9 +270,7 @@ class ValidationBootstrap:
             print("  ✓ Playwright Chromium installed")
 
         except FileNotFoundError:
-            raise BootstrapError(
-                "Playwright CLI not found. Ensure dependencies are installed."
-            )
+            raise BootstrapError("Playwright CLI not found. Ensure dependencies are installed.")
         except subprocess.TimeoutExpired:
             raise BootstrapError(
                 "Playwright install timed out (>5 minutes). Check network connection."
@@ -393,7 +389,8 @@ class ValidationBootstrap:
             screenshot_mode = "only-on-failure" if self.ci_mode else "on"
             return base_args + [
                 "tests/e2e/",
-                "-m", "e2e",
+                "-m",
+                "e2e",
                 f"--screenshot={screenshot_mode}",
                 "--headed" if not self.ci_mode else "--browser=chromium",
                 "--tracing=retain-on-failure",
