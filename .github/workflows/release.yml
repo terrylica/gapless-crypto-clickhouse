@@ -30,14 +30,14 @@ jobs:
       - name: Install semantic-release
         run: |
           npm install --global \
-            semantic-release@24 \
-            @semantic-release/changelog@6 \
-            @semantic-release/commit-analyzer@13 \
-            @semantic-release/release-notes-generator@14 \
-            @semantic-release/github@11 \
-            @semantic-release/git@11 \
-            @semantic-release/npm@12 \
-            conventional-changelog-conventionalcommits@8
+            semantic-release \
+            @semantic-release/changelog \
+            @semantic-release/commit-analyzer \
+            @semantic-release/release-notes-generator \
+            @semantic-release/github \
+            @semantic-release/git \
+            @semantic-release/npm \
+            conventional-changelog-conventionalcommits
 
       - name: Verify semantic-release installation
         run: semantic-release --version
