@@ -12,12 +12,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### Bug Fixes
 
-* **docs:** resolve broken internal links after ADR/plan restructuring ([da8c009](https://github.com/terrylica/gapless-crypto-clickhouse/commit/da8c0091a8e3b25eeb10b5ea6f5770be3b191bf6)), closes [#lychee-validation](https://github.com/terrylica/gapless-crypto-clickhouse/issues/lychee-validation)
-* **release:** add @semantic-release/exec to update pyproject.toml version ([8976e90](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8976e9028f33af5888e41b0eebcea754633a0869))
+- **docs:** resolve broken internal links after ADR/plan restructuring ([da8c009](https://github.com/terrylica/gapless-crypto-clickhouse/commit/da8c0091a8e3b25eeb10b5ea6f5770be3b191bf6)), closes [#lychee-validation](https://github.com/terrylica/gapless-crypto-clickhouse/issues/lychee-validation)
+- **release:** add @semantic-release/exec to update pyproject.toml version ([8976e90](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8976e9028f33af5888e41b0eebcea754633a0869))
 
 ### Documentation
 
-* **housekeeping:** restore documentation accuracy and clean temporary artifacts ([b4f06f2](https://github.com/terrylica/gapless-crypto-clickhouse/commit/b4f06f2c78eb07e1a748b4569713859e8dba163e))
+- **housekeeping:** restore documentation accuracy and clean temporary artifacts ([b4f06f2](https://github.com/terrylica/gapless-crypto-clickhouse/commit/b4f06f2c78eb07e1a748b4569713859e8dba163e))
 
 ## [2.1.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.1.1...v2.1.2) (2025-11-19)
 

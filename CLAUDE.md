@@ -34,6 +34,7 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 - [Development Commands](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/COMMANDS.md) - Testing, code quality, build, CI/CD
 - [CLI Migration Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md) - Migrating from gapless-crypto-data to gapless-crypto-clickhouse
 - [Publishing Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md) - PyPI publishing workflow
+- [`semantic-release`](/Users/terryli/.claude/skills/semantic-release/SKILL.md) - Automated versioning with Node.js semantic-release v25+, PyPI publishing with Doppler
 
 ### Validated Workflows
 
