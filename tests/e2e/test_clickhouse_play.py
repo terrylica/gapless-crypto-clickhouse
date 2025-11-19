@@ -14,7 +14,8 @@ Requirements:
 
 Markers:
     - @pytest.mark.e2e: E2E test (requires Docker + browsers)
-    - @pytest.mark.asyncio: Async test execution
+
+Note: pytest-playwright handles async execution automatically (no @pytest.mark.asyncio needed)
 
 SLOs:
     - Correctness: Validates actual user workflows (no mocks)
@@ -28,7 +29,6 @@ from pathlib import Path
 
 
 @pytest.mark.e2e
-@pytest.mark.asyncio
 async def test_clickhouse_play_landing_page_loads(page: Page, screenshot_dir: Path):
     """
     Validate ClickHouse Play landing page loads with correct UI elements.
@@ -53,7 +53,6 @@ async def test_clickhouse_play_landing_page_loads(page: Page, screenshot_dir: Pa
 
 
 @pytest.mark.e2e
-@pytest.mark.asyncio
 async def test_clickhouse_play_simple_query_execution(page: Page, screenshot_dir: Path):
     """
     Execute simple query and validate result rendering.
@@ -98,7 +97,6 @@ async def test_clickhouse_play_simple_query_execution(page: Page, screenshot_dir
 
 
 @pytest.mark.e2e
-@pytest.mark.asyncio
 async def test_clickhouse_play_invalid_query_error_handling(page: Page, screenshot_dir: Path):
     """
     Validate error message display for invalid SQL syntax.
@@ -136,7 +134,6 @@ async def test_clickhouse_play_invalid_query_error_handling(page: Page, screensh
 
 
 @pytest.mark.e2e
-@pytest.mark.asyncio
 @pytest.mark.timeout(30)  # Explicit timeout for long query
 async def test_clickhouse_play_large_result_set_rendering(page: Page, screenshot_dir: Path):
     """
@@ -176,7 +173,6 @@ async def test_clickhouse_play_large_result_set_rendering(page: Page, screenshot
 
 
 @pytest.mark.e2e
-@pytest.mark.asyncio
 async def test_clickhouse_play_empty_result_set(page: Page, screenshot_dir: Path):
     """
     Validate UI handles empty result sets gracefully.
@@ -215,7 +211,6 @@ async def test_clickhouse_play_empty_result_set(page: Page, screenshot_dir: Path
 
 
 @pytest.mark.e2e
-@pytest.mark.asyncio
 async def test_clickhouse_play_special_characters_in_query(page: Page, screenshot_dir: Path):
     """
     Validate UI handles special characters (Unicode, quotes, escapes).
