@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.2.1...v1.3.0) (2025-11-19)
+
+### Features
+
+* **e2e:** add autonomous validation framework with Playwright ([19a86cb](https://github.com/terrylica/gapless-crypto-clickhouse/commit/19a86cb26eb88d13a1aa2874a25a539d516edf7a)), closes [#13](https://github.com/terrylica/gapless-crypto-clickhouse/issues/13)
+
 ## [1.2.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.2.0...v1.2.1) (2025-11-19)
 
 ### Documentation
