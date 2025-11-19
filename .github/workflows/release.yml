@@ -31,7 +31,7 @@ jobs:
         run: |
           npm install --global \
             semantic-release@25 \
-            @semantic-release/changelog@7 \
+            @semantic-release/changelog@6 \
             @semantic-release/commit-analyzer@14 \
             @semantic-release/release-notes-generator@14 \
             @semantic-release/github@11 \
