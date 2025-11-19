@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.1.0...v2.1.1) (2025-11-19)
+
+### Bug Fixes
+
+* **ci:** remove VITE environment overrides for CH-UI ([5be20ea](https://github.com/terrylica/gapless-crypto-clickhouse/commit/5be20eaa4ef63509b01f1542c360ab30dcada5d1))
+
 ## [2.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.0.0...v2.1.0) (2025-11-19)
 
 ### Features
