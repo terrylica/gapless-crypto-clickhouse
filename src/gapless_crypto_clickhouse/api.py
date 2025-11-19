@@ -325,6 +325,8 @@ def fetch_data(
     limit: Optional[int] = None,
     start: Optional[str] = None,
     end: Optional[str] = None,
+    start_date: Optional[str] = None,  # Alias for start
+    end_date: Optional[str] = None,    # Alias for end
     output_dir: Optional[Union[str, Path]] = None,
     index_type: Optional[Literal["datetime", "range", "auto"]] = None,  # Deprecated parameter
     auto_fill_gaps: bool = True,
@@ -343,8 +345,10 @@ def fetch_data(
         symbol: Trading pair symbol (e.g., "BTCUSDT", "ETHUSDT")
         timeframe: Timeframe interval (e.g., "1m", "5m", "1h", "4h", "1d")
         limit: Maximum number of recent bars to return (optional)
-        start: Start date in YYYY-MM-DD format (optional)
-        end: End date in YYYY-MM-DD format (optional)
+        start: Start date in YYYY-MM-DD format (optional). Alias: start_date
+        end: End date in YYYY-MM-DD format (optional). Alias: end_date
+        start_date: Alias for start (recommended for clarity)
+        end_date: Alias for end (recommended for clarity)
         output_dir: Directory to save CSV files (optional)
         index_type: DEPRECATED - Use pandas operations directly
         auto_fill_gaps: Automatically fill detected gaps with authentic Binance API data (default: True)
@@ -361,6 +365,9 @@ def fetch_data(
         - taker_buy_base_asset_volume: Taker buy base volume
         - taker_buy_quote_asset_volume: Taker buy quote volume
 
+    Raises:
+        ValueError: If both 'start' and 'start_date' specified, or both 'end' and 'end_date' specified
+
     Examples:
         # Simple data fetching
         df = fetch_data("BTCUSDT", "1h", limit=1000)
@@ -373,8 +380,11 @@ def fetch_data(
             'close': 'last', 'volume': 'sum'
         })  # OHLCV resampling
 
-        # Fetch specific date range
+        # Fetch specific date range (legacy form)
         df = fetch_data("ETHUSDT", "4h", start="2024-01-01", end="2024-06-30")
+
+        # Fetch specific date range (explicit form - recommended)
+        df = fetch_data("ETHUSDT", "4h", start_date="2024-01-01", end_date="2024-06-30")
 
         # Save to custom directory
         df = fetch_data("SOLUSDT", "1h", limit=500, output_dir="./crypto_data")
@@ -387,6 +397,22 @@ def fetch_data(
 
     # Validate deprecated index_type parameter
     _validate_index_type_parameter(index_type)
+
+    # Validate and normalize date range parameters
+    if start is not None and start_date is not None:
+        raise ValueError(
+            "Cannot specify both 'start' and 'start_date'. "
+            "Use either 'start' OR 'start_date', not both."
+        )
+    if end is not None and end_date is not None:
+        raise ValueError(
+            "Cannot specify both 'end' and 'end_date'. "
+            "Use either 'end' OR 'end_date', not both."
+        )
+
+    # Normalize: prefer explicit _date parameters
+    start = start_date if start_date is not None else start
+    end = end_date if end_date is not None else end
 
     # Calculate date range from limit if needed
     start, end = _calculate_date_range_from_limit(limit, period, start, end)
@@ -419,6 +445,8 @@ def download(
     timeframe: Optional[Union[str, SupportedTimeframe]] = None,
     start: Optional[str] = None,
     end: Optional[str] = None,
+    start_date: Optional[str] = None,  # Alias for start
+    end_date: Optional[str] = None,    # Alias for end
     output_dir: Optional[Union[str, Path]] = None,
     index_type: Optional[Literal["datetime", "range", "auto"]] = None,  # Deprecated parameter
     auto_fill_gaps: bool = True,
@@ -434,8 +462,10 @@ def download(
     Args:
         symbol: Trading pair symbol (e.g., "BTCUSDT")
         timeframe: Timeframe interval (default: "1h" if neither specified)
-        start: Start date in YYYY-MM-DD format
-        end: End date in YYYY-MM-DD format
+        start: Start date in YYYY-MM-DD format. Alias: start_date
+        end: End date in YYYY-MM-DD format. Alias: end_date
+        start_date: Alias for start (recommended for clarity)
+        end_date: Alias for end (recommended for clarity)
         output_dir: Directory to save CSV files
         index_type: DEPRECATED - Use standard pandas operations instead
         auto_fill_gaps: Automatically fill detected gaps with authentic Binance API data (default: True)
@@ -444,9 +474,15 @@ def download(
     Returns:
         pd.DataFrame with complete OHLCV and microstructure data (gapless by default)
 
+    Raises:
+        ValueError: If both 'start' and 'start_date' specified, or both 'end' and 'end_date' specified
+
     Examples:
-        # Simple data download (automatically fills gaps)
+        # Simple data download (automatically fills gaps) - legacy form
         df = download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+
+        # Explicit form (recommended)
+        df = download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
 
         # Disable auto-fill if you want raw Vision archive data
         df = download("ETHUSDT", "4h", auto_fill_gaps=False)
@@ -457,6 +493,22 @@ def download(
     # Apply default if neither parameter specified
     if timeframe is None and interval is None:
         timeframe = "1h"
+
+    # Validate and normalize date range parameters
+    if start is not None and start_date is not None:
+        raise ValueError(
+            "Cannot specify both 'start' and 'start_date'. "
+            "Use either 'start' OR 'start_date', not both."
+        )
+    if end is not None and end_date is not None:
+        raise ValueError(
+            "Cannot specify both 'end' and 'end_date'. "
+            "Use either 'end' OR 'end_date', not both."
+        )
+
+    # Normalize: prefer explicit _date parameters
+    start = start_date if start_date is not None else start
+    end = end_date if end_date is not None else end
 
     return fetch_data(
         symbol=symbol,
