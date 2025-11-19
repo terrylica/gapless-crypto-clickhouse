@@ -4,26 +4,22 @@ from pathlib import Path
 
 import pytest
 
+import gapless_crypto_clickhouse
+
 
 def test_package_import():
     """Test that the main package can be imported."""
-    try:
-        import gapless_crypto_clickhouse
-
-        assert gapless_crypto_data is not None
-    except ImportError as e:
-        pytest.fail(f"Failed to import gapless_crypto_clickhouse: {e}")
+    assert gapless_crypto_clickhouse is not None
 
 
 def test_main_exports():
     """Test that main classes are exported from package."""
-    import gapless_crypto_clickhouse
 
     # Check that main classes are available
     expected_exports = ["BinancePublicDataCollector", "UniversalGapFiller"]
 
     for export in expected_exports:
-        assert hasattr(gapless_crypto_data, export), f"Missing export: {export}"
+        assert hasattr(gapless_crypto_clickhouse, export), f"Missing export: {export}"
 
 
 def test_collectors_module():
@@ -51,9 +47,7 @@ def test_gap_filling_module():
 def test_version_available():
     """Test that package version is available."""
     try:
-        import gapless_crypto_clickhouse
-
-        version = getattr(gapless_crypto_data, "__version__", None)
+        version = getattr(gapless_crypto_clickhouse, "__version__", None)
 
         if version is not None:
             assert isinstance(version, str)
@@ -69,9 +63,8 @@ def test_version_available():
 def test_package_structure():
     """Test that expected package structure exists."""
     # Get the package root
-    import gapless_crypto_clickhouse
 
-    package_path = Path(gapless_crypto_data.__file__).parent
+    package_path = Path(gapless_crypto_clickhouse.__file__).parent
 
     # Check for expected directories
     expected_dirs = ["collectors", "gap_filling", "utils"]
@@ -88,9 +81,8 @@ def test_package_structure():
 
 def test_no_syntax_errors():
     """Test that all Python files have valid syntax."""
-    import gapless_crypto_clickhouse
 
-    package_path = Path(gapless_crypto_data.__file__).parent
+    package_path = Path(gapless_crypto_clickhouse.__file__).parent
 
     # Find all Python files
     python_files = list(package_path.rglob("*.py"))
@@ -133,9 +125,8 @@ def test_all_imports_valid():
 
 def test_no_missing_dependencies():
     """Test that there are no missing module dependencies."""
-    import gapless_crypto_clickhouse
 
-    package_path = Path(gapless_crypto_data.__file__).parent
+    package_path = Path(gapless_crypto_clickhouse.__file__).parent
 
     # Find all Python files and check for problematic imports
     python_files = list(package_path.rglob("*.py"))
