@@ -91,6 +91,12 @@
       }
     ],
     [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "sed -i.bak 's/^version = \".*\"/version = \"${nextRelease.version}\"/' pyproject.toml && sed -i.bak 's/\"version\": \".*\"/\"version\": \"${nextRelease.version}\"/' package.json && rm -f pyproject.toml.bak package.json.bak"
+      }
+    ],
+    [
       "@semantic-release/npm",
       {
         "npmPublish": false
@@ -109,7 +115,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["CHANGELOG.md", "pyproject.toml"],
+        "assets": ["CHANGELOG.md", "pyproject.toml", "package.json"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ]

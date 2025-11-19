@@ -37,6 +37,7 @@ jobs:
             @semantic-release/github \
             @semantic-release/git \
             @semantic-release/npm \
+            @semantic-release/exec \
             conventional-changelog-conventionalcommits
 
       - name: Verify semantic-release installation
