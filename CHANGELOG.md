@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.0.0...v1.1.0) (2025-11-19)
+
+### Features
+
+* **ci:** add manual workflow dispatch for PyPI publishing ([1345db1](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1345db10a6a218bd6a6913d452e07e776dbb49af))
+
 ## 1.0.0 (2025-11-19)
 
 ### ⚠ BREAKING CHANGES
