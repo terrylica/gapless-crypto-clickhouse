@@ -142,6 +142,88 @@ def _validate_index_type_parameter(index_type: Optional[str]) -> None:
         )
 
 
+def _validate_symbol(symbol: str) -> None:
+    """Validate symbol against known supported symbols.
+
+    Args:
+        symbol: Trading pair symbol to validate
+
+    Raises:
+        ValueError: If symbol is not supported, with suggestions
+    """
+    from gapless_crypto_clickhouse import get_supported_symbols
+
+    supported = get_supported_symbols()
+
+    if symbol not in supported:
+        # Find close matches (simple prefix matching)
+        symbol_upper = symbol.upper()
+        close_matches = [s for s in supported if s.startswith(symbol_upper[:3])]
+
+        if close_matches:
+            raise ValueError(
+                f"Invalid symbol '{symbol}'. Did you mean '{close_matches[0]}'? "
+                f"Supported symbols: {', '.join(supported[:5])}, ... "
+                f"(see get_supported_symbols() for full list)"
+            )
+        else:
+            raise ValueError(
+                f"Invalid symbol '{symbol}'. "
+                f"Supported symbols: {', '.join(supported[:10])}, ... "
+                f"(see get_supported_symbols() for full list of {len(supported)} symbols)"
+            )
+
+
+def _validate_timeframe_value(timeframe: str) -> None:
+    """Validate timeframe against supported timeframes.
+
+    Args:
+        timeframe: Timeframe interval to validate
+
+    Raises:
+        ValueError: If timeframe is not supported
+    """
+    from gapless_crypto_clickhouse import get_supported_timeframes
+
+    supported = get_supported_timeframes()
+
+    if timeframe not in supported:
+        raise ValueError(
+            f"Invalid timeframe '{timeframe}'. "
+            f"Supported timeframes: {', '.join(supported)} "
+            f"(see get_supported_timeframes() for details)"
+        )
+
+
+def _validate_date_format(date_str: Optional[str], param_name: str) -> None:
+    """Validate date string format (YYYY-MM-DD).
+
+    Args:
+        date_str: Date string to validate
+        param_name: Parameter name for error context
+
+    Raises:
+        ValueError: If date format is invalid
+    """
+    if date_str is None:
+        return
+
+    import re
+
+    # Check YYYY-MM-DD format
+    if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_str):
+        raise ValueError(
+            f"Invalid {param_name} format '{date_str}'. "
+            f"Expected format: YYYY-MM-DD (e.g., '2024-01-01')"
+        )
+
+    # Validate date is parseable
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError as e:
+        raise ValueError(f"Invalid {param_name} date '{date_str}': {str(e)}") from e
+
+
 def _calculate_date_range_from_limit(
     limit: Optional[int],
     period: str,
@@ -367,6 +449,9 @@ def fetch_data(
 
     Raises:
         ValueError: If both 'start' and 'start_date' specified, or both 'end' and 'end_date' specified
+        ValueError: If symbol is not supported (with suggestions for correction)
+        ValueError: If timeframe is not supported (with list of supported timeframes)
+        ValueError: If date format is invalid (expected YYYY-MM-DD)
 
     Examples:
         # Simple data fetching
@@ -419,6 +504,12 @@ def fetch_data(
 
     # Apply default date range if not specified
     start, end = _apply_default_date_range(start, end)
+
+    # Upfront input validation (fast failure before expensive operations)
+    _validate_symbol(symbol)
+    _validate_timeframe_value(period)
+    _validate_date_format(start, "start/start_date")
+    _validate_date_format(end, "end/end_date")
 
     # Initialize collector and collect data
     collector = BinancePublicDataCollector(
@@ -476,6 +567,9 @@ def download(
 
     Raises:
         ValueError: If both 'start' and 'start_date' specified, or both 'end' and 'end_date' specified
+        ValueError: If symbol is not supported (with suggestions for correction)
+        ValueError: If timeframe is not supported (with list of supported timeframes)
+        ValueError: If date format is invalid (expected YYYY-MM-DD)
 
     Examples:
         # Simple data download (automatically fills gaps) - legacy form
