@@ -135,11 +135,11 @@ dev = [
     "pre-commit>=4.3.0",
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
-    "pytest-asyncio>=0.21.0",
+    # pytest-asyncio provided by pytest-playwright (transitive dependency)
     "pytest-timeout>=2.3.1",
     "pytest-html>=4.1.1",
     "playwright>=1.56.0",
-    "pytest-playwright>=0.6.0",
+    "pytest-playwright>=0.6.0",  # Includes pytest-asyncio for async test support
     "docker>=7.1.0",
     "ruff>=0.13.0",
     "types-requests>=2.32.4.20250913",
