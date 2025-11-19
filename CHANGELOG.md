@@ -2,17 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.3.0...v2.4.0) (2025-11-19)
+
+### Features
+
+* **symbols:** expand coverage from 6 to 20 symbols with dual spot+futures support ([836850c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/836850cc6b93335c75de3c4420af8c955353ce16)), closes [#2](https://github.com/terrylica/gapless-crypto-clickhouse/issues/2)
+
 ## [2.3.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.2.0...v2.3.0) (2025-11-19)
 
 ### Features
 
-* add Python 3.11 support for broader compatibility ([60d8373](https://github.com/terrylica/gapless-crypto-clickhouse/commit/60d8373e9ece9eb688dd854555ec0585a1268e77))
+- add Python 3.11 support for broader compatibility ([60d8373](https://github.com/terrylica/gapless-crypto-clickhouse/commit/60d8373e9ece9eb688dd854555ec0585a1268e77))
 
 ## [2.2.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.1.3...v2.2.0) (2025-11-19)
 
 ### Features
 
-* **release:** integrate Doppler for secure PyPI token management ([4ea992c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4ea992cb26d9cf18699d995344efd5855dc610d0))
+- **release:** integrate Doppler for secure PyPI token management ([4ea992c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4ea992cb26d9cf18699d995344efd5855dc610d0))
 
 ## [2.1.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.1.2...v2.1.3) (2025-11-19)
 
