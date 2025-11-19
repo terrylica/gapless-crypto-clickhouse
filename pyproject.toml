@@ -126,16 +126,7 @@ disallow_untyped_defs = true
 module = "tests.*"
 ignore_errors = true
 
-[tool.pytest.ini_options]
-minversion = "7.0"
-addopts = "-ra -q --strict-markers"
-testpaths = [
-    "tests",
-]
-markers = [
-    "integration: marks tests as integration tests (may require network access)",
-    "asyncio: marks tests as async tests using asyncio",
-]
+# pytest configuration moved to pytest.ini (separate file takes precedence)
 
 [dependency-groups]
 dev = [
@@ -145,6 +136,11 @@ dev = [
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
     "pytest-asyncio>=0.21.0",
+    "pytest-timeout>=2.3.1",
+    "pytest-html>=4.1.1",
+    "playwright>=1.56.0",
+    "pytest-playwright>=0.6.0",
+    "docker>=7.1.0",
     "ruff>=0.13.0",
     "types-requests>=2.32.4.20250913",
     "yamllint>=1.37.1",

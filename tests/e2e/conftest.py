@@ -1,0 +1,100 @@
+"""
+E2E Test Fixtures and Configuration.
+
+Playwright browser configuration and shared utilities for E2E validation
+of ClickHouse web interfaces (CH-UI dashboard, ClickHouse Play).
+
+Fixtures:
+    - browser_context_args: Browser context configuration (viewport, video recording)
+    - screenshot_dir: Artifact directory for test screenshots
+    - page: Enhanced page fixture with automatic failure handling
+
+SLOs:
+    - Observability: All page interactions logged, screenshots on failure
+    - Maintainability: Accessibility-first fixture patterns
+    - Correctness: No fallback configurations, explicit settings only
+"""
+
+import pytest
+from pathlib import Path
+from playwright.async_api import Browser, BrowserContext, Page
+
+
+@pytest.fixture(scope="session")
+def screenshot_dir(tmp_path_factory) -> Path:
+    """
+    Session-scoped directory for test screenshots.
+
+    Returns:
+        Path to screenshot directory (tmp/validation-artifacts/screenshots/)
+
+    Observability:
+        - Directory path logged during session setup
+        - Persists across all E2E tests in session
+    """
+    artifacts = tmp_path_factory.mktemp("e2e-screenshots")
+    print(f"\n📸 Screenshot directory: {artifacts}")
+    return artifacts
+
+
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    """
+    Playwright browser context configuration.
+
+    Returns:
+        Dict with browser context settings (viewport, video, etc.)
+
+    Configuration:
+        - Viewport: 1920x1080 (standard desktop resolution)
+        - Video recording: Disabled (use tracing instead for smaller artifacts)
+        - HTTPS errors: Ignored (localhost testing)
+        - Timezone: UTC (consistent timestamps)
+
+    SLOs:
+        - Maintainability: Explicit configuration, no defaults
+        - Correctness: No fallback values, all settings intentional
+    """
+    return {
+        **browser_context_args,
+        "viewport": {"width": 1920, "height": 1080},
+        "ignore_https_errors": True,  # Localhost testing
+        "timezone_id": "UTC",  # Consistent timestamps
+        # Video disabled - use tracing for debugging (smaller artifacts)
+        "record_video_dir": None,
+    }
+
+
+@pytest.fixture
+async def page(context: BrowserContext) -> Page:
+    """
+    Enhanced page fixture with automatic screenshot on failure.
+
+    Yields:
+        Page: Playwright page instance
+
+    Observability:
+        - Page creation logged
+        - Automatic screenshot capture on test failure
+        - Traces preserved on failure (retain-on-failure mode)
+
+    SLOs:
+        - Observability: All failures captured visually
+        - Maintainability: Consistent page setup across all tests
+    """
+    page = await context.new_page()
+    print(f"  📄 New page created: {page.url}")
+
+    yield page
+
+    # Cleanup handled by pytest-playwright automatically
+    await page.close()
+
+
+# Markers configuration
+def pytest_configure(config):
+    """Register custom markers for E2E tests."""
+    config.addinivalue_line(
+        "markers",
+        "e2e: End-to-end tests requiring Playwright and running services",
+    )

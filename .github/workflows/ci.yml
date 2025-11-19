@@ -9,19 +9,27 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 env:
   UV_SYSTEM_PYTHON: 1
 
 jobs:
-  test:
+  test-fast:
+    name: Fast Tests (Static + Unit + Integration)
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python-version }}
 
       - name: Install UV
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -45,7 +53,90 @@ jobs:
           source .venv/bin/activate
           uv run ruff format --check .
 
-      - name: Run tests
+      - name: Run unit and integration tests
         run: |
           source .venv/bin/activate
-          uv run pytest
+          uv run pytest -v --cov=src --cov-report=xml --cov-report=term -m "not e2e"
+
+      - name: Upload coverage
+        if: matrix.python-version == '3.12'
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          flags: unittests
+
+  test-e2e:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      clickhouse:
+        image: clickhouse/clickhouse-server:24.11
+        ports:
+          - 8123:8123
+          - 9000:9000
+        options: >-
+          --health-cmd="wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install UV
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Add UV to PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: |
+          uv venv
+          source .venv/bin/activate
+          uv sync
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: |
+          source .venv/bin/activate
+          uv run playwright install chromium --with-deps
+
+      - name: Install Playwright dependencies only
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: |
+          source .venv/bin/activate
+          uv run playwright install-deps chromium
+
+      - name: Wait for ClickHouse
+        run: |
+          timeout 60 bash -c 'until wget --spider http://localhost:8123/ping; do sleep 2; done'
+
+      - name: Run E2E tests
+        run: |
+          source .venv/bin/activate
+          uv run pytest tests/e2e/ -v --screenshot=only-on-failure --tracing=retain-on-failure
+
+      - name: Upload test artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-artifacts-${{ github.run_id }}
+          path: |
+            tmp/validation-artifacts/screenshots/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 7

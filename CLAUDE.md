@@ -25,6 +25,8 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 - [Validation Overview](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md) - 5-layer validation pipeline, DuckDB persistence
 - [ValidationStorage Specification](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md) - Database schema, API methods
 - [AI Agent Query Patterns](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md) - Common patterns for validation analysis
+- [E2E Testing Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/E2E_TESTING_GUIDE.md) - Playwright E2E validation, screenshot evidence, debugging
+- [Screenshot Baseline Management](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/SCREENSHOT_BASELINE.md) - Visual regression detection workflow
 
 ### Development
 
@@ -64,10 +66,12 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 **Data Source**: AWS S3 + CloudFront CDN (400+ edge locations, 99.99% SLA)
 
 **Download Strategy (Dual Approach)**:
+
 - **Monthly/Daily files**: urllib (simple HTTP, 2x faster for single large files)
 - **Concurrent downloads**: httpx with connection pooling (gap filling, multiple small requests)
 
 **Connection Pooling**:
+
 - Used for concurrent API requests (gap filling via Binance REST API)
 - NOT used for CloudFront downloads (each request routed to different edge server)
 - Configuration: `max_keepalive_connections=20, max_connections=30, keepalive_expiry=30.0`
@@ -87,6 +91,7 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 **Canonical Reference**: `docs/CURRENT_ARCHITECTURE_STATUS.yaml`
 
 **Production-Ready Features**:
+
 - Core data collection (CDN + REST API dual source)
 - ClickHouse database integration (ReplacingMergeTree with deduplication)
 - Idempotent ingestion with deterministic versioning

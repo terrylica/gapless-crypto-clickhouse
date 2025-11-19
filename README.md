@@ -14,6 +14,7 @@ ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x fas
 ## When to Use This Package
 
 **Choose `gapless-crypto-clickhouse`** (this package) when you need:
+
 - **Persistent database storage** for multi-symbol, multi-timeframe datasets
 - **Advanced SQL queries** for time-series analysis, aggregations, and joins
 - **USDT-margined futures** support (perpetual contracts)
@@ -21,6 +22,7 @@ ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x fas
 - **Python 3.12+** modern runtime environment
 
 **Choose [`gapless-crypto-data`](https://github.com/terrylica/gapless-crypto-data)** (file-based) when you need:
+
 - **Simple file-based workflows** with CSV output
 - **Single-symbol analysis** without database overhead
 - **Python 3.9-3.13** broader compatibility
@@ -208,6 +210,7 @@ AtomicCSVOperations → Final Gapless Dataset with Order Flow Metrics
 **v4.0.0+**: ClickHouse database support for persistent storage, advanced queries, and multi-symbol analysis.
 
 **When to use**:
+
 - **File-based approach**: Simple workflows, single symbols, CSV output compatibility
 - **Database approach**: Multi-symbol analysis, time-series queries, aggregations, production pipelines
 
@@ -230,6 +233,7 @@ docker exec -it gapless-clickhouse clickhouse-client
 ```
 
 **What happens on first start**:
+
 1. Downloads ClickHouse 24.1-alpine image (~200 MB)
 2. Creates `ohlcv` table with ReplacingMergeTree engine (from `schema.sql`)
 3. Configures compression (DoubleDelta for timestamps, Gorilla for OHLCV)
@@ -356,6 +360,7 @@ CLICKHOUSE_DB=default            # Database name (default: 'default')
 Comprehensive toolchain for ClickHouse data exploration and monitoring (100% open source):
 
 **Web Interfaces**:
+
 - **CH-UI** (modern TypeScript UI): http://localhost:5521
   ```bash
   docker-compose up -d ch-ui
@@ -363,6 +368,7 @@ Comprehensive toolchain for ClickHouse data exploration and monitoring (100% ope
 - **ClickHouse Play** (built-in): http://localhost:8123/play
 
 **CLI Tools**:
+
 - **clickhouse-client** (official CLI with 70+ formats):
   ```bash
   docker exec -it gapless-clickhouse clickhouse-client
@@ -373,6 +379,7 @@ Comprehensive toolchain for ClickHouse data exploration and monitoring (100% ope
   ```
 
 **Performance Monitoring**:
+
 - **chdig** (TUI with flamegraph visualization):
   ```bash
   brew install chdig
@@ -380,6 +387,7 @@ Comprehensive toolchain for ClickHouse data exploration and monitoring (100% ope
   ```
 
 **Validation**: Run automated validation suite:
+
 ```bash
 bash scripts/validate-clickhouse-tools.sh
 ```
@@ -391,6 +399,7 @@ bash scripts/validate-clickhouse-tools.sh
 **Migrating from `gapless-crypto-data` (file-based) to `gapless-crypto-clickhouse` (database-first)**:
 
 See [`docs/CLICKHOUSE_MIGRATION.md`](docs/CLICKHOUSE_MIGRATION.md) for:
+
 - Architecture changes (file-based → ClickHouse)
 - Code migration examples (drop-in replacement)
 - Deployment guide (Docker Compose, production)
@@ -398,6 +407,7 @@ See [`docs/CLICKHOUSE_MIGRATION.md`](docs/CLICKHOUSE_MIGRATION.md) for:
 - Troubleshooting common issues
 
 **Key Changes**:
+
 - Package name: `gapless-crypto-data` → `gapless-crypto-clickhouse`
 - Import paths: `gapless_crypto_data` → `gapless_crypto_clickhouse`
 - ClickHouse requirement: ClickHouse database required (Docker Compose provided)
@@ -417,6 +427,7 @@ See [`docs/CLICKHOUSE_MIGRATION.md`](docs/CLICKHOUSE_MIGRATION.md) for:
 5. **Backups**: Use ClickHouse Backup tool or volume snapshots
 
 **Scaling**:
+
 - Single-node: Validated at 53.7M rows (ADR-0003), headroom to ~200M rows
 - Distributed: ClickHouse supports sharding and replication for larger datasets
 
@@ -655,6 +666,7 @@ with ClickHouseConnection() as conn:
 ```
 
 **When to use hybrid approach**:
+
 - Initial data collection: Use file-based (faster, no database required)
 - Post-processing: Load into ClickHouse for aggregations, joins, time-series analytics
 - Archival: Keep CSV files for portability, use database for active analysis
@@ -742,6 +754,7 @@ docker exec gapless-clickhouse clickhouse-client --query "SHOW CREATE TABLE ohlc
 ```
 
 **What gets initialized**:
+
 - ClickHouse 24.1-alpine container on ports 9000 (native) and 8123 (HTTP)
 - `ohlcv` table with ReplacingMergeTree engine (from `schema.sql`)
 - Persistent volume for data (`clickhouse-data`)
@@ -821,6 +834,48 @@ uv run pre-commit run --all-files
 | Type check             | `uv run mypy src/`                  |
 | Validate pre-commit    | `uv run pre-commit run --all-files` |
 | Build package          | `uv build`                          |
+
+### E2E Validation Framework
+
+Autonomous end-to-end validation of ClickHouse web interfaces with Playwright 1.56+ and screenshot evidence.
+
+**Validate Web Interfaces**:
+
+```bash
+# Full validation (static + unit + integration + e2e)
+uv run scripts/run_validation.py
+
+# E2E tests only
+uv run scripts/run_validation.py --e2e-only
+
+# CI mode (headless, no interactive prompts)
+uv run scripts/run_validation.py --ci
+```
+
+**First-Time Setup**:
+
+```bash
+# Install Playwright browsers (one-time)
+uv run playwright install chromium --with-deps
+
+# Verify installation
+uv run playwright --version
+```
+
+**Test Targets**:
+- **CH-UI Dashboard**: localhost:5521
+- **ClickHouse Play**: localhost:8123/play
+
+**Features**:
+- Zero manual intervention (PEP 723 self-contained)
+- Screenshot capture for visual regression detection
+- Comprehensive coverage (happy path, errors, edge cases, timeouts)
+- CI/CD optimized with browser caching (30-60s speedup)
+
+**Documentation**:
+- [E2E Testing Guide](docs/validation/E2E_TESTING_GUIDE.md)
+- [Screenshot Baseline Management](docs/validation/SCREENSHOT_BASELINE.md)
+- [ADR-0013: Autonomous Validation Framework](docs/decisions/0013-autonomous-validation-framework.md)
 
 ### Project Structure for Development
 
