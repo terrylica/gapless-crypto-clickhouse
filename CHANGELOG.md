@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.2.0...v1.2.1) (2025-11-19)
+
+### Documentation
+
+* fix systematic package name inconsistencies across all documentation ([903036e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/903036e95b8371cf3b93dd4cd342c0ab94ffed14))
+
 ## [1.2.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.1.0...v1.2.0) (2025-11-19)
 
 ### Features
