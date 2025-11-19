@@ -20,7 +20,7 @@
           },
           {
             "type": "docs",
-            "release": false
+            "release": "patch"
           },
           {
             "type": "refactor",
