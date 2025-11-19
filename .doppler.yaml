@@ -1,0 +1,6 @@
+# Doppler configuration for gapless-crypto-clickhouse
+# https://docs.doppler.com/docs/enclave-project-setup
+
+setup:
+  project: gapless-crypto-clickhouse
+  config: dev
