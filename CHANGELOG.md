@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.2.0...v2.3.0) (2025-11-19)
+
+### Features
+
+* add Python 3.11 support for broader compatibility ([60d8373](https://github.com/terrylica/gapless-crypto-clickhouse/commit/60d8373e9ece9eb688dd854555ec0585a1268e77))
+
 ## [2.2.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.1.3...v2.2.0) (2025-11-19)
 
 ### Features
