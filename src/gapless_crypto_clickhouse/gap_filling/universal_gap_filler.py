@@ -141,8 +141,13 @@ class UniversalGapFiller:
                 if potential_symbol.endswith(("USDT", "BTC", "ETH", "BNB")):
                     return potential_symbol
 
-        # Fallback: look for common trading pairs
-        common_symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "ADAUSDT", "DOTUSDT", "LINKUSDT"]
+        # Fallback: look for common trading pairs (top 20 by market cap)
+        common_symbols = [
+            "BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT",
+            "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "DOTUSDT", "LINKUSDT",
+            "MATICUSDT", "LTCUSDT", "UNIUSDT", "ATOMUSDT", "FTMUSDT",
+            "NEARUSDT", "ALGOUSDT", "SANDUSDT", "MANAUSDT", "APEUSDT"
+        ]
         filename_upper = filename.upper()
         for symbol in common_symbols:
             if symbol in filename_upper:

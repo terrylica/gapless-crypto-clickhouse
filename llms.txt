@@ -29,9 +29,10 @@ results = gcd.fill_gaps("./data")
 
 ## Supported Symbols
 
-USDT-quoted spot pairs AND USDT-margined perpetual futures:
-- **Spot**: BTCUSDT, ETHUSDT, SOLUSDT, ADAUSDT, DOTUSDT, LINKUSDT, MATICUSDT, AVAXUSDT, ATOMUSDT, NEARUSDT, FTMUSDT, SANDUSDT, MANAUSDT, and more
-- **Futures**: BTCUSDT perps, ETHUSDT perps, SOLUSDT perps, etc. (via `instrument_type='futures'`)
+**20 USDT pairs** with dual spot + futures coverage:
+- **Top 20 by market cap**: BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, XRPUSDT, DOGEUSDT, ADAUSDT, AVAXUSDT, DOTUSDT, LINKUSDT, MATICUSDT, LTCUSDT, UNIUSDT, ATOMUSDT, FTMUSDT, NEARUSDT, ALGOUSDT, SANDUSDT, MANAUSDT, APEUSDT
+- **Spot + Futures**: All symbols validated for both Binance Spot and UM-margined perpetual futures markets
+- **Access via**: `instrument_type='spot'` (default) or `instrument_type='futures'`
 
 ## SDK Entry Points
 

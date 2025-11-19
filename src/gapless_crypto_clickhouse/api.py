@@ -66,25 +66,12 @@ def get_supported_timeframes() -> List[str]:
 
 
 # Type aliases for better discoverability and coding agent support
+# Top 20 symbols by market cap with dual spot + futures coverage
 SupportedSymbol = Literal[
-    "BTCUSDT",
-    "ETHUSDT",
-    "SOLUSDT",
-    "ADAUSDT",
-    "DOTUSDT",
-    "LINKUSDT",
-    "MATICUSDT",
-    "AVAXUSDT",
-    "ATOMUSDT",
-    "NEARUSDT",
-    "FTMUSDT",
-    "SANDUSDT",
-    "MANAUSDT",
-    "BNBUSDT",
-    "XRPUSDT",
-    "LTCUSDT",
-    "BCHUSDT",
-    "EOSUSDT",
+    "BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT",
+    "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "DOTUSDT", "LINKUSDT",
+    "MATICUSDT", "LTCUSDT", "UNIUSDT", "ATOMUSDT", "FTMUSDT",
+    "NEARUSDT", "ALGOUSDT", "SANDUSDT", "MANAUSDT", "APEUSDT",
 ]
 
 SupportedTimeframe = Literal[

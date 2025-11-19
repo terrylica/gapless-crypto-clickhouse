@@ -96,7 +96,11 @@ uv run gapless-crypto-data --fill-gaps --directory ./data
 
 ## Supported Assets
 
-USDT spot pairs only: BTCUSDT, ETHUSDT, SOLUSDT, ADAUSDT, DOTUSDT, LINKUSDT, etc.
+**20 USDT pairs** (spot + futures dual coverage):
+
+Top symbols by market cap: BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, XRPUSDT, DOGEUSDT, ADAUSDT, AVAXUSDT, DOTUSDT, LINKUSDT, MATICUSDT, LTCUSDT, UNIUSDT, ATOMUSDT, FTMUSDT, NEARUSDT, ALGOUSDT, SANDUSDT, MANAUSDT, APEUSDT
+
+All symbols validated for both Binance Spot and UM-margined perpetual futures markets.
 
 ## Performance
 

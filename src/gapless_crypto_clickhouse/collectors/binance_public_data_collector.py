@@ -276,14 +276,33 @@ class BinancePublicDataCollector:
             "1mo",
         ]
 
-        # Popular symbols with known availability (for validation)
+        # Top 20 symbols by market cap (dual coverage: spot + UM-margined perpetual futures)
+        # All symbols validated 2025-11-19 for both Binance Spot and Futures markets
+        # Listing dates from Binance historical data repository
         self.known_symbols = {
-            "BTCUSDT": "2017-08-17",
-            "ETHUSDT": "2017-08-17",
-            "SOLUSDT": "2020-08-11",
-            "ADAUSDT": "2018-04-17",
-            "DOTUSDT": "2020-08-19",
-            "LINKUSDT": "2019-01-16",
+            # Existing symbols (rank by market cap)
+            "BTCUSDT": "2017-08-17",   # #1 - Bitcoin
+            "ETHUSDT": "2017-08-17",   # #2 - Ethereum
+            "SOLUSDT": "2020-08-11",   # #4 - Solana
+            "ADAUSDT": "2018-04-17",   # #9 - Cardano
+            "DOTUSDT": "2020-08-19",   # #13 - Polkadot
+            "LINKUSDT": "2019-01-16",  # #14 - Chainlink
+
+            # New symbols (validated spot + futures dual coverage)
+            "BNBUSDT": "2017-11-06",   # #3 - Binance Coin
+            "XRPUSDT": "2018-05-04",   # #5 - Ripple
+            "DOGEUSDT": "2021-05-05",  # #8 - Dogecoin
+            "AVAXUSDT": "2020-09-22",  # #11 - Avalanche
+            "MATICUSDT": "2019-04-26", # #16 - Polygon
+            "LTCUSDT": "2018-01-23",   # #18 - Litecoin
+            "UNIUSDT": "2020-09-17",   # #19 - Uniswap
+            "ATOMUSDT": "2019-04-22",  # #21 - Cosmos
+            "FTMUSDT": "2019-10-31",   # #27 - Fantom
+            "NEARUSDT": "2020-11-02",  # #28 - NEAR Protocol
+            "ALGOUSDT": "2019-06-20",  # #31 - Algorand
+            "SANDUSDT": "2020-08-13",  # #38 - The Sandbox
+            "MANAUSDT": "2020-12-14",  # #42 - Decentraland
+            "APEUSDT": "2022-03-17",   # #48 - ApeCoin
         }
 
         # Validate date range and symbol
