@@ -80,6 +80,14 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+      ch-ui:
+        image: ghcr.io/caioricciuti/ch-ui:latest
+        ports:
+          - 5521:5521
+        env:
+          VITE_CLICKHOUSE_URL: http://clickhouse:8123
+          VITE_CLICKHOUSE_USER: default
+          VITE_CLICKHOUSE_PASS: ''
     steps:
       - uses: actions/checkout@v4
 
@@ -124,6 +132,10 @@ jobs:
       - name: Wait for ClickHouse
         run: |
           timeout 60 bash -c 'until wget --spider http://localhost:8123/ping; do sleep 2; done'
+
+      - name: Wait for CH-UI
+        run: |
+          timeout 60 bash -c 'until wget --spider http://localhost:5521; do sleep 2; done'
 
       - name: Run E2E tests
         run: |
