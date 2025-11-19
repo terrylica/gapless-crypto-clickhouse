@@ -659,11 +659,11 @@ No new OSS dependencies required for Phase 1 validation.
 All artifacts validated automatically:
 
 1. **ADR-0003 and plan YAML cross-reference**:
-   - Validation: `grep "x-adr-id: \"0003\"" docs/plan/0003-questdb-schema-robustness/plan.yaml`
+   - Validation: `grep "x-adr-id: \"0003\"" docs/development/plan/0003-questdb-schema-robustness/plan.yaml`
    - Expected: Match found
 
 2. **Plan YAML OpenAPI schema compliance**:
-   - Validation: `uvx yamllint docs/plan/0003-questdb-schema-robustness/plan.yaml`
+   - Validation: `uvx yamllint docs/development/plan/0003-questdb-schema-robustness/plan.yaml`
    - Expected: No errors
 
 3. **Agent scripts PEP 723 compliance**:
@@ -759,7 +759,7 @@ This ADR does NOT trigger a semantic release (documentation-only change).
 
 ## Implementation Plan
 
-See detailed plan: [docs/plan/0003-questdb-schema-robustness/plan.yaml](../plan/0003-questdb-schema-robustness/plan.yaml)
+See detailed plan: [docs/development/plan/0003-questdb-schema-robustness/plan.yaml](../plan/0003-questdb-schema-robustness/plan.yaml)
 
 **High-level timeline**:
 
@@ -786,7 +786,7 @@ See detailed plan: [docs/plan/0003-questdb-schema-robustness/plan.yaml](../plan/
 - **Date**: 2025-01-15
 - **Authors**: gapless-crypto-data team
 - **Status**: Proposed
-- **Related Plans**: [docs/plan/0003-questdb-schema-robustness/plan.yaml](../plan/0003-questdb-schema-robustness/plan.yaml)
+- **Related Plans**: [docs/development/plan/0003-questdb-schema-robustness/plan.yaml](../plan/0003-questdb-schema-robustness/plan.yaml)
 - **Depends On**: ADR-0001 (QuestDB single table design), ADR-0002 (validation pipeline)
 - **Supersedes**: None
 - **Superseded By**: None

@@ -235,7 +235,7 @@ All validation uses OSS tools:
 
 ## Implementation Plan
 
-See `docs/plan/0002-e2e-validation/plan.yaml` for detailed execution plan.
+See `docs/development/plan/0002-e2e-validation/plan.yaml` for detailed execution plan.
 
 **Phases**:
 
@@ -259,5 +259,5 @@ See `docs/plan/0002-e2e-validation/plan.yaml` for detailed execution plan.
 - **Date**: 2025-11-15
 - **Authors**: gapless-crypto-data team
 - **Status**: Accepted
-- **Related Plans**: docs/plan/0002-e2e-validation/plan.yaml
+- **Related Plans**: docs/development/plan/0002-e2e-validation/plan.yaml
 - **Depends On**: ADR-0001

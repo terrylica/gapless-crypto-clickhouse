@@ -261,7 +261,7 @@ pip install -i https://test.pypi.org/simple/ gapless-crypto-clickhouse
 ## References
 
 - **Agent Reports**: See `tmp/pypi-package-split/` for 5-agent parallel investigation findings
-- **Plan**: `docs/plan/0011-pypi-package-fork-clickhouse/plan.md`
+- **Plan**: `docs/development/plan/0011-pypi-package-fork-clickhouse/plan.md`
 - **ADR-0005**: ClickHouse Migration (context for v4.0.0 architecture)
 - **ADR-0004**: Futures Support Implementation (ClickHouse-specific features)
 - **PyPI Trusted Publishing**: https://docs.pypi.org/trusted-publishers/

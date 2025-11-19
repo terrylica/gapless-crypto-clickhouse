@@ -295,7 +295,7 @@ class OHLCVQuery:
 
 ## Implementation Plan
 
-See `docs/plan/0005-clickhouse-migration/plan.yaml` for detailed implementation timeline.
+See `docs/development/plan/0005-clickhouse-migration/plan.yaml` for detailed implementation timeline.
 
 **Phases**:
 

@@ -313,5 +313,5 @@ grep -q "Upgrading from v3.x" CHANGELOG.md && echo "PASS" || echo "FAIL"
 
 - Validation Report: 5-agent parallel investigation (93.1% → 100% success)
 - Previous ADRs: ADR-0006 (Audit Remediation)
-- Plan: `docs/plan/0007-release-validation-remediation/plan.yaml`
+- Plan: `docs/development/plan/0007-release-validation-remediation/plan.yaml`
 - Validation Artifacts: `tmp/full-validation/` (25 files, 5 agent reports)

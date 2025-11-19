@@ -208,4 +208,4 @@ bash scripts/validate-clickhouse-tools.sh | grep chdig
 
 - ADR-0008: ClickHouse Local Visualization Toolchain
 - chdig repository: https://github.com/azat/chdig
-- Plan: `docs/plan/0010-optional-development-tooling-chdig/plan.yaml`
+- Plan: `docs/development/plan/0010-optional-development-tooling-chdig/plan.yaml`

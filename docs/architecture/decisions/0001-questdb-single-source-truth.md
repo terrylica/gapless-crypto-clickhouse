@@ -197,7 +197,7 @@ Binance REST API → Parse → ILP → QuestDB (gap filling)
 
 ## Implementation Plan
 
-See `docs/plan/0001-questdb-refactor/plan.yaml` for detailed implementation timeline.
+See `docs/development/plan/0001-questdb-refactor/plan.yaml` for detailed implementation timeline.
 
 **Phases**:
 
@@ -223,4 +223,4 @@ See `docs/plan/0001-questdb-refactor/plan.yaml` for detailed implementation time
 - **Date**: 2025-11-15
 - **Authors**: gapless-crypto-data team
 - **Status**: Accepted
-- **Related Plans**: docs/plan/0001-questdb-refactor/plan.yaml
+- **Related Plans**: docs/development/plan/0001-questdb-refactor/plan.yaml

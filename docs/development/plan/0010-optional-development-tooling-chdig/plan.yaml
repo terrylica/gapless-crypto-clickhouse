@@ -177,7 +177,7 @@ x-oss-libraries:
 x-auto-validation:
   artifacts:
     - name: "ADR-0010 and plan.yaml cross-reference"
-      validation: "grep 'x-adr-id: \"0010\"' docs/plan/0010-optional-development-tooling-chdig/plan.yaml"
+      validation: "grep 'x-adr-id: \"0010\"' docs/development/plan/0010-optional-development-tooling-chdig/plan.yaml"
 
     - name: "chdig installed"
       validation: "command -v chdig"

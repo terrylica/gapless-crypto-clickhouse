@@ -305,4 +305,4 @@ git commit (auto-triggers hooks)
 
 - Audit Report: Comprehensive 10-dimension analysis (internal)
 - Previous ADRs: ADR-0005 (ClickHouse Migration)
-- Plan: `docs/plan/0006-v4-audit-remediation/plan.yaml`
+- Plan: `docs/development/plan/0006-v4-audit-remediation/plan.yaml`

@@ -849,7 +849,7 @@ uv run playwright --version
 
 - [E2E Testing Guide](docs/validation/E2E_TESTING_GUIDE.md)
 - [Screenshot Baseline Management](docs/validation/SCREENSHOT_BASELINE.md)
-- [ADR-0013: Autonomous Validation Framework](docs/decisions/0013-autonomous-validation-framework.md)
+- [ADR-0013: Autonomous Validation Framework](docs/architecture/decisions/0013-autonomous-validation-framework.md)
 
 ### Project Structure for Development
 

@@ -319,7 +319,7 @@ x-oss-libraries:
 x-auto-validation:
   artifacts:
     - name: "ADR-0008 and plan.yaml cross-reference"
-      validation: "grep 'x-adr-id: \\\"0008\\\"' docs/plan/0008-clickhouse-local-visualization-toolchain/plan.yaml"
+      validation: "grep 'x-adr-id: \\\"0008\\\"' docs/development/plan/0008-clickhouse-local-visualization-toolchain/plan.yaml"
 
     - name: "CH-UI container operational"
       validation: "docker ps | grep gapless-ch-ui && curl -s http://localhost:5521 | grep -q 'CH-UI'"

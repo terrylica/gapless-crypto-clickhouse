@@ -230,7 +230,7 @@ def main(symbol, timeframe, start_date, end_date, instrument_type):
 
 ## Implementation Plan
 
-See `docs/plan/0004-futures-support/plan.yaml` for detailed implementation timeline.
+See `docs/development/plan/0004-futures-support/plan.yaml` for detailed implementation timeline.
 
 **Phases**:
 

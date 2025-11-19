@@ -318,8 +318,8 @@ x-implementation-plan:
 
         - name: "Documentation Updates"
           paths:
-            - "docs/decisions/0003-questdb-schema-robustness-validation.md"
-            - "docs/plan/0003-questdb-schema-robustness/plan.yaml"
+            - "docs/architecture/decisions/0003-questdb-schema-robustness-validation.md"
+            - "docs/development/plan/0003-questdb-schema-robustness/plan.yaml"
             - "tmp/schema-robustness/futures-design/FUTURES_ROADMAP.md"
           description: "Update ADR, plan, and futures roadmap with corrected findings"
           acceptance_criteria:
@@ -383,7 +383,7 @@ x-slos:
 
       - name: "ADR-Plan Synchronization"
         target: "ADR-0003 and plan.yaml cross-references validated"
-        measurement: "grep 'x-adr-id: \"0003\"' docs/plan/0003-questdb-schema-robustness/plan.yaml succeeds"
+        measurement: "grep 'x-adr-id: \"0003\"' docs/development/plan/0003-questdb-schema-robustness/plan.yaml succeeds"
 
       - name: "Documentation Completeness"
         target: "All 6 agents documented with clear responsibilities and SQL queries"
@@ -442,10 +442,10 @@ x-oss-libraries:
 x-auto-validation:
   artifacts:
     - name: "ADR-0003 and plan.yaml cross-reference"
-      validation: "grep 'x-adr-id: \"0003\"' docs/plan/0003-questdb-schema-robustness/plan.yaml"
+      validation: "grep 'x-adr-id: \"0003\"' docs/development/plan/0003-questdb-schema-robustness/plan.yaml"
 
     - name: "Plan YAML OpenAPI schema compliance"
-      validation: "uvx yamllint docs/plan/0003-questdb-schema-robustness/plan.yaml"
+      validation: "uvx yamllint docs/development/plan/0003-questdb-schema-robustness/plan.yaml"
 
     - name: "Agent scripts PEP 723 compliance"
       validation: "uv run tmp/schema-robustness/validation/*.py (all scripts executable without external dependencies)"

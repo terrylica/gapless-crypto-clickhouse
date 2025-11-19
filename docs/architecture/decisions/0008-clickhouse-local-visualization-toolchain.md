@@ -405,4 +405,4 @@ clickhouse-local --query "
 - CH-UI repository: https://github.com/caioricciuti/ch-ui
 - chdig repository: https://github.com/azat/chdig
 - ClickHouse client docs: https://clickhouse.com/docs/en/interfaces/cli
-- Plan: `docs/plan/0008-clickhouse-local-visualization-toolchain/plan.yaml`
+- Plan: `docs/development/plan/0008-clickhouse-local-visualization-toolchain/plan.yaml`

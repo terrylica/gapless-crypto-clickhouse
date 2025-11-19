@@ -212,7 +212,7 @@ x-oss-libraries:
 x-auto-validation:
   artifacts:
     - name: "ADR-0009 and plan.yaml cross-reference"
-      validation: "grep 'x-adr-id: \"0009\"' docs/plan/0009-port-reconfiguration-ch-ui-enablement/plan.yaml"
+      validation: "grep 'x-adr-id: \"0009\"' docs/development/plan/0009-port-reconfiguration-ch-ui-enablement/plan.yaml"
 
     - name: "QuestDB container stopped"
       validation: "! docker ps | grep -q gapless-questdb"

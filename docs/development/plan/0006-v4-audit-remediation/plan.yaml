@@ -239,7 +239,7 @@ x-oss-libraries:
 x-auto-validation:
   artifacts:
     - name: "ADR-0006 and plan.yaml cross-reference"
-      validation: "grep 'x-adr-id: \\\"0006\\\"' docs/plan/0006-v4-audit-remediation/plan.yaml"
+      validation: "grep 'x-adr-id: \\\"0006\\\"' docs/development/plan/0006-v4-audit-remediation/plan.yaml"
 
     - name: "Version consistency check"
       validation: "python -c 'import gapless_crypto_data; import tomllib; t=tomllib.load(open(\"pyproject.toml\",\"rb\")); assert gapless_crypto_data.__version__ == t[\"project\"][\"version\"]'"

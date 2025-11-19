@@ -142,7 +142,7 @@ version = "1.0.0"  # May need manual sync with git tags
 **Files**:
 
 1. `docs/validation/E2E_TESTING_GUIDE.md:264`
-2. `docs/decisions/0013-autonomous-validation-framework.md:74,110`
+2. `docs/architecture/decisions/0013-autonomous-validation-framework.md:74,110`
 3. `docs/development/plan/0013-autonomous-validation-framework/plan.md:79,121`
 4. `scripts/run_validation.py:6`
 
@@ -210,12 +210,14 @@ version = "1.0.0"  # May need manual sync with git tags
 - ```ini
 
   ```
+
 - # pytest.ini
 - asyncio_mode = auto
 - asyncio_default_fixture_loop_scope = session
 - ```
 
   ```
+
 -
 - All E2E tests must use `@pytest.mark.asyncio(loop_scope="session")` to ensure compatibility with Playwright's async fixtures.
 ````
@@ -467,7 +469,7 @@ These artifacts document the ClickHouse fork creation, database-first architectu
 
 **Intent**: Complete dependency list in auto-install documentation
 
-**File**: `docs/decisions/0013-autonomous-validation-framework.md:110`
+**File**: `docs/architecture/decisions/0013-autonomous-validation-framework.md:110`
 
 **Changes**:
 

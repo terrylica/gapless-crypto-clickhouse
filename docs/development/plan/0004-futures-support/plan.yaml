@@ -370,7 +370,7 @@ x-oss-libraries:
 x-auto-validation:
   artifacts:
     - name: "ADR-0004 and plan.yaml cross-reference"
-      validation: "grep 'x-adr-id: \"0004\"' docs/plan/0004-futures-support/plan.yaml"
+      validation: "grep 'x-adr-id: \"0004\"' docs/development/plan/0004-futures-support/plan.yaml"
 
     - name: "Migration script SQL validation"
       validation: "psql -f docs/migrations/0004-add-instrument-type-column.sql --dry-run"

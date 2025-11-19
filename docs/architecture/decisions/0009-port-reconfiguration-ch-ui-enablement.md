@@ -288,4 +288,4 @@ bash scripts/validate-clickhouse-tools.sh
 
 - ADR-0008: ClickHouse Local Visualization Toolchain
 - VALIDATION_REPORT.md: Port conflict documentation
-- Plan: `docs/plan/0009-port-reconfiguration-ch-ui-enablement/plan.yaml`
+- Plan: `docs/development/plan/0009-port-reconfiguration-ch-ui-enablement/plan.yaml`

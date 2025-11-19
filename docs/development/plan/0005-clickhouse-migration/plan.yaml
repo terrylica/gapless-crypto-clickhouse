@@ -363,7 +363,7 @@ x-oss-libraries:
 x-auto-validation:
   artifacts:
     - name: "ADR-0005 and plan.yaml cross-reference"
-      validation: "grep 'x-adr-id: \\\"0005\\\"' docs/plan/0005-clickhouse-migration/plan.yaml"
+      validation: "grep 'x-adr-id: \\\"0005\\\"' docs/development/plan/0005-clickhouse-migration/plan.yaml"
 
     - name: "ClickHouse schema validation"
       validation: "clickhouse-client --query 'SHOW CREATE TABLE ohlcv' | grep 'ReplacingMergeTree'"

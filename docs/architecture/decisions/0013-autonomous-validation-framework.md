@@ -165,7 +165,7 @@ If Playwright integration proves problematic:
 
 ## Implementation Plan
 
-See: `docs/plan/0013-autonomous-validation-framework/plan.md`
+See: `docs/development/plan/0013-autonomous-validation-framework/plan.md`
 
 ## Related Decisions
 

@@ -360,7 +360,7 @@ Agent investigation findings: tmp/doc-audit/ (5 parallel agents)
 ## References
 
 - **Agent Reports**: `tmp/doc-audit/` (5-agent parallel investigation, 2025-11-19)
-- **Plan**: `docs/plan/0012-documentation-accuracy-remediation/plan.md`
+- **Plan**: `docs/development/plan/0012-documentation-accuracy-remediation/plan.md`
 - **ADR-0011**: PyPI Package Fork (context for fork creation)
 - **ADR-0005**: ClickHouse Migration (ClickHouse architecture background)
 

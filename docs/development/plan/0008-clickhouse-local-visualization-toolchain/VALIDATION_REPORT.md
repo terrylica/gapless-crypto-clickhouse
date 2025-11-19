@@ -197,7 +197,7 @@ docker exec gapless-clickhouse clickhouse-local \
 
 ### ADR-0008
 
-**Location**: `docs/decisions/0008-clickhouse-local-visualization-toolchain.md`
+**Location**: `docs/architecture/decisions/0008-clickhouse-local-visualization-toolchain.md`
 **Status**: ✅ Complete
 **Sync**: ✅ Perfect alignment with plan.yaml (x-adr-id: "0008")
 
@@ -211,7 +211,7 @@ docker exec gapless-clickhouse clickhouse-local \
 
 ### plan.yaml
 
-**Location**: `docs/plan/0008-clickhouse-local-visualization-toolchain/plan.yaml`
+**Location**: `docs/development/plan/0008-clickhouse-local-visualization-toolchain/plan.yaml`
 **Status**: ✅ Complete
 **Format**: ✅ OpenAPI 3.1.1 compliant
 

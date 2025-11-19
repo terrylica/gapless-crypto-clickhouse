@@ -202,7 +202,7 @@ x-oss-libraries:
 x-auto-validation:
   artifacts:
     - name: "ADR-0007 and plan.yaml cross-reference"
-      validation: "grep 'x-adr-id: \\\"0007\\\"' docs/plan/0007-release-validation-remediation/plan.yaml"
+      validation: "grep 'x-adr-id: \\\"0007\\\"' docs/development/plan/0007-release-validation-remediation/plan.yaml"
 
     - name: "Version consistency check"
       validation: "python -c 'import gapless_crypto_data; assert gapless_crypto_data.__version__ == \"4.0.0\"; assert \"v4.0.0\" in gapless_crypto_data.__doc__'"
