@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.7...v2.0.0) (2025-11-19)
+
+### ⚠ BREAKING CHANGES
+
+* **e2e:** Resolves event loop conflict between pytest-asyncio and pytest-playwright
+
+**Root Cause**: pytest-playwright (sync API) creates session-scoped event loop
+that conflicts with pytest-asyncio's Runner.run() when executing async tests
+
+**Solution**: Migrate to pytest-playwright-asyncio (official async support)
+- Replaces pytest-playwright>=0.6.0 with pytest-playwright-asyncio>=0.7.1
+- Upgrades pytest-asyncio>=0.21.0 to >=0.26.0 (required version)
+- Changes asyncio_default_fixture_loop_scope from function to session
+- Adds @pytest.mark.asyncio(loop_scope="session") to all 12 async E2E tests
+
+**Impact**: All E2E tests now use session-scoped event loop compatible with
+pytest-playwright-asyncio's async fixtures
+
+**Verification**: Dependencies synced, linting passed
+
+**References**:
+- https://github.com/microsoft/playwright-pytest/issues/167
+- https://pypi.org/project/pytest-playwright-asyncio/
+- tmp/e2e-implementation-status.md (Solution 1)
+
+### Bug Fixes
+
+* **e2e:** replace pytest-playwright with pytest-playwright-asyncio ([4c0bd04](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4c0bd042c39e6cb877ba845772d4632d79a26b00))
+
 ## [1.3.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.3.6...v1.3.7) (2025-11-19)
 
 ### Bug Fixes
