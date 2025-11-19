@@ -104,7 +104,7 @@ cd /opt/gapless-crypto-data
 sudo -u gapless uv sync --frozen --no-dev
 
 # Verify installation
-sudo -u gapless uv run python -c "import gapless_crypto_data; print('OK')"
+sudo -u gapless uv run python -c "import gapless_crypto_clickhouse; print('OK')"
 ```
 
 ## Configuration
@@ -113,7 +113,7 @@ sudo -u gapless uv run python -c "import gapless_crypto_data; print('OK')"
 
 ```bash
 # Copy systemd service file
-sudo cp /opt/gapless-crypto-data/deployment/systemd/questdb.service \
+sudo cp /opt/gapless-crypto-clickhouse/deployment/systemd/questdb.service \
   /etc/systemd/system/questdb.service
 
 # Edit service file (adjust memory settings)
@@ -139,15 +139,15 @@ sudo systemctl enable questdb
 
 ```bash
 # Copy systemd service file
-sudo cp /opt/gapless-crypto-data/deployment/systemd/gapless-crypto-collector.service \
+sudo cp /opt/gapless-crypto-clickhouse/deployment/systemd/gapless-crypto-collector.service \
   /etc/systemd/system/gapless-crypto-collector.service
 
 # Create environment file
-sudo -u gapless cp /opt/gapless-crypto-data/.env.example \
-  /opt/gapless-crypto-data/.env
+sudo -u gapless cp /opt/gapless-crypto-clickhouse/.env.example \
+  /opt/gapless-crypto-clickhouse/.env
 
 # Edit configuration
-sudo -u gapless nano /opt/gapless-crypto-data/.env
+sudo -u gapless nano /opt/gapless-crypto-clickhouse/.env
 ```
 
 **Environment configuration** (`.env`):
@@ -202,7 +202,7 @@ Wait for log message: `Server is ready to accept connections`
 ```bash
 # Apply database schema
 psql -h localhost -p 8812 -U admin -d qdb \
-  -f /opt/gapless-crypto-data/src/gapless_crypto_data/questdb/schema.sql
+  -f /opt/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/questdb/schema.sql
 
 # Verify table creation
 psql -h localhost -p 8812 -U admin -d qdb \
@@ -471,7 +471,7 @@ sudo journalctl -u gapless-crypto-collector -n 100
 
 **Common issues**:
 - QuestDB not running: Start questdb service first
-- Invalid .env file: Check syntax in /opt/gapless-crypto-data/.env
+- Invalid .env file: Check syntax in /opt/gapless-crypto-clickhouse/.env
 - Python dependencies: Run `sudo -u gapless uv sync --frozen`
 
 ### Slow Ingestion Performance

@@ -23,7 +23,7 @@ uv run pytest
 uv run pytest -v
 
 # Run with coverage report
-uv run pytest --cov=src/gapless_crypto_data --cov-report=html
+uv run pytest --cov=src/gapless_crypto_clickhouse --cov-report=html
 ```
 
 **Expected**: 30+ tests pass, 85%+ coverage for SDK entry points
@@ -87,7 +87,7 @@ uv run ruff format .
 uv run ruff format --check .
 
 # Format specific directory
-uv run ruff format src/gapless_crypto_data/
+uv run ruff format src/gapless_crypto_clickhouse/
 ```
 
 **Standard**: Ruff default formatting (PEP 8 compatible, Black-style)
@@ -102,7 +102,7 @@ uv run ruff check --fix .
 uv run ruff check .
 
 # Lint specific file
-uv run ruff check src/gapless_crypto_data/collectors/binance_public_data_collector.py
+uv run ruff check src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
 
 # Show all violations (including fixed)
 uv run ruff check --diff .
@@ -124,10 +124,10 @@ uv run ruff check --diff .
 uv run mypy src/
 
 # Type check with strict mode
-uv run mypy --strict src/gapless_crypto_data/
+uv run mypy --strict src/gapless_crypto_clickhouse/
 
 # Type check specific module
-uv run mypy src/gapless_crypto_data/validation/
+uv run mypy src/gapless_crypto_clickhouse/validation/
 
 # Show error codes
 uv run mypy --show-error-codes src/
@@ -189,7 +189,7 @@ uv build --sdist
 
 **Output**: `dist/` directory with `.whl` and `.tar.gz` files
 
-**Version**: Extracted from `src/gapless_crypto_data/__init__.py`
+**Version**: Extracted from `src/gapless_crypto_clickhouse/__init__.py`
 
 ### Local Installation
 
@@ -359,10 +359,10 @@ time uv run gapless-crypto-data --output-format parquet ...
 uv add --dev pdoc3
 
 # Generate HTML docs
-uv run pdoc --html --output-dir docs/api src/gapless_crypto_data
+uv run pdoc --html --output-dir docs/api src/gapless_crypto_clickhouse
 
 # Serve docs locally
-uv run pdoc --http localhost:8080 src/gapless_crypto_data
+uv run pdoc --http localhost:8080 src/gapless_crypto_clickhouse
 ```
 
 ### Validate Documentation Links
@@ -482,6 +482,6 @@ Before creating pull request:
 
 ## Related Documentation
 
-- **Development Setup**: [SETUP.md](/Users/terryli/eon/gapless-crypto-data/docs/development/SETUP.md)
-- **SDK Quality Standards**: [docs/sdk-quality-standards.yaml](/Users/terryli/eon/gapless-crypto-data/docs/sdk-quality-standards.yaml)
-- **Architecture Overview**: [docs/architecture/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-data/docs/architecture/OVERVIEW.md)
+- **Development Setup**: [SETUP.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/SETUP.md)
+- **SDK Quality Standards**: [docs/sdk-quality-standards.yaml](/Users/terryli/eon/gapless-crypto-clickhouse/docs/sdk-quality-standards.yaml)
+- **Architecture Overview**: [docs/architecture/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md)

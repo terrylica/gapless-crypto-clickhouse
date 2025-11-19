@@ -14,7 +14,7 @@ Fork `main-clickhouse` branch as independent `gapless-crypto-clickhouse` PyPI pa
 
 **Scope**:
 - New GitHub repository: `terrylica/gapless-crypto-clickhouse`
-- Module rename: `gapless_crypto_data` → `gapless_crypto_clickhouse`
+- Module rename: `gapless_crypto_clickhouse` → `gapless_crypto_clickhouse`
 - Package rename: `gapless-crypto-data` → `gapless-crypto-clickhouse`
 - Version reset: 4.0.0 → 1.0.0
 - ~150 files updated (source, tests, examples, documentation)
@@ -76,7 +76,7 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 
 ### Module Naming
 
-**Approach**: Full rename `gapless_crypto_data` → `gapless_crypto_clickhouse`
+**Approach**: Full rename `gapless_crypto_clickhouse` → `gapless_crypto_clickhouse`
 
 **Rationale**:
 - Matches PyPI name convention (kebab → snake_case)
@@ -84,7 +84,7 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 - Clear ClickHouse branding in code
 
 **Breaking Change**: All import paths change
-- Before: `import gapless_crypto_data as gcd`
+- Before: `import gapless_crypto_clickhouse as gcd`
 - After: `import gapless_crypto_clickhouse as gcc`
 
 ### Version Strategy
@@ -144,11 +144,11 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 
 1. **Rename directory**:
    ```bash
-   mv src/gapless_crypto_data src/gapless_crypto_clickhouse
+   mv src/gapless_crypto_clickhouse src/gapless_crypto_clickhouse
    ```
 
 2. **Update imports in source files** (~28 files):
-   - Pattern: `from gapless_crypto_data` → `from gapless_crypto_clickhouse`
+   - Pattern: `from gapless_crypto_clickhouse` → `from gapless_crypto_clickhouse`
    - Files: All `.py` files in `src/gapless_crypto_clickhouse/`
 
 3. **Update imports in test files** (~21 files):
@@ -166,8 +166,8 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 **Validation**:
 ```bash
 # Check no old imports remain
-grep -r "from gapless_crypto_data" src/ tests/ examples/
-grep -r "import gapless_crypto_data" src/ tests/ examples/
+grep -r "from gapless_crypto_clickhouse" src/ tests/ examples/
+grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 # Expected: No matches
 ```
 
@@ -185,9 +185,9 @@ grep -r "import gapless_crypto_data" src/ tests/ examples/
 | `version` | `4.0.0` | `1.0.0` |
 | `description` | Generic crypto data | ClickHouse-based cryptocurrency data collection |
 | `keywords` | crypto, binance, data | clickhouse, crypto, binance, database, time-series |
-| `packages` | `["src/gapless_crypto_data"]` | `["src/gapless_crypto_clickhouse"]` |
+| `packages` | `["src/gapless_crypto_clickhouse"]` | `["src/gapless_crypto_clickhouse"]` |
 | GitHub URLs | `gapless-crypto-data` | `gapless-crypto-clickhouse` |
-| `known-first-party` | `["gapless_crypto_data"]` | `["gapless_crypto_clickhouse"]` |
+| `known-first-party` | `["gapless_crypto_clickhouse"]` | `["gapless_crypto_clickhouse"]` |
 
 **Dependencies** (keep minimal for ClickHouse focus):
 - Keep: `clickhouse-driver`, `pandas`, `pyarrow`, `python-dotenv`
@@ -277,7 +277,7 @@ grep -r "import gapless_crypto_data" src/ tests/ examples/
 1. **Grep validation** (zero old references):
    ```bash
    grep -r "gapless-crypto-data" . --exclude-dir=.git --exclude-dir=.venv --exclude-dir=node_modules
-   grep -r "gapless_crypto_data" . --exclude-dir=.git --exclude-dir=.venv
+   grep -r "gapless_crypto_clickhouse" . --exclude-dir=.git --exclude-dir=.venv
    ```
    Expected: Only historical references in CHANGELOGs/ADRs
 
@@ -523,7 +523,7 @@ python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__v
 
 **Pre-Publish** (Phase 6):
 - [ ] `grep -r "gapless-crypto-data"` returns only historical references
-- [ ] `grep -r "gapless_crypto_data"` returns only historical references
+- [ ] `grep -r "gapless_crypto_clickhouse"` returns only historical references
 - [ ] `python -c "import gapless_crypto_clickhouse"` succeeds
 - [ ] `uv run pytest tests/ -v` passes
 - [ ] `uv build` creates `gapless_crypto_clickhouse-1.0.0-py3-none-any.whl`

@@ -71,7 +71,7 @@ ALTER TABLE ohlcv DEDUP ENABLE UPSERT KEYS(timestamp, symbol, timeframe, instrum
 
 ### Code Changes
 
-**1. URL Parameterization** (`src/gapless_crypto_data/collectors/questdb_bulk_loader.py`):
+**1. URL Parameterization** (`src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py`):
 ```python
 class QuestDBBulkLoader:
     SPOT_BASE_URL = "https://data.binance.vision/data/spot"
@@ -85,7 +85,7 @@ class QuestDBBulkLoader:
         )
 ```
 
-**2. CSV Parser Extension** (`src/gapless_crypto_data/collectors/questdb_bulk_loader.py:_parse_csv()`):
+**2. CSV Parser Extension** (`src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py:_parse_csv()`):
 ```python
 def _parse_csv(self, csv_path: Path, symbol: str, timeframe: str) -> pd.DataFrame:
     # Detect header presence (futures has header, spot doesn't)
@@ -104,7 +104,7 @@ def _parse_csv(self, csv_path: Path, symbol: str, timeframe: str) -> pd.DataFram
     return df
 ```
 
-**3. ILP Ingestion Update** (`src/gapless_crypto_data/collectors/questdb_bulk_loader.py:_ingest_dataframe()`):
+**3. ILP Ingestion Update** (`src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py:_ingest_dataframe()`):
 ```python
 sender.dataframe(
     df_ingest,
@@ -114,7 +114,7 @@ sender.dataframe(
 )
 ```
 
-**4. Query API Extension** (`src/gapless_crypto_data/query.py`):
+**4. Query API Extension** (`src/gapless_crypto_clickhouse/query.py`):
 ```python
 def get_ohlcv(
     self,
@@ -132,7 +132,7 @@ def get_ohlcv(
     params = (symbol, timeframe, instrument_type, start_ts, end_ts)
 ```
 
-**5. CLI Flag Addition** (`src/gapless_crypto_data/cli.py`):
+**5. CLI Flag Addition** (`src/gapless_crypto_clickhouse/cli.py`):
 ```python
 @click.option(
     "--instrument-type",

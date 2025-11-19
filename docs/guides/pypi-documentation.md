@@ -13,7 +13,7 @@ pip install gapless-crypto-data
 ### Simple API (Recommended for Most Users)
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 # Download recent data
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
@@ -208,7 +208,7 @@ print(f"Market impact volatility: {market_impact:.3f}")
 For complex workflows requiring detailed control, use the class-based API:
 
 ```python
-from gapless_crypto_data import BinancePublicDataCollector, UniversalGapFiller
+from gapless_crypto_clickhouse import BinancePublicDataCollector, UniversalGapFiller
 
 # Custom collection with full control
 collector = BinancePublicDataCollector(
@@ -325,7 +325,7 @@ df = gcd.download("SOLUSDT", "1d", start="2020-08-11")  # From listing
 ### Backtesting Framework Integration
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 import pandas as pd
 
 def prepare_backtest_data(symbol, timeframe, start, end):
@@ -354,7 +354,7 @@ btc_data = prepare_backtest_data("BTCUSDT", "1h", "2023-01-01", "2023-12-31")
 ### Portfolio Analysis
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 def analyze_portfolio(symbols, timeframe="1h", period_days=30):
     """Analyze portfolio of cryptocurrencies"""
@@ -456,8 +456,8 @@ MIT License - see repository for full details.
 ## Support
 
 - **Documentation**: [GitHub Repository](https://github.com/terrylica/gapless-crypto-data)
-- **Issues**: [GitHub Issues](https://github.com/terrylica/gapless-crypto-data/issues)
-- **Changelog**: [Release Notes](https://github.com/terrylica/gapless-crypto-data/blob/main/CHANGELOG.md)
+- **Issues**: [GitHub Issues](https://github.com/terrylica/gapless-crypto-clickhouse/issues)
+- **Changelog**: [Release Notes](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/CHANGELOG.md)
 
 ---
 
@@ -465,7 +465,7 @@ MIT License - see repository for full details.
 
 ```python
 pip install gapless-crypto-data
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 df = gcd.download("BTCUSDT", "1h", limit=1000)
 print(f"Fetched {len(df)} bars with {df.shape[1]} columns of microstructure data")
 ```

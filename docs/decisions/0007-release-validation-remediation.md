@@ -12,7 +12,7 @@ Comprehensive multi-agent parallel validation of v4.0.0 release candidate (post 
 
 **Critical (User-Facing)**:
 - Module docstring in `__init__.py` shows v2.15.3 instead of v4.0.0
-- Impact: `help(gapless_crypto_data)` shows wrong version, PyPI description may be incorrect
+- Impact: `help(gapless_crypto_clickhouse)` shows wrong version, PyPI description may be incorrect
 
 **Medium Priority (Quality Assurance)**:
 - Test assertion expects "3.2.0" instead of "4.0.0" in `test_api_edge_cases.py`
@@ -72,7 +72,7 @@ Overall: 93.1% validation success (469/504 checks passed)
 
 ### Fix 1: Module Docstring Version (CRITICAL)
 
-**File**: `src/gapless_crypto_data/__init__.py:2,66`
+**File**: `src/gapless_crypto_clickhouse/__init__.py:2,66`
 
 **Changes**:
 ```python
@@ -93,13 +93,13 @@ CLI Removed in v4.0.0:
 ```
 
 **Rationale**: Module docstring is primary user-facing documentation
-- Displayed by `help(gapless_crypto_data)`
+- Displayed by `help(gapless_crypto_clickhouse)`
 - Used by PyPI for package description
 - Must match `__version__` attribute (4.0.0)
 
 **Validation**:
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 assert gcd.__version__ == "4.0.0"
 assert "v4.0.0" in gcd.__doc__
 ```
@@ -186,7 +186,7 @@ test -f CHANGELOG.md && echo "PASS" || echo "FAIL"
 
 **Version Verification**:
 ```bash
-uv run python -c "import gapless_crypto_data as gcd; assert gcd.__version__ == '4.0.0'; assert 'v4.0.0' in gcd.__doc__"
+uv run python -c "import gapless_crypto_clickhouse as gcd; assert gcd.__version__ == '4.0.0'; assert 'v4.0.0' in gcd.__doc__"
 ```
 **Expected**: Exit code 0 (both assertions pass)
 
@@ -198,8 +198,8 @@ uv run pytest tests/test_api_edge_cases.py::test_get_info_structure -v
 
 **Documentation Consistency**:
 ```bash
-grep -c "v2.15.3" src/gapless_crypto_data/__init__.py
-grep -c "v4.0.0" src/gapless_crypto_data/__init__.py
+grep -c "v2.15.3" src/gapless_crypto_clickhouse/__init__.py
+grep -c "v4.0.0" src/gapless_crypto_clickhouse/__init__.py
 ```
 **Expected**: 0 occurrences of v2.15.3, 1+ occurrences of v4.0.0
 

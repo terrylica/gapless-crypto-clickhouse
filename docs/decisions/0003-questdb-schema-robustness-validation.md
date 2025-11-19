@@ -22,7 +22,7 @@ The gapless-crypto-data package uses a single centralized QuestDB database (`ohl
 
 ### Current State
 
-**Existing schema** (`src/gapless_crypto_data/questdb/schema.sql`):
+**Existing schema** (`src/gapless_crypto_clickhouse/questdb/schema.sql`):
 - Single unified table: `ohlcv`
 - 13 data columns + 1 designated timestamp
 - DEDUP enabled on composite key: `(timestamp, symbol, timeframe)`
@@ -253,7 +253,7 @@ SUPPORTED_TIMEFRAMES = [
 ### Bug Fix Implementation
 
 **Code changes** (3 files corrected):
-1. `src/gapless_crypto_data/collectors/questdb_bulk_loader.py:122` - Changed "1M" → "1mo"
+1. `src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py:122` - Changed "1M" → "1mo"
 2. `tmp/schema-robustness/ingestion/ingest_comprehensive.py:43` - Changed "1M" → "1mo"
 3. `tmp/schema-robustness/validation/04_timeframe_spectrum_agent.py:20` - Changed "1M" → "1mo"
 

@@ -56,7 +56,7 @@ After completing QuestDB schema validation (ADR-0003, 53.7M rows) and futures su
 
 ### Schema Design
 
-**ClickHouse schema** (`src/gapless_crypto_data/clickhouse/schema.sql`):
+**ClickHouse schema** (`src/gapless_crypto_clickhouse/clickhouse/schema.sql`):
 
 ```sql
 CREATE TABLE IF NOT EXISTS ohlcv (
@@ -137,7 +137,7 @@ def _prepare_clickhouse_row(row: Dict) -> Dict:
 
 ### Code Changes
 
-**1. Connection Layer** (`src/gapless_crypto_data/clickhouse/connection.py`):
+**1. Connection Layer** (`src/gapless_crypto_clickhouse/clickhouse/connection.py`):
 
 ```python
 from clickhouse_driver import Client
@@ -159,7 +159,7 @@ class ClickHouseConnection:
         self.client.insert_dataframe(f"INSERT INTO {table} VALUES", df)
 ```
 
-**2. Ingestion Rewrite** (`src/gapless_crypto_data/collectors/clickhouse_bulk_loader.py`):
+**2. Ingestion Rewrite** (`src/gapless_crypto_clickhouse/collectors/clickhouse_bulk_loader.py`):
 
 ```python
 class ClickHouseBulkLoader:
@@ -179,7 +179,7 @@ class ClickHouseBulkLoader:
         return len(df)
 ```
 
-**3. Query API Update** (`src/gapless_crypto_data/query.py`):
+**3. Query API Update** (`src/gapless_crypto_clickhouse/query.py`):
 
 ```python
 class OHLCVQuery:

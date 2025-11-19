@@ -239,7 +239,7 @@ Wait for: `Server is ready to accept connections`
 ```bash
 # Apply schema using psql
 psql -h localhost -p 8812 -U admin -d qdb \
-  -f /opt/gapless-crypto-data/src/gapless_crypto_data/questdb/schema.sql
+  -f /opt/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/questdb/schema.sql
 
 # Verify table creation
 psql -h localhost -p 8812 -U admin -d qdb \
@@ -265,7 +265,7 @@ psql -h localhost -p 8812 -U admin -d qdb -c "SELECT 1;"
 
 ```bash
 # Copy service file
-sudo cp /opt/gapless-crypto-data/deployment/systemd/gapless-crypto-collector.service \
+sudo cp /opt/gapless-crypto-clickhouse/deployment/systemd/gapless-crypto-collector.service \
   /etc/systemd/system/gapless-crypto-collector.service
 
 # Note: QuestDB is in Docker, not systemd
@@ -289,11 +289,11 @@ Requires=docker.service
 
 ```bash
 # Create .env file
-sudo -u gapless cp /opt/gapless-crypto-data/.env.example \
-  /opt/gapless-crypto-data/.env
+sudo -u gapless cp /opt/gapless-crypto-clickhouse/.env.example \
+  /opt/gapless-crypto-clickhouse/.env
 
 # Edit configuration
-sudo -u gapless nano /opt/gapless-crypto-data/.env
+sudo -u gapless nano /opt/gapless-crypto-clickhouse/.env
 ```
 
 **Environment configuration**:

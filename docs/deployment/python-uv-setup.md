@@ -96,7 +96,7 @@ cd gapless-crypto-data
 uv sync
 
 # Verify installation
-uv run python -c "import gapless_crypto_data; print('OK')"
+uv run python -c "import gapless_crypto_clickhouse; print('OK')"
 ```
 
 ### Running Commands
@@ -104,7 +104,7 @@ uv run python -c "import gapless_crypto_data; print('OK')"
 **Execute Python scripts**:
 ```bash
 # Run Python module
-uv run python -m gapless_crypto_data.collectors.questdb_bulk_loader
+uv run python -m gapless_crypto_clickhouse.collectors.questdb_bulk_loader
 
 # Run Python script
 uv run python scripts/example.py
@@ -231,10 +231,10 @@ Group=gapless
 WorkingDirectory=/opt/gapless-crypto-data
 
 # Python execution via uv
-ExecStart=/home/gapless/.local/bin/uv run --frozen python -m gapless_crypto_data.collectors.binance_public_data_collector
+ExecStart=/home/gapless/.local/bin/uv run --frozen python -m gapless_crypto_clickhouse.collectors.binance_public_data_collector
 
 # Environment configuration
-EnvironmentFile=/opt/gapless-crypto-data/.env
+EnvironmentFile=/opt/gapless-crypto-clickhouse/.env
 
 # Restart policy
 Restart=on-failure
@@ -506,7 +506,7 @@ uv sync --python 3.12
 
 ### Import Errors
 
-**Symptom**: `ModuleNotFoundError: No module named 'gapless_crypto_data'`
+**Symptom**: `ModuleNotFoundError: No module named 'gapless_crypto_clickhouse'`
 
 **Solution**:
 ```bash
@@ -514,7 +514,7 @@ uv sync --python 3.12
 uv sync
 
 # Verify installation
-uv run python -c "import gapless_crypto_data; print(gapless_crypto_data.__version__)"
+uv run python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__version__)"
 
 # Check virtual environment
 uv venv --show
@@ -595,6 +595,6 @@ uv sync
 
 1. **Set up QuestDB**: See `docs/deployment/linux-native-setup.md` or `macos-colima-setup.md`
 2. **Configure environment**: Edit `.env` file with connection details
-3. **Test connection**: Run `uv run python -m gapless_crypto_data.query` to verify
+3. **Test connection**: Run `uv run python -m gapless_crypto_clickhouse.query` to verify
 4. **Deploy to production**: Follow systemd integration guide above
 5. **Monitor**: Use `journalctl -u gapless-crypto-collector -f` for logs

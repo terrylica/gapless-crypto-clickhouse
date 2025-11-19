@@ -30,15 +30,15 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 - [Development Setup](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/SETUP.md) - Environment setup, IDE configuration, troubleshooting
 - [Development Commands](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/COMMANDS.md) - Testing, code quality, build, CI/CD
-- [CLI Migration Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md) - v3.x to v4.0.0 migration (CLI removed)
+- [CLI Migration Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md) - Migrating from gapless-crypto-data to gapless-crypto-clickhouse
 - [Publishing Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md) - PyPI publishing workflow
 
 ### Validated Workflows
 
-**Multi-Agent Methodologies** - Extracted from production use (ClickHouse v4.0.0 migration):
+**Multi-Agent Methodologies** - Extracted from production use (ClickHouse migration):
 
-- [`multi-agent-e2e-validation`](/Users/terryli/.claude/skills/multi-agent-e2e-validation/SKILL.md) - Parallel E2E validation workflow for database refactors (3-layer model: environment → data flow → query interface). Discovered 5 critical bugs (100% failure rate) before v4.0.0 release.
-- [`multi-agent-performance-profiling`](/Users/terryli/.claude/skills/multi-agent-performance-profiling/SKILL.md) - 5-agent parallel profiling workflow for bottleneck identification. Proved QuestDB ingests at 1.1M rows/sec (11x faster than target), revealing download as true bottleneck (90% of time).
+- [`multi-agent-e2e-validation`](/Users/terryli/.claude/skills/multi-agent-e2e-validation/SKILL.md) - Parallel E2E validation workflow for database refactors (3-layer model: environment → data flow → query interface). Discovered 5 critical bugs (100% failure rate) before release.
+- [`multi-agent-performance-profiling`](/Users/terryli/.claude/skills/multi-agent-performance-profiling/SKILL.md) - 5-agent parallel profiling workflow for bottleneck identification. Proved ClickHouse ingests at 1.1M rows/sec (11x faster than target), revealing download as true bottleneck (90% of time).
 
 **When to use**: Database migrations, pipeline refactors, performance investigations, pre-release validation
 
@@ -59,14 +59,22 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 ## Network Architecture
 
-**CRITICAL - Empirically Validated (2025-01-19)**: DO NOT modify network implementation
+**CRITICAL - Empirically Validated (2025-01-19)**: DO NOT modify network implementation without evidence
 
-- **Data Source**: AWS S3 + CloudFront CDN (400+ edge locations, 99.99% SLA)
-- **Performance**: urllib is 2x faster than httpx for CDN downloads
-- **NO connection pooling** (CloudFront uses different edge servers per request)
-- **NO retry logic** (CloudFront handles failover, 0% failure rate in production)
+**Data Source**: AWS S3 + CloudFront CDN (400+ edge locations, 99.99% SLA)
 
-**Single improvement worth making**: ETag-based caching for bandwidth optimization
+**Download Strategy (Dual Approach)**:
+- **Monthly/Daily files**: urllib (simple HTTP, 2x faster for single large files)
+- **Concurrent downloads**: httpx with connection pooling (gap filling, multiple small requests)
+
+**Connection Pooling**:
+- Used for concurrent API requests (gap filling via Binance REST API)
+- NOT used for CloudFront downloads (each request routed to different edge server)
+- Configuration: `max_keepalive_connections=20, max_connections=30, keepalive_expiry=30.0`
+
+**Retry Logic**: CloudFront handles failover automatically (0% failure rate in production)
+
+**Optimization Opportunity**: ETag-based caching for bandwidth reduction
 
 ## Authentication
 
@@ -78,4 +86,9 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 **Canonical Reference**: `docs/CURRENT_ARCHITECTURE_STATUS.yaml`
 
-**Production-Ready**: Core collection, intelligent resume (joblib Memory), memory streaming (Polars lazy), regression detection (PyOD ensemble), ClickHouse database integration
+**Production-Ready Features**:
+- Core data collection (CDN + REST API dual source)
+- ClickHouse database integration (ReplacingMergeTree with deduplication)
+- Idempotent ingestion with deterministic versioning
+- USDT-margined futures support (400+ symbols)
+- High-performance bulk loading (1.1M rows/sec validated)

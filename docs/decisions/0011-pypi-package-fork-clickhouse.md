@@ -36,7 +36,7 @@ Current main-clickhouse branch (v4.0.0) contains ClickHouse integration incompat
 1. **Repository Strategy**: Separate repository (`terrylica/gapless-crypto-clickhouse`)
    - Rationale: Cleanest separation, standard GitHub workflow, independent stars/issues/releases
 
-2. **Module Rename**: `gapless_crypto_data` → `gapless_crypto_clickhouse`
+2. **Module Rename**: `gapless_crypto_clickhouse` → `gapless_crypto_clickhouse`
    - Rationale: Matches PyPI name convention, clear ClickHouse branding, prevents import confusion
 
 3. **Version Numbering**: Start at v1.0.0 (fresh start)
@@ -62,19 +62,19 @@ git clone git@github.com:terrylica/gapless-crypto-clickhouse.git
 cd gapless-crypto-clickhouse
 
 # Copy from main-clickhouse branch
-cp -r ../gapless-crypto-data/* .
-cp -r ../gapless-crypto-data/.github .
+cp -r ../gapless-crypto-clickhouse/* .
+cp -r ../gapless-crypto-clickhouse/.github .
 ```
 
 ### Module Rename
 
 ```bash
 # Rename Python package directory
-mv src/gapless_crypto_data src/gapless_crypto_clickhouse
+mv src/gapless_crypto_clickhouse src/gapless_crypto_clickhouse
 ```
 
 **Files requiring import updates** (~150 files):
-- All source files: `from gapless_crypto_data` → `from gapless_crypto_clickhouse`
+- All source files: `from gapless_crypto_clickhouse` → `from gapless_crypto_clickhouse`
 - All test files: Update imports
 - All examples: Update imports
 - All documentation: Update package name references
@@ -133,7 +133,7 @@ keywords = ["clickhouse", "cryptocurrency", "crypto", "binance", ...]
 **Grep validation** (zero old references):
 ```bash
 grep -r "gapless-crypto-data" . --exclude-dir=.git --exclude-dir=.venv
-grep -r "gapless_crypto_data" . --exclude-dir=.git --exclude-dir=.venv
+grep -r "gapless_crypto_clickhouse" . --exclude-dir=.git --exclude-dir=.venv
 ```
 
 **Import validation**:
@@ -156,7 +156,7 @@ pip install -i https://test.pypi.org/simple/ gapless-crypto-clickhouse
 ### Manual Checklist
 
 - [ ] No `gapless-crypto-data` references in codebase
-- [ ] No `gapless_crypto_data` imports in codebase
+- [ ] No `gapless_crypto_clickhouse` imports in codebase
 - [ ] All tests pass with new imports
 - [ ] TestPyPI README renders correctly
 - [ ] TestPyPI package installs successfully
@@ -190,7 +190,7 @@ pip install -i https://test.pypi.org/simple/ gapless-crypto-clickhouse
 
 ### Alternative 1: Monorepo with Dual Packages
 
-**Implementation**: Keep both in same repo with `packages/gapless-crypto-data/` and `packages/gapless-crypto-clickhouse/`
+**Implementation**: Keep both in same repo with `packages/gapless-crypto-clickhouse/` and `packages/gapless-crypto-clickhouse/`
 
 **Pros**: Shared git history, easier cross-package refactoring
 

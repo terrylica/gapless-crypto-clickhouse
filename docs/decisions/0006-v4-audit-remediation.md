@@ -71,7 +71,7 @@ Comprehensive pre-release audit of main-clickhouse branch (v4.0.0) identified 6 
 
 ### Fix 1: Version Mismatch (CRITICAL)
 
-**File**: `src/gapless_crypto_data/__init__.py:79`
+**File**: `src/gapless_crypto_clickhouse/__init__.py:79`
 
 **Change**:
 ```python
@@ -89,7 +89,7 @@ __version__ = "4.0.0"
 
 **Validation**:
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 assert gcd.__version__ == "4.0.0"
 ```
 
@@ -179,7 +179,7 @@ After upgrading to v4.0.0, the following tests are expected to fail due to CLI r
 
 **Version Verification**:
 ```bash
-uv run python -c "import gapless_crypto_data as gcd; assert gcd.__version__ == '4.0.0'"
+uv run python -c "import gapless_crypto_clickhouse as gcd; assert gcd.__version__ == '4.0.0'"
 ```
 **Expected**: Exit code 0 (assertion passes)
 
@@ -187,7 +187,7 @@ uv run python -c "import gapless_crypto_data as gcd; assert gcd.__version__ == '
 ```bash
 uv build
 ```
-**Expected**: Successfully built dist/gapless_crypto_data-4.0.0.tar.gz and .whl
+**Expected**: Successfully built dist/gapless_crypto_clickhouse-4.0.0.tar.gz and .whl
 
 **Linting**:
 ```bash

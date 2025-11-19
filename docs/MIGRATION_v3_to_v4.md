@@ -42,12 +42,12 @@
 **Migration Path**:
 ```python
 # v3.x (QuestDB - REMOVED)
-from gapless_crypto_data.questdb import QuestDBConnection
-from gapless_crypto_data.collectors.questdb_bulk_loader import QuestDBBulkLoader
+from gapless_crypto_clickhouse.questdb import QuestDBConnection
+from gapless_crypto_clickhouse.collectors.questdb_bulk_loader import QuestDBBulkLoader
 
 # v4.0.0 (ClickHouse - NEW)
-from gapless_crypto_data.clickhouse import ClickHouseConnection
-from gapless_crypto_data.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 ```
 
 **Rationale**: See [ADR-0005: ClickHouse Migration](decisions/0005-clickhouse-migration.md) for technical decision rationale (ecosystem maturity, scalability, future-proofing).
@@ -83,7 +83,7 @@ uv pip install --upgrade gapless-crypto-data
 
 **Verify upgrade**:
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 # Check version
 print(gcd.__version__)  # Should print "4.0.0"
@@ -140,7 +140,7 @@ docker-compose logs clickhouse | grep "Ready for connections"
 #### Step 3: Test Database Connection
 
 ```python
-from gapless_crypto_data.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
 # Test connection (uses defaults: localhost:9000)
 with ClickHouseConnection() as conn:
@@ -155,8 +155,8 @@ with ClickHouseConnection() as conn:
 #### Step 4: Ingest Historical Data
 
 ```python
-from gapless_crypto_data.clickhouse import ClickHouseConnection
-from gapless_crypto_data.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 
 with ClickHouseConnection() as conn:
     loader = ClickHouseBulkLoader(conn, instrument_type="spot")
@@ -180,8 +180,8 @@ with ClickHouseConnection() as conn:
 #### Step 5: Query Data
 
 ```python
-from gapless_crypto_data.clickhouse import ClickHouseConnection
-from gapless_crypto_data.clickhouse_query import OHLCVQuery
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 
 with ClickHouseConnection() as conn:
     query = OHLCVQuery(conn)
@@ -223,8 +223,8 @@ with ClickHouseConnection() as conn:
 
 ```python
 # v3.x code (run BEFORE upgrading)
-from gapless_crypto_data.questdb import QuestDBConnection
-from gapless_crypto_data.query import OHLCVQuery
+from gapless_crypto_clickhouse.questdb import QuestDBConnection
+from gapless_crypto_clickhouse.query import OHLCVQuery
 import pandas as pd
 
 with QuestDBConnection() as conn:
@@ -246,8 +246,8 @@ pip install --upgrade gapless-crypto-data
 
 ```python
 # v4.0.0 code (run AFTER upgrading)
-from gapless_crypto_data.clickhouse import ClickHouseConnection
-from gapless_crypto_data.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 import pandas as pd
 
 # Load exported CSV
@@ -267,8 +267,8 @@ with ClickHouseConnection() as conn:
 #### Step 4: Verify Data Integrity
 
 ```python
-from gapless_crypto_data.clickhouse import ClickHouseConnection
-from gapless_crypto_data.clickhouse_query import OHLCVQuery
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 
 with ClickHouseConnection() as conn:
     query = OHLCVQuery(conn)
@@ -365,7 +365,7 @@ services:
       - "8123:8123"   # HTTP interface
     volumes:
       - clickhouse-data:/var/lib/clickhouse
-      - ./src/gapless_crypto_data/clickhouse/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+      - ./src/gapless_crypto_clickhouse/clickhouse/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
     environment:
       CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: ""
@@ -404,12 +404,12 @@ After upgrading to v4.0.0:
 
 ```bash
 # Verify installation
-python -c "import gapless_crypto_data as gcd; print(gcd.__version__)"
+python -c "import gapless_crypto_clickhouse as gcd; print(gcd.__version__)"
 # Expected output: 4.0.0
 
 # Test file-based API (should work unchanged)
 python -c "
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 df = gcd.download('BTCUSDT', timeframe='1d', start='2024-01-01', end='2024-01-07')
 print(f'Downloaded {len(df)} bars')
 "
@@ -417,7 +417,7 @@ print(f'Downloaded {len(df)} bars')
 
 # Test ClickHouse connection (if using database)
 python -c "
-from gapless_crypto_data.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 with ClickHouseConnection() as conn:
     print(f'ClickHouse connected: {conn.health_check()}')
 "
@@ -428,7 +428,7 @@ with ClickHouseConnection() as conn:
 
 | Issue | Symptom | Solution |
 |-------|---------|----------|
-| **Import Error** | `ModuleNotFoundError: No module named 'gapless_crypto_data.questdb'` | Expected (QuestDB removed). Update imports to use `clickhouse` instead |
+| **Import Error** | `ModuleNotFoundError: No module named 'gapless_crypto_clickhouse.questdb'` | Expected (QuestDB removed). Update imports to use `clickhouse` instead |
 | **Connection Refused** | `clickhouse_driver.errors.NetworkError: Connection refused` | Start ClickHouse: `docker-compose up -d` |
 | **Port Conflict** | `Error starting ClickHouse: port 9000 already in use` | Change port in `docker-compose.yml` or stop conflicting service |
 | **Schema Not Found** | `clickhouse_driver.errors.ServerException: Table ohlcv doesn't exist` | Restart container to trigger schema init: `docker-compose restart clickhouse` |
@@ -444,7 +444,7 @@ If you encounter issues with v4.0.0:
 pip install gapless-crypto-data==3.3.0
 
 # Verify downgrade
-python -c "import gapless_crypto_data as gcd; print(gcd.__version__)"
+python -c "import gapless_crypto_clickhouse as gcd; print(gcd.__version__)"
 # Expected output: 3.3.0
 ```
 
@@ -461,7 +461,7 @@ sudo systemctl start questdb
 ### Step 3: Verify Rollback
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 # Test file-based API (should work on v3.3.0)
 df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-01-07")
@@ -472,7 +472,7 @@ print(f"Rollback successful: {len(df)} bars downloaded")
 
 If rollback was necessary, please report the issue:
 
-- **GitHub Issues**: https://github.com/terrylica/gapless-crypto-data/issues
+- **GitHub Issues**: https://github.com/terrylica/gapless-crypto-clickhouse/issues
 - **Email**: terry@eonlabs.com
 
 Include:
@@ -516,15 +516,15 @@ A: Follow the rollback procedure (downgrade to v3.3.0) and report the issue on G
 - **[ClickHouse Migration Guide](CLICKHOUSE_MIGRATION.md)** - Technical deep-dive on ClickHouse implementation
 - **[ADR-0005: ClickHouse Migration](decisions/0005-clickhouse-migration.md)** - Decision rationale and architecture details
 - **[Docker Compose Reference](../docker-compose.yml)** - Production-ready ClickHouse configuration
-- **[GitHub Discussions](https://github.com/terrylica/gapless-crypto-data/discussions)** - Community support
+- **[GitHub Discussions](https://github.com/terrylica/gapless-crypto-clickhouse/discussions)** - Community support
 - **[Release Notes](release-notes.md)** - Complete v4.0.0 changelog
 
 ## Support
 
 **Need help with migration?**
 
-- **GitHub Issues**: https://github.com/terrylica/gapless-crypto-data/issues
-- **GitHub Discussions**: https://github.com/terrylica/gapless-crypto-data/discussions
+- **GitHub Issues**: https://github.com/terrylica/gapless-crypto-clickhouse/issues
+- **GitHub Discussions**: https://github.com/terrylica/gapless-crypto-clickhouse/discussions
 - **Email**: terry@eonlabs.com
 
 **Before posting**:

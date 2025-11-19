@@ -113,7 +113,7 @@ SELECT * FROM ohlcv LIMIT 10;
 ```bash
 # Apply schema using psql
 psql -h localhost -p 8812 -U admin -d qdb \
-  -f src/gapless_crypto_data/questdb/schema.sql
+  -f src/gapless_crypto_clickhouse/questdb/schema.sql
 
 # Verify table creation
 psql -h localhost -p 8812 -U admin -d qdb \
@@ -155,7 +155,7 @@ cd /path/to/gapless-crypto-data
 uv sync
 
 # Verify installation
-uv run python -c "import gapless_crypto_data; print('OK')"
+uv run python -c "import gapless_crypto_clickhouse; print('OK')"
 ```
 
 ### Configure Environment
@@ -189,7 +189,7 @@ CLOUDFRONT_ENABLED=true
 
 ```bash
 # Run bulk data collection (test mode)
-uv run python -m gapless_crypto_data.collectors.binance_public_data_collector \
+uv run python -m gapless_crypto_clickhouse.collectors.binance_public_data_collector \
   --symbol BTCUSDT \
   --timeframe 1m \
   --start-date 2025-01-01 \

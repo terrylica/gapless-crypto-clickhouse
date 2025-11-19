@@ -158,7 +158,7 @@ def example_gap_detection_and_filling():
     gap_filler = UniversalGapFiller()
 
     # Example with sample data files
-    sample_data_dir = Path("./src/gapless_crypto_data/sample_data")
+    sample_data_dir = Path("./src/gapless_crypto_clickhouse/sample_data")
 
     if sample_data_dir.exists():
         csv_files = list(sample_data_dir.glob("*.csv"))
@@ -274,7 +274,7 @@ def example_validation_and_quality_checks():
     collector = BinancePublicDataCollector(symbol="SOLUSDT")
 
     # Find sample files to validate
-    sample_data_dir = Path("./src/gapless_crypto_data/sample_data")
+    sample_data_dir = Path("./src/gapless_crypto_clickhouse/sample_data")
 
     if sample_data_dir.exists():
         csv_files = list(sample_data_dir.glob("*SOLUSDT*.csv"))

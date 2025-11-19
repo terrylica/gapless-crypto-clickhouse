@@ -11,7 +11,7 @@ supersedes: ["1.0.0"]
 
 Common query patterns for AI coding agents to analyze validation history and diagnose data quality issues.
 
-All examples use `ValidationStorage` from `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/storage.py`
+All examples use `ValidationStorage` from `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py`
 
 ## Basic Query Patterns
 
@@ -20,7 +20,7 @@ All examples use `ValidationStorage` from `/Users/terryli/eon/gapless-crypto-dat
 Query most recent validation reports:
 
 ```python
-from gapless_crypto_data.validation import ValidationStorage
+from gapless_crypto_clickhouse.validation import ValidationStorage
 
 storage = ValidationStorage()
 recent = storage.query_recent(limit=10)
@@ -156,7 +156,7 @@ for status, count in stats['status_distribution'].items():
 
 ```python
 import pandas as pd
-from gapless_crypto_data.validation import ValidationStorage
+from gapless_crypto_clickhouse.validation import ValidationStorage
 
 storage = ValidationStorage()
 df = storage.export_to_dataframe()
@@ -247,7 +247,7 @@ For custom queries beyond the API:
 
 ```python
 import duckdb
-from gapless_crypto_data.validation import get_validation_db_path
+from gapless_crypto_clickhouse.validation import get_validation_db_path
 
 db_path = get_validation_db_path()
 
@@ -312,7 +312,7 @@ with duckdb.connect(str(db_path)) as conn:
 
 ```python
 from pathlib import Path
-from gapless_crypto_data.validation import CSVValidator, ValidationStorage
+from gapless_crypto_clickhouse.validation import CSVValidator, ValidationStorage
 
 validator = CSVValidator()
 storage = ValidationStorage()
@@ -410,6 +410,6 @@ if recent['total_errors'].mean() > baseline['total_errors'].mean():
 
 ## Related Documentation
 
-- **Validation Overview**: [OVERVIEW.md](/Users/terryli/eon/gapless-crypto-data/docs/validation/OVERVIEW.md)
-- **Storage Specification**: [STORAGE.md](/Users/terryli/eon/gapless-crypto-data/docs/validation/STORAGE.md)
-- **Test Examples**: `/Users/terryli/eon/gapless-crypto-data/tests/test_validation_storage.py`
+- **Validation Overview**: [OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md)
+- **Storage Specification**: [STORAGE.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md)
+- **Test Examples**: `/Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py`

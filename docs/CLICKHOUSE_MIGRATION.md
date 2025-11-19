@@ -103,7 +103,7 @@ def _compute_version_hash(row):
 
 **Before (QuestDB)**:
 ```python
-from gapless_crypto_data.questdb import QuestDBConnection
+from gapless_crypto_clickhouse.questdb import QuestDBConnection
 
 with QuestDBConnection() as conn:
     # PostgreSQL queries
@@ -112,7 +112,7 @@ with QuestDBConnection() as conn:
 
 **After (ClickHouse)**:
 ```python
-from gapless_crypto_data.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
 with ClickHouseConnection() as conn:
     # Native protocol queries
@@ -127,7 +127,7 @@ with ClickHouseConnection() as conn:
 
 **Before (QuestDB)**:
 ```python
-from gapless_crypto_data.collectors.questdb_bulk_loader import QuestDBBulkLoader
+from gapless_crypto_clickhouse.collectors.questdb_bulk_loader import QuestDBBulkLoader
 
 with QuestDBConnection() as conn:
     loader = QuestDBBulkLoader(conn, instrument_type="spot")
@@ -136,7 +136,7 @@ with QuestDBConnection() as conn:
 
 **After (ClickHouse)**:
 ```python
-from gapless_crypto_data.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
+from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 
 with ClickHouseConnection() as conn:
     loader = ClickHouseBulkLoader(conn, instrument_type="spot")
@@ -149,7 +149,7 @@ with ClickHouseConnection() as conn:
 
 **Before (QuestDB)**:
 ```python
-from gapless_crypto_data.query import OHLCVQuery
+from gapless_crypto_clickhouse.query import OHLCVQuery
 
 with QuestDBConnection() as conn:
     query = OHLCVQuery(conn)
@@ -158,7 +158,7 @@ with QuestDBConnection() as conn:
 
 **After (ClickHouse)**:
 ```python
-from gapless_crypto_data.clickhouse_query import OHLCVQuery
+from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 
 with ClickHouseConnection() as conn:
     query = OHLCVQuery(conn)
@@ -184,7 +184,7 @@ services:
       - "8123:8123"   # HTTP interface
     volumes:
       - clickhouse-data:/var/lib/clickhouse
-      - ./src/gapless_crypto_data/clickhouse/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+      - ./src/gapless_crypto_clickhouse/clickhouse/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
     environment:
       CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: ""
@@ -201,7 +201,7 @@ docker-compose logs -f  # View logs
 ```bash
 # Automatic via initdb.d
 # Or manual:
-docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_data/clickhouse/schema.sql
+docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_clickhouse/clickhouse/schema.sql
 ```
 
 ### Production
@@ -258,7 +258,7 @@ docker exec questdb clickhouse-client --query "SELECT * FROM ohlcv FORMAT CSV" >
 
 ```python
 import pandas as pd
-from gapless_crypto_data.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
 # Read CSV
 df = pd.read_csv("ohlcv_export.csv")
@@ -344,7 +344,7 @@ CLICKHOUSE_PORT=9001 docker-compose up -d
 
 **Solution**:
 ```bash
-docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_data/clickhouse/schema.sql
+docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_clickhouse/clickhouse/schema.sql
 ```
 
 ### Slow queries with FINAL

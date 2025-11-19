@@ -63,12 +63,15 @@ Usage:
     result = collector.collect_timeframe_data("1h")
     df = result["dataframe"]
 
-CLI Removed in v4.0.0:
-    ⚠️  The CLI was removed in v4.0.0. Please use the Python API instead (see above).
+Package Relationship:
+    This package is a fork of gapless-crypto-data focused on ClickHouse database workflows.
 
-    For v3.x users upgrading:
-        See docs/development/CLI_MIGRATION_GUIDE.md for migration instructions.
-        All CLI functionality is available through the Python API.
+    For file-based workflows (CSV/Parquet only):
+        See https://pypi.org/project/gapless-crypto-data/
+
+    Migrating from gapless-crypto-data:
+        See docs/development/CLI_MIGRATION_GUIDE.md for migration guide.
+        Note: This package never had a CLI (Python API only).
 
 Supported Symbols (USDT Spot Only):
     BTCUSDT, ETHUSDT, SOLUSDT, ADAUSDT, DOTUSDT, LINKUSDT, MATICUSDT,

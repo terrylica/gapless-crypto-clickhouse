@@ -15,7 +15,7 @@ uv add gapless-crypto-data
 ### Basic Usage
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 # Fetch recent data with date range
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
@@ -58,7 +58,7 @@ print(f"Filled {results['gaps_filled']}/{results['gaps_detected']} gaps")
 ## Advanced API (Power Users)
 
 ```python
-from gapless_crypto_data import BinancePublicDataCollector, UniversalGapFiller
+from gapless_crypto_clickhouse import BinancePublicDataCollector, UniversalGapFiller
 
 # Custom collection with full control
 collector = BinancePublicDataCollector(

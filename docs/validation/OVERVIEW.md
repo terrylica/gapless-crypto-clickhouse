@@ -17,7 +17,7 @@ supersedes: []
 
 ### CSVValidator
 
-**Location**: `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/csv_validator.py`
+**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/csv_validator.py`
 
 **Purpose**: Multi-layer validation of OHLCV CSV files
 
@@ -51,7 +51,7 @@ supersedes: []
 
 ### ValidationReport (Pydantic Model)
 
-**Location**: `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/models.py`
+**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/models.py`
 
 **Purpose**: Type-safe validation report with OpenAPI 3.1.1 schema
 
@@ -68,7 +68,7 @@ supersedes: []
 
 ### ValidationStorage
 
-**Location**: `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/storage.py`
+**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py`
 
 **Purpose**: DuckDB persistent storage for validation reports
 
@@ -76,7 +76,7 @@ supersedes: []
 
 **Interface**: SQL query interface for flexible data exploration
 
-See [Storage Specification](/Users/terryli/eon/gapless-crypto-data/docs/validation/STORAGE.md) for complete schema details.
+See [Storage Specification](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md) for complete schema details.
 
 ## Storage Backend
 
@@ -118,7 +118,7 @@ Query Interface (SQL/pandas)
 ### Basic Validation (No Persistence)
 
 ```python
-from gapless_crypto_data.validation import CSVValidator
+from gapless_crypto_clickhouse.validation import CSVValidator
 
 validator = CSVValidator()
 report = validator.validate_csv_file("data/BTCUSDT-1h.csv", expected_timeframe="1h")
@@ -133,7 +133,7 @@ else:
 ### Validation with Persistence
 
 ```python
-from gapless_crypto_data.validation import CSVValidator
+from gapless_crypto_clickhouse.validation import CSVValidator
 
 validator = CSVValidator()
 report = validator.validate_csv_file(
@@ -146,7 +146,7 @@ report = validator.validate_csv_file(
 ### Query Validation History
 
 ```python
-from gapless_crypto_data.validation import ValidationStorage
+from gapless_crypto_clickhouse.validation import ValidationStorage
 
 storage = ValidationStorage()
 
@@ -162,7 +162,7 @@ print(f"Total: {stats['total_validations']}")
 print(f"Avg errors: {stats['avg_errors']}")
 ```
 
-See [Query Patterns Guide](/Users/terryli/eon/gapless-crypto-data/docs/validation/QUERY_PATTERNS.md) for complete examples.
+See [Query Patterns Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md) for complete examples.
 
 ## Design Principles
 
@@ -222,14 +222,14 @@ report = validator.validate_csv_file("data.csv", store_report=True)  # Persists 
 
 - **Single source of truth**: CSVValidator is canonical validator
 - **Type safety**: Pydantic models prevent data corruption
-- **Test coverage**: Validation tests in `/Users/terryli/eon/gapless-crypto-data/tests/test_validation_storage.py`
+- **Test coverage**: Validation tests in `/Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py`
 
 ## Helper Functions
 
 ### Extract Symbol/Timeframe from Path
 
 ```python
-from gapless_crypto_data.validation import extract_symbol_timeframe_from_path
+from gapless_crypto_clickhouse.validation import extract_symbol_timeframe_from_path
 
 symbol, timeframe = extract_symbol_timeframe_from_path(
     "binance_spot_BTCUSDT-1h_20240101-20240102_v2.10.0.csv"
@@ -246,7 +246,7 @@ symbol, timeframe = extract_symbol_timeframe_from_path(
 ### Get Database Path
 
 ```python
-from gapless_crypto_data.validation import get_validation_db_path
+from gapless_crypto_clickhouse.validation import get_validation_db_path
 
 db_path = get_validation_db_path()
 # Returns: Path('~/.cache/gapless-crypto-data/validation.duckdb')
@@ -267,7 +267,7 @@ Validation storage designed for high-volume research:
 
 ```python
 from pathlib import Path
-from gapless_crypto_data.validation import CSVValidator, ValidationStorage
+from gapless_crypto_clickhouse.validation import CSVValidator, ValidationStorage
 
 validator = CSVValidator()
 storage = ValidationStorage()
@@ -289,7 +289,7 @@ correlation = df[["coverage_percentage", "total_errors"]].corr()
 
 ## Related Documentation
 
-- **Storage Specification**: [STORAGE.md](/Users/terryli/eon/gapless-crypto-data/docs/validation/STORAGE.md)
-- **Query Patterns**: [QUERY_PATTERNS.md](/Users/terryli/eon/gapless-crypto-data/docs/validation/QUERY_PATTERNS.md)
-- **Architecture Overview**: [docs/architecture/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-data/docs/architecture/OVERVIEW.md)
-- **Test Suite**: [tests/test_validation_storage.py](/Users/terryli/eon/gapless-crypto-data/tests/test_validation_storage.py)
+- **Storage Specification**: [STORAGE.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md)
+- **Query Patterns**: [QUERY_PATTERNS.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md)
+- **Architecture Overview**: [docs/architecture/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md)
+- **Test Suite**: [tests/test_validation_storage.py](/Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py)

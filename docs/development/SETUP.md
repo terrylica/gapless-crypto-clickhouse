@@ -161,7 +161,7 @@ uv run ruff check --fix .
 uv run ruff check .
 
 # Lint specific file
-uv run ruff check src/gapless_crypto_data/collectors/binance_public_data_collector.py
+uv run ruff check src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
 ```
 
 **Rules**: Ruff default ruleset (includes pycodestyle, pyflakes, isort)
@@ -173,7 +173,7 @@ uv run ruff check src/gapless_crypto_data/collectors/binance_public_data_collect
 uv run mypy src/
 
 # Type check specific module
-uv run mypy src/gapless_crypto_data/validation/
+uv run mypy src/gapless_crypto_clickhouse/validation/
 ```
 
 **Standard**: PEP 561 compliance via `py.typed` marker
@@ -199,7 +199,7 @@ Main project configuration:
 - Build system configuration (Hatchling)
 - Tool configurations (ruff, mypy, pytest)
 
-**Location**: `/Users/terryli/eon/gapless-crypto-data/pyproject.toml`
+**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/pyproject.toml`
 
 ### `.python-version`
 
@@ -229,11 +229,11 @@ Dependency lock file (auto-generated):
 
 - Test discovery: `tests/` directory
 - Markers: `@pytest.mark.integration`, `@pytest.mark.unit`
-- Coverage: Enabled for `src/gapless_crypto_data/`
+- Coverage: Enabled for `src/gapless_crypto_clickhouse/`
 
 ### Sample Data
 
-**Location**: `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/sample_data/`
+**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/sample_data/`
 
 **Purpose**: Real data files for end-to-end tests
 
@@ -358,7 +358,7 @@ uv run pre-commit run --all-files
 
 ## Related Documentation
 
-- **Development Commands**: [COMMANDS.md](/Users/terryli/eon/gapless-crypto-data/docs/development/COMMANDS.md)
-- **CLI Migration Guide**: [CLI_MIGRATION_GUIDE.md](/Users/terryli/eon/gapless-crypto-data/docs/development/CLI_MIGRATION_GUIDE.md) (planned)
-- **Publishing Guide**: [PUBLISHING.md](/Users/terryli/eon/gapless-crypto-data/docs/development/PUBLISHING.md) (planned)
-- **SDK Quality Standards**: [docs/sdk-quality-standards.yaml](/Users/terryli/eon/gapless-crypto-data/docs/sdk-quality-standards.yaml)
+- **Development Commands**: [COMMANDS.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/COMMANDS.md)
+- **CLI Migration Guide**: [CLI_MIGRATION_GUIDE.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md) (planned)
+- **Publishing Guide**: [PUBLISHING.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md) (planned)
+- **SDK Quality Standards**: [docs/sdk-quality-standards.yaml](/Users/terryli/eon/gapless-crypto-clickhouse/docs/sdk-quality-standards.yaml)

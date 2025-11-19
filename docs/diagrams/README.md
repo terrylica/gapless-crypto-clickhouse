@@ -7,7 +7,7 @@ This directory contains Mermaid flowcharts visualizing the core business logic a
 ### 1. End-to-End Collection Pipeline
 
 **File**: `01-collection-pipeline.mmd`
-**Reference**: `src/gapless_crypto_data/collectors/binance_public_data_collector.py:732-943`
+**Reference**: `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py:732-943`
 
 Visualizes the complete data collection journey from user request through download, validation, and saving. Key flows include:
 
@@ -25,7 +25,7 @@ Visualizes the complete data collection journey from user request through downlo
 ### 2. Gap Detection and Filling Workflow
 
 **File**: `02-gap-filling.mmd`
-**Reference**: `src/gapless_crypto_data/gap_filling/universal_gap_filler.py:597-644`
+**Reference**: `src/gapless_crypto_clickhouse/gap_filling/universal_gap_filler.py:597-644`
 
 Shows the zero-gap guarantee process using authentic Binance API data. Covers:
 
@@ -42,7 +42,7 @@ Shows the zero-gap guarantee process using authentic Binance API data. Covers:
 ### 3. Multi-Symbol Multi-Timeframe Orchestration
 
 **File**: `03-multi-symbol-collection.mmd`
-**Reference**: `src/gapless_crypto_data/cli.py:424-470`
+**Reference**: `src/gapless_crypto_clickhouse/cli.py:424-470`
 
 Complex nested loop orchestration with intelligent checkpointing and resume capability. Features:
 
@@ -59,7 +59,7 @@ Complex nested loop orchestration with intelligent checkpointing and resume capa
 ### 4. Download with ETag Caching Strategy
 
 **File**: `04-download-caching.mmd`
-**Reference**: `src/gapless_crypto_data/collectors/binance_public_data_collector.py:354-481`
+**Reference**: `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py:354-481`
 
 Explains the 22x performance advantage through HTTP ETag conditional requests. Details:
 
@@ -76,7 +76,7 @@ Explains the 22x performance advantage through HTTP ETag conditional requests. D
 ### 5. Data Validation Decision Tree
 
 **File**: `05-validation-flow.mmd`
-**Reference**: `src/gapless_crypto_data/validation/csv_validator.py:170-232`
+**Reference**: `src/gapless_crypto_clickhouse/validation/csv_validator.py:170-232`
 
 Multi-layer validation strategy ensuring data quality. Includes:
 
@@ -166,7 +166,7 @@ The `BinancePublicDataCollector` follows this flow:
 ```
 ````
 
-See `src/gapless_crypto_data/collectors/binance_public_data_collector.py` for implementation.
+See `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py` for implementation.
 
 ````
 

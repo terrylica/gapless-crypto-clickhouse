@@ -1,35 +1,97 @@
 ---
 version: "1.0.0"
-last_updated: "2025-10-28"
+last_updated: "2025-11-19"
 canonical_source: true
 supersedes: []
 ---
 
-# CLI Migration Guide
+# Migrating from gapless-crypto-data to gapless-crypto-clickhouse
 
-⚠️ **The CLI is deprecated and will be removed in v4.0.0.**
+> **Note**: This guide is for users of the parent package **`gapless-crypto-data`** (v3.x) who want to migrate to the ClickHouse-based fork **`gapless-crypto-clickhouse`** (v1.x).
+>
+> **This is NOT a version upgrade**: These are two separate packages with different purposes. Choose based on your use case (file-based vs database-first).
 
-This guide provides side-by-side examples to help you migrate from the deprecated CLI to the Python API.
+## Package Comparison
+
+| Aspect | gapless-crypto-data (v3.x) | gapless-crypto-clickhouse (v1.x) |
+|--------|---------------------------|----------------------------------|
+| **Storage** | CSV files only | ClickHouse database (primary) + optional CSV |
+| **Python** | 3.9-3.13 | 3.12-3.13 only |
+| **CLI** | Present (v3.x) | Never existed |
+| **Package Name** | `gapless-crypto-data` | `gapless-crypto-clickhouse` |
+| **Module Name** | `gapless_crypto_data` | `gapless_crypto_clickhouse` |
+| **PyPI** | https://pypi.org/project/gapless-crypto-data/ | https://pypi.org/project/gapless-crypto-clickhouse/ |
+
+## Should You Migrate?
+
+**Use gapless-crypto-data (v3.x)** if you:
+- Need file-based workflows (CSV/Parquet)
+- Are on Python 3.9-3.11
+- Prefer stateless data collection
+- Use the CLI for simple collection tasks
+
+**Use gapless-crypto-clickhouse (v1.x)** if you:
+- Need persistent database storage
+- Are querying multiple symbols/timeframes together
+- Need sub-second query latency
+- Are building production data pipelines
+- Want automatic deduplication
 
 ## Table of Contents
 
-- [Why Migrate?](#why-migrate)
+- [Installation](#installation)
+- [Import Changes](#import-changes)
 - [Quick Migration Examples](#quick-migration-examples)
 - [Common Patterns](#common-patterns)
 - [Advanced Use Cases](#advanced-use-cases)
-- [Benefits of Python API](#benefits-of-python-api)
+- [Benefits of ClickHouse Integration](#benefits-of-clickhouse-integration)
+
+---
+
+## Installation
+
+**Before (gapless-crypto-data)**:
+```bash
+pip install gapless-crypto-data
+```
+
+**After (gapless-crypto-clickhouse)**:
+```bash
+pip install gapless-crypto-clickhouse
+
+# Also requires ClickHouse (via Docker or native installation)
+docker run -d -p 9000:9000 -p 8123:8123 clickhouse/clickhouse-server
+```
+
+## Import Changes
+
+**All imports must change**:
+
+**Before**:
+```python
+import gapless_crypto_data as gcd
+from gapless_crypto_data import BinancePublicDataCollector, UniversalGapFiller
+from gapless_crypto_data.validation import CSVValidator, ValidationStorage
+```
+
+**After**:
+```python
+import gapless_crypto_clickhouse as gcc  # Note: Different alias convention
+from gapless_crypto_clickhouse import BinancePublicDataCollector, UniversalGapFiller
+from gapless_crypto_clickhouse.validation import CSVValidator, ValidationStorage
+```
 
 ---
 
 ## Why Migrate?
 
-The Python API offers several advantages over the CLI:
+The ClickHouse integration offers several advantages:
 
-1. **Better Integration**: Use data directly in your Python scripts without file I/O
-2. **More Flexible**: Programmatic access to all package features
-3. **Better Error Handling**: Catch and handle exceptions in your code
-4. **Type Safety**: Full IDE autocomplete and type checking support
-5. **Composable**: Easily combine with pandas, numpy, and other libraries
+1. **Persistent Storage**: Data survives across sessions, no need to re-download
+2. **Query Performance**: Millisecond latency for time-range queries
+3. **Multi-Symbol Queries**: Single query across all symbols/timeframes
+4. **Automatic Deduplication**: ReplacingMergeTree handles duplicates automatically
+5. **Production-Ready**: Validated at 100M+ rows with 1.1M rows/sec ingestion
 
 ---
 
@@ -46,7 +108,7 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1h
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 # Fetch data directly as pandas DataFrame
 df = gcd.fetch_data("BTCUSDT", timeframe="1h")
@@ -64,7 +126,7 @@ gapless-crypto-data --symbol ETHUSDT --timeframes 1h,4h,1d
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 timeframes = ["1h", "4h", "1d"]
 for tf in timeframes:
@@ -84,7 +146,7 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1h \
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 df = gcd.download(
     "BTCUSDT",
@@ -106,7 +168,7 @@ gapless-crypto-data --symbol BTCUSDT,ETHUSDT,SOLUSDT --timeframes 1h
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
 results = {}
@@ -133,7 +195,7 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1h \
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 from pathlib import Path
 
 # Fetch data and save manually
@@ -159,7 +221,7 @@ gapless-crypto-data --fill-gaps --directory ./data
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 # Fill gaps in all CSV files in directory
 results = gcd.fill_gaps("./data")
@@ -181,7 +243,7 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1s,1m,3m \
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 # Collect ultra-high frequency data for a single day
 timeframes = ["1s", "1m", "3m"]
@@ -214,7 +276,7 @@ gapless-crypto-data --symbol BTCUSDT,ETHUSDT,SOLUSDT --timeframes 1h,4h,1d
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 from datetime import datetime
 
 symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
@@ -258,7 +320,7 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1h --output-dir ./data
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 import pandas as pd
 import numpy as np
 
@@ -291,8 +353,8 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1h
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_data as gcd
-from gapless_crypto_data import NetworkError, DataCollectionError
+import gapless_crypto_clickhouse as gcd
+from gapless_crypto_clickhouse import NetworkError, DataCollectionError
 import time
 
 def fetch_with_retry(symbol, timeframe, max_retries=3):
@@ -328,7 +390,7 @@ if df is not None:
 No need to save and load files:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 # Immediate access to pandas DataFrame
 df = gcd.fetch_data("BTCUSDT", timeframe="1h")
@@ -341,7 +403,7 @@ recent_low = df.tail(100)['low'].min()
 ### 2. Integration with Data Science Stack
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -360,7 +422,7 @@ print(df[['open', 'high', 'low', 'close', 'volume']].describe())
 ### 3. Programmatic Control
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 from datetime import datetime, timedelta
 
 # Dynamic date ranges
@@ -382,7 +444,7 @@ if len(df) < 720:
 ### 4. Testing and Automation
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 import unittest
 
 class TestDataCollection(unittest.TestCase):
@@ -419,7 +481,7 @@ We recommend migrating to the Python API as soon as possible to ensure compatibi
 
 - **Documentation**: [README.md](../../README.md)
 - **Examples**: [examples/](../../examples/)
-- **Issues**: [GitHub Issues](https://github.com/terrylica/gapless-crypto-data/issues)
+- **Issues**: [GitHub Issues](https://github.com/terrylica/gapless-crypto-clickhouse/issues)
 
 ---
 

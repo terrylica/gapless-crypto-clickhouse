@@ -11,7 +11,7 @@ supersedes: []
 
 DuckDB-based persistent storage for CSV validation reports with SQL query interface for AI coding agents.
 
-**Location**: `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/storage.py`
+**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py`
 
 ## Database Schema
 
@@ -112,7 +112,7 @@ CREATE INDEX idx_validation_summary ON validation_reports(validation_summary);
 
 **Platform**:
 
-- macOS/Linux: `$HOME/.cache/gapless-crypto-data/validation.duckdb`
+- macOS/Linux: `$HOME/.cache/gapless-crypto-clickhouse/validation.duckdb`
 - Automatic directory creation if missing
 
 ## API Methods
@@ -275,7 +275,7 @@ Get aggregate statistics across all validations.
 ### Basic Insert
 
 ```python
-from gapless_crypto_data.validation import ValidationStorage, ValidationReport
+from gapless_crypto_clickhouse.validation import ValidationStorage, ValidationReport
 
 storage = ValidationStorage()
 
@@ -297,7 +297,7 @@ for report in recent:
 
 ```python
 import pandas as pd
-from gapless_crypto_data.validation import ValidationStorage
+from gapless_crypto_clickhouse.validation import ValidationStorage
 
 storage = ValidationStorage()
 df = storage.export_to_dataframe()
@@ -317,7 +317,7 @@ Advanced users can query DuckDB directly:
 
 ```python
 import duckdb
-from gapless_crypto_data.validation import get_validation_db_path
+from gapless_crypto_clickhouse.validation import get_validation_db_path
 
 db_path = get_validation_db_path()
 
@@ -336,7 +336,7 @@ with duckdb.connect(str(db_path)) as conn:
 
 ## Related Documentation
 
-- **Validation Overview**: [OVERVIEW.md](/Users/terryli/eon/gapless-crypto-data/docs/validation/OVERVIEW.md)
-- **Query Patterns**: [QUERY_PATTERNS.md](/Users/terryli/eon/gapless-crypto-data/docs/validation/QUERY_PATTERNS.md)
-- **ValidationReport Model**: `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/models.py`
-- **Test Suite**: `/Users/terryli/eon/gapless-crypto-data/tests/test_validation_storage.py`
+- **Validation Overview**: [OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md)
+- **Query Patterns**: [QUERY_PATTERNS.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md)
+- **ValidationReport Model**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/models.py`
+- **Test Suite**: `/Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py`

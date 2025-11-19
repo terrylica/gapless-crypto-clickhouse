@@ -188,7 +188,7 @@ chdig --cluster production_cluster --shard 1 --replica 2
 chdig --host localhost --port 9000
 
 # Terminal 2: Start ingestion
-python -m gapless_crypto_data.collectors.clickhouse_bulk_loader
+python -m gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader
 
 # In chdig:
 # - Press 'r' for recent queries

@@ -19,7 +19,7 @@ Guide to collecting complete historical cryptocurrency market data from Binance 
 
 **Date Range**: 2020-08-15 to 2025-03-20 (4.1-year historical range, configurable)
 
-**Output Location**: `src/gapless_crypto_data/sample_data/` (default)
+**Output Location**: `src/gapless_crypto_clickhouse/sample_data/` (default)
 
 ## Dual Data Source Strategy
 
@@ -113,7 +113,7 @@ uv run gapless-crypto-data --fill-gaps --directory ./data --symbol BTCUSDT --tim
 ### Basic Collection
 
 ```python
-from gapless_crypto_data import BinancePublicDataCollector
+from gapless_crypto_clickhouse import BinancePublicDataCollector
 
 collector = BinancePublicDataCollector()
 collector.collect_data(
@@ -168,7 +168,7 @@ collector.collect_timeframe_data("1h")
 Get list of supported symbols:
 
 ```python
-import gapless_crypto_data as gcd
+import gapless_crypto_clickhouse as gcd
 
 symbols = gcd.get_supported_symbols()
 print(symbols)
@@ -204,7 +204,7 @@ print(timeframes)
 ### Step 1: Initialize Collector
 
 ```python
-from gapless_crypto_data import BinancePublicDataCollector
+from gapless_crypto_clickhouse import BinancePublicDataCollector
 
 collector = BinancePublicDataCollector(
     symbol="BTCUSDT",
@@ -268,7 +268,7 @@ collector = BinancePublicDataCollector(
 Validate collected data:
 
 ```python
-from gapless_crypto_data.validation import CSVValidator
+from gapless_crypto_clickhouse.validation import CSVValidator
 
 validator = CSVValidator()
 report = validator.validate_csv_file("data/BTCUSDT-1h.csv", expected_timeframe="1h")
@@ -315,7 +315,7 @@ print(f"Gaps: {report['datetime_validation']['gaps_found']}")
 
 - **Configuration**: Flexible via constructor parameters
 - **Output formats**: CSV (default), Parquet (optional)
-- **Test coverage**: Collection tests in `/Users/terryli/eon/gapless-crypto-data/tests/test_binance_collector.py`
+- **Test coverage**: Collection tests in `/Users/terryli/eon/gapless-crypto-clickhouse/tests/test_binance_collector.py`
 
 ## Troubleshooting
 
@@ -345,8 +345,8 @@ If file write errors:
 
 ## Related Documentation
 
-- **Architecture Overview**: [docs/architecture/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-data/docs/architecture/OVERVIEW.md)
-- **Data Format**: [docs/architecture/DATA_FORMAT.md](/Users/terryli/eon/gapless-crypto-data/docs/architecture/DATA_FORMAT.md)
-- **Python API Reference**: [python-api.md](/Users/terryli/eon/gapless-crypto-data/docs/guides/python-api.md)
-- **Gap Filling**: [GAP_FILLING.md](/Users/terryli/eon/gapless-crypto-data/docs/guides/GAP_FILLING.md) (planned)
-- **Validation**: [docs/validation/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-data/docs/validation/OVERVIEW.md)
+- **Architecture Overview**: [docs/architecture/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md)
+- **Data Format**: [docs/architecture/DATA_FORMAT.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/DATA_FORMAT.md)
+- **Python API Reference**: [python-api.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/python-api.md)
+- **Gap Filling**: [GAP_FILLING.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/GAP_FILLING.md) (planned)
+- **Validation**: [docs/validation/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md)

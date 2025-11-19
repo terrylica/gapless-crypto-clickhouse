@@ -120,7 +120,7 @@ git push origin v1.0.1
 
 ### Workflow Status
 
-- **TestPyPI**: Check https://github.com/terrylica/gapless-crypto-data/actions
+- **TestPyPI**: Check https://github.com/terrylica/gapless-crypto-clickhouse/actions
 - **PyPI**: Monitor the `publish-to-pypi` job for approval requests
 
 ### Package Verification
@@ -133,7 +133,7 @@ pip install -i https://test.pypi.org/simple/ gapless-crypto-data==<version>
 pip install gapless-crypto-data==<version>
 
 # Test installation
-python -c "from gapless_crypto_data import BinancePublicDataCollector; print('✅ Import successful')"
+python -c "from gapless_crypto_clickhouse import BinancePublicDataCollector; print('✅ Import successful')"
 ```
 
 ### Digital Attestations

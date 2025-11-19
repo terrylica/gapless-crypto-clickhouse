@@ -73,7 +73,7 @@ uv run gapless-crypto-data --fill-gaps --directory ./data
 ### Python API
 
 ```python
-from gapless_crypto_data import BinancePublicDataCollector, UniversalGapFiller
+from gapless_crypto_clickhouse import BinancePublicDataCollector, UniversalGapFiller
 
 # Collect data
 collector = BinancePublicDataCollector(symbol="ETHUSDT", start_date="2024-01-01", end_date="2024-01-31")
@@ -220,8 +220,8 @@ uv run gapless-crypto-data --symbol BTCUSDT --timeframes 1h
 
 # Join the community
 # ⭐ Star the repo: https://github.com/terrylica/gapless-crypto-data
-# 🐛 Report issues: https://github.com/terrylica/gapless-crypto-data/issues
-# 💬 Discussions: https://github.com/terrylica/gapless-crypto-data/discussions
+# 🐛 Report issues: https://github.com/terrylica/gapless-crypto-clickhouse/issues
+# 💬 Discussions: https://github.com/terrylica/gapless-crypto-clickhouse/discussions
 ```
 
 ---
