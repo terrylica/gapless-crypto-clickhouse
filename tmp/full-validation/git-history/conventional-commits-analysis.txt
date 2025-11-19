@@ -1,0 +1,161 @@
+CONVENTIONAL COMMITS ANALYSIS
+==============================
+
+Total Commits Analyzed: 15 (last 15 non-merge commits)
+
+Format: type(scope): subject
+Breaking Changes: Marked with ! after scope or BREAKING CHANGE: in body
+
+COMMIT-BY-COMMIT BREAKDOWN:
+---------------------------
+
+1. 934ab84 - docs(claude): fix multi-agent methodology reference to ClickHouse
+   ✅ Type: docs
+   ✅ Scope: claude
+   ✅ Subject: clear, actionable
+   ✅ Body: has rationale + ADR-0006 reference
+   ❌ Breaking: No (none expected)
+
+2. 24f0436 - docs(migration): document expected CLI test failures in v4.0.0
+   ✅ Type: docs
+   ✅ Scope: migration
+   ✅ Subject: clear, actionable
+   ✅ Body: has rationale + ADR-0006 reference
+   ❌ Breaking: No (none expected)
+
+3. 59b2758 - docs(readme): remove second cli.py reference from project structure
+   ✅ Type: docs
+   ✅ Scope: readme
+   ✅ Subject: clear, actionable
+   ✅ Body: has rationale + ADR-0006 reference
+   ❌ Breaking: No (none expected)
+
+4. a9b9d47 - docs(readme): remove cli.py from project structure diagrams
+   ✅ Type: docs
+   ✅ Scope: readme
+   ✅ Subject: clear, actionable
+   ✅ Body: has rationale + ADR-0006 reference
+   ❌ Breaking: No (none expected)
+
+5. cef3979 - docs(claude): update version to 4.0.0 and database info
+   ✅ Type: docs
+   ✅ Scope: claude
+   ✅ Subject: clear, actionable
+   ✅ Body: has rationale + ADR-0006 reference
+   ❌ Breaking: No (none expected)
+
+6. 2932103 - docs(readme): update CLI removal notice to past tense
+   ✅ Type: docs
+   ✅ Scope: readme
+   ✅ Subject: clear, actionable
+   ✅ Body: has rationale + ADR-0006 reference
+   ❌ Breaking: No (none expected)
+
+7. f02860f - fix(version)!: update __version__ to 4.0.0 for release consistency
+   ✅ Type: fix
+   ✅ Scope: version
+   ✅ Breaking marker: ! present
+   ✅ Subject: clear, actionable
+   ✅ Body: BREAKING CHANGE: marker present
+   ✅ Rationale: runtime version check behavior change documented
+   ✅ ADR reference: ADR-0006 Issue 1 (CRITICAL)
+
+8. d63a1f7 - docs(v4.0.0)!: comprehensive ClickHouse documentation and migration guide
+   ✅ Type: docs
+   ✅ Scope: v4.0.0
+   ✅ Breaking marker: ! present
+   ✅ Subject: clear, describes scope
+   ✅ Body: BREAKING CHANGE: marker present
+   ✅ Rationale: detailed documentation changes listed
+   ✅ ADR reference: ADR-0005, Phase 3 + 4
+
+9. de5d107 - chore(deps): remove QuestDB dependencies for v4.0.0
+   ✅ Type: chore
+   ✅ Scope: deps
+   ✅ Subject: clear, actionable
+   ✅ Body: detailed dependency removal list
+   ✅ ADR reference: ADR-0005
+   ❌ Breaking: No ! marker (should have one - dependency removal is breaking)
+
+10. f270024 - feat(clickhouse)!: remove QuestDB implementation for v4.0.0
+    ✅ Type: feat
+    ✅ Scope: clickhouse
+    ✅ Breaking marker: ! present
+    ✅ Subject: clear, actionable
+    ✅ Body: BREAKING CHANGE: marker present
+    ✅ Rationale: detailed removal list (13,324 lines)
+    ✅ ADR reference: ADR-0005
+
+11. a537054 - feat(clickhouse)!: implement ClickHouse as primary database (ADR-0005)
+    ✅ Type: feat
+    ✅ Scope: clickhouse
+    ✅ Breaking marker: ! present
+    ✅ Subject: clear, actionable (ADR in subject)
+    ✅ Body: BREAKING CHANGE: marker present
+    ✅ Rationale: new implementation details
+    ✅ ADR reference: ADR-0005
+
+12. a501547 - docs(validation): complete Agent 3 validation with Bug #5 discovery
+    ✅ Type: docs
+    ✅ Scope: validation
+    ✅ Subject: clear, describes outcome
+    ✅ Body: detailed validation results + bug analysis
+    ✅ ADR reference: ADR-0002, Agent 3
+    ❌ Breaking: No (none expected)
+
+13. a9bf4c3 - fix(query): resolve detect_gaps() QuestDB SQL incompatibility (Bug #5)
+    ✅ Type: fix
+    ✅ Scope: query
+    ✅ Subject: clear, identifies bug
+    ✅ Body: detailed bug analysis + fix description
+    ✅ ADR reference: ADR-0002
+    ❌ Breaking: No ! marker (possibly should have one - SQL changes could break existing queries)
+
+14. de65135 - fix(questdb)!: resolve all critical bugs from e2e validation (4 bugs + dedup)
+    ✅ Type: fix
+    ✅ Scope: questdb
+    ✅ Breaking marker: ! present
+    ✅ Subject: clear, comprehensive
+    ✅ Body: BREAKING CHANGE: marker present
+    ✅ Rationale: detailed bug fixes + schema change
+    ✅ ADR reference: ADR-0002, ADR-0001
+
+15. 1296645 - fix(questdb)!: critical bugs found in e2e validation - RELEASE BLOCKED
+    ✅ Type: fix
+    ✅ Scope: questdb
+    ✅ Breaking marker: ! present
+    ✅ Subject: clear, urgent marker
+    ✅ Body: BREAKING CHANGE: marker present
+    ✅ Rationale: detailed validation failures
+    ✅ ADR reference: ADR-0002, ADR-0001
+
+COMPLIANCE SUMMARY:
+===================
+
+Conventional Commits Format: 15/15 (100%)
+- All commits follow type(scope): subject format
+- Types used: docs (7), fix (4), feat (3), chore (1)
+- Scopes present in all commits
+
+Breaking Change Markers: 5/15 commits
+- f02860f: fix(version)! ✅ BREAKING CHANGE: in body
+- d63a1f7: docs(v4.0.0)! ✅ BREAKING CHANGE: in body
+- f270024: feat(clickhouse)! ✅ BREAKING CHANGE: in body
+- a537054: feat(clickhouse)! ✅ BREAKING CHANGE: in body
+- de65135: fix(questdb)! ✅ BREAKING CHANGE: in body
+- 1296645: fix(questdb)! ✅ BREAKING CHANGE: in body
+
+Potential Missing Breaking Markers:
+- de5d107 (chore(deps)): Removed QuestDB deps (breaking for users)
+- a9bf4c3 (fix(query)): SQL syntax changes (possibly breaking)
+
+ADR References: 14/15 commits reference ADRs
+- Missing: 1296645 has inline references but not in standard format
+
+Commit Quality:
+- All commits have detailed bodies with rationale
+- All ADR-0006 commits reference specific issues (Issue 1-6)
+- All commits follow imperative mood in subject
+- All commits provide context and impact analysis
+
+VERDICT: ✅ PASS with minor notes

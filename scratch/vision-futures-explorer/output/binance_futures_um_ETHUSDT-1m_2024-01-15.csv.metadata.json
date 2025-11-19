@@ -1,0 +1,13 @@
+{
+  "symbol": "ETHUSDT",
+  "market_type": "um",
+  "interval": "1m",
+  "date": "2024-01-15",
+  "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/1m/ETHUSDT-1m-2024-01-15.zip",
+  "row_count": 1441,
+  "column_count": 12,
+  "format_compatible": false,
+  "download_size_bytes": 62338,
+  "output_file": "/Users/terryli/eon/gapless-crypto-data/scratch/vision-futures-explorer/output/binance_futures_um_ETHUSDT-1m_2024-01-15.csv",
+  "collection_timestamp": "2025-11-12T19:53:08.984614"
+}

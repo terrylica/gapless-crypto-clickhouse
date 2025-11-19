@@ -1,0 +1,80 @@
+# Test Failure Analysis - v4.0.0 Release Candidate
+
+## Expected Failures (22 total - CLI deprecation in v4.0.0)
+
+### CLI Tests (20 failures - EXPECTED per ADR and migration guide)
+All CLI failures are expected because CLI was removed in v4.0.0 (pyproject.toml line 53-54 confirms removal of [project.scripts]).
+
+Migration guide states:
+- v4.0.0: CLI removed completely
+- Users must migrate to Python API
+
+#### tests/test_cli.py (8 failures - EXPECTED)
+1. test_cli_help_and_description - CLI module doesn't exist
+2. test_cli_entry_point - gapless-crypto-data command not available (script removed)
+3. test_cli_invalid_args - CLI module doesn't exist
+4. test_cli_help_mentions_multi_symbol - CLI module doesn't exist
+5. test_cli_list_timeframes_flag - CLI module doesn't exist
+6. test_cli_help_mentions_list_timeframes - CLI module doesn't exist
+7. test_cli_invalid_timeframe_shows_available - CLI module doesn't exist
+8. test_cli_timeframe_discoverability_integration - CLI module doesn't exist
+
+#### tests/test_cli_integration.py (10 failures - EXPECTED)
+1. test_legacy_cli_btcusdt_single_day - ModuleNotFoundError: No module named 'pydantic'
+2. test_subcommand_cli_ethusdt_single_day - ModuleNotFoundError: No module named 'pydantic'
+3. test_multiple_symbols_integration - CLI removed
+4. test_multiple_timeframes_integration - CLI removed
+5. test_gap_filling_integration - Data generation failed (CLI removed)
+6. test_invalid_symbol_error_handling - CLI removed
+7. test_cli_help_integration - CLI removed
+8. test_cli_version_integration - CLI removed
+9. test_list_timeframes_integration - CLI removed
+10. test_11_column_microstructure_format - Data generation failed (CLI removed)
+11. test_metadata_completeness - Data generation failed (CLI removed)
+
+#### tests/test_package.py (2 failures - EXPECTED)
+1. test_cli_module - Cannot import 'cli' from gapless_crypto_data
+2. test_cli_module_imports - Cannot import 'cli' from gapless_crypto_data
+
+## Unexpected Failures (2 total)
+
+### CRITICAL ISSUE: Pydantic Missing from CLI Entry Point
+**Root Cause**: CLI entry point (`~/.local/bin/gapless-crypto-data`) tries to import from removed CLI module, which triggers module loading chain that requires pydantic.
+
+**Error**: ModuleNotFoundError: No module named 'pydantic'
+- File: /Users/terryli/.local/bin/gapless-crypto-data (old script still installed)
+- Import chain: cli.py → __init__.py → __probe__.py → api.py → collectors → validation.models → pydantic
+
+**Impact**: CLI tests fail with import error instead of graceful "module not found"
+
+**Fix Required**: 
+1. Remove old CLI script from ~/.local/bin/gapless-crypto-data
+2. OR ensure clean install removes entry point
+3. Test suite should handle graceful failure when CLI removed
+
+### tests/test_api_edge_cases.py (1 failure - NEEDS UPDATE)
+**test_get_info_structure**: Expected version '3.2.0' but got '4.0.0'
+- File: tests/test_api_edge_cases.py:184
+- Root Cause: Test hardcoded old version number
+- Impact: Trivial - test needs version bump to 4.0.0
+- Fix: Update assertion from '3.2.0' to '4.0.0'
+
+## Summary Statistics
+- Total tests: 336
+- Passed: 308 (91.7%)
+- Failed: 22 (6.5%)
+- Skipped: 6 (1.8%)
+- Expected failures: 20 (all CLI deprecation)
+- Unexpected failures: 2 (1 critical pydantic issue, 1 trivial version check)
+
+## Coverage Analysis
+- Overall: 60% coverage
+- SDK Entry Points (api.py): 91% coverage ✅ (exceeds 85% target)
+- __probe__.py: 95% coverage ✅ (exceeds target)
+- Core collector: 49% coverage (acceptable for non-SDK code)
+- ClickHouse modules: 0% coverage (expected - not used in this validation)
+
+## Test Execution Performance
+- Total time: 257.67s (4 minutes 17 seconds)
+- Average per test: 0.77s
+- No timeouts or hanging tests

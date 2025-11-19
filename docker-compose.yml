@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.1-alpine
+    container_name: gapless-clickhouse
+    ports:
+      - "9000:9000"   # Native protocol (for clickhouse-driver)
+      - "8123:8123"   # HTTP interface (for clickhouse-client)
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+      - ./src/gapless_crypto_clickhouse/clickhouse/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    environment:
+      # No authentication for local development (WARNING: not production-ready)
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD:
+      CLICKHOUSE_DB: default
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    healthcheck:
+      test: ["CMD", "clickhouse-client", "--query", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - gapless-network
+
+  ch-ui:
+    image: ghcr.io/caioricciuti/ch-ui:latest
+    container_name: gapless-ch-ui
+    ports:
+      - "5521:5521"
+    environment:
+      VITE_CLICKHOUSE_URL: http://localhost:8123
+      VITE_CLICKHOUSE_USER: default
+      VITE_CLICKHOUSE_PASS: ''
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - gapless-network
+
+volumes:
+  clickhouse-data:
+    driver: local
+
+networks:
+  gapless-network:
+    driver: bridge
+
+# Usage:
+#   docker-compose up -d          # Start ClickHouse in background
+#   docker-compose logs -f        # View logs
+#   docker-compose down           # Stop and remove containers
+#   docker-compose down -v        # Stop and remove volumes (delete data)
+#
+# Access ClickHouse:
+#   clickhouse-client --host localhost --port 9000
+#   curl http://localhost:8123 -d "SELECT 1"
+#
+# Access Visualization Tools:
+#   CH-UI Web Interface:         http://localhost:5521 (modern TypeScript UI)
+#   ClickHouse Play (built-in):  http://localhost:8123/play (quick queries)
+#
+# Initialize schema:
+#   Schema automatically created from schema.sql on first start (via initdb.d)
+#   Manual initialization: docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_clickhouse/clickhouse/schema.sql
+#
+# Performance tuning:
+#   - ulimits: Increase file descriptor limit for ClickHouse (required for large datasets)
+#   - volumes: Persist data across container restarts
+#   - healthcheck: Ensure ClickHouse is ready before accepting connections
+#
+# Security notes:
+#   - No authentication configured (localhost-only development)
+#   - For production: Set CLICKHOUSE_PASSWORD, enable TLS, configure access control
+#   - Network isolation: Uses bridge network (not host network)

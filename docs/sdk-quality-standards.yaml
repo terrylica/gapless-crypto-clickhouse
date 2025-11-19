@@ -1,0 +1,118 @@
+---
+# SDK Quality Standards - Machine-Readable Specification
+# Version: 3.1.0
+# Last Updated: 2025-01-19
+# Purpose: Type safety, AI agent discoverability, structured error handling
+
+standards:
+  type_safety:
+    pep_561_compliance:
+      marker_file: src/gapless_crypto_data/py.typed
+      build_inclusion: pyproject.toml [tool.hatch.build.targets.wheel.force-include]
+      intent: Enable downstream type checkers (mypy/pyright/pytype)
+      status: implemented
+      version_introduced: 3.1.0
+
+    strict_mode_modules:
+      - module: gapless_crypto_data.api
+        disallow_untyped_defs: true
+        intent: Enforce type safety on primary SDK entry point
+        status: pending
+      - module: gapless_crypto_data.__probe__
+        disallow_untyped_defs: true
+        intent: Enforce type safety on AI agent introspection hooks
+        status: pending
+
+  structured_exceptions:
+    base_exception:
+      class: GaplessCryptoDataError
+      location: src/gapless_crypto_data/exceptions.py
+      intent: AI-parseable error details via .details dict attribute
+      status: pending
+      version_planned: 3.2.0
+
+    specialized_exceptions:
+      - DataCollectionError: Binance data collection failures
+      - ValidationError: Input validation failures
+      - NetworkError: Network operation failures
+      - GapFillingError: Gap detection/filling failures
+
+  ai_agent_discoverability:
+    llms_txt:
+      location: /llms.txt
+      standard: "Emerging 2025 convention (Cursor, Claude Code, GitHub Copilot)"
+      content_intent: Package capabilities, quickstart, key file locations
+      status: pending
+      version_planned: 3.2.0
+
+    probe_module:
+      location: src/gapless_crypto_data/__probe__.py
+      functions:
+        - discover_api(): Return function signatures and docstrings
+        - get_capabilities(): Return supported symbols/timeframes
+        - get_task_graph(): Return dependency graph for multi-step workflows
+      coverage_current: 33%
+      coverage_target: 80%
+
+coverage_priorities:
+  primary_sdk_entry_points:
+    target_coverage: "95-100%"
+    modules:
+      - name: api.py
+        current: 70%
+        target: 85%
+        intent: Main function-based API (fetch_data, download, fill_gaps)
+      - name: __probe__.py
+        current: 33%
+        target: 80%
+        intent: AI agent introspection hooks
+
+  secondary_core_engines:
+    target_coverage: "85-95%"
+    modules:
+      - name: binance_public_data_collector.py
+        current: 52%
+        target: 70%
+        intent: 22x faster data collection engine
+      - name: universal_gap_filler.py
+        current: "~60%"
+        target: 70%
+        intent: Zero-gaps guarantee via authentic API data
+      - name: checkpointing.py
+        current: 17%
+        target: 70%
+        intent: Resume capability for interrupted collections
+
+  tertiary_cli_wrapper:
+    target_coverage: "9% acceptable"
+    rationale: CLI is convenience wrapper, not primary SDK interface
+    primary_use_case: Programmatic API via "import gapless_crypto_data"
+
+quality_metrics:
+  version: 3.1.0
+  overall_coverage: 54%
+  overall_target: 80%
+  docstring_coverage: 97.1%
+  type_hints_status: partial
+  exception_structure: ad_hoc
+
+evolution_plan:
+  v3_1_0:
+    - Add py.typed marker (PEP 561 compliance)
+    - Update pyproject.toml build configuration
+
+  v3_2_0:
+    - Create exceptions.py with structured hierarchy
+    - Add llms.txt for AI agent discovery
+    - Enforce mypy strict mode on api.py and __probe__.py
+    - Increase SDK coverage: api.py 70%→85%, __probe__.py 33%→80%
+
+  v3_3_0:
+    - Increase core coverage: binance_collector 52%→70%, checkpointing 17%→70%
+    - Add multi-Python CI testing (3.9-3.13)
+    - Add coverage badges via Codecov
+
+references:
+  pep_561: https://peps.python.org/pep-0561/
+  llms_txt_standard: https://llmstxt.org/
+  structured_exceptions_pattern: docs/patterns/exception-hierarchy.md

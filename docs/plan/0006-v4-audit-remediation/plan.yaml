@@ -1,0 +1,275 @@
+openapi: 3.1.1
+info:
+  title: "v4.0.0 Audit Remediation Plan"
+  description: |
+    Fix 6 issues identified in comprehensive pre-release audit of main-clickhouse branch.
+
+    Audit found 1 critical blocker (version mismatch), 3 medium documentation issues,
+    and 2 low-priority UX improvements. All fixes are metadata/documentation-only.
+
+    This plan implements:
+    - Fix 1 (CRITICAL): Update __version__ in __init__.py from 3.3.0 to 4.0.0
+    - Fix 2 (MEDIUM): Update CLI deprecation notice from future to past tense
+    - Fix 3 (MEDIUM): Update CLAUDE.md version from v2.5.0 to v4.0.0
+    - Fix 4 (MEDIUM): Remove cli.py references from README project structure
+    - Fix 5 (LOW): Document expected CLI test failures in migration guide
+    - Fix 6 (LOW): Fix CLAUDE.md multi-agent reference (QuestDB → ClickHouse)
+
+    Validation suite runs after all fixes:
+    - Version verification (runtime check)
+    - Package rebuild (uv build)
+    - Linting (ruff check)
+  version: "1.0.0"
+  x-adr-id: "0006"
+  x-status: "validated"
+  x-target-release: "4.0.0"
+  x-validation-date: "2025-11-17"
+  x-validation-passed: true
+  x-breaking-change: true
+  x-depends-on: ["0005"]
+
+paths: {}
+
+x-implementation-plan:
+  timeline:
+    total_duration: "30 minutes"
+    estimated_hours: 0.5
+    completed_date: "2025-11-17"
+
+  phases:
+    - id: "phase-1"
+      name: "Critical Fix: Version Mismatch"
+      duration: "5 minutes"
+      status: "completed"
+      deliverables:
+        - name: "Update __version__ in __init__.py"
+          paths:
+            - "src/gapless_crypto_data/__init__.py"
+          description: |
+            Fix critical version inconsistency blocking release.
+            pyproject.toml declares 4.0.0, but __init__.py has 3.3.0.
+          acceptance_criteria:
+            - "Runtime check: gcd.__version__ == '4.0.0'"
+            - "Matches pyproject.toml version"
+            - "Semantic release automation compatible"
+          commit_message: "fix(version)!: update __version__ to 4.0.0 for release consistency"
+          commit_body: |
+            BREAKING CHANGE: __version__ attribute now correctly reflects 4.0.0
+
+            Runtime version check will now return correct version:
+            - Before: gcd.__version__ == "3.3.0" (incorrect)
+            - After: gcd.__version__ == "4.0.0" (correct, matches pyproject.toml)
+
+            Refs: ADR-0006 Issue 1 (CRITICAL)
+
+    - id: "phase-2"
+      name: "Medium Priority Documentation Fixes"
+      duration: "15 minutes"
+      status: "completed"
+      dependencies: ["phase-1"]
+      deliverables:
+        - name: "Update CLI Deprecation Notice"
+          paths:
+            - "README.md"
+          description: |
+            CLI was removed in v4.0.0 (pyproject.toml:53), but README uses future tense
+            ("will be removed") implying it still exists. Update to past tense.
+          acceptance_criteria:
+            - "README section title: 'CLI Removed in v4.0.0'"
+            - "Body uses past tense: 'was removed'"
+            - "Breaking change notice included"
+          commit_message: "docs(readme): update CLI removal notice to past tense"
+          commit_body: |
+            CLI was removed in v4.0.0 (pyproject.toml:53), but README used future
+            tense implying it still exists. Update to reflect current state.
+
+            Refs: ADR-0006 Issue 2 (MEDIUM)
+
+        - name: "Update CLAUDE.md Version"
+          paths:
+            - "CLAUDE.md"
+          description: |
+            CLAUDE.md references outdated v2.5.0. Update to v4.0.0 with accurate
+            description of ClickHouse database architecture.
+          acceptance_criteria:
+            - "Version: v4.0.0 (not v2.5.0)"
+            - "Description mentions ClickHouse database"
+            - "Mentions optional file-based workflows"
+          commit_message: "docs(claude): update version to 4.0.0 and database info"
+          commit_body: |
+            CLAUDE.md referenced outdated v2.5.0. Update to v4.0.0 with accurate
+            description of ClickHouse database architecture.
+
+            Refs: ADR-0006 Issue 3 (MEDIUM)
+
+        - name: "Remove cli.py from README Project Structure"
+          paths:
+            - "README.md"
+          description: |
+            CLI was removed but still appears in two project structure diagrams
+            (lines 780, 807). Remove references for accuracy.
+          acceptance_criteria:
+            - "No cli.py references in line 780"
+            - "No cli.py references in line 807"
+            - "Project structure diagrams accurate"
+          commit_message: "docs(readme): remove cli.py from project structure diagrams"
+          commit_body: |
+            CLI was removed in v4.0.0 but still appeared in two project structure
+            diagrams. Remove references for accuracy.
+
+            Refs: ADR-0006 Issue 4 (MEDIUM)
+
+    - id: "phase-3"
+      name: "Low Priority UX Improvements"
+      duration: "10 minutes"
+      status: "completed"
+      dependencies: ["phase-2"]
+      deliverables:
+        - name: "Document Expected Test Failures"
+          paths:
+            - "docs/MIGRATION_v3_to_v4.md"
+          description: |
+            CLI tests will fail after v4.0.0 upgrade. Document expected failures
+            and workaround to prevent user confusion.
+          acceptance_criteria:
+            - "New section: 'Expected Test Failures in v4.0.0'"
+            - "Lists failing test files: test_cli.py, test_cli_integration.py"
+            - "Provides pytest --ignore workaround"
+            - "Explains maintainer vs user actions"
+          commit_message: "docs(migration): document expected CLI test failures in v4.0.0"
+          commit_body: |
+            CLI tests will fail after v4.0.0 upgrade. Document expected failures
+            and workaround to prevent confusion.
+
+            Refs: ADR-0006 Issue 5 (LOW)
+
+        - name: "Fix CLAUDE.md Multi-Agent Reference"
+          paths:
+            - "CLAUDE.md"
+          description: |
+            Multi-agent section incorrectly referenced "QuestDB v4.0.0 migration".
+            Correct to ClickHouse (current database in v4.0.0).
+          acceptance_criteria:
+            - "References 'ClickHouse v4.0.0 migration' (not QuestDB)"
+            - "Accurately describes current architecture"
+          commit_message: "docs(claude): fix multi-agent methodology reference to ClickHouse"
+          commit_body: |
+            Multi-agent section incorrectly referenced "QuestDB v4.0.0 migration".
+            Correct to ClickHouse (current database in v4.0.0).
+
+            Refs: ADR-0006 Issue 6 (LOW)
+
+    - id: "phase-4"
+      name: "Validation Suite"
+      duration: "5 minutes"
+      status: "completed"
+      dependencies: ["phase-3"]
+      deliverables:
+        - name: "Version Verification"
+          description: "Confirm runtime __version__ matches pyproject.toml"
+          validation_command: "uv run python -c \"import gapless_crypto_data as gcd; assert gcd.__version__ == '4.0.0'\""
+          expected_output: "Exit code 0 (assertion passes)"
+
+        - name: "Package Rebuild"
+          description: "Verify package still builds after fixes"
+          validation_command: "uv build"
+          expected_output: "Successfully built dist/gapless_crypto_data-4.0.0.tar.gz and .whl"
+
+        - name: "Ruff Linting"
+          description: "Confirm no new linting issues introduced"
+          validation_command: "uv run ruff check src/"
+          expected_output: "All checks passed (zero warnings)"
+
+x-slos:
+  availability:
+    metrics:
+      - name: "No Downtime"
+        target: "All fixes are static file edits, zero runtime impact"
+        measurement: "Documentation/metadata-only changes"
+
+  correctness:
+    metrics:
+      - name: "Version Attribute Accuracy"
+        target: "__version__ matches pyproject.toml (4.0.0)"
+        measurement: "Runtime assertion: gcd.__version__ == '4.0.0'"
+
+      - name: "Documentation Accuracy"
+        target: "All references to CLI removal use past tense"
+        measurement: "Manual review of README.md"
+
+  observability:
+    metrics:
+      - name: "User Version Checks"
+        target: "Users can programmatically verify package version"
+        measurement: "import gapless_crypto_data; print(__version__)"
+
+  maintainability:
+    metrics:
+      - name: "Git History Clarity"
+        target: "6 atomic commits, one per issue"
+        measurement: "Git log shows 6 conventional commits with clear messages"
+
+      - name: "Documentation Consistency"
+        target: "All version references updated (README, CLAUDE.md, __init__.py)"
+        measurement: "Grep for version references shows consistency"
+
+x-error-handling:
+  policy: "raise-and-propagate"
+  rationale: "Static file edits have no runtime error handling requirements."
+  examples:
+    - scenario: "File edit fails (permission error)"
+      behavior: "Edit tool raises error, stops execution"
+      no_fallback: "Does NOT silently skip fix, does NOT continue with partial fixes"
+      propagation: "Error bubbles to user, manual intervention required"
+
+    - scenario: "Validation fails (version mismatch persists)"
+      behavior: "Assertion raises error with clear message"
+      no_retry: "Does NOT retry validation, does NOT proceed to next step"
+      propagation: "Halts workflow, reports failure to user"
+
+x-oss-libraries:
+  - name: "uv"
+    usage: "Package build and Python execution for validation"
+    version: ">=0.7.0"
+
+  - name: "ruff"
+    usage: "Linting validation post-fixes"
+    version: ">=0.13.0"
+
+x-auto-validation:
+  artifacts:
+    - name: "ADR-0006 and plan.yaml cross-reference"
+      validation: "grep 'x-adr-id: \\\"0006\\\"' docs/plan/0006-v4-audit-remediation/plan.yaml"
+
+    - name: "Version consistency check"
+      validation: "python -c 'import gapless_crypto_data; import tomllib; t=tomllib.load(open(\"pyproject.toml\",\"rb\")); assert gapless_crypto_data.__version__ == t[\"project\"][\"version\"]'"
+
+    - name: "Package build success"
+      validation: "uv build && test -f dist/gapless_crypto_data-4.0.0-py3-none-any.whl"
+
+    - name: "Linting passes"
+      validation: "uv run ruff check src/ || exit 1"
+
+x-semantic-release:
+  enabled: true
+  breaking_change: true
+  release_type: "patch"
+  target_version: "v4.0.0"
+  commit_convention: "conventional-commits"
+  changelog_sections:
+    - type: "fix"
+      section: "Bug Fixes"
+      notes: "BREAKING: Version attribute updated to match package version"
+
+    - type: "docs"
+      section: "Documentation"
+
+x-compliance:
+  openapi_version: "3.1.1"
+  doc_style: "evolutionary-without-promo"
+  slo_focus: "availability, correctness, observability, maintainability"
+  error_policy: "raise-propagate-no-fallback"
+  oss_preference: "prefer-oss-over-custom"
+  auto_validate: "all-artifacts-validated"
+  release_automation: "semantic-release-conventional-commits"
+  adr_plan_sync: "x-adr-id cross-reference validated"

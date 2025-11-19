@@ -1,0 +1,210 @@
+openapi: 3.1.1
+info:
+  title: "Optional Development Tooling Enhancement (chdig)"
+  description: |
+    Install chdig TUI monitoring tool to complete the full 5-tool visualization stack
+    documented in ADR-0008 (ClickHouse Local Visualization Toolchain).
+
+    Problem: chdig documented as optional Tier 2 tool but not installed, validation
+    shows 6/6 critical tests passing with warning for missing chdig.
+
+    Solution: Install chdig via Homebrew, validate functionality, achieve 7/7 validation.
+
+    Phases:
+    1. Install chdig via Homebrew (brew install chdig)
+    2. Validate installation and ClickHouse connectivity
+    3. Confirm validation script shows 7/7 tests passing
+
+    Result: Complete tooling setup matching ADR-0008 specification.
+
+  version: "1.0.0"
+  x-adr-id: "0010"
+  x-status: "validated"
+  x-target-release: "4.0.0"
+  x-validation-date: "2025-11-18"
+  x-validation-passed: true
+  x-breaking-change: false
+  x-depends-on: ["0008", "0009"]
+
+paths: {}
+
+x-implementation-plan:
+  timeline:
+    total_duration: "5 minutes"
+    estimated_hours: 0.08
+    estimated_completion: "2025-11-18"
+
+  phases:
+    - id: "phase-1"
+      name: "Install chdig via Homebrew"
+      duration: "2 minutes"
+      status: "completed"
+      deliverables:
+        - name: "Install chdig"
+          description: |
+            Install chdig TUI monitoring tool via Homebrew package manager.
+            Homebrew manages dependencies and PATH configuration automatically.
+          acceptance_criteria:
+            - "brew install chdig succeeds"
+            - "chdig binary available in PATH: command -v chdig"
+            - "chdig --version returns version string"
+          validation_command: "brew list chdig && chdig --version"
+          expected_output: "chdig 0.x.x (version string)"
+          rollback: "brew uninstall chdig (instant removal)"
+
+    - id: "phase-2"
+      name: "Validate Installation and Connectivity"
+      duration: "2 minutes"
+      status: "completed"
+      dependencies: ["phase-1"]
+      deliverables:
+        - name: "Test ClickHouse connectivity"
+          description: |
+            Launch chdig and verify it connects to local ClickHouse instance
+            at localhost:9000 (native protocol).
+          acceptance_criteria:
+            - "chdig --host localhost --port 9000 launches TUI"
+            - "TUI displays ClickHouse system metrics"
+            - "No connection errors in chdig output"
+          validation_command: "timeout 5 chdig --host localhost --port 9000 || echo 'TUI launched (timeout expected)'"
+          expected_output: "TUI launched successfully (manual verification required)"
+          manual_check: "Visually confirm TUI shows metrics, queries, system info"
+
+    - id: "phase-3"
+      name: "Confirm Validation Script Passes"
+      duration: "1 minute"
+      status: "completed"
+      dependencies: ["phase-2"]
+      deliverables:
+        - name: "Run comprehensive validation suite"
+          description: |
+            Execute scripts/validate-clickhouse-tools.sh to confirm all 7 tools
+            now pass validation (was 6/6 with chdig warning).
+          acceptance_criteria:
+            - "chdig test: ✅ PASS (was ⚠️ WARN)"
+            - "Tests passed: 7/7 (was 6/6)"
+            - "All critical validations passed"
+          validation_command: "bash scripts/validate-clickhouse-tools.sh"
+          expected_output: "✅ All critical validations passed! (7 tools operational)"
+          commit_message: "chore(tooling): install chdig for local performance monitoring"
+          commit_body: |
+            Install chdig TUI monitoring tool to complete ADR-0008 toolchain.
+
+            Changes:
+            - Install chdig via Homebrew (brew install chdig)
+            - Verify connectivity to ClickHouse localhost:9000
+            - Validation script now shows 7/7 tests passing
+
+            Validation results:
+            - chdig installed and operational
+            - ClickHouse connectivity confirmed
+            - All visualization tools available
+
+            Refs: ADR-0010, ADR-0008
+
+x-slos:
+  availability:
+    metrics:
+      - name: "Tool Availability"
+        target: "chdig accessible via PATH after installation"
+        measurement: "command -v chdig returns path"
+
+      - name: "ClickHouse Connectivity"
+        target: "chdig connects to localhost:9000 without errors"
+        measurement: "chdig TUI launches and displays metrics"
+
+  correctness:
+    metrics:
+      - name: "Version Verification"
+        target: "chdig --version returns valid version string"
+        measurement: "Exit code 0, output matches semantic version pattern"
+
+      - name: "Validation Script Accuracy"
+        target: "Validation script correctly detects chdig installation"
+        measurement: "Test 6/7 shows ✅ PASS instead of ⚠️ WARN"
+
+  observability:
+    metrics:
+      - name: "Monitoring Capability"
+        target: "chdig provides TUI-based performance monitoring"
+        measurement: "TUI displays queries, system metrics, flamegraphs"
+
+      - name: "Validation Coverage"
+        target: "All documented tools validated (7/7)"
+        measurement: "scripts/validate-clickhouse-tools.sh passes all tests"
+
+  maintainability:
+    metrics:
+      - name: "Update Mechanism"
+        target: "Homebrew manages chdig updates"
+        measurement: "brew upgrade chdig works without manual intervention"
+
+      - name: "Documentation Sync"
+        target: "Implementation matches ADR-0008 documentation"
+        measurement: "All 5 tools from ADR-0008 now installed"
+
+x-error-handling:
+  policy: "raise-and-propagate"
+  rationale: "Fail-fast on installation errors, manual intervention required."
+  examples:
+    - scenario: "Homebrew not installed"
+      behavior: "brew install chdig fails with 'command not found'"
+      no_fallback: "Does NOT install via alternative method, does NOT skip chdig"
+      propagation: "Error visible to user: 'brew: command not found'"
+
+    - scenario: "chdig installation fails"
+      behavior: "brew install chdig exits with non-zero code"
+      no_retry: "Does NOT retry installation, does NOT continue to validation"
+      propagation: "Homebrew error message displayed, user must investigate"
+
+    - scenario: "ClickHouse not running"
+      behavior: "chdig shows connection error in TUI"
+      no_fallback: "Does NOT skip connectivity check, does NOT use mock data"
+      propagation: "User sees connection error, must start ClickHouse first"
+
+x-oss-libraries:
+  - name: "chdig"
+    usage: "TUI performance monitoring for ClickHouse"
+    version: "latest (pre-alpha)"
+    license: "MIT"
+    repository: "https://github.com/azat/chdig"
+
+  - name: "Homebrew"
+    usage: "Package manager for chdig installation"
+    version: ">=4.0.0"
+    license: "BSD-2-Clause"
+
+x-auto-validation:
+  artifacts:
+    - name: "ADR-0010 and plan.yaml cross-reference"
+      validation: "grep 'x-adr-id: \"0010\"' docs/plan/0010-optional-development-tooling-chdig/plan.yaml"
+
+    - name: "chdig installed"
+      validation: "command -v chdig"
+
+    - name: "chdig version check"
+      validation: "chdig --version"
+
+    - name: "Validation script passes 7/7"
+      validation: "bash scripts/validate-clickhouse-tools.sh | grep -q '7'"
+
+x-semantic-release:
+  enabled: true
+  breaking_change: false
+  release_type: "patch"
+  target_version: "v4.0.0"
+  commit_convention: "conventional-commits"
+  changelog_sections:
+    - type: "chore"
+      section: "Chores"
+      notes: "Install chdig for local performance monitoring"
+
+x-compliance:
+  openapi_version: "3.1.1"
+  doc_style: "evolutionary-without-promo"
+  slo_focus: "availability, correctness, observability, maintainability"
+  error_policy: "raise-propagate-no-fallback"
+  oss_preference: "100-percent-open-source"
+  auto_validate: "all-tools-validated"
+  release_automation: "semantic-release-conventional-commits"
+  adr_plan_sync: "x-adr-id cross-reference validated"

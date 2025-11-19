@@ -1,0 +1,95 @@
+openapi: 3.1.1
+info:
+  title: PyPI Publishing Configuration
+  version: 2.6.0
+  description: |
+    Native GitHub Actions trusted publishing configuration for gapless-crypto-data.
+    Implements OIDC-based authentication without API token dependencies.
+
+components:
+  schemas:
+    TrustedPublisher:
+      type: object
+      properties:
+        provider:
+          type: string
+          enum: [GitHub]
+        repository:
+          type: string
+          example: "terrylica/gapless-crypto-data"
+        workflow:
+          type: string
+          example: "publish.yml"
+        environment:
+          type: string
+          example: "pypi"
+      required: [provider, repository, workflow, environment]
+
+    WorkflowConfiguration:
+      type: object
+      properties:
+        permissions:
+          type: object
+          properties:
+            id-token:
+              type: string
+              enum: [write]
+          required: [id-token]
+        environment:
+          type: string
+          enum: [pypi]
+        authentication_method:
+          type: string
+          enum: [oidc]
+      required: [permissions, environment, authentication_method]
+
+paths:
+  /pypi-publishing:
+    post:
+      summary: Publish package to PyPI via trusted publishing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowConfiguration'
+      responses:
+        '200':
+          description: Package published successfully
+        '400':
+          description: File already exists or validation failed
+
+current_configuration:
+  pypi_trusted_publisher:
+    provider: GitHub
+    repository: terrylica/gapless-crypto-data
+    workflow: publish.yml
+    environment: pypi
+    configured_date: "2025-09-18"
+
+  github_workflow:
+    file: .github/workflows/publish.yml
+    permissions:
+      id-token: write
+    environment: pypi
+    authentication_method: oidc
+    api_token_removed: true
+
+  validation_status:
+    authentication_test: passed
+    file_upload_attempt: passed
+    error_reason: "file_already_exists"
+    confirms_working: true
+
+  github_packages_limitation:
+    python_support: false
+    supported_types: [npm, docker, rubygems, maven, gradle, nuget]
+    reason: "GitHub Packages does not support Python/PyPI packages as of 2025-09-18"
+    workaround: "PyPI remains canonical distribution channel for Python packages"
+
+migration_completed:
+  from: api_token_authentication
+  to: oidc_trusted_publishing
+  date: "2025-09-18"
+  version: v2.5.0
+  root_cause_resolution: completed

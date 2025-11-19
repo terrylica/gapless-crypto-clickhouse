@@ -1,0 +1,132 @@
+%% Data Validation Decision Tree
+%% Shows multi-layer validation with specific checks at each layer
+%% Reference: src/gapless_crypto_data/validation/csv_validator.py:170-232
+
+%%{init: {'theme':'base', 'themeVariables': {'lineColor':'#c4b5fd','primaryBorderColor':'#c4b5fd'}}}%%
+
+flowchart TD
+    %% Entry Point
+    Start([CSV file loaded<br/>into DataFrame]) --> Layer1[LAYER 1:<br/>Structure Validation]
+
+    %% Layer 1: Structure
+    Layer1 --> CheckFile{File exists<br/>and readable?}
+    CheckFile --> ErrorFile[❌ File Error:<br/>Cannot access file]
+    CheckFile --> CheckColumns[Check required columns<br/>present in DataFrame]
+
+    CheckColumns --> Has11Cols{Has all 11<br/>enhanced cols?}
+    Has11Cols --> ValidStructure[✅ Enhanced format<br/>11-column microstructure]
+    Has11Cols --> Has6Cols{Has 6<br/>legacy cols?}
+    Has6Cols --> LegacyStructure[✅ Legacy format<br/>6-column OHLCV]
+    Has6Cols --> ErrorStructure[❌ Structure Error:<br/>Missing required columns]
+
+    %% Layer 2: DateTime Validation
+    ValidStructure --> Layer2[LAYER 2:<br/>DateTime Validation]
+    LegacyStructure --> Layer2
+
+    Layer2 --> ParseDateTime[Parse 'date' column<br/>to datetime objects]
+    ParseDateTime --> ParseSuccess{Parse<br/>successful?}
+
+    ParseSuccess --> ErrorDateTime[❌ DateTime Error:<br/>Invalid timestamp format]
+    ParseSuccess --> CheckSorted{Timestamps<br/>sorted chronologically?}
+
+    CheckSorted --> WarnSort[⚠️  Warning:<br/>Data not chronological]
+    CheckSorted --> CalcDiffs[Calculate time diffs<br/>between consecutive rows]
+
+    WarnSort --> CalcDiffs
+    CalcDiffs --> ScanGaps[Scan for gaps:<br/>diff > expected interval]
+
+    ScanGaps --> HasGaps{Gaps<br/>detected?}
+    HasGaps --> RecordGaps[📊 Record gap details:<br/>count, positions, sizes]
+    HasGaps --> NoGaps[✅ Continuous sequence<br/>no gaps]
+
+    RecordGaps --> CheckDuplicates[Check for duplicate<br/>timestamps]
+    NoGaps --> CheckDuplicates
+
+    CheckDuplicates --> HasDupes{Duplicates<br/>found?}
+    HasDupes --> ErrorDupes[❌ DateTime Error:<br/>Duplicate timestamps]
+    HasDupes --> DateTimePass[✅ DateTime validation passed]
+
+    %% Layer 3: OHLCV Quality
+    DateTimePass --> Layer3[LAYER 3:<br/>OHLCV Quality Validation]
+
+    Layer3 --> CheckOHLC[For each row:<br/>open, high, low, close]
+    CheckOHLC --> ValidateLogic{OHLCV logic<br/>valid?}
+
+    note1["OHLCV Logic Checks:<br/>• high >= open<br/>• high >= close<br/>• low <= open<br/>• low <= close<br/>• high >= low<br/>• All values > 0"] -.-> ValidateLogic
+
+    ValidateLogic --> ErrorOHLC[❌ OHLCV Error:<br/>Illogical price relationships]
+    ValidateLogic --> CheckVolume[Validate volume > 0<br/>for all rows]
+
+    CheckVolume --> VolumeValid{Volume<br/>valid?}
+    VolumeValid --> ErrorVolume[❌ Volume Error:<br/>Zero or negative volume]
+    VolumeValid --> CheckRanges[Check price ranges<br/>for sanity]
+
+    CheckRanges --> RangeCheck{Prices in<br/>reasonable range?}
+    RangeCheck --> WarnOutlier[⚠️  Warning:<br/>Extreme price values]
+    RangeCheck --> OHLCVPass[✅ OHLCV validation passed]
+
+    WarnOutlier --> OHLCVPass
+
+    %% Layer 4: Coverage Validation
+    OHLCVPass --> Layer4[LAYER 4:<br/>Coverage Validation]
+
+    Layer4 --> CalcExpected[Calculate expected bars<br/>from date range + timeframe]
+    CalcExpected --> CountActual[Count actual bars<br/>in DataFrame]
+
+    CountActual --> CompareCoverage[Compare:<br/>actual vs expected]
+    CompareCoverage --> CoverageCheck{Coverage<br/>>= 95%?}
+
+    CoverageCheck --> WarnCoverage[⚠️  Warning:<br/>Low coverage < 95%]
+    CoverageCheck --> FullCoverage[✅ Good coverage<br/>>= 95% complete]
+
+    WarnCoverage --> Layer5
+    FullCoverage --> Layer5
+
+    %% Layer 5: Anomaly Detection
+    Layer5[LAYER 5:<br/>Anomaly Detection] --> CalcStats[Calculate statistics:<br/>mean, std, quantiles]
+
+    CalcStats --> DetectSpikes[Detect price spikes<br/>>3 std from mean]
+    DetectSpikes --> HasSpikes{Suspicious<br/>spikes?}
+
+    HasSpikes --> LogSpikes[📊 Log anomalies:<br/>positions, values]
+    HasSpikes --> NoSpikes[✅ No anomalies detected]
+
+    LogSpikes --> CheckFlash[Check for flash crashes<br/>price drop >20% in 1 bar]
+    NoSpikes --> CheckFlash
+
+    CheckFlash --> HasCrash{Flash crash<br/>detected?}
+    HasCrash --> LogCrash[📊 Log crash event<br/>for investigation]
+    HasCrash --> NoCrash[✅ No flash crashes]
+
+    LogCrash --> AnomalyPass
+    NoCrash --> AnomalyPass[✅ Anomaly detection passed]
+
+    %% Final Aggregation
+    AnomalyPass --> Aggregate[Aggregate all validation results]
+
+    Aggregate --> GenerateReport[Generate validation report:<br/>• Structure: PASS/FAIL<br/>• DateTime: PASS/FAIL<br/>• OHLCV: PASS/FAIL<br/>• Coverage: %<br/>• Anomalies: count<br/>• Gaps: details]
+
+    GenerateReport --> OverallCheck{All critical<br/>checks passed?}
+
+    OverallCheck --> FinalFail[❌ VALIDATION FAILED<br/>Data quality issues detected]
+    OverallCheck --> FinalWarn[⚠️  VALIDATION PASSED<br/>with warnings]
+    OverallCheck --> FinalPass[✅ VALIDATION PASSED<br/>High quality data!]
+
+    FinalFail --> End([Return validation report])
+    FinalWarn --> End
+    FinalPass --> End
+
+    %% Styling
+    classDef errorNode fill:#fca5a5
+    classDef warnNode fill:#fcd34d
+    classDef passNode fill:#86efac
+    classDef layerNode fill:#93c5fd
+    classDef decisionNode fill:#a5f3fc
+    classDef dataNode fill:#d1d5db
+
+    class ErrorFile,ErrorStructure,ErrorDateTime,ErrorDupes,ErrorOHLC,ErrorVolume,FinalFail errorNode
+    class WarnSort,WarnOutlier,WarnCoverage,FinalWarn warnNode
+    class ValidStructure,LegacyStructure,NoGaps,DateTimePass,OHLCVPass,FullCoverage,NoSpikes,NoCrash,AnomalyPass,FinalPass passNode
+    class Layer1,Layer2,Layer3,Layer4,Layer5 layerNode
+    class CheckFile,Has11Cols,Has6Cols,ParseSuccess,CheckSorted,HasGaps,HasDupes,ValidateLogic,VolumeValid,RangeCheck,CoverageCheck,HasSpikes,HasCrash,OverallCheck decisionNode
+    class ParseDateTime,CalcDiffs,ScanGaps,CheckDuplicates,CheckOHLC,CheckVolume,CheckRanges,CalcExpected,CountActual,CalcStats,DetectSpikes dataNode

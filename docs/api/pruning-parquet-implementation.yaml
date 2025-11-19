@@ -1,0 +1,242 @@
+openapi: 3.1.1
+info:
+  title: "Pruning and Parquet Implementation Specification"
+  description: |
+    Technical specification for removing over-engineered modules and implementing
+    Parquet format support. Machine-readable implementation guide with exception-only
+    failure patterns and standard library dependencies.
+  version: "2.10.0"
+
+paths: {}
+
+components:
+  schemas:
+    PruningTarget:
+      type: object
+      required: [module_path, removal_rationale, dependency_impact]
+      properties:
+        module_path:
+          type: string
+          format: path
+          description: "Absolute path to module/directory for removal"
+        removal_rationale:
+          type: string
+          enum: ["over_engineered", "dependency_overhead", "complexity_without_benefit"]
+        dependency_impact:
+          type: array
+          items:
+            type: string
+          description: "List of dependencies that can be removed"
+
+    ParquetConfiguration:
+      type: object
+      required: [engine, compression, schema_preservation]
+      properties:
+        engine:
+          type: string
+          enum: ["pyarrow"]
+          description: "Parquet engine (pyarrow already in dependencies)"
+        compression:
+          type: string
+          enum: ["snappy"]
+          description: "Compression algorithm for optimal speed/size balance"
+        schema_preservation:
+          type: boolean
+          const: true
+          description: "Maintain 11-column microstructure format"
+        backward_compatibility:
+          type: boolean
+          const: true
+          description: "CSV remains default format"
+
+    ImplementationPhase:
+      type: object
+      required: [phase_id, operations, validation_criteria]
+      properties:
+        phase_id:
+          type: integer
+          minimum: 1
+          maximum: 2
+        operations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Operation"
+        validation_criteria:
+          type: array
+          items:
+            type: string
+
+    Operation:
+      type: object
+      required: [type, target, expected_outcome]
+      properties:
+        type:
+          type: string
+          enum: ["delete", "modify", "create", "test"]
+        target:
+          type: string
+          format: path
+        expected_outcome:
+          type: string
+        failure_mode:
+          type: string
+          enum: ["exception_only"]
+
+x-implementation-plan:
+  metadata:
+    format_version: "3.1.1"
+    generator: "claude-code-cli"
+    timestamp: "2025-01-19"
+    compliance:
+      exception_only_failure: true
+      standard_library_preference: true
+      no_fallback_mechanisms: true
+
+  phase_1_pruning:
+    description: "Remove over-engineered modules reducing complexity and dependencies"
+    targets:
+      pyod_regression:
+        module_path: "src/gapless_crypto_data/regression/"
+        files_to_delete:
+          - "src/gapless_crypto_data/regression/__init__.py"
+          - "src/gapless_crypto_data/regression/regression_detector.py"
+        dependencies_to_remove:
+          - "pyod>=2.0.5"
+          - "scipy>=1.16.2"
+        rationale: "3-sigma outlier detection sufficient for use case"
+        lines_of_code_removed: ">500"
+
+      polars_streaming:
+        module_path: "src/gapless_crypto_data/streaming/memory_streaming.py"
+        files_to_delete:
+          - "src/gapless_crypto_data/streaming/memory_streaming.py"
+        dependencies_to_remove:
+          - "polars>=1.33.1"
+        rationale: "Mixed pandas/polars creates confusion, pandas sufficient"
+        standardization: "pandas_exclusive"
+
+      joblib_checkpointing:
+        module_path: "src/gapless_crypto_data/resume/intelligent_checkpointing.py"
+        modification_type: "simplification"
+        replace_joblib_memory_with: "json_state_file"
+        dependencies_to_remove:
+          - "joblib>=1.5.2"
+        rationale: "JSON state sufficient for deterministic operations"
+        functionality_preserved: "basic_checkpoint_resume"
+
+    validation:
+      test_suite_passes: true
+      import_errors_resolved: true
+      dependency_count_reduced: ">= 3"
+      code_complexity_reduced: true
+
+  phase_2_parquet:
+    description: "Add Parquet format support using pandas built-in capabilities"
+
+    api_enhancements:
+      save_parquet_function:
+        location: "src/gapless_crypto_data/api.py"
+        signature: "save_parquet(df: pd.DataFrame, path: str) -> None"
+        implementation: "df.to_parquet(path, engine='pyarrow', compression='snappy')"
+        exception_handling: "raise FileNotFoundError | PermissionError | ValueError"
+        no_fallback: true
+
+      load_parquet_function:
+        location: "src/gapless_crypto_data/api.py"
+        signature: "load_parquet(path: str) -> pd.DataFrame"
+        implementation: "pd.read_parquet(path, engine='pyarrow')"
+        exception_handling: "raise FileNotFoundError | ParquetError"
+        no_fallback: true
+
+    collector_modifications:
+      binance_collector:
+        location: "src/gapless_crypto_data/collectors/binance_public_data_collector.py"
+        parameter_addition:
+          name: "output_format"
+          type: "str"
+          enum: ["csv", "parquet"]
+          default: "csv"
+        method_modification:
+          target: "save_data()"
+          conditional_save: "if output_format == 'parquet': save_parquet()"
+          backward_compatibility: "csv_remains_default"
+
+    performance_expectations:
+      file_size_reduction: "5x to 10x smaller than CSV"
+      read_speed_improvement: "10x to 100x faster than CSV"
+      write_speed_improvement: "2x to 5x faster than CSV"
+      memory_usage: "similar_to_csv_during_processing"
+
+    format_specifications:
+      parquet_schema:
+        preserve_11_columns: true
+        column_types:
+          date: "timestamp"
+          ohlc: "float64"
+          volume_metrics: "float64"
+          trade_counts: "int64"
+        metadata_preservation: true
+
+      compression_config:
+        algorithm: "snappy"
+        rationale: "best_balance_speed_size"
+        alternatives_rejected: ["gzip", "lz4", "brotli"]
+
+    testing_requirements:
+      round_trip_integrity: "DataFrame → Parquet → DataFrame == original"
+      performance_benchmark: "measure read/write speeds vs CSV"
+      file_size_verification: "confirm 5x+ compression"
+      edge_case_handling: "empty DataFrames, large datasets, special characters"
+
+  documentation_updates:
+    architecture_status:
+      file: "docs/CURRENT_ARCHITECTURE_STATUS.yaml"
+      add_capability: "parquet_format_support"
+      remove_capabilities: ["pyod_regression", "polars_streaming", "complex_checkpointing"]
+
+    api_documentation:
+      new_examples:
+        - "df = fetch_data('BTCUSDT', '1h', output_format='parquet')"
+        - "save_parquet(df, 'crypto_data.parquet')"
+        - "df = load_parquet('crypto_data.parquet')"
+
+  dependency_changes:
+    removed_dependencies:
+      - "pyod>=2.0.5"
+      - "polars>=1.33.1"
+      - "joblib>=1.5.2"
+      - "scipy>=1.16.2"
+    existing_dependencies_utilized:
+      - "pyarrow>=21.0.0"  # Already present for other functionality
+      - "pandas>=2.0.0"    # Core dependency
+    net_dependency_reduction: 3
+
+  success_criteria:
+    functionality:
+      - "All existing CSV workflows continue working"
+      - "Parquet format provides 5x+ file size reduction"
+      - "Read performance improves 10x+ for large datasets"
+      - "No regression in data integrity"
+
+    code_quality:
+      - "Reduced dependency count by >= 3 packages"
+      - "Simplified codebase with fewer abstractions"
+      - "Exception-only failure patterns maintained"
+      - "Standard library patterns preferred"
+
+    compatibility:
+      - "Backward compatibility preserved (CSV default)"
+      - "All tests pass without modification"
+      - "API surface remains stable"
+
+  failure_modes:
+    exception_only_patterns:
+      parquet_write_failure: "raise immediate exception, no CSV fallback"
+      corrupted_parquet_read: "raise ParquetError, no recovery attempt"
+      missing_pyarrow: "raise ImportError with clear message"
+
+    no_fallback_mechanisms:
+      - "No automatic format conversion on failure"
+      - "No silent degradation to CSV on Parquet errors"
+      - "No retry logic for file operations"
+      - "No synthetic data generation on read errors"

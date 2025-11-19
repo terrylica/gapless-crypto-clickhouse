@@ -1,0 +1,95 @@
+{
+  "version": "v2.10.0",
+  "generator": "BinancePublicDataCollector",
+  "generation_timestamp": "2025-09-23T01:14:14.802471+00:00Z",
+  "data_source": "Binance Public Data Repository",
+  "data_source_url": "https://data.binance.vision/data/spot/monthly/klines",
+  "market_type": "spot",
+  "symbol": "BTCUSDT",
+  "timeframe": "1d",
+  "collection_method": "direct_download",
+  "target_period": {
+    "start": "2025-09-21T00:00:00",
+    "end": "2025-09-22T23:59:59",
+    "total_days": 1
+  },
+  "actual_bars": 1,
+  "date_range": {
+    "start": "2025-09-21 00:00:00",
+    "end": "2025-09-21 00:00:00"
+  },
+  "statistics": {
+    "price_min": 115188.0,
+    "price_max": 115819.06,
+    "volume_total": 4511.52219,
+    "volume_mean": 4511.52219
+  },
+  "collection_performance": {
+    "method": "direct_download",
+    "duration": 0.0,
+    "bars_per_second": 0,
+    "total_bars": 1
+  },
+  "data_integrity": {
+    "chronological_order": true,
+    "data_hash": "95592bdb9353accc2b148ad7d3dcdbe081fc62ac40a90810041570615a651083",
+    "corruption_detected": false,
+    "corrupted_rows_count": 0,
+    "corruption_details": [],
+    "header_detection": {
+      "header_found": false,
+      "header_content": null,
+      "data_start_row": 0
+    }
+  },
+  "timestamp_format_analysis": {
+    "total_rows_analyzed": 21,
+    "formats_detected": {
+      "microseconds": 21
+    },
+    "transitions_detected": 0,
+    "transition_details": [],
+    "primary_format": "microseconds",
+    "format_consistency": true
+  },
+  "enhanced_microstructure_format": {
+    "format_version": "v2.10.0",
+    "total_columns": 11,
+    "enhanced_features": [
+      "quote_asset_volume",
+      "number_of_trades",
+      "taker_buy_base_asset_volume",
+      "taker_buy_quote_asset_volume",
+      "close_time"
+    ],
+    "analysis_capabilities": [
+      "order_flow_analysis",
+      "liquidity_metrics",
+      "market_microstructure",
+      "trade_weighted_prices",
+      "institutional_data_patterns"
+    ],
+    "professional_features": true,
+    "api_format_compatibility": true
+  },
+  "gap_analysis": {
+    "analysis_performed": true,
+    "total_gaps_detected": 0,
+    "gaps_filled": 0,
+    "gaps_remaining": 0,
+    "gap_details": [],
+    "gap_filling_method": "authentic_binance_api",
+    "data_completeness_score": 1.0,
+    "note": "Insufficient data for gap analysis (< 2 rows)"
+  },
+  "compliance": {
+    "zero_magic_numbers": true,
+    "temporal_integrity": true,
+    "authentic_spot_data_only": true,
+    "official_binance_source": true,
+    "binance_format_transition_aware": true,
+    "supports_milliseconds_microseconds": true,
+    "full_binance_microstructure_format": true,
+    "professional_trading_ready": true
+  }
+}

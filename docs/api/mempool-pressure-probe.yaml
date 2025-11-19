@@ -1,0 +1,338 @@
+openapi: 3.1.1
+info:
+  title: "Mempool Pressure API Probe Specification"
+  description: |
+    Specification for Bitcoin mempool pressure data collection using mempool.space API.
+    Provides leading indicators for fee pressure, settlement stress, and network congestion.
+
+    **Feature Family**: Base-layer on-chain (Bitcoin)
+    **Data Source**: mempool.space REST/WebSocket API
+    **Update Frequency**: 1-minute intervals
+    **Retention**: Complete historical backfill support
+  version: "1.0.0"
+  contact:
+    name: "Gapless Crypto Data Project"
+    email: "terry@eonlabs.com"
+
+paths: {}
+
+components:
+  schemas:
+    MempoolSnapshot:
+      type: object
+      description: "Point-in-time mempool state snapshot"
+      required:
+        - timestamp
+        - unconfirmed_count
+        - vsize_mb
+        - fee_histogram
+        - next_block_fees
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: "UTC timestamp of snapshot (ISO 8601)"
+        unconfirmed_count:
+          type: integer
+          minimum: 0
+          description: "Number of unconfirmed transactions in mempool"
+        vsize_mb:
+          type: number
+          minimum: 0
+          description: "Total virtual size of mempool in MB"
+        fee_histogram:
+          type: array
+          description: "Fee rate histogram (sat/vB buckets with tx counts)"
+          items:
+            $ref: "#/components/schemas/FeeHistogramBucket"
+        next_block_fees:
+          $ref: "#/components/schemas/NextBlockFees"
+        block_height:
+          type: integer
+          description: "Current Bitcoin block height"
+
+    FeeHistogramBucket:
+      type: object
+      required:
+        - fee_rate_min
+        - fee_rate_max
+        - tx_count
+        - vsize_total
+      properties:
+        fee_rate_min:
+          type: number
+          description: "Minimum fee rate for bucket (sat/vB)"
+        fee_rate_max:
+          type: number
+          description: "Maximum fee rate for bucket (sat/vB)"
+        tx_count:
+          type: integer
+          description: "Number of transactions in bucket"
+        vsize_total:
+          type: number
+          description: "Total vsize of transactions in bucket (vB)"
+
+    NextBlockFees:
+      type: object
+      description: "Fee estimates for next block inclusion"
+      required:
+        - fastest_fee
+        - half_hour_fee
+        - hour_fee
+        - economy_fee
+        - minimum_fee
+      properties:
+        fastest_fee:
+          type: number
+          description: "Fee rate for next block (sat/vB)"
+        half_hour_fee:
+          type: number
+          description: "Fee rate for ~30min confirmation (sat/vB)"
+        hour_fee:
+          type: number
+          description: "Fee rate for ~1hr confirmation (sat/vB)"
+        economy_fee:
+          type: number
+          description: "Fee rate for low-priority tx (sat/vB)"
+        minimum_fee:
+          type: number
+          description: "Minimum relay fee (sat/vB)"
+
+# PROBE ARCHITECTURE SPECIFICATION
+x-probe-architecture:
+  overview: |
+    Mempool pressure probe uses UV-isolated tasks in tmp/probe/mempool_pressure/
+    for parallel data collection with phased spawning strategy.
+
+  directory_structure:
+    probe_root: "/tmp/probe/mempool_pressure/"
+    subdirectories:
+      - "tasks/": "Individual UV task workspaces (task_YYYYMMDD_HHMMSS/)"
+      - "cache/": "HTTP response cache with ETag support"
+      - "output/": "Validated parquet files (1-hour granularity)"
+      - "logs/": "Task execution logs and error traces"
+      - "checkpoints/": "Resume state for interrupted collections"
+
+  uv_task_pattern: |
+    Each probe task runs in isolated UV environment:
+
+    1. Create task workspace: tmp/probe/mempool_pressure/tasks/task_{timestamp}/
+    2. Generate inline PEP 723 script with dependencies:
+       - httpx>=0.28.0 (HTTP client)
+       - polars>=1.0.0 (data processing)
+       - duckdb>=1.1.0 (validation persistence)
+    3. Execute with: uv run --isolated probe_script.py
+    4. Output validated data to output/
+    5. Cleanup task workspace on success
+
+  phased_spawning:
+    phase_1_discovery:
+      duration: "Initial 60 seconds"
+      tasks: 1
+      purpose: "Validate API access, discover current block height, establish baseline"
+
+    phase_2_backfill:
+      duration: "Next 5 minutes"
+      tasks: 5
+      purpose: "Parallel backfill of last 24 hours (if gaps detected)"
+      parallelism: "5 concurrent UV tasks"
+
+    phase_3_streaming:
+      duration: "Continuous"
+      tasks: 1
+      purpose: "Real-time 1-minute interval collection"
+      resilience: "Auto-restart on failure, exponential backoff"
+
+  data_flow:
+    collection_interval: "60 seconds"
+    api_endpoints:
+      - name: "mempool"
+        url: "https://mempool.space/api/mempool"
+        rate_limit: "10 requests/second (generous)"
+      - name: "recommended_fees"
+        url: "https://mempool.space/api/v1/fees/recommended"
+        rate_limit: "10 requests/second"
+
+    validation_pipeline:
+      - layer: "HTTP validation"
+        checks: ["200 status", "valid JSON", "schema conformance"]
+      - layer: "Data quality"
+        checks: ["timestamp monotonicity", "fee rate sanity (1-1000 sat/vB)", "tx count > 0"]
+      - layer: "Gap detection"
+        checks: ["1-minute interval enforcement", "missing timestamp detection"]
+      - layer: "Anomaly detection"
+        checks: ["vsize spike detection (z-score > 3)", "fee spike detection"]
+      - layer: "DuckDB persistence"
+        checks: ["duplicate prevention", "referential integrity"]
+
+  storage_format:
+    file_pattern: "mempool_pressure_YYYYMMDD_HH.parquet"
+    granularity: "1 hour per file (60 snapshots)"
+    schema_version: "1.0.0"
+    compression: "snappy"
+    partitioning: "date (YYYYMMDD)"
+
+# ENGINEERED SIGNALS SPECIFICATION
+x-engineered-signals:
+  mempool_slope:
+    formula: "d(vsize_mb)/dt over 5-minute rolling window"
+    interpretation: "Positive slope = increasing congestion"
+    alert_threshold: "> 2 MB/min"
+
+  fee_pressure_index:
+    formula: "log(P90_fee / P50_fee) * vsize_mb"
+    interpretation: "Combined metric of fee spread and backlog"
+    normalization: "Z-score over 24-hour window"
+
+  settlement_urgency:
+    formula: "(fastest_fee - economy_fee) / economy_fee"
+    interpretation: "Premium for immediate settlement"
+    typical_range: "0.1 to 10.0 (10% to 1000% premium)"
+
+  time_to_clear:
+    formula: "vsize_mb / (block_size_avg * 6 blocks/hour)"
+    interpretation: "Estimated hours to clear current mempool"
+    block_size_avg: "1.5 MB (empirical average)"
+
+# INTEGRATION WITH EXISTING SYSTEM
+x-integration:
+  api_entry_point:
+    module: "gapless_crypto_data.mempool"
+    functions:
+      - "collect_mempool_pressure(start_date, end_date, output_dir)"
+      - "MempoolPressureCollector(cache_dir, validation_storage)"
+
+  validation_storage:
+    table_name: "mempool_pressure_reports"
+    schema_extends: "ValidationReport base schema"
+    additional_columns:
+      - "avg_fee_rate DOUBLE"
+      - "vsize_mb DOUBLE"
+      - "unconfirmed_count INTEGER"
+      - "slope_mb_per_min DOUBLE"
+      - "fee_pressure_index DOUBLE"
+
+  cli_interface:
+    command: "uv run gapless-crypto-data mempool"
+    options:
+      - "--start YYYY-MM-DD"
+      - "--end YYYY-MM-DD"
+      - "--output-dir PATH"
+      - "--interval INTEGER (default: 60 seconds)"
+      - "--mode [backfill|stream|hybrid]"
+
+# SLOS (Service Level Objectives)
+x-slos:
+  correctness:
+    - "Zero data fabrication: All data from mempool.space API, never synthetic"
+    - "Timestamp accuracy: ±5 seconds of actual snapshot time"
+    - "Fee rate validity: All values within 1-1000 sat/vB range (sanity check)"
+    - "Gap detection: 100% of missing 1-minute intervals flagged"
+
+  availability:
+    - "API uptime dependency: mempool.space SLA (99.9%+)"
+    - "Backfill capability: Full historical recovery after outages"
+    - "Graceful degradation: Continue collection if validation DB unavailable"
+
+  observability:
+    - "Task execution logging: All UV task spawns, completions, failures logged"
+    - "API rate limiting: Log warning at 80% of rate limit"
+    - "Validation reports: DuckDB persistence for all snapshots"
+    - "Engineered signals: Pre-computed and stored with raw data"
+
+  maintainability:
+    - "UV isolation: Each task runs in isolated environment (reproducible)"
+    - "Schema versioning: Parquet files include schema version metadata"
+    - "Cleanup automation: Task workspaces deleted after 24 hours"
+    - "Error propagation: Exception-only failures (no silent errors)"
+
+# IMPLEMENTATION ROADMAP
+x-implementation:
+  phase_1_probe_runner:
+    status: "PENDING"
+    tasks:
+      - "Create tmp/probe/mempool_pressure/ directory structure"
+      - "Implement UV task spawner with PEP 723 inline dependencies"
+      - "Add phased spawning logic (discovery → backfill → streaming)"
+      - "Implement task cleanup and error handling"
+    deliverable: "src/gapless_crypto_data/mempool/probe_runner.py"
+
+  phase_2_api_client:
+    status: "PENDING"
+    tasks:
+      - "Implement mempool.space REST API client"
+      - "Add ETag-based caching for bandwidth optimization"
+      - "Implement rate limiting (10 req/sec)"
+      - "Add retry logic with exponential backoff"
+    deliverable: "src/gapless_crypto_data/mempool/api_client.py"
+
+  phase_3_validation:
+    status: "PENDING"
+    tasks:
+      - "Extend ValidationStorage with mempool_pressure_reports table"
+      - "Implement 5-layer validation pipeline"
+      - "Add gap detection and anomaly detection"
+      - "Create MempoolPressureReport Pydantic model"
+    deliverable: "src/gapless_crypto_data/mempool/validation.py"
+
+  phase_4_signals:
+    status: "PENDING"
+    tasks:
+      - "Implement mempool_slope calculation"
+      - "Implement fee_pressure_index"
+      - "Implement settlement_urgency and time_to_clear"
+      - "Add signal validation and sanity checks"
+    deliverable: "src/gapless_crypto_data/mempool/signals.py"
+
+  phase_5_integration:
+    status: "PENDING"
+    tasks:
+      - "Add CLI command: gapless-crypto-data mempool"
+      - "Create Python API: collect_mempool_pressure()"
+      - "Add examples/mempool_pressure_example.py"
+      - "Update docs with mempool pressure guide"
+    deliverable: "Complete integration with existing package"
+
+# DEPENDENCIES
+x-dependencies:
+  python_packages:
+    httpx: ">=0.28.0"
+    polars: ">=1.0.0"
+    duckdb: ">=1.1.0"
+    pydantic: ">=2.0.0"
+
+  api_dependencies:
+    mempool_space:
+      url: "https://mempool.space/api"
+      rate_limit: "10 req/sec"
+      authentication: "None (public API)"
+      uptime_sla: "99.9%+"
+
+# TESTING STRATEGY
+x-testing:
+  unit_tests:
+    - "test_probe_runner.py: UV task spawning, cleanup, error handling"
+    - "test_api_client.py: HTTP requests, caching, rate limiting"
+    - "test_validation.py: Schema validation, gap detection, anomaly detection"
+    - "test_signals.py: Engineered signal calculations, edge cases"
+
+  integration_tests:
+    - "test_mempool_collection.py: End-to-end collection workflow"
+    - "test_backfill.py: Historical backfill with gap recovery"
+    - "test_streaming.py: Real-time streaming mode"
+
+  performance_tests:
+    - "Parallel UV task spawning (5 concurrent tasks)"
+    - "Memory usage during 24-hour backfill"
+    - "Parquet file compression ratio"
+
+# COMPLIANCE
+x-compliance:
+  openapi_version: "3.1.1"
+  pep_standards:
+    - "PEP 723: Inline script dependencies for UV tasks"
+    - "PEP 561: Type hints for all public APIs"
+  data_privacy:
+    - "No personal data collected (public mempool data only)"
+  licensing:
+    - "MIT License (same as gapless-crypto-data)"

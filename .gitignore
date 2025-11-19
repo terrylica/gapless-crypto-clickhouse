@@ -1,0 +1,35 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+venv/
+env/
+test-env/
+*-env/
+# Gapless Crypto Data checkpoint files (auto-generated during collection)
+.gapless_checkpoints/
+
+# macOS system files
+.DS_Store
+*/.DS_Store
+
+# Test coverage artifacts
+.coverage
+coverage.json
+htmlcov/
+
+# .Sessions folder - never delete
+.sessions/
+!.sessions/.gitignore
+
+# Lychee link checker cache and results
+.lycheecache
+.lycheecache/
+.lychee-results.json
+.lychee-results.txt

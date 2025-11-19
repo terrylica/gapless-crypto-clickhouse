@@ -1,0 +1,87 @@
+%% Download with ETag Caching Strategy
+%% Shows how ETag caching achieves 22x faster performance vs API-only collection
+%% Reference: src/gapless_crypto_data/collectors/binance_public_data_collector.py:354-481
+
+%%{init: {'theme':'base', 'themeVariables': {'lineColor':'#c4b5fd','primaryBorderColor':'#c4b5fd'}}}%%
+
+flowchart TD
+    %% Entry Point
+    Start([Need data for<br/>BTCUSDT 1h Jan 2024]) --> GenerateURL[Generate monthly ZIP URL:<br/>data.binance.vision/data/spot/<br/>monthly/klines/BTCUSDT/1h/<br/>BTCUSDT-1h-2024-01.zip]
+
+    %% ETag Cache Check
+    GenerateURL --> CheckCache[Check local ETag cache<br/>~/.cache/gapless-crypto-data/etags/]
+
+    CheckCache --> CacheExists{ETag entry<br/>exists for URL?}
+
+    %% First Download Path
+    CacheExists --> NoCache[No cache entry<br/>send normal HTTP request]
+    NoCache --> FullRequest[HTTP GET request<br/>no special headers]
+
+    %% Cached Path
+    CacheExists --> HasCache[ETag cached:<br/>e.g., 'abc123...']
+    HasCache --> ConditionalRequest[HTTP GET request with:<br/>If-None-Match: 'abc123...']
+
+    %% DNS Resolution
+    FullRequest --> ResolveDNS[Resolve DNS:<br/>data.binance.vision →<br/>CloudFront edge server]
+    ConditionalRequest --> ResolveDNS
+
+    ResolveDNS --> FindEdge[Route to nearest<br/>CloudFront edge location<br/>400+ global locations]
+
+    %% CloudFront Processing
+    FindEdge --> CloudFront{CloudFront<br/>processes request}
+
+    CloudFront --> FreshDownload[Full download requested]
+    CloudFront --> CompareETag[Compare cached ETag<br/>vs current object ETag]
+
+    %% ETag Comparison
+    CompareETag --> ETagMatch{ETags match?}
+
+    ETagMatch --> Return304[HTTP 304 Not Modified<br/>Content-Length: 0<br/>ETag: 'abc123...'<br/>⚡ 0 BYTES TRANSFERRED!]
+
+    ETagMatch --> Return200New[HTTP 200 OK<br/>Content-Length: ~180 MB<br/>ETag: 'xyz789...'<br/>📦 FULL FILE DOWNLOAD]
+
+    FreshDownload --> CheckS3[CloudFront checks<br/>origin S3 bucket]
+    CheckS3 --> Return200[HTTP 200 OK<br/>Content-Length: ~180 MB<br/>ETag: 'def456...'<br/>📦 FULL FILE DOWNLOAD]
+
+    %% Processing 304 Response
+    Return304 --> Use304[Use locally cached ZIP<br/>from previous download]
+    Use304 --> LoadLocal[Load ZIP from:<br/>~/.cache/gapless-crypto-data/zips/]
+    LoadLocal --> ExtractCached[Extract CSV from<br/>cached ZIP file]
+
+    %% Processing 200 Response
+    Return200 --> SaveETag[Save new ETag:<br/>'def456...' to cache]
+    Return200New --> SaveETagNew[Update ETag:<br/>'xyz789...' in cache]
+
+    SaveETag --> DownloadZIP[Download ~180 MB ZIP]
+    SaveETagNew --> DownloadZIP
+
+    DownloadZIP --> SaveZIP[Save ZIP to local cache]
+    SaveZIP --> ExtractNew[Extract CSV from<br/>new ZIP file]
+
+    %% Merge Paths
+    ExtractCached --> ProcessCSV[Process CSV data]
+    ExtractNew --> ProcessCSV
+
+    ProcessCSV --> Complete([Data ready for use])
+
+    %% Performance Comparison Annotation
+    note1["⚡ PERFORMANCE COMPARISON<br/>---<br/>304 Not Modified (cached):<br/>  • Bandwidth: 0 bytes<br/>  • Time: ~380ms RTT only<br/>  • Cost: $0<br/>---<br/>200 OK (fresh download):<br/>  • Bandwidth: ~180 MB<br/>  • Time: ~8-15 seconds<br/>  • Cost: egress fees<br/>---<br/>API-only approach:<br/>  • Requests: ~730 API calls<br/>  • Time: ~3-5 minutes<br/>  • Rate limited + pagination"] -.-> Return304
+
+    %% Architecture Notes
+    note2["📍 BINANCE VISION ARCHITECTURE<br/>---<br/>Origin: S3 bucket in ap-northeast-1<br/>CDN: CloudFront (400+ edge locations)<br/>Data: Immutable historical klines<br/>Updates: Monthly files published once<br/>---<br/>Why ETags work:<br/>• Historical data never changes<br/>• ETag stable for life of file<br/>• 99.99% CloudFront SLA<br/>• Zero false cache hits"] -.-> CloudFront
+
+    %% Caching Strategy Notes
+    note3["🗄️ CACHE STRUCTURE<br/>---<br/>ETag cache (JSON):<br/>  {<br/>    'url': 'https://...',<br/>    'etag': 'abc123...',<br/>    'last_modified': '2024-01-15',<br/>    'size': 180456789<br/>  }<br/>---<br/>ZIP cache (files):<br/>  BTCUSDT-1h-2024-01.zip<br/>  BTCUSDT-1h-2024-02.zip<br/>  ...<br/>---<br/>Invalidation: Manual only<br/>TTL: Infinite (immutable data)"] -.-> CheckCache
+
+    %% Styling
+    classDef cacheHit fill:#86efac
+    classDef cacheMiss fill:#fcd34d
+    classDef cloudfront fill:#a5f3fc
+    classDef decision fill:#d1d5db
+    classDef critical fill:#93c5fd
+
+    class Return304,Use304,LoadLocal,ExtractCached cacheHit
+    class Return200,Return200New,DownloadZIP,SaveZIP,ExtractNew cacheMiss
+    class CloudFront,FindEdge,ResolveDNS,CheckS3 cloudfront
+    class CacheExists,ETagMatch decision
+    class Start,GenerateURL,CheckCache,Complete critical

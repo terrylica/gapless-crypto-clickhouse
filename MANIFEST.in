@@ -1,0 +1,45 @@
+# Include essential project files
+include README.md
+include LICENSE
+include CHANGELOG.md
+include pyproject.toml
+include .python-version
+
+# Include documentation
+recursive-include docs *.md *.yaml *.yml
+exclude docs/guides/pypi-documentation.md
+
+# Include examples
+recursive-include examples *.py *.sh *.md
+
+# Include tests (but exclude from wheel)
+recursive-include tests *.py
+
+# Include configuration files
+include .pre-commit-config.yaml
+
+# Exclude development and cache files
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .DS_Store
+global-exclude *.so
+global-exclude .git*
+exclude .gitignore
+exclude .gitattributes
+
+# Exclude build and distribution artifacts
+global-exclude *.egg-info
+global-exclude build
+global-exclude dist
+global-exclude .tox
+global-exclude .coverage
+global-exclude .pytest_cache
+global-exclude .mypy_cache
+global-exclude .ruff_cache
+
+# Exclude development directories and checkpoints
+exclude test_output
+exclude .gapless_checkpoints
+
+# Exclude virtual environment
+exclude .venv

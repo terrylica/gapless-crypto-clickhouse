@@ -1,0 +1,448 @@
+openapi: 3.1.1
+info:
+  title: "Comprehensive Codebase Audit Plan"
+  description: |
+    Systematic audit methodology for identifying pruning opportunities and growth paths.
+    Covers code quality, architecture, dependencies, testing, documentation, and performance.
+  version: "1.0.0"
+
+paths: {}
+
+components:
+  schemas:
+    AuditScope:
+      type: object
+      properties:
+        total_phases: 18
+        estimated_duration: "4-6 hours"
+        output_format: "Machine-readable YAML findings + prioritized recommendations"
+
+x-audit-methodology:
+  phase_1_codebase_inventory:
+    objective: "Map entire codebase structure and file relationships"
+
+    tasks:
+      inventory_source_files:
+        tool: "find + wc"
+        commands:
+          - "find src/ -type f -name '*.py' | wc -l"
+          - "find src/ -type f -name '*.py' -exec wc -l {} + | sort -nr"
+        output: "Line count by file, total Python files"
+
+      inventory_test_files:
+        tool: "find + grep"
+        commands:
+          - "find tests/ -type f -name 'test_*.py' | wc -l"
+          - "grep -r '^def test_' tests/ | wc -l"
+        output: "Test file count, test function count"
+
+      inventory_documentation:
+        tool: "find"
+        commands:
+          - "find . -name '*.md' -o -name '*.yaml' | grep -E '(docs/|README)'"
+        output: "Documentation file inventory"
+
+      calculate_ratios:
+        metrics:
+          - "test_lines / source_lines ratio"
+          - "documentation_files / source_files ratio"
+          - "Average lines per Python file"
+
+  phase_2_import_graph_analysis:
+    objective: "Detect circular dependencies and unused imports"
+
+    tasks:
+      build_import_graph:
+        approach: "Parse all Python files for import statements"
+        commands:
+          - "grep -r '^import\\|^from' src/ --include='*.py'"
+        analysis:
+          - "Build adjacency list of module dependencies"
+          - "Detect circular import chains"
+          - "Identify orphaned modules (no imports)"
+
+      detect_circular_dependencies:
+        tool: "Custom Python script or pydeps"
+        validation: "No circular imports allowed (exception-only failure principle)"
+
+      identify_unused_imports:
+        tool: "ruff check --select F401"
+        command: "ruff check src/ tests/ --select F401 --output-format=json"
+
+  phase_3_dead_code_detection:
+    objective: "Find unused functions, classes, variables"
+
+    tasks:
+      scan_unused_variables:
+        tool: "ruff check --select F841"
+        command: "ruff check src/ --select F841"
+
+      detect_unused_functions:
+        tool: "vulture"
+        command: "uvx vulture src/ --min-confidence 80"
+        note: "Exclude test fixtures and public API methods"
+
+      find_unreachable_code:
+        tool: "ruff check --select F401,F841,B"
+        patterns:
+          - "Code after return/raise"
+          - "Unreachable except clauses"
+          - "Unused loop variables"
+
+  phase_4_code_duplication:
+    objective: "Detect duplicated code blocks across modules"
+
+    tasks:
+      detect_duplicate_code:
+        tool: "Custom analysis or radon"
+        approach:
+          - "Find identical function implementations"
+          - "Detect similar code patterns (>80% similarity)"
+          - "Identify copy-pasted code blocks"
+
+      analyze_duplication_patterns:
+        focus_areas:
+          - "Data validation logic"
+          - "Error handling patterns"
+          - "CSV parsing/writing logic"
+          - "Timeframe conversion logic (already addressed in v3.0.0)"
+
+  phase_5_dependency_audit:
+    objective: "Review all dependencies for necessity, freshness, security"
+
+    tasks:
+      list_all_dependencies:
+        tool: "uv pip list"
+        command: "uv pip list --format=json"
+
+      check_unused_dependencies:
+        approach: "Search codebase for each dependency import"
+        script: |
+          for dep in httpx pandas pyarrow; do
+            echo "Checking $dep..."
+            grep -r "^import $dep\\|^from $dep" src/ tests/ examples/
+          done
+
+      check_outdated_dependencies:
+        tool: "uv pip list --outdated"
+        command: "uv pip list --outdated --format=json"
+
+      security_scan:
+        tool: "pip-audit or safety"
+        command: "uvx pip-audit --format=json"
+        note: "Exclude from SLOs but document findings"
+
+  phase_6_test_coverage_analysis:
+    objective: "Identify untested code paths and coverage gaps"
+
+    tasks:
+      generate_coverage_report:
+        tool: "pytest-cov"
+        command: "uv run pytest --cov=src/gapless_crypto_data --cov-report=term-missing --cov-report=json"
+
+      identify_untested_modules:
+        analysis: "Modules with <80% coverage"
+
+      identify_untested_branches:
+        focus: "Error handling branches, edge cases"
+
+      check_critical_paths:
+        priority_areas:
+          - "Gap detection algorithm"
+          - "Data validation logic"
+          - "Atomic file operations"
+          - "ETag caching (already 100% covered)"
+
+  phase_7_complexity_metrics:
+    objective: "Analyze code complexity and identify refactoring candidates"
+
+    tasks:
+      cyclomatic_complexity:
+        tool: "radon cc"
+        command: "uvx radon cc src/ -a -s"
+        threshold: "CC > 10 flagged for refactoring"
+
+      cognitive_complexity:
+        tool: "ruff or custom analysis"
+        focus: "Deeply nested conditionals, long functions"
+
+      maintainability_index:
+        tool: "radon mi"
+        command: "uvx radon mi src/ -s"
+        threshold: "MI < 20 flagged for refactoring"
+
+      identify_long_functions:
+        tool: "grep + awk"
+        approach: "Functions >100 lines flagged for decomposition"
+
+  phase_8_temporal_leakage_review:
+    objective: "Detect data leakage patterns in time-series processing"
+
+    tasks:
+      review_gap_filling_logic:
+        file: "src/gapless_crypto_data/gap_filling/universal_gap_filler.py"
+        checks:
+          - "Gap detection uses only past data (no future peeking)"
+          - "API calls use proper time boundaries"
+          - "No look-ahead bias in validation"
+
+      review_data_collection:
+        file: "src/gapless_crypto_data/collectors/binance_public_data_collector.py"
+        checks:
+          - "Timestamp handling is UTC-only (no DST issues)"
+          - "No future data used in current timeframe"
+          - "Date range filtering applied correctly"
+
+      review_validation_logic:
+        checks:
+          - "OHLCV validation doesn't use future candles"
+          - "Gap detection respects chronological ordering"
+
+  phase_9_documentation_audit:
+    objective: "Find outdated, missing, or inconsistent documentation"
+
+    tasks:
+      check_docstring_coverage:
+        tool: "interrogate"
+        command: "uvx interrogate src/ -vv"
+        threshold: "100% public API docstrings required"
+
+      validate_readme_accuracy:
+        checks:
+          - "Installation instructions current"
+          - "API examples work"
+          - "Version references match pyproject.toml"
+
+      check_changelog_completeness:
+        validation: "All releases documented in MILESTONE_*.yaml"
+
+      verify_architecture_docs:
+        files:
+          - "docs/CURRENT_ARCHITECTURE_STATUS.yaml"
+          - "docs/MILESTONE_v3.0.0.yaml"
+          - "docs/MILESTONE_v3.1.0.yaml"
+        checks:
+          - "Version references consistent"
+          - "Capability descriptions accurate"
+          - "Test counts match actual"
+
+  phase_10_todo_comment_scan:
+    objective: "Catalog all TODO/FIXME/HACK/XXX comments"
+
+    tasks:
+      scan_todo_comments:
+        command: "grep -rn 'TODO\\|FIXME\\|HACK\\|XXX\\|NOTE\\|OPTIMIZE' src/ tests/ --include='*.py'"
+        analysis:
+          - "Categorize by priority (FIXME > TODO > OPTIMIZE)"
+          - "Check if still relevant"
+          - "Convert to GitHub issues or remove"
+
+  phase_11_configuration_audit:
+    objective: "Detect configuration duplication and hard-coded values"
+
+    tasks:
+      review_configuration_files:
+        files:
+          - "pyproject.toml"
+          - ".github/workflows/*.yml"
+          - "pytest.ini or pyproject.toml[tool.pytest]"
+        checks:
+          - "No duplicate configuration"
+          - "Version numbers consistent"
+
+      scan_hard_coded_values:
+        patterns:
+          - "Hard-coded URLs"
+          - "Hard-coded timeframes"
+          - "Magic numbers"
+        command: "grep -rn '\"http' src/ --include='*.py'"
+
+  phase_12_algorithmic_complexity:
+    objective: "Identify O(n²) or worse algorithms, find SOTA alternatives"
+
+    tasks:
+      review_loop_nesting:
+        tool: "grep + manual review"
+        focus: "Nested loops in data processing"
+
+      identify_vectorization_opportunities:
+        current: "Python loops in gap detection"
+        sota_alternative: "NumPy vectorization (already identified in v3.0.0 plan)"
+
+      review_sorting_algorithms:
+        check: "Use built-in sort (TimSort O(n log n))"
+
+      analyze_data_structures:
+        current_usage:
+          - "Lists for sequential access"
+          - "Dicts for lookups"
+        optimization_opportunities:
+          - "Sets for membership testing"
+          - "Deques for queue operations"
+
+  phase_13_error_handling_audit:
+    objective: "Ensure consistent exception-only failure patterns"
+
+    tasks:
+      scan_try_except_blocks:
+        command: "grep -rn 'except.*:' src/ --include='*.py' -A 1"
+        checks:
+          - "No bare except clauses"
+          - "No silent exception swallowing"
+          - "All exceptions propagate or raise"
+
+      verify_no_fallback_logic:
+        anti_patterns:
+          - "except: return default_value"
+          - "except: pass"
+          - "except: continue"
+        validation: "All errors raise (exception-only failure principle)"
+
+      check_error_messages:
+        quality_checks:
+          - "Error messages are descriptive"
+          - "Include context (file path, symbol, etc)"
+
+  phase_14_logging_audit:
+    objective: "Verify logging completeness and consistency"
+
+    tasks:
+      scan_logging_usage:
+        command: "grep -rn 'logger\\.' src/ --include='*.py'"
+
+      check_logging_levels:
+        categories:
+          - "DEBUG: Cache hits/misses, detailed operations"
+          - "INFO: Collection progress, summary statistics"
+          - "WARNING: Duplicate removal, potential issues"
+          - "ERROR: Download failures, validation errors"
+
+      verify_observability:
+        slo_target: "All data modifications logged (100%)"
+        checks:
+          - "Gap filling logs duplicate removal (v3.0.0 added)"
+          - "ETag caching logs all operations (v3.0.0 added)"
+          - "File operations logged"
+
+  phase_15_performance_profiling:
+    objective: "Identify performance bottlenecks"
+
+    tasks:
+      profile_hot_paths:
+        tool: "cProfile or py-spy"
+        focus:
+          - "Gap detection algorithm"
+          - "CSV parsing/writing"
+          - "Data validation"
+
+      memory_profiling:
+        tool: "memory_profiler"
+        check: "Memory usage during large dataset processing"
+
+      io_bottleneck_analysis:
+        focus:
+          - "File I/O patterns"
+          - "Network requests (ETag caching already optimized)"
+
+  phase_16_consolidate_pruning_recommendations:
+    objective: "Synthesize all findings into actionable pruning list"
+
+    categories:
+      dead_code_removal:
+        - "Unused functions/classes"
+        - "Unreachable code blocks"
+        - "Commented-out code"
+
+      dependency_pruning:
+        - "Unused dependencies"
+        - "Redundant dependencies"
+
+      test_pruning:
+        - "Redundant tests (v3.1.0 already did 17→12)"
+        - "Overly specific tests"
+
+      documentation_pruning:
+        - "Outdated planning docs"
+        - "Duplicate documentation"
+
+      configuration_pruning:
+        - "Duplicate config entries"
+        - "Obsolete settings"
+
+  phase_17_identify_growth_opportunities:
+    objective: "Find opportunities to replace custom code with SOTA"
+
+    categories:
+      algorithm_upgrades:
+        - "NumPy vectorization for gap detection (deferred from v3.0.0)"
+        - "Polars for DataFrame operations (if applicable)"
+
+      library_replacements:
+        - "Custom validation → Pydantic validators"
+        - "Custom caching → functools.lru_cache (where applicable)"
+
+      architectural_improvements:
+        - "Plugin system for data sources"
+        - "Streaming data pipeline"
+
+      tooling_upgrades:
+        - "Pre-commit hooks for complexity checks"
+        - "Automated dependency updates"
+
+  phase_18_create_action_plan:
+    objective: "Prioritize findings with SLO impact analysis"
+
+    prioritization_criteria:
+      p0_critical:
+        - "Temporal leakage bugs"
+        - "Exception handling violations"
+        - "Circular dependencies"
+
+      p1_high:
+        - "Dead code removal"
+        - "Unused dependencies"
+        - "Missing test coverage (<80%)"
+
+      p2_medium:
+        - "Code duplication"
+        - "High complexity (CC >10)"
+        - "Documentation gaps"
+
+      p3_low:
+        - "Optimization opportunities"
+        - "SOTA replacements"
+        - "TODO comment cleanup"
+
+    output_format:
+      - "Pruning opportunities: DELETE list with rationale"
+      - "Growth opportunities: ADOPT list with SLO impact"
+      - "Implementation plan: Phased approach with validation"
+
+x-audit-deliverables:
+  findings_report:
+    format: "OpenAPI 3.1.1 YAML"
+    sections:
+      - "Executive summary (metrics, key findings)"
+      - "Detailed findings by category"
+      - "Pruning recommendations (prioritized)"
+      - "Growth opportunities (with SOTA alternatives)"
+      - "Implementation roadmap"
+
+  metrics_dashboard:
+    key_metrics:
+      - "Total lines of code"
+      - "Test coverage percentage"
+      - "Cyclomatic complexity distribution"
+      - "Dependency count (before/after pruning)"
+      - "Documentation coverage"
+      - "Dead code percentage"
+
+  action_items:
+    format: "Prioritized backlog with SLO impacts"
+    categories: ["DELETE", "REFACTOR", "ADOPT", "DOCUMENT"]
+
+x-compliance:
+  exception_only_failure: "All audit findings respect exception-only principle"
+  aod_ioi_documentation: "Findings documented with intent, not implementation details"
+  slo_focus: "Availability, correctness, observability, maintainability (exclude perf/security)"
+  no_promotional_language: "Findings use neutral, technical language"

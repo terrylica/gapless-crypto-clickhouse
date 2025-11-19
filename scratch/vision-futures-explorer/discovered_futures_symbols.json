@@ -1,0 +1,6045 @@
+{
+  "metadata": {
+    "discovery_timestamp": "2025-11-12T19:49:59.950797",
+    "market_type": "um",
+    "granularity": "daily",
+    "total_symbols": 753,
+    "request_count": 1,
+    "duration_seconds": 0.51,
+    "s3_prefix": "data/futures/um/daily/klines/"
+  },
+  "summary": {
+    "total_symbols": 753,
+    "perpetual_count": 708,
+    "delivery_count": 44
+  },
+  "perpetual_contracts": [
+    "0GUSDT",
+    "1000000BOBUSDT",
+    "1000000MOGUSDT",
+    "1000BONKUSDC",
+    "1000BONKUSDT",
+    "1000BTTCUSDT",
+    "1000CATUSDT",
+    "1000CHEEMSUSDT",
+    "1000FLOKIUSDT",
+    "1000LUNCBUSD",
+    "1000LUNCUSDT",
+    "1000PEPEUSDC",
+    "1000PEPEUSDT",
+    "1000RATSUSDT",
+    "1000SATSUSDT",
+    "1000SHIBBUSD",
+    "1000SHIBUSDC",
+    "1000SHIBUSDT",
+    "1000WHYUSDT",
+    "1000XECUSDT",
+    "1000XUSDT",
+    "1INCHUSDT",
+    "1MBABYDOGEUSDT",
+    "2ZUSDT",
+    "42USDT",
+    "4USDT",
+    "A2ZUSDT",
+    "AAVEUSDC",
+    "AAVEUSDT",
+    "ACEUSDT",
+    "ACHUSDT",
+    "ACTUSDT",
+    "ACXUSDT",
+    "ADABUSD",
+    "ADAUSDC",
+    "ADAUSDT",
+    "AERGOUSDT",
+    "AERGOUSDTSETTLED",
+    "AEROUSDT",
+    "AEVOUSDT",
+    "AGIXBUSD",
+    "AGIXUSDT",
+    "AGLDUSDT",
+    "AGTUSDT",
+    "AI16ZUSDT",
+    "AIAUSDT",
+    "AINUSDT",
+    "AIOTUSDT",
+    "AIOUSDT",
+    "AIUSDT",
+    "AIXBTUSDT",
+    "AKEUSDT",
+    "AKROUSDT",
+    "AKTUSDT",
+    "ALCHUSDT",
+    "ALGOUSDT",
+    "ALICEUSDT",
+    "ALLOUSDT",
+    "ALLUSDT",
+    "ALPACAUSDT",
+    "ALPHAUSDT",
+    "ALPINEUSDT",
+    "ALTUSDT",
+    "AMBBUSD",
+    "AMBUSDT",
+    "ANCBUSD",
+    "ANCUSDT",
+    "ANIMEUSDT",
+    "ANKRUSDT",
+    "ANTUSDT",
+    "APEBUSD",
+    "APEUSDT",
+    "API3USDT",
+    "APRUSDT",
+    "APTBUSD",
+    "APTUSDT",
+    "ARBUSDC",
+    "ARBUSDT",
+    "ARCUSDT",
+    "ARIAUSDT",
+    "ARKMUSDT",
+    "ARKUSDT",
+    "ARPAUSDT",
+    "ARUSDT",
+    "ASRUSDT",
+    "ASTERUSDT",
+    "ASTRUSDT",
+    "ATAUSDT",
+    "ATHUSDT",
+    "ATOMUSDT",
+    "ATUSDT",
+    "AUCTIONBUSD",
+    "AUCTIONUSDT",
+    "AUDIOUSDT",
+    "AUSDT",
+    "AVAAIUSDT",
+    "AVAUSDT",
+    "AVAXBUSD",
+    "AVAXUSDC",
+    "AVAXUSDT",
+    "AVNTUSDT",
+    "AWEUSDT",
+    "AXLUSDT",
+    "AXSUSDT",
+    "B2USDT",
+    "B3USDT",
+    "BABYUSDT",
+    "BADGERUSDT",
+    "BAKEUSDT",
+    "BALUSDT",
+    "BANANAS31USDT",
+    "BANANAUSDT",
+    "BANDUSDT",
+    "BANKUSDT",
+    "BANUSDT",
+    "BARDUSDT",
+    "BASUSDT",
+    "BATUSDT",
+    "BBUSDT",
+    "BCHUSDC",
+    "BCHUSDT",
+    "BDXNUSDT",
+    "BEAMXUSDT",
+    "BELUSDT",
+    "BERAUSDT",
+    "BICOUSDT",
+    "BIDUSDT",
+    "BIGTIMEUSDT",
+    "BIOUSDC",
+    "BIOUSDT",
+    "BLESSUSDT",
+    "BLUAIUSDT",
+    "BLUEBIRDUSDT",
+    "BLURUSDT",
+    "BLZUSDT",
+    "BMTUSDT",
+    "BNBBUSD",
+    "BNBUSDC",
+    "BNBUSDT",
+    "BNTUSDT",
+    "BNXUSDT",
+    "BNXUSDTSETTLED",
+    "BOMEUSDC",
+    "BOMEUSDT",
+    "BONDUSDT",
+    "BRETTUSDT",
+    "BROCCOLI714USDT",
+    "BROCCOLIF3BUSDT",
+    "BRUSDT",
+    "BSVUSDT",
+    "BSWUSDT",
+    "BTCBUSD",
+    "BTCDOMUSDT",
+    "BTCSTUSDT",
+    "BTCUSDC",
+    "BTCUSDT",
+    "BTRUSDT",
+    "BTSUSDT",
+    "BTTUSDT",
+    "BULLAUSDT",
+    "BUSDT",
+    "BZRXUSDT",
+    "C98USDT",
+    "CAKEUSDT",
+    "CARVUSDT",
+    "CATIUSDT",
+    "CCUSDT",
+    "CELOUSDT",
+    "CELRUSDT",
+    "CETUSUSDT",
+    "CFXUSDT",
+    "CGPTUSDT",
+    "CHESSUSDT",
+    "CHILLGUYUSDT",
+    "CHRUSDT",
+    "CHZUSDT",
+    "CKBUSDT",
+    "CLOUSDT",
+    "COAIUSDT",
+    "COCOSUSDT",
+    "COMBOUSDT",
+    "COMMONUSDT",
+    "COMPUSDT",
+    "COOKIEUSDT",
+    "COSUSDT",
+    "COTIUSDT",
+    "COWUSDT",
+    "CROSSUSDT",
+    "CRVUSDC",
+    "CRVUSDT",
+    "CTKUSDT",
+    "CTKUSDTSETTLED",
+    "CTSIUSDT",
+    "CUDISUSDT",
+    "CUSDT",
+    "CVCUSDT",
+    "CVCUSDTSETTLED",
+    "CVXBUSD",
+    "CVXUSDT",
+    "CVXUSDTSETTLED",
+    "CYBERUSDT",
+    "DAMUSDT",
+    "DARUSDT",
+    "DASHUSDT",
+    "DEEPUSDT",
+    "DEFIUSDT",
+    "DEGENUSDT",
+    "DEGOUSDT",
+    "DENTUSDT",
+    "DEXEUSDT",
+    "DFUSDT",
+    "DGBUSDT",
+    "DIAUSDT",
+    "DMCUSDT",
+    "DODOBUSD",
+    "DODOUSDT",
+    "DODOXUSDT",
+    "DOGEBUSD",
+    "DOGEUSDC",
+    "DOGEUSDT",
+    "DOGSUSDT",
+    "DOLOUSDT",
+    "DOODUSDT",
+    "DOTBUSD",
+    "DOTECOUSDT",
+    "DOTUSDT",
+    "DRIFTUSDT",
+    "DUSDT",
+    "DUSKUSDT",
+    "DYDXUSDT",
+    "DYMUSDT",
+    "EDENUSDT",
+    "EDUUSDT",
+    "EGLDUSDT",
+    "EIGENUSDT",
+    "ENAUSDC",
+    "ENAUSDT",
+    "ENJUSDT",
+    "ENSOUSDT",
+    "ENSUSDT",
+    "EOSUSDT",
+    "EPICUSDT",
+    "EPTUSDT",
+    "ERAUSDT",
+    "ESPORTSUSDT",
+    "ETCBUSD",
+    "ETCUSDT",
+    "ETHBTC",
+    "ETHBUSD",
+    "ETHFIUSDC",
+    "ETHFIUSDT",
+    "ETHUSDC",
+    "ETHUSDT",
+    "ETHWUSDT",
+    "EULUSDT",
+    "EVAAUSDT",
+    "FARTCOINUSDT",
+    "FETUSDT",
+    "FFUSDT",
+    "FHEUSDT",
+    "FIDAUSDT",
+    "FILBUSD",
+    "FILUSDC",
+    "FILUSDT",
+    "FIOUSDT",
+    "FISUSDT",
+    "FLMUSDT",
+    "FLOCKUSDT",
+    "FLOWUSDT",
+    "FLUIDUSDT",
+    "FLUXUSDT",
+    "FOLKSUSDT",
+    "FOOTBALLUSDT",
+    "FORMUSDT",
+    "FORTHUSDT",
+    "FRONTUSDT",
+    "FTMBUSD",
+    "FTMUSDT",
+    "FTTBUSD",
+    "FTTUSDT",
+    "FUNUSDT",
+    "FUSDT",
+    "FXSUSDT",
+    "GALABUSD",
+    "GALAUSDT",
+    "GALBUSD",
+    "GALUSDT",
+    "GASUSDT",
+    "GHSTUSDT",
+    "GIGGLEUSDT",
+    "GLMRUSDT",
+    "GLMUSDT",
+    "GMTBUSD",
+    "GMTUSDT",
+    "GMXUSDT",
+    "GOATUSDT",
+    "GPSUSDT",
+    "GRASSUSDT",
+    "GRIFFAINUSDT",
+    "GRTUSDT",
+    "GTCUSDT",
+    "GUNUSDT",
+    "GUSDT",
+    "HAEDALUSDT",
+    "HANAUSDT",
+    "HBARUSDC",
+    "HBARUSDT",
+    "HEIUSDT",
+    "HEMIUSDT",
+    "HFTUSDT",
+    "HIFIUSDT",
+    "HIGHUSDT",
+    "HIPPOUSDT",
+    "HIVEUSDT",
+    "HMSTRUSDT",
+    "HNTUSDT",
+    "HOLOUSDT",
+    "HOMEUSDT",
+    "HOOKUSDT",
+    "HOTUSDT",
+    "HUMAUSDT",
+    "HUSDT",
+    "HYPERUSDT",
+    "HYPEUSDT",
+    "ICNTUSDT",
+    "ICPBUSD",
+    "ICPUSDT",
+    "ICXUSDT",
+    "IDEXUSDT",
+    "IDOLUSDT",
+    "IDUSDT",
+    "ILVUSDT",
+    "IMXUSDT",
+    "INITUSDT",
+    "INJUSDT",
+    "INUSDT",
+    "IOSTUSDT",
+    "IOTAUSDT",
+    "IOTXUSDT",
+    "IOUSDT",
+    "IPUSDC",
+    "IPUSDT",
+    "JASMYUSDT",
+    "JCTUSDT",
+    "JELLYJELLYUSDT",
+    "JOEUSDT",
+    "JSTUSDT",
+    "JTOUSDT",
+    "JUPUSDT",
+    "KAIAUSDT",
+    "KAITOUSDC",
+    "KAITOUSDT",
+    "KASUSDT",
+    "KAVAUSDT",
+    "KDAUSDT",
+    "KEEPUSDT",
+    "KERNELUSDT",
+    "KEYUSDT",
+    "KGENUSDT",
+    "KITEUSDT",
+    "KLAYUSDT",
+    "KMNOUSDT",
+    "KNCUSDT",
+    "KOMAUSDT",
+    "KSMUSDT",
+    "LABUSDT",
+    "LAUSDT",
+    "LAYERUSDT",
+    "LDOBUSD",
+    "LDOUSDT",
+    "LENDUSDT",
+    "LEVERBUSD",
+    "LEVERUSDT",
+    "LIGHTUSDT",
+    "LINAUSDT",
+    "LINEAUSDT",
+    "LINKBUSD",
+    "LINKUSDC",
+    "LINKUSDT",
+    "LISTAUSDT",
+    "LITUSDT",
+    "LOKAUSDT",
+    "LOOMUSDT",
+    "LPTUSDT",
+    "LQTYUSDT",
+    "LRCUSDT",
+    "LSKUSDT",
+    "LTCBUSD",
+    "LTCUSDC",
+    "LTCUSDT",
+    "LUMIAUSDT",
+    "LUNA2BUSD",
+    "LUNA2USDT",
+    "LUNABUSD",
+    "LUNAUSDT",
+    "LYNUSDT",
+    "MAGICUSDT",
+    "MANAUSDT",
+    "MANTAUSDT",
+    "MASKUSDT",
+    "MATICBUSD",
+    "MATICUSDC",
+    "MATICUSDT",
+    "MAVIAUSDT",
+    "MAVIAUSDTSETTLED",
+    "MAVUSDT",
+    "MBLUSDT",
+    "MBOXUSDT",
+    "MDTUSDT",
+    "MELANIAUSDT",
+    "MEMEFIUSDT",
+    "MEMEUSDT",
+    "MERLUSDT",
+    "METISUSDT",
+    "METUSDT",
+    "MEUSDT",
+    "MEWUSDT",
+    "MILKUSDT",
+    "MINAUSDT",
+    "MINAUSDTSETTLED",
+    "MIRAUSDT",
+    "MITOUSDT",
+    "MKRUSDT",
+    "MLNUSDT",
+    "MMTUSDT",
+    "MOCAUSDT",
+    "MONUSDT",
+    "MOODENGUSDT",
+    "MORPHOUSDT",
+    "MOVEUSDT",
+    "MOVRUSDT",
+    "MTLUSDT",
+    "MUBARAKUSDT",
+    "MUSDT",
+    "MYROUSDT",
+    "MYXUSDT",
+    "NAORISUSDT",
+    "NEARBUSD",
+    "NEARUSDC",
+    "NEARUSDT",
+    "NEIROETHUSDT",
+    "NEIROUSDT",
+    "NEOUSDC",
+    "NEOUSDT",
+    "NEWTUSDT",
+    "NFPUSDT",
+    "NILUSDT",
+    "NKNUSDT",
+    "NMRUSDT",
+    "NOMUSDT",
+    "NOTUSDT",
+    "NTRNUSDT",
+    "NULSUSDT",
+    "NUUSDT",
+    "NXPCUSDT",
+    "OBOLUSDT",
+    "OCEANUSDT",
+    "OGNUSDT",
+    "OGUSDT",
+    "OLUSDT",
+    "OMGUSDT",
+    "OMNIUSDT",
+    "OMUSDT",
+    "ONDOUSDT",
+    "ONEUSDT",
+    "ONGUSDT",
+    "ONTUSDT",
+    "ONUSDT",
+    "OPENUSDT",
+    "OPUSDT",
+    "ORBSUSDT",
+    "ORCAUSDT",
+    "ORDERUSDT",
+    "ORDIUSDC",
+    "ORDIUSDT",
+    "OXTUSDT",
+    "PARTIUSDT",
+    "PAXGUSDT",
+    "PENDLEUSDT",
+    "PENGUUSDC",
+    "PENGUUSDT",
+    "PEOPLEUSDT",
+    "PERPUSDT",
+    "PHAUSDT",
+    "PHBBUSD",
+    "PHBUSDT",
+    "PIPPINUSDT",
+    "PIXELUSDT",
+    "PLAYUSDT",
+    "PLUMEUSDT",
+    "PNUTUSDC",
+    "PNUTUSDT",
+    "POLUSDT",
+    "POLYXUSDT",
+    "PONKEUSDT",
+    "POPCATUSDT",
+    "PORT3USDT",
+    "PORTALUSDT",
+    "POWRUSDT",
+    "PROMPTUSDT",
+    "PROMUSDT",
+    "PROVEUSDT",
+    "PTBUSDT",
+    "PUFFERUSDT",
+    "PUMPBTCUSDT",
+    "PUMPUSDT",
+    "PUMPUSDTSETTLED",
+    "PUNDIXUSDT",
+    "PYTHUSDT",
+    "QNTUSDT",
+    "QTUMUSDT",
+    "QUICKUSDT",
+    "QUSDT",
+    "RADUSDT",
+    "RAREUSDT",
+    "RAYSOLUSDT",
+    "RAYUSDT",
+    "RDNTUSDT",
+    "RECALLUSDT",
+    "REDUSDT",
+    "REEFUSDT",
+    "REIUSDT",
+    "RENDERUSDT",
+    "RENUSDT",
+    "RESOLVUSDT",
+    "REZUSDT",
+    "RIFUSDT",
+    "RIVERUSDT",
+    "RLCUSDT",
+    "RNDRUSDT",
+    "RONINUSDT",
+    "ROSEUSDT",
+    "RPLUSDT",
+    "RSRUSDT",
+    "RUNEUSDT",
+    "RVNUSDT",
+    "RVVUSDT",
+    "SAFEUSDT",
+    "SAGAUSDT",
+    "SAHARAUSDT",
+    "SANDBUSD",
+    "SANDUSDT",
+    "SANTOSUSDT",
+    "SAPIENUSDT",
+    "SCRTUSDT",
+    "SCRUSDT",
+    "SCUSDT",
+    "SEIUSDT",
+    "SFPUSDT",
+    "SHELLUSDT",
+    "SIGNUSDT",
+    "SIRENUSDT",
+    "SKATEUSDT",
+    "SKLUSDT",
+    "SKYAIUSDT",
+    "SKYUSDT",
+    "SLERFUSDT",
+    "SLPUSDT",
+    "SLPUSDTSETTLED",
+    "SNTUSDT",
+    "SNXUSDT",
+    "SOLBUSD",
+    "SOLUSDC",
+    "SOLUSDT",
+    "SOLVUSDT",
+    "SOMIUSDT",
+    "SONICUSDT",
+    "SOONUSDT",
+    "SOPHUSDT",
+    "SPELLUSDT",
+    "SPKUSDT",
+    "SPXUSDT",
+    "SQDUSDT",
+    "SRMUSDT",
+    "SSVUSDT",
+    "STABLEUSDT",
+    "STBLUSDT",
+    "STEEMUSDT",
+    "STGUSDT",
+    "STMXUSDT",
+    "STORJUSDT",
+    "STOUSDT",
+    "STPTUSDT",
+    "STRAXUSDT",
+    "STRKUSDT",
+    "STXUSDT",
+    "SUIUSDC",
+    "SUIUSDT",
+    "SUNUSDT",
+    "SUPERUSDT",
+    "SUSDT",
+    "SUSHIUSDT",
+    "SWARMSUSDT",
+    "SWELLUSDT",
+    "SXPUSDT",
+    "SXTUSDT",
+    "SYNUSDT",
+    "SYRUPUSDT",
+    "SYSUSDT",
+    "TACUSDT",
+    "TAGUSDT",
+    "TAIKOUSDT",
+    "TAKEUSDT",
+    "TANSSIUSDT",
+    "TAOUSDT",
+    "TAUSDT",
+    "THETAUSDT",
+    "THEUSDT",
+    "TIAUSDC",
+    "TIAUSDT",
+    "TLMBUSD",
+    "TLMUSDT",
+    "TLMUSDTSETTLED",
+    "TNSRUSDT",
+    "TOKENUSDT",
+    "TOMOUSDT",
+    "TONUSDT",
+    "TOSHIUSDT",
+    "TOWNSUSDT",
+    "TRADOORUSDT",
+    "TRBUSDT",
+    "TREEUSDT",
+    "TROYUSDT",
+    "TRUMPUSDC",
+    "TRUMPUSDT",
+    "TRUSTUSDT",
+    "TRUTHUSDT",
+    "TRUUSDT",
+    "TRXBUSD",
+    "TRXUSDT",
+    "TSTUSDT",
+    "TURBOUSDT",
+    "TURTLEUSDT",
+    "TUSDT",
+    "TUTUSDT",
+    "TWTUSDT",
+    "UAIUSDT",
+    "UBUSDT",
+    "UMAUSDT",
+    "UNFIUSDT",
+    "UNIBUSD",
+    "UNIUSDC",
+    "UNIUSDT",
+    "USDCUSDT",
+    "USELESSUSDT",
+    "USTCUSDT",
+    "USUALUSDT",
+    "UXLINKUSDT",
+    "VANAUSDT",
+    "VANRYUSDT",
+    "VELODROMEUSDT",
+    "VELVETUSDT",
+    "VETUSDT",
+    "VFYUSDT",
+    "VICUSDT",
+    "VIDTUSDT",
+    "VINEUSDT",
+    "VIRTUALUSDT",
+    "VOXELUSDT",
+    "VTHOUSDT",
+    "VVVUSDT",
+    "WALUSDT",
+    "WAVESBUSD",
+    "WAVESUSDT",
+    "WAXPUSDT",
+    "WCTUSDT",
+    "WIFUSDC",
+    "WIFUSDT",
+    "WLDUSDC",
+    "WLDUSDT",
+    "WLFIUSDC",
+    "WLFIUSDT",
+    "WOOUSDT",
+    "WUSDT",
+    "XAIUSDT",
+    "XANUSDT",
+    "XCNUSDT",
+    "XEMUSDT",
+    "XLMUSDT",
+    "XMRUSDT",
+    "XNYUSDT",
+    "XPINUSDT",
+    "XPLUSDT",
+    "XRPBUSD",
+    "XRPUSDC",
+    "XRPUSDT",
+    "XTZUSDT",
+    "XVGUSDT",
+    "XVSUSDT",
+    "YALAUSDT",
+    "YBUSDT",
+    "YFIIUSDT",
+    "YFIUSDT",
+    "YGGUSDT",
+    "ZBTUSDT",
+    "ZECUSDT",
+    "ZENUSDT",
+    "ZEREBROUSDT",
+    "ZETAUSDT",
+    "ZILUSDT",
+    "ZKCUSDT",
+    "ZKJUSDT",
+    "ZKUSDT",
+    "ZORAUSDT",
+    "ZRCUSDT",
+    "ZROUSDT",
+    "ZRXUSDT",
+    "\u5e01\u5b89\u4eba\u751fUSDT"
+  ],
+  "delivery_contracts": [
+    "BTCBUSD_210129",
+    "BTCBUSD_210226",
+    "BTCUSDT_210326",
+    "BTCUSDT_210625",
+    "BTCUSDT_210924",
+    "BTCUSDT_211231",
+    "BTCUSDT_220325",
+    "BTCUSDT_220624",
+    "BTCUSDT_220930",
+    "BTCUSDT_221230",
+    "BTCUSDT_230331",
+    "BTCUSDT_230630",
+    "BTCUSDT_230929",
+    "BTCUSDT_231229",
+    "BTCUSDT_240329",
+    "BTCUSDT_240628",
+    "BTCUSDT_240927",
+    "BTCUSDT_241227",
+    "BTCUSDT_250328",
+    "BTCUSDT_250627",
+    "BTCUSDT_250926",
+    "BTCUSDT_251226",
+    "BTCUSDT_260327",
+    "ETHUSDT_210326",
+    "ETHUSDT_210625",
+    "ETHUSDT_210924",
+    "ETHUSDT_211231",
+    "ETHUSDT_220325",
+    "ETHUSDT_220624",
+    "ETHUSDT_220930",
+    "ETHUSDT_221230",
+    "ETHUSDT_230331",
+    "ETHUSDT_230630",
+    "ETHUSDT_230929",
+    "ETHUSDT_231229",
+    "ETHUSDT_240329",
+    "ETHUSDT_240628",
+    "ETHUSDT_240927",
+    "ETHUSDT_241227",
+    "ETHUSDT_250328",
+    "ETHUSDT_250627",
+    "ETHUSDT_250926",
+    "ETHUSDT_251226",
+    "ETHUSDT_260327"
+  ],
+  "classified_symbols": [
+    {
+      "symbol": "0GUSDT",
+      "type": "perpetual",
+      "base_symbol": "0GUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000000BOBUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000000BOBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000000MOGUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000000MOGUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000BONKUSDC",
+      "type": "perpetual",
+      "base_symbol": "1000BONKUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000BONKUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000BONKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000BTTCUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000BTTCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000CATUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000CATUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000CHEEMSUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000CHEEMSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000FLOKIUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000FLOKIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000LUNCBUSD",
+      "type": "perpetual",
+      "base_symbol": "1000LUNCBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000LUNCUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000LUNCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000PEPEUSDC",
+      "type": "perpetual",
+      "base_symbol": "1000PEPEUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000PEPEUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000PEPEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000RATSUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000RATSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000SATSUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000SATSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000SHIBBUSD",
+      "type": "perpetual",
+      "base_symbol": "1000SHIBBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000SHIBUSDC",
+      "type": "perpetual",
+      "base_symbol": "1000SHIBUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000SHIBUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000SHIBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000WHYUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000WHYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000XECUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000XECUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1000XUSDT",
+      "type": "perpetual",
+      "base_symbol": "1000XUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1INCHUSDT",
+      "type": "perpetual",
+      "base_symbol": "1INCHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "1MBABYDOGEUSDT",
+      "type": "perpetual",
+      "base_symbol": "1MBABYDOGEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "2ZUSDT",
+      "type": "perpetual",
+      "base_symbol": "2ZUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "42USDT",
+      "type": "perpetual",
+      "base_symbol": "42USDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "4USDT",
+      "type": "perpetual",
+      "base_symbol": "4USDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "A2ZUSDT",
+      "type": "perpetual",
+      "base_symbol": "A2ZUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AAVEUSDC",
+      "type": "perpetual",
+      "base_symbol": "AAVEUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AAVEUSDT",
+      "type": "perpetual",
+      "base_symbol": "AAVEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ACEUSDT",
+      "type": "perpetual",
+      "base_symbol": "ACEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ACHUSDT",
+      "type": "perpetual",
+      "base_symbol": "ACHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ACTUSDT",
+      "type": "perpetual",
+      "base_symbol": "ACTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ACXUSDT",
+      "type": "perpetual",
+      "base_symbol": "ACXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ADABUSD",
+      "type": "perpetual",
+      "base_symbol": "ADABUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ADAUSDC",
+      "type": "perpetual",
+      "base_symbol": "ADAUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ADAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ADAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AERGOUSDT",
+      "type": "perpetual",
+      "base_symbol": "AERGOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AERGOUSDTSETTLED",
+      "type": "perpetual",
+      "base_symbol": "AERGOUSDTSETTLED",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AEROUSDT",
+      "type": "perpetual",
+      "base_symbol": "AEROUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AEVOUSDT",
+      "type": "perpetual",
+      "base_symbol": "AEVOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AGIXBUSD",
+      "type": "perpetual",
+      "base_symbol": "AGIXBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AGIXUSDT",
+      "type": "perpetual",
+      "base_symbol": "AGIXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AGLDUSDT",
+      "type": "perpetual",
+      "base_symbol": "AGLDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AGTUSDT",
+      "type": "perpetual",
+      "base_symbol": "AGTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AI16ZUSDT",
+      "type": "perpetual",
+      "base_symbol": "AI16ZUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AIAUSDT",
+      "type": "perpetual",
+      "base_symbol": "AIAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AINUSDT",
+      "type": "perpetual",
+      "base_symbol": "AINUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AIOTUSDT",
+      "type": "perpetual",
+      "base_symbol": "AIOTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AIOUSDT",
+      "type": "perpetual",
+      "base_symbol": "AIOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AIUSDT",
+      "type": "perpetual",
+      "base_symbol": "AIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AIXBTUSDT",
+      "type": "perpetual",
+      "base_symbol": "AIXBTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AKEUSDT",
+      "type": "perpetual",
+      "base_symbol": "AKEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AKROUSDT",
+      "type": "perpetual",
+      "base_symbol": "AKROUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AKTUSDT",
+      "type": "perpetual",
+      "base_symbol": "AKTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ALCHUSDT",
+      "type": "perpetual",
+      "base_symbol": "ALCHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ALGOUSDT",
+      "type": "perpetual",
+      "base_symbol": "ALGOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ALICEUSDT",
+      "type": "perpetual",
+      "base_symbol": "ALICEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ALLOUSDT",
+      "type": "perpetual",
+      "base_symbol": "ALLOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ALLUSDT",
+      "type": "perpetual",
+      "base_symbol": "ALLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ALPACAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ALPACAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ALPHAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ALPHAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ALPINEUSDT",
+      "type": "perpetual",
+      "base_symbol": "ALPINEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ALTUSDT",
+      "type": "perpetual",
+      "base_symbol": "ALTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AMBBUSD",
+      "type": "perpetual",
+      "base_symbol": "AMBBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AMBUSDT",
+      "type": "perpetual",
+      "base_symbol": "AMBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ANCBUSD",
+      "type": "perpetual",
+      "base_symbol": "ANCBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ANCUSDT",
+      "type": "perpetual",
+      "base_symbol": "ANCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ANIMEUSDT",
+      "type": "perpetual",
+      "base_symbol": "ANIMEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ANKRUSDT",
+      "type": "perpetual",
+      "base_symbol": "ANKRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ANTUSDT",
+      "type": "perpetual",
+      "base_symbol": "ANTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "APEBUSD",
+      "type": "perpetual",
+      "base_symbol": "APEBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "APEUSDT",
+      "type": "perpetual",
+      "base_symbol": "APEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "API3USDT",
+      "type": "perpetual",
+      "base_symbol": "API3USDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "APRUSDT",
+      "type": "perpetual",
+      "base_symbol": "APRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "APTBUSD",
+      "type": "perpetual",
+      "base_symbol": "APTBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "APTUSDT",
+      "type": "perpetual",
+      "base_symbol": "APTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ARBUSDC",
+      "type": "perpetual",
+      "base_symbol": "ARBUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ARBUSDT",
+      "type": "perpetual",
+      "base_symbol": "ARBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ARCUSDT",
+      "type": "perpetual",
+      "base_symbol": "ARCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ARIAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ARIAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ARKMUSDT",
+      "type": "perpetual",
+      "base_symbol": "ARKMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ARKUSDT",
+      "type": "perpetual",
+      "base_symbol": "ARKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ARPAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ARPAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ARUSDT",
+      "type": "perpetual",
+      "base_symbol": "ARUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ASRUSDT",
+      "type": "perpetual",
+      "base_symbol": "ASRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ASTERUSDT",
+      "type": "perpetual",
+      "base_symbol": "ASTERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ASTRUSDT",
+      "type": "perpetual",
+      "base_symbol": "ASTRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ATAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ATAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ATHUSDT",
+      "type": "perpetual",
+      "base_symbol": "ATHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ATOMUSDT",
+      "type": "perpetual",
+      "base_symbol": "ATOMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ATUSDT",
+      "type": "perpetual",
+      "base_symbol": "ATUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AUCTIONBUSD",
+      "type": "perpetual",
+      "base_symbol": "AUCTIONBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AUCTIONUSDT",
+      "type": "perpetual",
+      "base_symbol": "AUCTIONUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AUDIOUSDT",
+      "type": "perpetual",
+      "base_symbol": "AUDIOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AUSDT",
+      "type": "perpetual",
+      "base_symbol": "AUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AVAAIUSDT",
+      "type": "perpetual",
+      "base_symbol": "AVAAIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AVAUSDT",
+      "type": "perpetual",
+      "base_symbol": "AVAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AVAXBUSD",
+      "type": "perpetual",
+      "base_symbol": "AVAXBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AVAXUSDC",
+      "type": "perpetual",
+      "base_symbol": "AVAXUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AVAXUSDT",
+      "type": "perpetual",
+      "base_symbol": "AVAXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AVNTUSDT",
+      "type": "perpetual",
+      "base_symbol": "AVNTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AWEUSDT",
+      "type": "perpetual",
+      "base_symbol": "AWEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AXLUSDT",
+      "type": "perpetual",
+      "base_symbol": "AXLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "AXSUSDT",
+      "type": "perpetual",
+      "base_symbol": "AXSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "B2USDT",
+      "type": "perpetual",
+      "base_symbol": "B2USDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "B3USDT",
+      "type": "perpetual",
+      "base_symbol": "B3USDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BABYUSDT",
+      "type": "perpetual",
+      "base_symbol": "BABYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BADGERUSDT",
+      "type": "perpetual",
+      "base_symbol": "BADGERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BAKEUSDT",
+      "type": "perpetual",
+      "base_symbol": "BAKEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BALUSDT",
+      "type": "perpetual",
+      "base_symbol": "BALUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BANANAS31USDT",
+      "type": "perpetual",
+      "base_symbol": "BANANAS31USDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BANANAUSDT",
+      "type": "perpetual",
+      "base_symbol": "BANANAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BANDUSDT",
+      "type": "perpetual",
+      "base_symbol": "BANDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BANKUSDT",
+      "type": "perpetual",
+      "base_symbol": "BANKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BANUSDT",
+      "type": "perpetual",
+      "base_symbol": "BANUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BARDUSDT",
+      "type": "perpetual",
+      "base_symbol": "BARDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BASUSDT",
+      "type": "perpetual",
+      "base_symbol": "BASUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BATUSDT",
+      "type": "perpetual",
+      "base_symbol": "BATUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BBUSDT",
+      "type": "perpetual",
+      "base_symbol": "BBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BCHUSDC",
+      "type": "perpetual",
+      "base_symbol": "BCHUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BCHUSDT",
+      "type": "perpetual",
+      "base_symbol": "BCHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BDXNUSDT",
+      "type": "perpetual",
+      "base_symbol": "BDXNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BEAMXUSDT",
+      "type": "perpetual",
+      "base_symbol": "BEAMXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BELUSDT",
+      "type": "perpetual",
+      "base_symbol": "BELUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BERAUSDT",
+      "type": "perpetual",
+      "base_symbol": "BERAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BICOUSDT",
+      "type": "perpetual",
+      "base_symbol": "BICOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BIDUSDT",
+      "type": "perpetual",
+      "base_symbol": "BIDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BIGTIMEUSDT",
+      "type": "perpetual",
+      "base_symbol": "BIGTIMEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BIOUSDC",
+      "type": "perpetual",
+      "base_symbol": "BIOUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BIOUSDT",
+      "type": "perpetual",
+      "base_symbol": "BIOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BLESSUSDT",
+      "type": "perpetual",
+      "base_symbol": "BLESSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BLUAIUSDT",
+      "type": "perpetual",
+      "base_symbol": "BLUAIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BLUEBIRDUSDT",
+      "type": "perpetual",
+      "base_symbol": "BLUEBIRDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BLURUSDT",
+      "type": "perpetual",
+      "base_symbol": "BLURUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BLZUSDT",
+      "type": "perpetual",
+      "base_symbol": "BLZUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BMTUSDT",
+      "type": "perpetual",
+      "base_symbol": "BMTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BNBBUSD",
+      "type": "perpetual",
+      "base_symbol": "BNBBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BNBUSDC",
+      "type": "perpetual",
+      "base_symbol": "BNBUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BNBUSDT",
+      "type": "perpetual",
+      "base_symbol": "BNBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BNTUSDT",
+      "type": "perpetual",
+      "base_symbol": "BNTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BNXUSDT",
+      "type": "perpetual",
+      "base_symbol": "BNXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BNXUSDTSETTLED",
+      "type": "perpetual",
+      "base_symbol": "BNXUSDTSETTLED",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BOMEUSDC",
+      "type": "perpetual",
+      "base_symbol": "BOMEUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BOMEUSDT",
+      "type": "perpetual",
+      "base_symbol": "BOMEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BONDUSDT",
+      "type": "perpetual",
+      "base_symbol": "BONDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BRETTUSDT",
+      "type": "perpetual",
+      "base_symbol": "BRETTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BROCCOLI714USDT",
+      "type": "perpetual",
+      "base_symbol": "BROCCOLI714USDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BROCCOLIF3BUSDT",
+      "type": "perpetual",
+      "base_symbol": "BROCCOLIF3BUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BRUSDT",
+      "type": "perpetual",
+      "base_symbol": "BRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BSVUSDT",
+      "type": "perpetual",
+      "base_symbol": "BSVUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BSWUSDT",
+      "type": "perpetual",
+      "base_symbol": "BSWUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BTCBUSD",
+      "type": "perpetual",
+      "base_symbol": "BTCBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BTCBUSD_210129",
+      "type": "delivery",
+      "base_symbol": "BTCBUSD",
+      "expiry_date": "2021-01-29",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCBUSD_210226",
+      "type": "delivery",
+      "base_symbol": "BTCBUSD",
+      "expiry_date": "2021-02-26",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCDOMUSDT",
+      "type": "perpetual",
+      "base_symbol": "BTCDOMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BTCSTUSDT",
+      "type": "perpetual",
+      "base_symbol": "BTCSTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BTCUSDC",
+      "type": "perpetual",
+      "base_symbol": "BTCUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BTCUSDT",
+      "type": "perpetual",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BTCUSDT_210326",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2021-03-26",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_210625",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2021-06-25",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_210924",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2021-09-24",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_211231",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2021-12-31",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_220325",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2022-03-25",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_220624",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2022-06-24",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_220930",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2022-09-30",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_221230",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2022-12-30",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_230331",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2023-03-31",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_230630",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2023-06-30",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_230929",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2023-09-29",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_231229",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2023-12-29",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_240329",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2024-03-29",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_240628",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2024-06-28",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_240927",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2024-09-27",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_241227",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2024-12-27",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_250328",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2025-03-28",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_250627",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2025-06-27",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_250926",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2025-09-26",
+      "is_expired": true
+    },
+    {
+      "symbol": "BTCUSDT_251226",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2025-12-26",
+      "is_expired": false
+    },
+    {
+      "symbol": "BTCUSDT_260327",
+      "type": "delivery",
+      "base_symbol": "BTCUSDT",
+      "expiry_date": "2026-03-27",
+      "is_expired": false
+    },
+    {
+      "symbol": "BTRUSDT",
+      "type": "perpetual",
+      "base_symbol": "BTRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BTSUSDT",
+      "type": "perpetual",
+      "base_symbol": "BTSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BTTUSDT",
+      "type": "perpetual",
+      "base_symbol": "BTTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BULLAUSDT",
+      "type": "perpetual",
+      "base_symbol": "BULLAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BUSDT",
+      "type": "perpetual",
+      "base_symbol": "BUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "BZRXUSDT",
+      "type": "perpetual",
+      "base_symbol": "BZRXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "C98USDT",
+      "type": "perpetual",
+      "base_symbol": "C98USDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CAKEUSDT",
+      "type": "perpetual",
+      "base_symbol": "CAKEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CARVUSDT",
+      "type": "perpetual",
+      "base_symbol": "CARVUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CATIUSDT",
+      "type": "perpetual",
+      "base_symbol": "CATIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CCUSDT",
+      "type": "perpetual",
+      "base_symbol": "CCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CELOUSDT",
+      "type": "perpetual",
+      "base_symbol": "CELOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CELRUSDT",
+      "type": "perpetual",
+      "base_symbol": "CELRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CETUSUSDT",
+      "type": "perpetual",
+      "base_symbol": "CETUSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CFXUSDT",
+      "type": "perpetual",
+      "base_symbol": "CFXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CGPTUSDT",
+      "type": "perpetual",
+      "base_symbol": "CGPTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CHESSUSDT",
+      "type": "perpetual",
+      "base_symbol": "CHESSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CHILLGUYUSDT",
+      "type": "perpetual",
+      "base_symbol": "CHILLGUYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CHRUSDT",
+      "type": "perpetual",
+      "base_symbol": "CHRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CHZUSDT",
+      "type": "perpetual",
+      "base_symbol": "CHZUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CKBUSDT",
+      "type": "perpetual",
+      "base_symbol": "CKBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CLOUSDT",
+      "type": "perpetual",
+      "base_symbol": "CLOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "COAIUSDT",
+      "type": "perpetual",
+      "base_symbol": "COAIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "COCOSUSDT",
+      "type": "perpetual",
+      "base_symbol": "COCOSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "COMBOUSDT",
+      "type": "perpetual",
+      "base_symbol": "COMBOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "COMMONUSDT",
+      "type": "perpetual",
+      "base_symbol": "COMMONUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "COMPUSDT",
+      "type": "perpetual",
+      "base_symbol": "COMPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "COOKIEUSDT",
+      "type": "perpetual",
+      "base_symbol": "COOKIEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "COSUSDT",
+      "type": "perpetual",
+      "base_symbol": "COSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "COTIUSDT",
+      "type": "perpetual",
+      "base_symbol": "COTIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "COWUSDT",
+      "type": "perpetual",
+      "base_symbol": "COWUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CROSSUSDT",
+      "type": "perpetual",
+      "base_symbol": "CROSSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CRVUSDC",
+      "type": "perpetual",
+      "base_symbol": "CRVUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CRVUSDT",
+      "type": "perpetual",
+      "base_symbol": "CRVUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CTKUSDT",
+      "type": "perpetual",
+      "base_symbol": "CTKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CTKUSDTSETTLED",
+      "type": "perpetual",
+      "base_symbol": "CTKUSDTSETTLED",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CTSIUSDT",
+      "type": "perpetual",
+      "base_symbol": "CTSIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CUDISUSDT",
+      "type": "perpetual",
+      "base_symbol": "CUDISUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CUSDT",
+      "type": "perpetual",
+      "base_symbol": "CUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CVCUSDT",
+      "type": "perpetual",
+      "base_symbol": "CVCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CVCUSDTSETTLED",
+      "type": "perpetual",
+      "base_symbol": "CVCUSDTSETTLED",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CVXBUSD",
+      "type": "perpetual",
+      "base_symbol": "CVXBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CVXUSDT",
+      "type": "perpetual",
+      "base_symbol": "CVXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CVXUSDTSETTLED",
+      "type": "perpetual",
+      "base_symbol": "CVXUSDTSETTLED",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "CYBERUSDT",
+      "type": "perpetual",
+      "base_symbol": "CYBERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DAMUSDT",
+      "type": "perpetual",
+      "base_symbol": "DAMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DARUSDT",
+      "type": "perpetual",
+      "base_symbol": "DARUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DASHUSDT",
+      "type": "perpetual",
+      "base_symbol": "DASHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DEEPUSDT",
+      "type": "perpetual",
+      "base_symbol": "DEEPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DEFIUSDT",
+      "type": "perpetual",
+      "base_symbol": "DEFIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DEGENUSDT",
+      "type": "perpetual",
+      "base_symbol": "DEGENUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DEGOUSDT",
+      "type": "perpetual",
+      "base_symbol": "DEGOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DENTUSDT",
+      "type": "perpetual",
+      "base_symbol": "DENTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DEXEUSDT",
+      "type": "perpetual",
+      "base_symbol": "DEXEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DFUSDT",
+      "type": "perpetual",
+      "base_symbol": "DFUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DGBUSDT",
+      "type": "perpetual",
+      "base_symbol": "DGBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DIAUSDT",
+      "type": "perpetual",
+      "base_symbol": "DIAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DMCUSDT",
+      "type": "perpetual",
+      "base_symbol": "DMCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DODOBUSD",
+      "type": "perpetual",
+      "base_symbol": "DODOBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DODOUSDT",
+      "type": "perpetual",
+      "base_symbol": "DODOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DODOXUSDT",
+      "type": "perpetual",
+      "base_symbol": "DODOXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DOGEBUSD",
+      "type": "perpetual",
+      "base_symbol": "DOGEBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DOGEUSDC",
+      "type": "perpetual",
+      "base_symbol": "DOGEUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DOGEUSDT",
+      "type": "perpetual",
+      "base_symbol": "DOGEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DOGSUSDT",
+      "type": "perpetual",
+      "base_symbol": "DOGSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DOLOUSDT",
+      "type": "perpetual",
+      "base_symbol": "DOLOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DOODUSDT",
+      "type": "perpetual",
+      "base_symbol": "DOODUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DOTBUSD",
+      "type": "perpetual",
+      "base_symbol": "DOTBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DOTECOUSDT",
+      "type": "perpetual",
+      "base_symbol": "DOTECOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DOTUSDT",
+      "type": "perpetual",
+      "base_symbol": "DOTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DRIFTUSDT",
+      "type": "perpetual",
+      "base_symbol": "DRIFTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DUSDT",
+      "type": "perpetual",
+      "base_symbol": "DUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DUSKUSDT",
+      "type": "perpetual",
+      "base_symbol": "DUSKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DYDXUSDT",
+      "type": "perpetual",
+      "base_symbol": "DYDXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "DYMUSDT",
+      "type": "perpetual",
+      "base_symbol": "DYMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "EDENUSDT",
+      "type": "perpetual",
+      "base_symbol": "EDENUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "EDUUSDT",
+      "type": "perpetual",
+      "base_symbol": "EDUUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "EGLDUSDT",
+      "type": "perpetual",
+      "base_symbol": "EGLDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "EIGENUSDT",
+      "type": "perpetual",
+      "base_symbol": "EIGENUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ENAUSDC",
+      "type": "perpetual",
+      "base_symbol": "ENAUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ENAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ENAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ENJUSDT",
+      "type": "perpetual",
+      "base_symbol": "ENJUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ENSOUSDT",
+      "type": "perpetual",
+      "base_symbol": "ENSOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ENSUSDT",
+      "type": "perpetual",
+      "base_symbol": "ENSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "EOSUSDT",
+      "type": "perpetual",
+      "base_symbol": "EOSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "EPICUSDT",
+      "type": "perpetual",
+      "base_symbol": "EPICUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "EPTUSDT",
+      "type": "perpetual",
+      "base_symbol": "EPTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ERAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ERAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ESPORTSUSDT",
+      "type": "perpetual",
+      "base_symbol": "ESPORTSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ETCBUSD",
+      "type": "perpetual",
+      "base_symbol": "ETCBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ETCUSDT",
+      "type": "perpetual",
+      "base_symbol": "ETCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ETHBTC",
+      "type": "perpetual",
+      "base_symbol": "ETHBTC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ETHBUSD",
+      "type": "perpetual",
+      "base_symbol": "ETHBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ETHFIUSDC",
+      "type": "perpetual",
+      "base_symbol": "ETHFIUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ETHFIUSDT",
+      "type": "perpetual",
+      "base_symbol": "ETHFIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ETHUSDC",
+      "type": "perpetual",
+      "base_symbol": "ETHUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ETHUSDT",
+      "type": "perpetual",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ETHUSDT_210326",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2021-03-26",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_210625",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2021-06-25",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_210924",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2021-09-24",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_211231",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2021-12-31",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_220325",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2022-03-25",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_220624",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2022-06-24",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_220930",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2022-09-30",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_221230",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2022-12-30",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_230331",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2023-03-31",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_230630",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2023-06-30",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_230929",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2023-09-29",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_231229",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2023-12-29",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_240329",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2024-03-29",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_240628",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2024-06-28",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_240927",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2024-09-27",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_241227",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2024-12-27",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_250328",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2025-03-28",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_250627",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2025-06-27",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_250926",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2025-09-26",
+      "is_expired": true
+    },
+    {
+      "symbol": "ETHUSDT_251226",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2025-12-26",
+      "is_expired": false
+    },
+    {
+      "symbol": "ETHUSDT_260327",
+      "type": "delivery",
+      "base_symbol": "ETHUSDT",
+      "expiry_date": "2026-03-27",
+      "is_expired": false
+    },
+    {
+      "symbol": "ETHWUSDT",
+      "type": "perpetual",
+      "base_symbol": "ETHWUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "EULUSDT",
+      "type": "perpetual",
+      "base_symbol": "EULUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "EVAAUSDT",
+      "type": "perpetual",
+      "base_symbol": "EVAAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FARTCOINUSDT",
+      "type": "perpetual",
+      "base_symbol": "FARTCOINUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FETUSDT",
+      "type": "perpetual",
+      "base_symbol": "FETUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FFUSDT",
+      "type": "perpetual",
+      "base_symbol": "FFUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FHEUSDT",
+      "type": "perpetual",
+      "base_symbol": "FHEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FIDAUSDT",
+      "type": "perpetual",
+      "base_symbol": "FIDAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FILBUSD",
+      "type": "perpetual",
+      "base_symbol": "FILBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FILUSDC",
+      "type": "perpetual",
+      "base_symbol": "FILUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FILUSDT",
+      "type": "perpetual",
+      "base_symbol": "FILUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FIOUSDT",
+      "type": "perpetual",
+      "base_symbol": "FIOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FISUSDT",
+      "type": "perpetual",
+      "base_symbol": "FISUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FLMUSDT",
+      "type": "perpetual",
+      "base_symbol": "FLMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FLOCKUSDT",
+      "type": "perpetual",
+      "base_symbol": "FLOCKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FLOWUSDT",
+      "type": "perpetual",
+      "base_symbol": "FLOWUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FLUIDUSDT",
+      "type": "perpetual",
+      "base_symbol": "FLUIDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FLUXUSDT",
+      "type": "perpetual",
+      "base_symbol": "FLUXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FOLKSUSDT",
+      "type": "perpetual",
+      "base_symbol": "FOLKSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FOOTBALLUSDT",
+      "type": "perpetual",
+      "base_symbol": "FOOTBALLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FORMUSDT",
+      "type": "perpetual",
+      "base_symbol": "FORMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FORTHUSDT",
+      "type": "perpetual",
+      "base_symbol": "FORTHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FRONTUSDT",
+      "type": "perpetual",
+      "base_symbol": "FRONTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FTMBUSD",
+      "type": "perpetual",
+      "base_symbol": "FTMBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FTMUSDT",
+      "type": "perpetual",
+      "base_symbol": "FTMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FTTBUSD",
+      "type": "perpetual",
+      "base_symbol": "FTTBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FTTUSDT",
+      "type": "perpetual",
+      "base_symbol": "FTTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FUNUSDT",
+      "type": "perpetual",
+      "base_symbol": "FUNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FUSDT",
+      "type": "perpetual",
+      "base_symbol": "FUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "FXSUSDT",
+      "type": "perpetual",
+      "base_symbol": "FXSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GALABUSD",
+      "type": "perpetual",
+      "base_symbol": "GALABUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GALAUSDT",
+      "type": "perpetual",
+      "base_symbol": "GALAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GALBUSD",
+      "type": "perpetual",
+      "base_symbol": "GALBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GALUSDT",
+      "type": "perpetual",
+      "base_symbol": "GALUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GASUSDT",
+      "type": "perpetual",
+      "base_symbol": "GASUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GHSTUSDT",
+      "type": "perpetual",
+      "base_symbol": "GHSTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GIGGLEUSDT",
+      "type": "perpetual",
+      "base_symbol": "GIGGLEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GLMRUSDT",
+      "type": "perpetual",
+      "base_symbol": "GLMRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GLMUSDT",
+      "type": "perpetual",
+      "base_symbol": "GLMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GMTBUSD",
+      "type": "perpetual",
+      "base_symbol": "GMTBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GMTUSDT",
+      "type": "perpetual",
+      "base_symbol": "GMTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GMXUSDT",
+      "type": "perpetual",
+      "base_symbol": "GMXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GOATUSDT",
+      "type": "perpetual",
+      "base_symbol": "GOATUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GPSUSDT",
+      "type": "perpetual",
+      "base_symbol": "GPSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GRASSUSDT",
+      "type": "perpetual",
+      "base_symbol": "GRASSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GRIFFAINUSDT",
+      "type": "perpetual",
+      "base_symbol": "GRIFFAINUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GRTUSDT",
+      "type": "perpetual",
+      "base_symbol": "GRTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GTCUSDT",
+      "type": "perpetual",
+      "base_symbol": "GTCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GUNUSDT",
+      "type": "perpetual",
+      "base_symbol": "GUNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "GUSDT",
+      "type": "perpetual",
+      "base_symbol": "GUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HAEDALUSDT",
+      "type": "perpetual",
+      "base_symbol": "HAEDALUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HANAUSDT",
+      "type": "perpetual",
+      "base_symbol": "HANAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HBARUSDC",
+      "type": "perpetual",
+      "base_symbol": "HBARUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HBARUSDT",
+      "type": "perpetual",
+      "base_symbol": "HBARUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HEIUSDT",
+      "type": "perpetual",
+      "base_symbol": "HEIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HEMIUSDT",
+      "type": "perpetual",
+      "base_symbol": "HEMIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HFTUSDT",
+      "type": "perpetual",
+      "base_symbol": "HFTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HIFIUSDT",
+      "type": "perpetual",
+      "base_symbol": "HIFIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HIGHUSDT",
+      "type": "perpetual",
+      "base_symbol": "HIGHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HIPPOUSDT",
+      "type": "perpetual",
+      "base_symbol": "HIPPOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HIVEUSDT",
+      "type": "perpetual",
+      "base_symbol": "HIVEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HMSTRUSDT",
+      "type": "perpetual",
+      "base_symbol": "HMSTRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HNTUSDT",
+      "type": "perpetual",
+      "base_symbol": "HNTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HOLOUSDT",
+      "type": "perpetual",
+      "base_symbol": "HOLOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HOMEUSDT",
+      "type": "perpetual",
+      "base_symbol": "HOMEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HOOKUSDT",
+      "type": "perpetual",
+      "base_symbol": "HOOKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HOTUSDT",
+      "type": "perpetual",
+      "base_symbol": "HOTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HUMAUSDT",
+      "type": "perpetual",
+      "base_symbol": "HUMAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HUSDT",
+      "type": "perpetual",
+      "base_symbol": "HUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HYPERUSDT",
+      "type": "perpetual",
+      "base_symbol": "HYPERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "HYPEUSDT",
+      "type": "perpetual",
+      "base_symbol": "HYPEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ICNTUSDT",
+      "type": "perpetual",
+      "base_symbol": "ICNTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ICPBUSD",
+      "type": "perpetual",
+      "base_symbol": "ICPBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ICPUSDT",
+      "type": "perpetual",
+      "base_symbol": "ICPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ICPUSDT_SETTLED",
+      "type": "perpetual_variant",
+      "base_symbol": "ICPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ICXUSDT",
+      "type": "perpetual",
+      "base_symbol": "ICXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "IDEXUSDT",
+      "type": "perpetual",
+      "base_symbol": "IDEXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "IDOLUSDT",
+      "type": "perpetual",
+      "base_symbol": "IDOLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "IDUSDT",
+      "type": "perpetual",
+      "base_symbol": "IDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ILVUSDT",
+      "type": "perpetual",
+      "base_symbol": "ILVUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "IMXUSDT",
+      "type": "perpetual",
+      "base_symbol": "IMXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "INITUSDT",
+      "type": "perpetual",
+      "base_symbol": "INITUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "INJUSDT",
+      "type": "perpetual",
+      "base_symbol": "INJUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "INUSDT",
+      "type": "perpetual",
+      "base_symbol": "INUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "IOSTUSDT",
+      "type": "perpetual",
+      "base_symbol": "IOSTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "IOTAUSDT",
+      "type": "perpetual",
+      "base_symbol": "IOTAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "IOTXUSDT",
+      "type": "perpetual",
+      "base_symbol": "IOTXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "IOUSDT",
+      "type": "perpetual",
+      "base_symbol": "IOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "IPUSDC",
+      "type": "perpetual",
+      "base_symbol": "IPUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "IPUSDT",
+      "type": "perpetual",
+      "base_symbol": "IPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "JASMYUSDT",
+      "type": "perpetual",
+      "base_symbol": "JASMYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "JCTUSDT",
+      "type": "perpetual",
+      "base_symbol": "JCTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "JELLYJELLYUSDT",
+      "type": "perpetual",
+      "base_symbol": "JELLYJELLYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "JOEUSDT",
+      "type": "perpetual",
+      "base_symbol": "JOEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "JSTUSDT",
+      "type": "perpetual",
+      "base_symbol": "JSTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "JTOUSDT",
+      "type": "perpetual",
+      "base_symbol": "JTOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "JUPUSDT",
+      "type": "perpetual",
+      "base_symbol": "JUPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KAIAUSDT",
+      "type": "perpetual",
+      "base_symbol": "KAIAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KAITOUSDC",
+      "type": "perpetual",
+      "base_symbol": "KAITOUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KAITOUSDT",
+      "type": "perpetual",
+      "base_symbol": "KAITOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KASUSDT",
+      "type": "perpetual",
+      "base_symbol": "KASUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KAVAUSDT",
+      "type": "perpetual",
+      "base_symbol": "KAVAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KDAUSDT",
+      "type": "perpetual",
+      "base_symbol": "KDAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KEEPUSDT",
+      "type": "perpetual",
+      "base_symbol": "KEEPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KERNELUSDT",
+      "type": "perpetual",
+      "base_symbol": "KERNELUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KEYUSDT",
+      "type": "perpetual",
+      "base_symbol": "KEYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KGENUSDT",
+      "type": "perpetual",
+      "base_symbol": "KGENUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KITEUSDT",
+      "type": "perpetual",
+      "base_symbol": "KITEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KLAYUSDT",
+      "type": "perpetual",
+      "base_symbol": "KLAYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KMNOUSDT",
+      "type": "perpetual",
+      "base_symbol": "KMNOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KNCUSDT",
+      "type": "perpetual",
+      "base_symbol": "KNCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KOMAUSDT",
+      "type": "perpetual",
+      "base_symbol": "KOMAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "KSMUSDT",
+      "type": "perpetual",
+      "base_symbol": "KSMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LABUSDT",
+      "type": "perpetual",
+      "base_symbol": "LABUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LAUSDT",
+      "type": "perpetual",
+      "base_symbol": "LAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LAYERUSDT",
+      "type": "perpetual",
+      "base_symbol": "LAYERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LDOBUSD",
+      "type": "perpetual",
+      "base_symbol": "LDOBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LDOUSDT",
+      "type": "perpetual",
+      "base_symbol": "LDOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LENDUSDT",
+      "type": "perpetual",
+      "base_symbol": "LENDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LEVERBUSD",
+      "type": "perpetual",
+      "base_symbol": "LEVERBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LEVERUSDT",
+      "type": "perpetual",
+      "base_symbol": "LEVERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LIGHTUSDT",
+      "type": "perpetual",
+      "base_symbol": "LIGHTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LINAUSDT",
+      "type": "perpetual",
+      "base_symbol": "LINAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LINEAUSDT",
+      "type": "perpetual",
+      "base_symbol": "LINEAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LINKBUSD",
+      "type": "perpetual",
+      "base_symbol": "LINKBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LINKUSDC",
+      "type": "perpetual",
+      "base_symbol": "LINKUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LINKUSDT",
+      "type": "perpetual",
+      "base_symbol": "LINKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LISTAUSDT",
+      "type": "perpetual",
+      "base_symbol": "LISTAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LITUSDT",
+      "type": "perpetual",
+      "base_symbol": "LITUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LOKAUSDT",
+      "type": "perpetual",
+      "base_symbol": "LOKAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LOOMUSDT",
+      "type": "perpetual",
+      "base_symbol": "LOOMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LPTUSDT",
+      "type": "perpetual",
+      "base_symbol": "LPTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LQTYUSDT",
+      "type": "perpetual",
+      "base_symbol": "LQTYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LRCUSDT",
+      "type": "perpetual",
+      "base_symbol": "LRCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LSKUSDT",
+      "type": "perpetual",
+      "base_symbol": "LSKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LTCBUSD",
+      "type": "perpetual",
+      "base_symbol": "LTCBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LTCUSDC",
+      "type": "perpetual",
+      "base_symbol": "LTCUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LTCUSDT",
+      "type": "perpetual",
+      "base_symbol": "LTCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LUMIAUSDT",
+      "type": "perpetual",
+      "base_symbol": "LUMIAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LUNA2BUSD",
+      "type": "perpetual",
+      "base_symbol": "LUNA2BUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LUNA2USDT",
+      "type": "perpetual",
+      "base_symbol": "LUNA2USDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LUNABUSD",
+      "type": "perpetual",
+      "base_symbol": "LUNABUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LUNAUSDT",
+      "type": "perpetual",
+      "base_symbol": "LUNAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "LYNUSDT",
+      "type": "perpetual",
+      "base_symbol": "LYNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MAGICUSDT",
+      "type": "perpetual",
+      "base_symbol": "MAGICUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MANAUSDT",
+      "type": "perpetual",
+      "base_symbol": "MANAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MANTAUSDT",
+      "type": "perpetual",
+      "base_symbol": "MANTAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MASKUSDT",
+      "type": "perpetual",
+      "base_symbol": "MASKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MATICBUSD",
+      "type": "perpetual",
+      "base_symbol": "MATICBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MATICUSDC",
+      "type": "perpetual",
+      "base_symbol": "MATICUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MATICUSDT",
+      "type": "perpetual",
+      "base_symbol": "MATICUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MAVIAUSDT",
+      "type": "perpetual",
+      "base_symbol": "MAVIAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MAVIAUSDTSETTLED",
+      "type": "perpetual",
+      "base_symbol": "MAVIAUSDTSETTLED",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MAVUSDT",
+      "type": "perpetual",
+      "base_symbol": "MAVUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MBLUSDT",
+      "type": "perpetual",
+      "base_symbol": "MBLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MBOXUSDT",
+      "type": "perpetual",
+      "base_symbol": "MBOXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MDTUSDT",
+      "type": "perpetual",
+      "base_symbol": "MDTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MELANIAUSDT",
+      "type": "perpetual",
+      "base_symbol": "MELANIAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MEMEFIUSDT",
+      "type": "perpetual",
+      "base_symbol": "MEMEFIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MEMEUSDT",
+      "type": "perpetual",
+      "base_symbol": "MEMEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MERLUSDT",
+      "type": "perpetual",
+      "base_symbol": "MERLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "METISUSDT",
+      "type": "perpetual",
+      "base_symbol": "METISUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "METUSDT",
+      "type": "perpetual",
+      "base_symbol": "METUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MEUSDT",
+      "type": "perpetual",
+      "base_symbol": "MEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MEWUSDT",
+      "type": "perpetual",
+      "base_symbol": "MEWUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MILKUSDT",
+      "type": "perpetual",
+      "base_symbol": "MILKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MINAUSDT",
+      "type": "perpetual",
+      "base_symbol": "MINAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MINAUSDTSETTLED",
+      "type": "perpetual",
+      "base_symbol": "MINAUSDTSETTLED",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MIRAUSDT",
+      "type": "perpetual",
+      "base_symbol": "MIRAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MITOUSDT",
+      "type": "perpetual",
+      "base_symbol": "MITOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MKRUSDT",
+      "type": "perpetual",
+      "base_symbol": "MKRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MLNUSDT",
+      "type": "perpetual",
+      "base_symbol": "MLNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MMTUSDT",
+      "type": "perpetual",
+      "base_symbol": "MMTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MOCAUSDT",
+      "type": "perpetual",
+      "base_symbol": "MOCAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MONUSDT",
+      "type": "perpetual",
+      "base_symbol": "MONUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MOODENGUSDT",
+      "type": "perpetual",
+      "base_symbol": "MOODENGUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MORPHOUSDT",
+      "type": "perpetual",
+      "base_symbol": "MORPHOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MOVEUSDT",
+      "type": "perpetual",
+      "base_symbol": "MOVEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MOVRUSDT",
+      "type": "perpetual",
+      "base_symbol": "MOVRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MTLUSDT",
+      "type": "perpetual",
+      "base_symbol": "MTLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MUBARAKUSDT",
+      "type": "perpetual",
+      "base_symbol": "MUBARAKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MUSDT",
+      "type": "perpetual",
+      "base_symbol": "MUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MYROUSDT",
+      "type": "perpetual",
+      "base_symbol": "MYROUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "MYXUSDT",
+      "type": "perpetual",
+      "base_symbol": "MYXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NAORISUSDT",
+      "type": "perpetual",
+      "base_symbol": "NAORISUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NEARBUSD",
+      "type": "perpetual",
+      "base_symbol": "NEARBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NEARUSDC",
+      "type": "perpetual",
+      "base_symbol": "NEARUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NEARUSDT",
+      "type": "perpetual",
+      "base_symbol": "NEARUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NEIROETHUSDT",
+      "type": "perpetual",
+      "base_symbol": "NEIROETHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NEIROUSDT",
+      "type": "perpetual",
+      "base_symbol": "NEIROUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NEOUSDC",
+      "type": "perpetual",
+      "base_symbol": "NEOUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NEOUSDT",
+      "type": "perpetual",
+      "base_symbol": "NEOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NEWTUSDT",
+      "type": "perpetual",
+      "base_symbol": "NEWTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NFPUSDT",
+      "type": "perpetual",
+      "base_symbol": "NFPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NILUSDT",
+      "type": "perpetual",
+      "base_symbol": "NILUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NKNUSDT",
+      "type": "perpetual",
+      "base_symbol": "NKNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NMRUSDT",
+      "type": "perpetual",
+      "base_symbol": "NMRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NOMUSDT",
+      "type": "perpetual",
+      "base_symbol": "NOMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NOTUSDT",
+      "type": "perpetual",
+      "base_symbol": "NOTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NTRNUSDT",
+      "type": "perpetual",
+      "base_symbol": "NTRNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NULSUSDT",
+      "type": "perpetual",
+      "base_symbol": "NULSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NUUSDT",
+      "type": "perpetual",
+      "base_symbol": "NUUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "NXPCUSDT",
+      "type": "perpetual",
+      "base_symbol": "NXPCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OBOLUSDT",
+      "type": "perpetual",
+      "base_symbol": "OBOLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OCEANUSDT",
+      "type": "perpetual",
+      "base_symbol": "OCEANUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OGNUSDT",
+      "type": "perpetual",
+      "base_symbol": "OGNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OGUSDT",
+      "type": "perpetual",
+      "base_symbol": "OGUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OLUSDT",
+      "type": "perpetual",
+      "base_symbol": "OLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OMGUSDT",
+      "type": "perpetual",
+      "base_symbol": "OMGUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OMNIUSDT",
+      "type": "perpetual",
+      "base_symbol": "OMNIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OMUSDT",
+      "type": "perpetual",
+      "base_symbol": "OMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ONDOUSDT",
+      "type": "perpetual",
+      "base_symbol": "ONDOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ONEUSDT",
+      "type": "perpetual",
+      "base_symbol": "ONEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ONGUSDT",
+      "type": "perpetual",
+      "base_symbol": "ONGUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ONTUSDT",
+      "type": "perpetual",
+      "base_symbol": "ONTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ONUSDT",
+      "type": "perpetual",
+      "base_symbol": "ONUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OPENUSDT",
+      "type": "perpetual",
+      "base_symbol": "OPENUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OPUSDT",
+      "type": "perpetual",
+      "base_symbol": "OPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ORBSUSDT",
+      "type": "perpetual",
+      "base_symbol": "ORBSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ORCAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ORCAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ORDERUSDT",
+      "type": "perpetual",
+      "base_symbol": "ORDERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ORDIUSDC",
+      "type": "perpetual",
+      "base_symbol": "ORDIUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ORDIUSDT",
+      "type": "perpetual",
+      "base_symbol": "ORDIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "OXTUSDT",
+      "type": "perpetual",
+      "base_symbol": "OXTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PARTIUSDT",
+      "type": "perpetual",
+      "base_symbol": "PARTIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PAXGUSDT",
+      "type": "perpetual",
+      "base_symbol": "PAXGUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PENDLEUSDT",
+      "type": "perpetual",
+      "base_symbol": "PENDLEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PENGUUSDC",
+      "type": "perpetual",
+      "base_symbol": "PENGUUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PENGUUSDT",
+      "type": "perpetual",
+      "base_symbol": "PENGUUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PEOPLEUSDT",
+      "type": "perpetual",
+      "base_symbol": "PEOPLEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PERPUSDT",
+      "type": "perpetual",
+      "base_symbol": "PERPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PHAUSDT",
+      "type": "perpetual",
+      "base_symbol": "PHAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PHBBUSD",
+      "type": "perpetual",
+      "base_symbol": "PHBBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PHBUSDT",
+      "type": "perpetual",
+      "base_symbol": "PHBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PIPPINUSDT",
+      "type": "perpetual",
+      "base_symbol": "PIPPINUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PIXELUSDT",
+      "type": "perpetual",
+      "base_symbol": "PIXELUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PLAYUSDT",
+      "type": "perpetual",
+      "base_symbol": "PLAYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PLUMEUSDT",
+      "type": "perpetual",
+      "base_symbol": "PLUMEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PNUTUSDC",
+      "type": "perpetual",
+      "base_symbol": "PNUTUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PNUTUSDT",
+      "type": "perpetual",
+      "base_symbol": "PNUTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "POLUSDT",
+      "type": "perpetual",
+      "base_symbol": "POLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "POLYXUSDT",
+      "type": "perpetual",
+      "base_symbol": "POLYXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PONKEUSDT",
+      "type": "perpetual",
+      "base_symbol": "PONKEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "POPCATUSDT",
+      "type": "perpetual",
+      "base_symbol": "POPCATUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PORT3USDT",
+      "type": "perpetual",
+      "base_symbol": "PORT3USDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PORTALUSDT",
+      "type": "perpetual",
+      "base_symbol": "PORTALUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "POWRUSDT",
+      "type": "perpetual",
+      "base_symbol": "POWRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PROMPTUSDT",
+      "type": "perpetual",
+      "base_symbol": "PROMPTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PROMUSDT",
+      "type": "perpetual",
+      "base_symbol": "PROMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PROVEUSDT",
+      "type": "perpetual",
+      "base_symbol": "PROVEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PTBUSDT",
+      "type": "perpetual",
+      "base_symbol": "PTBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PUFFERUSDT",
+      "type": "perpetual",
+      "base_symbol": "PUFFERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PUMPBTCUSDT",
+      "type": "perpetual",
+      "base_symbol": "PUMPBTCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PUMPUSDT",
+      "type": "perpetual",
+      "base_symbol": "PUMPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PUMPUSDTSETTLED",
+      "type": "perpetual",
+      "base_symbol": "PUMPUSDTSETTLED",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PUNDIXUSDT",
+      "type": "perpetual",
+      "base_symbol": "PUNDIXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "PYTHUSDT",
+      "type": "perpetual",
+      "base_symbol": "PYTHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "QNTUSDT",
+      "type": "perpetual",
+      "base_symbol": "QNTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "QTUMUSDT",
+      "type": "perpetual",
+      "base_symbol": "QTUMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "QUICKUSDT",
+      "type": "perpetual",
+      "base_symbol": "QUICKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "QUSDT",
+      "type": "perpetual",
+      "base_symbol": "QUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RADUSDT",
+      "type": "perpetual",
+      "base_symbol": "RADUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RAREUSDT",
+      "type": "perpetual",
+      "base_symbol": "RAREUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RAYSOLUSDT",
+      "type": "perpetual",
+      "base_symbol": "RAYSOLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RAYUSDT",
+      "type": "perpetual",
+      "base_symbol": "RAYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RDNTUSDT",
+      "type": "perpetual",
+      "base_symbol": "RDNTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RECALLUSDT",
+      "type": "perpetual",
+      "base_symbol": "RECALLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "REDUSDT",
+      "type": "perpetual",
+      "base_symbol": "REDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "REEFUSDT",
+      "type": "perpetual",
+      "base_symbol": "REEFUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "REIUSDT",
+      "type": "perpetual",
+      "base_symbol": "REIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RENDERUSDT",
+      "type": "perpetual",
+      "base_symbol": "RENDERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RENUSDT",
+      "type": "perpetual",
+      "base_symbol": "RENUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RESOLVUSDT",
+      "type": "perpetual",
+      "base_symbol": "RESOLVUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "REZUSDT",
+      "type": "perpetual",
+      "base_symbol": "REZUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RIFUSDT",
+      "type": "perpetual",
+      "base_symbol": "RIFUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RIVERUSDT",
+      "type": "perpetual",
+      "base_symbol": "RIVERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RLCUSDT",
+      "type": "perpetual",
+      "base_symbol": "RLCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RNDRUSDT",
+      "type": "perpetual",
+      "base_symbol": "RNDRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RONINUSDT",
+      "type": "perpetual",
+      "base_symbol": "RONINUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ROSEUSDT",
+      "type": "perpetual",
+      "base_symbol": "ROSEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RPLUSDT",
+      "type": "perpetual",
+      "base_symbol": "RPLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RSRUSDT",
+      "type": "perpetual",
+      "base_symbol": "RSRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RUNEUSDT",
+      "type": "perpetual",
+      "base_symbol": "RUNEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RVNUSDT",
+      "type": "perpetual",
+      "base_symbol": "RVNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "RVVUSDT",
+      "type": "perpetual",
+      "base_symbol": "RVVUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SAFEUSDT",
+      "type": "perpetual",
+      "base_symbol": "SAFEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SAGAUSDT",
+      "type": "perpetual",
+      "base_symbol": "SAGAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SAHARAUSDT",
+      "type": "perpetual",
+      "base_symbol": "SAHARAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SANDBUSD",
+      "type": "perpetual",
+      "base_symbol": "SANDBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SANDUSDT",
+      "type": "perpetual",
+      "base_symbol": "SANDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SANTOSUSDT",
+      "type": "perpetual",
+      "base_symbol": "SANTOSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SAPIENUSDT",
+      "type": "perpetual",
+      "base_symbol": "SAPIENUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SCRTUSDT",
+      "type": "perpetual",
+      "base_symbol": "SCRTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SCRUSDT",
+      "type": "perpetual",
+      "base_symbol": "SCRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SCUSDT",
+      "type": "perpetual",
+      "base_symbol": "SCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SEIUSDT",
+      "type": "perpetual",
+      "base_symbol": "SEIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SFPUSDT",
+      "type": "perpetual",
+      "base_symbol": "SFPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SHELLUSDT",
+      "type": "perpetual",
+      "base_symbol": "SHELLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SIGNUSDT",
+      "type": "perpetual",
+      "base_symbol": "SIGNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SIRENUSDT",
+      "type": "perpetual",
+      "base_symbol": "SIRENUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SKATEUSDT",
+      "type": "perpetual",
+      "base_symbol": "SKATEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SKLUSDT",
+      "type": "perpetual",
+      "base_symbol": "SKLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SKYAIUSDT",
+      "type": "perpetual",
+      "base_symbol": "SKYAIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SKYUSDT",
+      "type": "perpetual",
+      "base_symbol": "SKYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SLERFUSDT",
+      "type": "perpetual",
+      "base_symbol": "SLERFUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SLPUSDT",
+      "type": "perpetual",
+      "base_symbol": "SLPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SLPUSDTSETTLED",
+      "type": "perpetual",
+      "base_symbol": "SLPUSDTSETTLED",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SNTUSDT",
+      "type": "perpetual",
+      "base_symbol": "SNTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SNXUSDT",
+      "type": "perpetual",
+      "base_symbol": "SNXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SOLBUSD",
+      "type": "perpetual",
+      "base_symbol": "SOLBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SOLUSDC",
+      "type": "perpetual",
+      "base_symbol": "SOLUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SOLUSDT",
+      "type": "perpetual",
+      "base_symbol": "SOLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SOLVUSDT",
+      "type": "perpetual",
+      "base_symbol": "SOLVUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SOMIUSDT",
+      "type": "perpetual",
+      "base_symbol": "SOMIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SONICUSDT",
+      "type": "perpetual",
+      "base_symbol": "SONICUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SOONUSDT",
+      "type": "perpetual",
+      "base_symbol": "SOONUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SOPHUSDT",
+      "type": "perpetual",
+      "base_symbol": "SOPHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SPELLUSDT",
+      "type": "perpetual",
+      "base_symbol": "SPELLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SPKUSDT",
+      "type": "perpetual",
+      "base_symbol": "SPKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SPXUSDT",
+      "type": "perpetual",
+      "base_symbol": "SPXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SQDUSDT",
+      "type": "perpetual",
+      "base_symbol": "SQDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SRMUSDT",
+      "type": "perpetual",
+      "base_symbol": "SRMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SSVUSDT",
+      "type": "perpetual",
+      "base_symbol": "SSVUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STABLEUSDT",
+      "type": "perpetual",
+      "base_symbol": "STABLEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STBLUSDT",
+      "type": "perpetual",
+      "base_symbol": "STBLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STEEMUSDT",
+      "type": "perpetual",
+      "base_symbol": "STEEMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STGUSDT",
+      "type": "perpetual",
+      "base_symbol": "STGUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STMXUSDT",
+      "type": "perpetual",
+      "base_symbol": "STMXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STORJUSDT",
+      "type": "perpetual",
+      "base_symbol": "STORJUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STOUSDT",
+      "type": "perpetual",
+      "base_symbol": "STOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STPTUSDT",
+      "type": "perpetual",
+      "base_symbol": "STPTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STRAXUSDT",
+      "type": "perpetual",
+      "base_symbol": "STRAXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STRKUSDT",
+      "type": "perpetual",
+      "base_symbol": "STRKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "STXUSDT",
+      "type": "perpetual",
+      "base_symbol": "STXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SUIUSDC",
+      "type": "perpetual",
+      "base_symbol": "SUIUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SUIUSDT",
+      "type": "perpetual",
+      "base_symbol": "SUIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SUNUSDT",
+      "type": "perpetual",
+      "base_symbol": "SUNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SUPERUSDT",
+      "type": "perpetual",
+      "base_symbol": "SUPERUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SUSDT",
+      "type": "perpetual",
+      "base_symbol": "SUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SUSHIUSDT",
+      "type": "perpetual",
+      "base_symbol": "SUSHIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SWARMSUSDT",
+      "type": "perpetual",
+      "base_symbol": "SWARMSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SWELLUSDT",
+      "type": "perpetual",
+      "base_symbol": "SWELLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SXPUSDT",
+      "type": "perpetual",
+      "base_symbol": "SXPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SXTUSDT",
+      "type": "perpetual",
+      "base_symbol": "SXTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SYNUSDT",
+      "type": "perpetual",
+      "base_symbol": "SYNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SYRUPUSDT",
+      "type": "perpetual",
+      "base_symbol": "SYRUPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "SYSUSDT",
+      "type": "perpetual",
+      "base_symbol": "SYSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TACUSDT",
+      "type": "perpetual",
+      "base_symbol": "TACUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TAGUSDT",
+      "type": "perpetual",
+      "base_symbol": "TAGUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TAIKOUSDT",
+      "type": "perpetual",
+      "base_symbol": "TAIKOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TAKEUSDT",
+      "type": "perpetual",
+      "base_symbol": "TAKEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TANSSIUSDT",
+      "type": "perpetual",
+      "base_symbol": "TANSSIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TAOUSDT",
+      "type": "perpetual",
+      "base_symbol": "TAOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TAUSDT",
+      "type": "perpetual",
+      "base_symbol": "TAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "THETAUSDT",
+      "type": "perpetual",
+      "base_symbol": "THETAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "THEUSDT",
+      "type": "perpetual",
+      "base_symbol": "THEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TIAUSDC",
+      "type": "perpetual",
+      "base_symbol": "TIAUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TIAUSDT",
+      "type": "perpetual",
+      "base_symbol": "TIAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TLMBUSD",
+      "type": "perpetual",
+      "base_symbol": "TLMBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TLMUSDT",
+      "type": "perpetual",
+      "base_symbol": "TLMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TLMUSDTSETTLED",
+      "type": "perpetual",
+      "base_symbol": "TLMUSDTSETTLED",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TNSRUSDT",
+      "type": "perpetual",
+      "base_symbol": "TNSRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TOKENUSDT",
+      "type": "perpetual",
+      "base_symbol": "TOKENUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TOMOUSDT",
+      "type": "perpetual",
+      "base_symbol": "TOMOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TONUSDT",
+      "type": "perpetual",
+      "base_symbol": "TONUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TOSHIUSDT",
+      "type": "perpetual",
+      "base_symbol": "TOSHIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TOWNSUSDT",
+      "type": "perpetual",
+      "base_symbol": "TOWNSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TRADOORUSDT",
+      "type": "perpetual",
+      "base_symbol": "TRADOORUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TRBUSDT",
+      "type": "perpetual",
+      "base_symbol": "TRBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TREEUSDT",
+      "type": "perpetual",
+      "base_symbol": "TREEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TROYUSDT",
+      "type": "perpetual",
+      "base_symbol": "TROYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TRUMPUSDC",
+      "type": "perpetual",
+      "base_symbol": "TRUMPUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TRUMPUSDT",
+      "type": "perpetual",
+      "base_symbol": "TRUMPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TRUSTUSDT",
+      "type": "perpetual",
+      "base_symbol": "TRUSTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TRUTHUSDT",
+      "type": "perpetual",
+      "base_symbol": "TRUTHUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TRUUSDT",
+      "type": "perpetual",
+      "base_symbol": "TRUUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TRXBUSD",
+      "type": "perpetual",
+      "base_symbol": "TRXBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TRXUSDT",
+      "type": "perpetual",
+      "base_symbol": "TRXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TSTUSDT",
+      "type": "perpetual",
+      "base_symbol": "TSTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TURBOUSDT",
+      "type": "perpetual",
+      "base_symbol": "TURBOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TURTLEUSDT",
+      "type": "perpetual",
+      "base_symbol": "TURTLEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TUSDT",
+      "type": "perpetual",
+      "base_symbol": "TUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TUTUSDT",
+      "type": "perpetual",
+      "base_symbol": "TUTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "TWTUSDT",
+      "type": "perpetual",
+      "base_symbol": "TWTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "UAIUSDT",
+      "type": "perpetual",
+      "base_symbol": "UAIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "UBUSDT",
+      "type": "perpetual",
+      "base_symbol": "UBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "UMAUSDT",
+      "type": "perpetual",
+      "base_symbol": "UMAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "UNFIUSDT",
+      "type": "perpetual",
+      "base_symbol": "UNFIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "UNIBUSD",
+      "type": "perpetual",
+      "base_symbol": "UNIBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "UNIUSDC",
+      "type": "perpetual",
+      "base_symbol": "UNIUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "UNIUSDT",
+      "type": "perpetual",
+      "base_symbol": "UNIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "USDCUSDT",
+      "type": "perpetual",
+      "base_symbol": "USDCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "USELESSUSDT",
+      "type": "perpetual",
+      "base_symbol": "USELESSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "USTCUSDT",
+      "type": "perpetual",
+      "base_symbol": "USTCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "USUALUSDT",
+      "type": "perpetual",
+      "base_symbol": "USUALUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "UXLINKUSDT",
+      "type": "perpetual",
+      "base_symbol": "UXLINKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VANAUSDT",
+      "type": "perpetual",
+      "base_symbol": "VANAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VANRYUSDT",
+      "type": "perpetual",
+      "base_symbol": "VANRYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VELODROMEUSDT",
+      "type": "perpetual",
+      "base_symbol": "VELODROMEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VELVETUSDT",
+      "type": "perpetual",
+      "base_symbol": "VELVETUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VETUSDT",
+      "type": "perpetual",
+      "base_symbol": "VETUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VFYUSDT",
+      "type": "perpetual",
+      "base_symbol": "VFYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VICUSDT",
+      "type": "perpetual",
+      "base_symbol": "VICUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VIDTUSDT",
+      "type": "perpetual",
+      "base_symbol": "VIDTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VINEUSDT",
+      "type": "perpetual",
+      "base_symbol": "VINEUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VIRTUALUSDT",
+      "type": "perpetual",
+      "base_symbol": "VIRTUALUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VOXELUSDT",
+      "type": "perpetual",
+      "base_symbol": "VOXELUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VTHOUSDT",
+      "type": "perpetual",
+      "base_symbol": "VTHOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "VVVUSDT",
+      "type": "perpetual",
+      "base_symbol": "VVVUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WALUSDT",
+      "type": "perpetual",
+      "base_symbol": "WALUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WAVESBUSD",
+      "type": "perpetual",
+      "base_symbol": "WAVESBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WAVESUSDT",
+      "type": "perpetual",
+      "base_symbol": "WAVESUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WAXPUSDT",
+      "type": "perpetual",
+      "base_symbol": "WAXPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WCTUSDT",
+      "type": "perpetual",
+      "base_symbol": "WCTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WIFUSDC",
+      "type": "perpetual",
+      "base_symbol": "WIFUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WIFUSDT",
+      "type": "perpetual",
+      "base_symbol": "WIFUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WLDUSDC",
+      "type": "perpetual",
+      "base_symbol": "WLDUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WLDUSDT",
+      "type": "perpetual",
+      "base_symbol": "WLDUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WLFIUSDC",
+      "type": "perpetual",
+      "base_symbol": "WLFIUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WLFIUSDT",
+      "type": "perpetual",
+      "base_symbol": "WLFIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WOOUSDT",
+      "type": "perpetual",
+      "base_symbol": "WOOUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "WUSDT",
+      "type": "perpetual",
+      "base_symbol": "WUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XAIUSDT",
+      "type": "perpetual",
+      "base_symbol": "XAIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XANUSDT",
+      "type": "perpetual",
+      "base_symbol": "XANUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XCNUSDT",
+      "type": "perpetual",
+      "base_symbol": "XCNUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XEMUSDT",
+      "type": "perpetual",
+      "base_symbol": "XEMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XLMUSDT",
+      "type": "perpetual",
+      "base_symbol": "XLMUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XMRUSDT",
+      "type": "perpetual",
+      "base_symbol": "XMRUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XNYUSDT",
+      "type": "perpetual",
+      "base_symbol": "XNYUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XPINUSDT",
+      "type": "perpetual",
+      "base_symbol": "XPINUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XPLUSDT",
+      "type": "perpetual",
+      "base_symbol": "XPLUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XRPBUSD",
+      "type": "perpetual",
+      "base_symbol": "XRPBUSD",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XRPUSDC",
+      "type": "perpetual",
+      "base_symbol": "XRPUSDC",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XRPUSDT",
+      "type": "perpetual",
+      "base_symbol": "XRPUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XTZUSDT",
+      "type": "perpetual",
+      "base_symbol": "XTZUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XVGUSDT",
+      "type": "perpetual",
+      "base_symbol": "XVGUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "XVSUSDT",
+      "type": "perpetual",
+      "base_symbol": "XVSUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "YALAUSDT",
+      "type": "perpetual",
+      "base_symbol": "YALAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "YBUSDT",
+      "type": "perpetual",
+      "base_symbol": "YBUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "YFIIUSDT",
+      "type": "perpetual",
+      "base_symbol": "YFIIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "YFIUSDT",
+      "type": "perpetual",
+      "base_symbol": "YFIUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "YGGUSDT",
+      "type": "perpetual",
+      "base_symbol": "YGGUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZBTUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZBTUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZECUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZECUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZENUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZENUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZEREBROUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZEREBROUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZETAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZETAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZILUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZILUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZKCUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZKCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZKJUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZKJUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZKUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZKUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZORAUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZORAUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZRCUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZRCUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZROUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZROUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "ZRXUSDT",
+      "type": "perpetual",
+      "base_symbol": "ZRXUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    },
+    {
+      "symbol": "\u5e01\u5b89\u4eba\u751fUSDT",
+      "type": "perpetual",
+      "base_symbol": "\u5e01\u5b89\u4eba\u751fUSDT",
+      "expiry_date": null,
+      "is_expired": false
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+%% End-to-End Data Collection Pipeline
+%% Shows the complete flow from user request through download, validation, and saving
+%% Reference: src/gapless_crypto_data/collectors/binance_public_data_collector.py:732-943
+
+%%{init: {'theme':'base', 'themeVariables': {'lineColor':'#c4b5fd','primaryBorderColor':'#c4b5fd'}}}%%
+
+flowchart TD
+    %% Entry Point
+    Start([User calls fetch_data or download]) --> ValidateParams[Validate Parameters<br/>timeframe, dates, symbol]
+
+    %% Parameter Validation
+    ValidateParams --> CheckDates{Dates valid?}
+    CheckDates --> ErrorDates[Raise ValueError:<br/>Invalid date range]
+    CheckDates --> CheckSymbol{Symbol supported?}
+    CheckSymbol --> ErrorSymbol[Raise ValueError:<br/>Unsupported symbol]
+    CheckSymbol --> InitCollector[Initialize<br/>BinancePublicDataCollector]
+
+    %% Collection Setup
+    InitCollector --> CalcMonths[Calculate required months<br/>from date range]
+    CalcMonths --> GenURLs[Generate monthly ZIP URLs<br/>data.binance.vision/...]
+
+    %% Download Loop Start
+    GenURLs --> LoopMonths{For each month}
+    LoopMonths --> CheckETag[Check ETag cache<br/>for this URL]
+
+    %% ETag Caching Logic
+    CheckETag --> HasETag{ETag cached?}
+    HasETag --> SendConditional[Send HTTP request with<br/>If-None-Match header]
+    HasETag --> SendDirect[Send HTTP request<br/>no cache headers]
+
+    SendConditional --> CDNResponse{CloudFront<br/>response?}
+    SendDirect --> CDNResponse
+
+    %% CloudFront Responses
+    CDNResponse --> UseCached[Use locally cached ZIP<br/>0 bytes transferred!]
+    CDNResponse --> DownloadZIP[Download new ZIP file<br/>~50-200 MB]
+    CDNResponse --> TryDaily[Fallback: Try daily files<br/>for this month]
+
+    %% Daily Fallback Path
+    TryDaily --> GenDailyURLs[Generate 28-31 daily URLs]
+    GenDailyURLs --> DownloadDailies[Download each daily ZIP]
+    DownloadDailies --> CombineDaily[Combine daily CSVs]
+    CombineDaily --> ProcessData
+
+    %% Main Processing Path
+    UseCached --> ExtractCSV[Extract CSV from ZIP]
+    DownloadZIP --> UpdateETag[Update ETag cache]
+    UpdateETag --> ExtractCSV
+
+    ExtractCSV --> DetectHeader[Detect header row<br/>vs pure data]
+    DetectHeader --> AnalyzeTimestamp[Analyze timestamp format<br/>ms vs μs]
+
+    %% Format Detection
+    AnalyzeTimestamp --> ParseRaw[Parse raw Binance data<br/>12 columns + ignore]
+    ParseRaw --> TrackTransitions[Track format transitions<br/>ms→μs within file]
+    TrackTransitions --> Extract11Col[Extract 11-column<br/>microstructure format]
+
+    %% Data Processing
+    Extract11Col --> ProcessData[Convert to DataFrame<br/>with datetime index]
+    ProcessData --> FilterDates[Filter to exact<br/>date range requested]
+    FilterDates --> ValidateSequence[Validate timestamp<br/>sequence chronological]
+
+    %% Gap Detection
+    ValidateSequence --> DetectGaps[Detect timestamp gaps]
+    DetectGaps --> HasGaps{Gaps found?}
+    HasGaps --> LogGaps[Log gap details<br/>in metadata]
+    HasGaps --> NoGaps[Mark as continuous]
+
+    LogGaps --> CheckAutoFill{auto_fill_gaps<br/>enabled?}
+    NoGaps --> CheckAutoFill
+
+    %% Auto Gap Filling
+    CheckAutoFill --> FillGaps[Call UniversalGapFiller<br/>fetch from Binance API]
+    CheckAutoFill --> SkipFilling[Keep authentic<br/>Vision data as-is]
+
+    FillGaps --> MergeData[Merge filled data<br/>deduplicate by timestamp]
+    MergeData --> SaveResults
+    SkipFilling --> SaveResults
+
+    %% Saving
+    SaveResults[Save to CSV/Parquet] --> GenMetadata[Generate metadata JSON<br/>version, stats, integrity]
+    GenMetadata --> CalcHash[Calculate data hash<br/>SHA-256]
+    CalcHash --> WriteFiles[Write data file + metadata]
+
+    %% More Months?
+    WriteFiles --> MoreMonths{More months<br/>to process?}
+    MoreMonths --> LoopMonths
+    MoreMonths --> CombineMonths[Combine all months<br/>into single DataFrame]
+
+    %% Final Steps
+    CombineMonths --> ApplyLimit{Limit param<br/>specified?}
+    ApplyLimit --> TakeLast[Take last N rows]
+    ApplyLimit --> KeepAll[Keep all data]
+
+    TakeLast --> SetIndex{index_type?}
+    KeepAll --> SetIndex
+
+    SetIndex --> DatetimeIndex[Set datetime index]
+    SetIndex --> RangeIndex[Keep RangeIndex]
+
+    DatetimeIndex --> ReturnDF([Return DataFrame<br/>to user])
+    RangeIndex --> ReturnDF
+
+    %% Error Paths
+    ErrorDates -.-> End([End with error])
+    ErrorSymbol -.-> End
+
+    %% Styling
+    classDef errorNode fill:#fca5a5
+    classDef cacheNode fill:#a5f3fc
+    classDef processNode fill:#86efac
+    classDef decisionNode fill:#fcd34d
+    classDef criticalNode fill:#93c5fd
+
+    class ErrorDates,ErrorSymbol,End errorNode
+    class CheckETag,HasETag,SendConditional,UpdateETag,UseCached cacheNode
+    class ProcessData,Extract11Col,ValidateSequence,MergeData processNode
+    class CheckDates,CheckSymbol,HasGaps,CheckAutoFill,MoreMonths,ApplyLimit,SetIndex decisionNode
+    class Start,ReturnDF,GenURLs,FillGaps criticalNode

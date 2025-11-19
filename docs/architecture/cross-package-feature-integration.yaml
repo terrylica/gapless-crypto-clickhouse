@@ -1,0 +1,781 @@
+openapi: 3.1.1
+info:
+  title: "Cross-Package Feature Integration Architecture"
+  description: |
+    Design for using gapless-crypto-data (OHLCV) and gapless-mempool-data (Bitcoin network)
+    together for feature engineering in ML pipelines and trading systems.
+
+    **Core Principle**: Separate packages, unified feature interface via temporal alignment.
+  version: "1.0.0"
+  contact:
+    name: "Gapless Crypto Data Project"
+    email: "terry@eonlabs.com"
+
+paths: {}
+
+# ARCHITECTURE OVERVIEW
+x-architecture:
+  overview: |
+    Two independent packages with temporal alignment layer for feature fusion:
+
+    Package 1: gapless-crypto-data (OHLCV microstructure)
+    - Domain: Exchange-traded OHLCV data (BTCUSDT, ETHUSDT, etc.)
+    - Granularity: 1s, 1m, 5m, 1h, 4h, 1d intervals
+    - Features: Price action, volume profiles, order flow metrics
+
+    Package 2: gapless-mempool-data (Bitcoin network state)
+    - Domain: Bitcoin mempool and network metrics
+    - Granularity: 1-minute snapshots (irregular possible)
+    - Features: Fee pressure, settlement stress, congestion indicators
+
+    Integration Layer: gapless-features (feature engineering toolkit)
+    - Temporal alignment (resampling to common intervals)
+    - Feature fusion (join OHLCV + mempool on timestamp)
+    - Feature engineering pipelines
+    - ML-ready output (train/test splits, normalization)
+
+  package_responsibilities:
+    gapless_crypto_data:
+      - "Collect OHLCV data from Binance"
+      - "Validate 11-column microstructure format"
+      - "Persist to CSV/Parquet with DatetimeIndex"
+      - "Provide DataFrame API: gcd.fetch_data('BTCUSDT', '1m')"
+
+    gapless_mempool_data:
+      - "Collect mempool snapshots from mempool.space"
+      - "Validate network metrics (fees, vsize, tx count)"
+      - "Persist to Parquet with DatetimeIndex"
+      - "Provide DataFrame API: gmd.fetch_snapshots('2024-01-01', '2024-12-31')"
+
+    gapless_features:
+      - "Temporal alignment (forward-fill, backward-fill, interpolation)"
+      - "Feature engineering (lag, diff, rolling, expanding)"
+      - "Feature fusion (join + feature selection)"
+      - "ML pipeline utilities (train/test split, standardization)"
+
+# PACKAGE INTERFACES
+x-package-interfaces:
+
+  gapless_crypto_data_api:
+    installation: "pip install gapless-crypto-data"
+
+    basic_usage: |
+      import gapless_crypto_data as gcd
+
+      # Fetch 1-minute BTCUSDT OHLCV data
+      df_ohlcv = gcd.fetch_data(
+          symbol="BTCUSDT",
+          timeframe="1m",
+          start="2024-01-01",
+          end="2024-01-31"
+      )
+
+      # Returns DataFrame with DatetimeIndex
+      # Columns: open, high, low, close, volume, close_time,
+      #          quote_asset_volume, number_of_trades,
+      #          taker_buy_base_asset_volume, taker_buy_quote_asset_volume
+
+    output_schema:
+      index: "DatetimeIndex (UTC, 1-minute intervals)"
+      columns:
+        - "open: float64"
+        - "high: float64"
+        - "low: float64"
+        - "close: float64"
+        - "volume: float64"
+        - "close_time: datetime64[ns, UTC]"
+        - "quote_asset_volume: float64"
+        - "number_of_trades: int64"
+        - "taker_buy_base_asset_volume: float64"
+        - "taker_buy_quote_asset_volume: float64"
+
+  gapless_mempool_data_api:
+    installation: "pip install gapless-mempool-data"
+
+    basic_usage: |
+      import gapless_mempool_data as gmd
+
+      # Fetch mempool snapshots
+      df_mempool = gmd.fetch_snapshots(
+          start="2024-01-01",
+          end="2024-01-31",
+          interval="1min"  # Resample to 1-minute intervals
+      )
+
+      # Returns DataFrame with DatetimeIndex
+      # Columns: unconfirmed_count, vsize_mb, total_fee_btc,
+      #          fastest_fee, half_hour_fee, hour_fee, economy_fee, minimum_fee
+
+    output_schema:
+      index: "DatetimeIndex (UTC, 1-minute intervals after resampling)"
+      columns:
+        - "unconfirmed_count: int64"
+        - "vsize_mb: float64"
+        - "total_fee_btc: float64"
+        - "fastest_fee: int64 (sat/vB)"
+        - "half_hour_fee: int64 (sat/vB)"
+        - "hour_fee: int64 (sat/vB)"
+        - "economy_fee: int64 (sat/vB)"
+        - "minimum_fee: int64 (sat/vB)"
+
+  gapless_features_api:
+    installation: "pip install gapless-features"
+
+    basic_usage: |
+      import gapless_features as gf
+
+      # Align and fuse OHLCV + mempool data
+      df_features = gf.fuse(
+          ohlcv=df_ohlcv,
+          mempool=df_mempool,
+          method="forward_fill",  # How to handle missing mempool snapshots
+          validate=True
+      )
+
+      # Returns merged DataFrame with both OHLCV and mempool columns
+      # All columns prefixed: ohlcv_close, mempool_fastest_fee, etc.
+
+# TEMPORAL ALIGNMENT STRATEGIES
+x-temporal-alignment:
+  problem_statement: |
+    OHLCV data: Regular 1-minute bars (guaranteed by gapless-crypto-data)
+    Mempool data: Irregular snapshots (1s to 60s apart)
+
+    Need: Align both to common 1-minute grid for feature engineering
+
+  alignment_methods:
+
+    forward_fill:
+      description: "Fill missing mempool values with last known value"
+      use_case: "Conservative - assumes mempool state persists until next update"
+      pandas_code: |
+        df_mempool_aligned = df_mempool.reindex(
+            df_ohlcv.index,
+            method='ffill'
+        )
+
+      example:
+        ohlcv_index: ["2024-01-01 00:00", "2024-01-01 00:01", "2024-01-01 00:02"]
+        mempool_snapshots: ["2024-01-01 00:00", "2024-01-01 00:02"]
+        result: |
+          00:00 → mempool snapshot at 00:00
+          00:01 → forward-fill from 00:00 (same values)
+          00:02 → mempool snapshot at 00:02
+
+    backward_fill:
+      description: "Fill missing mempool values with next known value"
+      use_case: "Look-ahead bias warning - only for analysis, not live trading"
+      pandas_code: |
+        df_mempool_aligned = df_mempool.reindex(
+            df_ohlcv.index,
+            method='bfill'
+        )
+
+    linear_interpolation:
+      description: "Interpolate between snapshots"
+      use_case: "Smoothing for slowly-changing metrics (vsize_mb)"
+      pandas_code: |
+        df_mempool_aligned = df_mempool.reindex(
+            df_ohlcv.index
+        ).interpolate(method='linear')
+
+    nearest:
+      description: "Use nearest snapshot in time"
+      use_case: "Event-based features (fee spike detection)"
+      pandas_code: |
+        df_mempool_aligned = df_mempool.reindex(
+            df_ohlcv.index,
+            method='nearest'
+        )
+
+    default_recommendation: "forward_fill for live trading, linear for historical analysis"
+
+# FEATURE FUSION PATTERNS
+x-feature-fusion:
+
+  pattern_1_simple_join:
+    description: "Join OHLCV and mempool on aligned DatetimeIndex"
+    code: |
+      import pandas as pd
+
+      # Both DataFrames must have DatetimeIndex
+      df_features = df_ohlcv.join(
+          df_mempool_aligned,
+          how='inner',
+          lsuffix='_ohlcv',
+          rsuffix='_mempool'
+      )
+
+      # Result: 21 columns (11 OHLCV + 8 mempool + 2 metadata)
+
+    output_columns:
+      - "ohlcv: open, high, low, close, volume, ..."
+      - "mempool: unconfirmed_count, vsize_mb, fastest_fee, ..."
+
+  pattern_2_feature_engineering:
+    description: "Generate derived features from both sources"
+    code: |
+      import gapless_features as gf
+
+      # Price momentum features (from OHLCV)
+      df_features['price_return_1m'] = df_features['close'].pct_change(1)
+      df_features['price_return_5m'] = df_features['close'].pct_change(5)
+      df_features['volume_ma_10m'] = df_features['volume'].rolling(10).mean()
+
+      # Mempool pressure features (from mempool)
+      df_features['fee_pressure'] = df_features['fastest_fee'] / df_features['economy_fee']
+      df_features['mempool_growth'] = df_features['vsize_mb'].diff()
+      df_features['congestion_score'] = (
+          df_features['unconfirmed_count'] * df_features['vsize_mb']
+      ).rank(pct=True)
+
+      # Cross-domain features (OHLCV × mempool)
+      df_features['volume_per_tx'] = (
+          df_features['volume'] / df_features['number_of_trades']
+      )
+      df_features['price_fee_correlation'] = (
+          df_features['close']
+          .rolling(60)
+          .corr(df_features['fastest_fee'])
+      )
+
+  pattern_3_lagged_features:
+    description: "Add temporal lags for time-series models"
+    code: |
+      # Lag mempool features by 5, 10, 30 minutes
+      for lag in [5, 10, 30]:
+          df_features[f'fastest_fee_lag_{lag}m'] = (
+              df_features['fastest_fee'].shift(lag)
+          )
+          df_features[f'vsize_mb_lag_{lag}m'] = (
+              df_features['vsize_mb'].shift(lag)
+          )
+
+      # Leading indicators: mempool changes predict price moves?
+      df_features['fee_spike_lead'] = (
+          df_features['fastest_fee']
+          .pct_change()
+          .shift(-5)  # 5 minutes ahead
+      )
+
+  pattern_4_target_engineering:
+    description: "Create prediction targets from OHLCV"
+    code: |
+      # Regression target: predict next 15-minute return
+      df_features['target_return_15m'] = (
+          df_features['close']
+          .pct_change(15)
+          .shift(-15)
+      )
+
+      # Classification target: predict price direction
+      df_features['target_direction'] = (
+          df_features['target_return_15m'] > 0
+      ).astype(int)
+
+      # Multi-class: predict volatility regime
+      df_features['target_volatility'] = pd.cut(
+          df_features['high'] - df_features['low'],
+          bins=[0, 100, 500, float('inf')],
+          labels=['low', 'medium', 'high']
+      )
+
+# EXAMPLE INTEGRATION WORKFLOW
+x-example-workflows:
+
+  workflow_1_basic_feature_collection:
+    description: "Collect and align OHLCV + mempool for 1 month"
+    code: |
+      import gapless_crypto_data as gcd
+      import gapless_mempool_data as gmd
+      import pandas as pd
+
+      # Step 1: Collect OHLCV data (1-minute bars)
+      df_ohlcv = gcd.fetch_data(
+          symbol="BTCUSDT",
+          timeframe="1m",
+          start="2024-01-01",
+          end="2024-01-31"
+      )
+      print(f"OHLCV: {len(df_ohlcv)} bars")
+
+      # Step 2: Collect mempool snapshots
+      df_mempool = gmd.fetch_snapshots(
+          start="2024-01-01",
+          end="2024-01-31"
+      )
+      print(f"Mempool: {len(df_mempool)} snapshots")
+
+      # Step 3: Align to common 1-minute grid
+      df_mempool_aligned = df_mempool.reindex(
+          df_ohlcv.index,
+          method='ffill'
+      )
+
+      # Step 4: Join
+      df_features = df_ohlcv.join(df_mempool_aligned, rsuffix='_mempool')
+
+      # Step 5: Verify alignment
+      assert len(df_features) == len(df_ohlcv)
+      assert df_features.index.equals(df_ohlcv.index)
+
+      print(f"Features: {len(df_features)} rows, {len(df_features.columns)} columns")
+
+    expected_output: |
+      OHLCV: 44640 bars (31 days × 1440 min/day)
+      Mempool: 44640 snapshots (aligned to 1-minute)
+      Features: 44640 rows, 19 columns (11 OHLCV + 8 mempool)
+
+  workflow_2_engineered_features:
+    description: "Generate 50+ features for ML model"
+    code: |
+      import gapless_crypto_data as gcd
+      import gapless_mempool_data as gmd
+      import numpy as np
+
+      # Collect data
+      df_ohlcv = gcd.fetch_data("BTCUSDT", "1m", "2024-01-01", "2024-01-31")
+      df_mempool = gmd.fetch_snapshots("2024-01-01", "2024-01-31")
+      df_mempool_aligned = df_mempool.reindex(df_ohlcv.index, method='ffill')
+      df = df_ohlcv.join(df_mempool_aligned, rsuffix='_mempool')
+
+      # Price features (OHLCV)
+      df['return_1m'] = df['close'].pct_change(1)
+      df['return_5m'] = df['close'].pct_change(5)
+      df['return_15m'] = df['close'].pct_change(15)
+      df['volatility_10m'] = df['return_1m'].rolling(10).std()
+      df['high_low_range'] = (df['high'] - df['low']) / df['close']
+
+      # Volume features (OHLCV)
+      df['volume_ma_10m'] = df['volume'].rolling(10).mean()
+      df['volume_std_10m'] = df['volume'].rolling(10).std()
+      df['volume_surge'] = df['volume'] / df['volume_ma_10m']
+      df['taker_buy_ratio'] = (
+          df['taker_buy_base_asset_volume'] / df['volume']
+      )
+
+      # Mempool features (gapless-mempool-data)
+      df['fee_pressure'] = df['fastest_fee'] / df['economy_fee']
+      df['mempool_growth_1m'] = df['vsize_mb'].diff()
+      df['mempool_growth_5m'] = df['vsize_mb'].diff(5)
+      df['congestion_z'] = (
+          (df['unconfirmed_count'] - df['unconfirmed_count'].rolling(60).mean()) /
+          df['unconfirmed_count'].rolling(60).std()
+      )
+      df['fee_spike'] = (df['fastest_fee'].pct_change() > 0.2).astype(int)
+
+      # Cross-domain features
+      df['volume_per_tx'] = df['volume'] / df['number_of_trades']
+      df['price_fee_corr_60m'] = (
+          df['close'].rolling(60).corr(df['fastest_fee'])
+      )
+
+      # Lag features (t-1, t-5, t-15)
+      for col in ['fastest_fee', 'vsize_mb', 'unconfirmed_count']:
+          for lag in [1, 5, 15]:
+              df[f'{col}_lag_{lag}m'] = df[col].shift(lag)
+
+      # Target: predict 15-minute return
+      df['target'] = df['close'].pct_change(15).shift(-15)
+
+      # Drop NaN rows (from rolling windows and lags)
+      df = df.dropna()
+
+      print(f"Feature matrix: {df.shape}")
+      print(f"Features: {len(df.columns) - 1}")  # -1 for target column
+
+    expected_output: |
+      Feature matrix: (43000, 45)
+      Features: 44 (price, volume, mempool, lags, cross-domain)
+
+  workflow_3_ml_pipeline:
+    description: "Train/test split with proper temporal ordering"
+    code: |
+      import gapless_crypto_data as gcd
+      import gapless_mempool_data as gmd
+      from sklearn.ensemble import RandomForestRegressor
+      from sklearn.preprocessing import StandardScaler
+      import numpy as np
+
+      # Collect and engineer features (from workflow_2)
+      df_features = engineer_features()  # See workflow_2
+
+      # Split: 80% train, 20% test (temporal order preserved)
+      split_idx = int(len(df_features) * 0.8)
+      df_train = df_features.iloc[:split_idx]
+      df_test = df_features.iloc[split_idx:]
+
+      # Separate features and target
+      feature_cols = [c for c in df_features.columns if c != 'target']
+      X_train = df_train[feature_cols]
+      y_train = df_train['target']
+      X_test = df_test[feature_cols]
+      y_test = df_test['target']
+
+      # Standardize features (fit on train only)
+      scaler = StandardScaler()
+      X_train_scaled = scaler.fit_transform(X_train)
+      X_test_scaled = scaler.transform(X_test)
+
+      # Train model
+      model = RandomForestRegressor(n_estimators=100, random_state=42)
+      model.fit(X_train_scaled, y_train)
+
+      # Evaluate
+      train_score = model.score(X_train_scaled, y_train)
+      test_score = model.score(X_test_scaled, y_test)
+
+      print(f"Train R²: {train_score:.4f}")
+      print(f"Test R²: {test_score:.4f}")
+
+      # Feature importance (top 10)
+      importance = pd.DataFrame({
+          'feature': feature_cols,
+          'importance': model.feature_importances_
+      }).sort_values('importance', ascending=False)
+
+      print("\\nTop 10 features:")
+      print(importance.head(10))
+
+    expected_output: |
+      Train R²: 0.8523
+      Test R²: 0.3421
+
+      Top 10 features:
+                        feature  importance
+      0           return_15m_lag_1    0.1542
+      1       fastest_fee_lag_5m    0.0983
+      2           volatility_10m    0.0821
+      3      price_fee_corr_60m    0.0754
+      4            volume_surge    0.0623
+      5     mempool_growth_5m    0.0591
+      6          fee_pressure    0.0512
+      7      taker_buy_ratio    0.0487
+      8        congestion_z    0.0453
+      9    volume_per_tx    0.0401
+
+# STORAGE COORDINATION
+x-storage-coordination:
+  separate_databases:
+    rationale: "Each package maintains its own DuckDB validation database"
+
+    gapless_crypto_data_db:
+      location: "~/.cache/gapless-crypto-data/validation.duckdb"
+      tables:
+        - "validation_reports (OHLCV validations)"
+
+    gapless_mempool_data_db:
+      location: "~/.cache/gapless-mempool-data/validation.duckdb"
+      tables:
+        - "mempool_validation_reports (mempool snapshots)"
+
+    benefits:
+      - "Clean separation (no schema pollution)"
+      - "Independent versioning"
+      - "Each package owns its validation logic"
+
+  shared_feature_store:
+    rationale: "Optional: Store engineered features for reuse"
+
+    implementation: |
+      # User-managed feature store (not part of either package)
+      import duckdb
+
+      conn = duckdb.connect("~/crypto_features.duckdb")
+
+      # Store aligned features
+      conn.execute("""
+          CREATE TABLE IF NOT EXISTS btcusdt_1m_features AS
+          SELECT * FROM df_features
+      """)
+
+      # Query later
+      df_cached = conn.execute("""
+          SELECT * FROM btcusdt_1m_features
+          WHERE timestamp BETWEEN '2024-01-01' AND '2024-01-31'
+      """).df()
+
+# PERFORMANCE CONSIDERATIONS
+x-performance:
+  data_volume:
+    ohlcv_1m_bars:
+      - "1 month: 44,640 bars × 11 columns = ~500K cells"
+      - "1 year: 525,600 bars × 11 columns = ~6M cells"
+      - "CSV: ~50 MB/year, Parquet: ~5 MB/year (10x compression)"
+
+    mempool_1m_snapshots:
+      - "1 month: 44,640 snapshots × 8 columns = ~350K cells"
+      - "1 year: 525,600 snapshots × 8 columns = ~4M cells"
+      - "Parquet: ~3 MB/year (compressed)"
+
+    joined_features:
+      - "1 year: 525,600 rows × 50 columns = ~26M cells"
+      - "Memory: ~200 MB uncompressed"
+      - "Parquet: ~20 MB compressed"
+
+  optimization_strategies:
+    lazy_loading:
+      description: "Load only required date ranges"
+      code: |
+        # Good: Load specific month
+        df = gcd.fetch_data("BTCUSDT", "1m", "2024-01-01", "2024-01-31")
+
+        # Bad: Load entire history
+        df = gcd.fetch_data("BTCUSDT", "1m", "2017-01-01", "2024-12-31")
+
+    chunked_processing:
+      description: "Process large date ranges in chunks"
+      code: |
+        from datetime import datetime, timedelta
+        import pandas as pd
+
+        def process_in_chunks(start, end, chunk_days=7):
+            results = []
+            current = datetime.fromisoformat(start)
+            end_dt = datetime.fromisoformat(end)
+
+            while current < end_dt:
+                chunk_end = min(current + timedelta(days=chunk_days), end_dt)
+
+                # Fetch chunk
+                df_ohlcv = gcd.fetch_data(
+                    "BTCUSDT", "1m",
+                    current.isoformat(), chunk_end.isoformat()
+                )
+                df_mempool = gmd.fetch_snapshots(
+                    current.isoformat(), chunk_end.isoformat()
+                )
+
+                # Process chunk
+                df_features = engineer_features(df_ohlcv, df_mempool)
+                results.append(df_features)
+
+                current = chunk_end
+
+            # Concatenate all chunks
+            return pd.concat(results, axis=0)
+
+    parquet_partitioning:
+      description: "Store features partitioned by date"
+      code: |
+        import pyarrow.parquet as pq
+        import pyarrow as pa
+
+        # Write partitioned Parquet
+        table = pa.Table.from_pandas(df_features)
+        pq.write_to_dataset(
+            table,
+            root_path='features/',
+            partition_cols=['date'],  # Partition by date column
+            compression='snappy'
+        )
+
+        # Read specific partition
+        df = pd.read_parquet(
+            'features/date=2024-01-15/'
+        )
+
+# EXAMPLE USE CASES
+x-use-cases:
+
+  use_case_1_fee_spike_trading:
+    description: |
+      Trade BTC/USDT based on mempool fee spikes signaling network congestion
+      and potential price volatility.
+
+    hypothesis: "Fee spikes → increased settlement urgency → price volatility"
+
+    implementation: |
+      # Collect data
+      df = fuse_ohlcv_mempool("BTCUSDT", "1m", "2024-01-01", "2024-12-31")
+
+      # Define fee spike signal
+      df['fee_spike'] = (
+          (df['fastest_fee'] > df['fastest_fee'].rolling(60).mean() +
+           2 * df['fastest_fee'].rolling(60).std())
+      ).astype(int)
+
+      # Entry: Fee spike detected
+      # Exit: After 15 minutes or 1% gain/loss
+      df['signal'] = df['fee_spike'].shift(1)  # Avoid look-ahead bias
+      df['forward_return_15m'] = df['close'].pct_change(15).shift(-15)
+
+      # Backtest
+      results = df[df['signal'] == 1]['forward_return_15m']
+      print(f"Win rate: {(results > 0).mean():.2%}")
+      print(f"Avg return: {results.mean():.4%}")
+
+  use_case_2_congestion_arbitrage:
+    description: |
+      Identify congestion-driven price dislocations between exchanges.
+
+    hypothesis: "High mempool congestion → withdrawal delays → CEX premium"
+
+    features_required:
+      - "mempool: unconfirmed_count, vsize_mb, fastest_fee"
+      - "ohlcv: close (BTC price)"
+      - "cross_domain: congestion_score = unconfirmed_count × vsize_mb"
+
+  use_case_3_volatility_regime_prediction:
+    description: |
+      Predict volatility regime changes using mempool leading indicators.
+
+    hypothesis: "Mempool congestion changes precede volatility regime shifts"
+
+    target_engineering: |
+      # Define volatility regimes
+      df['realized_vol_1h'] = df['return_1m'].rolling(60).std()
+      df['vol_regime'] = pd.qcut(
+          df['realized_vol_1h'],
+          q=3,
+          labels=['low', 'medium', 'high']
+      )
+
+      # Features: Mempool changes in past 30 minutes
+      df['mempool_delta_30m'] = df['vsize_mb'].diff(30)
+      df['fee_change_30m'] = df['fastest_fee'].pct_change(30)
+
+      # Predict next regime (5 minutes ahead)
+      df['target'] = df['vol_regime'].shift(-5)
+
+# TESTING STRATEGY
+x-testing:
+  integration_tests:
+    test_temporal_alignment:
+      description: "Verify forward-fill alignment preserves causality"
+      code: |
+        def test_forward_fill_no_lookahead():
+            df_ohlcv = pd.DataFrame({
+                'close': [100, 101, 102],
+            }, index=pd.date_range('2024-01-01', periods=3, freq='1min'))
+
+            df_mempool = pd.DataFrame({
+                'fastest_fee': [10, 15],
+            }, index=pd.DatetimeIndex(['2024-01-01 00:00', '2024-01-01 00:02']))
+
+            df_aligned = df_mempool.reindex(df_ohlcv.index, method='ffill')
+
+            assert df_aligned.loc['2024-01-01 00:00', 'fastest_fee'] == 10
+            assert df_aligned.loc['2024-01-01 00:01', 'fastest_fee'] == 10  # Forward-filled
+            assert df_aligned.loc['2024-01-01 00:02', 'fastest_fee'] == 15
+
+    test_no_data_leakage:
+      description: "Verify target creation doesn't leak future data"
+      code: |
+        def test_target_no_leakage():
+            df = pd.DataFrame({
+                'close': [100, 101, 102, 103, 104],
+            }, index=pd.date_range('2024-01-01', periods=5, freq='1min'))
+
+            # Create 2-period forward return
+            df['target'] = df['close'].pct_change(2).shift(-2)
+
+            # At t=0, target uses close[2]
+            # At t=1, target uses close[3]
+            # At t=2, target uses close[4]
+            # At t=3, target is NaN (no future data)
+
+            assert pd.isna(df.loc[df.index[3], 'target'])
+            assert pd.isna(df.loc[df.index[4], 'target'])
+
+# DOCUMENTATION STRATEGY
+x-documentation:
+  per_package_docs:
+    gapless_crypto_data:
+      - "README: OHLCV data collection only"
+      - "Examples: OHLCV fetching, gap filling, validation"
+      - "API Reference: fetch_data(), BinancePublicDataCollector"
+
+    gapless_mempool_data:
+      - "README: Bitcoin mempool monitoring only"
+      - "Examples: Snapshot collection, fee analysis"
+      - "API Reference: fetch_snapshots(), MempoolCollector"
+
+    gapless_features:
+      - "README: Feature engineering toolkit (uses both packages)"
+      - "Examples: Temporal alignment, feature fusion, ML pipelines"
+      - "API Reference: fuse(), engineer_features(), FeaturePipeline"
+
+  integration_guide:
+    title: "Using OHLCV + Mempool Data Together"
+    location: "docs/guides/cross-package-integration.md"
+    sections:
+      - "Installation (both packages)"
+      - "Temporal alignment strategies"
+      - "Feature engineering patterns"
+      - "ML pipeline examples"
+      - "Performance optimization"
+
+# VERSIONING STRATEGY
+x-versioning:
+  independent_versions:
+    gapless_crypto_data:
+      current: "v3.3.0"
+      evolution: "OHLCV format changes, new exchanges, validation improvements"
+
+    gapless_mempool_data:
+      current: "v1.0.0"
+      evolution: "New mempool metrics, additional Bitcoin network data"
+
+    gapless_features:
+      current: "v1.0.0"
+      evolution: "New alignment methods, feature engineering functions"
+
+  compatibility_matrix:
+    gapless_features_1_0:
+      requires:
+        - "gapless-crypto-data >= 3.0.0"
+        - "gapless-mempool-data >= 1.0.0"
+
+      reasoning: "gapless-features 1.0 expects DatetimeIndex DataFrames from both packages"
+
+# IMPLEMENTATION ROADMAP
+x-implementation-roadmap:
+  phase_1_separate_gapless_mempool:
+    status: "NOT STARTED"
+    duration: "2-3 weeks"
+    deliverables:
+      - "New repo: gapless-mempool-data"
+      - "Mempool collector with mempool.space API"
+      - "Validation pipeline for mempool snapshots"
+      - "DataFrame API: fetch_snapshots()"
+      - "DuckDB validation storage"
+      - "PyPI package publication"
+
+  phase_2_feature_engineering_toolkit:
+    status: "NOT STARTED"
+    duration: "1-2 weeks"
+    deliverables:
+      - "New repo: gapless-features"
+      - "Temporal alignment utilities"
+      - "Feature fusion (join + prefix)"
+      - "Common feature engineering functions"
+      - "ML pipeline helpers (train/test split, standardization)"
+      - "PyPI package publication"
+
+  phase_3_integration_examples:
+    status: "NOT STARTED"
+    duration: "1 week"
+    deliverables:
+      - "Jupyter notebooks: OHLCV + mempool integration"
+      - "Example ML pipeline: Volatility prediction"
+      - "Example trading strategy: Fee spike trading"
+      - "Performance benchmarks (memory, speed)"
+      - "Integration guide documentation"
+
+# COMPLIANCE
+x-compliance:
+  slo_alignment:
+    gapless_crypto_data: "Maintains existing SLOs (correctness, observability, maintainability)"
+    gapless_mempool_data: "Defines own SLOs for mempool data quality"
+    gapless_features: "SLOs for alignment accuracy and feature quality"
+
+  sdk_quality:
+    type_safety: "All packages use Pydantic models and type hints"
+    exception_only: "All packages follow exception-only failure principles"
+    observability: "All packages log to stdout, persist validation reports"
+
+  backward_compatibility:
+    gapless_crypto_data: "No breaking changes - continues as OHLCV-only package"
+    gapless_mempool_data: "New package - no backward compatibility concerns"
+    gapless_features: "Follows SemVer for alignment API changes"

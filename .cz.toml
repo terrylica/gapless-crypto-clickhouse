@@ -1,0 +1,11 @@
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "3.0.0"
+tag_format = "v$major.$minor.$patch"
+update_changelog_on_bump = true
+version_files = [
+    "Cargo.toml:version"
+]
+
+[tool.commitizen.settings]
+major_version_zero = false

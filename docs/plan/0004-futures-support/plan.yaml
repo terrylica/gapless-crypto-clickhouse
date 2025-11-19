@@ -1,0 +1,409 @@
+openapi: 3.1.1
+info:
+  title: "Futures Support Implementation Plan"
+  description: |
+    Implementation of USDT-margined perpetual futures support via instrument_type
+    schema extension, following ADR-0004 single-table approach recommendation.
+
+    Extends existing ohlcv table with instrument_type SYMBOL column (capacity 2: 'spot', 'futures')
+    to enable unified spot and futures data collection with same zero-gap guarantee.
+
+    This plan implements:
+    - Schema migration: ADD instrument_type column, update DEDUP key
+    - CSV parser extension: Handle 12-column futures format (vs 11-column spot)
+    - URL parameterization: Support /data/futures/um/ paths
+    - Query API extension: Filter by instrument_type parameter
+    - Backwards compatibility: Defaults to 'spot' for existing usage
+  version: "1.2.0"
+  x-adr-id: "0004"
+  x-status: "executing"
+  x-phase-status:
+    phase-1: "completed"
+    phase-2: "completed"
+    phase-3: "completed"
+    phase-4: "completed"
+    phase-5: "skipped"
+    phase-6: "completed"
+    phase-7: "pending"
+    phase-8: "pending"
+    phase-9: "pending"
+    phase-10: "pending"
+  x-target-release: "3.0.0"
+  x-breaking-change: true
+  x-depends-on: ["0003"]
+
+paths: {}
+
+x-implementation-plan:
+  timeline:
+    total_duration: "2 working days"
+    estimated_hours: 15.5
+    start_date: "2025-11-16"
+    target_completion: "2025-11-18"
+
+  phases:
+    - id: "phase-1"
+      name: "Schema Migration Script"
+      duration: "1 hour"
+      status: "completed"
+      completion_date: "2025-11-16"
+      deliverables:
+        - name: "Migration SQL Script"
+          paths:
+            - "docs/migrations/0004-add-instrument-type-column.sql"
+          description: |
+            SQL migration script to add instrument_type SYMBOL column, backfill
+            existing spot data, and update DEDUP key to include instrument_type.
+          acceptance_criteria:
+            - "ALTER TABLE adds instrument_type SYMBOL CAPACITY 2 CACHE"
+            - "UPDATE backfills all existing rows with 'spot'"
+            - "ALTER TABLE DEDUP updates to (timestamp, symbol, timeframe, instrument_type)"
+            - "Migration is idempotent (safe to re-run)"
+            - "Rollback script provided in case of issues"
+
+        - name: "Migration Test Script"
+          paths:
+            - "tests/migrations/test_0004_migration.py"
+          description: "Test script to validate migration on test database"
+          acceptance_criteria:
+            - "Verifies column added successfully"
+            - "Verifies all rows have instrument_type = 'spot'"
+            - "Verifies DEDUP key updated correctly"
+            - "Verifies row count unchanged after migration"
+
+    - id: "phase-2"
+      name: "CSV Parser Extension"
+      duration: "2 hours"
+      status: "pending"
+      dependencies: ["phase-1"]
+      deliverables:
+        - name: "Futures CSV Parser"
+          paths:
+            - "src/gapless_crypto_data/collectors/questdb_bulk_loader.py"
+          description: |
+            Extend _parse_csv() method to detect and handle 12-column futures CSV
+            format with header row, vs 11-column spot format without header.
+          acceptance_criteria:
+            - "Auto-detects header presence (futures) vs no header (spot)"
+            - "Parses 12-column futures CSV correctly"
+            - "Backwards compatible: spot parsing unchanged"
+            - "instrument_type column added to DataFrame"
+            - "Unit tests cover both spot and futures parsing"
+
+        - name: "CSV Format Detection"
+          paths:
+            - "src/gapless_crypto_data/collectors/csv_format_detector.py"
+          description: "Utility to detect CSV format by reading first line"
+          acceptance_criteria:
+            - "Returns 'spot' or 'futures' based on header detection"
+            - "Handles edge cases (empty files, corrupted headers)"
+            - "100% test coverage"
+
+    - id: "phase-3"
+      name: "URL Parameterization"
+      duration: "1 hour"
+      status: "pending"
+      dependencies: ["phase-1"]
+      deliverables:
+        - name: "Instrument Type Parameter"
+          paths:
+            - "src/gapless_crypto_data/collectors/questdb_bulk_loader.py"
+          description: |
+            Add instrument_type parameter to QuestDBBulkLoader.__init__(),
+            set base_url to /data/spot/ or /data/futures/um/ accordingly.
+          acceptance_criteria:
+            - "QuestDBBulkLoader accepts instrument_type='spot'|'futures'"
+            - "Defaults to 'spot' for backwards compatibility"
+            - "base_url set correctly based on instrument_type"
+            - "ValueError raised for invalid instrument_type values"
+
+    - id: "phase-4"
+      name: "ILP Ingestion Update"
+      duration: "1 hour"
+      status: "pending"
+      dependencies: ["phase-2", "phase-3"]
+      deliverables:
+        - name: "ILP Batch Write Update"
+          paths:
+            - "src/gapless_crypto_data/collectors/questdb_bulk_loader.py"
+          description: |
+            Update _ingest_dataframe() to include instrument_type in symbols list
+            for ILP ingestion, ensuring SYMBOL column indexing.
+          acceptance_criteria:
+            - "sender.dataframe() includes 'instrument_type' in symbols parameter"
+            - "instrument_type column written as SYMBOL (not STRING)"
+            - "ILP ingestion rate maintains >100K rows/sec"
+            - "Zero ingestion errors with futures data"
+
+    - id: "phase-5"
+      name: "CLI Flag Addition"
+      duration: "0.5 hours"
+      status: "pending"
+      dependencies: ["phase-3"]
+      deliverables:
+        - name: "CLI --instrument-type Flag"
+          paths:
+            - "src/gapless_crypto_data/cli.py"
+          description: |
+            Add --instrument-type flag to CLI with choices ['spot', 'futures'],
+            defaulting to 'spot' for backwards compatibility.
+          acceptance_criteria:
+            - "click.option('--instrument-type', type=Choice(['spot', 'futures']), default='spot')"
+            - "Flag passed to QuestDBBulkLoader constructor"
+            - "CLI help text documents flag usage"
+            - "Backwards compatible: existing commands work unchanged"
+
+    - id: "phase-6"
+      name: "Query API Update"
+      duration: "1 hour"
+      status: "pending"
+      dependencies: ["phase-1"]
+      deliverables:
+        - name: "Query API Extension"
+          paths:
+            - "src/gapless_crypto_data/query.py"
+          description: |
+            Add instrument_type parameter to get_ohlcv() and detect_gaps(),
+            update SQL queries to filter by instrument_type.
+          acceptance_criteria:
+            - "get_ohlcv() accepts instrument_type='spot'|'futures', defaults to 'spot'"
+            - "detect_gaps() accepts instrument_type parameter"
+            - "SQL WHERE clause includes 'AND instrument_type = ?'"
+            - "Backwards compatible: queries without filter return all data"
+
+    - id: "phase-7"
+      name: "Unit Tests"
+      duration: "2 hours"
+      status: "pending"
+      dependencies: ["phase-2", "phase-3", "phase-4", "phase-5", "phase-6"]
+      deliverables:
+        - name: "CSV Parser Tests"
+          paths:
+            - "tests/collectors/test_csv_parser.py"
+          description: "Test spot vs futures CSV parsing"
+          acceptance_criteria:
+            - "Tests spot 11-column parsing"
+            - "Tests futures 12-column parsing with header"
+            - "Tests auto-detection logic"
+            - "95% code coverage"
+
+        - name: "URL Parameterization Tests"
+          paths:
+            - "tests/collectors/test_url_parameterization.py"
+          description: "Test base_url selection logic"
+          acceptance_criteria:
+            - "Tests spot URL construction"
+            - "Tests futures URL construction"
+            - "Tests invalid instrument_type raises ValueError"
+
+        - name: "Query API Tests"
+          paths:
+            - "tests/query/test_instrument_type_filter.py"
+          description: "Test instrument_type filtering in queries"
+          acceptance_criteria:
+            - "Tests filtering by instrument_type='spot'"
+            - "Tests filtering by instrument_type='futures'"
+            - "Tests backwards compatibility (no filter)"
+
+    - id: "phase-8"
+      name: "Integration Tests"
+      duration: "2 hours"
+      status: "pending"
+      dependencies: ["phase-7"]
+      deliverables:
+        - name: "End-to-End Futures Ingestion"
+          paths:
+            - "tests/integration/test_futures_ingestion.py"
+          description: "Test complete futures data ingestion flow"
+          acceptance_criteria:
+            - "Ingest 1 futures symbol × 1 timeframe × 1 month successfully"
+            - "Verify instrument_type='futures' in database"
+            - "Verify DEDUP key prevents spot/futures collisions"
+            - "Verify query API filters correctly"
+
+        - name: "Cross-Instrument Query Test"
+          paths:
+            - "tests/integration/test_cross_instrument_query.py"
+          description: "Test querying spot and futures data from same table"
+          acceptance_criteria:
+            - "Query returns only spot data when instrument_type='spot'"
+            - "Query returns only futures data when instrument_type='futures'"
+            - "Query returns both when no filter specified"
+
+    - id: "phase-9"
+      name: "Documentation"
+      duration: "1 hour"
+      status: "pending"
+      dependencies: ["phase-8"]
+      deliverables:
+        - name: "Futures Collection Guide"
+          paths:
+            - "docs/guides/FUTURES_COLLECTION.md"
+          description: "User guide for collecting futures data"
+          acceptance_criteria:
+            - "CLI usage examples with --instrument-type futures"
+            - "Python API examples with instrument_type='futures'"
+            - "Migration guide from v2.x to v3.0.0"
+            - "Troubleshooting common issues"
+
+        - name: "API Documentation Update"
+          paths:
+            - "docs/guides/python-api.md"
+          description: "Update API docs with instrument_type parameter"
+          acceptance_criteria:
+            - "Document instrument_type parameter in get_ohlcv()"
+            - "Document instrument_type parameter in detect_gaps()"
+            - "Document QuestDBBulkLoader instrument_type parameter"
+
+        - name: "Migration Guide"
+          paths:
+            - "docs/guides/MIGRATION_V2_TO_V3.md"
+          description: "Step-by-step migration guide for v2.x users"
+          acceptance_criteria:
+            - "Backup instructions before migration"
+            - "Schema migration script usage"
+            - "Verification steps after migration"
+            - "Rollback procedures if issues occur"
+
+    - id: "phase-10"
+      name: "Futures Data Validation"
+      duration: "4 hours"
+      status: "pending"
+      dependencies: ["phase-9"]
+      deliverables:
+        - name: "Futures Validation Run"
+          paths:
+            - "tmp/futures-validation/reports/"
+          description: |
+            Re-run ADR-0003 6-agent validation suite with futures data
+            (5 symbols × 16 timeframes × 122 days) to validate schema robustness.
+          acceptance_criteria:
+            - "Ingest 5 futures symbols successfully (~54M rows)"
+            - "Total database: ~108M rows (54M spot + 54M futures)"
+            - "All 6 validation agents pass for futures data"
+            - "Zero DEDUP collisions between spot and futures"
+            - "Query performance acceptable at 108M row scale"
+
+        - name: "Cross-Instrument Validation"
+          paths:
+            - "tmp/futures-validation/cross_instrument_validation.py"
+          description: "Validate spot and futures coexist without conflicts"
+          acceptance_criteria:
+            - "Verify spot and futures have same symbol/timeframe/timestamp without DEDUP collision"
+            - "Verify instrument_type filter isolates spot vs futures correctly"
+            - "Verify row counts: spot=54M, futures=54M, total=108M"
+
+x-slos:
+  availability:
+    metrics:
+      - name: "CloudFront Futures Data Availability"
+        target: "100% availability for /data/futures/um/ endpoint"
+        measurement: "Zero 404 errors during futures ingestion"
+
+      - name: "Backwards Compatibility"
+        target: "100% existing spot workflows continue working"
+        measurement: "All existing unit/integration tests pass without modification"
+
+  correctness:
+    metrics:
+      - name: "Zero-Gap Guarantee (Futures)"
+        target: "100% zero-gap guarantee for futures data"
+        measurement: "detect_gaps(instrument_type='futures') returns zero gaps"
+
+      - name: "DEDUP Collision Prevention"
+        target: "Zero collisions between spot and futures data"
+        measurement: "Spot and futures can share same symbol/timeframe/timestamp without DEDUP error"
+
+      - name: "CSV Parsing Correctness"
+        target: "100% correct parsing of 12-column futures CSV format"
+        measurement: "All 12 columns parsed, no data loss, instrument_type populated"
+
+  observability:
+    metrics:
+      - name: "Instrument Type Tracking"
+        target: "100% rows have instrument_type populated"
+        measurement: "SELECT COUNT(*) FROM ohlcv WHERE instrument_type IS NULL returns 0"
+
+      - name: "Migration Logging"
+        target: "All migration steps logged with timestamps"
+        measurement: "Migration script outputs row count before/after, column addition confirmation"
+
+  maintainability:
+    metrics:
+      - name: "Code Reuse"
+        target: "Minimize code duplication between spot and futures logic"
+        measurement: "<70 lines changed across 5 files (no separate futures package)"
+
+      - name: "Test Coverage"
+        target: "95% coverage for new futures-specific code"
+        measurement: "pytest-cov reports 95%+ for CSV parser, URL param, query filter"
+
+x-error-handling:
+  policy: "raise-and-propagate"
+  rationale: "All errors surface immediately to prevent silent data corruption or incomplete migration."
+  examples:
+    - scenario: "futures CSV has unexpected column count"
+      behavior: "CSV parser raises ValueError with actual vs expected column count"
+      no_fallback: "Does NOT skip row, does NOT use default values"
+      propagation: "Ingestion halts, error logged with file path and line number"
+
+    - scenario: "DEDUP key collision between spot and futures (schema bug)"
+      behavior: "QuestDB raises DuplicateKeyError with conflict details"
+      no_retry: "Does NOT drop duplicate, does NOT override existing row"
+      propagation: "Error bubbles to CLI, exits with non-zero status code"
+
+    - scenario: "Migration fails midway (e.g., ALTER TABLE fails)"
+      behavior: "Migration script raises exception, no partial state"
+      no_default: "Does NOT proceed with remaining steps, does NOT commit partial changes"
+      propagation: "Rollback triggered, database state unchanged, user notified"
+
+x-oss-libraries:
+  - name: "psycopg"
+    usage: "QuestDB PostgreSQL wire protocol for schema migration ALTER TABLE commands"
+
+  - name: "pandas"
+    usage: "DataFrame operations for CSV parsing (both 11-column and 12-column formats)"
+
+  - name: "questdb"
+    usage: "ILP ingestion with instrument_type as SYMBOL column"
+
+x-auto-validation:
+  artifacts:
+    - name: "ADR-0004 and plan.yaml cross-reference"
+      validation: "grep 'x-adr-id: \"0004\"' docs/plan/0004-futures-support/plan.yaml"
+
+    - name: "Migration script SQL validation"
+      validation: "psql -f docs/migrations/0004-add-instrument-type-column.sql --dry-run"
+
+    - name: "Futures ingestion smoke test"
+      validation: "gapless-crypto-data --symbol BTCUSDT --timeframe 1h --start-date 2024-01-01 --end-date 2024-01-31 --instrument-type futures"
+
+    - name: "Cross-instrument query validation"
+      validation: "SELECT DISTINCT instrument_type FROM ohlcv returns ['spot', 'futures']"
+
+x-semantic-release:
+  enabled: true
+  breaking_change: true
+  release_type: "major"
+  target_version: "v3.0.0"
+  commit_convention: "conventional-commits"
+  changelog_sections:
+    - type: "feat"
+      section: "Features"
+      notes: "BREAKING: instrument_type parameter required for new writes"
+
+    - type: "fix"
+      section: "Bug Fixes"
+
+    - type: "docs"
+      section: "Documentation"
+
+x-compliance:
+  openapi_version: "3.1.1"
+  doc_style: "evolutionary-without-promo"
+  slo_focus: "availability, correctness, observability, maintainability"
+  error_policy: "raise-propagate-no-fallback"
+  oss_preference: "prefer-oss-over-custom"
+  auto_validate: "all-artifacts-validated"
+  release_automation: "semantic-release-conventional-commits"
+  adr_plan_sync: "x-adr-id cross-reference validated"

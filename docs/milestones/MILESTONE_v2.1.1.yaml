@@ -1,0 +1,296 @@
+milestone_id: 2025-09-16-v2.1.1-timeframe-discoverability-implementation
+commit_sha: 99be438a37a3e1b14e16b7c9b6b3a3c9d7b3a8f7
+timestamp: 2025-09-16T20:15:33+0000
+summary: Timeframe discoverability implementation with --list-timeframes flag and comprehensive CLI patterns
+
+lessons_learned:
+  challenges:
+    - description: Discoverability gap where only 8 of 16 available timeframes were documented in CLI help text
+      impact: Users could not easily discover all available timeframe options through conventional CLI patterns
+
+    - description: Error messages for invalid timeframes provided limited guidance without showing available alternatives
+      impact: Users had to reference documentation or source code to understand valid timeframe options
+
+    - description: CLI help text lacked reference to timeframe listing functionality for complete option discovery
+      impact: Users were unaware that comprehensive timeframe information was available through dedicated commands
+
+    - description: Test coverage needed expansion to validate timeframe discoverability across multiple CLI interaction patterns
+      impact: Comprehensive testing required to ensure discoverability functionality works correctly in all usage scenarios
+
+    - description: Conventional CLI patterns required implementation for timeframe option discovery using --list-* flag pattern
+      impact: Following established CLI conventions improves user experience and discoverability expectations
+
+  failed_approaches:
+    - approach: Including all 16 timeframes directly in help text without separate listing command
+      reason_failed: Would have cluttered help output and violated CLI best practices for handling large option sets
+      lesson: Use dedicated --list-* commands for comprehensive option display while keeping help text concise
+
+    - approach: Minimal error messages without available timeframe suggestions when invalid options provided
+      reason_failed: Users would still need to find available options elsewhere instead of immediate guidance
+      lesson: Error messages should provide actionable guidance including available alternatives and discovery commands
+
+    - approach: Basic test coverage assuming existing CLI tests covered timeframe discoverability scenarios
+      reason_failed: Timeframe discoverability required specific test scenarios beyond general CLI functionality
+      lesson: New discoverability features require dedicated test coverage for flag functionality, help text, and error handling
+
+    - approach: Inconsistent help text between main command and subcommands regarding timeframe options
+      reason_failed: Users could encounter different information depending on command context creating confusion
+      lesson: Maintain consistent discoverability information across all CLI command contexts
+
+  successful_solution:
+    approach: Conventional CLI discoverability implementation with --list-timeframes flag and comprehensive user guidance
+    key_insights:
+      - --list-timeframes flag provides complete timeframe listing with descriptions following CLI conventions
+      - Help text mentions "16 available options" and references --list-timeframes for complete discovery
+      - Error messages show available timeframes and suggest --list-timeframes for detailed information
+      - Test coverage includes flag functionality, help text validation, error handling, and integration scenarios
+      - Consistent messaging across main command and subcommands maintains user experience coherence
+      - Timeframe listing includes usage examples and performance notes for informed decision making
+
+  patterns_identified:
+    - pattern: CLI option discoverability using --list-* flags for comprehensive information display
+      context: When CLI commands support large option sets, provide dedicated listing commands for complete discovery
+
+    - pattern: Help text references to discovery commands for detailed option information
+      context: Keep help text concise while providing clear pathways to comprehensive option documentation
+
+    - pattern: Error message enhancement with available alternatives and discovery guidance
+      context: Invalid input should provide immediate actionable guidance including valid options and discovery commands
+
+    - pattern: Comprehensive test coverage for discoverability functionality across interaction patterns
+      context: Discoverability features require testing flag functionality, help integration, and error scenarios
+
+    - pattern: Consistent discoverability messaging across CLI command contexts
+      context: Maintain uniform discoverability information whether using main command or subcommands
+
+  future_guidance:
+    - Implement --list-* flags for any CLI functionality with multiple option sets for conventional discoverability
+    - Include discovery command references in help text while maintaining concise primary documentation
+    - Design error messages to provide immediate guidance with available alternatives and discovery pathways
+    - Add dedicated test coverage for discoverability features including flag functionality and integration scenarios
+    - Maintain consistent discoverability messaging across all CLI command contexts and subcommands
+    - Include usage examples and context information in option listing commands for informed user decisions
+    - Follow CLI conventions for option discovery to meet user expectations for interface patterns
+    - Validate discoverability implementation through comprehensive testing of all interaction pathways
+
+technical_details:
+  architecture_changes: |
+    Timeframe Discoverability Architecture (v2.1.1):
+
+    BEFORE (v2.1.0):
+    - Help text showed only 8 of 16 available timeframes
+    - No dedicated timeframe listing functionality
+    - Basic error messages without alternative suggestions
+    - Limited discoverability for complete timeframe options
+
+    AFTER (v2.1.1):
+    - --list-timeframes flag with all 16 timeframes and descriptions
+    - Help text references "16 available options" and --list-timeframes
+    - Error messages show available timeframes with discovery guidance
+    - Comprehensive test coverage for discoverability functionality
+
+    CLI Flag Implementation:
+    ```python
+    def list_timeframes() -> int:
+        """Display all available timeframes with descriptions."""
+        print("📊 Available Timeframes")
+
+        # Get available timeframes from collector
+        collector = BinancePublicDataCollector()
+        timeframes = collector.available_timeframes
+
+        # Display with descriptions and usage examples
+        for tf in timeframes:
+            desc = descriptions.get(tf, "Standard trading interval")
+            print(f"{tf:9} | {desc}")
+    ```
+
+    Help Text Enhancement:
+    ```python
+    # BEFORE: Limited timeframe information
+    help="Comma-separated timeframes (default: 1m,3m,5m,15m,30m,1h,2h,4h)"
+
+    # AFTER: Complete discoverability reference
+    help="Comma-separated timeframes from 16 available options (default: 1m,3m,5m,15m,30m,1h,2h,4h). Use --list-timeframes to see all available timeframes"
+    ```
+
+    Error Message Expansion:
+    ```python
+    # BEFORE: Basic error message
+    print(f"❌ Timeframe {trading_timeframe} not available")
+
+    # AFTER: Comprehensive guidance
+    print(f"❌ Timeframe '{trading_timeframe}' not available")
+    print(f"📊 Available timeframes: {', '.join(self.available_timeframes)}")
+    print(f"💡 Use 'gapless-crypto-data --list-timeframes' for detailed descriptions")
+    ```
+
+    Test Coverage Implementation:
+    ```python
+    # New timeframe discoverability tests
+    def test_cli_list_timeframes_flag():
+        # Validates --list-timeframes functionality with all 16 timeframes
+
+    def test_cli_help_mentions_list_timeframes():
+        # Validates help text includes discoverability references
+
+    def test_cli_invalid_timeframe_shows_available():
+        # Validates error messages provide available alternatives
+
+    def test_cli_timeframe_discoverability_integration():
+        # Validates complete discoverability workflow
+    ```
+
+    Argument Parsing Enhancement:
+    ```python
+    # Add --list-timeframes flag to argument parser
+    parser.add_argument("--list-timeframes", action="store_true",
+                       help="List all available timeframes with descriptions")
+
+    # Route to timeframe listing function
+    if parsed_arguments.list_timeframes:
+        return list_timeframes()
+    ```
+
+  new_dependencies: |
+    No new external dependencies introduced:
+    - Timeframe discoverability built on existing CLI argument parsing infrastructure
+    - Error message enhancement uses existing collector available_timeframes attribute
+    - Test coverage expansion uses existing pytest infrastructure and CLI testing patterns
+    - Help text updates use existing argparse help system
+
+    Discoverability Components:
+    - list_timeframes() function providing comprehensive timeframe display
+    - Argument parser integration for --list-timeframes flag handling
+    - Error message enhancement in BinancePublicDataCollector
+    - Test infrastructure extension for discoverability scenario coverage
+
+  performance_impacts: |
+    - --list-timeframes command executes instantly with minimal overhead
+    - Help text updates add negligible parsing overhead
+    - Error message enhancement adds minimal string formatting when errors occur
+    - Test coverage expansion maintains fast test execution times
+    - No impact on data collection performance or functionality
+
+    Performance Characteristics:
+    - Timeframe listing: instantaneous execution with formatted output
+    - Help text parsing: negligible overhead during argument processing
+    - Error handling: minimal string processing overhead only when errors occur
+    - Test execution: 4 new tests complete in under 2 seconds total
+
+  security_considerations: |
+    - Timeframe listing uses existing validated timeframe data without user input processing
+    - Help text updates use static strings without dynamic content generation
+    - Error message formatting uses controlled string interpolation with validated timeframe data
+    - Test coverage validates expected behavior without introducing security vectors
+    - No new attack surfaces introduced through discoverability functionality
+
+validation_results:
+  timeframe_discoverability_test_coverage: 4_new_tests
+  total_test_count_increased: "14 → 18"
+  all_16_timeframes_discoverable: true
+  help_text_references_list_command: true
+  error_messages_provide_guidance: true
+  cli_convention_compliance: true
+
+development_context:
+  version_significance: Patch version 2.1.1 with timeframe discoverability feature addition
+  feature_scope: CLI discoverability patterns, help text enhancement, error message improvement, test coverage
+  cli_convention_adherence: --list-* flag pattern for comprehensive option discovery
+  user_experience_focus: Conventional discoverability patterns for complete timeframe information
+
+migration_notes: |
+  v2.1.0 to v2.1.1 Migration (Timeframe Discoverability):
+  - Fully backwards compatible: all existing CLI usage continues unchanged
+  - New functionality: --list-timeframes flag for comprehensive timeframe discovery
+  - Enhanced help text references complete timeframe information
+  - Improved error messages with available alternatives and discovery guidance
+
+  Timeframe Discovery Patterns:
+  ```bash
+  # List all available timeframes with descriptions
+  gapless-crypto-data --list-timeframes
+
+  # Help text now mentions 16 available options
+  gapless-crypto-data --help
+  gapless-crypto-data collect --help
+
+  # Error messages provide discovery guidance
+  gapless-crypto-data --symbol BTCUSDT --timeframes invalid_timeframe
+  # Shows: Available timeframes and suggests --list-timeframes
+  ```
+
+  Discoverability Workflow:
+  ```bash
+  # Step 1: Discover available timeframes
+  gapless-crypto-data --list-timeframes
+  # Output: All 16 timeframes with descriptions and usage examples
+
+  # Step 2: Use discovered timeframes
+  gapless-crypto-data --symbol BTCUSDT --timeframes 1s,1m,1h,1d
+
+  # Step 3: Get help with timeframe references
+  gapless-crypto-data --help
+  # Output: "from 16 available options... Use --list-timeframes"
+  ```
+
+  Test Validation:
+  ```bash
+  # Validate timeframe discoverability functionality
+  uv run pytest tests/test_cli.py::test_cli_list_timeframes_flag -v
+  uv run pytest tests/test_cli.py::test_cli_help_mentions_list_timeframes -v
+  uv run pytest tests/test_cli.py::test_cli_invalid_timeframe_shows_available -v
+
+  # Complete discoverability integration test
+  uv run pytest tests/test_cli.py::test_cli_timeframe_discoverability_integration -v
+
+  # All CLI tests including new discoverability coverage
+  uv run pytest tests/test_cli.py -v  # 18 tests total
+  ```
+
+retrospective_summary: |
+  v2.1.1 represents a successful implementation of timeframe discoverability functionality that addresses
+  the user experience gap where only 8 of 16 available timeframes were easily discoverable through CLI
+  help text, establishing conventional CLI patterns for complete option discovery.
+
+  The most significant improvement is the addition of the --list-timeframes flag following established
+  CLI conventions for comprehensive option listing. This provides users with detailed information about
+  all 16 available timeframes including descriptions, usage examples, and performance notes, enabling
+  informed decision making for timeframe selection.
+
+  Help text enhancement to reference "16 available options" and --list-timeframes creates clear pathways
+  for users to discover complete timeframe information while maintaining concise primary documentation.
+  This balance between brief help text and comprehensive option discovery follows CLI best practices.
+
+  Error message expansion provides immediate actionable guidance when invalid timeframes are specified,
+  showing available alternatives and suggesting the discovery command. This eliminates the need for users
+  to search documentation or source code for valid options, improving error recovery experience.
+
+  The comprehensive test coverage with 4 new tests validates timeframe discoverability across multiple
+  interaction patterns including flag functionality, help text integration, error handling, and complete
+  workflow scenarios. This systematic testing ensures the discoverability features work correctly.
+
+  Key insight: CLI discoverability benefits significantly from following established conventions rather
+  than creating custom patterns. The --list-* flag pattern immediately communicates functionality to
+  users familiar with CLI tools, reducing learning overhead and improving adoption.
+
+  The implementation demonstrates that user experience improvements can be achieved without architectural
+  complexity or performance impact. The discoverability functionality adds minimal overhead while
+  providing substantial usability benefits through conventional interface patterns.
+
+  Error handling with immediate alternative suggestions and discovery guidance represents best practices
+  for CLI error recovery. Users receive actionable information at the point of failure rather than
+  generic error messages requiring additional research.
+
+  The consistent messaging across main command and subcommands maintains user experience coherence
+  regardless of command context. Users encounter the same discoverability information whether using
+  direct flags or subcommand patterns.
+
+  This milestone establishes patterns for extending CLI discoverability that prioritize conventional
+  user interface patterns, comprehensive testing, and error recovery guidance. The systematic approach
+  to option discovery provides a template for future CLI enhancements.
+
+  The successful implementation of timeframe discoverability demonstrates that thoughtful attention to
+  CLI conventions and user experience patterns can significantly improve tool usability while maintaining
+  system simplicity and performance. The 4 new tests and conventional --list-* pattern ensure robust
+  and accessible timeframe discovery functionality.

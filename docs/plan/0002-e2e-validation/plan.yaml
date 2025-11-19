@@ -1,0 +1,418 @@
+openapi: 3.1.1
+info:
+  title: "E2E Validation Plan for QuestDB Refactor"
+  description: |
+    Comprehensive end-to-end validation of gapless-crypto-data v4.0.0 QuestDB refactor
+    before merging to main. Validates all Phase 1-3 deliverables with real Binance data
+    and actual QuestDB deployment.
+  version: "1.0.0"
+  x-adr-id: "0002"
+  x-status: "executing"
+  x-depends-on: ["0001"]
+  x-target-branch: "feat/questdb-single-source-truth"
+
+paths: {}
+
+components:
+  schemas:
+    ValidationPlan:
+      type: object
+      required:
+        - agents
+        - timeline
+        - success_criteria
+      properties:
+        agents:
+          type: array
+        timeline:
+          type: object
+        success_criteria:
+          type: array
+
+x-validation-plan:
+  timeline:
+    total_duration: "30 minutes"
+    start_time: "2025-11-15T16:00:00Z"
+
+  execution_strategy:
+    type: "parallel-agents"
+    description: "7 specialized agents with dynamic writeTodo creation"
+    parallelism:
+      - phase: "setup"
+        agents: ["agent-1"]
+        sequential: true
+      - phase: "validation"
+        agents: ["agent-2", "agent-3", "agent-4", "agent-5", "agent-6"]
+        parallel: true
+      - phase: "integration"
+        agents: ["agent-7"]
+        sequential: true
+
+  agents:
+    - id: "agent-1"
+      name: "Environment Setup & Infrastructure"
+      responsibility: "QuestDB deployment, schema application, .env configuration"
+      dynamic_writeTodos:
+        - initial: "Start Colima and deploy QuestDB via docker-compose"
+          triggers_next: "Create .env and verify connectivity"
+        - step: "Create .env and verify connectivity"
+          triggers_next: "Apply schema.sql and verify table structure"
+        - step: "Apply schema.sql and verify table structure"
+          completion: "QuestDB running, schema loaded, connections verified"
+      validation_directory: "tmp/e2e-validation/agent-1-env/"
+      artifacts:
+        - "docker-compose logs → agent-1-env/questdb.log"
+        - ".env file → agent-1-env/config.env"
+        - "schema validation → agent-1-env/schema-check.txt"
+
+    - id: "agent-2"
+      name: "Bulk Loader Validation"
+      responsibility: "CloudFront → QuestDB ingestion with real Binance data"
+      depends_on: ["agent-1"]
+      dynamic_writeTodos:
+        - initial: "Download BTCUSDT 1m Jan 2024 from CloudFront"
+          triggers_next: "Verify CSV parsing and DataFrame transformation"
+        - step: "Verify CSV parsing and DataFrame transformation"
+          triggers_next: "Test ILP ingestion and measure performance"
+        - step: "Test ILP ingestion and measure performance"
+          triggers_next: "Test multi-month and deduplication (Feb 2024 + re-ingest Jan)"
+        - step: "Test multi-month and deduplication"
+          completion: "Ingestion validated, >100K rows/sec, deduplication works"
+      validation_directory: "tmp/e2e-validation/agent-2-bulk/"
+      test_data:
+        symbol: "BTCUSDT"
+        timeframe: "1m"
+        months: ["2024-01", "2024-02"]
+        expected_rows: "~85000 per month"
+      success_criteria:
+        - "Ingestion rate >100,000 rows/sec"
+        - "Row count matches CSV exactly"
+        - "UPSERT deduplication prevents duplicates"
+        - "11-column format preserved"
+        - "data_source='cloudfront' tracked"
+
+    - id: "agent-3"
+      name: "Query Interface Validation"
+      responsibility: "All query methods + edge cases + error handling"
+      depends_on: ["agent-2"]
+      dynamic_writeTodos:
+        - initial: "Test get_latest() with various limits (100, 1000, 10000)"
+          triggers_next: "Test get_range() with date boundaries and edge cases"
+        - step: "Test get_range() with date boundaries"
+          triggers_next: "Test get_multi_symbol() with ETHUSDT addition"
+        - step: "Test get_multi_symbol()"
+          triggers_next: "Test execute_sql() and detect_gaps()"
+        - step: "Test execute_sql() and detect_gaps()"
+          completion: "All query methods work, edge cases handled, errors raise"
+      validation_directory: "tmp/e2e-validation/agent-3-query/"
+      test_scenarios:
+        - method: "get_latest"
+          edge_cases: ["limit=1", "limit=100000", "invalid symbol"]
+        - method: "get_range"
+          edge_cases: ["full month", "partial month", "cross-month", "invalid dates"]
+        - method: "get_multi_symbol"
+          edge_cases: ["2 symbols", "non-existent symbol", "empty result"]
+        - method: "execute_sql"
+          edge_cases: ["parameterized query", "SQL injection attempt", "syntax error"]
+        - method: "detect_gaps"
+          edge_cases: ["no gaps", "single gap", "multiple gaps"]
+      success_criteria:
+        - "Query latency <1s for 1M rows"
+        - "pandas DataFrame output validated"
+        - "Invalid inputs raise ValueError"
+        - "SQL injection prevented (parameterized queries)"
+        - "Edge cases handled correctly"
+
+    - id: "agent-4"
+      name: "Gap Filler Validation"
+      responsibility: "SQL gap detection + REST API filling + deduplication"
+      depends_on: ["agent-2"]
+      dynamic_writeTodos:
+        - initial: "Create artificial gap by deleting rows (Jan 15-17)"
+          triggers_next: "Test detect_gaps() SQL accuracy"
+        - step: "Test detect_gaps() SQL accuracy"
+          triggers_next: "Test fill_gap() via Binance REST API"
+        - step: "Test fill_gap() via REST API"
+          triggers_next: "Verify deduplication and data_source tracking"
+        - step: "Verify deduplication and data_source tracking"
+          completion: "Gap detection accurate, filling works, zero-gap achieved"
+      validation_directory: "tmp/e2e-validation/agent-4-gap/"
+      test_scenarios:
+        - "Create gap → detect → verify gap_start/gap_end/expected_bars"
+        - "Fill gap via REST API → verify data_source='api'"
+        - "Re-fill same gap → verify UPSERT (no duplicates)"
+        - "Detect gaps after fill → verify zero gaps"
+      success_criteria:
+        - "detect_gaps() finds all gaps accurately"
+        - "fill_gap() fetches from Binance REST API"
+        - "data_source='api' vs 'cloudfront' tracked correctly"
+        - "UPSERT prevents duplicates on re-fill"
+        - "Zero-gap guarantee validated"
+
+    - id: "agent-5"
+      name: "Error Handling Validation"
+      responsibility: "Raise-and-propagate compliance (no fallbacks/retries/silent failures)"
+      depends_on: ["agent-1"]
+      dynamic_writeTodos:
+        - initial: "Test connection failures (stop QuestDB → attempt operations)"
+          triggers_next: "Test invalid inputs (ValueError cases)"
+        - step: "Test invalid inputs (ValueError)"
+          triggers_next: "Test Binance API failures (404, rate limits)"
+        - step: "Test API failures"
+          triggers_next: "Test CloudFront download failures and cleanup"
+        - step: "Test download failures and cleanup"
+          completion: "All errors raise+propagate, no silent failures, cleanup works"
+      validation_directory: "tmp/e2e-validation/agent-5-errors/"
+      test_scenarios:
+        connection_failures:
+          - "Stop QuestDB → query → assert ConnectionError"
+          - "Stop QuestDB → ingest → assert ConnectionError"
+          - "Invalid connection string → assert psycopg.Error"
+        validation_errors:
+          - "Invalid symbol (special chars) → assert ValueError"
+          - "Invalid timeframe (unsupported) → assert ValueError"
+          - "Invalid date format → assert ValueError"
+          - "Negative limit → assert ValueError"
+        api_failures:
+          - "Non-existent month → assert HTTPError 404"
+          - "Invalid symbol → assert HTTPError 404"
+        download_failures:
+          - "Corrupted ZIP → assert BadZipFile"
+          - "Network error → assert URLError"
+          - "Verify temp file cleanup on all error paths"
+      success_criteria:
+        - "All errors raise (no silent failures)"
+        - "Errors propagate to caller (no catch-and-ignore)"
+        - "Error messages contain context"
+        - "Temp files cleaned up on error"
+        - "No automatic retries observed"
+        - "No fallback mechanisms observed"
+
+    - id: "agent-6"
+      name: "Performance & Observability Validation"
+      responsibility: "SLO compliance + logging + Prometheus metrics"
+      depends_on: ["agent-2"]
+      dynamic_writeTodos:
+        - initial: "Measure bulk ingestion performance (target: >100K rows/sec)"
+          triggers_next: "Measure query latency (target: <1s for typical range)"
+        - step: "Measure query latency"
+          triggers_next: "Verify logging (INFO/DEBUG for all operations)"
+        - step: "Verify logging"
+          triggers_next: "Test Prometheus metrics endpoint"
+        - step: "Test Prometheus metrics"
+          completion: "Performance meets SLO, logging comprehensive, metrics available"
+      validation_directory: "tmp/e2e-validation/agent-6-perf/"
+      slo_targets:
+        ingestion:
+          metric: "rows per second"
+          target: ">100,000"
+          measurement: "ingest 1M rows, calculate rate"
+        query_latency:
+          metric: "seconds"
+          target: "<1.0"
+          measurement: "query 1M row range, time execution"
+        logging:
+          requirements:
+            - "Connection lifecycle logged (DEBUG)"
+            - "Ingestion metrics logged (INFO)"
+            - "Query execution logged (DEBUG)"
+            - "Error context logged (ERROR)"
+        observability:
+          requirements:
+            - "Prometheus /metrics endpoint accessible"
+            - "QuestDB metrics exposed (heap, disk, rows)"
+            - "Data lineage tracked (data_source column)"
+      success_criteria:
+        - "Ingestion rate exceeds 100K rows/sec"
+        - "Query latency under 1s for 1M rows"
+        - "All operations logged at appropriate level"
+        - "Prometheus metrics endpoint responds"
+        - "QuestDB metrics present in /metrics"
+
+    - id: "agent-7"
+      name: "Full Pipeline Integration"
+      responsibility: "End-to-end realistic scenario (fresh DB → collection → query → gaps → fill)"
+      depends_on: ["agent-2", "agent-3", "agent-4", "agent-5", "agent-6"]
+      dynamic_writeTodos:
+        - initial: "Simulate fresh database (drop table, re-apply schema)"
+          triggers_next: "Test complete collection workflow (BTCUSDT Jan-Feb)"
+        - step: "Test collection workflow"
+          triggers_next: "Test multi-symbol collection (add ETHUSDT, SOLUSDT)"
+        - step: "Test multi-symbol collection"
+          triggers_next: "Test real-world gap scenario (incomplete month + fill)"
+        - step: "Test gap scenario"
+          completion: "Full pipeline validated, zero-gap guarantee confirmed"
+      validation_directory: "tmp/e2e-validation/agent-7-integration/"
+      test_scenarios:
+        - name: "Fresh Database Setup"
+          steps:
+            - "DROP TABLE ohlcv"
+            - "Re-apply schema.sql"
+            - "Verify empty database"
+        - name: "Complete Collection Workflow"
+          steps:
+            - "Ingest BTCUSDT 1m Jan-Feb 2024 via bulk loader"
+            - "Detect gaps (should be zero for CloudFront)"
+            - "Query latest 1000 bars"
+            - "Verify data completeness"
+        - name: "Multi-Symbol Collection"
+          steps:
+            - "Add ETHUSDT 1m Jan 2024"
+            - "Add SOLUSDT 1m Jan 2024"
+            - "Query all symbols together (get_multi_symbol)"
+            - "Verify no cross-contamination"
+        - name: "Real-World Gap Scenario"
+          steps:
+            - "Ingest incomplete month (skip Jan 10-20)"
+            - "Detect gaps"
+            - "Fill gaps via REST API"
+            - "Verify zero-gap guarantee"
+      success_criteria:
+        - "Fresh database setup succeeds"
+        - "Bulk collection completes without errors"
+        - "Multi-symbol queries work correctly"
+        - "Gap detection + filling achieves zero-gap"
+        - "All data sources tracked (cloudfront vs api)"
+
+x-success-criteria:
+  all_agents_success: "All 7 agents report completion without errors"
+  performance_slo:
+    - metric: "ingestion_rate"
+      target: ">100K rows/sec"
+      validated_by: "agent-6"
+    - metric: "query_latency"
+      target: "<1s for 1M rows"
+      validated_by: "agent-6"
+  correctness:
+    - requirement: "Zero-gap guarantee"
+      validated_by: "agent-4, agent-7"
+    - requirement: "Deduplication (UPSERT semantics)"
+      validated_by: "agent-2, agent-4"
+    - requirement: "11-column microstructure format"
+      validated_by: "agent-2"
+    - requirement: "Data lineage tracking"
+      validated_by: "agent-2, agent-4, agent-6"
+  error_handling:
+    - requirement: "All errors raise and propagate"
+      validated_by: "agent-5"
+    - requirement: "No silent failures"
+      validated_by: "agent-5"
+    - requirement: "No automatic retries"
+      validated_by: "agent-5"
+    - requirement: "Temp file cleanup on error"
+      validated_by: "agent-5"
+  observability:
+    - requirement: "INFO/DEBUG logging comprehensive"
+      validated_by: "agent-6"
+    - requirement: "Prometheus metrics exposed"
+      validated_by: "agent-6"
+
+x-artifacts:
+  validation_report:
+    path: "tmp/e2e-validation/VALIDATION_REPORT.md"
+    sections:
+      - "Executive Summary"
+      - "Agent Results (7 agents)"
+      - "Performance Metrics"
+      - "SLO Compliance Matrix"
+      - "Issues Found (if any)"
+      - "Recommendations"
+  agent_logs:
+    pattern: "tmp/e2e-validation/agent-*/
+
+*.log"
+    description: "Detailed logs from each agent"
+  questdb_logs:
+    source: "docker logs gapless-questdb"
+    destination: "tmp/e2e-validation/questdb-container.log"
+
+x-reusable-artifacts:
+  test_fixtures:
+    - source: "tests/conftest.py"
+      reuse: "real_btcusdt_1h_sample fixture pattern for CloudFront download"
+    - source: "tests/test_error_handling.py"
+      reuse: "Error propagation testing patterns"
+  data_sources:
+    - type: "real_binance_cloudfront"
+      symbols: ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+      timeframe: "1m"
+      months: ["2024-01", "2024-02"]
+      rationale: "Tests real-world format, parsing, network reliability"
+
+x-slos:
+  availability:
+    metrics:
+      - name: "QuestDB Deployment Health"
+        target: "Docker health check passes"
+        validation: "agent-1 verifies health check"
+      - name: "Connection Failure Handling"
+        target: "Raises ConnectionError (no silent failure)"
+        validation: "agent-5 tests connection failures"
+
+  correctness:
+    metrics:
+      - name: "Zero-Gap Guarantee"
+        target: "100% gap filling success"
+        validation: "agent-4 + agent-7 gap scenarios"
+      - name: "Deduplication"
+        target: "UPSERT semantics prevent duplicates"
+        validation: "agent-2 + agent-4 re-ingestion tests"
+      - name: "Data Authenticity"
+        target: "data_source column tracks CloudFront vs API"
+        validation: "agent-2 + agent-4 verify tracking"
+
+  observability:
+    metrics:
+      - name: "Logging Coverage"
+        target: "All operations logged (INFO/DEBUG)"
+        validation: "agent-6 log inspection"
+      - name: "Prometheus Metrics"
+        target: "QuestDB /metrics endpoint responds"
+        validation: "agent-6 HTTP GET /metrics"
+      - name: "Data Lineage"
+        target: "data_source column populated"
+        validation: "agent-2 + agent-4 verify column"
+
+  maintainability:
+    metrics:
+      - name: "pandas DataFrame Output"
+        target: "All queries return pandas.DataFrame"
+        validation: "agent-3 type checks"
+      - name: "PostgreSQL Protocol"
+        target: "psycopg3 connections work"
+        validation: "agent-1 + agent-3 connection tests"
+      - name: "Documentation Accuracy"
+        target: "Deployment guides lead to working setup"
+        validation: "agent-1 follows docs/deployment/macos-colima-setup.md"
+
+x-error-handling:
+  policy: "raise-and-propagate"
+  validation_approach: "agent-5 explicitly tests error scenarios"
+
+  test_scenarios:
+    connection_failures:
+      - scenario: "QuestDB stopped during query"
+        expected: "psycopg.OperationalError or ConnectionError"
+        validation: "agent-5"
+    validation_failures:
+      - scenario: "Invalid symbol format"
+        expected: "ValueError with context"
+        validation: "agent-5"
+    api_failures:
+      - scenario: "CloudFront 404 (non-existent month)"
+        expected: "HTTPError with status code 404"
+        validation: "agent-5"
+    cleanup:
+      - scenario: "Error during ZIP extraction"
+        expected: "Temp files deleted (tempfile.TemporaryDirectory)"
+        validation: "agent-5"
+
+x-compliance:
+  adr_reference: "0002"
+  depends_on_adr: "0001"
+  doc_style: "evolutionary-without-promo"
+  slo_focus: "availability, correctness, observability, maintainability"
+  error_policy: "raise-propagate-no-fallback"
+  oss_preference: "pytest, psycopg, pandas, httpx, docker-compose"
+  auto_validate: "all-artifacts-validated"
+  deployment_scope: "macos-colima-only"

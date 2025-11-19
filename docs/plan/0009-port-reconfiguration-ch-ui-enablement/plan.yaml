@@ -1,0 +1,248 @@
+openapi: 3.1.1
+info:
+  title: "Port Reconfiguration for CH-UI Enablement"
+  description: |
+    Reconfigure ClickHouse to use standard ports (9000/8123) by stopping QuestDB legacy container,
+    enabling CH-UI web interface to start and complete the visualization toolchain.
+
+    Problem: QuestDB container from pre-v4.0.0 architecture occupies port 9000, forcing ClickHouse
+    to use non-standard ports (9001/8124). This blocks CH-UI from starting (expects port 8123).
+
+    Solution: Stop QuestDB (v4.0.0 is ClickHouse-only), reconfigure ClickHouse for standard ports,
+    start CH-UI. All data persists in Docker volumes (zero data loss).
+
+    Phases:
+    1. Stop QuestDB container (free port 9000)
+    2. Reconfigure ClickHouse to standard ports (9000/8123)
+    3. Start CH-UI web interface (http://localhost:5521)
+    4. Validate all 5 visualization tools operational
+
+    Result: 6/6 critical validation tests passing (was 5/5, CH-UI now included).
+
+  version: "1.0.0"
+  x-adr-id: "0009"
+  x-status: "validated"
+  x-target-release: "4.0.0"
+  x-validation-date: "2025-11-18"
+  x-validation-passed: true
+  x-breaking-change: false
+  x-depends-on: ["0008"]
+
+paths: {}
+
+x-implementation-plan:
+  timeline:
+    total_duration: "10 minutes"
+    estimated_hours: 0.17
+    estimated_completion: "2025-11-18"
+
+  phases:
+    - id: "phase-1"
+      name: "Stop QuestDB Container"
+      duration: "2 minutes"
+      status: "completed"
+      deliverables:
+        - name: "Stop QuestDB to free port 9000"
+          description: |
+            Stop gapless-questdb container (legacy from pre-v4.0.0).
+            Container and volumes preserved for potential rollback.
+          acceptance_criteria:
+            - "QuestDB container stopped: docker stop gapless-questdb"
+            - "Port 9000 freed: docker ps | grep 9000 returns nothing"
+            - "Container preserved: docker ps -a shows gapless-questdb (Exited)"
+          validation_command: "docker ps | grep 9000"
+          expected_output: "(empty - port 9000 freed)"
+          rollback: "docker start gapless-questdb (instant, no data loss)"
+
+    - id: "phase-2"
+      name: "Reconfigure ClickHouse to Standard Ports"
+      duration: "3 minutes"
+      status: "completed"
+      dependencies: ["phase-1"]
+      deliverables:
+        - name: "Restart ClickHouse with standard ports"
+          description: |
+            Stop and remove existing ClickHouse container (volumes persist).
+            Start ClickHouse via docker-compose.yml (standard ports 9000/8123).
+          acceptance_criteria:
+            - "Existing container stopped: docker stop gapless-clickhouse"
+            - "Container removed: docker rm gapless-clickhouse"
+            - "New container started: docker compose up -d clickhouse"
+            - "Standard ports active: 0.0.0.0:9000->9000/tcp, 0.0.0.0:8123->8123/tcp"
+            - "Data intact: volumes persist at /var/lib/clickhouse"
+          validation_command: "docker ps | grep gapless-clickhouse"
+          expected_output: "0.0.0.0:9000->9000/tcp, 0.0.0.0:8123->8123/tcp"
+          data_safety: "ClickHouse data in Docker volumes, unaffected by container recreation"
+
+    - id: "phase-3"
+      name: "Start CH-UI Web Interface"
+      duration: "2 minutes"
+      status: "completed"
+      dependencies: ["phase-2"]
+      deliverables:
+        - name: "Start CH-UI container"
+          description: |
+            Start CH-UI via docker-compose.yml.
+            Connects to ClickHouse at http://localhost:8123 (browser-accessible URL).
+          acceptance_criteria:
+            - "Container started: docker compose up -d ch-ui"
+            - "Container running: docker ps | grep gapless-ch-ui"
+            - "Port exposed: 0.0.0.0:5521->5521/tcp"
+            - "Web interface accessible: curl http://localhost:5521"
+          validation_command: "curl -sf http://localhost:5521 | grep -q 'CH-UI'"
+          expected_output: "Exit code 0 (CH-UI accessible)"
+
+    - id: "phase-4"
+      name: "Validate All Visualization Tools"
+      duration: "3 minutes"
+      status: "completed"
+      dependencies: ["phase-3"]
+      deliverables:
+        - name: "Run comprehensive validation suite"
+          description: |
+            Execute scripts/validate-clickhouse-tools.sh to confirm all 5 tools operational.
+            Validation should pass without port auto-detection workarounds.
+          acceptance_criteria:
+            - "ClickHouse container: ✅ PASS (port 9000)"
+            - "HTTP interface: ✅ PASS (port 8123)"
+            - "ClickHouse Play: ✅ PASS (http://localhost:8123/play)"
+            - "CH-UI: ✅ PASS (http://localhost:5521) - NEW"
+            - "clickhouse-client: ✅ PASS"
+            - "clickhouse-local: ✅ PASS"
+            - "chdig: ⚠️ WARN (optional, not installed)"
+            - "Tests passed: 6/6 (was 5/5 before CH-UI)"
+          validation_command: "bash scripts/validate-clickhouse-tools.sh"
+          expected_output: "✅ All critical validations passed! (6 tools operational)"
+          commit_message: "chore(viz): reconfigure ClickHouse to standard ports, enable CH-UI"
+          commit_body: |
+            Reconfigure ClickHouse to use standard ports (9000/8123) by stopping QuestDB.
+
+            Changes:
+            - Stop QuestDB container (legacy from pre-v4.0.0, no longer used)
+            - Restart ClickHouse with standard ports (was 9001/8124)
+            - Start CH-UI web interface (now accessible at http://localhost:5521)
+
+            Validation results:
+            - 6/6 critical tests passed (was 5/5, CH-UI now included)
+            - ClickHouse data intact (Docker volumes persist)
+            - All visualization tools operational
+
+            Refs: ADR-0009
+
+x-slos:
+  availability:
+    metrics:
+      - name: "ClickHouse Downtime"
+        target: "< 10 seconds during reconfiguration"
+        measurement: "docker stop + rm + compose up elapsed time"
+        impact: "Minimal (development environment only)"
+
+      - name: "CH-UI Uptime"
+        target: "Matches ClickHouse uptime after reconfiguration"
+        measurement: "docker-compose ps shows ch-ui running"
+
+  correctness:
+    metrics:
+      - name: "Data Integrity"
+        target: "Zero data loss during ClickHouse reconfiguration"
+        measurement: "Docker volumes persist at /var/lib/clickhouse"
+        validation: "Query data before/after reconfiguration (identical results)"
+
+      - name: "Port Configuration"
+        target: "ClickHouse on standard ports (9000/8123)"
+        measurement: "docker port gapless-clickhouse 9000 | grep 0.0.0.0:9000"
+
+  observability:
+    metrics:
+      - name: "Validation Coverage"
+        target: "All 5 visualization tools validated"
+        measurement: "scripts/validate-clickhouse-tools.sh passes 6/6 tests"
+
+      - name: "Port Transparency"
+        target: "Standard ports eliminate need for port auto-detection"
+        measurement: "Validation script uses hardcoded standard ports (no detection logic)"
+
+  maintainability:
+    metrics:
+      - name: "Configuration Simplicity"
+        target: "Standard ports reduce configuration burden"
+        measurement: "docker-compose.yml requires no port customization"
+
+      - name: "Rollback Capability"
+        target: "QuestDB container preserved for potential rollback"
+        measurement: "docker ps -a shows gapless-questdb (Exited state)"
+
+x-error-handling:
+  policy: "raise-and-propagate"
+  rationale: "Fail-fast on configuration errors, manual intervention required."
+  examples:
+    - scenario: "Port 9000 still occupied after QuestDB stop"
+      behavior: "docker compose up fails with port binding error"
+      no_fallback: "Does NOT use alternative ports, does NOT skip validation"
+      propagation: "Error visible to user: 'port 9000: address already in use'"
+
+    - scenario: "ClickHouse data volume missing"
+      behavior: "ClickHouse starts but data appears empty"
+      detection: "Query returns no rows (volume mount failed)"
+      no_retry: "Does NOT auto-create volumes, does NOT continue without data"
+      propagation: "User must investigate volume configuration"
+
+    - scenario: "CH-UI fails to start"
+      behavior: "docker compose up ch-ui exits with error"
+      no_fallback: "Does NOT skip CH-UI, does NOT use alternative UI"
+      propagation: "Check container logs: docker logs gapless-ch-ui"
+
+x-oss-libraries:
+  - name: "Docker Compose"
+    usage: "Container orchestration for ClickHouse and CH-UI"
+    version: ">=2.0.0"
+    license: "Apache 2.0"
+
+  - name: "ClickHouse"
+    usage: "OLAP database (official Docker image)"
+    version: "24.1-alpine"
+    license: "Apache 2.0"
+
+  - name: "CH-UI"
+    usage: "Modern web interface for ClickHouse"
+    version: "latest"
+    license: "Apache 2.0"
+    repository: "https://github.com/caioricciuti/ch-ui"
+
+x-auto-validation:
+  artifacts:
+    - name: "ADR-0009 and plan.yaml cross-reference"
+      validation: "grep 'x-adr-id: \"0009\"' docs/plan/0009-port-reconfiguration-ch-ui-enablement/plan.yaml"
+
+    - name: "QuestDB container stopped"
+      validation: "! docker ps | grep -q gapless-questdb"
+
+    - name: "ClickHouse on standard ports"
+      validation: "docker port gapless-clickhouse 9000 | grep -q '0.0.0.0:9000' && docker port gapless-clickhouse 8123 | grep -q '0.0.0.0:8123'"
+
+    - name: "CH-UI accessible"
+      validation: "curl -sf http://localhost:5521 | grep -q 'CH-UI'"
+
+    - name: "All visualization tools operational"
+      validation: "bash scripts/validate-clickhouse-tools.sh"
+
+x-semantic-release:
+  enabled: true
+  breaking_change: false
+  release_type: "patch"
+  target_version: "v4.0.0"
+  commit_convention: "conventional-commits"
+  changelog_sections:
+    - type: "chore"
+      section: "Chores"
+      notes: "Reconfigure ClickHouse to standard ports, enable CH-UI"
+
+x-compliance:
+  openapi_version: "3.1.1"
+  doc_style: "evolutionary-without-promo"
+  slo_focus: "availability, correctness, observability, maintainability"
+  error_policy: "raise-propagate-no-fallback"
+  oss_preference: "100-percent-open-source"
+  auto_validate: "all-tools-validated"
+  release_automation: "semantic-release-conventional-commits"
+  adr_plan_sync: "x-adr-id cross-reference validated"

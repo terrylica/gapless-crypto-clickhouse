@@ -1,0 +1,56 @@
+📝 Summary
+---------------------
+🔍 Total..........897
+✅ Successful.....846
+⏳ Timeouts.........0
+🔀 Redirected......17
+👻 Excluded.........7
+❓ Unknown..........0
+🚫 Errors..........27
+⛔ Unsupported.....27
+
+Errors in ./docs/README.md
+[ERROR] file:///Users/terryli/eon/gapless-crypto-data/docs/PUBLISHING.md | Cannot find file: File not found. Check if file exists and path is correct
+[404] https://github.com/terrylica/gapless-crypto-data/discussions | Rejected status code (this depends on your "accept" configuration): Not Found
+
+Errors in ./README.md
+[404] https://github.com/terrylica/gapless-crypto-data/workflows/CI/CD%20Pipeline/badge.svg | Rejected status code (this depends on your "accept" configuration): Not Found
+
+Redirects in ./README.md
+https://github.com/terrylica/gapless-crypto-data/releases/latest | Redirect: Followed 1 redirect resolving to the final status of: OK. Redirects: https://github.com/terrylica/gapless-crypto-data/releases/latest --> https://github.com/terrylica/gapless-crypto-data/releases/tag/v3.3.0
+https://opensource.org/licenses/MIT | Redirect: Followed 1 redirect resolving to the final status of: OK. Redirects: https://opensource.org/licenses/MIT --> https://opensource.org/license/MIT
+
+
+Errors in ./RELEASE_NOTES.md
+[404] https://github.com/terrylica/rangebar/compare/v2.16.0...v3.0.0 | Rejected status code (this depends on your "accept" configuration): Not Found
+
+Errors in ./RELEASE_NOTES_SHORT.md
+[404] https://github.com/terrylica/rangebar/compare/v2.15.3...v2.16.0 | Rejected status code (this depends on your "accept" configuration): Not Found
+
+Errors in ./tmp/clickhouse_futures_validation_results.txt
+[404] https://data.binance.vision/data/futures/um | Rejected status code (this depends on your "accept" configuration): Not Found
+
+Errors in ./tmp/clickhouse_validation_results.txt
+[404] https://data.binance.vision/data/spot | Rejected status code (this depends on your "accept" configuration): Not Found
+
+Errors in ./tmp/schema-robustness/ingestion/ingestion_log.txt
+[404] https://data.binance.vision/data/spot/monthly/klines/ADAUSDT/1M/ADAUSDT-1M-2023-11.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/ADAUSDT/1M/ADAUSDT-1M-2023-12.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/ADAUSDT/1M/ADAUSDT-1M-2024-01.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/ADAUSDT/1M/ADAUSDT-1M-2024-02.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/BNBUSDT/1M/BNBUSDT-1M-2023-11.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/BNBUSDT/1M/BNBUSDT-1M-2023-12.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/BNBUSDT/1M/BNBUSDT-1M-2024-01.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/BNBUSDT/1M/BNBUSDT-1M-2024-02.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1M/BTCUSDT-1M-2023-11.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1M/BTCUSDT-1M-2023-12.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1M/BTCUSDT-1M-2024-01.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1M/BTCUSDT-1M-2024-02.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/DOGEUSDT/1M/DOGEUSDT-1M-2023-11.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/DOGEUSDT/1M/DOGEUSDT-1M-2023-12.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/DOGEUSDT/1M/DOGEUSDT-1M-2024-01.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/DOGEUSDT/1M/DOGEUSDT-1M-2024-02.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1M/ETHUSDT-1M-2023-11.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1M/ETHUSDT-1M-2023-12.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1M/ETHUSDT-1M-2024-01.zip | Rejected status code (this depends on your "accept" configuration): Not Found
+[404] https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1M/ETHUSDT-1M-2024-02.zip | Rejected status code (this depends on your "accept" configuration): Not Found

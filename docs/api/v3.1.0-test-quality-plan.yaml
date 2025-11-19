@@ -1,0 +1,201 @@
+openapi: 3.1.1
+info:
+  title: "v3.1.0 Test Quality Improvement Plan"
+  description: |
+    Test suite refinement focusing on real data usage, redundancy elimination,
+    and integration test coverage. This plan addresses synthetic data usage
+    in integration tests and consolidates overlapping test cases.
+  version: "3.1.0"
+
+paths: {}
+
+components:
+  schemas:
+    TestQualityMetrics:
+      type: object
+      properties:
+        total_tests:
+          type: integer
+          example: 71
+        real_data_tests:
+          type: integer
+          example: 8
+        synthetic_data_tests:
+          type: integer
+          example: 5
+
+x-implementation-plan:
+  scope: "Test Suite Quality Improvement"
+  version: "3.1.0"
+  implementation_date: "2025-01-19"
+
+  objectives:
+    primary:
+      - "Replace synthetic OHLCV data with real cached Binance data"
+      - "Consolidate redundant ETag cache tests"
+      - "Add integration test for ETag caching with real CDN data"
+
+    slo_targets:
+      correctness: "Tests validate real-world behavior, not synthetic scenarios"
+      maintainability: "Reduced test count through consolidation (17→12 ETag tests)"
+      observability: "Clear separation between unit tests (fake data) and integration tests (real data)"
+
+  tasks:
+    task_1_real_data_fixture:
+      priority: "HIGH"
+      description: "Create pytest fixture for real BTCUSDT sample data"
+      rationale: "3 integration tests currently create synthetic OHLCV data when real Binance data is available"
+
+      implementation:
+        file_to_create: "tests/conftest.py"
+        fixture_specs:
+          name: "real_btcusdt_1h_sample"
+          scope: "session"
+          caching: "Downloads once per pytest session, reuses across all tests"
+          data_specs:
+            symbol: "BTCUSDT"
+            timeframe: "1h"
+            start_date: "2024-01-01"
+            end_date: "2024-01-02"
+            expected_rows: "~48 (2 days × 24 hours)"
+          storage: "pytest tmp_path_factory for session-scoped temp directory"
+
+      affected_tests:
+        - "test_integration.py::test_concurrent_file_operations"
+        - "test_integration.py::test_data_integrity_validation_pipeline"
+        - "test_integration.py::test_large_dataset_handling"
+
+      changes_required:
+        - "Remove synthetic data generation loops"
+        - "Replace with fixture: def test_foo(real_btcusdt_1h_sample)"
+        - "Use real_btcusdt_1h_sample.copy() for mutation tests"
+
+      slo_improvement:
+        correctness: "Tests validate against real Binance OHLCV data structure"
+        maintainability: "Single fixture eliminates 3 synthetic data generators"
+
+    task_2_consolidate_etag_tests:
+      priority: "MEDIUM"
+      description: "Consolidate ETag cache tests from 17 to 12"
+      rationale: "6 test classes with overlapping setup/teardown logic"
+
+      current_structure:
+        test_classes: 6
+        test_count: 17
+        issues:
+          - "TestETagCacheBasics + TestETagCacheMetadata + TestETagCacheStatistics do similar setup"
+          - "Each class creates tempfile.TemporaryDirectory independently"
+
+      target_structure:
+        test_classes: 3
+        test_count: 12
+        consolidation:
+          TestETagCacheOperations:
+            description: "Lifecycle, persistence, metadata, statistics"
+            tests:
+              - "test_cache_lifecycle (replaces: init, empty_cache, update_retrieve)"
+              - "test_persistence_across_instances"
+              - "test_metadata_structure"
+              - "test_statistics_tracking"
+              - "test_statistics_after_operations"
+
+          TestETagCacheErrorHandling:
+            description: "Corruption handling, invalidation, edge cases"
+            tests:
+              - "test_corrupted_cache_file_recovery"
+              - "test_empty_cache_file_valid"
+              - "test_invalidate_entry"
+              - "test_invalidate_nonexistent_safe"
+              - "test_clear_cache"
+
+          TestETagCacheCompliance:
+            description: "XDG Base Directory Specification, configuration"
+            tests:
+              - "test_xdg_default_location"
+              - "test_custom_cache_directory"
+
+      implementation:
+        file_to_modify: "tests/test_etag_cache.py"
+        approach: "Rewrite with new class structure, merge similar tests"
+        validation: "All 12 new tests must pass before deleting old 17 tests"
+
+      slo_improvement:
+        maintainability: "30% reduction in test count (17→12) without losing coverage"
+        observability: "Clearer test organization by functional area"
+
+    task_3_etag_integration_test:
+      priority: "LOW"
+      description: "Add integration test validating ETag caching with real Binance CDN"
+      rationale: "All current ETag tests are unit tests with fake data - no integration validation"
+
+      implementation:
+        file_to_modify: "tests/test_integration.py"
+        test_spec:
+          name: "test_etag_caching_reduces_bandwidth"
+          marks: "@pytest.mark.integration"
+          data_source: "Real Binance Vision CDN"
+          test_steps:
+            - "First collection: Download 1 day BTCUSDT 1h data, capture cache stats"
+            - "Clear downloaded CSV (keep ETag cache)"
+            - "Second collection: Same date range, verify 304 responses"
+            - "Assert: Cache entries increased, no new downloads"
+
+          validation_points:
+            - "First run: etag_cache.get_cache_stats()['total_entries'] == 0 initially"
+            - "After first run: total_entries > 0"
+            - "Second run: Download messages show 'Cache HIT' not 'Cache MISS'"
+            - "Bandwidth saved: ~90% (estimate from cache stats)"
+
+      slo_improvement:
+        correctness: "Validates actual ETag caching behavior with CloudFront CDN"
+        observability: "Integration test proves bandwidth reduction in real scenario"
+
+  validation_criteria:
+    task_1_success:
+      - "conftest.py contains real_btcusdt_1h_sample fixture"
+      - "3 integration tests use fixture instead of synthetic data"
+      - "All affected tests pass with real data"
+      - "Test execution time comparable (real data cached)"
+
+    task_2_success:
+      - "ETag cache tests reduced from 17 to 12"
+      - "Test classes reduced from 6 to 3"
+      - "All 12 new tests pass"
+      - "Test coverage maintained (no functionality lost)"
+
+    task_3_success:
+      - "New integration test validates real ETag caching"
+      - "Test demonstrates bandwidth reduction with real CDN"
+      - "Test marked with @pytest.mark.integration"
+      - "Test skips gracefully on network failure"
+
+  risk_mitigation:
+    network_dependency:
+      risk: "Real data fixture requires network access"
+      mitigation: "@pytest.mark.integration + graceful skip on network failure"
+
+    test_execution_time:
+      risk: "Real data download may slow test suite"
+      mitigation: "session-scoped fixture downloads once, caches for all tests"
+
+    cache_corruption:
+      risk: "ETag cache corruption could fail tests"
+      mitigation: "Tests use isolated tempfile.TemporaryDirectory, no shared state"
+
+  documentation_updates:
+    files_to_update:
+      - "docs/CURRENT_ARCHITECTURE_STATUS.yaml (test count: 71→66)"
+      - "docs/api/v3.1.0-test-quality-plan.yaml (this file)"
+
+    changelog_entry:
+      version: "3.1.0"
+      changes:
+        - "Replace synthetic OHLCV data with real Binance data in integration tests"
+        - "Consolidate ETag cache tests (17→12 tests, 6→3 classes)"
+        - "Add integration test for ETag caching bandwidth reduction"
+
+x-compliance:
+  exception_only_failure: "All tests raise on error, no silent fallbacks"
+  real_data_preference: "Integration tests use real Binance data, unit tests use fake data"
+  oss_usage: "pytest fixtures (standard library), no custom test frameworks"
+  documentation_style: "Machine-readable OpenAPI 3.1.1 specification"

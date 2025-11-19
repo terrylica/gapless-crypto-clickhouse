@@ -1,0 +1,1175 @@
+Metadata-Version: 2.4
+Name: gapless-crypto-data
+Version: 4.0.0
+Summary: Ultra-fast cryptocurrency data collection with zero gaps guarantee. 22x faster via Binance public repository with complete 13-timeframe support (1s-1d) and intelligent monthly-to-daily fallback. Provides 11-column microstructure format with order flow metrics.
+Project-URL: Homepage, https://github.com/terrylica/gapless-crypto-data
+Project-URL: Documentation, https://github.com/terrylica/gapless-crypto-data#readme
+Project-URL: Repository, https://github.com/terrylica/gapless-crypto-data.git
+Project-URL: Issues, https://github.com/terrylica/gapless-crypto-data/issues
+Project-URL: Changelog, https://github.com/terrylica/gapless-crypto-data/blob/main/CHANGELOG.md
+Author-email: Eon Labs <terry@eonlabs.com>
+Maintainer-email: Terry Li <terry@eonlabs.com>
+License: MIT
+License-File: AUTHORS.md
+License-File: LICENSE
+Keywords: 13-timeframes,1s-1d,22x-faster,OHLCV,api,authentic-data,backward-compatibility,binance,ccxt,collection,crypto,cryptocurrency,data,download,dual-parameter,fetch-data,financial-data,function-based,gap-filling,gapless,interval,liquidity,microstructure,monthly-daily-fallback,order-flow,pandas,performance,taker-volume,time-series,timeframe,trading,ultra-high-frequency,zero-gaps
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Office/Business :: Financial :: Investment
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.12
+Requires-Dist: clickhouse-driver>=0.2.9
+Requires-Dist: duckdb>=1.1.0
+Requires-Dist: httpx>=0.25.0
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: pyarrow>=16.0.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: python-dotenv>=1.0.0
+Description-Content-Type: text/markdown
+
+# Gapless Crypto Data
+
+[![PyPI version](https://img.shields.io/pypi/v/gapless-crypto-data.svg)](https://pypi.org/project/gapless-crypto-data/)
+[![GitHub release](https://img.shields.io/github/v/release/terrylica/gapless-crypto-data.svg)](https://github.com/terrylica/gapless-crypto-data/releases/latest)
+[![Python Versions](https://img.shields.io/pypi/pyversions/gapless-crypto-data.svg)](https://pypi.org/project/gapless-crypto-data/)
+[![Downloads](https://img.shields.io/pypi/dm/gapless-crypto-data.svg)](https://pypi.org/project/gapless-crypto-data/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![UV Managed](https://img.shields.io/badge/uv-managed-blue.svg)](https://github.com/astral-sh/uv)
+[![Tests](https://github.com/terrylica/gapless-crypto-data/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/terrylica/gapless-crypto-data/actions)
+[![AI Agent Ready](https://img.shields.io/badge/AI%20Agent-Ready-brightgreen.svg)](https://github.com/terrylica/gapless-crypto-data/blob/main/PROBE_USAGE_EXAMPLE.md)
+
+Ultra-fast cryptocurrency data collection with zero gaps guarantee. Provides 11-column microstructure format through Binance public data repository with intelligent monthly-to-daily fallback for seamless coverage.
+
+## Features
+
+- **22x faster** data collection via Binance public data repository
+- **Zero gaps guarantee** through intelligent monthly-to-daily fallback
+- **Complete 13-timeframe support**: 1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d
+- **Ultra-high frequency** to daily data collection (1-second to 1-day intervals)
+- **11-column microstructure format** with order flow and liquidity metrics
+- **Intelligent fallback system** automatically switches to daily files when monthly files unavailable
+- **Gap detection and filling** with authentic Binance API data only
+- **UV-based Python tooling** for modern dependency management
+- **Atomic file operations** ensuring data integrity
+- **Multi-symbol & multi-timeframe** concurrent collection
+- **CCXT-compatible** dual parameter support (timeframe/interval)
+- **Production-grade** with comprehensive test coverage
+
+## Quick Start
+
+### Installation (UV)
+
+```bash
+# Install via UV
+uv add gapless-crypto-data
+
+# Or install globally
+uv tool install gapless-crypto-data
+```
+
+### Installation (pip)
+
+```bash
+pip install gapless-crypto-data
+```
+
+### Optional: Database Setup (ClickHouse)
+
+For persistent storage and advanced query capabilities, you can optionally set up ClickHouse:
+
+```bash
+# Start ClickHouse using Docker Compose
+docker-compose up -d
+
+# Verify ClickHouse is running
+docker-compose ps
+
+# View logs
+docker-compose logs -f clickhouse
+```
+
+See [Database Integration](#database-integration-optional) for complete setup guide and usage examples.
+
+### Python API (Recommended)
+
+#### Function-based API
+
+```python
+import gapless_crypto_data as gcd
+
+# Fetch recent data with date range (CCXT-compatible timeframe parameter)
+df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-06-30")
+
+# Or with limit
+df = gcd.fetch_data("ETHUSDT", timeframe="4h", limit=1000)
+
+# Backward compatibility (legacy interval parameter)
+df = gcd.fetch_data("ETHUSDT", interval="4h", limit=1000)  # DeprecationWarning
+
+# Get available symbols and timeframes
+symbols = gcd.get_supported_symbols()
+timeframes = gcd.get_supported_timeframes()
+
+# Fill gaps in existing data
+results = gcd.fill_gaps("./data")
+```
+
+#### Class-based API
+
+```python
+from gapless_crypto_data import BinancePublicDataCollector, UniversalGapFiller
+
+# Custom collection with full control
+collector = BinancePublicDataCollector(
+    symbol="SOLUSDT",
+    start_date="2023-01-01",
+    end_date="2023-12-31"
+)
+
+result = collector.collect_timeframe_data("1h")
+df = result["dataframe"]
+
+# Manual gap filling
+gap_filler = UniversalGapFiller()
+gaps = gap_filler.detect_all_gaps(csv_file, "1h")
+```
+
+### CLI Removed in v4.0.0
+
+> **Breaking Change**: The CLI interface was removed in v4.0.0.
+> Please use the Python API instead (see examples above).
+
+```bash
+# Collect data for multiple timeframes (all 13 timeframes supported)
+gapless-crypto-data --symbol SOLUSDT --timeframes 1s,1m,5m,1h,4h,1d
+
+# Ultra-high frequency data collection (1-second intervals)
+gapless-crypto-data --symbol BTCUSDT --timeframes 1s,1m,3m
+
+# Extended timeframes with intelligent fallback
+gapless-crypto-data --symbol ETHUSDT --timeframes 6h,8h,12h,1d
+
+# Collect multiple symbols at once (native multi-symbol support)
+gapless-crypto-data --symbol BTCUSDT,ETHUSDT,SOLUSDT --timeframes 1h,4h,1d
+
+# Collect specific date range with custom output directory
+gapless-crypto-data --symbol BTCUSDT --timeframes 1h --start 2023-01-01 --end 2023-12-31 --output-dir ./crypto_data
+
+# Multi-symbol with custom settings
+gapless-crypto-data --symbol BTCUSDT,ETHUSDT --timeframes 5m,1h --start 2024-01-01 --end 2024-06-30 --output-dir ./crypto_data
+
+# Fill gaps in existing data
+gapless-crypto-data --fill-gaps --directory ./data
+
+# Help
+gapless-crypto-data --help
+```
+
+## Data Structure
+
+All functions return pandas DataFrames with complete microstructure data:
+
+```python
+import gapless_crypto_data as gcd
+
+# Fetch data
+df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-06-30")
+
+# DataFrame columns (11-column microstructure format)
+print(df.columns.tolist())
+# ['date', 'open', 'high', 'low', 'close', 'volume',
+#  'close_time', 'quote_asset_volume', 'number_of_trades',
+#  'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume']
+
+# Professional microstructure analysis
+buy_pressure = df['taker_buy_base_asset_volume'].sum() / df['volume'].sum()
+avg_trade_size = df['volume'].sum() / df['number_of_trades'].sum()
+market_impact = df['quote_asset_volume'].std() / df['quote_asset_volume'].mean()
+
+print(f"Taker buy pressure: {buy_pressure:.1%}")
+print(f"Average trade size: {avg_trade_size:.4f} BTC")
+print(f"Market impact volatility: {market_impact:.3f}")
+```
+
+## Data Sources
+
+The package supports two data collection methods:
+
+- **Binance Public Repository**: Pre-generated monthly ZIP files for historical data
+- **Binance API**: Real-time data for gap filling and recent data collection
+
+## 🏗️ Architecture
+
+### Core Components
+
+- **BinancePublicDataCollector**: Data collection with full 11-column microstructure format
+- **UniversalGapFiller**: Intelligent gap detection and filling with authentic API-first validation
+- **AtomicCSVOperations**: Corruption-proof file operations with atomic writes
+- **SafeCSVMerger**: Safe merging of data files with integrity validation
+
+### Data Flow
+
+```
+Binance Public Data Repository → BinancePublicDataCollector → 11-Column Microstructure Format
+                ↓
+Gap Detection → UniversalGapFiller → Authentic API-First Validation
+                ↓
+AtomicCSVOperations → Final Gapless Dataset with Order Flow Metrics
+```
+
+## 🗄️ Database Integration (Optional)
+
+**v4.0.0+**: ClickHouse database support for persistent storage, advanced queries, and multi-symbol analysis.
+
+**When to use**:
+- **File-based approach**: Simple workflows, single symbols, CSV output compatibility
+- **Database approach**: Multi-symbol analysis, time-series queries, aggregations, production pipelines
+
+### Quick Start with Docker Compose
+
+The repository includes a production-ready `docker-compose.yml` for local development:
+
+```bash
+# Start ClickHouse (runs in background)
+docker-compose up -d
+
+# Verify container is healthy
+docker-compose ps
+
+# View initialization logs
+docker-compose logs clickhouse
+
+# Access ClickHouse client (optional)
+docker exec -it gapless-crypto-data-clickhouse clickhouse-client
+```
+
+**What happens on first start**:
+1. Downloads ClickHouse 24.1-alpine image (~200 MB)
+2. Creates `ohlcv` table with ReplacingMergeTree engine (from `schema.sql`)
+3. Configures compression (DoubleDelta for timestamps, Gorilla for OHLCV)
+4. Sets up health checks and automatic restart
+
+**Schema auto-initialization**: The `schema.sql` file is automatically executed via Docker's `initdb.d` mechanism.
+
+### Basic Usage Examples
+
+#### Connection and Health Check
+
+```python
+from gapless_crypto_data.clickhouse import ClickHouseConnection
+
+# Connect to ClickHouse (reads from .env or uses defaults)
+with ClickHouseConnection() as conn:
+    # Verify connection
+    health = conn.health_check()
+    print(f"ClickHouse connected: {health}")
+
+    # Execute simple query
+    result = conn.execute("SELECT count() FROM ohlcv")
+    print(f"Total rows in database: {result[0][0]:,}")
+```
+
+#### Bulk Data Ingestion
+
+```python
+from gapless_crypto_data.clickhouse import ClickHouseConnection
+from gapless_crypto_data.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
+
+# Ingest historical data from Binance public repository
+with ClickHouseConnection() as conn:
+    loader = ClickHouseBulkLoader(conn, instrument_type="spot")
+
+    # Ingest single month (e.g., January 2024)
+    rows_inserted = loader.ingest_month("BTCUSDT", "1h", year=2024, month=1)
+    print(f"Inserted {rows_inserted:,} rows for BTCUSDT 1h (Jan 2024)")
+
+    # Ingest date range (e.g., Q1 2024)
+    total_rows = loader.ingest_date_range(
+        symbol="ETHUSDT",
+        timeframe="4h",
+        start_date="2024-01-01",
+        end_date="2024-03-31"
+    )
+    print(f"Inserted {total_rows:,} rows for ETHUSDT 4h (Q1 2024)")
+```
+
+**Zero-gap guarantee**: ClickHouse uses deterministic versioning (SHA256 hash) to handle duplicate ingestion safely. Re-running ingestion commands won't create duplicates.
+
+#### Querying Data
+
+```python
+from gapless_crypto_data.clickhouse import ClickHouseConnection
+from gapless_crypto_data.clickhouse_query import OHLCVQuery
+
+with ClickHouseConnection() as conn:
+    query = OHLCVQuery(conn)
+
+    # Get latest data (last 10 bars)
+    df = query.get_latest("BTCUSDT", "1h", limit=10)
+    print(f"Latest 10 bars:\n{df[['timestamp', 'close']]}")
+
+    # Get specific date range
+    df = query.get_range(
+        symbol="BTCUSDT",
+        timeframe="1h",
+        start_date="2024-01-01",
+        end_date="2024-01-31",
+        instrument_type="spot"
+    )
+    print(f"January 2024: {len(df):,} bars")
+
+    # Multi-symbol comparison
+    df = query.get_multi_symbol(
+        symbols=["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+        timeframe="1d",
+        start_date="2024-01-01",
+        end_date="2024-12-31"
+    )
+    print(f"Multi-symbol dataset: {df.shape}")
+```
+
+**FINAL keyword**: All queries automatically use `FINAL` to ensure deduplicated results. This adds ~10-30% overhead but guarantees data correctness.
+
+#### Futures Support (ADR-0004)
+
+```python
+# Ingest futures data (12-column format with funding rate)
+with ClickHouseConnection() as conn:
+    loader = ClickHouseBulkLoader(conn, instrument_type="futures")
+    rows = loader.ingest_month("BTCUSDT", "1h", 2024, 1)
+    print(f"Futures data: {rows:,} rows")
+
+    # Query futures data (isolated from spot)
+    query = OHLCVQuery(conn)
+    df_spot = query.get_latest("BTCUSDT", "1h", instrument_type="spot", limit=10)
+    df_futures = query.get_latest("BTCUSDT", "1h", instrument_type="futures", limit=10)
+
+    print(f"Spot data: {len(df_spot)} bars")
+    print(f"Futures data: {len(df_futures)} bars")
+```
+
+**Spot/Futures isolation**: The `instrument_type` column ensures spot and futures data coexist without conflicts.
+
+### Configuration
+
+**Environment Variables** (`.env` file or system environment):
+
+```bash
+CLICKHOUSE_HOST=localhost        # ClickHouse server hostname
+CLICKHOUSE_PORT=9000             # Native protocol port (default: 9000)
+CLICKHOUSE_HTTP_PORT=8123        # HTTP interface port (default: 8123)
+CLICKHOUSE_USER=default          # Username (default: 'default')
+CLICKHOUSE_PASSWORD=             # Password (empty for local dev)
+CLICKHOUSE_DB=default            # Database name (default: 'default')
+```
+
+**Docker Compose defaults**: The included `docker-compose.yml` uses these defaults, no `.env` file required for local development.
+
+### Migration Guide
+
+**Migrating from v3.x (file-based) to v4.0.0 (ClickHouse)**:
+
+See [`docs/CLICKHOUSE_MIGRATION.md`](docs/CLICKHOUSE_MIGRATION.md) for:
+- Architecture changes (file-based → ClickHouse)
+- Code migration examples (drop-in replacement)
+- Deployment guide (Docker Compose, production)
+- Performance characteristics (ingestion, query, deduplication)
+- Troubleshooting common issues
+
+**Key Changes**:
+- Import paths: `gapless_crypto_data.query` → `gapless_crypto_data.clickhouse_query`
+- Connection: `QuestDBConnection` → `ClickHouseConnection`
+- Bulk loader: `QuestDBBulkLoader` → `ClickHouseBulkLoader`
+- API signatures: **Unchanged** (backwards compatible)
+
+**Rollback strategy**: v3.x file-based approach still supported in v4.0.0. Database integration is optional.
+
+### Production Deployment
+
+**Recommended setup**:
+
+1. **Persistent storage**: Mount volumes for data durability
+2. **Authentication**: Set `CLICKHOUSE_PASSWORD` for non-localhost deployments
+3. **TLS**: Enable TLS for remote connections
+4. **Monitoring**: ClickHouse exports Prometheus metrics on port 9363
+5. **Backups**: Use ClickHouse Backup tool or volume snapshots
+
+**Scaling**:
+- Single-node: Validated at 53.7M rows (ADR-0003), headroom to ~200M rows
+- Distributed: ClickHouse supports sharding and replication for larger datasets
+
+See ClickHouse documentation for production deployment best practices.
+
+## 📝 CLI Options
+
+### Data Collection
+
+```bash
+gapless-crypto-data [OPTIONS]
+
+Options:
+  --symbol TEXT          Trading pair symbol(s) - single symbol or comma-separated list (e.g., SOLUSDT, BTCUSDT,ETHUSDT)
+  --timeframes TEXT      Comma-separated timeframes (1m,3m,5m,15m,30m,1h,2h,4h)
+  --start TEXT          Start date (YYYY-MM-DD)
+  --end TEXT            End date (YYYY-MM-DD)
+  --output-dir TEXT     Output directory for CSV files (default: src/gapless_crypto_data/sample_data/)
+  --help                Show this message and exit
+```
+
+### Gap Filling
+
+```bash
+gapless-crypto-data --fill-gaps [OPTIONS]
+
+Options:
+  --directory TEXT      Data directory to scan for gaps
+  --symbol TEXT         Specific symbol to process (optional)
+  --timeframe TEXT      Specific timeframe to process (optional)
+  --help               Show this message and exit
+```
+
+## 🔧 Advanced Usage
+
+### Batch Processing
+
+#### CLI Multi-Symbol (Recommended)
+
+```bash
+# Native multi-symbol support
+gapless-crypto-data --symbol BTCUSDT,ETHUSDT,SOLUSDT,ADAUSDT --timeframes 1m,5m,15m,1h,4h --start 2023-01-01 --end 2023-12-31
+
+# Alternative: Multiple separate commands for different settings
+gapless-crypto-data --symbol BTCUSDT,ETHUSDT --timeframes 1m,1h --start 2023-01-01 --end 2023-06-30
+gapless-crypto-data --symbol SOLUSDT,ADAUSDT --timeframes 5m,4h --start 2023-07-01 --end 2023-12-31
+```
+
+#### Simple API (Recommended)
+
+```python
+import gapless_crypto_data as gcd
+
+# Process multiple symbols with simple loops
+symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "ADAUSDT"]
+timeframes = ["1h", "4h"]
+
+for symbol in symbols:
+    for timeframe in timeframes:
+        df = gcd.fetch_data(symbol, timeframe, start="2023-01-01", end="2023-12-31")
+        print(f"{symbol} {timeframe}: {len(df)} bars collected")
+```
+
+#### Advanced API (Complex Workflows)
+
+```python
+from gapless_crypto_data import BinancePublicDataCollector
+
+# Initialize with custom settings
+collector = BinancePublicDataCollector(
+    start_date="2023-01-01",
+    end_date="2023-12-31",
+    output_dir="./crypto_data"
+)
+
+# Process multiple symbols with detailed control
+symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+for symbol in symbols:
+    collector.symbol = symbol
+    results = collector.collect_multiple_timeframes(["1m", "5m", "1h", "4h"])
+    for timeframe, result in results.items():
+        print(f"{symbol} {timeframe}: {result['stats']}")
+```
+
+### Gap Analysis
+
+#### Simple API (Recommended)
+
+```python
+import gapless_crypto_data as gcd
+
+# Quick gap filling for entire directory
+results = gcd.fill_gaps("./data")
+print(f"Processed {results['files_processed']} files")
+print(f"Filled {results['gaps_filled']}/{results['gaps_detected']} gaps")
+print(f"Success rate: {results['success_rate']:.1f}%")
+
+# Gap filling for specific symbols only
+results = gcd.fill_gaps("./data", symbols=["BTCUSDT", "ETHUSDT"])
+```
+
+#### Advanced API (Detailed Control)
+
+```python
+from gapless_crypto_data import UniversalGapFiller
+
+gap_filler = UniversalGapFiller()
+
+# Manual gap detection and analysis
+gaps = gap_filler.detect_all_gaps("BTCUSDT_1h.csv", "1h")
+print(f"Found {len(gaps)} gaps")
+
+for gap in gaps:
+    duration_hours = gap['duration'].total_seconds() / 3600
+    print(f"Gap: {gap['start_time']} → {gap['end_time']} ({duration_hours:.1f}h)")
+
+# Fill specific gaps
+result = gap_filler.process_file("BTCUSDT_1h.csv", "1h")
+```
+
+### Database Query Examples (v4.0.0+)
+
+For users leveraging ClickHouse database integration:
+
+#### Bulk Ingestion Pipeline
+
+```python
+from gapless_crypto_data.clickhouse import ClickHouseConnection
+from gapless_crypto_data.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
+
+# Multi-symbol bulk ingestion for backtesting datasets
+symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "ADAUSDT", "DOGEUSDT"]
+timeframes = ["1h", "4h", "1d"]
+
+with ClickHouseConnection() as conn:
+    loader = ClickHouseBulkLoader(conn, instrument_type="spot")
+
+    for symbol in symbols:
+        for timeframe in timeframes:
+            # Ingest Q1 2024 data
+            rows = loader.ingest_date_range(
+                symbol=symbol,
+                timeframe=timeframe,
+                start_date="2024-01-01",
+                end_date="2024-03-31"
+            )
+            print(f"{symbol} {timeframe}: {rows:,} rows ingested")
+
+# Zero-gap guarantee: Re-running this script won't create duplicates
+```
+
+#### Multi-Symbol Analysis
+
+```python
+from gapless_crypto_data.clickhouse import ClickHouseConnection
+from gapless_crypto_data.clickhouse_query import OHLCVQuery
+
+with ClickHouseConnection() as conn:
+    query = OHLCVQuery(conn)
+
+    # Get synchronized data for all symbols (same time range)
+    df = query.get_multi_symbol(
+        symbols=["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+        timeframe="1h",
+        start_date="2024-01-01",
+        end_date="2024-01-31"
+    )
+
+    # Analyze cross-asset correlations
+    pivot = df.pivot_table(index="timestamp", columns="symbol", values="close")
+    correlation = pivot.corr()
+    print(f"Correlation matrix:\n{correlation}")
+
+    # Relative strength analysis
+    for symbol in ["BTCUSDT", "ETHUSDT", "SOLUSDT"]:
+        symbol_data = df[df["symbol"] == symbol]
+        returns = symbol_data["close"].pct_change().sum()
+        print(f"{symbol} total return: {returns:.2%}")
+```
+
+#### Advanced Time-Series Queries
+
+```python
+from gapless_crypto_data.clickhouse import ClickHouseConnection
+
+with ClickHouseConnection() as conn:
+    # Custom SQL for advanced analytics (ClickHouse functions)
+    query = """
+    SELECT
+        symbol,
+        timeframe,
+        toStartOfDay(timestamp) AS day,
+        avg(close) AS avg_price,
+        stddevPop(close) AS volatility,
+        sum(volume) AS total_volume,
+        count() AS bar_count
+    FROM ohlcv FINAL
+    WHERE symbol IN ('BTCUSDT', 'ETHUSDT')
+      AND timeframe = '1h'
+      AND timestamp >= '2024-01-01'
+      AND timestamp < '2024-02-01'
+    GROUP BY symbol, timeframe, day
+    ORDER BY day ASC, symbol ASC
+    """
+
+    result = conn.execute(query)
+
+    # Process results
+    for row in result:
+        symbol, timeframe, day, avg_price, volatility, volume, bars = row
+        print(f"{day} {symbol}: avg=${avg_price:.2f}, vol={volatility:.2f}, volume={volume:,.0f}")
+```
+
+#### Hybrid Approach (File + Database)
+
+Combine file-based collection with database querying:
+
+```python
+import gapless_crypto_data as gcd
+from gapless_crypto_data.clickhouse import ClickHouseConnection
+from gapless_crypto_data.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
+
+# Step 1: Collect to CSV files (22x faster, portable format)
+df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-03-31")
+print(f"Downloaded {len(df):,} bars to CSV")
+
+# Step 2: Ingest CSV to ClickHouse for analysis
+with ClickHouseConnection() as conn:
+    loader = ClickHouseBulkLoader(conn)
+    loader.ingest_from_dataframe(df, symbol="BTCUSDT", timeframe="1h")
+
+    # Step 3: Run advanced queries
+    query = OHLCVQuery(conn)
+    gaps = query.detect_gaps("BTCUSDT", "1h", "2024-01-01", "2024-03-31")
+    print(f"Gap detection: {len(gaps)} gaps found")
+```
+
+**When to use hybrid approach**:
+- Initial data collection: Use file-based (faster, no database required)
+- Post-processing: Load into ClickHouse for aggregations, joins, time-series analytics
+- Archival: Keep CSV files for portability, use database for active analysis
+
+## AI Agent Integration
+
+This package includes probe hooks (`gapless_crypto_data.__probe__`) that enable AI coding agents to discover functionality programmatically.
+
+### For AI Coding Agent Users
+
+To have your AI coding agent analyze this package, use this prompt:
+
+```
+Analyze gapless-crypto-data using: import gapless_crypto_data; probe = gapless_crypto_data.__probe__
+
+Execute: probe.discover_api(), probe.get_capabilities(), probe.get_task_graph()
+
+Provide insights about cryptocurrency data collection capabilities and usage patterns.
+```
+
+## 🛠️ Development
+
+### Prerequisites
+
+- **UV Package Manager** - [Install UV](https://docs.astral.sh/uv/getting-started/installation/)
+- **Python 3.9+** - UV will manage Python versions automatically
+- **Git** - For repository cloning and version control
+- **Docker & Docker Compose** (Optional) - For ClickHouse database development
+
+### Development Installation Workflow
+
+**IMPORTANT**: This project uses **mandatory pre-commit hooks** to prevent broken code from being committed. All commits are automatically validated for formatting, linting, and basic quality checks.
+
+#### Step 1: Clone Repository
+
+```bash
+git clone https://github.com/terrylica/gapless-crypto-data.git
+cd gapless-crypto-data
+```
+
+#### Step 2: Development Environment Setup
+
+```bash
+# Create isolated virtual environment
+uv venv
+
+# Activate virtual environment
+source .venv/bin/activate  # macOS/Linux
+# .venv\Scripts\activate   # Windows
+
+# Install all dependencies (production + development)
+uv sync --dev
+```
+
+#### Step 3: Verify Installation
+
+```bash
+# Test CLI functionality
+uv run gapless-crypto-data --help
+
+# Run test suite
+uv run pytest
+
+# Quick data collection test
+uv run gapless-crypto-data --symbol BTCUSDT --timeframes 1h --start 2024-01-01 --end 2024-01-01 --output-dir ./test_data
+```
+
+#### Step 3a: Database Setup (Optional - ClickHouse)
+
+If you want to develop with ClickHouse database features:
+
+```bash
+# Start ClickHouse container
+docker-compose up -d
+
+# Verify ClickHouse is running and healthy
+docker-compose ps
+docker-compose logs clickhouse | grep "Ready for connections"
+
+# Test ClickHouse connection
+docker exec gapless-crypto-data-clickhouse clickhouse-client --query "SELECT 1"
+
+# View ClickHouse schema
+docker exec gapless-crypto-data-clickhouse clickhouse-client --query "SHOW CREATE TABLE ohlcv"
+```
+
+**What gets initialized**:
+- ClickHouse 24.1-alpine container on ports 9000 (native) and 8123 (HTTP)
+- `ohlcv` table with ReplacingMergeTree engine (from `schema.sql`)
+- Persistent volume for data (`clickhouse-data`)
+- Health checks and automatic restart
+
+**Test database ingestion**:
+
+```python
+# Create a test script: test_clickhouse.py
+from gapless_crypto_data.clickhouse import ClickHouseConnection
+from gapless_crypto_data.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
+
+with ClickHouseConnection() as conn:
+    # Health check
+    print(f"ClickHouse connected: {conn.health_check()}")
+
+    # Test ingestion (small dataset)
+    loader = ClickHouseBulkLoader(conn, instrument_type="spot")
+    rows = loader.ingest_month("BTCUSDT", "1d", year=2024, month=1)
+    print(f"Test ingestion: {rows} rows")
+
+# Run test
+# uv run python test_clickhouse.py
+```
+
+**Teardown**:
+
+```bash
+# Stop ClickHouse (keeps data)
+docker-compose down
+
+# Stop and delete all data (fresh start)
+docker-compose down -v
+```
+
+#### Step 4: Set Up Pre-Commit Hooks (Mandatory)
+
+```bash
+# Install pre-commit hooks (prevents broken code from being committed)
+uv run pre-commit install
+
+# Test pre-commit hooks
+uv run pre-commit run --all-files
+```
+
+#### Step 5: Development Tools
+
+```bash
+# Code formatting
+uv run ruff format .
+
+# Linting and auto-fixes
+uv run ruff check --fix .
+
+# Type checking
+uv run mypy src/
+
+# Run specific tests
+uv run pytest tests/test_binance_collector.py -v
+
+# Manual pre-commit validation
+uv run pre-commit run --all-files
+```
+
+### Development Commands Reference
+
+| Task                   | Command                             |
+| ---------------------- | ----------------------------------- |
+| Install dependencies   | `uv sync --dev`                     |
+| Setup pre-commit hooks | `uv run pre-commit install`         |
+| Add new dependency     | `uv add package-name`               |
+| Add dev dependency     | `uv add --dev package-name`         |
+| Run CLI                | `uv run gapless-crypto-data [args]` |
+| Run tests              | `uv run pytest`                     |
+| Format code            | `uv run ruff format .`              |
+| Lint code              | `uv run ruff check --fix .`         |
+| Type check             | `uv run mypy src/`                  |
+| Validate pre-commit    | `uv run pre-commit run --all-files` |
+| Build package          | `uv build`                          |
+
+### Project Structure for Development
+
+```
+gapless-crypto-data/
+├── src/gapless_crypto_data/        # Main package
+│   ├── __init__.py                 # Package exports
+│   ├── collectors/                 # Data collection modules
+│   └── gap_filling/                # Gap detection/filling
+├── tests/                          # Test suite
+├── docs/                           # Documentation
+├── examples/                       # Usage examples
+├── pyproject.toml                  # Project configuration
+└── uv.lock                        # Dependency lock file
+```
+
+### Building and Publishing
+
+```bash
+# Build package
+uv build
+
+# Publish to PyPI (requires API token)
+uv publish
+```
+
+## 📁 Project Structure
+
+```
+gapless-crypto-data/
+├── src/
+│   └── gapless_crypto_data/
+│       ├── __init__.py              # Package exports
+│       ├── collectors/
+│       │   ├── __init__.py
+│       │   └── binance_public_data_collector.py
+│       ├── gap_filling/
+│       │   ├── __init__.py
+│       │   ├── universal_gap_filler.py
+│       │   └── safe_file_operations.py
+│       └── utils/
+│           └── __init__.py
+├── tests/                           # Test suite
+├── docs/                           # Documentation
+├── pyproject.toml                  # Project configuration
+├── README.md                       # This file
+└── LICENSE                         # MIT License
+```
+
+## 🔍 Supported Timeframes
+
+All 13 Binance timeframes supported for complete market coverage:
+
+| Timeframe  | Code  | Description              | Use Case                     |
+| ---------- | ----- | ------------------------ | ---------------------------- |
+| 1 second   | `1s`  | Ultra-high frequency     | HFT, microstructure analysis |
+| 1 minute   | `1m`  | High resolution          | Scalping, order flow         |
+| 3 minutes  | `3m`  | Short-term analysis      | Quick trend detection        |
+| 5 minutes  | `5m`  | Common trading timeframe | Day trading signals          |
+| 15 minutes | `15m` | Medium-term signals      | Swing trading entry          |
+| 30 minutes | `30m` | Longer-term patterns     | Position management          |
+| 1 hour     | `1h`  | Popular for backtesting  | Strategy development         |
+| 2 hours    | `2h`  | Extended analysis        | Multi-timeframe confluence   |
+| 4 hours    | `4h`  | Daily cycle patterns     | Trend following              |
+| 6 hours    | `6h`  | Quarter-day analysis     | Position sizing              |
+| 8 hours    | `8h`  | Third-day cycles         | Risk management              |
+| 12 hours   | `12h` | Half-day patterns        | Overnight positions          |
+| 1 day      | `1d`  | Daily analysis           | Long-term trends             |
+
+## ⚠️ Requirements
+
+- Python 3.9+
+- pandas >= 2.0.0
+- requests >= 2.25.0
+- Stable internet connection for data downloads
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Install development dependencies (`uv sync --dev`)
+4. Make your changes
+5. Run tests (`uv run pytest`)
+6. Format code (`uv run ruff format .`)
+7. Commit changes (`git commit -m 'Add amazing feature'`)
+8. Push to branch (`git push origin feature/amazing-feature`)
+9. Open a Pull Request
+
+## 📚 API Reference
+
+### BinancePublicDataCollector
+
+Cryptocurrency spot data collection from Binance's public data repository using pre-generated monthly ZIP files.
+
+#### Key Methods
+
+**`__init__(symbol, start_date, end_date, output_dir)`**
+
+Initialize the collector with trading pair and date range.
+
+```python
+collector = BinancePublicDataCollector(
+    symbol="BTCUSDT",           # USDT spot pair
+    start_date="2023-01-01",    # Start date (YYYY-MM-DD)
+    end_date="2023-12-31",      # End date (YYYY-MM-DD)
+    output_dir="./crypto_data"  # Output directory (optional)
+)
+```
+
+**`collect_timeframe_data(trading_timeframe) -> Dict[str, Any]`**
+
+Collect complete historical data for a single timeframe with full 11-column microstructure format.
+
+```python
+result = collector.collect_timeframe_data("1h")
+df = result["dataframe"]              # pandas DataFrame with OHLCV + microstructure
+filepath = result["filepath"]         # Path to saved CSV file
+stats = result["stats"]               # Collection statistics
+
+# Access microstructure data
+total_trades = df["number_of_trades"].sum()
+taker_buy_ratio = df["taker_buy_base_asset_volume"].sum() / df["volume"].sum()
+```
+
+**`collect_multiple_timeframes(timeframes) -> Dict[str, Dict[str, Any]]`**
+
+Collect data for multiple timeframes with comprehensive progress tracking.
+
+```python
+results = collector.collect_multiple_timeframes(["1h", "4h"])
+for timeframe, result in results.items():
+    df = result["dataframe"]
+    print(f"{timeframe}: {len(df):,} bars")
+```
+
+### UniversalGapFiller
+
+Gap detection and filling for various timeframes with 11-column microstructure format using Binance API data.
+
+#### Key Methods
+
+**`detect_all_gaps(csv_file) -> List[Dict]`**
+
+Automatically detect timestamp gaps in CSV files.
+
+```python
+gap_filler = UniversalGapFiller()
+gaps = gap_filler.detect_all_gaps("BTCUSDT_1h_data.csv")
+print(f"Found {len(gaps)} gaps to fill")
+```
+
+**`fill_gap(csv_file, gap_info) -> bool`**
+
+Fill a specific gap with authentic Binance API data.
+
+```python
+# Fill first detected gap
+success = gap_filler.fill_gap("BTCUSDT_1h_data.csv", gaps[0])
+print(f"Gap filled successfully: {success}")
+```
+
+**`process_file(directory) -> Dict[str, Dict]`**
+
+Batch process all CSV files in a directory for gap detection and filling.
+
+```python
+results = gap_filler.process_file("./crypto_data/")
+for filename, result in results.items():
+    print(f"{filename}: {result['gaps_filled']} gaps filled")
+```
+
+### AtomicCSVOperations
+
+Safe atomic operations for CSV files with header preservation and corruption prevention. Uses temporary files and atomic rename operations to ensure data integrity.
+
+#### Key Methods
+
+**`create_backup() -> Path`**
+
+Create timestamped backup of original file before modifications.
+
+```python
+from pathlib import Path
+atomic_ops = AtomicCSVOperations(Path("data.csv"))
+backup_path = atomic_ops.create_backup()
+```
+
+**`write_dataframe_atomic(df) -> bool`**
+
+Atomically write DataFrame to CSV with integrity validation.
+
+```python
+success = atomic_ops.write_dataframe_atomic(df)
+if not success:
+    atomic_ops.rollback_from_backup()
+```
+
+### SafeCSVMerger
+
+Safe CSV data merging with gap filling capabilities and data integrity validation. Handles temporal data insertion while maintaining chronological order.
+
+#### Key Methods
+
+**`merge_gap_data_safe(gap_data, gap_start, gap_end) -> bool`**
+
+Safely merge gap data into existing CSV using atomic operations.
+
+```python
+from datetime import datetime
+merger = SafeCSVMerger(Path("eth_data.csv"))
+success = merger.merge_gap_data_safe(
+    gap_data,                    # DataFrame with gap data
+    datetime(2024, 1, 1, 12),   # Gap start time
+    datetime(2024, 1, 1, 15)    # Gap end time
+)
+```
+
+## Output Formats
+
+### DataFrame Structure (Python API)
+
+Returns pandas DataFrame with 11-column microstructure format:
+
+| Column                         | Type           | Description            | Example               |
+| ------------------------------ | -------------- | ---------------------- | --------------------- |
+| `date`                         | datetime64[ns] | Open timestamp         | `2024-01-01 12:00:00` |
+| `open`                         | float64        | Opening price          | `42150.50`            |
+| `high`                         | float64        | Highest price          | `42200.00`            |
+| `low`                          | float64        | Lowest price           | `42100.25`            |
+| `close`                        | float64        | Closing price          | `42175.75`            |
+| `volume`                       | float64        | Base asset volume      | `15.250000`           |
+| `close_time`                   | datetime64[ns] | Close timestamp        | `2024-01-01 12:59:59` |
+| `quote_asset_volume`           | float64        | Quote asset volume     | `643238.125`          |
+| `number_of_trades`             | int64          | Trade count            | `1547`                |
+| `taker_buy_base_asset_volume`  | float64        | Taker buy base volume  | `7.825000`            |
+| `taker_buy_quote_asset_volume` | float64        | Taker buy quote volume | `329891.750`          |
+
+### CSV File Structure
+
+CSV files include header comments with metadata followed by data:
+
+```csv
+# Binance Spot Market Data v2.5.0
+# Generated: 2025-09-18T23:09:25.391126+00:00Z
+# Source: Binance Public Data Repository
+# Market: SPOT | Symbol: BTCUSDT | Timeframe: 1h
+# Coverage: 48 bars
+# Period: 2024-01-01 00:00:00 to 2024-01-02 23:00:00
+# Collection: direct_download in 0.0s
+# Data Hash: 5fba9d2e5d3db849...
+# Compliance: Zero-Magic-Numbers, Temporal-Integrity, Official-Binance-Source
+#
+date,open,high,low,close,volume,close_time,quote_asset_volume,number_of_trades,taker_buy_base_asset_volume,taker_buy_quote_asset_volume
+2024-01-01 00:00:00,42283.58,42554.57,42261.02,42475.23,1271.68108,2024-01-01 00:59:59,53957248.973789,47134,682.57581,28957416.819645
+```
+
+### Metadata JSON Structure
+
+Each CSV file includes comprehensive metadata in `.metadata.json`:
+
+```json
+{
+  "version": "v2.5.0",
+  "generator": "BinancePublicDataCollector",
+  "data_source": "Binance Public Data Repository",
+  "symbol": "BTCUSDT",
+  "timeframe": "1h",
+  "enhanced_microstructure_format": {
+    "total_columns": 11,
+    "analysis_capabilities": [
+      "order_flow_analysis",
+      "liquidity_metrics",
+      "market_microstructure",
+      "trade_weighted_prices",
+      "institutional_data_patterns"
+    ]
+  },
+  "gap_analysis": {
+    "total_gaps_detected": 0,
+    "data_completeness_score": 1.0,
+    "gap_filling_method": "authentic_binance_api"
+  },
+  "data_integrity": {
+    "chronological_order": true,
+    "corruption_detected": false
+  }
+}
+```
+
+### Streaming Output (Memory-Efficient)
+
+For large datasets, Polars streaming provides constant memory usage:
+
+```python
+from gapless_crypto_data.streaming import StreamingDataProcessor
+
+processor = StreamingDataProcessor(chunk_size=10_000, memory_limit_mb=100)
+for chunk in processor.stream_csv_chunks("large_dataset.csv"):
+    # Process chunk with constant memory usage
+    print(f"Chunk shape: {chunk.shape}")
+```
+
+### File Naming Convention
+
+Output files follow consistent naming pattern:
+
+```
+binance_spot_{SYMBOL}-{TIMEFRAME}_{START_DATE}-{END_DATE}_v{VERSION}.csv
+binance_spot_{SYMBOL}-{TIMEFRAME}_{START_DATE}-{END_DATE}_v{VERSION}.metadata.json
+```
+
+Examples:
+
+- `binance_spot_BTCUSDT-1h_20240101-20240102_v2.5.0.csv`
+- `binance_spot_ETHUSDT-4h_20240101-20240201_v2.5.0.csv`
+- `binance_spot_SOLUSDT-1d_20240101-20241231_v2.5.0.csv`
+
+### Error Handling
+
+All classes implement robust error handling with meaningful exceptions:
+
+```python
+try:
+    collector = BinancePublicDataCollector(symbol="INVALIDPAIR")
+    result = collector.collect_timeframe_data("1h")
+except ValueError as e:
+    print(f"Invalid symbol format: {e}")
+except ConnectionError as e:
+    print(f"Network error: {e}")
+except FileNotFoundError as e:
+    print(f"Output directory error: {e}")
+```
+
+### Type Hints
+
+All public APIs include comprehensive type hints for better IDE support:
+
+```python
+from typing import Dict, List, Optional, Any
+from pathlib import Path
+import pandas as pd
+
+def collect_timeframe_data(self, trading_timeframe: str) -> Dict[str, Any]:
+    # Returns dict with 'dataframe', 'filepath', and 'stats' keys
+    pass
+
+def collect_multiple_timeframes(
+    self,
+    timeframes: Optional[List[str]] = None
+) -> Dict[str, Dict[str, Any]]:
+    # Returns nested dict by timeframe
+    pass
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🏢 About Eon Labs
+
+Gapless Crypto Data is developed by [Eon Labs](https://github.com/terrylica), specializing in quantitative trading infrastructure and machine learning for financial markets.
+
+---
+
+**UV-based** - Python dependency management
+**📊 11-Column Format** - Microstructure data with order flow metrics
+**🔒 Gap Detection** - Data completeness validation and filling

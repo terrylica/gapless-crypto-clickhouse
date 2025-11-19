@@ -1,0 +1,15 @@
+docs(claude): fix multi-agent methodology reference to ClickHouse
+docs(migration): document expected CLI test failures in v4.0.0
+docs(readme): remove second cli.py reference from project structure
+docs(readme): remove cli.py from project structure diagrams
+docs(claude): update version to 4.0.0 and database info
+docs(readme): update CLI removal notice to past tense
+fix(version)!: update __version__ to 4.0.0 for release consistency
+docs(v4.0.0)!: comprehensive ClickHouse documentation and migration guide
+chore(deps): remove QuestDB dependencies for v4.0.0
+feat(clickhouse)!: remove QuestDB implementation for v4.0.0
+feat(clickhouse)!: implement ClickHouse as primary database (ADR-0005)
+docs(validation): complete Agent 3 validation with Bug #5 discovery
+fix(query): resolve detect_gaps() QuestDB SQL incompatibility (Bug #5)
+fix(questdb)!: resolve all critical bugs from e2e validation (4 bugs + dedup)
+fix(questdb)!: critical bugs found in e2e validation - RELEASE BLOCKED

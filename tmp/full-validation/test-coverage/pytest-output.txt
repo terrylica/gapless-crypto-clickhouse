@@ -1,0 +1,791 @@
+DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+DEBUG Found project root: `/Users/terryli/eon/gapless-crypto-data`
+DEBUG No workspace root found, using project root
+DEBUG Discovered project `gapless-crypto-data` at: /Users/terryli/eon/gapless-crypto-data
+DEBUG Acquired lock for `/Users/terryli/eon/gapless-crypto-data`
+DEBUG Using Python request `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3` from explicit request
+DEBUG Checking for Python environment at `.venv`
+DEBUG The project environment's Python version satisfies the request: `path `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3``
+DEBUG Released lock at `/var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/uv-f75a052cd49c587c.lock`
+DEBUG Using request timeout of 30s
+DEBUG Found static `pyproject.toml` for: gapless-crypto-data @ file:///Users/terryli/eon/gapless-crypto-data
+DEBUG No workspace root found, using project root
+DEBUG Existing `uv.lock` satisfies workspace requirements
+DEBUG Using request timeout of 30s
+DEBUG Computed cache info: Some(Timestamp(SystemTime { tv_sec: 1763441506, tv_nsec: 20241287 })), None, None, {}, {"src": Some(Timestamp(Timestamp(SystemTime { tv_sec: 1757906618, tv_nsec: 47687211 })))}
+DEBUG Requirement already installed: gapless-crypto-data==4.0.0 (from file:///Users/terryli/eon/gapless-crypto-data)
+DEBUG Requirement already installed: commitizen==4.9.1
+DEBUG Requirement already installed: mypy==1.18.1
+DEBUG Requirement already installed: pandas-stubs==2.3.2.250827
+DEBUG Requirement already installed: pre-commit==4.3.0
+DEBUG Requirement already installed: pytest==8.4.2
+DEBUG Requirement already installed: pytest-asyncio==1.2.0
+DEBUG Requirement already installed: pytest-cov==7.0.0
+DEBUG Requirement already installed: ruff==0.13.0
+DEBUG Requirement already installed: types-requests==2.32.4.20250913
+DEBUG Requirement already installed: yamllint==1.37.1
+DEBUG Requirement already installed: clickhouse-driver==0.2.10
+DEBUG Requirement already installed: duckdb==1.4.1
+DEBUG Requirement already installed: httpx==0.28.1
+DEBUG Requirement already installed: pandas==2.3.2
+DEBUG Requirement already installed: pyarrow==21.0.0
+DEBUG Requirement already installed: pydantic==2.12.3
+DEBUG Requirement already installed: python-dotenv==1.2.1
+DEBUG Requirement already installed: argcomplete==3.6.2
+DEBUG Requirement already installed: charset-normalizer==3.4.3
+DEBUG Requirement already installed: colorama==0.4.6
+DEBUG Requirement already installed: decli==0.6.3
+DEBUG Requirement already installed: deprecated==1.2.18
+DEBUG Requirement already installed: jinja2==3.1.6
+DEBUG Requirement already installed: packaging==25.0
+DEBUG Requirement already installed: prompt-toolkit==3.0.51
+DEBUG Requirement already installed: pyyaml==6.0.2
+DEBUG Requirement already installed: questionary==2.1.1
+DEBUG Requirement already installed: termcolor==3.1.0
+DEBUG Requirement already installed: tomlkit==0.13.3
+DEBUG Requirement already installed: mypy-extensions==1.1.0
+DEBUG Requirement already installed: pathspec==0.12.1
+DEBUG Requirement already installed: typing-extensions==4.15.0
+DEBUG Requirement already installed: numpy==2.2.6
+DEBUG Requirement already installed: types-pytz==2025.2.0.20250809
+DEBUG Requirement already installed: cfgv==3.4.0
+DEBUG Requirement already installed: identify==2.6.14
+DEBUG Requirement already installed: nodeenv==1.9.1
+DEBUG Requirement already installed: virtualenv==20.34.0
+DEBUG Requirement already installed: iniconfig==2.1.0
+DEBUG Requirement already installed: pluggy==1.6.0
+DEBUG Requirement already installed: pygments==2.19.2
+DEBUG Requirement already installed: coverage==7.10.6
+DEBUG Requirement already installed: urllib3==2.5.0
+DEBUG Requirement already installed: pytz==2025.2
+DEBUG Requirement already installed: tzlocal==5.3.1
+DEBUG Requirement already installed: anyio==4.10.0
+DEBUG Requirement already installed: certifi==2025.8.3
+DEBUG Requirement already installed: httpcore==1.0.9
+DEBUG Requirement already installed: idna==3.10
+DEBUG Requirement already installed: python-dateutil==2.9.0.post0
+DEBUG Requirement already installed: tzdata==2025.2
+DEBUG Requirement already installed: annotated-types==0.7.0
+DEBUG Requirement already installed: pydantic-core==2.41.4
+DEBUG Requirement already installed: typing-inspection==0.4.2
+DEBUG Requirement already installed: wrapt==1.17.3
+DEBUG Requirement already installed: markupsafe==3.0.2
+DEBUG Requirement already installed: wcwidth==0.2.14
+DEBUG Requirement already installed: distlib==0.4.0
+DEBUG Requirement already installed: filelock==3.19.1
+DEBUG Requirement already installed: platformdirs==4.4.0
+DEBUG Requirement already installed: sniffio==1.3.1
+DEBUG Requirement already installed: h11==0.16.0
+DEBUG Requirement already installed: six==1.17.0
+DEBUG Using Python 3.13.6 interpreter at: /Users/terryli/eon/gapless-crypto-data/.venv/bin/python3
+DEBUG Running `pytest --tb=short --cov=src/gapless_crypto_data --cov-report=term-missing:skip-covered --cov-report=json -v`
+DEBUG Spawned child 73877 in process group 73859
+============================================================================== test session starts ===============================================================================
+platform darwin -- Python 3.13.6, pytest-8.4.2, pluggy-1.6.0
+rootdir: /Users/terryli/eon/gapless-crypto-data
+configfile: pyproject.toml
+testpaths: tests
+plugins: asyncio-1.2.0, anyio-4.10.0, cov-7.0.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 336 items
+
+tests/test_1s_1d_gap_filling.py ...........                                                                                                                                [  3%]
+tests/test_api_edge_cases.py ................F                                                                                                                             [  8%]
+tests/test_atomic_operations.py .......................                                                                                                                    [ 15%]
+tests/test_binance_collector.py ......s....................................                                                                                                [ 27%]
+tests/test_binance_collector_advanced.py ..............................                                                                                                    [ 36%]
+tests/test_cli.py F.FFF.....FFFF                                                                                                                                           [ 41%]
+tests/test_cli_integration.py FFFFFF.FFFFF                                                                                                                                 [ 44%]
+tests/test_concurrent_download.py ..................                                                                                                                       [ 50%]
+tests/test_error_handling.py ................................                                                                                                              [ 59%]
+tests/test_etag_cache.py ............                                                                                                                                      [ 63%]
+tests/test_gap_filler.py ............                                                                                                                                      [ 66%]
+tests/test_gapless_validation_1d_2018_present.py .....                                                                                                                     [ 68%]
+tests/test_integration.py .....                                                                                                                                            [ 69%]
+tests/test_monthly_to_daily_fallback.py .......                                                                                                                            [ 71%]
+tests/test_output_dir_dataframe_fix.py ...                                                                                                                                 [ 72%]
+tests/test_package.py ..F......F.                                                                                                                                          [ 75%]
+tests/test_probe_module.py ..................................                                                                                                              [ 86%]
+tests/test_simple_api.py ....s..s...s..s..s....                                                                                                                            [ 92%]
+tests/test_timeframe_constants.py .............                                                                                                                            [ 96%]
+tests/test_validation_storage.py ............                                                                                                                              [100%]
+
+==================================================================================== FAILURES ====================================================================================
+______________________________________________________________________ TestGetInfo.test_get_info_structure _______________________________________________________________________
+tests/test_api_edge_cases.py:184: in test_get_info_structure
+    assert info["version"] == "3.2.0"
+E   AssertionError: assert '4.0.0' == '3.2.0'
+E     
+E     - 3.2.0
+E     + 4.0.0
+------------------------------------------------------------------------------ Captured stdout call ------------------------------------------------------------------------------
+Binance Public Data Collector
+Symbol: SOLUSDT
+Date Range: 2020-08-15 to 2025-03-20
+Data Source: https://data.binance.vision/data/spot/monthly/klines
+Binance Public Data Collector
+Symbol: SOLUSDT
+Date Range: 2020-08-15 to 2025-03-20
+Data Source: https://data.binance.vision/data/spot/monthly/klines
+_________________________________________________________________________ test_cli_help_and_description __________________________________________________________________________
+tests/test_cli.py:13: in test_cli_help_and_description
+    assert result.returncode == 0
+E   AssertionError: assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3', '-m', 'gapless_crypto_data.cli', '-...tdout='', stderr='/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n').returncode
+______________________________________________________________________________ test_cli_entry_point ______________________________________________________________________________
+tests/test_cli.py:52: in test_cli_entry_point
+    assert result.returncode == 0
+E   AssertionError: assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--help'], returncode=1, stdout='', stderr='DEBUG uv 0.7.13... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+_____________________________________________________________________________ test_cli_invalid_args ______________________________________________________________________________
+tests/test_cli.py:64: in test_cli_invalid_args
+    assert "error:" in result.stderr.lower() or "usage:" in result.stderr.lower()
+E   AssertionError: assert ('error:' in '/users/terryli/eon/gapless-crypto-data/.venv/bin/python3: no module named gapless_crypto_data.cli\n' or 'usage:' in '/users/terryli/eon/gapless-crypto-data/.venv/bin/python3: no module named gapless_crypto_data.cli\n')
+E    +  where '/users/terryli/eon/gapless-crypto-data/.venv/bin/python3: no module named gapless_crypto_data.cli\n' = <built-in method lower of str object at 0x11790e4c0>()
+E    +    where <built-in method lower of str object at 0x11790e4c0> = '/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n'.lower
+E    +      where '/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n' = CompletedProcess(args=['/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3', '-m', 'gapless_crypto_data.cli', '-...tdout='', stderr='/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n').stderr
+E    +  and   '/users/terryli/eon/gapless-crypto-data/.venv/bin/python3: no module named gapless_crypto_data.cli\n' = <built-in method lower of str object at 0x11790e4c0>()
+E    +    where <built-in method lower of str object at 0x11790e4c0> = '/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n'.lower
+E    +      where '/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n' = CompletedProcess(args=['/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3', '-m', 'gapless_crypto_data.cli', '-...tdout='', stderr='/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n').stderr
+______________________________________________________________________ test_cli_help_mentions_multi_symbol _______________________________________________________________________
+tests/test_cli.py:72: in test_cli_help_mentions_multi_symbol
+    assert result.returncode == 0
+E   AssertionError: assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3', '-m', 'gapless_crypto_data.cli', '-...tdout='', stderr='/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n').returncode
+_________________________________________________________________________ test_cli_list_timeframes_flag __________________________________________________________________________
+tests/test_cli.py:285: in test_cli_list_timeframes_flag
+    assert result.returncode == 0
+E   AssertionError: assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3', '-m', 'gapless_crypto_data.cli', '-...tdout='', stderr='/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n').returncode
+_____________________________________________________________________ test_cli_help_mentions_list_timeframes _____________________________________________________________________
+tests/test_cli.py:325: in test_cli_help_mentions_list_timeframes
+    assert result.returncode == 0
+E   AssertionError: assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3', '-m', 'gapless_crypto_data.cli', '-...tdout='', stderr='/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n').returncode
+___________________________________________________________________ test_cli_invalid_timeframe_shows_available ___________________________________________________________________
+tests/test_cli.py:368: in test_cli_invalid_timeframe_shows_available
+    assert "❌ Timeframe 'invalid_timeframe' not available" in result.stdout
+E   assert "❌ Timeframe 'invalid_timeframe' not available" in ''
+E    +  where '' = CompletedProcess(args=['/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3', '-m', 'gapless_crypto_data.cli', '-...tdout='', stderr='/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n').stdout
+_________________________________________________________________ test_cli_timeframe_discoverability_integration _________________________________________________________________
+tests/test_cli.py:386: in test_cli_timeframe_discoverability_integration
+    assert list_result.returncode == 0
+E   AssertionError: assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3', '-m', 'gapless_crypto_data.cli', '-...tdout='', stderr='/Users/terryli/eon/gapless-crypto-data/.venv/bin/python3: No module named gapless_crypto_data.cli\n').returncode
+_____________________________________________________________ TestCLIIntegration.test_legacy_cli_btcusdt_single_day ______________________________________________________________
+tests/test_cli_integration.py:42: in test_legacy_cli_btcusdt_single_day
+    assert result.returncode == 0, f"CLI failed with: {result.stderr}"
+E   AssertionError: CLI failed with: DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+E     DEBUG Found project root: `/Users/terryli/eon/gapless-crypto-data`
+E     DEBUG No workspace root found, using project root
+E     DEBUG Discovered project `gapless-crypto-data` at: /Users/terryli/eon/gapless-crypto-data
+E     DEBUG Acquired lock for `/Users/terryli/eon/gapless-crypto-data`
+E     DEBUG Using Python request `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3` from explicit request
+E     DEBUG Checking for Python environment at `.venv`
+E     DEBUG The project environment's Python version satisfies the request: `path `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3``
+E     DEBUG Released lock at `/var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/uv-f75a052cd49c587c.lock`
+E     DEBUG Using request timeout of 30s
+E     DEBUG Found static `pyproject.toml` for: gapless-crypto-data @ file:///Users/terryli/eon/gapless-crypto-data
+E     DEBUG No workspace root found, using project root
+E     DEBUG Existing `uv.lock` satisfies workspace requirements
+E     DEBUG Using request timeout of 30s
+E     DEBUG Computed cache info: Some(Timestamp(SystemTime { tv_sec: 1763441506, tv_nsec: 20241287 })), None, None, {}, {"src": Some(Timestamp(Timestamp(SystemTime { tv_sec: 1757906618, tv_nsec: 47687211 })))}
+E     DEBUG Requirement already installed: gapless-crypto-data==4.0.0 (from file:///Users/terryli/eon/gapless-crypto-data)
+E     DEBUG Requirement already installed: commitizen==4.9.1
+E     DEBUG Requirement already installed: mypy==1.18.1
+E     DEBUG Requirement already installed: pandas-stubs==2.3.2.250827
+E     DEBUG Requirement already installed: pre-commit==4.3.0
+E     DEBUG Requirement already installed: pytest==8.4.2
+E     DEBUG Requirement already installed: pytest-asyncio==1.2.0
+E     DEBUG Requirement already installed: pytest-cov==7.0.0
+E     DEBUG Requirement already installed: ruff==0.13.0
+E     DEBUG Requirement already installed: types-requests==2.32.4.20250913
+E     DEBUG Requirement already installed: yamllint==1.37.1
+E     DEBUG Requirement already installed: clickhouse-driver==0.2.10
+E     DEBUG Requirement already installed: duckdb==1.4.1
+E     DEBUG Requirement already installed: httpx==0.28.1
+E     DEBUG Requirement already installed: pandas==2.3.2
+E     DEBUG Requirement already installed: pyarrow==21.0.0
+E     DEBUG Requirement already installed: pydantic==2.12.3
+E     DEBUG Requirement already installed: python-dotenv==1.2.1
+E     DEBUG Requirement already installed: argcomplete==3.6.2
+E     DEBUG Requirement already installed: charset-normalizer==3.4.3
+E     DEBUG Requirement already installed: colorama==0.4.6
+E     DEBUG Requirement already installed: decli==0.6.3
+E     DEBUG Requirement already installed: deprecated==1.2.18
+E     DEBUG Requirement already installed: jinja2==3.1.6
+E     DEBUG Requirement already installed: packaging==25.0
+E     DEBUG Requirement already installed: prompt-toolkit==3.0.51
+E     DEBUG Requirement already installed: pyyaml==6.0.2
+E     DEBUG Requirement already installed: questionary==2.1.1
+E     DEBUG Requirement already installed: termcolor==3.1.0
+E     DEBUG Requirement already installed: tomlkit==0.13.3
+E     DEBUG Requirement already installed: mypy-extensions==1.1.0
+E     DEBUG Requirement already installed: pathspec==0.12.1
+E     DEBUG Requirement already installed: typing-extensions==4.15.0
+E     DEBUG Requirement already installed: numpy==2.2.6
+E     DEBUG Requirement already installed: types-pytz==2025.2.0.20250809
+E     DEBUG Requirement already installed: cfgv==3.4.0
+E     DEBUG Requirement already installed: identify==2.6.14
+E     DEBUG Requirement already installed: nodeenv==1.9.1
+E     DEBUG Requirement already installed: virtualenv==20.34.0
+E     DEBUG Requirement already installed: iniconfig==2.1.0
+E     DEBUG Requirement already installed: pluggy==1.6.0
+E     DEBUG Requirement already installed: pygments==2.19.2
+E     DEBUG Requirement already installed: coverage==7.10.6
+E     DEBUG Requirement already installed: urllib3==2.5.0
+E     DEBUG Requirement already installed: pytz==2025.2
+E     DEBUG Requirement already installed: tzlocal==5.3.1
+E     DEBUG Requirement already installed: anyio==4.10.0
+E     DEBUG Requirement already installed: certifi==2025.8.3
+E     DEBUG Requirement already installed: httpcore==1.0.9
+E     DEBUG Requirement already installed: idna==3.10
+E     DEBUG Requirement already installed: python-dateutil==2.9.0.post0
+E     DEBUG Requirement already installed: tzdata==2025.2
+E     DEBUG Requirement already installed: annotated-types==0.7.0
+E     DEBUG Requirement already installed: pydantic-core==2.41.4
+E     DEBUG Requirement already installed: typing-inspection==0.4.2
+E     DEBUG Requirement already installed: wrapt==1.17.3
+E     DEBUG Requirement already installed: markupsafe==3.0.2
+E     DEBUG Requirement already installed: wcwidth==0.2.14
+E     DEBUG Requirement already installed: distlib==0.4.0
+E     DEBUG Requirement already installed: filelock==3.19.1
+E     DEBUG Requirement already installed: platformdirs==4.4.0
+E     DEBUG Requirement already installed: sniffio==1.3.1
+E     DEBUG Requirement already installed: h11==0.16.0
+E     DEBUG Requirement already installed: six==1.17.0
+E     DEBUG Using Python 3.13.6 interpreter at: /Users/terryli/eon/gapless-crypto-data/.venv/bin/python3
+E     DEBUG Running `gapless-crypto-data --symbol BTCUSDT --timeframes 1h --start 2024-01-01 --end 2024-01-01 --output-dir /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpuy7vldw8`
+E     DEBUG Spawned child 74086 in process group 73859
+E     Traceback (most recent call last):
+E       File "/Users/terryli/.local/bin/gapless-crypto-data", line 4, in <module>
+E         from gapless_crypto_data.cli import main
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py", line 87, in <module>
+E         from . import __probe__
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__probe__.py", line 27, in <module>
+E         from . import api
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/api.py", line 30, in <module>
+E         from .collectors.binance_public_data_collector import BinancePublicDataCollector
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/__init__.py", line 7, in <module>
+E         from .binance_public_data_collector import BinancePublicDataCollector
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/binance_public_data_collector.py", line 31, in <module>
+E         from ..validation.csv_validator import CSVValidator
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/__init__.py", line 22, in <module>
+E         from gapless_crypto_data.validation.csv_validator import CSVValidator
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/csv_validator.py", line 26, in <module>
+E         from .models import ValidationReport
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/models.py", line 10, in <module>
+E         from pydantic import BaseModel, ConfigDict, Field
+E     ModuleNotFoundError: No module named 'pydantic'
+E     DEBUG Command exited with code: 1
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--symbol', 'BTCUSDT', '--timeframes', '1h', '--start', '20... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+___________________________________________________________ TestCLIIntegration.test_subcommand_cli_ethusdt_single_day ____________________________________________________________
+tests/test_cli_integration.py:107: in test_subcommand_cli_ethusdt_single_day
+    assert result.returncode == 0, f"CLI failed with: {result.stderr}"
+E   AssertionError: CLI failed with: DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+E     DEBUG Found project root: `/Users/terryli/eon/gapless-crypto-data`
+E     DEBUG No workspace root found, using project root
+E     DEBUG Discovered project `gapless-crypto-data` at: /Users/terryli/eon/gapless-crypto-data
+E     DEBUG Acquired lock for `/Users/terryli/eon/gapless-crypto-data`
+E     DEBUG Using Python request `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3` from explicit request
+E     DEBUG Checking for Python environment at `.venv`
+E     DEBUG The project environment's Python version satisfies the request: `path `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3``
+E     DEBUG Released lock at `/var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/uv-f75a052cd49c587c.lock`
+E     DEBUG Using request timeout of 30s
+E     DEBUG Found static `pyproject.toml` for: gapless-crypto-data @ file:///Users/terryli/eon/gapless-crypto-data
+E     DEBUG No workspace root found, using project root
+E     DEBUG Existing `uv.lock` satisfies workspace requirements
+E     DEBUG Using request timeout of 30s
+E     DEBUG Computed cache info: Some(Timestamp(SystemTime { tv_sec: 1763441506, tv_nsec: 20241287 })), None, None, {}, {"src": Some(Timestamp(Timestamp(SystemTime { tv_sec: 1757906618, tv_nsec: 47687211 })))}
+E     DEBUG Requirement already installed: gapless-crypto-data==4.0.0 (from file:///Users/terryli/eon/gapless-crypto-data)
+E     DEBUG Requirement already installed: commitizen==4.9.1
+E     DEBUG Requirement already installed: mypy==1.18.1
+E     DEBUG Requirement already installed: pandas-stubs==2.3.2.250827
+E     DEBUG Requirement already installed: pre-commit==4.3.0
+E     DEBUG Requirement already installed: pytest==8.4.2
+E     DEBUG Requirement already installed: pytest-asyncio==1.2.0
+E     DEBUG Requirement already installed: pytest-cov==7.0.0
+E     DEBUG Requirement already installed: ruff==0.13.0
+E     DEBUG Requirement already installed: types-requests==2.32.4.20250913
+E     DEBUG Requirement already installed: yamllint==1.37.1
+E     DEBUG Requirement already installed: clickhouse-driver==0.2.10
+E     DEBUG Requirement already installed: duckdb==1.4.1
+E     DEBUG Requirement already installed: httpx==0.28.1
+E     DEBUG Requirement already installed: pandas==2.3.2
+E     DEBUG Requirement already installed: pyarrow==21.0.0
+E     DEBUG Requirement already installed: pydantic==2.12.3
+E     DEBUG Requirement already installed: python-dotenv==1.2.1
+E     DEBUG Requirement already installed: argcomplete==3.6.2
+E     DEBUG Requirement already installed: charset-normalizer==3.4.3
+E     DEBUG Requirement already installed: colorama==0.4.6
+E     DEBUG Requirement already installed: decli==0.6.3
+E     DEBUG Requirement already installed: deprecated==1.2.18
+E     DEBUG Requirement already installed: jinja2==3.1.6
+E     DEBUG Requirement already installed: packaging==25.0
+E     DEBUG Requirement already installed: prompt-toolkit==3.0.51
+E     DEBUG Requirement already installed: pyyaml==6.0.2
+E     DEBUG Requirement already installed: questionary==2.1.1
+E     DEBUG Requirement already installed: termcolor==3.1.0
+E     DEBUG Requirement already installed: tomlkit==0.13.3
+E     DEBUG Requirement already installed: mypy-extensions==1.1.0
+E     DEBUG Requirement already installed: pathspec==0.12.1
+E     DEBUG Requirement already installed: typing-extensions==4.15.0
+E     DEBUG Requirement already installed: numpy==2.2.6
+E     DEBUG Requirement already installed: types-pytz==2025.2.0.20250809
+E     DEBUG Requirement already installed: cfgv==3.4.0
+E     DEBUG Requirement already installed: identify==2.6.14
+E     DEBUG Requirement already installed: nodeenv==1.9.1
+E     DEBUG Requirement already installed: virtualenv==20.34.0
+E     DEBUG Requirement already installed: iniconfig==2.1.0
+E     DEBUG Requirement already installed: pluggy==1.6.0
+E     DEBUG Requirement already installed: pygments==2.19.2
+E     DEBUG Requirement already installed: coverage==7.10.6
+E     DEBUG Requirement already installed: urllib3==2.5.0
+E     DEBUG Requirement already installed: pytz==2025.2
+E     DEBUG Requirement already installed: tzlocal==5.3.1
+E     DEBUG Requirement already installed: anyio==4.10.0
+E     DEBUG Requirement already installed: certifi==2025.8.3
+E     DEBUG Requirement already installed: httpcore==1.0.9
+E     DEBUG Requirement already installed: idna==3.10
+E     DEBUG Requirement already installed: python-dateutil==2.9.0.post0
+E     DEBUG Requirement already installed: tzdata==2025.2
+E     DEBUG Requirement already installed: annotated-types==0.7.0
+E     DEBUG Requirement already installed: pydantic-core==2.41.4
+E     DEBUG Requirement already installed: typing-inspection==0.4.2
+E     DEBUG Requirement already installed: wrapt==1.17.3
+E     DEBUG Requirement already installed: markupsafe==3.0.2
+E     DEBUG Requirement already installed: wcwidth==0.2.14
+E     DEBUG Requirement already installed: distlib==0.4.0
+E     DEBUG Requirement already installed: filelock==3.19.1
+E     DEBUG Requirement already installed: platformdirs==4.4.0
+E     DEBUG Requirement already installed: sniffio==1.3.1
+E     DEBUG Requirement already installed: h11==0.16.0
+E     DEBUG Requirement already installed: six==1.17.0
+E     DEBUG Using Python 3.13.6 interpreter at: /Users/terryli/eon/gapless-crypto-data/.venv/bin/python3
+E     DEBUG Running `gapless-crypto-data collect --symbol ETHUSDT --timeframes 1h --start 2024-01-01 --end 2024-01-01 --output-dir /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpm4elkiye`
+E     DEBUG Spawned child 74090 in process group 73859
+E     Traceback (most recent call last):
+E       File "/Users/terryli/.local/bin/gapless-crypto-data", line 4, in <module>
+E         from gapless_crypto_data.cli import main
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py", line 87, in <module>
+E         from . import __probe__
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__probe__.py", line 27, in <module>
+E         from . import api
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/api.py", line 30, in <module>
+E         from .collectors.binance_public_data_collector import BinancePublicDataCollector
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/__init__.py", line 7, in <module>
+E         from .binance_public_data_collector import BinancePublicDataCollector
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/binance_public_data_collector.py", line 31, in <module>
+E         from ..validation.csv_validator import CSVValidator
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/__init__.py", line 22, in <module>
+E         from gapless_crypto_data.validation.csv_validator import CSVValidator
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/csv_validator.py", line 26, in <module>
+E         from .models import ValidationReport
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/models.py", line 10, in <module>
+E         from pydantic import BaseModel, ConfigDict, Field
+E     ModuleNotFoundError: No module named 'pydantic'
+E     DEBUG Command exited with code: 1
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', 'collect', '--symbol', 'ETHUSDT', '--timeframes', '1h', '--... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+______________________________________________________________ TestCLIIntegration.test_multiple_symbols_integration ______________________________________________________________
+tests/test_cli_integration.py:144: in test_multiple_symbols_integration
+    assert result.returncode == 0, f"CLI failed with: {result.stderr}"
+E   AssertionError: CLI failed with: DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+E     DEBUG Found project root: `/Users/terryli/eon/gapless-crypto-data`
+E     DEBUG No workspace root found, using project root
+E     DEBUG Discovered project `gapless-crypto-data` at: /Users/terryli/eon/gapless-crypto-data
+E     DEBUG Acquired lock for `/Users/terryli/eon/gapless-crypto-data`
+E     DEBUG Using Python request `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3` from explicit request
+E     DEBUG Checking for Python environment at `.venv`
+E     DEBUG The project environment's Python version satisfies the request: `path `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3``
+E     DEBUG Released lock at `/var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/uv-f75a052cd49c587c.lock`
+E     DEBUG Using request timeout of 30s
+E     DEBUG Found static `pyproject.toml` for: gapless-crypto-data @ file:///Users/terryli/eon/gapless-crypto-data
+E     DEBUG No workspace root found, using project root
+E     DEBUG Existing `uv.lock` satisfies workspace requirements
+E     DEBUG Using request timeout of 30s
+E     DEBUG Computed cache info: Some(Timestamp(SystemTime { tv_sec: 1763441506, tv_nsec: 20241287 })), None, None, {}, {"src": Some(Timestamp(Timestamp(SystemTime { tv_sec: 1757906618, tv_nsec: 47687211 })))}
+E     DEBUG Requirement already installed: gapless-crypto-data==4.0.0 (from file:///Users/terryli/eon/gapless-crypto-data)
+E     DEBUG Requirement already installed: commitizen==4.9.1
+E     DEBUG Requirement already installed: mypy==1.18.1
+E     DEBUG Requirement already installed: pandas-stubs==2.3.2.250827
+E     DEBUG Requirement already installed: pre-commit==4.3.0
+E     DEBUG Requirement already installed: pytest==8.4.2
+E     DEBUG Requirement already installed: pytest-asyncio==1.2.0
+E     DEBUG Requirement already installed: pytest-cov==7.0.0
+E     DEBUG Requirement already installed: ruff==0.13.0
+E     DEBUG Requirement already installed: types-requests==2.32.4.20250913
+E     DEBUG Requirement already installed: yamllint==1.37.1
+E     DEBUG Requirement already installed: clickhouse-driver==0.2.10
+E     DEBUG Requirement already installed: duckdb==1.4.1
+E     DEBUG Requirement already installed: httpx==0.28.1
+E     DEBUG Requirement already installed: pandas==2.3.2
+E     DEBUG Requirement already installed: pyarrow==21.0.0
+E     DEBUG Requirement already installed: pydantic==2.12.3
+E     DEBUG Requirement already installed: python-dotenv==1.2.1
+E     DEBUG Requirement already installed: argcomplete==3.6.2
+E     DEBUG Requirement already installed: charset-normalizer==3.4.3
+E     DEBUG Requirement already installed: colorama==0.4.6
+E     DEBUG Requirement already installed: decli==0.6.3
+E     DEBUG Requirement already installed: deprecated==1.2.18
+E     DEBUG Requirement already installed: jinja2==3.1.6
+E     DEBUG Requirement already installed: packaging==25.0
+E     DEBUG Requirement already installed: prompt-toolkit==3.0.51
+E     DEBUG Requirement already installed: pyyaml==6.0.2
+E     DEBUG Requirement already installed: questionary==2.1.1
+E     DEBUG Requirement already installed: termcolor==3.1.0
+E     DEBUG Requirement already installed: tomlkit==0.13.3
+E     DEBUG Requirement already installed: mypy-extensions==1.1.0
+E     DEBUG Requirement already installed: pathspec==0.12.1
+E     DEBUG Requirement already installed: typing-extensions==4.15.0
+E     DEBUG Requirement already installed: numpy==2.2.6
+E     DEBUG Requirement already installed: types-pytz==2025.2.0.20250809
+E     DEBUG Requirement already installed: cfgv==3.4.0
+E     DEBUG Requirement already installed: identify==2.6.14
+E     DEBUG Requirement already installed: nodeenv==1.9.1
+E     DEBUG Requirement already installed: virtualenv==20.34.0
+E     DEBUG Requirement already installed: iniconfig==2.1.0
+E     DEBUG Requirement already installed: pluggy==1.6.0
+E     DEBUG Requirement already installed: pygments==2.19.2
+E     DEBUG Requirement already installed: coverage==7.10.6
+E     DEBUG Requirement already installed: urllib3==2.5.0
+E     DEBUG Requirement already installed: pytz==2025.2
+E     DEBUG Requirement already installed: tzlocal==5.3.1
+E     DEBUG Requirement already installed: anyio==4.10.0
+E     DEBUG Requirement already installed: certifi==2025.8.3
+E     DEBUG Requirement already installed: httpcore==1.0.9
+E     DEBUG Requirement already installed: idna==3.10
+E     DEBUG Requirement already installed: python-dateutil==2.9.0.post0
+E     DEBUG Requirement already installed: tzdata==2025.2
+E     DEBUG Requirement already installed: annotated-types==0.7.0
+E     DEBUG Requirement already installed: pydantic-core==2.41.4
+E     DEBUG Requirement already installed: typing-inspection==0.4.2
+E     DEBUG Requirement already installed: wrapt==1.17.3
+E     DEBUG Requirement already installed: markupsafe==3.0.2
+E     DEBUG Requirement already installed: wcwidth==0.2.14
+E     DEBUG Requirement already installed: distlib==0.4.0
+E     DEBUG Requirement already installed: filelock==3.19.1
+E     DEBUG Requirement already installed: platformdirs==4.4.0
+E     DEBUG Requirement already installed: sniffio==1.3.1
+E     DEBUG Requirement already installed: h11==0.16.0
+E     DEBUG Requirement already installed: six==1.17.0
+E     DEBUG Using Python 3.13.6 interpreter at: /Users/terryli/eon/gapless-crypto-data/.venv/bin/python3
+E     DEBUG Running `gapless-crypto-data --symbol BTCUSDT,ETHUSDT --timeframes 1h --start 2024-01-01 --end 2024-01-01 --output-dir /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpuob7rj_w`
+E     DEBUG Spawned child 74121 in process group 73859
+E     Traceback (most recent call last):
+E       File "/Users/terryli/.local/bin/gapless-crypto-data", line 4, in <module>
+E         from gapless_crypto_data.cli import main
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py", line 87, in <module>
+E         from . import __probe__
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__probe__.py", line 27, in <module>
+E         from . import api
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/api.py", line 30, in <module>
+E         from .collectors.binance_public_data_collector import BinancePublicDataCollector
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/__init__.py", line 7, in <module>
+E         from .binance_public_data_collector import BinancePublicDataCollector
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/binance_public_data_collector.py", line 31, in <module>
+E         from ..validation.csv_validator import CSVValidator
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/__init__.py", line 22, in <module>
+E         from gapless_crypto_data.validation.csv_validator import CSVValidator
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/csv_validator.py", line 26, in <module>
+E         from .models import ValidationReport
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/models.py", line 10, in <module>
+E         from pydantic import BaseModel, ConfigDict, Field
+E     ModuleNotFoundError: No module named 'pydantic'
+E     DEBUG Command exited with code: 1
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--symbol', 'BTCUSDT,ETHUSDT', '--timeframes', '1h', '--sta... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+____________________________________________________________ TestCLIIntegration.test_multiple_timeframes_integration _____________________________________________________________
+tests/test_cli_integration.py:183: in test_multiple_timeframes_integration
+    assert result.returncode == 0, f"CLI failed with: {result.stderr}"
+E   AssertionError: CLI failed with: DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+E     DEBUG Found project root: `/Users/terryli/eon/gapless-crypto-data`
+E     DEBUG No workspace root found, using project root
+E     DEBUG Discovered project `gapless-crypto-data` at: /Users/terryli/eon/gapless-crypto-data
+E     DEBUG Acquired lock for `/Users/terryli/eon/gapless-crypto-data`
+E     DEBUG Using Python request `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3` from explicit request
+E     DEBUG Checking for Python environment at `.venv`
+E     DEBUG The project environment's Python version satisfies the request: `path `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3``
+E     DEBUG Released lock at `/var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/uv-f75a052cd49c587c.lock`
+E     DEBUG Using request timeout of 30s
+E     DEBUG Found static `pyproject.toml` for: gapless-crypto-data @ file:///Users/terryli/eon/gapless-crypto-data
+E     DEBUG No workspace root found, using project root
+E     DEBUG Existing `uv.lock` satisfies workspace requirements
+E     DEBUG Using request timeout of 30s
+E     DEBUG Computed cache info: Some(Timestamp(SystemTime { tv_sec: 1763441506, tv_nsec: 20241287 })), None, None, {}, {"src": Some(Timestamp(Timestamp(SystemTime { tv_sec: 1757906618, tv_nsec: 47687211 })))}
+E     DEBUG Requirement already installed: gapless-crypto-data==4.0.0 (from file:///Users/terryli/eon/gapless-crypto-data)
+E     DEBUG Requirement already installed: commitizen==4.9.1
+E     DEBUG Requirement already installed: mypy==1.18.1
+E     DEBUG Requirement already installed: pandas-stubs==2.3.2.250827
+E     DEBUG Requirement already installed: pre-commit==4.3.0
+E     DEBUG Requirement already installed: pytest==8.4.2
+E     DEBUG Requirement already installed: pytest-asyncio==1.2.0
+E     DEBUG Requirement already installed: pytest-cov==7.0.0
+E     DEBUG Requirement already installed: ruff==0.13.0
+E     DEBUG Requirement already installed: types-requests==2.32.4.20250913
+E     DEBUG Requirement already installed: yamllint==1.37.1
+E     DEBUG Requirement already installed: clickhouse-driver==0.2.10
+E     DEBUG Requirement already installed: duckdb==1.4.1
+E     DEBUG Requirement already installed: httpx==0.28.1
+E     DEBUG Requirement already installed: pandas==2.3.2
+E     DEBUG Requirement already installed: pyarrow==21.0.0
+E     DEBUG Requirement already installed: pydantic==2.12.3
+E     DEBUG Requirement already installed: python-dotenv==1.2.1
+E     DEBUG Requirement already installed: argcomplete==3.6.2
+E     DEBUG Requirement already installed: charset-normalizer==3.4.3
+E     DEBUG Requirement already installed: colorama==0.4.6
+E     DEBUG Requirement already installed: decli==0.6.3
+E     DEBUG Requirement already installed: deprecated==1.2.18
+E     DEBUG Requirement already installed: jinja2==3.1.6
+E     DEBUG Requirement already installed: packaging==25.0
+E     DEBUG Requirement already installed: prompt-toolkit==3.0.51
+E     DEBUG Requirement already installed: pyyaml==6.0.2
+E     DEBUG Requirement already installed: questionary==2.1.1
+E     DEBUG Requirement already installed: termcolor==3.1.0
+E     DEBUG Requirement already installed: tomlkit==0.13.3
+E     DEBUG Requirement already installed: mypy-extensions==1.1.0
+E     DEBUG Requirement already installed: pathspec==0.12.1
+E     DEBUG Requirement already installed: typing-extensions==4.15.0
+E     DEBUG Requirement already installed: numpy==2.2.6
+E     DEBUG Requirement already installed: types-pytz==2025.2.0.20250809
+E     DEBUG Requirement already installed: cfgv==3.4.0
+E     DEBUG Requirement already installed: identify==2.6.14
+E     DEBUG Requirement already installed: nodeenv==1.9.1
+E     DEBUG Requirement already installed: virtualenv==20.34.0
+E     DEBUG Requirement already installed: iniconfig==2.1.0
+E     DEBUG Requirement already installed: pluggy==1.6.0
+E     DEBUG Requirement already installed: pygments==2.19.2
+E     DEBUG Requirement already installed: coverage==7.10.6
+E     DEBUG Requirement already installed: urllib3==2.5.0
+E     DEBUG Requirement already installed: pytz==2025.2
+E     DEBUG Requirement already installed: tzlocal==5.3.1
+E     DEBUG Requirement already installed: anyio==4.10.0
+E     DEBUG Requirement already installed: certifi==2025.8.3
+E     DEBUG Requirement already installed: httpcore==1.0.9
+E     DEBUG Requirement already installed: idna==3.10
+E     DEBUG Requirement already installed: python-dateutil==2.9.0.post0
+E     DEBUG Requirement already installed: tzdata==2025.2
+E     DEBUG Requirement already installed: annotated-types==0.7.0
+E     DEBUG Requirement already installed: pydantic-core==2.41.4
+E     DEBUG Requirement already installed: typing-inspection==0.4.2
+E     DEBUG Requirement already installed: wrapt==1.17.3
+E     DEBUG Requirement already installed: markupsafe==3.0.2
+E     DEBUG Requirement already installed: wcwidth==0.2.14
+E     DEBUG Requirement already installed: distlib==0.4.0
+E     DEBUG Requirement already installed: filelock==3.19.1
+E     DEBUG Requirement already installed: platformdirs==4.4.0
+E     DEBUG Requirement already installed: sniffio==1.3.1
+E     DEBUG Requirement already installed: h11==0.16.0
+E     DEBUG Requirement already installed: six==1.17.0
+E     DEBUG Using Python 3.13.6 interpreter at: /Users/terryli/eon/gapless-crypto-data/.venv/bin/python3
+E     DEBUG Running `gapless-crypto-data --symbol SOLUSDT --timeframes 1h,4h --start 2024-01-01 --end 2024-01-01 --output-dir /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpoi75c2wo`
+E     DEBUG Spawned child 74123 in process group 73859
+E     Traceback (most recent call last):
+E       File "/Users/terryli/.local/bin/gapless-crypto-data", line 4, in <module>
+E         from gapless_crypto_data.cli import main
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py", line 87, in <module>
+E         from . import __probe__
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__probe__.py", line 27, in <module>
+E         from . import api
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/api.py", line 30, in <module>
+E         from .collectors.binance_public_data_collector import BinancePublicDataCollector
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/__init__.py", line 7, in <module>
+E         from .binance_public_data_collector import BinancePublicDataCollector
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/binance_public_data_collector.py", line 31, in <module>
+E         from ..validation.csv_validator import CSVValidator
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/__init__.py", line 22, in <module>
+E         from gapless_crypto_data.validation.csv_validator import CSVValidator
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/csv_validator.py", line 26, in <module>
+E         from .models import ValidationReport
+E       File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/validation/models.py", line 10, in <module>
+E         from pydantic import BaseModel, ConfigDict, Field
+E     ModuleNotFoundError: No module named 'pydantic'
+E     DEBUG Command exited with code: 1
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--symbol', 'SOLUSDT', '--timeframes', '1h,4h', '--start', ... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+________________________________________________________________ TestCLIIntegration.test_gap_filling_integration _________________________________________________________________
+tests/test_cli_integration.py:216: in test_gap_filling_integration
+    assert result.returncode == 0, "Data generation failed"
+E   AssertionError: Data generation failed
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--symbol', 'BTCUSDT', '--timeframes', '1h', '--start', '20... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+_____________________________________________________________ TestCLIIntegration.test_invalid_symbol_error_handling ______________________________________________________________
+tests/test_cli_integration.py:251: in test_invalid_symbol_error_handling
+    assert "FAILED: No datasets generated" in result.stdout
+E   AssertionError: assert 'FAILED: No datasets generated' in ''
+E    +  where '' = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--symbol', 'INVALIDTESTINGSYMBOL', '--timeframes', '1h', '... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').stdout
+__________________________________________________________________ TestCLIIntegration.test_cli_help_integration __________________________________________________________________
+tests/test_cli_integration.py:284: in test_cli_help_integration
+    assert result.returncode == 0, "Help command failed"
+E   AssertionError: Help command failed
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--help'], returncode=1, stdout='', stderr='DEBUG uv 0.7.13... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+________________________________________________________________ TestCLIIntegration.test_cli_version_integration _________________________________________________________________
+tests/test_cli_integration.py:315: in test_cli_version_integration
+    assert result.returncode == 0, "Version command failed"
+E   AssertionError: Version command failed
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--version'], returncode=1, stdout='', stderr='DEBUG uv 0.7... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+______________________________________________________________ TestCLIIntegration.test_list_timeframes_integration _______________________________________________________________
+tests/test_cli_integration.py:326: in test_list_timeframes_integration
+    assert result.returncode == 0, "List timeframes command failed"
+E   AssertionError: List timeframes command failed
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--list-timeframes'], returncode=1, stdout='', stderr='DEBU... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+_____________________________________________________________ TestDataIntegrity.test_11_column_microstructure_format _____________________________________________________________
+tests/test_cli_integration.py:358: in test_11_column_microstructure_format
+    assert result.returncode == 0, "Data generation failed"
+E   AssertionError: Data generation failed
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--symbol', 'BTCUSDT', '--timeframes', '1h', '--start', '20... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+__________________________________________________________________ TestDataIntegrity.test_metadata_completeness __________________________________________________________________
+tests/test_cli_integration.py:412: in test_metadata_completeness
+    assert result.returncode == 0, "Data generation failed"
+E   AssertionError: Data generation failed
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['uv', 'run', 'gapless-crypto-data', '--symbol', 'ETHUSDT', '--timeframes', '1h', '--start', '20... BaseModel, ConfigDict, Field\nModuleNotFoundError: No module named \'pydantic\'\nDEBUG Command exited with code: 1\n').returncode
+________________________________________________________________________________ test_cli_module _________________________________________________________________________________
+tests/test_package.py:32: in test_cli_module
+    from gapless_crypto_data import cli
+E   ImportError: cannot import name 'cli' from 'gapless_crypto_data' (/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py)
+
+During handling of the above exception, another exception occurred:
+tests/test_package.py:37: in test_cli_module
+    pytest.fail(f"Failed to import CLI module: {e}")
+E   Failed: Failed to import CLI module: cannot import name 'cli' from 'gapless_crypto_data' (/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py)
+____________________________________________________________________________ test_cli_module_imports _____________________________________________________________________________
+tests/test_package.py:148: in test_cli_module_imports
+    from gapless_crypto_data import cli
+E   ImportError: cannot import name 'cli' from 'gapless_crypto_data' (/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py)
+
+During handling of the above exception, another exception occurred:
+tests/test_package.py:154: in test_cli_module_imports
+    pytest.fail(f"Failed to import CLI module: {e}")
+E   Failed: Failed to import CLI module: cannot import name 'cli' from 'gapless_crypto_data' (/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py)
+================================================================================ warnings summary ================================================================================
+tests/test_gapless_validation_1d_2018_present.py::TestGaplessValidation1d2018Present::test_collect_1d_data_2018_to_present
+  /Users/terryli/eon/gapless-crypto-data/.venv/lib/python3.13/site-packages/_pytest/python.py:161: PytestReturnNotNoneWarning: Test functions should return None, but tests/test_gapless_validation_1d_2018_present.py::TestGaplessValidation1d2018Present::test_collect_1d_data_2018_to_present returned <class 'dict'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/test_simple_api.py::TestSimpleAPI::test_fetch_data_parameters
+tests/test_simple_api.py::TestSimpleAPI::test_fetch_data_index_types
+tests/test_simple_api.py::TestSimpleAPI::test_fetch_data_index_types
+tests/test_simple_api.py::TestSimpleAPI::test_fetch_data_index_types
+tests/test_simple_api.py::TestAPIUsagePatterns::test_symbol_discovery_pattern
+tests/test_simple_api.py::TestAPIUsagePatterns::test_fetch_data_auto_fill_parameter
+tests/test_simple_api.py::TestAPIUsagePatterns::test_fetch_data_auto_fill_parameter
+  /Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/binance_public_data_collector.py:290: UserWarning: ⚠️  Requested end date 2025-11-17 is in the future. Binance public data is typically available up to 2025-11-16. Recent data may not be available and requests may fail with 404 errors.
+    self._validate_parameters()
+
+tests/test_simple_api.py::TestSimpleAPI::test_fetch_data_index_types
+  /Users/terryli/eon/gapless-crypto-data/tests/test_simple_api.py:104: DeprecationWarning: The 'index_type' parameter is deprecated and will be removed in v3.0.0. Use standard pandas operations on the returned DataFrame instead.
+    df_datetime = gcd.fetch_data("BTCUSDT", "1h", limit=1, index_type="datetime")
+
+tests/test_simple_api.py::TestSimpleAPI::test_fetch_data_index_types
+  /Users/terryli/eon/gapless-crypto-data/tests/test_simple_api.py:110: DeprecationWarning: The 'index_type' parameter is deprecated and will be removed in v3.0.0. Use standard pandas operations on the returned DataFrame instead.
+    df_range = gcd.fetch_data("BTCUSDT", "1h", limit=1, index_type="range")
+
+tests/test_simple_api.py::TestSimpleAPI::test_fetch_data_index_types
+  /Users/terryli/eon/gapless-crypto-data/tests/test_simple_api.py:117: DeprecationWarning: The 'index_type' parameter is deprecated and will be removed in v3.0.0. Use standard pandas operations on the returned DataFrame instead.
+    df_auto = gcd.fetch_data("BTCUSDT", "1h", limit=1, index_type="auto")
+
+tests/test_simple_api.py::TestSimpleAPI::test_fetch_data_invalid_index_type
+  /Users/terryli/eon/gapless-crypto-data/tests/test_simple_api.py:129: DeprecationWarning: The 'index_type' parameter is deprecated and will be removed in v3.0.0. Use standard pandas operations on the returned DataFrame instead.
+    gcd.fetch_data("BTCUSDT", "1h", limit=1, index_type="invalid")
+
+tests/test_simple_api.py::TestSimpleAPI::test_backward_compatibility_range_index
+  /Users/terryli/eon/gapless-crypto-data/tests/test_simple_api.py:154: DeprecationWarning: The 'index_type' parameter is deprecated and will be removed in v3.0.0. Use standard pandas operations on the returned DataFrame instead.
+    df = gcd.fetch_data(
+
+tests/test_simple_api.py::TestSimpleAPI::test_download_index_type_support
+tests/test_simple_api.py::TestSimpleAPI::test_download_index_type_support
+  /Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/api.py:474: DeprecationWarning: The 'index_type' parameter is deprecated and will be removed in v3.0.0. Use standard pandas operations on the returned DataFrame instead.
+    return fetch_data(
+
+tests/test_simple_api.py::TestSimpleAPI::test_api_style_consistency
+  /Users/terryli/eon/gapless-crypto-data/tests/test_simple_api.py:308: DeprecationWarning: The 'index_type' parameter is deprecated and will be removed in v3.0.0. Use standard pandas operations on the returned DataFrame instead.
+    df_function = gcd.fetch_data(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================================================================= tests coverage =================================================================================
+________________________________________________________________ coverage: platform darwin, python 3.13.6-final-0 ________________________________________________________________
+
+Name                                                                       Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------------------------------
+src/gapless_crypto_data/__probe__.py                                          85      4    95%   315-316, 324-325
+src/gapless_crypto_data/api.py                                               126     11    91%   181, 207-208, 224, 226, 269, 303, 319-332, 427, 537
+src/gapless_crypto_data/clickhouse/__init__.py                                 3      3     0%   14-17
+src/gapless_crypto_data/clickhouse/config.py                                  31     31     0%   10-111
+src/gapless_crypto_data/clickhouse/connection.py                              62     62     0%   19-239
+src/gapless_crypto_data/clickhouse_query.py                                  105    105     0%   49-641
+src/gapless_crypto_data/collectors/binance_public_data_collector.py          697    352    49%   318, 380-432, 446, 451-474, 565, 575, 635, 665-669, 673-674, 702-715, 891, 896-941, 1272-1304, 1337-1453, 1484-1541, 1545-1548, 1573-1574, 1578-1617, 1622-1725, 1758-1788, 1801-1805, 1818-1840, 1852-1886, 1899-1912, 1925-1947, 1960-1974, 1979-1993, 1997
+src/gapless_crypto_data/collectors/clickhouse_bulk_loader.py                 111    111     0%   41-440
+src/gapless_crypto_data/collectors/concurrent_collection_orchestrator.py     128     99    23%   110-134, 138-142, 146-147, 162-257, 282-325, 337, 351-357, 369-397
+src/gapless_crypto_data/collectors/csv_format_detector.py                     38     38     0%   14-123
+src/gapless_crypto_data/collectors/httpx_downloader.py                       133     19    86%   177, 205-207, 258-272, 315, 349, 354, 356, 371, 387-390
+src/gapless_crypto_data/exceptions.py                                         13      2    85%   47-48
+src/gapless_crypto_data/gap_filling/safe_file_operations.py                  164     27    84%   177, 208-210, 222-224, 380, 392-394, 409-435, 439
+src/gapless_crypto_data/gap_filling/universal_gap_filler.py                  244     57    77%   125, 233-234, 276-278, 309-312, 360-364, 435, 458-459, 485, 517, 520, 566, 578, 585, 623, 627, 649-709, 713
+src/gapless_crypto_data/resume/__init__.py                                     2      2     0%   7-9
+src/gapless_crypto_data/resume/intelligent_checkpointing.py                  144    144     0%   16-383
+src/gapless_crypto_data/utils/timestamp_format_analyzer.py                    68      9    87%   175-184, 223-230
+src/gapless_crypto_data/validation/csv_validator.py                          256     47    82%   63-65, 88-90, 92-94, 116-118, 120-122, 160-170, 219-221, 241-244, 266-267, 290, 318, 320-324, 341, 392, 426-428, 465, 468, 507-508, 575, 593, 597
+src/gapless_crypto_data/validation/storage.py                                119     13    89%   108-119, 245, 247, 369-370, 435-436
+--------------------------------------------------------------------------------------------------------
+TOTAL                                                                       2821   1136    60%
+
+10 files skipped due to complete coverage.
+Coverage JSON written to file coverage.json
+============================================================================ short test summary info =============================================================================
+SKIPPED [1] tests/test_binance_collector.py:107: Network-dependent test failed: Error tokenizing data. C error: Expected 1 fields in line 9, saw 3
+SKIPPED [1] tests/test_simple_api.py:98: Network-dependent test failed: assert False
+ +  where False = isinstance(RangeIndex(start=0, stop=1, step=1), <class 'pandas.core.indexes.datetimes.DatetimeIndex'>)
+ +    where RangeIndex(start=0, stop=1, step=1) =                  date      open      high      low     close  ...          close_time quote_asset_volume  number_of_tr...       1.349979e+08            266346                    806.81206                  7.424079e+07\n\n[1 rows x 11 columns].index
+ +    and   <class 'pandas.core.indexes.datetimes.DatetimeIndex'> = pd.DatetimeIndex
+SKIPPED [1] tests/test_simple_api.py:148: Network-dependent test failed: assert False
+ +  where False = isinstance(RangeIndex(start=0, stop=48, step=1), <class 'pandas.core.indexes.datetimes.DatetimeIndex'>)
+ +    where RangeIndex(start=0, stop=48, step=1) =                   date      open      high       low  ...  quote_asset_volume  number_of_trades taker_buy_base_asset_v...       4.854025e+07             48014                   530.80152                  2.385204e+07\n\n[48 rows x 11 columns].index
+ +    and   <class 'pandas.core.indexes.datetimes.DatetimeIndex'> = pd.DatetimeIndex
+SKIPPED [1] tests/test_simple_api.py:271: Network-dependent test failed: assert False
+ +  where False = isinstance(RangeIndex(start=0, stop=2, step=1), <class 'pandas.core.indexes.datetimes.DatetimeIndex'>)
+ +    where RangeIndex(start=0, stop=2, step=1) =         date      open      high       low     close  ...          close_time quote_asset_volume  number_of_trades  ta...       2.944332e+09           2247532                  33817.14447                  1.527964e+09\n\n[2 rows x 11 columns].index
+ +    and   <class 'pandas.core.indexes.datetimes.DatetimeIndex'> = pd.DatetimeIndex
+SKIPPED [1] tests/test_simple_api.py:336: Network-dependent test failed: assert False
+ +  where False = isinstance(RangeIndex(start=0, stop=2, step=1), <class 'pandas.core.indexes.datetimes.DatetimeIndex'>)
+ +    where RangeIndex(start=0, stop=2, step=1) =         date      open      high       low     close  ...          close_time quote_asset_volume  number_of_trades  ta...       2.944332e+09           2247532                  33817.14447                  1.527964e+09\n\n[2 rows x 11 columns].index
+ +    and   <class 'pandas.core.indexes.datetimes.DatetimeIndex'> = pd.DatetimeIndex
+SKIPPED [1] tests/test_simple_api.py:405: Network-dependent test failed: assert False
+ +  where False = isinstance(RangeIndex(start=0, stop=24, step=1), <class 'pandas.core.indexes.datetimes.DatetimeIndex'>)
+ +    where RangeIndex(start=0, stop=24, step=1) =                   date     open     high      low    close  ...          close_time quote_asset_volume  number_of_trad...      2.771744e+07             29324                    7312.6733                  1.715287e+07\n\n[24 rows x 11 columns].index
+ +    and   <class 'pandas.core.indexes.datetimes.DatetimeIndex'> = pd.DatetimeIndex
+FAILED tests/test_api_edge_cases.py::TestGetInfo::test_get_info_structure - AssertionError: assert '4.0.0' == '3.2.0'
+FAILED tests/test_cli.py::test_cli_help_and_description - AssertionError: assert 1 == 0
+FAILED tests/test_cli.py::test_cli_entry_point - AssertionError: assert 1 == 0
+FAILED tests/test_cli.py::test_cli_invalid_args - AssertionError: assert ('error:' in '/users/terryli/eon/gapless-crypto-data/.venv/bin/python3: no module named gapless_crypto...
+FAILED tests/test_cli.py::test_cli_help_mentions_multi_symbol - AssertionError: assert 1 == 0
+FAILED tests/test_cli.py::test_cli_list_timeframes_flag - AssertionError: assert 1 == 0
+FAILED tests/test_cli.py::test_cli_help_mentions_list_timeframes - AssertionError: assert 1 == 0
+FAILED tests/test_cli.py::test_cli_invalid_timeframe_shows_available - assert "❌ Timeframe 'invalid_timeframe' not available" in ''
+FAILED tests/test_cli.py::test_cli_timeframe_discoverability_integration - AssertionError: assert 1 == 0
+FAILED tests/test_cli_integration.py::TestCLIIntegration::test_legacy_cli_btcusdt_single_day - AssertionError: CLI failed with: DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+FAILED tests/test_cli_integration.py::TestCLIIntegration::test_subcommand_cli_ethusdt_single_day - AssertionError: CLI failed with: DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+FAILED tests/test_cli_integration.py::TestCLIIntegration::test_multiple_symbols_integration - AssertionError: CLI failed with: DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+FAILED tests/test_cli_integration.py::TestCLIIntegration::test_multiple_timeframes_integration - AssertionError: CLI failed with: DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+FAILED tests/test_cli_integration.py::TestCLIIntegration::test_gap_filling_integration - AssertionError: Data generation failed
+FAILED tests/test_cli_integration.py::TestCLIIntegration::test_invalid_symbol_error_handling - AssertionError: assert 'FAILED: No datasets generated' in ''
+FAILED tests/test_cli_integration.py::TestCLIIntegration::test_cli_help_integration - AssertionError: Help command failed
+FAILED tests/test_cli_integration.py::TestCLIIntegration::test_cli_version_integration - AssertionError: Version command failed
+FAILED tests/test_cli_integration.py::TestCLIIntegration::test_list_timeframes_integration - AssertionError: List timeframes command failed
+FAILED tests/test_cli_integration.py::TestDataIntegrity::test_11_column_microstructure_format - AssertionError: Data generation failed
+FAILED tests/test_cli_integration.py::TestDataIntegrity::test_metadata_completeness - AssertionError: Data generation failed
+FAILED tests/test_package.py::test_cli_module - Failed: Failed to import CLI module: cannot import name 'cli' from 'gapless_crypto_data' (/Users/terryli/eon/gapless-crypto-dat...
+FAILED tests/test_package.py::test_cli_module_imports - Failed: Failed to import CLI module: cannot import name 'cli' from 'gapless_crypto_data' (/Users/terryli/eon/gapless-cr...
+======================================================= 22 failed, 308 passed, 6 skipped, 16 warnings in 257.67s (0:04:17) =======================================================
+DEBUG Command exited with code: 1

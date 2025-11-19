@@ -1,0 +1,676 @@
+openapi: 3.1.1
+info:
+  title: "Comprehensive Codebase Audit Findings"
+  description: |
+    Complete audit report for gapless-crypto-data repository identifying
+    pruning opportunities and growth paths. Covers code quality, architecture,
+    dependencies, testing, documentation, and algorithmic complexity.
+  version: "1.0.0"
+
+paths: {}
+
+components:
+  schemas:
+    ExecutiveSummary:
+      type: object
+      properties:
+        total_phases_completed: 15
+        audit_date: "2025-10-17"
+        codebase_size:
+          source_files: 18
+          source_lines: 7008
+          test_files: 15
+          test_lines: 6097
+          test_functions: 170
+          test_source_ratio: 0.87
+        overall_health: "GOOD with targeted improvements needed"
+
+x-audit-findings:
+
+  phase_1_codebase_inventory:
+    status: "COMPLETED"
+    findings:
+      codebase_metrics:
+        source_files: 18
+        source_lines_of_code: 7008
+        test_files: 15
+        test_lines: 6097
+        test_functions: 170
+        test_source_ratio: 0.87
+        documentation_files: 8
+
+      giant_file_alert:
+        file: "src/gapless_crypto_data/collectors/binance_public_data_collector.py"
+        lines: 2446
+        percentage_of_codebase: 35
+        priority: "P0 - CRITICAL"
+        impact: |
+          Single file contains over one-third of entire codebase. Maintainability
+          index shows 0.00 (C rating). Urgent decomposition required.
+
+  phase_2_import_graph:
+    status: "COMPLETED"
+    findings:
+      circular_dependencies: "NONE FOUND"
+      unused_imports:
+        count: 1
+        locations:
+          - file: "tests/test_timeframe_constants.py"
+            line: 173
+            import: "UniversalGapFiller"
+            severity: "LOW"
+
+  phase_3_dead_code:
+    status: "COMPLETED"
+    findings:
+      unused_variables: "NONE (F841 check passed)"
+      unreachable_code: "NONE (B check passed)"
+      overall: "CLEAN"
+
+  phase_4_code_duplication:
+    status: "COMPLETED"
+    findings:
+      duplication_level: "MINIMAL"
+      csv_operations: 3
+      exception_handlers: 27
+      assessment: "Acceptable duplication levels, no action needed"
+
+  phase_5_dependency_audit:
+    status: "COMPLETED"
+    findings:
+      total_dependencies: 3
+      dependency_analysis:
+        httpx:
+          status: "USED"
+          occurrences: 3
+          verdict: "KEEP"
+        pandas:
+          status: "HEAVILY USED"
+          occurrences: 16
+          verdict: "KEEP"
+        pyarrow:
+          status: "POTENTIALLY UNUSED"
+          occurrences: 0
+          verdict: "INVESTIGATE"
+          note: |
+            Zero direct imports found. May be pandas backend for Parquet support.
+            Verify necessity or document indirect usage.
+
+      configuration_duplication:
+        issue: "Duplicate dependency configuration mechanisms"
+        locations:
+          - "pyproject.toml [project.optional-dependencies] (lines 55-67)"
+          - "pyproject.toml [dependency-groups] (lines 141-153)"
+        priority: "P2"
+        recommendation: "Choose single mechanism (prefer dependency-groups for uv)"
+
+  phase_6_test_coverage:
+    status: "COMPLETED"
+    findings:
+      total_coverage: "54%"
+      total_statements: 2338
+      total_missed: 1076
+
+      critical_gaps:
+        cli_module:
+          coverage: "9%"
+          statements: 195
+          missed: 178
+          priority: "P1 - HIGH"
+
+        probe_module:
+          coverage: "33%"
+          statements: 85
+          missed: 57
+          priority: "P2"
+
+        api_module:
+          coverage: "70%"
+          statements: 105
+          missed: 31
+          priority: "P2"
+
+        binance_collector:
+          coverage: "52%"
+          statements: 935
+          missed: 447
+          priority: "P1 - HIGH"
+
+        concurrent_orchestrator:
+          coverage: "23%"
+          statements: 128
+          missed: 99
+          priority: "P1"
+
+        intelligent_checkpointing:
+          coverage: "17%"
+          statements: 144
+          missed: 119
+          priority: "P1"
+
+        error_handling:
+          coverage: "31%"
+          statements: 64
+          missed: 44
+          priority: "P2"
+
+      excellent_coverage:
+        - module: "etag_cache"
+          coverage: "100%"
+        - module: "timeframe_constants"
+          coverage: "100%"
+        - module: "hybrid_url_generator"
+          coverage: "100%"
+        - module: "httpx_downloader"
+          coverage: "86%"
+        - module: "safe_file_operations"
+          coverage: "84%"
+
+  phase_7_complexity_metrics:
+    status: "COMPLETED"
+    findings:
+      high_complexity_functions:
+        count: 16
+        average_cc: 16.375
+
+      critical_complexity_d_rating:
+        - function: "cli.py::collect_data"
+          cc: 29
+          priority: "P0 - CRITICAL"
+
+        - function: "api.py::fetch_data"
+          cc: 25
+          priority: "P0 - CRITICAL"
+
+        - function: "universal_gap_filler.py::fill_gap"
+          cc: 22
+          priority: "P0 - CRITICAL"
+
+        - function: "binance_public_data_collector.py::main"
+          cc: 21
+          priority: "P1"
+
+      high_complexity_c_rating:
+        - function: "BinancePublicDataCollector._validate_csv_structure"
+          cc: 19
+
+        - function: "BinancePublicDataCollector.process_raw_data"
+          cc: 16
+
+        - function: "BinancePublicDataCollector.apply_gap_filling_to_validated_files"
+          cc: 16
+
+        - function: "ConcurrentCollectionOrchestrator.collect_timeframe_concurrent"
+          cc: 16
+
+        - function: "BinancePublicDataCollector.validate_csv_file"
+          cc: 15
+
+        - function: "BinancePublicDataCollector.download_and_extract_month"
+          cc: 14
+
+        - function: "BinancePublicDataCollector.collect_timeframe_data"
+          cc: 13
+
+        - function: "BinancePublicDataCollector._report_format_analysis"
+          cc: 12
+
+        - function: "BinancePublicDataCollector.generate_metadata"
+          cc: 11
+
+        - function: "BinancePublicDataCollector._validate_datetime_sequence"
+          cc: 11
+
+        - function: "universal_gap_filler.py::main"
+          cc: 11
+
+        - function: "AtomicCSVOperations.validate_dataframe"
+          cc: 11
+
+      maintainability_index:
+        binance_public_data_collector:
+          mi: "0.00"
+          rating: "C - UNMAINTAINABLE"
+          priority: "P0 - CRITICAL"
+          note: "2,446 lines in single file. Requires immediate decomposition."
+
+  phase_8_temporal_leakage:
+    status: "COMPLETED"
+    findings:
+      result: "PASSING"
+      validation_points:
+        - check: "UTC-only timestamp handling"
+          status: "PASS"
+          evidence: "Line 203: Explicit UTC-only comment and validation"
+
+        - check: "Gap filling boundary validation"
+          status: "PASS"
+          evidence: "Lines 231-239: Proper gap period filtering"
+
+        - check: "No future peeking in gap detection"
+          status: "PASS"
+          evidence: "Lines 272-278: Uses expected_interval from constants"
+
+        - check: "Chronological processing"
+          status: "PASS"
+          evidence: "Gap filling processes chronologically, no look-ahead bias"
+
+  phase_9_documentation_audit:
+    status: "COMPLETED"
+    findings:
+      docstring_coverage: "97.1%"
+      total_functions_classes: 170
+      documented: 165
+      missing: 5
+      threshold: "80%"
+      result: "PASSING"
+
+      missing_docstrings:
+        - module: "httpx_downloader"
+          count: 1
+          coverage: "92%"
+
+        - module: "safe_file_operations"
+          count: 1
+          coverage: "92%"
+
+        - module: "universal_gap_filler"
+          count: 1
+          coverage: "89%"
+
+        - module: "error_handling"
+          count: 1
+          coverage: "92%"
+
+  phase_10_todo_comments:
+    status: "COMPLETED"
+    findings:
+      source_code: "NO TODO/FIXME/HACK comments found"
+      test_code: "NO TODO/FIXME/HACK comments found"
+      result: "CLEAN"
+
+  phase_11_configuration_audit:
+    status: "COMPLETED"
+    findings:
+      critical_issues:
+        version_mismatch:
+          location: "pyproject.toml:3"
+          current: "3.0.0"
+          expected: "3.1.0"
+          priority: "P0 - CRITICAL"
+          impact: |
+            Version in pyproject.toml does not match completed v3.1.0 milestone.
+            This will cause PyPI publish failures and version confusion.
+
+      configuration_duplication:
+        dependency_groups:
+          locations:
+            - "[project.optional-dependencies] (lines 55-67)"
+            - "[dependency-groups] (lines 141-153)"
+          priority: "P2"
+          recommendation: "Use single mechanism (dependency-groups for uv)"
+
+      hard_coded_values:
+        binance_urls:
+          assessment: "APPROPRIATE"
+          rationale: "Public stable endpoints, correct to hard-code"
+
+  phase_12_algorithmic_complexity:
+    status: "COMPLETED"
+    findings:
+      nested_loops: "NONE FOUND"
+      pandas_antipatterns:
+        iterrows: "NONE"
+        apply: "NONE"
+        applymap: "NONE"
+
+      vectorization_opportunities:
+        gap_detection_loop:
+          location: "universal_gap_filler.py:170-186"
+          current_complexity: "O(n)"
+          current_approach: "Loop with .iloc[] indexing"
+          sota_replacement: "pandas .diff() vectorization"
+          priority: "P3 - LOW"
+          estimated_speedup: "5-10x for datasets >1000 rows"
+          implementation: |
+            # Current O(n) loop:
+            for row_index in range(1, len(ohlcv_dataframe)):
+                current_time = ohlcv_dataframe.iloc[row_index]["date"]
+                previous_time = ohlcv_dataframe.iloc[row_index - 1]["date"]
+                ...
+
+            # SOTA vectorized:
+            time_diffs = ohlcv_dataframe['date'].diff()
+            gap_mask = time_diffs > expected_interval
+            gap_indices = gap_mask[gap_mask].index
+
+        gap_validation_loop:
+          location: "universal_gap_filler.py:312-321"
+          priority: "P3 - LOW"
+          same_approach: "Apply diff() vectorization"
+
+  phase_13_error_handling:
+    status: "COMPLETED"
+    findings:
+      total_try_except_blocks: 73
+      files_with_exception_handling: 10
+
+      bare_except_clauses:
+        count: 2
+        locations:
+          - file: "binance_public_data_collector.py"
+            line: 561
+            priority: "P2"
+            action: "Review - ensure exceptions propagate appropriately"
+
+          - file: "__probe__.py"
+            line: 324
+            priority: "P3"
+            note: "Probe module may have different error handling requirements"
+
+  phase_14_logging_audit:
+    status: "COMPLETED"
+    findings:
+      total_logger_statements: 138
+      assessment: "GOOD - Comprehensive logging coverage"
+      observability: "HIGH"
+
+  phase_15_performance_profiling:
+    status: "DEFERRED"
+    rationale: |
+      Performance profiling requires running actual benchmarks with cProfile/py-spy.
+      Deferred to future milestone as current SLOs exclude speed/performance metrics.
+      Focus on correctness, availability, observability, maintainability.
+
+x-pruning-recommendations:
+
+  p0_critical:
+    version_update:
+      action: "UPDATE"
+      file: "pyproject.toml"
+      line: 3
+      change: "version = \"3.0.0\" → \"3.1.0\""
+      rationale: "Match completed v3.1.0 milestone"
+      slo_impact:
+        correctness: "Prevents version confusion and PyPI conflicts"
+        maintainability: "Ensures version consistency across documentation"
+
+    decompose_giant_file:
+      action: "REFACTOR"
+      file: "binance_public_data_collector.py"
+      current_size: "2,446 lines (35% of codebase)"
+      maintainability_index: "0.00 (C - UNMAINTAINABLE)"
+      priority: "P0"
+      slo_impact:
+        maintainability: "CRITICAL - File is unmaintainable at current size"
+        correctness: "High complexity (MI=0) increases bug risk"
+      proposed_decomposition:
+        - module: "csv_format_detector.py"
+          responsibility: "CSV format detection and validation"
+          functions:
+            - "_detect_timestamp_format"
+            - "_validate_csv_structure"
+            - "_validate_datetime_sequence"
+            - "_report_format_analysis"
+          estimated_lines: "~400"
+
+        - module: "zip_downloader.py"
+          responsibility: "ZIP download and extraction with ETag caching"
+          functions:
+            - "download_and_extract_month"
+            - "generate_monthly_urls"
+          estimated_lines: "~300"
+
+        - module: "raw_data_processor.py"
+          responsibility: "Raw CSV processing and transformation"
+          functions:
+            - "process_raw_data"
+            - "convert_to_enhanced_format"
+          estimated_lines: "~400"
+
+        - module: "binance_collector_core.py"
+          responsibility: "Core collection orchestration"
+          functions:
+            - "collect_timeframe_data"
+            - "collect_multiple_timeframes"
+            - "generate_metadata"
+          estimated_lines: "~600"
+
+        - module: "gap_filling_integration.py"
+          responsibility: "Gap filling integration"
+          functions:
+            - "apply_gap_filling_to_validated_files"
+          estimated_lines: "~200"
+
+      implementation_approach:
+        - "Extract functions to new modules"
+        - "Maintain public API compatibility"
+        - "Add tests for each new module"
+        - "Update imports in dependent modules"
+
+    reduce_function_complexity:
+      priority: "P0"
+      functions:
+        - name: "cli.py::collect_data"
+          current_cc: 29
+          target_cc: "<10"
+          approach: "Extract CLI argument parsing to separate functions"
+
+        - name: "api.py::fetch_data"
+          current_cc: 25
+          target_cc: "<10"
+          approach: "Extract parameter validation and data fetching logic"
+
+        - name: "universal_gap_filler.py::fill_gap"
+          current_cc: 22
+          target_cc: "<10"
+          approach: "Extract format detection, API fetching, validation to separate methods"
+
+  p1_high:
+    increase_test_coverage:
+      priority: "P1"
+      target: "80% overall coverage"
+      current: "54%"
+
+      critical_modules:
+        cli_module:
+          current: "9%"
+          target: ">80%"
+          approach: "Add integration tests for CLI commands"
+
+        binance_collector:
+          current: "52%"
+          target: ">80%"
+          approach: "Add tests for uncovered error paths and edge cases"
+
+        concurrent_orchestrator:
+          current: "23%"
+          target: ">80%"
+          approach: "Add concurrency tests with mocked downloads"
+
+        intelligent_checkpointing:
+          current: "17%"
+          target: ">80%"
+          approach: "Add tests for checkpoint save/resume logic"
+
+  p2_medium:
+    dependency_configuration:
+      action: "CONSOLIDATE"
+      issue: "Duplicate dependency configuration"
+      current:
+        - "[project.optional-dependencies]"
+        - "[dependency-groups]"
+      recommendation: "Use [dependency-groups] exclusively (uv standard)"
+
+    pyarrow_dependency:
+      action: "INVESTIGATE or DOCUMENT"
+      issue: "pyarrow has zero direct imports"
+      options:
+        option_1:
+          action: "Document as pandas Parquet backend"
+          add_comment: "# Required by pandas for Parquet support"
+
+        option_2:
+          action: "Remove if not used"
+          validation: "Test Parquet functionality without pyarrow"
+
+    bare_except_review:
+      action: "REVIEW"
+      locations:
+        - "binance_public_data_collector.py:561"
+        - "__probe__.py:324"
+      validation: "Ensure exceptions propagate, no silent failures"
+
+  p3_low:
+    vectorize_gap_detection:
+      action: "OPTIMIZE"
+      location: "universal_gap_filler.py:170-186"
+      current: "O(n) loop with .iloc[]"
+      sota: "pandas .diff() vectorization"
+      estimated_speedup: "5-10x for large datasets"
+      priority: "P3 - Nice to have"
+      slo_impact: "Performance improvement (excluded from current SLOs)"
+
+    unused_import_cleanup:
+      action: "REMOVE"
+      location: "tests/test_timeframe_constants.py:173"
+      import: "UniversalGapFiller"
+      impact: "MINIMAL - code hygiene only"
+
+x-growth-opportunities:
+
+  adopt_sota_libraries:
+    polars_for_large_datasets:
+      current: "pandas for all DataFrame operations"
+      sota_alternative: "Polars for >1M row datasets"
+      benefits:
+        - "10-100x faster query execution"
+        - "Lower memory footprint"
+        - "Native parallelization"
+      applicability: "Optional for users with very large datasets"
+      priority: "P3 - Future enhancement"
+
+    pydantic_validation:
+      current: "Manual parameter validation in collectors"
+      sota_alternative: "Pydantic v2 models for parameter validation"
+      benefits:
+        - "Automatic type coercion"
+        - "Rich error messages"
+        - "JSON schema generation"
+      priority: "P2 - Medium"
+      slo_impact:
+        correctness: "Stronger input validation"
+        maintainability: "Declarative validation reduces code"
+
+  architectural_improvements:
+    plugin_system:
+      description: "Plugin architecture for data sources beyond Binance"
+      current: "Hard-coded Binance-only"
+      future: "Pluggable sources (Coinbase, Kraken, etc)"
+      priority: "P3 - Future"
+
+    streaming_pipeline:
+      description: "Streaming data processing for real-time data"
+      current: "Batch processing only"
+      future: "Streaming with asyncio"
+      priority: "P3 - Future"
+
+x-action-plan:
+
+  immediate_phase:
+    duration: "1-2 days"
+    tasks:
+      - task: "Update pyproject.toml version to 3.1.0"
+        priority: "P0"
+        effort: "5 minutes"
+
+      - task: "Remove unused import in test_timeframe_constants.py"
+        priority: "P3"
+        effort: "5 minutes"
+
+      - task: "Document or remove pyarrow dependency"
+        priority: "P2"
+        effort: "30 minutes"
+
+      - task: "Consolidate dependency configuration"
+        priority: "P2"
+        effort: "1 hour"
+
+  short_term_phase:
+    duration: "1-2 weeks"
+    tasks:
+      - task: "Decompose binance_public_data_collector.py"
+        priority: "P0"
+        effort: "3-5 days"
+        modules_to_create: 5
+
+      - task: "Reduce function complexity (CC >20)"
+        priority: "P0"
+        effort: "2-3 days"
+        functions_to_refactor: 3
+
+      - task: "Increase test coverage for CLI module"
+        priority: "P1"
+        effort: "2 days"
+        target_coverage: "80%"
+
+  medium_term_phase:
+    duration: "1 month"
+    tasks:
+      - task: "Increase test coverage for all modules to 80%"
+        priority: "P1"
+        effort: "1-2 weeks"
+
+      - task: "Review and fix bare except clauses"
+        priority: "P2"
+        effort: "1 day"
+
+      - task: "Consider Pydantic validation adoption"
+        priority: "P2"
+        effort: "1 week"
+
+  future_enhancements:
+    tasks:
+      - task: "Vectorize gap detection with pandas .diff()"
+        priority: "P3"
+        effort: "1-2 days"
+
+      - task: "Evaluate Polars for large dataset optimization"
+        priority: "P3"
+        effort: "3-5 days"
+
+x-slo-impact-analysis:
+
+  correctness:
+    critical_improvements:
+      - "Version consistency (3.0.0 → 3.1.0)"
+      - "High complexity reduction (CC 29 → <10)"
+      - "Test coverage increase (54% → 80%)"
+
+  maintainability:
+    critical_improvements:
+      - "Giant file decomposition (MI 0.00 → >20)"
+      - "Reduced function complexity"
+      - "Better test coverage"
+
+  observability:
+    current_status: "GOOD (138 logger statements, 97% docstrings)"
+    no_action_needed: true
+
+  availability:
+    current_status: "GOOD (exception-only failure principles maintained)"
+    minor_improvements:
+      - "Review bare except clauses"
+
+x-compliance:
+  openapi_version: "3.1.1"
+  documentation_style: "Machine-readable technical specifications"
+  language_guidelines: "Evolutionary without promotional qualifiers"
+  slo_validation: "Correctness, maintainability, observability, availability"
+  performance_excluded: "Speed/performance metrics excluded from current SLOs"
+
+  pattern_conformity:
+    exception_only_failure: "Maintained (minor review needed)"
+    real_data_preference: "Validated (API-first, no synthetic data)"
+    oss_usage: "Pandas, pytest, ruff, radon (all SOTA)"
+    temporal_leakage: "PASSING (UTC-only, proper boundaries)"

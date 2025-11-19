@@ -1,0 +1,425 @@
+openapi: 3.1.1
+info:
+  title: "v3.0.0 Stabilization Plan - Critical Fixes + Performance Optimization"
+  description: |
+    Two-phase implementation plan addressing critical bugs and performance bottlenecks
+    discovered through comprehensive codebase analysis. Phase A stabilizes production
+    correctness, Phase B optimizes bandwidth and computation efficiency.
+  version: "3.0.0"
+  contact:
+    name: "Eon Labs"
+    email: "terry@eonlabs.com"
+
+paths: {}
+
+components:
+  schemas:
+    ImplementationPhase:
+      type: object
+      properties:
+        phase_id:
+          type: string
+          enum: ["PATH_A", "PATH_B"]
+        status:
+          type: string
+          enum: ["PLANNED", "IN_PROGRESS", "COMPLETED"]
+        slo_targets:
+          $ref: "#/components/schemas/SLOTargets"
+
+    SLOTargets:
+      type: object
+      description: "Service Level Objectives excluding speed/performance/security"
+      properties:
+        availability:
+          type: string
+          example: "100% - all 13 timeframes function correctly"
+        correctness:
+          type: string
+          example: "100% - gap detection produces accurate results"
+        observability:
+          type: string
+          example: "All data modifications logged"
+        maintainability:
+          type: string
+          example: "Single source of truth for timeframe mappings"
+
+# PHASE A: CRITICAL FIXES (2-3 hours)
+x-phase-a-critical-fixes:
+  status: "PLANNED"
+  priority: "P0_CRITICAL"
+  estimated_duration: "2-3 hours"
+
+  slo_targets:
+    availability: "100% - all 13 timeframes operational (currently 61.5% - 8/13 working)"
+    correctness: "100% - gap detection accuracy for all timeframes"
+    observability: "All data modifications logged with counts"
+    maintainability: "Zero code duplication for timeframe mappings"
+
+  critical_bugs:
+    timeframe_interval_calculation:
+      location: "src/gapless_crypto_data/gap_filling/universal_gap_filler.py:493"
+      severity: "CRITICAL"
+      affected_timeframes: ["2h", "4h", "6h", "8h", "12h"]
+      impact: "38.5% of timeframes produce incorrect gap detection"
+      root_cause: |
+        Line 493: int(trading_timeframe[:-1]) incorrectly parses hour-based timeframes
+        Example: "2h"[:-1] = "2" → int("2") = 2 → 2 minutes instead of 120 minutes
+
+      fix_strategy:
+        approach: "centralized_timeframe_mapping"
+        implementation:
+          - action: "create_constants_module"
+            path: "src/gapless_crypto_data/utils/timeframe_constants.py"
+            content: |
+              TIMEFRAME_TO_MINUTES = {
+                  "1s": 1/60, "1m": 1, "3m": 3, "5m": 5, "15m": 15, "30m": 30,
+                  "1h": 60, "2h": 120, "4h": 240, "6h": 360,
+                  "8h": 480, "12h": 720, "1d": 1440
+              }
+              TIMEFRAME_TO_TIMEDELTA = {
+                  tf: pd.Timedelta(minutes=minutes)
+                  for tf, minutes in TIMEFRAME_TO_MINUTES.items()
+              }
+
+          - action: "replace_duplicated_mappings"
+            locations:
+              - "src/gapless_crypto_data/gap_filling/universal_gap_filler.py:176-191"
+              - "src/gapless_crypto_data/gap_filling/universal_gap_filler.py:488-494"
+              - "src/gapless_crypto_data/collectors/binance_public_data_collector.py:1090-1100"
+            replacement: "from gapless_crypto_data.utils.timeframe_constants import TIMEFRAME_TO_TIMEDELTA"
+
+          - action: "update_gap_detection"
+            file: "src/gapless_crypto_data/gap_filling/universal_gap_filler.py"
+            line: 191
+            old: "interval_mapping = {...}"
+            new: "from ..utils.timeframe_constants import TIMEFRAME_TO_TIMEDELTA"
+
+          - action: "update_gap_validation"
+            file: "src/gapless_crypto_data/gap_filling/universal_gap_filler.py"
+            line: 493
+            old: "expected_time_interval = (pd.Timedelta(minutes=1) if ... else ...)"
+            new: "expected_time_interval = TIMEFRAME_TO_TIMEDELTA[trading_timeframe]"
+
+      validation:
+        regression_tests:
+          - test_name: "test_timeframe_interval_calculation_2h_4h_6h_8h_12h"
+            location: "tests/test_gap_filler.py"
+            scenarios:
+              - timeframe: "2h"
+                expected_minutes: 120
+                gap_scenario: "4-hour gap should be detected as 2 missing candles"
+              - timeframe: "4h"
+                expected_minutes: 240
+                gap_scenario: "8-hour gap should be detected as 2 missing candles"
+              - timeframe: "6h"
+                expected_minutes: 360
+              - timeframe: "8h"
+                expected_minutes: 480
+              - timeframe: "12h"
+                expected_minutes: 720
+
+    version_inconsistency:
+      severity: "HIGH"
+      impact: "User confusion, PyPI trust issues"
+      discovered_state:
+        pyproject_toml: "3.0.0"
+        init_py: "2.15.3"
+        architecture_yaml: "2.10.0"
+        latest_milestone: "2.15.1"
+
+      fix_strategy:
+        approach: "align_to_pyproject_toml"
+        rationale: "pyproject.toml drives PyPI package metadata"
+        target_version: "3.0.0"
+
+        updates:
+          - file: "src/gapless_crypto_data/__init__.py"
+            line: 76
+            change: "__version__ = '2.15.3' → __version__ = '3.0.0'"
+
+          - file: "docs/CURRENT_ARCHITECTURE_STATUS.yaml"
+            line: 26
+            change: "canonical_version: 'v2.10.0' → canonical_version: 'v3.0.0'"
+
+          - action: "create_milestone"
+            file: "docs/milestones/MILESTONE_v3.0.0.yaml"
+            content: "Document critical bug fixes and version alignment"
+
+    silent_data_modification:
+      location: "src/gapless_crypto_data/gap_filling/universal_gap_filler.py:476"
+      severity: "MEDIUM"
+      issue: "drop_duplicates() removes data without logging"
+
+      fix_strategy:
+        approach: "observability_enhancement"
+        implementation:
+          old_code: |
+            combined_dataframe = combined_dataframe.sort_values("date").drop_duplicates(
+                subset=["date"], keep="first"
+            )
+
+          new_code: |
+            pre_dedup_count = len(combined_dataframe)
+            combined_dataframe = combined_dataframe.sort_values("date").drop_duplicates(
+                subset=["date"], keep="first"
+            )
+            duplicates_removed = pre_dedup_count - len(combined_dataframe)
+            if duplicates_removed > 0:
+                logger.warning(
+                    f"Removed {duplicates_removed} duplicate timestamp(s) during gap filling"
+                )
+
+    dependency_documentation_mismatch:
+      severity: "MEDIUM"
+      discovered_inconsistencies:
+        scipy:
+          pyproject_toml: "scipy>=1.13.1"
+          architecture_docs: "removal_date: 2025-01-19, removal_reason: dependency of removed PyOD"
+        kaleido:
+          pyproject_toml: "kaleido>=1.1.0"
+          architecture_docs: "not mentioned"
+        plotly:
+          pyproject_toml: "plotly>=6.3.1"
+          architecture_docs: "not mentioned"
+
+      fix_strategy:
+        approach: "audit_then_reconcile"
+        steps:
+          - action: "grep_for_actual_usage"
+            command: "grep -r 'import scipy\\|from scipy' src/ tests/ examples/"
+          - action: "grep_for_plotly_usage"
+            command: "grep -r 'import plotly\\|from plotly' src/ tests/ examples/"
+          - action: "grep_for_kaleido_usage"
+            command: "grep -r 'import kaleido\\|from kaleido' src/ tests/ examples/"
+
+          - action: "decision_matrix"
+            if_unused:
+              - "Remove from pyproject.toml dependencies"
+              - "Update uv.lock with: uv sync"
+              - "Document removal in CURRENT_ARCHITECTURE_STATUS.yaml"
+            if_used:
+              - "Update CURRENT_ARCHITECTURE_STATUS.yaml with usage rationale"
+              - "Add to dependencies_current section"
+
+  pruning_actions:
+    - item: "code_duplication_timeframe_mappings"
+      locations: 3
+      replacement: "centralized utils/timeframe_constants.py module"
+
+    - item: "inconsistent_dependency_documentation"
+      action: "reconcile pyproject.toml with architecture docs"
+
+  growth_actions:
+    - item: "centralized_timeframe_constants"
+      rationale: "single source of truth, eliminates 3 duplications"
+
+    - item: "observability_logging"
+      rationale: "users aware of data modifications"
+
+    - item: "regression_test_coverage"
+      rationale: "prevent future timeframe calculation bugs"
+
+    - item: "version_alignment"
+      rationale: "eliminate user confusion, restore PyPI trust"
+
+  validation_criteria:
+    tests_passing: "100% (all existing tests + 5 new regression tests)"
+    linting_clean: "zero ruff violations"
+    timeframe_coverage: "100% (all 13 timeframes validated)"
+    version_consistency: "100% (all files report v3.0.0)"
+
+# PHASE B: PERFORMANCE OPTIMIZATION (4-6 hours)
+x-phase-b-performance:
+  status: "PLANNED"
+  priority: "P1_HIGH"
+  estimated_duration: "4-6 hours"
+  depends_on: "PATH_A completion"
+
+  slo_targets:
+    availability: "100% - ETag caching handles network failures gracefully"
+    correctness: "100% - vectorized gap detection produces identical results"
+    observability: "Cache hit/miss rates logged"
+    maintainability: "ETag storage follows XDG Base Directory Specification"
+
+  optimization_opportunities:
+    etag_caching:
+      current_state: "Re-downloads all monthly ZIP files every run"
+      issue: "90%+ bandwidth waste for immutable historical data"
+      evidence: "Explicitly noted in CLAUDE.md lines 31-36"
+
+      implementation:
+        approach: "cloudfront_etag_validation"
+        rationale: "Binance Vision uses AWS CloudFront CDN which provides ETags"
+
+        architecture:
+          cache_location: "$HOME/.cache/gapless-crypto-data/etags.json"
+          cache_structure: |
+            {
+              "https://data.binance.vision/.../BTCUSDT-1h-2024-01.zip": {
+                "etag": "efcd0b4716abb9d950262a26fcb6ba43",
+                "last_checked": "2025-10-16T16:30:00Z",
+                "file_size": 12845632
+              }
+            }
+
+        implementation_steps:
+          - action: "create_etag_cache_manager"
+            file: "src/gapless_crypto_data/utils/etag_cache.py"
+            oss_library: "None - standard library pathlib + json sufficient"
+            methods:
+              - "load_cache() -> dict"
+              - "save_cache(cache: dict) -> None"
+              - "get_etag(url: str) -> Optional[str]"
+              - "update_etag(url: str, etag: str, size: int) -> None"
+
+          - action: "modify_download_logic"
+            file: "src/gapless_crypto_data/collectors/binance_public_data_collector.py"
+            location: "around line 354 (urllib.request.urlopen)"
+            changes:
+              - "Load ETag cache before download"
+              - "Add If-None-Match header to request"
+              - "Handle 304 Not Modified responses"
+              - "Update cache on successful 200 responses"
+              - "Log cache hit/miss for observability"
+
+        error_handling:
+          principle: "exception_only_failure"
+          scenarios:
+            cache_corrupted: "raise ValueError with clear message, delete cache file"
+            network_failure: "propagate HTTPError, no retry logic"
+            etag_mismatch: "log warning, proceed with full download"
+
+      validation:
+        bandwidth_measurement:
+          - "First run: measure total bytes downloaded"
+          - "Second run (same data): measure bytes downloaded"
+          - "Assert: second run < 10% of first run bandwidth"
+
+        correctness:
+          - "Compare DataFrame from cached vs fresh download"
+          - "Assert: identical data (no corruption)"
+
+    vectorized_gap_detection:
+      current_state: "O(n) Python loop with .iloc[] row access"
+      issue: "Slow for 1s/1m timeframes (millions of rows)"
+      evidence: "Lines 194-210 in universal_gap_filler.py"
+
+      implementation:
+        approach: "numpy_vectorization"
+        oss_library: "numpy (already dependency via pandas)"
+
+        implementation_steps:
+          - action: "create_vectorized_detector"
+            file: "src/gapless_crypto_data/gap_filling/universal_gap_filler.py"
+            method: "detect_all_gaps_vectorized"
+            implementation: |
+              def detect_all_gaps_vectorized(self, csv_path: Path, timeframe: str) -> List[Dict]:
+                  """Vectorized gap detection using NumPy for 10-100x speedup"""
+                  df = pd.read_csv(csv_path, comment="#")
+                  timestamps = pd.to_datetime(df["date"]).values  # NumPy array
+
+                  time_diffs = np.diff(timestamps)  # Vectorized diff
+                  expected_interval = TIMEFRAME_TO_TIMEDELTA[timeframe]
+
+                  gap_indices = np.where(time_diffs > expected_interval.to_timedelta64())[0]
+
+                  # Convert to gap info dicts
+                  gaps = []
+                  for idx in gap_indices:
+                      gaps.append({
+                          "position": idx + 1,
+                          "start_time": pd.Timestamp(timestamps[idx]) + expected_interval,
+                          "end_time": pd.Timestamp(timestamps[idx + 1]),
+                          "duration": pd.Timedelta(time_diffs[idx]),
+                          "expected_interval": expected_interval,
+                      })
+                  return gaps
+
+          - action: "add_fallback_for_compatibility"
+            strategy: "detect if dataset small (<10k rows), use original loop"
+            rationale: "NumPy overhead not worth it for small datasets"
+
+          - action: "benchmark_comparison"
+            test_file: "tests/test_gap_detection_performance.py"
+            scenarios:
+              small_dataset: "1000 rows - verify no regression"
+              large_dataset: "1M rows - verify 10x+ speedup"
+
+      validation:
+        correctness: "Vectorized results match loop results exactly"
+        performance: "10x faster for 100k+ row datasets"
+
+  pruning_actions:
+    - item: "unused_dependencies_if_found"
+      action: "Remove scipy/plotly/kaleido if audit shows no usage"
+
+  growth_actions:
+    - item: "etag_caching_system"
+      benefit: "90% bandwidth reduction for repeated runs"
+
+    - item: "vectorized_gap_detection"
+      benefit: "10-100x faster for ultra-high frequency data"
+
+    - item: "comprehensive_documentation_update"
+      files:
+        - "docs/CURRENT_ARCHITECTURE_STATUS.yaml"
+        - "docs/milestones/MILESTONE_v3.0.0.yaml"
+        - "README.md performance section"
+
+# SINGLE SOURCE OF TRUTH
+x-version-tracking:
+  current_implementation_version: "3.0.0"
+  supersedes:
+    - "docs/milestones/MILESTONE_v2.15.1.yaml"
+    - "docs/milestones/MILESTONE_v2.15.0.yaml"
+
+  canonical_references:
+    implementation_plan: "docs/api/v3.0.0-stabilization-plan.yaml (this file)"
+    milestone_log: "docs/milestones/MILESTONE_v3.0.0.yaml (to be created)"
+    architecture_status: "docs/CURRENT_ARCHITECTURE_STATUS.yaml (to be updated)"
+
+  archival_actions:
+    - action: "create_archive_directory"
+      path: "docs/archive/milestones-v2/"
+
+    - action: "move_outdated_milestones"
+      files:
+        - "docs/milestones/MILESTONE_v2.*.yaml → docs/archive/milestones-v2/"
+      keep_current:
+        - "docs/milestones/MILESTONE_v3.0.0.yaml"
+
+# COMPLIANCE VALIDATION
+x-compliance:
+  openapi_version: "3.1.1"
+  documentation_principles:
+    abstractions_over_details: "Focuses on intent and contracts, not implementation specifics"
+    intent_over_implementation: "Describes what and why, not how in excessive detail"
+
+  language_guidelines:
+    prohibited_promotional_terms:
+      - "enhanced"
+      - "improved"
+      - "corrected"
+      - "production-grade"
+      - "optimized"
+      - "robust"
+
+    acceptable_technical_terms:
+      - "centralized"  # architectural decision
+      - "vectorized"  # algorithmic transformation
+      - "aligned"  # consistency restoration
+      - "validated"  # test coverage
+
+  exception_only_failure:
+    no_fallbacks: true
+    no_defaults: true
+    no_retries: true
+    no_silent_handling: true
+    propagate_all_errors: true
+
+  oss_preference:
+    custom_code_justification_required: true
+    prefer_standard_library: true
+    examples:
+      etag_cache: "pathlib + json (standard library) sufficient, no need for external cache library"
+      vectorization: "numpy (already transitive dependency via pandas)"

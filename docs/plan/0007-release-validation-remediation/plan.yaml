@@ -1,0 +1,243 @@
+openapi: 3.1.1
+info:
+  title: "v4.0.0 Release Validation Remediation Plan"
+  description: |
+    Fix 3 issues identified in comprehensive 5-agent parallel validation of v4.0.0 release candidate.
+
+    Multi-agent validation found 1 critical user-facing issue (module docstring version mismatch),
+    1 medium QA issue (test assertion outdated), and 1 medium documentation gap (CHANGELOG upgrade instructions).
+
+    This plan implements:
+    - Fix 1 (CRITICAL): Update module docstring from v2.15.3 to v4.0.0
+    - Fix 2 (MEDIUM): Update test assertion from "3.2.0" to "4.0.0"
+    - Fix 3 (MEDIUM): Add CHANGELOG upgrade instructions for v3.x users
+
+    Validation suite runs after all fixes:
+    - Version verification (runtime + docstring check)
+    - Targeted test execution (version assertion test only)
+    - Documentation consistency (grep for version refs)
+    - CHANGELOG presence (upgrade instructions)
+
+  version: "1.0.0"
+  x-adr-id: "0007"
+  x-status: "validated"
+  x-target-release: "4.0.0"
+  x-validation-date: "2025-11-17"
+  x-validation-passed: true
+  x-breaking-change: false
+  x-depends-on: ["0006"]
+
+paths: {}
+
+x-implementation-plan:
+  timeline:
+    total_duration: "15 minutes"
+    estimated_hours: 0.25
+    completed_date: "2025-11-17"
+
+  phases:
+    - id: "phase-1"
+      name: "Critical Fix: Module Docstring Version"
+      duration: "3 minutes"
+      status: "completed"
+      deliverables:
+        - name: "Update module docstring to v4.0.0"
+          paths:
+            - "src/gapless_crypto_data/__init__.py"
+          description: |
+            Fix critical version inconsistency in user-facing documentation.
+            Module docstring shows v2.15.3 but __version__ attribute returns 4.0.0.
+            This affects help() output and PyPI package description.
+          acceptance_criteria:
+            - "Docstring header: 'Gapless Crypto Data v4.0.0'"
+            - "CLI notice: 'CLI Removed in v4.0.0' (past tense)"
+            - "Runtime check: 'v4.0.0' in gcd.__doc__"
+          commit_message: "fix(docs): update module docstring to v4.0.0"
+          commit_body: |
+            Fix critical version mismatch in module docstring affecting user-facing docs.
+
+            Changes:
+            - Line 2: Update header from v2.15.3 → v4.0.0
+            - Line 66: Update CLI notice to past tense (already removed)
+
+            Impact:
+            - help(gapless_crypto_data) now shows correct version
+            - PyPI package description will display v4.0.0
+            - Consistent with __version__ attribute
+
+            Refs: ADR-0007 Issue 1 (CRITICAL)
+
+    - id: "phase-2"
+      name: "Medium Priority QA and Documentation Fixes"
+      duration: "10 minutes"
+      status: "completed"
+      dependencies: ["phase-1"]
+      deliverables:
+        - name: "Update Test Assertion"
+          paths:
+            - "tests/test_api_edge_cases.py"
+          description: |
+            Test assertion expects "3.2.0" but get_info() returns "4.0.0".
+            Causes 1 unexpected test failure in validation.
+          acceptance_criteria:
+            - "Line 184: assert info['version'] == '4.0.0'"
+            - "Test passes: test_get_info_structure"
+          commit_message: "test: update version assertion to 4.0.0"
+          commit_body: |
+            Fix outdated version assertion causing test failure.
+
+            get_info() returns runtime __version__ attribute (4.0.0),
+            but test expected hardcoded "3.2.0".
+
+            Refs: ADR-0007 Issue 2 (MEDIUM)
+
+        - name: "Add CHANGELOG Upgrade Instructions"
+          paths:
+            - "CHANGELOG.md"
+          description: |
+            Users upgrading from v3.x encounter ModuleNotFoundError due to
+            old CLI entry point. Provide explicit clean uninstall instructions.
+          acceptance_criteria:
+            - "Section: '## [4.0.0] - 2025-11-17'"
+            - "Subsection: 'Upgrading from v3.x'"
+            - "Includes: pip uninstall + rm CLI entry point commands"
+            - "References: CLI_MIGRATION_GUIDE.md"
+          commit_message: "docs(changelog): add v3.x upgrade instructions for CLI removal"
+          commit_body: |
+            Add explicit upgrade instructions for v3.x users affected by CLI removal.
+
+            Multi-agent validation discovered old CLI entry point causes import errors.
+            Users need clean uninstall procedure to avoid ModuleNotFoundError.
+
+            Includes:
+            - Breaking changes section (CLI removed)
+            - Upgrade procedure (uninstall + rm entry point)
+            - Migration guide reference
+            - Added/Removed/Fixed sections per Keep a Changelog
+
+            Refs: ADR-0007 Issue 3 (MEDIUM)
+
+    - id: "phase-3"
+      name: "Validation Suite"
+      duration: "2 minutes"
+      status: "completed"
+      dependencies: ["phase-2"]
+      deliverables:
+        - name: "Version Verification"
+          description: "Confirm runtime __version__ and docstring both show 4.0.0"
+          validation_command: "uv run python -c \"import gapless_crypto_data as gcd; assert gcd.__version__ == '4.0.0'; assert 'v4.0.0' in gcd.__doc__\""
+          expected_output: "Exit code 0 (both assertions pass)"
+
+        - name: "Targeted Test Execution"
+          description: "Verify version assertion test now passes"
+          validation_command: "uv run pytest tests/test_api_edge_cases.py::test_get_info_structure -v"
+          expected_output: "1 passed (no version assertion failure)"
+
+        - name: "Documentation Consistency"
+          description: "Confirm no v2.15.3 references remain"
+          validation_command: "grep -c 'v2.15.3' src/gapless_crypto_data/__init__.py || echo '0'"
+          expected_output: "0 (zero occurrences)"
+
+        - name: "CHANGELOG Presence"
+          description: "Verify upgrade instructions exist"
+          validation_command: "grep -q 'Upgrading from v3.x' CHANGELOG.md && echo 'PASS' || echo 'FAIL'"
+          expected_output: "PASS"
+
+x-slos:
+  availability:
+    metrics:
+      - name: "No Downtime"
+        target: "All fixes are static file edits, zero runtime impact"
+        measurement: "Documentation/test-only changes"
+
+  correctness:
+    metrics:
+      - name: "Module Docstring Accuracy"
+        target: "Docstring version matches __version__ attribute (4.0.0)"
+        measurement: "Runtime assertion: 'v4.0.0' in gcd.__doc__"
+
+      - name: "Test Assertion Accuracy"
+        target: "Test expects correct version (4.0.0)"
+        measurement: "pytest test_get_info_structure passes"
+
+  observability:
+    metrics:
+      - name: "User Version Checks"
+        target: "Users see consistent 4.0.0 across help(), __version__, PyPI"
+        measurement: "help(gapless_crypto_data) displays v4.0.0"
+
+  maintainability:
+    metrics:
+      - name: "Git History Clarity"
+        target: "3 atomic commits, one per issue"
+        measurement: "Git log shows 3 conventional commits with clear messages"
+
+      - name: "Upgrade Path Documentation"
+        target: "CHANGELOG provides explicit v3.x upgrade procedure"
+        measurement: "Grep finds 'Upgrading from v3.x' section"
+
+x-error-handling:
+  policy: "raise-and-propagate"
+  rationale: "Static file edits have no runtime error handling requirements."
+  examples:
+    - scenario: "File edit fails (permission error)"
+      behavior: "Edit tool raises error, stops execution"
+      no_fallback: "Does NOT silently skip fix, does NOT continue with partial fixes"
+      propagation: "Error bubbles to user, manual intervention required"
+
+    - scenario: "Validation fails (version mismatch persists)"
+      behavior: "Assertion raises error with clear message"
+      no_retry: "Does NOT retry validation, does NOT proceed to next step"
+      propagation: "Halts workflow, reports failure to user"
+
+x-oss-libraries:
+  - name: "uv"
+    usage: "Python execution for validation"
+    version: ">=0.7.0"
+
+  - name: "pytest"
+    usage: "Targeted test execution"
+    version: ">=8.4.0"
+
+x-auto-validation:
+  artifacts:
+    - name: "ADR-0007 and plan.yaml cross-reference"
+      validation: "grep 'x-adr-id: \\\"0007\\\"' docs/plan/0007-release-validation-remediation/plan.yaml"
+
+    - name: "Version consistency check"
+      validation: "python -c 'import gapless_crypto_data; assert gapless_crypto_data.__version__ == \"4.0.0\"; assert \"v4.0.0\" in gapless_crypto_data.__doc__'"
+
+    - name: "Test assertion passes"
+      validation: "uv run pytest tests/test_api_edge_cases.py::test_get_info_structure -v"
+
+    - name: "CHANGELOG upgrade instructions exist"
+      validation: "grep -q 'Upgrading from v3.x' CHANGELOG.md"
+
+x-semantic-release:
+  enabled: true
+  breaking_change: false
+  release_type: "patch"
+  target_version: "v4.0.0"
+  commit_convention: "conventional-commits"
+  changelog_sections:
+    - type: "fix"
+      section: "Bug Fixes"
+      notes: "Module docstring version corrected"
+
+    - type: "test"
+      section: "Tests"
+      notes: "Version assertion updated"
+
+    - type: "docs"
+      section: "Documentation"
+      notes: "CHANGELOG upgrade instructions for v3.x users"
+
+x-compliance:
+  openapi_version: "3.1.1"
+  doc_style: "evolutionary-without-promo"
+  slo_focus: "availability, correctness, observability, maintainability"
+  error_policy: "raise-propagate-no-fallback"
+  oss_preference: "prefer-oss-over-custom"
+  auto_validate: "all-artifacts-validated"
+  release_automation: "semantic-release-conventional-commits"
+  adr_plan_sync: "x-adr-id cross-reference validated"

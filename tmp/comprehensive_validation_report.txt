@@ -1,0 +1,123 @@
+================================================================================
+CLICKHOUSE MIGRATION COMPREHENSIVE VALIDATION
+ADR-0005 Acceptance Criteria Verification
+================================================================================
+
+[SECTION 1] Infrastructure Verification
+--------------------------------------------------------------------------------
+Initializing ClickHouse connection: localhost:9001
+✓ Container running
+  localhost:9001 accessible
+Initializing ClickHouse connection: localhost:9001
+✓ Schema created
+  ohlcv table exists
+✓ Schema structure
+  17 columns verified
+✓ Table engine
+  ReplacingMergeTree configured
+
+[SECTION 2] Spot Data Verification
+--------------------------------------------------------------------------------
+Initializing ClickHouse connection: localhost:9001
+ClickHouse bulk loader initialized (instrument_type=spot, base_url=https://data.binance.vision/data/spot)
+Downloading from CloudFront: https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-02.zip
+Download complete: 38782 bytes
+Extracting ZIP: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpycr34v1k/ETHUSDT-1h-2024-02.zip
+Extracted CSV: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpycr34v1k/ETHUSDT-1h-2024-02.csv (109184 bytes)
+Parsing CSV: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpycr34v1k/ETHUSDT-1h-2024-02.csv (instrument_type=spot)
+/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/clickhouse_bulk_loader.py:307: ParserWarning: Length of header or names does not match length of data. This leads to a loss of data with index_col=False.
+  df = pd.read_csv(
+Parsed 696 rows from CSV (format=spot)
+Ingesting 696 rows to ClickHouse
+Inserting 696 rows to ohlcv
+Successfully inserted 696 rows to ohlcv
+Successfully ingested 696 rows
+Completed ingestion: ETHUSDT 1h 2024-02 (696 rows)
+✓ Spot ingestion
+  696 rows ingested
+Retrieved 10 bars for ETHUSDT 1h (spot)
+✓ get_latest query
+  Retrieved 10 rows
+Retrieved 673 bars for ETHUSDT 1h (spot) (2024-02-01 to 2024-02-29)
+✓ get_range query
+  Retrieved 673 rows
+Retrieved 721 bars for 2 symbols (spot) (2024-01-01 to 2024-01-31)
+✓ get_multi_symbol query
+  721 rows, symbols: ['BTCUSDT']
+
+[SECTION 3] Futures Data Verification (ADR-0004)
+--------------------------------------------------------------------------------
+Initializing ClickHouse connection: localhost:9001
+ClickHouse bulk loader initialized (instrument_type=futures, base_url=https://data.binance.vision/data/futures/um)
+Downloading from CloudFront: https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-02.zip
+Download complete: 36577 bytes
+Extracting ZIP: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmp3995qa8r/ETHUSDT-1h-2024-02.zip
+Extracted CSV: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmp3995qa8r/ETHUSDT-1h-2024-02.csv (84012 bytes)
+Parsing CSV: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmp3995qa8r/ETHUSDT-1h-2024-02.csv (instrument_type=futures)
+Parsed 696 rows from CSV (format=futures)
+Ingesting 696 rows to ClickHouse
+Inserting 696 rows to ohlcv
+Successfully inserted 696 rows to ohlcv
+Successfully ingested 696 rows
+Completed ingestion: ETHUSDT 1h 2024-02 (696 rows)
+✓ Futures ingestion
+  696 rows ingested
+✓ Spot/futures isolation
+  spot: 1440, futures: 1440
+Retrieved 5 bars for ETHUSDT 1h (spot)
+Retrieved 5 bars for ETHUSDT 1h (futures)
+✓ instrument_type parameter
+  Filtering works
+✓ No cross-contamination
+  Both types present: {'futures': 673, 'spot': 673}
+
+[SECTION 4] Zero-Gap Guarantee Verification
+--------------------------------------------------------------------------------
+Initializing ClickHouse connection: localhost:9001
+ClickHouse bulk loader initialized (instrument_type=spot, base_url=https://data.binance.vision/data/spot)
+Downloading from CloudFront: https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-02.zip
+Download complete: 38782 bytes
+Extracting ZIP: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmphwtj504i/ETHUSDT-1h-2024-02.zip
+Extracted CSV: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmphwtj504i/ETHUSDT-1h-2024-02.csv (109184 bytes)
+Parsing CSV: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmphwtj504i/ETHUSDT-1h-2024-02.csv (instrument_type=spot)
+/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/clickhouse_bulk_loader.py:307: ParserWarning: Length of header or names does not match length of data. This leads to a loss of data with index_col=False.
+  df = pd.read_csv(
+Parsed 696 rows from CSV (format=spot)
+Ingesting 696 rows to ClickHouse
+Inserting 696 rows to ohlcv
+Successfully inserted 696 rows to ohlcv
+Successfully ingested 696 rows
+Completed ingestion: ETHUSDT 1h 2024-02 (696 rows)
+✓ Zero-gap (spot)
+  673 rows maintained (no duplicates)
+ClickHouse bulk loader initialized (instrument_type=futures, base_url=https://data.binance.vision/data/futures/um)
+Downloading from CloudFront: https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-02.zip
+Download complete: 36577 bytes
+Extracting ZIP: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpkgo0jypp/ETHUSDT-1h-2024-02.zip
+Extracted CSV: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpkgo0jypp/ETHUSDT-1h-2024-02.csv (84012 bytes)
+Parsing CSV: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpkgo0jypp/ETHUSDT-1h-2024-02.csv (instrument_type=futures)
+Parsed 696 rows from CSV (format=futures)
+Ingesting 696 rows to ClickHouse
+Inserting 696 rows to ohlcv
+Successfully inserted 696 rows to ohlcv
+Successfully ingested 696 rows
+Completed ingestion: ETHUSDT 1h 2024-02 (696 rows)
+✓ Zero-gap (futures)
+  673 rows maintained (no duplicates)
+
+[SECTION 5] Performance Verification
+--------------------------------------------------------------------------------
+Initializing ClickHouse connection: localhost:9001
+Retrieved 721 bars for BTCUSDT 1h (spot) (2024-01-01 to 2024-01-31)
+✓ Query performance
+  721 rows in 0.032s (FINAL overhead acceptable)
+
+================================================================================
+VALIDATION SUMMARY
+================================================================================
+Total checks: 15
+Passed: 15
+Failed: 0
+Success rate: 100.0%
+Duration: 2.75s
+================================================================================

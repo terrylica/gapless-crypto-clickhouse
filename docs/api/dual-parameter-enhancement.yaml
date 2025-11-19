@@ -1,0 +1,367 @@
+openapi: 3.1.1
+info:
+  title: "Dual Parameter Enhancement Specification"
+  description: |
+    API enhancement implementing CCXT-compatible dual parameter support for timeframe/interval parameters.
+    Provides backward compatibility while migrating to cryptocurrency ecosystem standards.
+  version: "2.7.0"
+  contact:
+    name: "Eon Labs"
+    email: "terry@eonlabs.com"
+
+paths:
+  /api/fetch_data:
+    post:
+      summary: "Fetch cryptocurrency data with dual parameter support"
+      operationId: "fetchData"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FetchDataRequest"
+            examples:
+              timeframe_preferred:
+                summary: "CCXT-compatible timeframe parameter (preferred)"
+                value:
+                  symbol: "BTCUSDT"
+                  timeframe: "1h"
+                  limit: 1000
+              interval_legacy:
+                summary: "Legacy interval parameter (deprecated)"
+                value:
+                  symbol: "BTCUSDT"
+                  interval: "1h"
+                  limit: 1000
+      responses:
+        "200":
+          description: "Cryptocurrency data retrieved successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataFrameResponse"
+        "400":
+          description: "Parameter validation error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParameterValidationError"
+
+  /api/download:
+    post:
+      summary: "Download cryptocurrency data with dual parameter support"
+      operationId: "downloadData"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DownloadRequest"
+      responses:
+        "200":
+          description: "Data download completed successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataFrameResponse"
+
+  /api/supported_timeframes:
+    get:
+      summary: "Get supported timeframes (preferred)"
+      operationId: "getSupportedTimeframes"
+      responses:
+        "200":
+          description: "List of supported timeframes"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeframeListResponse"
+
+  /api/supported_intervals:
+    get:
+      summary: "Get supported intervals (legacy)"
+      operationId: "getSupportedIntervals"
+      deprecated: true
+      responses:
+        "200":
+          description: "List of supported intervals with deprecation warning"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeframeListResponse"
+
+components:
+  schemas:
+    FetchDataRequest:
+      type: object
+      properties:
+        symbol:
+          type: string
+          pattern: "^[A-Z]+USDT$"
+          description: "Trading pair symbol (USDT spot pairs only)"
+          example: "BTCUSDT"
+        timeframe:
+          $ref: "#/components/schemas/TimeframeValue"
+        interval:
+          $ref: "#/components/schemas/IntervalValue"
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          description: "Maximum number of recent bars to return"
+          example: 1000
+        start:
+          type: string
+          format: date
+          description: "Start date in YYYY-MM-DD format"
+          example: "2024-01-01"
+        end:
+          type: string
+          format: date
+          description: "End date in YYYY-MM-DD format"
+          example: "2024-12-31"
+        output_dir:
+          type: string
+          description: "Directory to save CSV files"
+          example: "./crypto_data"
+      required:
+        - symbol
+      oneOf:
+        - required: [timeframe]
+        - required: [interval]
+      not:
+        allOf:
+          - required: [timeframe]
+          - required: [interval]
+
+    DownloadRequest:
+      type: object
+      properties:
+        symbol:
+          type: string
+          pattern: "^[A-Z]+USDT$"
+          description: "Trading pair symbol (USDT spot pairs only)"
+          example: "BTCUSDT"
+        timeframe:
+          $ref: "#/components/schemas/TimeframeValue"
+        interval:
+          $ref: "#/components/schemas/IntervalValue"
+        start:
+          type: string
+          format: date
+          description: "Start date in YYYY-MM-DD format"
+          example: "2024-01-01"
+        end:
+          type: string
+          format: date
+          description: "End date in YYYY-MM-DD format"
+          example: "2024-12-31"
+        output_dir:
+          type: string
+          description: "Directory to save CSV files"
+          example: "./crypto_data"
+      required:
+        - symbol
+
+    TimeframeValue:
+      type: string
+      enum:
+        - "1s"
+        - "1m"
+        - "3m"
+        - "5m"
+        - "15m"
+        - "30m"
+        - "1h"
+        - "2h"
+        - "4h"
+        - "6h"
+        - "8h"
+        - "12h"
+        - "1d"
+        - "3d"
+        - "1w"
+        - "1mo"
+      description: "CCXT-compatible timeframe interval (preferred)"
+      example: "1h"
+
+    IntervalValue:
+      type: string
+      enum:
+        - "1s"
+        - "1m"
+        - "3m"
+        - "5m"
+        - "15m"
+        - "30m"
+        - "1h"
+        - "2h"
+        - "4h"
+        - "6h"
+        - "8h"
+        - "12h"
+        - "1d"
+        - "3d"
+        - "1w"
+        - "1mo"
+      deprecated: true
+      description: "Legacy interval parameter (use timeframe instead)"
+      example: "1h"
+
+    DataFrameResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/OHLCVRecord"
+        metadata:
+          $ref: "#/components/schemas/ResponseMetadata"
+
+    OHLCVRecord:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+          description: "Open time timestamp"
+        open:
+          type: number
+          format: double
+          description: "Opening price"
+        high:
+          type: number
+          format: double
+          description: "Highest price"
+        low:
+          type: number
+          format: double
+          description: "Lowest price"
+        close:
+          type: number
+          format: double
+          description: "Closing price"
+        volume:
+          type: number
+          format: double
+          description: "Base asset volume"
+        close_time:
+          type: string
+          format: date-time
+          description: "Close time timestamp"
+        quote_asset_volume:
+          type: number
+          format: double
+          description: "Quote asset volume"
+        number_of_trades:
+          type: integer
+          description: "Number of trades"
+        taker_buy_base_asset_volume:
+          type: number
+          format: double
+          description: "Taker buy base asset volume"
+        taker_buy_quote_asset_volume:
+          type: number
+          format: double
+          description: "Taker buy quote asset volume"
+
+    TimeframeListResponse:
+      type: object
+      properties:
+        timeframes:
+          type: array
+          items:
+            type: string
+          description: "List of supported timeframe intervals"
+          example:
+            - "1m"
+            - "5m"
+            - "1h"
+            - "4h"
+            - "1d"
+
+    ResponseMetadata:
+      type: object
+      properties:
+        version:
+          type: string
+          description: "API version"
+          example: "2.7.0"
+        parameter_used:
+          type: string
+          enum: ["timeframe", "interval"]
+          description: "Which parameter was used for the request"
+        deprecation_warning:
+          type: string
+          description: "Deprecation warning if legacy parameter used"
+
+    ParameterValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: "Error type"
+          example: "ParameterValidationError"
+        message:
+          type: string
+          description: "Error message"
+          examples:
+            - "Must specify 'timeframe' parameter. CCXT-compatible 'timeframe' is preferred over legacy 'interval'."
+            - "Cannot specify both 'timeframe' and 'interval' parameters. Use 'timeframe' (CCXT-compatible) or 'interval' (legacy), not both."
+        parameter_guidance:
+          type: object
+          properties:
+            preferred:
+              type: string
+              description: "Preferred parameter name"
+              example: "timeframe"
+            legacy:
+              type: string
+              description: "Legacy parameter name"
+              example: "interval"
+            ecosystem_standard:
+              type: string
+              description: "Ecosystem standard reference"
+              example: "CCXT-compatible"
+
+# Enhancement specifications
+x-enhancement-metadata:
+  implementation_pattern: "dual_parameter_support"
+  backward_compatibility: true
+  deprecation_period: "5_years"
+  ecosystem_alignment: "CCXT"
+  validation_strategy: "exception_only"
+
+  implementation_details:
+    parameter_validation:
+      mutual_exclusion: "timeframe XOR interval"
+      exception_types:
+        - "ValueError: missing_parameter"
+        - "ValueError: conflicting_parameters"
+      fallback_mechanisms: "none"
+
+    deprecation_handling:
+      warning_type: "DeprecationWarning"
+      stack_level: 2
+      migration_guidance: "Use get_supported_timeframes() instead"
+
+    community_alignment:
+      ccxt_compatibility: true
+      python_api_patterns: "PEP 387 compliant"
+      crypto_ecosystem_standard: "timeframe parameter"
+
+x-migration-guidance:
+  from_legacy:
+    old_pattern: 'gcd.fetch_data("BTCUSDT", interval="1h")'
+    new_pattern: 'gcd.fetch_data("BTCUSDT", timeframe="1h")'
+    compatibility_period: "5 years"
+
+  function_mapping:
+    get_supported_intervals: "get_supported_timeframes"
+    deprecation_status: "DeprecationWarning issued"
+
+  ecosystem_benefits:
+    - "CCXT ecosystem compatibility"
+    - "Reduced integration friction"
+    - "Consistent parameter naming"
+    - "Zero breaking changes during transition"

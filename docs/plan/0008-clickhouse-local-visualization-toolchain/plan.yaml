@@ -1,0 +1,372 @@
+openapi: 3.1.1
+info:
+  title: "ClickHouse Local Visualization Toolchain Implementation"
+  description: |
+    Implement comprehensive 5-tool visualization stack for local ClickHouse development.
+
+    Provides developers with production-ready tools across web, CLI, and monitoring
+    interfaces for ClickHouse data exploration and database administration.
+
+    This plan implements:
+    - Tool 1 (WEB): CH-UI modern web interface via Docker Compose
+    - Tool 2 (WEB): ClickHouse Play built-in UI documentation
+    - Tool 3 (CLI): clickhouse-client official CLI setup
+    - Tool 4 (TUI): chdig performance monitoring via Homebrew
+    - Tool 5 (CLI): clickhouse-local file analysis documentation
+
+    All tools 100% open source (Apache 2.0 / MIT), zero cost, production-ready.
+
+  version: "1.0.0"
+  x-adr-id: "0008"
+  x-status: "validated"
+  x-target-release: "4.0.0"
+  x-validation-date: "2025-11-17"
+  x-validation-passed: true
+  x-breaking-change: false
+  x-depends-on: ["0005"]
+
+paths: {}
+
+x-implementation-plan:
+  timeline:
+    total_duration: "45 minutes"
+    estimated_hours: 0.75
+    completed_date: "2025-11-17"
+
+  phases:
+    - id: "phase-1"
+      name: "Web Interface: CH-UI"
+      duration: "10 minutes"
+      status: "completed"
+      deliverables:
+        - name: "Add CH-UI service to docker-compose.yml"
+          paths:
+            - "docker-compose.yml"
+          description: |
+            Integrate CH-UI web interface as Docker Compose service.
+            Connects to existing ClickHouse container via internal network.
+          acceptance_criteria:
+            - "Service name: ch-ui"
+            - "Image: ghcr.io/caioricciuti/ch-ui:latest"
+            - "Port: 5521:5521"
+            - "Environment: VITE_CLICKHOUSE_URL=http://localhost:8123"
+            - "Depends on: clickhouse service healthy"
+            - "Network: gapless-network"
+          validation_command: "docker-compose up -d ch-ui && curl -s http://localhost:5521"
+          commit_message: "feat(viz): add CH-UI web interface via Docker Compose"
+          commit_body: |
+            Add modern TypeScript-based web UI for ClickHouse exploration.
+
+            Features:
+            - Multi-tab SQL editor with IntelliSense
+            - Real-time performance metrics dashboard
+            - Schema browser and query history
+            - Dark/Light mode support
+
+            Access: http://localhost:5521
+
+            Refs: ADR-0008 Tool 1 (WEB)
+
+    - id: "phase-2"
+      name: "Documentation: Built-in Tools"
+      duration: "15 minutes"
+      status: "completed"
+      dependencies: ["phase-1"]
+      deliverables:
+        - name: "ClickHouse Play usage guide"
+          paths:
+            - "docs/development/CLICKHOUSE_PLAY_GUIDE.md"
+          description: |
+            Document built-in ClickHouse Play UI (ships with ClickHouse 20.11+).
+            Zero installation, accessible via HTTP interface.
+          acceptance_criteria:
+            - "Access URL: http://localhost:8123/play"
+            - "Example queries provided"
+            - "Limitations documented (10K rows, 1MB limit)"
+          commit_message: "docs(viz): add ClickHouse Play usage guide"
+          commit_body: |
+            Document built-in web UI for quick ad-hoc queries.
+
+            Play UI ships with ClickHouse, no installation required.
+            Complements CH-UI for simple query tasks.
+
+            Refs: ADR-0008 Tool 2 (WEB)
+
+        - name: "clickhouse-client CLI guide"
+          paths:
+            - "docs/development/CLICKHOUSE_CLIENT_GUIDE.md"
+          description: |
+            Comprehensive guide for official clickhouse-client CLI.
+            Covers Docker usage, shell aliases, formats, and advanced features.
+          acceptance_criteria:
+            - "Docker exec examples"
+            - "Shell alias recommendations"
+            - "70+ format examples (CSV, JSON, Parquet)"
+            - "AI query assistance documentation"
+          validation_command: "docker exec gapless-clickhouse clickhouse-client --query 'SELECT 1'"
+          commit_message: "docs(viz): add clickhouse-client comprehensive guide"
+          commit_body: |
+            Document official CLI for scripting and automation.
+
+            Covers:
+            - Docker exec patterns
+            - Shell aliases for convenience
+            - 70+ output formats
+            - Query parameters and AI assistance
+
+            Refs: ADR-0008 Tool 3 (CLI)
+
+        - name: "clickhouse-local file analysis guide"
+          paths:
+            - "docs/development/CLICKHOUSE_LOCAL_GUIDE.md"
+          description: |
+            Guide for clickhouse-local embedded engine.
+            File-based queries, format conversion, pre-ingestion validation.
+          acceptance_criteria:
+            - "CSV/JSON/Parquet query examples"
+            - "Format conversion patterns"
+            - "S3 file analysis examples"
+            - "Use cases vs limitations"
+          validation_command: "echo 'a,b\n1,2' > /tmp/test.csv && clickhouse-local --query \"SELECT * FROM file('/tmp/test.csv', CSV)\""
+          commit_message: "docs(viz): add clickhouse-local file analysis guide"
+          commit_body: |
+            Document embedded ClickHouse for file-based queries.
+
+            Use cases:
+            - Pre-ingestion CSV validation
+            - Format conversion (CSV ↔ JSON ↔ Parquet)
+            - Ad-hoc file analysis without server
+
+            Refs: ADR-0008 Tool 5 (CLI)
+
+    - id: "phase-3"
+      name: "Performance Monitoring: chdig"
+      duration: "10 minutes"
+      status: "completed"
+      dependencies: ["phase-2"]
+      deliverables:
+        - name: "chdig installation and setup"
+          paths:
+            - "docs/development/CHDIG_GUIDE.md"
+            - "scripts/install-chdig.sh"
+          description: |
+            Install chdig TUI monitoring tool via Homebrew.
+            Provide usage guide for performance profiling.
+          acceptance_criteria:
+            - "Homebrew installation: brew install chdig"
+            - "Usage examples (local + cluster)"
+            - "Flamegraph documentation"
+            - "Pre-alpha status warning"
+          validation_command: "which chdig && chdig --version"
+          commit_message: "feat(viz): add chdig TUI performance monitoring"
+          commit_body: |
+            Add Rust-based TUI for ClickHouse performance monitoring.
+
+            Features:
+            - Top-like interactive interface
+            - Flamegraph visualization (CPU, memory)
+            - Slow query detection
+            - Historical analysis
+
+            Installation: brew install chdig
+
+            Refs: ADR-0008 Tool 4 (TUI)
+
+    - id: "phase-4"
+      name: "Validation Suite"
+      duration: "10 minutes"
+      status: "completed"
+      dependencies: ["phase-3"]
+      deliverables:
+        - name: "Automated validation script"
+          paths:
+            - "scripts/validate-clickhouse-tools.sh"
+          description: |
+            Comprehensive validation of all 5 visualization tools.
+            Checks Docker health, HTTP endpoints, CLI functionality.
+          acceptance_criteria:
+            - "Validates CH-UI web interface (port 5521)"
+            - "Validates ClickHouse Play (port 8123/play)"
+            - "Validates clickhouse-client (Docker exec)"
+            - "Validates chdig installation"
+            - "Validates clickhouse-local functionality"
+            - "Exit code 0 if all pass, non-zero if any fail"
+          validation_command: "bash scripts/validate-clickhouse-tools.sh"
+          expected_output: "✅ All 7 checks passed"
+          commit_message: "test(viz): add comprehensive validation suite"
+          commit_body: |
+            Automated validation for all ClickHouse visualization tools.
+
+            Validates:
+            - Docker containers (ClickHouse, CH-UI)
+            - HTTP endpoints (Play UI, CH-UI)
+            - CLI tools (clickhouse-client, clickhouse-local)
+            - TUI monitoring (chdig)
+
+            Usage: bash scripts/validate-clickhouse-tools.sh
+
+            Refs: ADR-0008 Validation
+
+        - name: "Update main README with visualization section"
+          paths:
+            - "README.md"
+          description: |
+            Add "Local Visualization Tools" section to README.
+            Quick-start guide with links to comprehensive docs.
+          acceptance_criteria:
+            - "New section: ## Local Visualization Tools"
+            - "5-tool overview with access methods"
+            - "Links to detailed guides in docs/development/"
+            - "Validation command reference"
+          commit_message: "docs(readme): add local visualization tools section"
+          commit_body: |
+            Document 5-tool visualization stack in main README.
+
+            Tools covered:
+            - CH-UI (web)
+            - ClickHouse Play (web)
+            - clickhouse-client (CLI)
+            - chdig (TUI)
+            - clickhouse-local (CLI)
+
+            Refs: ADR-0008
+
+x-slos:
+  availability:
+    metrics:
+      - name: "CH-UI Uptime"
+        target: "Matches ClickHouse uptime (depends_on health check)"
+        measurement: "docker-compose ps shows ch-ui running"
+
+      - name: "Tool Accessibility"
+        target: "All tools accessible within 30 seconds of docker-compose up"
+        measurement: "Validation script passes"
+
+  correctness:
+    metrics:
+      - name: "Same Database Connection"
+        target: "All tools connect to same ClickHouse instance"
+        measurement: "Query results consistent across tools"
+
+      - name: "Documentation Accuracy"
+        target: "All commands in docs execute without errors"
+        measurement: "Manual validation checklist complete"
+
+  observability:
+    metrics:
+      - name: "Performance Metrics"
+        target: "chdig provides real-time query performance visibility"
+        measurement: "Flamegraph displays CPU/memory usage"
+
+      - name: "Query History"
+        target: "CH-UI persists query history across sessions"
+        measurement: "LocalStorage contains previous queries"
+
+  maintainability:
+    metrics:
+      - name: "Tool Updates"
+        target: "Docker images auto-update on docker-compose pull"
+        measurement: "Latest CH-UI image pulled"
+
+      - name: "Documentation Coverage"
+        target: "Each tool has dedicated guide in docs/development/"
+        measurement: "5 guide files exist and accurate"
+
+x-error-handling:
+  policy: "raise-and-propagate"
+  rationale: "Fail-fast on tool unavailability, no silent fallbacks."
+  examples:
+    - scenario: "CH-UI container fails to start"
+      behavior: "docker-compose up exits with error, shows container logs"
+      no_fallback: "Does NOT silently skip CH-UI, does NOT fall back to Play UI"
+      propagation: "Error visible to user, manual intervention required"
+
+    - scenario: "chdig not installed"
+      behavior: "Validation script fails with clear message: 'chdig not found, run: brew install chdig'"
+      no_retry: "Does NOT attempt auto-install, does NOT skip chdig validation"
+      propagation: "Exit code 1, user must install manually"
+
+    - scenario: "ClickHouse connection refused"
+      behavior: "All tools fail with connection error"
+      no_fallback: "Does NOT retry, does NOT use fallback URL"
+      propagation: "Error message: 'Ensure ClickHouse running: docker-compose up -d clickhouse'"
+
+x-oss-libraries:
+  - name: "CH-UI"
+    usage: "Modern web interface for ClickHouse"
+    version: "latest"
+    license: "Apache 2.0"
+    repository: "https://github.com/caioricciuti/ch-ui"
+
+  - name: "clickhouse-client"
+    usage: "Official CLI for queries and administration"
+    version: "24.1+"
+    license: "Apache 2.0"
+    repository: "https://github.com/ClickHouse/ClickHouse"
+
+  - name: "chdig"
+    usage: "TUI performance monitoring and flamegraph visualization"
+    version: ">=25.11.1"
+    license: "MIT"
+    repository: "https://github.com/azat/chdig"
+
+  - name: "clickhouse-local"
+    usage: "Embedded ClickHouse for file-based queries"
+    version: "24.1+"
+    license: "Apache 2.0"
+    repository: "https://github.com/ClickHouse/ClickHouse"
+
+x-auto-validation:
+  artifacts:
+    - name: "ADR-0008 and plan.yaml cross-reference"
+      validation: "grep 'x-adr-id: \\\"0008\\\"' docs/plan/0008-clickhouse-local-visualization-toolchain/plan.yaml"
+
+    - name: "CH-UI container operational"
+      validation: "docker ps | grep gapless-ch-ui && curl -s http://localhost:5521 | grep -q 'CH-UI'"
+
+    - name: "ClickHouse Play accessible"
+      validation: "curl -s http://localhost:8123/play | grep -q 'ClickHouse'"
+
+    - name: "clickhouse-client functional"
+      validation: "docker exec gapless-clickhouse clickhouse-client --query 'SELECT 1' | grep -q '1'"
+
+    - name: "chdig installed"
+      validation: "which chdig && chdig --version"
+
+    - name: "clickhouse-local functional"
+      validation: "echo 'a,b\\n1,2' > /tmp/test.csv && clickhouse-local --query \"SELECT * FROM file('/tmp/test.csv', CSV)\" | grep -q '1'"
+
+    - name: "All guides created"
+      validation: "test -f docs/development/CLICKHOUSE_PLAY_GUIDE.md && test -f docs/development/CLICKHOUSE_CLIENT_GUIDE.md && test -f docs/development/CLICKHOUSE_LOCAL_GUIDE.md && test -f docs/development/CHDIG_GUIDE.md"
+
+    - name: "Validation script exists and executable"
+      validation: "test -x scripts/validate-clickhouse-tools.sh"
+
+x-semantic-release:
+  enabled: true
+  breaking_change: false
+  release_type: "minor"
+  target_version: "v4.1.0"
+  commit_convention: "conventional-commits"
+  changelog_sections:
+    - type: "feat"
+      section: "Features"
+      notes: "Local visualization toolchain (CH-UI, chdig)"
+
+    - type: "docs"
+      section: "Documentation"
+      notes: "Comprehensive guides for 5 visualization tools"
+
+    - type: "test"
+      section: "Tests"
+      notes: "Automated validation suite for visualization stack"
+
+x-compliance:
+  openapi_version: "3.1.1"
+  doc_style: "evolutionary-without-promo"
+  slo_focus: "availability, correctness, observability, maintainability"
+  error_policy: "raise-propagate-no-fallback"
+  oss_preference: "100-percent-open-source"
+  auto_validate: "all-tools-validated"
+  release_automation: "semantic-release-conventional-commits"
+  adr_plan_sync: "x-adr-id cross-reference validated"

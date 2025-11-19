@@ -1,0 +1,111 @@
+# gapless-crypto-clickhouse collector systemd service
+# Python application using uv for dependency management
+#
+# Installation:
+#   1. Install uv: curl -LsSf https://astral.sh/uv/install.sh | sh
+#   2. Clone repository: git clone https://github.com/terrylica/gapless-crypto-clickhouse.git /opt/gapless-crypto-clickhouse
+#   3. Create user: sudo useradd -r -s /bin/false gapless
+#   4. Set ownership: sudo chown -R gapless:gapless /opt/gapless-crypto-clickhouse
+#   5. Copy .env file: sudo cp /opt/gapless-crypto-clickhouse/.env.example /opt/gapless-crypto-clickhouse/.env
+#   6. Configure .env: sudo nano /opt/gapless-crypto-clickhouse/.env
+#   7. Copy this file to /etc/systemd/system/gapless-crypto-collector.service
+#   8. Reload systemd: sudo systemctl daemon-reload
+#   9. Enable service: sudo systemctl enable gapless-crypto-collector
+#  10. Start service: sudo systemctl start gapless-crypto-collector
+
+[Unit]
+Description=Gapless Crypto Data Collector
+Documentation=https://github.com/terrylica/gapless-crypto-clickhouse
+After=network-online.target clickhouse.service
+Wants=network-online.target
+Requires=clickhouse.service
+
+[Service]
+Type=simple
+User=gapless
+Group=gapless
+
+# Working directory
+WorkingDirectory=/opt/gapless-crypto-clickhouse
+
+# Python execution via uv
+# Note: uv automatically manages dependencies from pyproject.toml
+ExecStart=/home/gapless/.local/bin/uv run --frozen python -m gapless_crypto_clickhouse.collectors.binance_public_data_collector
+
+# Environment configuration
+EnvironmentFile=/opt/gapless-crypto-clickhouse/.env
+
+# Restart policy
+Restart=on-failure
+RestartSec=30s
+
+# Logging (systemd journal)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gapless-crypto-collector
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/gapless-crypto-clickhouse/data
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=1024
+
+[Install]
+WantedBy=multi-user.target
+
+# Management commands:
+#   sudo systemctl start gapless-crypto-collector      # Start collector
+#   sudo systemctl stop gapless-crypto-collector       # Stop collector
+#   sudo systemctl restart gapless-crypto-collector    # Restart collector
+#   sudo systemctl status gapless-crypto-collector     # View status
+#   sudo journalctl -u gapless-crypto-collector -f     # View logs (live)
+#   sudo journalctl -u gapless-crypto-collector --since "1 hour ago"  # Recent logs
+
+# Configuration (.env file):
+#
+# ClickHouse connection:
+#   CLICKHOUSE_HOST=localhost
+#   CLICKHOUSE_ILP_PORT=9009
+#   CLICKHOUSE_PG_PORT=8812
+#   CLICKHOUSE_PG_USER=admin
+#   CLICKHOUSE_PG_PASSWORD=quest
+#   CLICKHOUSE_PG_DATABASE=qdb
+#
+# Data collection:
+#   BINANCE_SYMBOLS=BTCUSDT,ETHUSDT,BNBUSDT
+#   BINANCE_TIMEFRAMES=1m,5m,15m,1h,1d
+#   COLLECTION_MODE=bulk  # bulk, websocket, or hybrid
+#   CLOUDFRONT_ENABLED=true
+#   GAP_FILL_ENABLED=true
+#
+# Logging:
+#   LOG_LEVEL=INFO
+#   LOG_FORMAT=json
+
+# Deployment workflow (zero-downtime updates):
+#   cd /opt/gapless-crypto-clickhouse
+#   git pull origin main
+#   uv sync --frozen --no-dev
+#   sudo systemctl restart gapless-crypto-collector
+
+# Monitoring:
+#   # Check if service is running
+#   systemctl is-active gapless-crypto-collector
+#
+#   # View resource usage
+#   systemctl status gapless-crypto-collector
+#
+#   # View recent errors
+#   journalctl -u gapless-crypto-collector -p err --since today
+
+# Troubleshooting:
+#   # If service fails to start:
+#   1. Check ClickHouse is running: systemctl status questdb
+#   2. Verify .env file exists and is readable
+#   3. Test uv manually: sudo -u gapless uv run python --version
+#   4. Check logs: journalctl -u gapless-crypto-collector -n 50

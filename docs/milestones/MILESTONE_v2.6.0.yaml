@@ -1,0 +1,164 @@
+openapi: 3.1.1
+info:
+  title: "Milestone v2.6.0 - Native GitHub Actions Trusted Publishing"
+  description: |
+    Implementation of OIDC-based PyPI publishing pipeline eliminating API token dependencies.
+    Migration from token-based authentication to GitHub-native trusted publishing approach.
+  version: "2.6.0"
+
+components:
+  schemas:
+    TrustedPublishingMigration:
+      type: object
+      properties:
+        authentication_method:
+          type: string
+          enum: [oidc_trusted_publishing]
+        api_tokens_eliminated:
+          type: boolean
+        workflow_configuration:
+          type: object
+          properties:
+            environment_requirement:
+              type: string
+              enum: [pypi]
+            permissions:
+              type: object
+              properties:
+                id-token:
+                  type: string
+                  enum: [write]
+        platform_limitations_documented:
+          type: boolean
+
+x-milestone-implementation:
+  version: "v2.6.0"
+  implementation_date: "2025-09-18"
+  scope: "PyPI publishing pipeline modernization"
+
+  technical_achievements:
+    trusted_publishing_configuration:
+      status: "IMPLEMENTED"
+      pypi_publisher_config:
+        provider: "GitHub"
+        repository: "terrylica/gapless-crypto-data"
+        workflow: "publish.yml"
+        environment: "pypi"
+
+      workflow_modifications:
+        file: ".github/workflows/publish.yml"
+        authentication_method: "oidc"
+        permissions_added: ["id-token: write"]
+        environment_requirement: "pypi"
+        api_token_dependencies_removed: true
+
+    github_packages_limitation_analysis:
+      status: "DOCUMENTED"
+      python_support: false
+      supported_package_types: [npm, docker, rubygems, maven, gradle, nuget]
+      canonical_distribution_channel: "PyPI"
+      documentation_location: "docs/PYPI_PUBLISHING_CONFIGURATION.yaml"
+
+    root_cause_resolution:
+      status: "COMPLETED"
+      original_issue: "PyPI publishing gap from v2.2.0 to v2.5.0"
+      cascading_issues_resolved:
+        - yaml_syntax_errors
+        - linting_failures
+        - dependency_inconsistencies
+        - test_mock_incompatibilities
+        - invalid_documentation_validation
+        - authentication_method_conflicts
+
+      final_resolution_method: "local_token_validation_and_trusted_publishing_migration"
+
+  validation_evidence:
+    authentication_test:
+      method: "OIDC token generation and PyPI upload attempt"
+      result: "PASSED"
+      error_condition: "file_already_exists"
+      confirms: "authentication mechanism operational"
+
+    workflow_execution:
+      build_step: "PASSED"
+      test_step: "PASSED"
+      publish_step: "AUTHENTICATED"
+      sigstore_signing: "CONFIGURED"
+
+  documentation_updates:
+    files_modified:
+      - "docs/PYPI_PUBLISHING_CONFIGURATION.yaml"
+      - "docs/CURRENT_ARCHITECTURE_STATUS.yaml"
+      - ".github/workflows/publish.yml"
+
+    specifications_format: "OpenAPI 3.1.1"
+    documentation_approach: "machine_readable_technical_specifications"
+
+    canonical_references_established:
+      publishing_configuration: "docs/PYPI_PUBLISHING_CONFIGURATION.yaml"
+      architecture_status: "docs/CURRENT_ARCHITECTURE_STATUS.yaml"
+      project_guidance: "CLAUDE.md"
+
+  dependency_evolution:
+    additions:
+      httpx: "0.25.0+"
+      reason: "performance_improvement_over_requests"
+
+    removals:
+      requests: "eliminated"
+      typer: "eliminated"
+      rich: "eliminated"
+      reason: "maintain_traditional_argparse_interface"
+
+  testing_validation:
+    total_tests: "124 passed, 1 skipped"
+    integration_tests: "PASSED"
+    cli_functionality: "VALIDATED"
+    build_process: "VERIFIED"
+
+x-evolution-tracking:
+  migration_pattern: "api_token_to_oidc_trusted_publishing"
+  architectural_improvement: "zero_credential_workflow"
+  security_advancement: "eliminate_stored_secrets"
+
+  backward_compatibility:
+    pypi_distribution: "maintained"
+    cli_interface: "preserved"
+    api_surface: "unchanged"
+
+  forward_compatibility:
+    automatic_attestations: "enabled"
+    sigstore_signing: "configured"
+    environment_scoped_publishing: "implemented"
+
+x-technical-debt-resolution:
+  api_token_secret_management: "eliminated"
+  workflow_authentication_complexity: "simplified"
+  publishing_failure_points: "reduced"
+
+  maintenance_burden_reduction:
+    token_rotation: "not_required"
+    credential_updates: "not_required"
+    authentication_troubleshooting: "minimized"
+
+x-compliance-validation:
+  openapi_conformity: "3.1.1"
+  documentation_style: "evolutionary_machine_readable"
+  version_tracking: "technical_descriptive"
+  promotional_language: "eliminated"
+
+  pattern_adherence:
+    user_global_patterns: "unix_conventions_sota_tools"
+    project_patterns: "exception_only_failures_atomic_operations"
+    cross_pattern_harmony: "validated"
+
+x-milestone-closure:
+  implementation_complete: true
+  validation_passed: true
+  documentation_updated: true
+  version_incremented: true
+
+  next_evolution_readiness:
+    trusted_publishing: "operational"
+    pypi_distribution: "automated"
+    github_actions_integration: "native"

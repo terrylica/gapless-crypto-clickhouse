@@ -1,0 +1,125 @@
+%% Gap Detection and Filling Workflow
+%% Shows the zero-gap guarantee process using authentic Binance API data
+%% Reference: src/gapless_crypto_data/gap_filling/universal_gap_filler.py:597-644
+
+%%{init: {'theme':'base', 'themeVariables': {'lineColor':'#c4b5fd','primaryBorderColor':'#c4b5fd'}}}%%
+
+flowchart TD
+    %% Entry Point
+    Start([CSV file or DataFrame<br/>with potential gaps]) --> DetectFormat[Detect CSV format:<br/>enhanced 11-col vs legacy 6-col]
+
+    %% Format Detection
+    DetectFormat --> CheckColumns{Has all 11<br/>enhanced cols?}
+    CheckColumns --> UseEnhanced[Format: Enhanced<br/>11-column microstructure]
+    CheckColumns --> CheckLegacy{Has 6<br/>legacy cols?}
+    CheckLegacy --> UseLegacy[Format: Legacy<br/>6-column OHLCV]
+    CheckLegacy --> FormatError[Error: Unknown format<br/>cannot process]
+
+    %% Load and Analyze
+    UseEnhanced --> LoadData[Load CSV into DataFrame]
+    UseLegacy --> LoadData
+    LoadData --> ParseDates[Parse 'date' column<br/>to datetime]
+
+    ParseDates --> SortCheck{Data sorted<br/>chronologically?}
+    SortCheck --> SortData[Sort by timestamp]
+    SortCheck --> CalcInterval[Calculate expected interval<br/>from timeframe param]
+    SortData --> CalcInterval
+
+    %% Gap Detection
+    CalcInterval --> ScanTimestamps[Scan all consecutive<br/>timestamp pairs]
+    ScanTimestamps --> CalcDiffs[Calculate actual<br/>time differences]
+
+    CalcDiffs --> CompareInterval[Compare actual vs expected<br/>for each pair]
+    CompareInterval --> IdentifyGaps[Identify gaps where<br/>actual > expected + tolerance]
+
+    IdentifyGaps --> HasGaps{Any gaps<br/>detected?}
+    HasGaps --> NoContinuous[Data is continuous!<br/>No filling needed]
+    HasGaps --> CountGaps[Count total gaps<br/>and affected periods]
+
+    %% Gap Details
+    CountGaps --> LogGapInfo[Log gap details:<br/>start time, end time,<br/>expected bars, missing bars]
+
+    LogGapInfo --> PrioritizeGaps[Prioritize gaps<br/>by size and criticality]
+
+    %% Filling Process Start
+    PrioritizeGaps --> ForEachGap{For each gap}
+    ForEachGap --> CalcGapRange[Calculate exact<br/>time range to fill]
+
+    CalcGapRange --> BuildAPIRequest[Build Binance API request:<br/>symbol, timeframe,<br/>startTime, endTime, limit]
+
+    %% API Call
+    BuildAPIRequest --> CallBinanceAPI[Call Binance REST API<br/>klines endpoint]
+    CallBinanceAPI --> CheckAPIResponse{API<br/>response?}
+
+    CheckAPIResponse --> ParseAPI[Parse API response<br/>array of klines]
+    CheckAPIResponse --> LogNoData[Log: No data available<br/>from Binance for period]
+    CheckAPIResponse --> LogAPIError[Log API error<br/>skip this gap]
+
+    %% Process API Data
+    ParseAPI --> ConvertFormat[Convert API format<br/>to CSV format]
+    ConvertFormat --> FilterToGap[Filter data to exact<br/>gap period only]
+
+    FilterToGap --> ValidateAPI[Validate API data:<br/>timestamps, OHLCV logic]
+    ValidateAPI --> MatchFormat{Match CSV<br/>format?}
+
+    MatchFormat --> ExtractAll11[Extract all 11 columns]
+    MatchFormat --> ExtractOHLCV6[Extract 6 OHLCV columns]
+
+    %% Merge Process
+    ExtractAll11 --> MergeData[Merge existing + new data]
+    ExtractOHLCV6 --> MergeData
+
+    MergeData --> Deduplicate[Deduplicate by timestamp<br/>prefer existing data]
+    Deduplicate --> ReSort[Sort by timestamp again]
+
+    %% Validation
+    ReSort --> ValidateMerge[Validate merge:<br/>no new gaps created?]
+    ValidateMerge --> VerifyFill{Gap successfully<br/>filled?}
+
+    VerifyFill --> RecordSuccess[Record success<br/>increment filled_count]
+    VerifyFill --> RecordPartial[Record partial fill<br/>or failure]
+
+    RecordSuccess --> MoreGaps{More gaps<br/>to fill?}
+    RecordPartial --> MoreGaps
+    LogNoData --> MoreGaps
+    LogAPIError --> MoreGaps
+
+    MoreGaps --> ForEachGap
+    MoreGaps --> FinalValidation[Final validation:<br/>scan for remaining gaps]
+
+    %% Final Steps
+    FinalValidation --> CalcStats[Calculate statistics:<br/>gaps_detected, gaps_filled,<br/>success_rate, data_quality]
+
+    CalcStats --> UpdateMetadata[Update metadata JSON:<br/>gap_analysis section]
+    UpdateMetadata --> SaveResults{Save to<br/>original file?}
+
+    SaveResults --> AtomicSave[Atomic save operation:<br/>write to temp → rename]
+    SaveResults --> ReturnDF[Return filled DataFrame<br/>without saving]
+
+    AtomicSave --> BackupOriginal[Backup original file<br/>.bak extension]
+    BackupOriginal --> WriteNew[Write new filled data]
+    WriteNew --> VerifyWrite{Write<br/>successful?}
+
+    VerifyWrite --> DeleteBackup[Delete backup<br/>all good!]
+    VerifyWrite --> RestoreBackup[Restore from backup<br/>log error]
+
+    DeleteBackup --> Complete([Gap filling complete!<br/>Zero gaps achieved])
+    RestoreBackup --> ErrorEnd([End with error])
+    ReturnDF --> Complete
+    NoContinuous --> Complete
+    FormatError -.-> ErrorEnd
+
+    %% Styling
+    classDef apiNode fill:#fcd34d
+    classDef successNode fill:#86efac
+    classDef errorNode fill:#fca5a5
+    classDef criticalNode fill:#93c5fd
+    classDef decisionNode fill:#a5f3fc
+    classDef dataNode fill:#d1d5db
+
+    class BuildAPIRequest,CallBinanceAPI,CheckAPIResponse,ParseAPI apiNode
+    class RecordSuccess,Complete,DeleteBackup,NoContinuous successNode
+    class FormatError,LogAPIError,ErrorEnd,RestoreBackup errorNode
+    class Start,HasGaps,MergeData,ValidateMerge,Complete criticalNode
+    class CheckColumns,CheckLegacy,SortCheck,HasGaps,MatchFormat,VerifyFill,SaveResults,VerifyWrite decisionNode
+    class LoadData,ParseDates,ScanTimestamps,CalcDiffs,ConvertFormat dataNode

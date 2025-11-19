@@ -1,0 +1,141 @@
+DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+DEBUG Found project root: `/Users/terryli/eon/gapless-crypto-data`
+DEBUG No workspace root found, using project root
+DEBUG Discovered project `gapless-crypto-data` at: /Users/terryli/eon/gapless-crypto-data
+DEBUG Acquired lock for `/Users/terryli/eon/gapless-crypto-data`
+DEBUG Using Python request `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3` from explicit request
+DEBUG Checking for Python environment at `.venv`
+DEBUG The project environment's Python version satisfies the request: `path `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3``
+DEBUG Released lock at `/var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/uv-f75a052cd49c587c.lock`
+DEBUG Using request timeout of 30s
+DEBUG Found static `pyproject.toml` for: gapless-crypto-data @ file:///Users/terryli/eon/gapless-crypto-data
+DEBUG No workspace root found, using project root
+DEBUG Existing `uv.lock` satisfies workspace requirements
+DEBUG Using request timeout of 30s
+DEBUG Computed cache info: Some(Timestamp(SystemTime { tv_sec: 1763441506, tv_nsec: 20241287 })), None, None, {}, {"src": Some(Timestamp(Timestamp(SystemTime { tv_sec: 1757906618, tv_nsec: 47687211 })))}
+DEBUG Requirement already installed: gapless-crypto-data==4.0.0 (from file:///Users/terryli/eon/gapless-crypto-data)
+DEBUG Requirement already installed: commitizen==4.9.1
+DEBUG Requirement already installed: mypy==1.18.1
+DEBUG Requirement already installed: pandas-stubs==2.3.2.250827
+DEBUG Requirement already installed: pre-commit==4.3.0
+DEBUG Requirement already installed: pytest==8.4.2
+DEBUG Requirement already installed: pytest-asyncio==1.2.0
+DEBUG Requirement already installed: pytest-cov==7.0.0
+DEBUG Requirement already installed: ruff==0.13.0
+DEBUG Requirement already installed: types-requests==2.32.4.20250913
+DEBUG Requirement already installed: yamllint==1.37.1
+DEBUG Requirement already installed: clickhouse-driver==0.2.10
+DEBUG Requirement already installed: duckdb==1.4.1
+DEBUG Requirement already installed: httpx==0.28.1
+DEBUG Requirement already installed: pandas==2.3.2
+DEBUG Requirement already installed: pyarrow==21.0.0
+DEBUG Requirement already installed: pydantic==2.12.3
+DEBUG Requirement already installed: python-dotenv==1.2.1
+DEBUG Requirement already installed: argcomplete==3.6.2
+DEBUG Requirement already installed: charset-normalizer==3.4.3
+DEBUG Requirement already installed: colorama==0.4.6
+DEBUG Requirement already installed: decli==0.6.3
+DEBUG Requirement already installed: deprecated==1.2.18
+DEBUG Requirement already installed: jinja2==3.1.6
+DEBUG Requirement already installed: packaging==25.0
+DEBUG Requirement already installed: prompt-toolkit==3.0.51
+DEBUG Requirement already installed: pyyaml==6.0.2
+DEBUG Requirement already installed: questionary==2.1.1
+DEBUG Requirement already installed: termcolor==3.1.0
+DEBUG Requirement already installed: tomlkit==0.13.3
+DEBUG Requirement already installed: mypy-extensions==1.1.0
+DEBUG Requirement already installed: pathspec==0.12.1
+DEBUG Requirement already installed: typing-extensions==4.15.0
+DEBUG Requirement already installed: numpy==2.2.6
+DEBUG Requirement already installed: types-pytz==2025.2.0.20250809
+DEBUG Requirement already installed: cfgv==3.4.0
+DEBUG Requirement already installed: identify==2.6.14
+DEBUG Requirement already installed: nodeenv==1.9.1
+DEBUG Requirement already installed: virtualenv==20.34.0
+DEBUG Requirement already installed: iniconfig==2.1.0
+DEBUG Requirement already installed: pluggy==1.6.0
+DEBUG Requirement already installed: pygments==2.19.2
+DEBUG Requirement already installed: coverage==7.10.6
+DEBUG Requirement already installed: urllib3==2.5.0
+DEBUG Requirement already installed: pytz==2025.2
+DEBUG Requirement already installed: tzlocal==5.3.1
+DEBUG Requirement already installed: anyio==4.10.0
+DEBUG Requirement already installed: certifi==2025.8.3
+DEBUG Requirement already installed: httpcore==1.0.9
+DEBUG Requirement already installed: idna==3.10
+DEBUG Requirement already installed: python-dateutil==2.9.0.post0
+DEBUG Requirement already installed: tzdata==2025.2
+DEBUG Requirement already installed: annotated-types==0.7.0
+DEBUG Requirement already installed: pydantic-core==2.41.4
+DEBUG Requirement already installed: typing-inspection==0.4.2
+DEBUG Requirement already installed: wrapt==1.17.3
+DEBUG Requirement already installed: markupsafe==3.0.2
+DEBUG Requirement already installed: wcwidth==0.2.14
+DEBUG Requirement already installed: distlib==0.4.0
+DEBUG Requirement already installed: filelock==3.19.1
+DEBUG Requirement already installed: platformdirs==4.4.0
+DEBUG Requirement already installed: sniffio==1.3.1
+DEBUG Requirement already installed: h11==0.16.0
+DEBUG Requirement already installed: six==1.17.0
+DEBUG Using Python 3.13.6 interpreter at: /Users/terryli/eon/gapless-crypto-data/.venv/bin/python3
+DEBUG Running `mypy src/gapless_crypto_data`
+DEBUG Spawned child 73643 in process group 73628
+src/gapless_crypto_data/utils/timestamp_format_analyzer.py:121: error: Incompatible types in assignment (expression has type "None", variable has type "int")  [assignment]
+src/gapless_crypto_data/utils/etag_cache.py:98: error: Returning Any from function declared to return "dict[str, dict[Any, Any]]"  [no-any-return]
+src/gapless_crypto_data/utils/etag_cache.py:138: error: Returning Any from function declared to return "str | None"  [no-any-return]
+src/gapless_crypto_data/resume/intelligent_checkpointing.py:140: error: Returning Any from function declared to return "dict[str, Any] | None"  [no-any-return]
+src/gapless_crypto_data/gap_filling/safe_file_operations.py:95: error: Incompatible types in assignment (expression has type "Path", variable has type "None")  [assignment]
+src/gapless_crypto_data/gap_filling/safe_file_operations.py:100: error: Need type annotation for "header_comments" (hint: "header_comments: list[<type>] = ...")  [var-annotated]
+src/gapless_crypto_data/gap_filling/safe_file_operations.py:159: error: Incompatible types in assignment (expression has type "Path", variable has type "None")  [assignment]
+src/gapless_crypto_data/gap_filling/safe_file_operations.py:174: error: No overload variant of "read_csv" matches argument types "None", "str"  [call-overload]
+src/gapless_crypto_data/gap_filling/safe_file_operations.py:174: note: Possible overload variants:
+src/gapless_crypto_data/gap_filling/safe_file_operations.py:174: note:     def [HashableT: Hashable] read_csv(filepath_or_buffer: str | PathLike[str] | ReadCsvBuffer[bytes] | ReadCsvBuffer[str], *, sep: str | None = ..., delimiter: str | None = ..., header: int | Sequence[int] | Literal['infer'] | None = ..., names: MutableSequence[Any] | ndarray[Any, Any] | tuple[Any, ...] | range | None = ..., index_col: int | str | Sequence[str | int] | Literal[False] | None = ..., usecols: SequenceNotStr[Hashable] | range | ExtensionArray | ndarray[Any, Any] | Index[Any] | Series[Any] | Callable[[HashableT], bool] | None = ..., dtype: ExtensionDtype | str | dtype[generic[Any]] | type[str] | type[complex] | type[bool] | type[object] | Mapping[Hashable, ExtensionDtype | str | dtype[generic[Any]] | type[str] | type[complex] | type[bool] | type[object]] | defaultdict[Any, Any] | None = ..., engine: Literal['c', 'python', 'pyarrow', 'python-fwf'] | None = ..., converters: Mapping[int | str, Callable[[str], Any]] | Mapping[int, Callable[[str], Any]] | Mapping[str, Callable[[str], Any]] | None = ..., true_values: list[str] | None = ..., false_values: list[str] | None = ..., skipinitialspace: bool = ..., skiprows: int | Sequence[int] | Callable[[int], bool] | None = ..., skipfooter: int = ..., nrows: int | None = ..., na_values: Sequence[str] | Mapping[str, Sequence[str]] | None = ..., keep_default_na: bool = ..., na_filter: bool = ..., verbose: bool = ..., skip_blank_lines: bool = ..., parse_dates: bool | list[int] | list[str] | Sequence[Sequence[int]] | Mapping[str, Sequence[int | str]] | None = ..., keep_date_col: bool = ..., date_format: dict[Hashable, str] | str | None = ..., dayfirst: bool = ..., cache_dates: bool = ..., iterator: Literal[True], chunksize: int | None = ..., compression: Literal['infer', 'gzip', 'bz2', 'zip', 'xz', 'zstd', 'tar'] | dict[str, Any] | None = ..., thousands: str | None = ..., decimal: str = ..., lineterminator: str | None = ..., quotechar: str = ..., quoting: Literal[4, 5] | Literal[0, 1, 2, 3] = ..., doublequote: bool = ..., escapechar: str | None = ..., comment: str | None = ..., encoding: str | None = ..., encoding_errors: str | None = ..., dialect: str | Dialect | None = ..., on_bad_lines: Literal['error', 'warn', 'skip'] | Callable[[list[str]], list[str] | None] = ..., delim_whitespace: bool = ..., low_memory: bool = ..., memory_map: bool = ..., float_precision: Literal['high', 'legacy', 'round_trip'] | None = ..., storage_options: dict[str, Any] | None | None = ..., dtype_backend: Literal['pyarrow', 'numpy_nullable'] | Literal[_NoDefault.no_default] = ...) -> TextFileReader
+src/gapless_crypto_data/gap_filling/safe_file_operations.py:174: note:     def [HashableT: Hashable] read_csv(filepath_or_buffer: str | PathLike[str] | ReadCsvBuffer[bytes] | ReadCsvBuffer[str], *, sep: str | None = ..., delimiter: str | None = ..., header: int | Sequence[int] | Literal['infer'] | None = ..., names: MutableSequence[Any] | ndarray[Any, Any] | tuple[Any, ...] | range | None = ..., index_col: int | str | Sequence[str | int] | Literal[False] | None = ..., usecols: SequenceNotStr[Hashable] | range | ExtensionArray | ndarray[Any, Any] | Index[Any] | Series[Any] | Callable[[HashableT], bool] | None = ..., dtype: ExtensionDtype | str | dtype[generic[Any]] | type[str] | type[complex] | type[bool] | type[object] | Mapping[Hashable, ExtensionDtype | str | dtype[generic[Any]] | type[str] | type[complex] | type[bool] | type[object]] | defaultdict[Any, Any] | None = ..., engine: Literal['c', 'python', 'pyarrow', 'python-fwf'] | None = ..., converters: Mapping[int | str, Callable[[str], Any]] | Mapping[int, Callable[[str], Any]] | Mapping[str, Callable[[str], Any]] | None = ..., true_values: list[str] | None = ..., false_values: list[str] | None = ..., skipinitialspace: bool = ..., skiprows: int | Sequence[int] | Callable[[int], bool] | None = ..., skipfooter: int = ..., nrows: int | None = ..., na_values: Sequence[str] | Mapping[str, Sequence[str]] | None = ..., keep_default_na: bool = ..., na_filter: bool = ..., verbose: bool = ..., skip_blank_lines: bool = ..., parse_dates: bool | list[int] | list[str] | Sequence[Sequence[int]] | Mapping[str, Sequence[int | str]] | None = ..., keep_date_col: bool = ..., date_format: dict[Hashable, str] | str | None = ..., dayfirst: bool = ..., cache_dates: bool = ..., iterator: bool = ..., chunksize: int, compression: Literal['infer', 'gzip', 'bz2', 'zip', 'xz', 'zstd', 'tar'] | dict[str, Any] | None = ..., thousands: str | None = ..., decimal: str = ..., lineterminator: str | None = ..., quotechar: str = ..., quoting: Literal[4, 5] | Literal[0, 1, 2, 3] = ..., doublequote: bool = ..., escapechar: str | None = ..., comment: str | None = ..., encoding: str | None = ..., encoding_errors: str | None = ..., dialect: str | Dialect | None = ..., on_bad_lines: Literal['error', 'warn', 'skip'] | Callable[[list[str]], list[str] | None] = ..., delim_whitespace: bool = ..., low_memory: bool = ..., memory_map: bool = ..., float_precision: Literal['high', 'legacy', 'round_trip'] | None = ..., storage_options: dict[str, Any] | None | None = ..., dtype_backend: Literal['pyarrow', 'numpy_nullable'] | Literal[_NoDefault.no_default] = ...) -> TextFileReader
+src/gapless_crypto_data/gap_filling/safe_file_operations.py:174: note:     def [HashableT: Hashable] read_csv(filepath_or_buffer: str | PathLike[str] | ReadCsvBuffer[bytes] | ReadCsvBuffer[str], *, sep: str | None = ..., delimiter: str | None = ..., header: int | Sequence[int] | Literal['infer'] | None = ..., names: MutableSequence[Any] | ndarray[Any, Any] | tuple[Any, ...] | range | None = ..., index_col: int | str | Sequence[str | int] | Literal[False] | None = ..., usecols: SequenceNotStr[Hashable] | range | ExtensionArray | ndarray[Any, Any] | Index[Any] | Series[Any] | Callable[[HashableT], bool] | None = ..., dtype: ExtensionDtype | str | dtype[generic[Any]] | type[str] | type[complex] | type[bool] | type[object] | Mapping[Hashable, ExtensionDtype | str | dtype[generic[Any]] | type[str] | type[complex] | type[bool] | type[object]] | defaultdict[Any, Any] | None = ..., engine: Literal['c', 'python', 'pyarrow', 'python-fwf'] | None = ..., converters: Mapping[int | str, Callable[[str], Any]] | Mapping[int, Callable[[str], Any]] | Mapping[str, Callable[[str], Any]] | None = ..., true_values: list[str] | None = ..., false_values: list[str] | None = ..., skipinitialspace: bool = ..., skiprows: int | Sequence[int] | Callable[[int], bool] | None = ..., skipfooter: int = ..., nrows: int | None = ..., na_values: Sequence[str] | Mapping[str, Sequence[str]] | None = ..., keep_default_na: bool = ..., na_filter: bool = ..., verbose: bool = ..., skip_blank_lines: bool = ..., parse_dates: bool | list[int] | list[str] | Sequence[Sequence[int]] | Mapping[str, Sequence[int | str]] | None = ..., keep_date_col: bool = ..., date_format: dict[Hashable, str] | str | None = ..., dayfirst: bool = ..., cache_dates: bool = ..., iterator: Literal[False] = ..., chunksize: None = ..., compression: Literal['infer', 'gzip', 'bz2', 'zip', 'xz', 'zstd', 'tar'] | dict[str, Any] | None = ..., thousands: str | None = ..., decimal: str = ..., lineterminator: str | None = ..., quotechar: str = ..., quoting: Literal[4, 5] | Literal[0, 1, 2, 3] = ..., doublequote: bool = ..., escapechar: str | None = ..., comment: str | None = ..., encoding: str | None = ..., encoding_errors: str | None = ..., dialect: str | Dialect | None = ..., on_bad_lines: Literal['error', 'warn', 'skip'] | Callable[[list[str]], list[str] | None] = ..., delim_whitespace: bool = ..., low_memory: bool = ..., memory_map: bool = ..., float_precision: Literal['high', 'legacy', 'round_trip'] | None = ..., storage_options: dict[str, Any] | None | None = ..., dtype_backend: Literal['pyarrow', 'numpy_nullable'] | Literal[_NoDefault.no_default] = ...) -> DataFrame
+src/gapless_crypto_data/clickhouse/connection.py:23: error: Skipping analyzing "clickhouse_driver": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+src/gapless_crypto_data/clickhouse/connection.py:24: error: Skipping analyzing "clickhouse_driver.errors": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+src/gapless_crypto_data/clickhouse/connection.py:24: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+src/gapless_crypto_data/clickhouse/connection.py:158: error: Returning Any from function declared to return "list[tuple[Any, ...]]"  [no-any-return]
+src/gapless_crypto_data/clickhouse/connection.py:190: error: Returning Any from function declared to return "DataFrame"  [no-any-return]
+src/gapless_crypto_data/clickhouse_query.py:53: error: Skipping analyzing "clickhouse_driver.errors": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+src/gapless_crypto_data/validation/storage.py:335: error: Argument 1 to "append" of "list" has incompatible type "int"; expected "str"  [arg-type]
+src/gapless_crypto_data/validation/storage.py:463: error: Value of type "tuple[Any, ...] | None" is not indexable  [index]
+src/gapless_crypto_data/validation/storage.py:498: error: Value of type "tuple[Any, ...] | None" is not indexable  [index]
+src/gapless_crypto_data/validation/storage.py:499: error: Value of type "tuple[Any, ...] | None" is not indexable  [index]
+src/gapless_crypto_data/validation/storage.py:500: error: Value of type "tuple[Any, ...] | None" is not indexable  [index]
+src/gapless_crypto_data/validation/csv_validator.py:243: error: Unsupported operand types for + ("object" and "int")  [operator]
+src/gapless_crypto_data/validation/csv_validator.py:374: error: Need type annotation for "errors" (hint: "errors: list[<type>] = ...")  [var-annotated]
+src/gapless_crypto_data/validation/csv_validator.py:375: error: Need type annotation for "warnings" (hint: "warnings: list[<type>] = ...")  [var-annotated]
+src/gapless_crypto_data/validation/csv_validator.py:420: error: Need type annotation for "warnings" (hint: "warnings: list[<type>] = ...")  [var-annotated]
+src/gapless_crypto_data/gap_filling/universal_gap_filler.py:228: error: Argument "params" to "get" has incompatible type "dict[str, object]"; expected "QueryParams | Mapping[str, str | int | float | bool | None | Sequence[str | int | float | bool | None]] | list[tuple[str, str | int | float | bool | None]] | tuple[tuple[str, str | int | float | bool | None], ...] | str | bytes | None"  [arg-type]
+src/gapless_crypto_data/gap_filling/universal_gap_filler.py:462: error: Returning Any from function declared to return "DataFrame | None"  [no-any-return]
+src/gapless_crypto_data/collectors/httpx_downloader.py:209: error: Argument 1 to "append" of "list" has incompatible type "DownloadResult | BaseException"; expected "DownloadResult"  [arg-type]
+src/gapless_crypto_data/collectors/httpx_downloader.py:216: error: Missing return statement  [return]
+src/gapless_crypto_data/collectors/httpx_downloader.py:226: error: Item "None" of "Semaphore | None" has no attribute "__aenter__"  [union-attr]
+src/gapless_crypto_data/collectors/httpx_downloader.py:226: error: Item "None" of "Semaphore | None" has no attribute "__aexit__"  [union-attr]
+src/gapless_crypto_data/collectors/httpx_downloader.py:286: error: Item "None" of "AsyncClient | None" has no attribute "get"  [union-attr]
+src/gapless_crypto_data/collectors/concurrent_collection_orchestrator.py:150: error: Function "builtins.callable" is not valid as a type  [valid-type]
+src/gapless_crypto_data/collectors/concurrent_collection_orchestrator.py:150: note: Perhaps you meant "typing.Callable" instead of "callable"?
+src/gapless_crypto_data/collectors/concurrent_collection_orchestrator.py:232: error: Incompatible types in assignment (expression has type "CollectionResult", variable has type "DownloadResult")  [assignment]
+src/gapless_crypto_data/collectors/concurrent_collection_orchestrator.py:251: error: Incompatible return value type (got "DownloadResult", expected "CollectionResult")  [return-value]
+src/gapless_crypto_data/collectors/concurrent_collection_orchestrator.py:270: error: Function "builtins.callable" is not valid as a type  [valid-type]
+src/gapless_crypto_data/collectors/concurrent_collection_orchestrator.py:270: note: Perhaps you meant "typing.Callable" instead of "callable"?
+src/gapless_crypto_data/collectors/concurrent_collection_orchestrator.py:314: error: Incompatible types in assignment (expression has type "CollectionResult | BaseException", target has type "CollectionResult")  [assignment]
+src/gapless_crypto_data/collectors/binance_public_data_collector.py:790: error: Incompatible return value type (got "None", expected "dict[str, Any]")  [return-value]
+src/gapless_crypto_data/collectors/binance_public_data_collector.py:1128: error: Incompatible return value type (got "None", expected "Path")  [return-value]
+src/gapless_crypto_data/api.py:125: error: Incompatible return value type (got "str | None", expected "str")  [return-value]
+src/gapless_crypto_data/api.py:177: error: Incompatible return value type (got "tuple[str | None, str | None]", expected "tuple[str, str]")  [return-value]
+src/gapless_crypto_data/api.py:181: error: Incompatible return value type (got "tuple[Literal[''] | None, Literal[''] | None]", expected "tuple[str, str]")  [return-value]
+src/gapless_crypto_data/api.py:530: error: Unsupported target for indexed assignment ("object")  [index]
+src/gapless_crypto_data/api.py:531: error: Unsupported operand types for + ("object" and "int")  [operator]
+src/gapless_crypto_data/api.py:536: error: Unsupported operand types for < ("int" and "object")  [operator]
+src/gapless_crypto_data/api.py:537: error: Unsupported left operand type for / ("object")  [operator]
+src/gapless_crypto_data/__probe__.py:35: error: Function is missing a return type annotation  [no-untyped-def]
+src/gapless_crypto_data/__probe__.py:35: note: Use "-> None" if function does not return a value
+src/gapless_crypto_data/__probe__.py:46: error: Returning Any from function declared to return "dict[str, Any]"  [no-any-return]
+src/gapless_crypto_data/__probe__.py:73: error: Returning Any from function declared to return "dict[str, Any]"  [no-any-return]
+src/gapless_crypto_data/__probe__.py:130: error: Returning Any from function declared to return "dict[str, Any]"  [no-any-return]
+src/gapless_crypto_data/__probe__.py:215: error: Incompatible return value type (got "dict[str, Sequence[str]]", expected "list[str]")  [return-value]
+src/gapless_crypto_data/__probe__.py:300: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+Found 49 errors in 14 files (checked 29 source files)
+DEBUG Command exited with code: 1

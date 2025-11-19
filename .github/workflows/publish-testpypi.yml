@@ -1,0 +1,75 @@
+name: Publish to TestPyPI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  UV_SYSTEM_PYTHON: 1
+
+jobs:
+  build-and-publish-testpypi:
+    name: Build and publish to TestPyPI
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install UV
+      run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    - name: Add UV to PATH
+      run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+    - name: Install dependencies
+      run: |
+        uv venv
+        source .venv/bin/activate
+        uv sync --dev
+
+    - name: Validate file encoding
+      run: |
+        echo "Checking file encoding (UTF-8/ASCII required)..."
+        find src/ tests/ examples/ -name "*.py" -o -name "*.md" \
+          -o -name "*.txt" -o -name "*.toml" -o -name "*.yml" \
+          -o -name "*.yaml" 2>/dev/null | \
+        xargs file --mime-encoding | grep -v -E "(utf-8|us-ascii)" && {
+          echo "❌ Non-UTF-8/ASCII files found!"
+          exit 1
+        } || {
+          echo "✅ All project text files are properly encoded"
+        }
+
+    - name: Lint with ruff
+      run: |
+        source .venv/bin/activate
+        uv run ruff check .
+        uv run ruff format --check .
+
+    - name: Run tests
+      run: |
+        source .venv/bin/activate
+        uv run pytest tests/ -v --tb=short
+
+    - name: Build package
+      run: |
+        source .venv/bin/activate
+        uv build
+
+    - name: Publish to TestPyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
+        verbose: true
+        skip-existing: true

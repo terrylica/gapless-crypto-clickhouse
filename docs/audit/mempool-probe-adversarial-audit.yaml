@@ -1,0 +1,721 @@
+openapi: 3.1.1
+info:
+  title: "Mempool Probe Adversarial Audit Report"
+  description: |
+    Critical audit of mempool pressure probe design against existing gapless-crypto-data
+    architecture, identifying misalignments, violations, and incompatibilities.
+
+    **Verdict**: REJECTED - Fundamental architectural conflicts
+  version: "1.0.0"
+  contact:
+    name: "Gapless Crypto Data Project"
+    email: "terry@eonlabs.com"
+
+paths: {}
+
+# EXECUTIVE SUMMARY
+x-audit-summary:
+  verdict: "REJECTED"
+  severity: "CRITICAL"
+  recommendation: |
+    The mempool pressure probe design violates core architectural principles and
+    creates fundamental incompatibilities with existing data structures. Rejection
+    recommended. If mempool data is needed, it should be a SEPARATE package.
+
+  critical_violations: 7
+  major_violations: 12
+  minor_violations: 3
+  total_violations: 22
+
+  impact_assessment:
+    code_complexity: "HIGH - Dual data models (OHLCV + mempool)"
+    maintenance_burden: "HIGH - Two validation pipelines"
+    user_confusion: "HIGH - Mixed API patterns"
+    architectural_debt: "CRITICAL - Schema pollution, pattern divergence"
+
+# CRITICAL VIOLATIONS (Architecture-Breaking)
+x-critical-violations:
+
+  violation_1_data_format_mismatch:
+    severity: "CRITICAL"
+    category: "Data Model Incompatibility"
+    finding: |
+      Mempool snapshots are fundamentally incompatible with 11-column OHLCV format.
+
+      Existing system:
+      - 11-column CSV/Parquet: date, open, high, low, close, volume, close_time,
+        quote_asset_volume, number_of_trades, taker_buy_base_asset_volume,
+        taker_buy_quote_asset_volume
+      - Time-series data with fixed interval (1m, 1h, 1d)
+      - Price/volume metrics
+
+      Mempool probe:
+      - Variable schema: unconfirmed_count, vsize_mb, fee_histogram (array),
+        next_block_fees (nested object)
+      - Point-in-time snapshots (no OHLCV)
+      - Network congestion metrics (no price/volume)
+
+    evidence:
+      existing_columns:
+        - "date (timestamp)"
+        - "open, high, low, close (price)"
+        - "volume, quote_asset_volume (volume)"
+        - "number_of_trades (integer)"
+        - "taker metrics (volume)"
+
+      mempool_columns:
+        - "timestamp (datetime)"
+        - "unconfirmed_count (integer)"
+        - "vsize_mb (float)"
+        - "fee_histogram (array of objects)"
+        - "next_block_fees (nested object)"
+
+    impact: |
+      - Cannot reuse existing CSV parsing logic
+      - Cannot reuse existing DataFrame utilities
+      - Cannot apply OHLCV-specific validations
+      - Forces dual data model throughout codebase
+
+    recommendation: "REJECT - Different data domain requires separate package"
+
+  violation_2_validation_pipeline_incompatibility:
+    severity: "CRITICAL"
+    category: "Validation Architecture"
+    finding: |
+      CSVValidator is hardcoded for OHLCV validation. Mempool data requires
+      completely different validation logic.
+
+      CSVValidator layers (src/gapless_crypto_data/validation/csv_validator.py):
+      1. Structure: Expects 11 OHLCV columns
+      2. DateTime: Expects chronological OHLCV time series
+      3. OHLCV Quality: Validates price relationships (high >= low, etc.)
+      4. Coverage: Calculates expected bars for timeframe intervals
+      5. Anomaly: Price/volume outlier detection (3-sigma on price/volume)
+
+      None of these apply to mempool snapshots.
+
+    evidence:
+      csv_validator_assumptions:
+        - 'line 103: "_validate_ohlcv_quality(df)" - expects OHLCV columns'
+        - 'line 135: "_validate_expected_coverage(df, expected_timeframe)" - assumes fixed intervals'
+        - 'line 142: "_validate_statistical_anomalies(df)" - 3-sigma on price/volume'
+
+      mempool_requirements:
+        - No OHLCV columns (only network metrics)
+        - No fixed intervals (snapshots can be 1s or 60s apart)
+        - Different anomaly patterns (fee spikes, vsize spikes)
+
+    impact: |
+      - Cannot reuse 5-layer validation pipeline
+      - Need separate MempoolValidator class
+      - Dual validation codepaths increase complexity
+      - Testing burden doubles
+
+    recommendation: "REJECT - Requires complete validation rewrite"
+
+  violation_3_storage_schema_pollution:
+    severity: "CRITICAL"
+    category: "Database Schema Design"
+    finding: |
+      ValidationReport Pydantic model (src/gapless_crypto_data/validation/models.py)
+      is OHLCV-specific. Extending it for mempool creates schema pollution.
+
+      Current ValidationReport fields (OHLCV-specific):
+      - price_min, price_max, volume_min, volume_max, volume_mean
+      - ohlc_errors, negative_zero_values
+      - expected_bars, actual_bars, coverage_percentage
+      - gaps_found, chronological_order
+
+      Proposed mempool fields (from mempool-pressure-probe.yaml):
+      - avg_fee_rate, vsize_mb, unconfirmed_count
+      - slope_mb_per_min, fee_pressure_index
+
+      INCOMPATIBLE: OHLCV fields meaningless for mempool, mempool fields meaningless for OHLCV.
+
+    evidence:
+      validation_report_py_lines_89_124: |
+        # Flattened metrics for efficient querying (extracted from layer results)
+        price_min: Optional[float] = Field(default=None, description="Minimum price value")
+        price_max: Optional[float] = Field(default=None, description="Maximum price value")
+        volume_min: Optional[float] = Field(default=None, description="Minimum volume")
+        volume_max: Optional[float] = Field(default=None, description="Maximum volume")
+        volume_mean: Optional[float] = Field(default=None, description="Mean volume")
+        ohlc_errors: Optional[int] = Field(default=None, description="Number of OHLC logic errors")
+        # ... etc
+
+      proposed_extension:
+        avg_fee_rate: Optional[float]
+        vsize_mb: Optional[float]
+        unconfirmed_count: Optional[int]
+        slope_mb_per_min: Optional[float]
+        fee_pressure_index: Optional[float]
+
+    impact: |
+      - DuckDB table becomes bloated with mutually exclusive columns
+      - Queries require discriminator column (data_type: "ohlcv" vs "mempool")
+      - Schema evolution becomes complex (OHLCV changes don't affect mempool)
+      - Type safety degraded (Optional fields everywhere)
+
+    recommendation: "REJECT - Use separate validation_mempool_reports table or separate DB"
+
+  violation_4_collector_pattern_divergence:
+    severity: "CRITICAL"
+    category: "API Design Consistency"
+    finding: |
+      Existing collector pattern (BinancePublicDataCollector) vs proposed UV-based probe runner.
+
+      Existing pattern (src/gapless_crypto_data/collectors/binance_public_data_collector.py):
+      - Class-based collector: BinancePublicDataCollector(symbol, start_date, end_date)
+      - Returns pandas DataFrame with 11 columns
+      - Integrated into function API: gcd.fetch_data("BTCUSDT", "1h")
+      - Uses httpx with ETag caching
+      - Sequential download → process → merge → validate workflow
+
+      Proposed probe pattern:
+      - UV-isolated task spawning in /tmp/probe/mempool_pressure/
+      - PEP 723 inline dependencies
+      - Phased spawning (discovery → backfill → streaming)
+      - Outputs Parquet files to temp directories
+      - Task cleanup and ephemeral workspaces
+
+      INCOMPATIBLE: Two completely different execution models.
+
+    evidence:
+      existing_api_py_lines_34_48: |
+        def get_supported_symbols() -> List[str]:
+            collector = BinancePublicDataCollector()
+            return list(collector.known_symbols.keys())
+
+        def get_supported_timeframes() -> List[str]:
+            collector = BinancePublicDataCollector()
+            return collector.available_timeframes
+
+      proposed_api:
+        # From mempool-pressure-probe.yaml x-integration
+        collect_mempool_pressure(start_date, end_date, output_dir)
+        MempoolPressureCollector(cache_dir, validation_storage)
+
+      inconsistency:
+        - BinancePublicDataCollector returns DataFrame immediately
+        - MempoolPressureCollector writes Parquet to disk (async pattern)
+        - Different parameter names (start_date vs start)
+        - Different return types (DataFrame vs file paths)
+
+    impact: |
+      - Users must learn two different APIs
+      - Documentation split (OHLCV guide vs mempool guide)
+      - Integration examples become complex
+      - Cannot use existing helpers (get_supported_symbols, etc.)
+
+    recommendation: "REJECT - Pattern divergence creates fragmented UX"
+
+  violation_5_output_format_conflict:
+    severity: "CRITICAL"
+    category: "Data Format Standardization"
+    finding: |
+      Existing system is CSV-first with optional Parquet. Mempool probe is Parquet-first.
+
+      Existing system (src/gapless_crypto_data/collectors/binance_public_data_collector.py line 160):
+      - Default: output_format="csv"
+      - Optional: output_format="parquet"
+      - Rationale: CSV is universal, human-readable, git-friendly
+
+      Mempool probe (mempool-pressure-probe.yaml x-probe-architecture):
+      - file_pattern: "mempool_pressure_YYYYMMDD_HH.parquet"
+      - compression: "snappy"
+      - No CSV option mentioned
+
+    evidence:
+      existing_binance_collector_init:
+        output_format: str = "csv"  # Line 160
+
+      mempool_probe_storage:
+        storage_format:
+          file_pattern: "mempool_pressure_YYYYMMDD_HH.parquet"
+          compression: "snappy"
+
+    impact: |
+      - Inconsistent user experience (OHLCV = CSV default, mempool = Parquet only?)
+      - Mixed file formats in output directories
+      - Git diff unfriendly for mempool data (binary Parquet)
+      - Documentation must explain dual format strategy
+
+    recommendation: "REJECT - Format inconsistency creates confusion"
+
+  violation_6_no_dataframe_integration:
+    severity: "CRITICAL"
+    category: "Pandas Integration"
+    finding: |
+      Existing system is DataFrame-first. Mempool probe doesn't naturally fit DataFrame model.
+
+      Existing system:
+      - All collectors return pandas DataFrame with DatetimeIndex
+      - API functions return DataFrame: gcd.fetch_data() -> pd.DataFrame
+      - Examples show df.head(), df.plot(), df.resample() patterns
+      - 11-column DataFrame is core abstraction
+
+      Mempool probe:
+      - Snapshots are point-in-time records (not time series)
+      - Nested structures (fee_histogram: array, next_block_fees: object)
+      - Better suited to document store (JSON) or columnar (Parquet)
+      - DataFrame would have array columns (non-standard pandas usage)
+
+    evidence:
+      existing_api_return_type:
+        # From api.py
+        def fetch_data(...) -> pd.DataFrame:
+            # Returns 11-column DataFrame
+
+      mempool_snapshot_structure:
+        # From mempool-pressure-probe.yaml
+        fee_histogram:
+          type: array
+          items:
+            type: object
+            properties:
+              fee_rate_min, fee_rate_max, tx_count, vsize_total
+
+        next_block_fees:
+          type: object
+          properties:
+            fastest_fee, half_hour_fee, hour_fee, economy_fee, minimum_fee
+
+    impact: |
+      - Cannot use standard pandas operations (df.resample, df.rolling)
+      - Nested columns require explosion (df.explode) or JSON parsing
+      - Plotting requires custom logic (can't df.plot() directly)
+      - Documentation must explain when to use DataFrame vs raw dict
+
+    recommendation: "REJECT - Data structure mismatch with pandas-first design"
+
+  violation_7_temporal_mismatch:
+    severity: "CRITICAL"
+    category: "Data Model Semantics"
+    finding: |
+      OHLCV data is interval-based (bars). Mempool data is point-in-time (snapshots).
+
+      OHLCV model:
+      - Each row = aggregated data for time interval (e.g., 1 hour)
+      - Continuous time series with expected gaps detectable
+      - Coverage calculable (expected 24 bars/day for 1h timeframe)
+      - Resampling makes sense (1h → 4h aggregation)
+
+      Mempool model:
+      - Each row = instantaneous state at specific timestamp
+      - Irregular intervals (could be 1s, 60s, or 5min apart)
+      - No "expected coverage" (mempool state changes continuously)
+      - Resampling questionable (averaging unconfirmed_count?)
+
+    evidence:
+      ohlcv_semantics:
+        # Each bar represents AGGREGATED data over interval
+        date: "2024-01-01 00:00:00"  # Start of 1-hour interval
+        open: 42000.0                # First price in interval
+        high: 42500.0                # Max price in interval
+        low: 41800.0                 # Min price in interval
+        close: 42200.0               # Last price in interval
+        volume: 1250.5               # Total volume in interval
+
+      mempool_semantics:
+        # Each snapshot is POINT-IN-TIME state
+        timestamp: "2024-01-01 00:00:00"  # Exact moment
+        unconfirmed_count: 12500          # Count at this moment
+        vsize_mb: 45.3                    # Size at this moment
+        fastest_fee: 25                   # Fee estimate at this moment
+
+    impact: |
+      - Coverage validation meaningless (no "expected" snapshot count)
+      - Gap detection ambiguous (is 5-min gap a problem?)
+      - Aggregation semantics unclear (mean of unconfirmed_count?)
+      - Different temporal reasoning required
+
+    recommendation: "REJECT - Fundamental semantic mismatch"
+
+# MAJOR VIOLATIONS (Significant Design Issues)
+x-major-violations:
+
+  violation_8_cli_inconsistency:
+    severity: "MAJOR"
+    category: "CLI Design"
+    finding: |
+      Proposed CLI command doesn't match existing pattern.
+
+      Existing CLI (src/gapless_crypto_data/cli.py):
+      - Command: gapless-crypto-data [options]
+      - No subcommands
+      - Parameters: --symbol, --timeframes, --start, --end, --output-dir, --fill-gaps
+
+      Proposed CLI (mempool-pressure-probe.yaml x-integration):
+      - Command: gapless-crypto-data mempool [options]
+      - Subcommand: "mempool"
+      - Parameters: --start, --end, --output-dir, --interval, --mode
+
+    impact: "CLI becomes subcommand-based for mempool, but not for OHLCV - confusing"
+
+  violation_9_dependency_bloat:
+    severity: "MAJOR"
+    category: "Dependency Management"
+    finding: |
+      Mempool probe introduces dependencies already removed for simplicity.
+
+      Current dependencies (pyproject.toml):
+      - duckdb>=1.1.0
+      - httpx>=0.25.0
+      - pandas>=2.0.0
+      - pydantic>=2.0.0
+      - pyarrow>=16.0.0
+
+      Proposed additions (mempool-pressure-probe.yaml):
+      - polars>=1.0.0 (REMOVED in v1.2.0 per CURRENT_ARCHITECTURE_STATUS.yaml line 139)
+
+    evidence:
+      removed_dependency:
+        # From docs/CURRENT_ARCHITECTURE_STATUS.yaml lines 138-141
+        polars:
+          version: "1.5.2"
+          removal_reason: "Mixed pandas/polars creates confusion - standardized on pandas"
+          removal_date: "2025-01-19"
+
+    impact: "Re-introduces complexity removed for architectural simplicity"
+
+  violation_10_test_coverage_fragmentation:
+    severity: "MAJOR"
+    category: "Testing Strategy"
+    finding: |
+      Doubles testing surface area with separate test suites.
+
+      Current tests:
+      - test_binance_collector.py (core collection)
+      - test_gap_filler.py (gap filling)
+      - test_validation_storage.py (DuckDB persistence)
+      - test_csv_validator.py (5-layer validation)
+
+      Proposed additions:
+      - test_probe_runner.py (UV task spawning)
+      - test_mempool_api_client.py (mempool.space API)
+      - test_mempool_validation.py (separate validation logic)
+      - test_mempool_signals.py (engineered signals)
+
+    impact: "Testing complexity increases 33% (8 → 12 test files)"
+
+  violation_11_etag_cache_duplication:
+    severity: "MAJOR"
+    category: "Code Duplication"
+    finding: |
+      Mempool probe reinvents ETag caching despite existing implementation.
+
+      Existing implementation:
+      - src/gapless_crypto_data/utils/etag_cache.py (lines 1-300)
+      - XDG-compliant cache location: ~/.cache/gapless-crypto-data/
+      - ETag storage in JSON: {"url": "etag_value"}
+      - If-None-Match header support
+
+      Proposed (mempool-pressure-probe.yaml x-probe-architecture):
+      - cache/: "HTTP response cache with ETag support"
+      - Separate implementation in probe runner
+
+    impact: "Duplicates existing cache logic instead of reusing ETagCache class"
+
+  violation_12_symbol_timeframe_extraction_mismatch:
+    severity: "MAJOR"
+    category: "Metadata Handling"
+    finding: |
+      ValidationReport expects symbol/timeframe from filename. Mempool has neither.
+
+      Existing pattern (validation/storage.py extract_symbol_timeframe_from_path):
+      - Filename: "BTCUSDT-1h_2024-01-01_to_2024-12-31.csv"
+      - Extracts: symbol="BTCUSDT", timeframe="1h"
+
+      Mempool filenames:
+      - "mempool_pressure_20241103_14.parquet"
+      - No symbol (Bitcoin network-wide data)
+      - No timeframe (irregular snapshots)
+
+    impact: "symbol and timeframe columns NULL for all mempool records in DuckDB"
+
+  violation_13_error_handling_pattern_mismatch:
+    severity: "MAJOR"
+    category: "Exception Design"
+    finding: |
+      Mempool probe uses generic exceptions. Existing system uses typed exceptions.
+
+      Existing (src/gapless_crypto_data/exceptions.py):
+      - DataCollectionError
+      - GapFillingError
+      - ValidationError
+
+      Mempool probe:
+      - RuntimeError(f"Task {task_id} failed")
+      - Generic exceptions in POC
+
+    impact: "Error handling becomes inconsistent across features"
+
+  violation_14_observability_gap:
+    severity: "MAJOR"
+    category: "Logging and Monitoring"
+    finding: |
+      UV-isolated tasks create observability challenges.
+
+      Existing pattern:
+      - Direct logging to stdout/stderr
+      - Clear progress reporting
+      - Validation results immediately accessible
+
+      UV task pattern:
+      - Logs scattered across tmp/probe/mempool_pressure/logs/
+      - Task stdout captured in subprocess
+      - No centralized progress reporting
+
+    impact: "Debugging becomes harder with distributed task logs"
+
+  violation_15_atomic_operations_unclear:
+    severity: "MAJOR"
+    category: "Data Integrity"
+    finding: |
+      Existing system emphasizes atomic file operations. Mempool probe doesn't.
+
+      Existing (docs/architecture/OVERVIEW.md):
+      - "Atomic file operations preventing corruption"
+      - "SafeCSVMerger for corruption-proof merges"
+
+      Mempool probe:
+      - Direct Parquet writes with df.write_parquet()
+      - No mention of atomic write strategy
+
+    impact: "Risk of partial writes during crashes"
+
+  violation_16_gap_filling_semantics:
+    severity: "MAJOR"
+    category: "Feature Semantics"
+    finding: |
+      Gap filling makes sense for OHLCV intervals but not mempool snapshots.
+
+      OHLCV gap filling:
+      - Detect missing 1-hour bars
+      - Fill with Binance API klines endpoint
+      - Result: complete time series
+
+      Mempool "gap filling":
+      - What's a gap? Missing 1-minute snapshot?
+      - How to fill? Mempool state is not historical (can't backfill past states)
+      - Result: Cannot reconstruct past mempool state
+
+    impact: "Core feature (gap filling) not applicable to mempool data"
+
+  violation_17_resume_checkpoint_mismatch:
+    severity: "MAJOR"
+    category: "Resume Functionality"
+    finding: |
+      Intelligent resume system designed for OHLCV monthly downloads, not snapshots.
+
+      Existing resume (src/gapless_crypto_data/resume/intelligent_checkpointing.py):
+      - Checkpoints: {"symbol": "BTCUSDT", "processed_months": ["2024-01", "2024-02"]}
+      - Resumes from last completed month
+
+      Mempool snapshots:
+      - No monthly structure
+      - Continuous streaming or time-range backfill
+      - Different resume semantics
+
+    impact: "Resume system doesn't apply to mempool collection"
+
+  violation_18_documentation_fragmentation:
+    severity: "MAJOR"
+    category: "Documentation Consistency"
+    finding: |
+      Mempool docs split user guide into two paradigms.
+
+      Current docs:
+      - Single architecture guide (OVERVIEW.md)
+      - Single data collection guide (DATA_COLLECTION.md)
+      - Single Python API guide (python-api.md)
+
+      With mempool:
+      - Need separate mempool architecture guide
+      - Need separate mempool collection guide
+      - Need separate mempool API guide
+
+    impact: "Documentation maintenance burden increases significantly"
+
+  violation_19_version_tracking_ambiguity:
+    severity: "MAJOR"
+    category: "Versioning"
+    finding: |
+      Unclear how mempool probe versions relate to package version.
+
+      Package version: 3.3.0
+      Mempool probe spec version: 1.0.0
+
+      Questions:
+      - Do they version independently?
+      - Does package 3.4.0 include mempool probe 1.0.0 or 1.1.0?
+      - How to communicate version compatibility?
+
+    impact: "Version management complexity increases"
+
+# MINOR VIOLATIONS (Cosmetic/Preference)
+x-minor-violations:
+
+  violation_20_probe_naming:
+    severity: "MINOR"
+    category: "Naming Conventions"
+    finding: "Term 'probe' not used elsewhere in codebase. Inconsistent terminology."
+    impact: "Minor naming inconsistency"
+
+  violation_21_pep723_dependency:
+    severity: "MINOR"
+    category: "Python Version"
+    finding: "PEP 723 inline dependencies require uv-specific features, not standard Python"
+    impact: "Tool-specific dependency (not pip-installable)"
+
+  violation_22_tmp_directory_usage:
+    severity: "MINOR"
+    category: "File System Usage"
+    finding: "Existing system uses package directory or user-specified paths, not /tmp"
+    impact: "Different file system usage pattern"
+
+# ARCHITECTURAL DEBT ANALYSIS
+x-architectural-debt:
+  summary: |
+    Adding mempool probe creates significant architectural debt that compounds
+    over time. The system becomes a hybrid OHLCV/mempool data platform with
+    dual codepaths, dual validations, and dual APIs.
+
+  immediate_debt:
+    - "Dual data models (OHLCV vs mempool)"
+    - "Dual validation pipelines (CSVValidator vs MempoolValidator)"
+    - "Dual storage schemas (validation_reports table pollution)"
+    - "Dual collector patterns (class-based vs UV tasks)"
+
+  compounding_debt:
+    - "Every new feature must consider both OHLCV and mempool"
+    - "Bug fixes may need dual implementations"
+    - "Performance optimizations split across two codepaths"
+    - "Documentation maintenance doubles"
+
+  future_constraints:
+    - "Adding more non-OHLCV features (funding rates, liquidations) compounds further"
+    - "Each feature adds columns to bloated validation_reports table"
+    - "API becomes inconsistent grab-bag of data types"
+    - "Package identity becomes unclear (OHLCV tool or data aggregator?)"
+
+# ALTERNATIVE RECOMMENDATIONS
+x-alternatives:
+
+  alternative_1_separate_package:
+    title: "Create Separate Package: gapless-mempool-data"
+    rationale: |
+      Mempool data is fundamentally different domain. Separate package maintains
+      clean architecture and allows independent evolution.
+
+    benefits:
+      - "Clean separation of concerns"
+      - "Independent versioning (mempool v1.0.0 vs gapless v3.3.0)"
+      - "Each package stays focused (gapless = OHLCV, mempool = Bitcoin network)"
+      - "No architectural debt in either package"
+      - "Users install only what they need"
+
+    drawbacks:
+      - "Duplicate validation infrastructure"
+      - "Potential code duplication (ETag cache, error handling)"
+      - "Separate documentation"
+
+    recommendation: "RECOMMENDED - Best long-term architecture"
+
+  alternative_2_plugin_architecture:
+    title: "Create Plugin System for Non-OHLCV Data"
+    rationale: |
+      If mempool is just the first of many non-OHLCV features, design a plugin
+      system that doesn't pollute core package.
+
+    approach:
+      - "Core package: gapless-crypto-data (OHLCV only)"
+      - "Plugin interface: DataSourcePlugin ABC"
+      - "Plugins: gapless-mempool-plugin, gapless-funding-rates-plugin, etc."
+      - "Validation: Each plugin provides own validator"
+
+    benefits:
+      - "Core stays clean and focused"
+      - "Extensible for future data sources"
+      - "Plugins can version independently"
+      - "Users install plugins as needed"
+
+    drawbacks:
+      - "Complexity of plugin system design"
+      - "Documentation for plugin development"
+      - "Potential for plugin incompatibilities"
+
+    recommendation: "GOOD - If multiple non-OHLCV sources planned"
+
+  alternative_3_data_warehouse_approach:
+    title: "Pivot to Data Warehouse Platform"
+    rationale: |
+      Embrace multi-source data collection and redesign as data warehouse tool.
+
+    approach:
+      - "Rename: crypto-data-warehouse"
+      - "Multi-source architecture from ground up"
+      - "Unified validation framework for heterogeneous data"
+      - "Catalog-based discovery (DuckDB as data catalog)"
+
+    benefits:
+      - "Honest about multi-source nature"
+      - "Designed for heterogeneity from start"
+      - "Can add OHLCV, mempool, funding rates, etc. cleanly"
+
+    drawbacks:
+      - "Complete architectural rewrite"
+      - "Breaking changes for existing users"
+      - "Scope creep risk"
+
+    recommendation: "ONLY IF - Complete pivot decision made"
+
+# COMPLIANCE ASSESSMENT
+x-compliance:
+  slo_compliance:
+    correctness: "VIOLATED - Mempool validation logic unproven"
+    observability: "DEGRADED - UV task logs scattered"
+    maintainability: "VIOLATED - Dual codepaths increase complexity"
+
+  sdk_quality_standards:
+    type_safety: "DEGRADED - Optional fields everywhere in ValidationReport"
+    ai_discoverability: "DEGRADED - Two different API patterns to document"
+    structured_exceptions: "VIOLATED - Generic exceptions in probe"
+    coverage_strategy: "SPLIT - Two test suites needed"
+
+  existing_principles:
+    exception_only_failures: "PARTIAL - Some probe errors use print()"
+    atomic_operations: "UNCLEAR - No atomic write strategy mentioned"
+    streaming_first: "VIOLATED - Probe writes temp files, not streams"
+
+# FINAL VERDICT
+x-final-verdict:
+  decision: "REJECT"
+  rationale: |
+    Mempool pressure probe introduces 22 violations (7 critical, 12 major, 3 minor)
+    across data models, validation, storage, API design, and architectural patterns.
+
+    The fundamental issue: OHLCV interval data and mempool point-in-time snapshots
+    are different data domains requiring different abstractions. Forcing them into
+    a single package creates architectural debt that compounds over time.
+
+  recommendation: |
+    Create separate package: gapless-mempool-data
+
+    Benefits:
+    1. Clean architecture for both packages
+    2. Independent versioning and evolution
+    3. No schema pollution or dual codepaths
+    4. Users install only what they need
+    5. Each package stays focused and maintainable
+
+  implementation_path:
+    - "Archive mempool-pressure-probe.yaml as reference"
+    - "Create new repository: gapless-mempool-data"
+    - "Port probe design to standalone package"
+    - "Document cross-package usage if needed"
+    - "Keep gapless-crypto-data focused on OHLCV excellence"
+
+  closure: |
+    This audit demonstrates the value of adversarial review before implementation.
+    Rejecting the probe now saves months of refactoring debt later.

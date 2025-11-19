@@ -1,0 +1,446 @@
+openapi: 3.1.1
+info:
+  title: "QuestDB Single Source of Truth - Implementation Plan"
+  description: |
+    Detailed implementation plan for migrating gapless-crypto-data from file-based
+    storage to QuestDB time-series database as single source of truth.
+  version: "1.0.0"
+  x-adr-id: "0001"
+  x-status: "ready-for-release"
+  x-target-release: "4.0.0"
+
+paths: {}
+
+components:
+  schemas:
+    ImplementationPlan:
+      type: object
+      required:
+        - phases
+        - timeline
+        - deliverables
+      properties:
+        phases:
+          type: array
+        timeline:
+          type: object
+        deliverables:
+          type: array
+
+x-implementation-plan:
+  timeline:
+    total_duration: "11 weeks"
+    start_date: "2025-11-15"
+    target_completion: "2026-02-07"
+
+  phases:
+    - id: "phase-1"
+      name: "Infrastructure & Documentation"
+      duration: "2 weeks"
+      weeks: "1-2"
+      status: "completed"
+      deliverables:
+        - name: "QuestDB Schema Design"
+          path: "src/gapless_crypto_data/questdb/schema.sql"
+          description: "Single unified table with DAY partitioning and WAL mode"
+          acceptance_criteria:
+            - "SYMBOL types for symbol, timeframe, data_source columns"
+            - "PARTITION BY DAY for optimal query performance"
+            - "WAL mode enabled for concurrent writes"
+
+        - name: "docker-compose.macos.yml"
+          path: "deployment/docker-compose.macos.yml"
+          description: "Colima-optimized QuestDB deployment for macOS development"
+          acceptance_criteria:
+            - "Named volume (not bind mount) for 3.5x faster I/O"
+            - "VirtioFS mount type specified in docs"
+            - "Health check using bash built-ins"
+
+        - name: "systemd Service Templates"
+          paths:
+            - "deployment/systemd/questdb.service"
+            - "deployment/systemd/gapless-crypto-collector.service"
+          description: "Production Linux deployment configurations"
+          acceptance_criteria:
+            - "QuestDB service with proper JVM heap sizing"
+            - "Python collector service using uv run"
+            - "Dependency ordering (questdb before collector)"
+
+        - name: "Deployment Guides"
+          paths:
+            - "docs/deployment/macos-colima-setup.md"
+            - "docs/deployment/linux-native-setup.md"
+            - "docs/deployment/linux-docker-setup.md"
+          description: "Complete setup instructions for all deployment options"
+          acceptance_criteria:
+            - "Colima installation and configuration for macOS"
+            - "Native QuestDB binary installation for Linux"
+            - "Docker alternative for Linux production"
+            - "Resource requirements (CPU, RAM, disk) documented"
+
+    - id: "phase-2"
+      name: "Python API Refactoring"
+      duration: "3 weeks"
+      weeks: "3-5"
+      status: "completed"
+      dependencies: ["phase-1"]
+      deliverables:
+        - name: "Remove CLI"
+          paths:
+            - "src/gapless_crypto_data/cli.py"  # DELETE
+          description: "Remove deprecated CLI interface (machine interface only)"
+          acceptance_criteria:
+            - "cli.py deleted entirely"
+            - "__main__.py updated to remove CLI entry point"
+            - "pyproject.toml console_scripts entry removed"
+
+        - name: "QuestDB Connection Module"
+          path: "src/gapless_crypto_data/questdb/connection.py"
+          description: "Managed QuestDB connections with environment config"
+          acceptance_criteria:
+            - "QuestDBConfig loads from environment variables"
+            - "get_sender() returns questdb.ingress.Sender for ILP"
+            - "get_pg_connection() returns psycopg.Connection for queries"
+            - "Context manager support for automatic cleanup"
+
+        - name: "Bulk Loader Refactoring"
+          path: "src/gapless_crypto_data/collectors/binance_public_data_collector.py"
+          description: "Refactor to ingest CloudFront ZIPs directly to QuestDB"
+          acceptance_criteria:
+            - "Downloads CloudFront ZIP (preserve 22x speedup)"
+            - "Extracts CSV to temp location (transient)"
+            - "Streams to QuestDB via ILP (no persistent files)"
+            - "Deletes temp CSV after ingestion"
+            - "output_dir parameter removed"
+
+        - name: "Query Interface"
+          path: "src/gapless_crypto_data/query.py"
+          description: "SQL query abstraction returning pandas DataFrames"
+          acceptance_criteria:
+            - "get_latest(symbol, timeframe, limit) method"
+            - "get_range(symbol, timeframe, start, end) method"
+            - "get_multi_symbol(symbols, timeframe, start, end) method"
+            - "execute_sql(sql, params) for raw queries"
+            - "Returns pandas DataFrames for backward compatibility"
+
+        - name: "Gap Filler Module"
+          path: "src/gapless_crypto_data/collectors/gap_filler.py"
+          description: "SQL-based gap detection and REST API filling"
+          acceptance_criteria:
+            - "detect_gaps() uses SQL timestamp sequence analysis"
+            - "fill_gaps() fetches from Binance REST API"
+            - "Direct QuestDB ingestion via ILP"
+            - "Deduplication via QuestDB UPSERT semantics"
+
+    - id: "phase-3"
+      name: "uv Dependency Management"
+      duration: "1 week"
+      weeks: "6"
+      status: "completed"
+      dependencies: ["phase-2"]
+      deliverables:
+        - name: "Update pyproject.toml"
+          path: "pyproject.toml"
+          description: "Add QuestDB dependencies, remove CLI dependencies"
+          acceptance_criteria:
+            - "questdb>=4.0.0 added to dependencies"
+            - "psycopg[binary]>=3.2.0 added to dependencies"
+            - "python-dotenv>=1.0.0 added"
+            - "typer, rich, click removed (CLI dependencies)"
+            - "requires-python = '>=3.12'"
+
+        - name: "Create uv.lock"
+          path: "uv.lock"
+          description: "Reproducible dependency lockfile"
+          acceptance_criteria:
+            - "Generated via 'uv lock'"
+            - "Committed to git (enables reproducible builds)"
+            - "CI/CD uses 'uv sync --frozen --no-dev'"
+
+        - name: "uv Deployment Guide"
+          path: "docs/deployment/python-uv-setup.md"
+          description: "Non-containerized Python deployment instructions"
+          acceptance_criteria:
+            - "Installation instructions (brew/standalone)"
+            - "Development workflow (uv sync)"
+            - "Production deployment (uv sync --frozen --no-dev)"
+            - "systemd integration examples"
+
+    - id: "phase-4"
+      name: "Migration Tooling"
+      duration: "1 week"
+      weeks: "7"
+      status: "skipped"
+      dependencies: ["phase-3"]
+      skip_reason: "Deferred to post-v4.0.0 release - users can manually migrate or continue using v3.x until migration tooling is available"
+      deliverables:
+        - name: "Migration Script"
+          path: "scripts/migrate_v3_to_v4.py"
+          description: "Automated v3.x CSV/Parquet → v4.0.0 QuestDB migration"
+          acceptance_criteria:
+            - "Auto-discover CSV/Parquet files in source directory"
+            - "Progress tracking with resume capability (.migration_progress.json)"
+            - "Row count validation after each file"
+            - "Dry-run mode for testing"
+            - "Error handling with failed file tracking"
+
+        - name: "Migration Guide"
+          path: "docs/guides/migration-guide-v3-to-v4.md"
+          description: "Step-by-step migration instructions for users"
+          acceptance_criteria:
+            - "Prerequisites (QuestDB deployment)"
+            - "Backup procedures"
+            - "Migration script usage"
+            - "Validation steps"
+            - "Rollback procedures"
+
+        - name: "Breaking Changes Documentation"
+          path: "BREAKING_CHANGES_v4.0.0.md"
+          description: "Comprehensive changelog for v4.0.0"
+          acceptance_criteria:
+            - "All removed APIs documented"
+            - "All changed APIs with migration examples"
+            - "Deprecation timeline"
+            - "Migration checklist"
+
+    - id: "phase-5"
+      name: "Testing & Validation"
+      duration: "2 weeks"
+      weeks: "8-9"
+      status: "skipped"
+      dependencies: ["phase-4"]
+      skip_reason: "Deferred to post-v4.0.0 release - basic testing via manual QA"
+      deliverables:
+        - name: "Integration Tests"
+          paths:
+            - "tests/integration/test_questdb_bulk_loader.py"
+            - "tests/integration/test_questdb_gap_filler.py"
+            - "tests/integration/test_questdb_query.py"
+          description: "End-to-end tests for QuestDB ingestion and queries"
+          acceptance_criteria:
+            - "Bulk loader test: CloudFront → QuestDB → verify row count"
+            - "Gap filler test: detect gaps → fill → validate zero gaps"
+            - "Query test: ingest data → query DataFrame → assert correctness"
+            - "Test coverage: 85%+ on new modules"
+
+        - name: "Performance Benchmarks"
+          path: "tests/benchmarks/test_questdb_performance.py"
+          description: "Validate performance against requirements"
+          acceptance_criteria:
+            - "Bulk ingestion: >100K rows/sec"
+            - "Query latency: <1s for typical OHLCV range"
+            - "Preserve CloudFront 22x speedup (validate download speed)"
+
+        - name: "Migration Validation"
+          path: "tests/integration/test_migration_v3_to_v4.py"
+          description: "Automated validation of v3.x → v4.0.0 migration"
+          acceptance_criteria:
+            - "Row count parity (CSV vs QuestDB)"
+            - "Timestamp sequence validation"
+            - "OHLC constraint checks (high >= all, low <= all)"
+            - "Gap detection consistency"
+
+    - id: "phase-6"
+      name: "Documentation"
+      duration: "2 weeks"
+      weeks: "10-11"
+      status: "skipped"
+      dependencies: ["phase-5"]
+      skip_reason: "Phase 1 deployment guides sufficient for v4.0.0 release"
+      deliverables:
+        - name: "README Update"
+          path: "README.md"
+          description: "Quick start guide with QuestDB examples"
+          acceptance_criteria:
+            - "Installation instructions (QuestDB + uv)"
+            - "Quick start code examples"
+            - "Link to deployment guides"
+            - "Link to migration guide"
+
+        - name: "API Reference"
+          path: "docs/api/python-api-v4.md"
+          description: "Complete v4.0.0 Python API documentation"
+          acceptance_criteria:
+            - "QuestDBConnection class reference"
+            - "OHLCVQuery class reference"
+            - "BinancePublicDataCollector v4.0.0 changes"
+            - "Example code for all major use cases"
+
+        - name: "Troubleshooting Guide"
+          path: "docs/troubleshooting/questdb-deployment.md"
+          description: "Common issues and solutions"
+          acceptance_criteria:
+            - "Colima issues (macOS)"
+            - "systemd issues (Linux)"
+            - "QuestDB connection issues"
+            - "Migration issues"
+
+x-slos:
+  availability:
+    metrics:
+      - name: "QuestDB Uptime"
+        target: "99.9%"
+        measurement: "systemd/Docker health checks"
+
+      - name: "Data Source Availability"
+        target: "99.99%"
+        measurement: "CloudFront SLA compliance"
+
+  correctness:
+    metrics:
+      - name: "Zero-Gap Guarantee"
+        target: "100%"
+        measurement: "SQL timestamp sequence validation"
+        validation: "Automated in tests/integration/test_gap_detection.py"
+
+      - name: "Data Authenticity"
+        target: "100%"
+        measurement: "Only Binance sources, no synthetic data"
+        validation: "data_source column tracking"
+
+      - name: "Deduplication"
+        target: "Zero duplicates"
+        measurement: "UNIQUE constraint on (timestamp, symbol, timeframe)"
+        validation: "QuestDB UPSERT semantics"
+
+  observability:
+    metrics:
+      - name: "Prometheus Metrics Endpoint"
+        target: "Exposed on :9003/metrics"
+        measurement: "QuestDB built-in metrics"
+
+      - name: "systemd Journal Logging"
+        target: "All services log to journalctl"
+        measurement: "StandardOutput=journal, StandardError=journal"
+
+      - name: "Data Lineage"
+        target: "Tracked in data_source column"
+        measurement: "cloudfront, api, websocket values"
+
+  maintainability:
+    metrics:
+      - name: "Single Table Schema"
+        target: "1 table (not 5,200 files)"
+        measurement: "Simplified vs file-based fragmentation"
+
+      - name: "Standard SQL"
+        target: "PostgreSQL wire protocol compatibility"
+        measurement: "psycopg3 client support"
+
+      - name: "Deployment Documentation"
+        target: "3 deployment options documented"
+        measurement: "Colima, native Linux, Docker Linux guides"
+
+x-error-handling:
+  policy: "raise-and-propagate"
+  rationale: "Fail fast, no silent failures, let callers handle errors"
+
+  examples:
+    - scenario: "QuestDB connection failure"
+      behavior: "Raise ConnectionError, propagate to caller"
+      no_fallback: "Do not retry, do not use default values"
+
+    - scenario: "CloudFront ZIP download failure"
+      behavior: "Raise HTTPError with full context"
+      no_fallback: "Do not attempt REST API as fallback"
+
+    - scenario: "Data validation failure (OHLC constraints)"
+      behavior: "Raise ValidationError with specific violation"
+      no_fallback: "Do not skip invalid rows, abort ingestion"
+
+    - scenario: "Gap detection finds gaps"
+      behavior: "Return gap list, do not auto-fill unless explicitly requested"
+      no_fallback: "No silent gap filling with synthetic data"
+
+x-oss-libraries:
+  - name: "QuestDB"
+    license: "Apache 2.0"
+    rationale: "Production-proven time-series database, OSS alternative to InfluxDB Enterprise"
+
+  - name: "questdb Python client"
+    license: "Apache 2.0"
+    rationale: "Official SDK for ILP ingestion"
+
+  - name: "psycopg3"
+    license: "BSD-3-Clause"
+    rationale: "PostgreSQL wire protocol client, mature and widely used"
+
+  - name: "uv"
+    license: "MIT/Apache 2.0"
+    rationale: "40% faster CI/CD vs pip, OSS alternative to poetry"
+
+  - name: "pandas"
+    license: "BSD-3-Clause"
+    rationale: "Existing dependency, DataFrame abstraction"
+
+x-auto-validation:
+  artifacts:
+    - name: "QuestDB Schema"
+      validation: "Load schema.sql → CREATE TABLE → Verify columns via pg_catalog"
+
+    - name: "docker-compose.yml"
+      validation: "docker-compose config --quiet (YAML syntax check)"
+
+    - name: "systemd Service Files"
+      validation: "systemd-analyze verify <service-file>"
+
+    - name: "Migration Script"
+      validation: "Dry-run → Compare row counts → Assert 100% parity"
+
+    - name: "uv.lock"
+      validation: "uv sync --frozen (verify lock file integrity)"
+
+x-semantic-release:
+  enabled: true
+  config:
+    branches:
+      - "main"
+    plugins:
+      - "@semantic-release/commit-analyzer"
+      - "@semantic-release/release-notes-generator"
+      - "@semantic-release/changelog"
+      - "@semantic-release/github"
+      - "@semantic-release/git"
+    preset: "conventionalcommits"
+
+  commit_types:
+    - type: "feat"
+      section: "Features"
+      release: "minor"
+
+    - type: "fix"
+      section: "Bug Fixes"
+      release: "patch"
+
+    - type: "docs"
+      section: "Documentation"
+      release: false
+
+    - type: "perf"
+      section: "Performance Improvements"
+      release: "patch"
+
+    - type: "refactor"
+      section: "Code Refactoring"
+      release: false
+
+    - type: "test"
+      section: "Tests"
+      release: false
+
+    - type: "chore"
+      section: "Chores"
+      release: false
+
+    - type: "BREAKING CHANGE"
+      section: "BREAKING CHANGES"
+      release: "major"
+
+x-compliance:
+  openapi_version: "3.1.1"
+  doc_style: "evolutionary-without-promo"
+  slo_focus: "availability, correctness, observability, maintainability"
+  error_policy: "raise-propagate-no-fallback"
+  oss_preference: "prefer-oss-over-custom"
+  auto_validate: "all-artifacts-validated"
+  release_automation: "semantic-release-conventional-commits"

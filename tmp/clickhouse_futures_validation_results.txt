@@ -1,0 +1,136 @@
+DEBUG uv 0.7.13 (62ed17b23 2025-06-12)
+DEBUG Found project root: `/Users/terryli/eon/gapless-crypto-data`
+DEBUG No workspace root found, using project root
+DEBUG Discovered project `gapless-crypto-data` at: /Users/terryli/eon/gapless-crypto-data
+DEBUG Acquired lock for `/Users/terryli/eon/gapless-crypto-data`
+DEBUG Using Python request `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3` from explicit request
+DEBUG Checking for Python environment at `.venv`
+DEBUG The project environment's Python version satisfies the request: `path `/Users/terryli/.local/share/uv/python/cpython-3.13.6-macos-aarch64-none/bin/python3``
+DEBUG Released lock at `/var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/uv-f75a052cd49c587c.lock`
+DEBUG Using request timeout of 30s
+DEBUG Found static `pyproject.toml` for: gapless-crypto-data @ file:///Users/terryli/eon/gapless-crypto-data
+DEBUG No workspace root found, using project root
+DEBUG Existing `uv.lock` satisfies workspace requirements
+DEBUG Using request timeout of 30s
+DEBUG Computed cache info: Some(Timestamp(SystemTime { tv_sec: 1763431114, tv_nsec: 479836835 })), None, None, {}, {"src": Some(Timestamp(Timestamp(SystemTime { tv_sec: 1757906618, tv_nsec: 47687211 })))}
+DEBUG Requirement already installed: gapless-crypto-data==3.3.0 (from file:///Users/terryli/eon/gapless-crypto-data)
+DEBUG Requirement already installed: commitizen==4.9.1
+DEBUG Requirement already installed: mypy==1.18.1
+DEBUG Requirement already installed: pandas-stubs==2.3.2.250827
+DEBUG Requirement already installed: pre-commit==4.3.0
+DEBUG Requirement already installed: pytest==8.4.2
+DEBUG Requirement already installed: pytest-asyncio==1.2.0
+DEBUG Requirement already installed: pytest-cov==7.0.0
+DEBUG Requirement already installed: ruff==0.13.0
+DEBUG Requirement already installed: types-requests==2.32.4.20250913
+DEBUG Requirement already installed: yamllint==1.37.1
+DEBUG Requirement already installed: clickhouse-driver==0.2.10
+DEBUG Requirement already installed: duckdb==1.4.1
+DEBUG Requirement already installed: httpx==0.28.1
+DEBUG Requirement already installed: pandas==2.3.2
+DEBUG Requirement already installed: psycopg==3.2.12
+DEBUG Requirement already installed: pyarrow==21.0.0
+DEBUG Requirement already installed: pydantic==2.12.3
+DEBUG Requirement already installed: python-dotenv==1.2.1
+DEBUG Requirement already installed: questdb==4.0.0
+DEBUG Requirement already installed: argcomplete==3.6.2
+DEBUG Requirement already installed: charset-normalizer==3.4.3
+DEBUG Requirement already installed: colorama==0.4.6
+DEBUG Requirement already installed: decli==0.6.3
+DEBUG Requirement already installed: deprecated==1.2.18
+DEBUG Requirement already installed: jinja2==3.1.6
+DEBUG Requirement already installed: packaging==25.0
+DEBUG Requirement already installed: prompt-toolkit==3.0.51
+DEBUG Requirement already installed: pyyaml==6.0.2
+DEBUG Requirement already installed: questionary==2.1.1
+DEBUG Requirement already installed: termcolor==3.1.0
+DEBUG Requirement already installed: tomlkit==0.13.3
+DEBUG Requirement already installed: mypy-extensions==1.1.0
+DEBUG Requirement already installed: pathspec==0.12.1
+DEBUG Requirement already installed: typing-extensions==4.15.0
+DEBUG Requirement already installed: numpy==2.2.6
+DEBUG Requirement already installed: types-pytz==2025.2.0.20250809
+DEBUG Requirement already installed: cfgv==3.4.0
+DEBUG Requirement already installed: identify==2.6.14
+DEBUG Requirement already installed: nodeenv==1.9.1
+DEBUG Requirement already installed: virtualenv==20.34.0
+DEBUG Requirement already installed: iniconfig==2.1.0
+DEBUG Requirement already installed: pluggy==1.6.0
+DEBUG Requirement already installed: pygments==2.19.2
+DEBUG Requirement already installed: coverage==7.10.6
+DEBUG Requirement already installed: urllib3==2.5.0
+DEBUG Requirement already installed: pytz==2025.2
+DEBUG Requirement already installed: tzlocal==5.3.1
+DEBUG Requirement already installed: anyio==4.10.0
+DEBUG Requirement already installed: certifi==2025.8.3
+DEBUG Requirement already installed: httpcore==1.0.9
+DEBUG Requirement already installed: idna==3.10
+DEBUG Requirement already installed: python-dateutil==2.9.0.post0
+DEBUG Requirement already installed: tzdata==2025.2
+DEBUG Requirement already installed: psycopg-binary==3.2.12
+DEBUG Requirement already installed: annotated-types==0.7.0
+DEBUG Requirement already installed: pydantic-core==2.41.4
+DEBUG Requirement already installed: typing-inspection==0.4.2
+DEBUG Requirement already installed: wrapt==1.17.3
+DEBUG Requirement already installed: markupsafe==3.0.2
+DEBUG Requirement already installed: wcwidth==0.2.14
+DEBUG Requirement already installed: distlib==0.4.0
+DEBUG Requirement already installed: filelock==3.19.1
+DEBUG Requirement already installed: platformdirs==4.4.0
+DEBUG Requirement already installed: sniffio==1.3.1
+DEBUG Requirement already installed: h11==0.16.0
+DEBUG Requirement already installed: six==1.17.0
+DEBUG Using Python 3.13.6 interpreter at: /Users/terryli/eon/gapless-crypto-data/.venv/bin/python3
+DEBUG Running `python tmp/clickhouse_futures_validation.py`
+DEBUG Spawned child 57687 in process group 57660
+================================================================================
+ClickHouse Futures Support Validation (Phase 6 / ADR-0004)
+================================================================================
+
+[1/5] Testing futures ingestion (BTCUSDT 1h, 2024-01)...
+Initializing ClickHouse connection: localhost:9001
+ClickHouse bulk loader initialized (instrument_type=futures, base_url=https://data.binance.vision/data/futures/um)
+Downloading from CloudFront: https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01.zip
+Download complete: 38890 bytes
+Extracting ZIP: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpbvthg7xk/BTCUSDT-1h-2024-01.zip
+Extracted CSV: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpbvthg7xk/BTCUSDT-1h-2024-01.csv (91706 bytes)
+Parsing CSV: /var/folders/f4/yr36gs0j7gb46m_lcdc6tr2h0000gn/T/tmpbvthg7xk/BTCUSDT-1h-2024-01.csv (instrument_type=futures)
+Parsed 744 rows from CSV (format=futures)
+Ingesting 744 rows to ClickHouse
+
+✗ Futures validation failed: Ingestion failed for 744 rows: 'number_of_trades'
+Traceback (most recent call last):
+  File "/Users/terryli/eon/gapless-crypto-data/.venv/lib/python3.13/site-packages/pandas/core/indexes/base.py", line 3812, in get_loc
+    return self._engine.get_loc(casted_key)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7096, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'number_of_trades'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/clickhouse_bulk_loader.py", line 412, in _ingest_dataframe
+    df_ingest["number_of_trades"] = df_ingest["number_of_trades"].astype("int64")
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/Users/terryli/eon/gapless-crypto-data/.venv/lib/python3.13/site-packages/pandas/core/frame.py", line 4107, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "/Users/terryli/eon/gapless-crypto-data/.venv/lib/python3.13/site-packages/pandas/core/indexes/base.py", line 3819, in get_loc
+    raise KeyError(key) from err
+KeyError: 'number_of_trades'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/terryli/eon/gapless-crypto-data/tmp/clickhouse_futures_validation.py", line 41, in main
+    rows = loader.ingest_month("BTCUSDT", "1h", 2024, 1)
+  File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/clickhouse_bulk_loader.py", line 207, in ingest_month
+    rows_ingested = self._ingest_dataframe(df)
+  File "/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/clickhouse_bulk_loader.py", line 443, in _ingest_dataframe
+    raise RuntimeError(
+        f"Ingestion failed for {len(df)} rows: {e}"
+    ) from e
+RuntimeError: Ingestion failed for 744 rows: 'number_of_trades'
+DEBUG Command exited with code: 1

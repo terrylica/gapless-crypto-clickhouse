@@ -1,0 +1,95 @@
+# gapless-crypto-clickhouse
+
+ClickHouse-based cryptocurrency data collection with zero gaps guarantee.
+22x faster than API-only via Binance public data repository.
+
+## Quick Start
+
+```python
+import gapless_crypto_clickhouse as gcd
+
+# Fetch recent OHLCV data
+df = gcd.fetch_data("BTCUSDT", timeframe="1h", limit=1000)
+
+# Download historical range
+df = gcd.download("ETHUSDT", timeframe="4h", start="2024-01-01", end="2024-06-30")
+
+# Fill gaps in existing datasets
+results = gcd.fill_gaps("./data")
+```
+
+## Core Capabilities
+
+- **ClickHouse Database**: Persistent storage with ReplacingMergeTree for deterministic deduplication
+- **Data Collection**: 22x faster via monthly ZIP files from Binance public repository
+- **Zero Gaps Guarantee**: Automatic gap detection and filling with authentic API data
+- **USDT-Margined Futures**: Perpetual contracts support via `instrument_type` column (spot/futures)
+- **13 Timeframes**: 1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d
+- **11/12-Column Format**: Spot (11 columns), Futures (12 columns with funding rate)
+
+## Supported Symbols
+
+USDT-quoted spot pairs AND USDT-margined perpetual futures:
+- **Spot**: BTCUSDT, ETHUSDT, SOLUSDT, ADAUSDT, DOTUSDT, LINKUSDT, MATICUSDT, AVAXUSDT, ATOMUSDT, NEARUSDT, FTMUSDT, SANDUSDT, MANAUSDT, and more
+- **Futures**: BTCUSDT perps, ETHUSDT perps, SOLUSDT perps, etc. (via `instrument_type='futures'`)
+
+## SDK Entry Points
+
+Primary API (function-based):
+- `fetch_data()` - Fetch recent data with limit
+- `download()` - Download historical range
+- `fill_gaps()` - Fill gaps in existing datasets
+- `get_supported_symbols()` - List available symbols
+- `get_supported_timeframes()` - List available timeframes
+
+Advanced API (class-based):
+- `BinancePublicDataCollector` - Direct access to collection engine
+- `UniversalGapFiller` - Direct access to gap filling engine
+
+AI Introspection:
+- `__probe__.discover_api()` - Get function signatures and docstrings
+- `__probe__.get_capabilities()` - Get supported symbols and timeframes
+- `__probe__.get_task_graph()` - Get dependency graph for workflows
+
+## Exception Hierarchy
+
+```python
+from gapless_crypto_clickhouse import (
+    GaplessCryptoDataError,      # Base exception with .details dict
+    DataCollectionError,          # Binance collection failures
+    ValidationError,              # Input validation failures
+    NetworkError,                 # Network operation failures
+    GapFillingError,              # Gap detection/filling failures
+)
+
+try:
+    df = gcd.fetch_data("INVALIDSYMBOL", timeframe="1h")
+except ValidationError as e:
+    print(e.details)  # Machine-parseable error context
+```
+
+## Data Format
+
+11-column microstructure format (CSV):
+```
+date, open, high, low, close, volume, close_time, quote_volume, count, taker_buy_volume, taker_buy_quote_volume
+```
+
+## Key Files
+
+- CLAUDE.md - AI coding agent guidance (architecture, patterns, standards)
+- docs/sdk-quality-standards.yaml - Machine-readable SDK standards
+- docs/CURRENT_ARCHITECTURE_STATUS.yaml - Production capabilities and SOTA integrations
+- src/gapless_crypto_clickhouse/api.py - Main SDK entry point
+- src/gapless_crypto_clickhouse/__probe__.py - AI introspection hooks
+- src/gapless_crypto_clickhouse/exceptions.py - Structured exception hierarchy
+
+## Version
+
+1.0.0 (PEP 561 compliant, structured exceptions, AI-optimized)
+
+## Links
+
+- GitHub: https://github.com/terrylica/gapless-crypto-clickhouse
+- PyPI: https://pypi.org/project/gapless-crypto-clickhouse/
+- Docs: https://github.com/terrylica/gapless-crypto-clickhouse#readme

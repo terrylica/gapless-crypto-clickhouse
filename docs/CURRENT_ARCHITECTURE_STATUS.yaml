@@ -1,0 +1,231 @@
+openapi: 3.1.1
+info:
+  title: "Current Architecture Status - Gapless Crypto Data"
+  description: |
+    Consolidated status of current system architecture, replacing outdated planning documents.
+    All references should point to this canonical source for current capabilities.
+  version: "3.0.0"
+
+paths: {}
+
+components:
+  schemas:
+    ArchitectureStatus:
+      type: object
+      properties:
+        current_version:
+          type: string
+          example: "3.0.0"
+        architecture_complete:
+          type: boolean
+        capabilities:
+          type: array
+
+# CURRENT ARCHITECTURE STATUS (2025-09-17)
+x-current-status:
+  canonical_version: "v3.0.0"
+  architecture_phase: "OPTIMIZED"
+
+  implemented_capabilities:
+    core_collection:
+      status: "PRODUCTION_READY"
+      description: "Ultra-fast Binance data collection with 22x performance advantage"
+      technical_specs:
+        - "11-column microstructure format"
+        - "Zero-gap guarantee through dual-source validation"
+        - "Atomic file operations preventing corruption"
+        - "Complete 4.1-year historical coverage"
+
+    intelligent_resume:
+      status: "SIMPLIFIED"
+      description: "Basic checkpointing with JSON state persistence"
+      technical_specs:
+        - "Simple JSON state file management"
+        - "Symbol-level progress tracking"
+        - "Basic checkpoint resume capability"
+        - "Reduced dependency overhead"
+
+    parquet_format_support:
+      status: "PRODUCTION_READY"
+      description: "High-performance Parquet format with 5-10x compression"
+      technical_specs:
+        - "Snappy compression for optimal speed/size balance"
+        - "PyArrow engine for maximum compatibility"
+        - "5-10x file size reduction vs CSV"
+        - "10-100x faster read performance"
+        - "Maintains 11-column microstructure format"
+        - "Backward compatibility with CSV as default"
+
+    cli_interface:
+      status: "PRODUCTION_READY"
+      description: "Traditional argparse CLI with multi-symbol support"
+      technical_specs:
+        - "Traditional argparse interface with standard Python patterns"
+        - "Comma-separated multi-symbol support"
+        - "16 timeframe options with validation"
+        - "Custom date ranges and output directories"
+        - "Sequential processing with progress reporting"
+
+    dual_parameter_api:
+      status: "PRODUCTION_READY"
+      description: "CCXT-compatible dual parameter support with backward compatibility"
+      technical_specs:
+        - "Exception-only parameter validation (no fallbacks)"
+        - "CCXT ecosystem alignment with timeframe parameter"
+        - "5-year deprecation period for legacy interval parameter"
+        - "Zero breaking changes during transition period"
+        - "Community-proven implementation patterns (PEP 387 compliant)"
+
+    pypi_publishing:
+      status: "PRODUCTION_READY"
+      description: "Native GitHub Actions trusted publishing with OIDC authentication"
+      technical_specs:
+        - "OIDC-based authentication eliminating API token dependencies"
+        - "PyPI trusted publisher configuration for terrylica/gapless-crypto-data"
+        - "Environment-scoped publishing with pypi environment requirement"
+        - "Automatic digital attestations and Sigstore artifact signing"
+
+    etag_based_caching:
+      status: "PRODUCTION_READY"
+      description: "HTTP ETag caching for bandwidth optimization (90%+ reduction on re-runs)"
+      technical_specs:
+        - "CloudFront ETag-based conditional requests (If-None-Match headers)"
+        - "Local ZIP file caching in XDG-compliant location ($HOME/.cache/gapless-crypto-data/)"
+        - "304 Not Modified responses eliminate redundant downloads"
+        - "Automatic cache corruption detection and recovery"
+        - "Standard library only implementation (pathlib + json)"
+        - "Full observability with cache hit/miss logging"
+
+  removed_concepts:
+    parallel_processing:
+      removal_date: "2025-09-17"
+      reason: "Unnecessary complexity for current use case"
+      replacement: "Sequential processing with better error isolation"
+
+    performance_benchmarking:
+      removal_date: "2025-09-17"
+      reason: "Not needed - focus on regression detection instead"
+      replacement: "Data quality monitoring and anomaly detection"
+
+  sota_integrations:
+    dependencies_current:
+      httpx: "0.28.1"
+      pandas: "2.0.0+"
+      pyarrow: "21.0.0"
+      python_warnings: "builtin"  # For DeprecationWarning support
+
+    dependencies_removed:
+      evidently:
+        version: "0.7.14"
+        removal_reason: "Replaced by PyOD ensemble methods and SciPy statistical tests"
+        removal_date: "2025-09-17"
+      typer:
+        version: "0.12.0"
+        removal_reason: "Reverted CLI modernization - maintain traditional argparse interface"
+        removal_date: "2025-09-17"
+      rich:
+        version: "14.1.0"
+        removal_reason: "Reverted CLI modernization - maintain traditional argparse interface"
+        removal_date: "2025-09-17"
+      requests:
+        version: "2.32.5"
+        removal_reason: "Replaced with httpx for better performance and connection handling"
+        removal_date: "2025-09-17"
+      joblib:
+        version: "1.5.2"
+        removal_reason: "Over-engineered for simple state persistence - replaced with JSON"
+        removal_date: "2025-01-19"
+      polars:
+        version: "1.33.1"
+        removal_reason: "Mixed pandas/polars creates confusion - standardized on pandas"
+        removal_date: "2025-01-19"
+      pyod:
+        version: "2.0.5"
+        removal_reason: "Over-engineered for simple outlier detection - use 3-sigma rule"
+        removal_date: "2025-01-19"
+      scipy:
+        version: "1.16.2"
+        removal_reason: "Dependency of removed PyOD - not needed independently"
+        removal_date: "2025-01-19"
+      plotly:
+        version: "6.3.1"
+        removal_reason: "Zero usage found in codebase audit - removed unused dependency"
+        removal_date: "2025-01-19"
+      kaleido:
+        version: "1.1.0"
+        removal_reason: "Plotly dependency - removed with plotly"
+        removal_date: "2025-01-19"
+
+    integration_status: "Simplified dependency stack - 3 core dependencies only"
+    performance_validation: "Confirmed through comprehensive testing"
+    pruning_impact: "Reduced from 6 to 3 dependencies (50% reduction)"
+
+  test_coverage:
+    total_tests: 71
+    coverage_areas:
+      - "Core collection functionality (existing)"
+      - "Intelligent resume system (11 tests)"
+      - "Memory streaming (8 tests)"
+      - "Regression detection (11 tests)"
+      - "Timeframe constants (13 tests)"
+      - "ETag caching (17 tests)"
+      - "Gap filling edge cases (11 tests - 1s/1d timeframes)"
+
+    all_tests_passing: true
+    integration_verified: true
+
+  documentation_status:
+    current_milestone: "docs/MILESTONE_v3.0.0.yaml"
+    architecture_status: "docs/CURRENT_ARCHITECTURE_STATUS.yaml"
+    api_enhancement_spec: "docs/api-dual-parameter-enhancement.yaml"
+    project_guide: "CLAUDE.md"
+    user_documentation: "README.md"
+    implementation_plan: "docs/api/v3.0.0-stabilization-plan.yaml"
+
+    outdated_references_pruned: true
+    canonical_source_established: true
+
+# FUTURE EVOLUTION GUIDANCE
+x-evolution-guidance:
+  architecture_complete: true
+  focus_areas:
+    - "Real-time monitoring extensions"
+    - "Advanced cryptocurrency-specific anomaly models"
+    - "Multi-exchange data source integration"
+
+  deprecated_concepts:
+    - "Parallel processing (replaced by sequential with better UX)"
+    - "Performance benchmarking (replaced by regression detection)"
+    - "Custom checkpointing (replaced by SOTA joblib integration)"
+    - "Evidently dependency (replaced by PyOD + SciPy integration)"
+    - "Empty exchanges module (unused, removed for clarity)"
+
+  reference_updates_required:
+    outdated_files:
+      - "Any references to Phase 2.3 (parallel processing)"
+      - "Any mentions of performance benchmarking as current feature"
+      - "Links to outdated milestone files (pre-v3.0.0)"
+
+    canonical_references:
+      - "docs/CURRENT_ARCHITECTURE_STATUS.yaml (this file)"
+      - "docs/MILESTONE_v3.0.0.yaml (v3.0.0 stabilization details)"
+      - "docs/api/v3.0.0-stabilization-plan.yaml (implementation plan)"
+      - "CLAUDE.md (project-specific development guidance)"
+
+  maintenance_pattern:
+    - "Update this file when architecture changes"
+    - "Deprecate outdated milestone files by moving to docs/archive/"
+    - "Maintain single canonical source for current capabilities"
+    - "Use evolutionary documentation without promotional language"
+
+# COMPLIANCE VALIDATION
+x-compliance:
+  openapi_version: "3.1.1"
+  documentation_style: "Machine-readable technical specifications"
+  language_guidelines: "Evolutionary without promotional qualifiers"
+  sota_validation: "All dependencies are community-proven with stable APIs"
+
+  pattern_conformity:
+    user_global_patterns: "Language evolution, Unix conventions, SOTA tool preferences"
+    project_patterns: "Exception-only failures, atomic operations, streaming-first design"
+    cross_pattern_harmony: "Validated and maintained"

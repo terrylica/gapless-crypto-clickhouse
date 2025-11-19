@@ -1,0 +1,32 @@
+{
+  "url_pattern": {
+    "spot": "https://data.binance.vision/data/spot/monthly/klines/{symbol}/{interval}/",
+    "futures_um": "https://data.binance.vision/data/futures/um/daily/klines/{symbol}/{interval}/",
+    "difference": "URL path prefix only (data/spot vs data/futures/um)",
+    "impact": "Minimal - parameterize base path"
+  },
+  "data_format": {
+    "spot": "11-column CSV (no header, taker_buy_base_volume)",
+    "futures": "12-column CSV (with header row, taker_buy_volume, ignore column)",
+    "compatible": false,
+    "impact": "HIGH - CSV parsing needs to skip header, drop ignore column, rename taker_buy_volume"
+  },
+  "timeframe_support": {
+    "spot": "1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d",
+    "futures": "1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1mo",
+    "difference": "Futures has 3d/1w/1mo, lacks 1s",
+    "impact": "Low - validation needs timeframe-specific rules"
+  },
+  "aggregation_granularity": {
+    "spot": "monthly and daily",
+    "futures": "monthly and daily",
+    "compatible": true,
+    "impact": "Zero"
+  },
+  "contract_types": {
+    "spot": "Single type (trading pairs)",
+    "futures": "Perpetual + delivery contracts",
+    "difference": "Futures needs contract type classification",
+    "impact": "Medium - symbol validation logic differs"
+  }
+}

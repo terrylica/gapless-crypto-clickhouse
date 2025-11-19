@@ -1,0 +1,508 @@
+openapi: 3.1.1
+info:
+  title: "Documentation Inventory & Audit"
+  description: |
+    Complete catalog of current documentation files with status, content summary,
+    and proposed reorganization plan. Used during SSoT restructuring to track
+    what exists, what needs migration, and what's missing.
+  version: "1.0.0"
+  x-created: "2025-10-20"
+
+paths: {}
+
+components:
+  schemas:
+    DocumentationItem:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["GOOD", "NEEDS_UPDATE", "NEEDS_MIGRATION", "MISSING"]
+        purpose:
+          type: string
+        target_location:
+          type: string
+        action:
+          type: string
+
+# CURRENT DOCUMENTATION INVENTORY (2025-10-20)
+x-documentation-inventory:
+
+  # Project Root Files
+  project_root:
+    - file: "README.md"
+      status: "GOOD"
+      purpose: "Project overview, features, installation, quick start"
+      lines: ~100
+      audience: "New users, marketers"
+      action: "Link from CLAUDE.md essentials"
+      notes: "Good high-level marketing overview"
+
+    - file: "CONTRIBUTING.md"
+      status: "GOOD"
+      purpose: "Contribution guidelines, code of conduct"
+      lines: ~50
+      audience: "Contributors"
+      action: "Reference from docs/development/"
+      target_location: "Stay at root, link from docs/"
+
+    - file: "AUTHORS.md"
+      status: "GOOD"
+      purpose: "Project authors and contributors"
+      lines: ~20
+      audience: "General"
+      action: "Link from README.md"
+
+    - file: "LICENSE"
+      status: "GOOD"
+      purpose: "MIT license"
+      audience: "Legal"
+      action: "No action needed"
+
+    - file: "CLAUDE.md"
+      status: "NEEDS_REORGANIZATION"
+      purpose: "Guidance for Claude Code users"
+      lines: 476
+      audience: "AI assistant users"
+      action: "Reduce to 50-70 lines, convert to navigation hub"
+      target_lines: "50-70"
+      spoke_destinations:
+        - "docs/architecture/OVERVIEW.md"
+        - "docs/architecture/CORE_COMPONENTS.md"
+        - "docs/architecture/DATA_FORMAT.md"
+        - "docs/architecture/network.md"
+        - "docs/development/SETUP.md"
+        - "docs/development/COMMANDS.md"
+        - "docs/guides/DATA_COLLECTION.md"
+        - "docs/guides/python-api.md"
+        - "docs/validation/"
+
+    - file: "PROBE_USAGE_EXAMPLE.md"
+      status: "GOOD"
+      purpose: "AI introspection probe usage examples"
+      lines: ~80
+      audience: "AI developers"
+      action: "Link from docs/api/"
+
+    - file: "CHANGELOG.md"
+      status: "GOOD"
+      purpose: "Change history"
+      lines: ~300
+      audience: "Users checking updates"
+      action: "Link from CLAUDE.md → Release History"
+
+    - file: "CONFORMITY_AUDIT_REPORT.md"
+      status: "GOOD"
+      purpose: "SDK quality conformity audit results"
+      lines: ~200
+      audience: "Quality assurance"
+      action: "Link from docs/development/"
+
+    - file: "RELEASE_NOTES_SHORT.md"
+      status: "GOOD"
+      purpose: "Short version of release notes"
+      audience: "Users"
+      action: "Review and consolidate with CHANGELOG.md"
+
+    - file: "dead_code_audit_plan.md"
+      status: "GOOD"
+      purpose: "Dead code audit plan"
+      audience: "Maintainers"
+      action: "Link from docs/development/"
+
+    - file: ".claude/commands/"
+      status: "GOOD"
+      purpose: "Custom Claude Code slash commands"
+      audience: "Claude Code users"
+      action: "Reference from CLAUDE.md"
+
+  # docs/ Directory
+  docs_root:
+    - file: "README.md"
+      status: "GOOD"
+      purpose: "Documentation hub and navigation"
+      lines: ~50
+      audience: "All users"
+      action: "Maintain, link to new spokes"
+
+    - file: "CURRENT_ARCHITECTURE_STATUS.yaml"
+      status: "GOOD"
+      purpose: "Canonical architecture source"
+      version: "3.0.0"
+      audience: "Developers"
+      action: "Source for docs/architecture/OVERVIEW.md"
+      notes: "OpenAPI 3.1.1 format, good format to follow"
+
+    - file: "CLI_MIGRATION_GUIDE.md"
+      status: "GOOD"
+      purpose: "CLI deprecation and migration guide"
+      audience: "Users using CLI"
+      action: "Link from docs/development/"
+      target_location: "docs/development/CLI_MIGRATION_GUIDE.md"
+
+    - file: "PUBLISHING.md"
+      status: "GOOD"
+      purpose: "Package publishing guidelines"
+      lines: ~80
+      audience: "Maintainers"
+      action: "Move to docs/development/PUBLISHING.md"
+
+    - file: "PYPI_PUBLISHING_CONFIGURATION.yaml"
+      status: "GOOD"
+      purpose: "PyPI configuration details"
+      audience: "Release managers"
+      action: "Link from docs/development/PUBLISHING.md"
+
+    - file: "release-notes.md"
+      status: "GOOD"
+      purpose: "Release notes summary"
+      audience: "Users"
+      action: "Consolidate with CHANGELOG.md"
+
+    - file: "sdk-quality-standards.yaml"
+      status: "GOOD"
+      purpose: "SDK quality standards specification"
+      version: "3.1.0"
+      audience: "Developers"
+      action: "Link from docs/development/"
+
+    - file: "MILESTONE_v3.0.0.yaml"
+      status: "GOOD"
+      purpose: "v3.0.0 milestone details"
+      audience: "Project history"
+      action: "Keep in docs/milestones/"
+
+    - file: "MILESTONE_v3.1.0.yaml"
+      status: "GOOD"
+      purpose: "v3.1.0 milestone details"
+      audience: "Project history"
+      action: "Keep in docs/milestones/"
+
+  # docs/api/ Directory
+  docs_api:
+    - file: "quick-start.md"
+      status: "GOOD"
+      purpose: "API quick start guide"
+      lines: ~80
+      audience: "New users"
+      action: "Link from CLAUDE.md → Quick Start"
+
+    - file: "dual-parameter-enhancement.yaml"
+      status: "GOOD"
+      purpose: "Dual parameter API specification"
+      audience: "API users"
+      action: "Keep, reference from docs/api/reference.md (needs creation)"
+
+    - file: "gapless-dataframe-enhancement.yaml"
+      status: "GOOD"
+      purpose: "Gapless dataframe feature spec"
+      audience: "API users"
+      action: "Keep, reference from docs/api/reference.md"
+
+    - file: "pruning-parquet-implementation.yaml"
+      status: "GOOD"
+      purpose: "Parquet implementation spec"
+      audience: "API users"
+      action: "Keep, reference from docs/api/reference.md"
+
+    - file: "v3.0.0-stabilization-plan.yaml"
+      status: "GOOD"
+      purpose: "v3.0.0 stabilization plan"
+      audience: "Development history"
+      action: "Archive or reference from docs/development/"
+
+    - file: "v3.1.0-test-quality-plan.yaml"
+      status: "GOOD"
+      purpose: "v3.1.0 test quality plan"
+      audience: "Development history"
+      action: "Archive or reference from docs/development/"
+
+    - file: "[NEW] reference.md"
+      status: "MISSING"
+      purpose: "Complete function reference"
+      planned: true
+      audience: "API users"
+      action: "Create at docs/api/reference.md"
+
+  # docs/audit/ Directory
+  docs_audit:
+    - file: "comprehensive-audit-findings.yaml"
+      status: "GOOD"
+      purpose: "Audit findings"
+      audience: "Quality assurance"
+      action: "Reference from docs/development/"
+
+    - file: "comprehensive-audit-plan.yaml"
+      status: "GOOD"
+      purpose: "Audit plan details"
+      audience: "QA"
+      action: "Reference from docs/development/"
+
+  # docs/diagrams/ Directory
+  docs_diagrams:
+    - file: "README.md"
+      status: "GOOD"
+      purpose: "Diagram index"
+      audience: "Visual learners"
+      action: "Link from docs/architecture/OVERVIEW.md"
+
+    - file: "01-collection-pipeline.mmd"
+      status: "GOOD"
+      purpose: "Data collection pipeline diagram"
+      audience: "Architecture learners"
+      action: "Reference from docs/architecture/OVERVIEW.md"
+
+    - file: "02-gap-filling.mmd"
+      status: "GOOD"
+      purpose: "Gap filling process diagram"
+      audience: "Gap filling users"
+      action: "Reference from docs/guides/GAP_FILLING.md"
+
+    - file: "03-multi-symbol-collection.mmd"
+      status: "GOOD"
+      purpose: "Multi-symbol collection diagram"
+      audience: "Advanced users"
+      action: "Reference from docs/guides/DATA_COLLECTION.md"
+
+    - file: "04-download-caching.mmd"
+      status: "GOOD"
+      purpose: "Download caching diagram"
+      audience: "Performance optimizers"
+      action: "Reference from docs/architecture/network.md"
+
+    - file: "05-validation-flow.mmd"
+      status: "GOOD"
+      purpose: "Validation process diagram"
+      audience: "Validation users"
+      action: "Reference from docs/validation/OVERVIEW.md"
+
+  # docs/guides/ Directory
+  docs_guides:
+    - file: "pypi-documentation.md"
+      status: "GOOD"
+      purpose: "Complete API documentation for PyPI users"
+      lines: ~300
+      audience: "PyPI package users"
+      action: "Review and potentially split into multiple spokes"
+
+    - file: "[NEW] DATA_COLLECTION.md"
+      status: "MISSING"
+      purpose: "Data collection workflow guide"
+      planned: true
+      audience: "Users"
+      action: "Create from CLAUDE.md content"
+
+    - file: "[NEW] python-api.md"
+      status: "MISSING"
+      purpose: "Python API usage patterns"
+      planned: true
+      audience: "API users"
+      action: "Create from CLAUDE.md content"
+
+    - file: "[NEW] GAP_FILLING.md"
+      status: "MISSING"
+      purpose: "Gap filling operations guide"
+      planned: true
+      audience: "Advanced users"
+      action: "Create from CLAUDE.md content"
+
+  # docs/milestones/ Directory
+  docs_milestones:
+    - pattern: "MILESTONE_v*.yaml"
+      count: 28
+      status: "GOOD"
+      purpose: "Version milestone documentation"
+      audience: "Project history"
+      action: "Keep as-is, ensure accessible from CLAUDE.md"
+      note: "Comprehensive version history from v2.0.0 to v2.15.1"
+
+  # docs/research/ Directory
+  docs_research:
+    - file: "[DIRECTORY EXISTS]"
+      status: "GOOD"
+      purpose: "Research and analysis documents"
+      audience: "Researchers"
+      action: "Link from CLAUDE.md → Deep Research"
+
+  # docs/architecture/ Directory [PLANNED]
+  docs_architecture_planned:
+    - file: "[NEW] OVERVIEW.md"
+      status: "MISSING"
+      purpose: "High-level system design"
+      planned: true
+      created_from:
+        - "CLAUDE.md (lines 5-35)"
+        - "CURRENT_ARCHITECTURE_STATUS.yaml"
+
+    - file: "[NEW] CORE_COMPONENTS.md"
+      status: "MISSING"
+      purpose: "Detailed component specifications"
+      planned: true
+      sections:
+        - "BinancePublicDataCollector"
+        - "UniversalGapFiller"
+        - "CSVValidator / ValidationStorage"
+
+    - file: "[NEW] DATA_FORMAT.md"
+      status: "MISSING"
+      purpose: "11-column microstructure format"
+      planned: true
+      created_from: "CLAUDE.md (lines 28-35)"
+
+    - file: "[NEW] network.md"
+      status: "MISSING"
+      purpose: "Network architecture, CDN optimization"
+      planned: true
+      created_from: "CLAUDE.md (Network Architecture section)"
+
+  # docs/validation/ Directory [PLANNED]
+  docs_validation_planned:
+    - file: "[NEW] OVERVIEW.md"
+      status: "MISSING"
+      purpose: "Validation architecture overview"
+      planned: true
+      created_from: "CLAUDE.md (Validation Architecture section, ~150 lines)"
+
+    - file: "[NEW] STORAGE.md"
+      status: "MISSING"
+      purpose: "ValidationStorage specification"
+      planned: true
+      created_from: "CLAUDE.md (Database Schema section)"
+
+    - file: "[NEW] QUERY_PATTERNS.md"
+      status: "MISSING"
+      purpose: "SQL query patterns for AI agents"
+      planned: true
+      created_from: "CLAUDE.md (AI Agent Query Patterns section)"
+
+  # docs/development/ Directory [PLANNED]
+  docs_development_planned:
+    - file: "[NEW] SETUP.md"
+      status: "MISSING"
+      purpose: "Development environment setup"
+      planned: true
+      created_from: "CLAUDE.md (Environment Setup section)"
+
+    - file: "[NEW] COMMANDS.md"
+      status: "MISSING"
+      purpose: "Development command reference"
+      planned: true
+      created_from:
+        - "CLAUDE.md (Testing, Code Quality, Build sections)"
+        - "Existing command documentation"
+
+    - file: "[NEW] TESTING.md"
+      status: "MISSING"
+      purpose: "Testing strategy and patterns"
+      planned: true
+
+    - file: "[MOVE] CLI_MIGRATION_GUIDE.md"
+      status: "GOOD"
+      purpose: "CLI deprecation guide"
+      planned: true
+      from: "docs/CLI_MIGRATION_GUIDE.md"
+      to: "docs/development/CLI_MIGRATION_GUIDE.md"
+
+    - file: "[MOVE] PUBLISHING.md"
+      status: "GOOD"
+      purpose: "Publishing guidelines"
+      planned: true
+      from: "docs/PUBLISHING.md"
+      to: "docs/development/PUBLISHING.md"
+
+  # Content Migration Summary
+  migration_summary:
+    claude_md_sections_to_migrate:
+      - section: "Architecture Overview"
+        lines: ~30
+        destination: "docs/architecture/OVERVIEW.md"
+
+      - section: "Core Components"
+        lines: ~10
+        destination: "docs/architecture/CORE_COMPONENTS.md"
+
+      - section: "Data Format Specifications"
+        lines: ~5
+        destination: "docs/architecture/DATA_FORMAT.md"
+
+      - section: "Development Commands"
+        lines: ~40
+        destination: "docs/development/COMMANDS.md"
+
+      - section: "Data Collection Patterns"
+        lines: ~30
+        destination: "docs/guides/DATA_COLLECTION.md"
+
+      - section: "Python API Integration"
+        lines: ~50
+        destination: "docs/guides/python-api.md"
+
+      - section: "Validation Architecture"
+        lines: ~150
+        destination: "docs/validation/"
+
+      - section: "Network Architecture"
+        lines: ~20
+        destination: "docs/architecture/network.md"
+
+      - section: "SDK Quality Standards"
+        lines: ~15
+        destination: "Link to existing docs/sdk-quality-standards.yaml"
+
+    total_claude_md_lines: 476
+    target_claude_md_lines: "50-70"
+    reduction: "90%"
+
+  # Files with Promotional Language (Audit)
+  promotional_language_audit:
+    files_to_review:
+      - "README.md (marketing focus, expected)"
+      - "CLAUDE.md (should be removed)"
+      - "docs/CURRENT_ARCHITECTURE_STATUS.yaml (review)"
+      - "docs/PUBLISHING.md (review)"
+
+    example_terms_found:
+      - term: "Ultra-fast"
+        location: "README.md, CLAUDE.md"
+        action: "OK for README (marketing), remove from CLAUDE.md"
+
+      - term: "Production-grade"
+        location: "README.md"
+        action: "OK for README, remove from technical docs"
+
+      - term: "Intelligent"
+        location: "CLAUDE.md (UniversalGapFiller, gap detection)"
+        action: "Replace with: describes algorithm specifics"
+
+    audit_status: "IN_PROGRESS"
+    audit_tool: "Manual grep for prohibited terms"
+
+  # Statistics
+  statistics:
+    total_documentation_files: ~50
+    good_state: ~30
+    needs_update: ~5
+    needs_migration: 1
+    missing: ~15
+
+    line_count_summary:
+      CLAUDE.md: 476
+      docs/: ~2500
+      project_root: ~400
+      total: ~3400
+
+    directory_structure:
+      docs/:
+        - api/: 7 files
+        - audit/: 2 files
+        - diagrams/: 6 files + README
+        - guides/: 1 file (plan for 3 more)
+        - milestones/: 28 files
+        - research/: (exists, contents unknown)
+        - ROOT: 8 files
+
+      planned_additions:
+        - docs/architecture/: 4 new files
+        - docs/development/: 5 new files
+        - docs/validation/: 3 new files
+        - docs/guides/: 2 more files
