@@ -137,7 +137,7 @@ Line 140: Returning Any from function declared to return "dict[str, Any] | None"
 ### CRITICAL Issues (13 errors in SDK entry points)
 
 - **api.py**: 8 type errors in main SDK interface
-- ****probe**.py**: 5 type errors in AI discoverability module
+- \***\*probe**.py\*\*: 5 type errors in AI discoverability module
 
 These violate `disallow_untyped_defs=true` enforcement per pyproject.toml lines 113-123.
 

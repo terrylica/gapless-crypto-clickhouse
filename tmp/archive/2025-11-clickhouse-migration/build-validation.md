@@ -152,7 +152,7 @@ gapless-crypto-data v4.0.0
 ### Package Import Test
 
 - **Status**: ✅ PASS
-- ****version****: 4.0.0
+- \***\*version\*\***: 4.0.0
 - **Metadata version**: 4.0.0
 
 ### Module Import Tests

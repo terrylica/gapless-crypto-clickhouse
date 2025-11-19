@@ -76,11 +76,11 @@ tests/e2e/
 
 ### Test Categories
 
-| Category | Marker                                       | Purpose                                                                  |
-| -------- | -------------------------------------------- | ------------------------------------------------------------------------ |
-| E2E      | `@pytest.mark.e2e`                           | End-to-end browser automation tests                                      |
+| Category | Marker                                       | Purpose                                                                         |
+| -------- | -------------------------------------------- | ------------------------------------------------------------------------------- |
+| E2E      | `@pytest.mark.e2e`                           | End-to-end browser automation tests                                             |
 | Async    | `@pytest.mark.asyncio(loop_scope="session")` | Async test execution with session-scoped event loop (pytest-playwright-asyncio) |
-| Timeout  | `@pytest.mark.timeout(N)`                    | Explicit timeout override (default: 300s)                                |
+| Timeout  | `@pytest.mark.timeout(N)`                    | Explicit timeout override (default: 300s)                                       |
 
 ---
 
@@ -139,11 +139,13 @@ asyncio_default_fixture_loop_scope = session
 ```
 
 **Why session scope?**
+
 - pytest-playwright-asyncio provides async fixtures (e.g., `page`) that expect a session-scoped event loop
 - Function-scoped loops cause `RuntimeError: Runner.run() cannot be called from a running event loop`
 - All E2E tests must use `@pytest.mark.asyncio(loop_scope="session")` for compatibility
 
 **Package Requirements**:
+
 - `pytest-playwright-asyncio>=0.7.1` (official async support, replaces `pytest-playwright`)
 - `pytest-asyncio>=0.26.0` (required version for session-scoped fixtures)
 
@@ -315,12 +317,14 @@ test-e2e:
 ### CI Test Execution
 
 **CI Scope** (GitHub Actions):
+
 - ✅ Runs: `tests/e2e/test_clickhouse_play.py` (6 tests) - ClickHouse Play interface validation
 - ❌ Skips: `tests/e2e/test_ch_ui_dashboard.py` (6 tests) - CH-UI requires interactive configuration
 
 **Rationale**: CH-UI requires web-based connection configuration (not CI-friendly). ClickHouse Play provides sufficient E2E framework validation and async event loop testing.
 
 **Local Testing** (full 12-test suite):
+
 ```bash
 docker-compose up -d
 uv run pytest tests/e2e/ -v

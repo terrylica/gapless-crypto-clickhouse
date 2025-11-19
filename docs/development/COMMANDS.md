@@ -82,6 +82,7 @@ uv run pytest tests/e2e/ -v --screenshot=only-on-failure --tracing=retain-on-fai
 **Markers**: `@pytest.mark.e2e` - End-to-end tests requiring Playwright and running services
 
 **Services Required**:
+
 - ClickHouse: localhost:8123 (HTTP), localhost:9000 (native)
 - CH-UI: localhost:5521 (web interface, local testing only)
 
