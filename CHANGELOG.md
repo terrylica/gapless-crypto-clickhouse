@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.1.1...v2.1.2) (2025-11-19)
+
+### Bug Fixes
+
+* **ci:** skip CH-UI tests in CI, validate framework with ClickHouse Play ([6a07b01](https://github.com/terrylica/gapless-crypto-clickhouse/commit/6a07b01f73c2b9561e6479a2a4b7716cfe0cc9bb))
+
 ## [2.1.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.1.0...v2.1.1) (2025-11-19)
 
 ### Bug Fixes
