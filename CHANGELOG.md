@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v4.0.0...v5.0.0) (2025-11-20)
+
+### ⚠ BREAKING CHANGES
+
+* None - fully backward compatible (additive only)
+
+### Features
+
+* align spot and futures to 713 symbols each ([32a8b9d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/32a8b9d3793bf95d67957bdb9a7581a0491f2c46))
+
 ## [4.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v3.1.1...v4.0.0) (2025-11-20)
 
 ### ⚠ BREAKING CHANGES
