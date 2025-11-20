@@ -124,11 +124,7 @@ def benchmark_clickhouse_ingestion():
         from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 
         with ClickHouseConnection() as conn:
-            # Check if ClickHouse is available
-            if not conn.health_check():
-                print("⚠️  ClickHouse not available, skipping")
-                return None
-
+            # health_check() is called in __enter__, will raise if unavailable
             loader = ClickHouseBulkLoader(conn, instrument_type="spot")
 
             mem_before = measure_memory()
@@ -168,10 +164,7 @@ def benchmark_clickhouse_query():
         from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 
         with ClickHouseConnection() as conn:
-            if not conn.health_check():
-                print("⚠️  ClickHouse not available, skipping")
-                return None
-
+            # health_check() is called in __enter__, will raise if unavailable
             query = OHLCVQuery(conn)
 
             mem_before = measure_memory()
@@ -181,8 +174,8 @@ def benchmark_clickhouse_query():
             df = query.get_range(
                 symbol="BTCUSDT",
                 timeframe="1h",
-                start_date="2024-01-01",
-                end_date="2024-01-31",
+                start="2024-01-01",
+                end="2024-01-31",
                 instrument_type="spot"
             )
 
