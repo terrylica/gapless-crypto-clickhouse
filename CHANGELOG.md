@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v3.1.0...v3.1.1) (2025-11-20)
+
+### Documentation
+
+* finalize v3.1.0 documentation with batch API and plan completion ([cdf4f86](https://github.com/terrylica/gapless-crypto-clickhouse/commit/cdf4f868310eac0f150d243c77783706ba0c1688))
+
 ## [3.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v3.0.0...v3.1.0) (2025-11-20)
 
 ### Features
