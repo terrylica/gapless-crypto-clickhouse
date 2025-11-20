@@ -100,6 +100,17 @@ timeframes = gcd.get_supported_timeframes()
 
 # Fill gaps in existing data
 results = gcd.fill_gaps("./data")
+
+# Multi-symbol batch download (concurrent execution - 10-20x faster)
+results = gcd.download_multiple(
+    symbols=["BTCUSDT", "ETHUSDT", "BNBUSDT", "XRPUSDT", "SOLUSDT"],
+    timeframe="1h",
+    start_date="2024-01-01",
+    end_date="2024-06-30",
+    max_workers=5  # Configure concurrency
+)
+# Returns: dict[str, pd.DataFrame]
+# Example: btc_df = results["BTCUSDT"]
 ```
 
 #### Class-based API

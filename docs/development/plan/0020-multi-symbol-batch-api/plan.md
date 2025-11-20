@@ -1,11 +1,12 @@
 # Multi-Symbol Batch Download API Implementation Plan
 
 **ADR ID**: 0020
-**Status**: In Progress
+**Status**: Complete
 **Owner**: Terry Li
 **Created**: 2025-11-19
-**Updated**: 2025-11-19
-**Target Release**: v3.1.0
+**Updated**: 2025-11-20
+**Completed**: 2025-11-20
+**Released**: v3.1.0
 
 ---
 
@@ -247,10 +248,10 @@ results = download_multiple(["INVALID1", "INVALID2", "INVALID3"])
 **Scaling Considerations**:
 
 | Symbols | Recommended max_workers | Expected Speedup |
-|---------|------------------------|------------------|
-| 5       | 5 (default)            | 4-5x             |
-| 20      | 10-15                  | 10-15x           |
-| 50      | 20-25                  | 20-25x           |
+| ------- | ----------------------- | ---------------- |
+| 5       | 5 (default)             | 4-5x             |
+| 20      | 10-15                   | 10-15x           |
+| 50      | 20-25                   | 20-25x           |
 
 ## Implementation Checklist
 
@@ -318,12 +319,14 @@ results = download_multiple(["INVALID1", "INVALID2", "INVALID3"])
 **Choice**: ThreadPoolExecutor (threads)
 
 **Rationale**:
+
 - **Network-bound**: Downloads dominated by network I/O, not CPU
 - **GIL Impact**: Minimal (threads wait on I/O, release GIL)
 - **Overhead**: Threads lightweight vs processes
 - **Simplicity**: ThreadPoolExecutor easier than ProcessPoolExecutor
 
 **Benchmark Expected**:
+
 ```
 Sequential (5 symbols): ~50 seconds
 Concurrent (5 symbols, max_workers=5): ~10-12 seconds
@@ -333,11 +336,13 @@ Speedup: 4-5x
 ### Resource Management
 
 **Connection Pooling**:
+
 - httpx already uses connection pooling (configured in `download()`)
 - ThreadPoolExecutor manages thread lifecycle
 - Context manager ensures cleanup (`with ThreadPoolExecutor()`)
 
 **Memory Usage**:
+
 - Each DataFrame loads into memory (standard for pandas)
 - ~5-10 MB per symbol (typical for 1 month of 1h data)
 - 20 symbols = ~100-200 MB peak memory (acceptable)
@@ -345,6 +350,7 @@ Speedup: 4-5x
 ### Backward Compatibility
 
 **No Breaking Changes**:
+
 - New function (additive change only)
 - Existing `download()` unchanged
 - Existing user code unaffected
@@ -377,6 +383,7 @@ Speedup: 4-5x
 - No impact on existing users (additive change)
 
 **Indicators for rollback**:
+
 - Deadlocks or race conditions detected
 - Memory leaks during concurrent execution
 - Data corruption (DataFrames incorrect)
@@ -390,6 +397,7 @@ Speedup: 4-5x
 **Likelihood**: Low (CloudFront designed for high concurrency)
 **Impact**: Medium (downloads fail or slow down)
 **Mitigation**:
+
 - Conservative max_workers default (5)
 - Users can reduce if rate limiting encountered
 - Error messages indicate rate limiting
@@ -400,6 +408,7 @@ Speedup: 4-5x
 **Likelihood**: Low (typical usage 5-20 symbols)
 **Impact**: High (program crash)
 **Mitigation**:
+
 - Document memory requirements
 - Recommend batching for >50 symbols
 - Results returned as-completed (streaming)
@@ -410,6 +419,7 @@ Speedup: 4-5x
 **Likelihood**: Very Low (no shared mutable state)
 **Impact**: High (data corruption)
 **Mitigation**:
+
 - Each download() call independent
 - Results dict populated atomically
 - ThreadPoolExecutor handles synchronization
@@ -451,6 +461,7 @@ Speedup: 4-5x
 ## Log Files
 
 Implementation logs stored in:
+
 - `logs/0020-multi-symbol-batch-api-YYYYMMDD_HHMMSS.log`
 
 ---

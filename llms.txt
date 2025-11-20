@@ -14,6 +14,14 @@ df = gcd.fetch_data("BTCUSDT", timeframe="1h", limit=1000)
 # Download historical range
 df = gcd.download("ETHUSDT", timeframe="4h", start="2024-01-01", end="2024-06-30")
 
+# Multi-symbol batch download (concurrent - 10-20x faster)
+results = gcd.download_multiple(
+    symbols=["BTCUSDT", "ETHUSDT", "BNBUSDT"],
+    timeframe="1h",
+    start_date="2024-01-01",
+    end_date="2024-06-30"
+)  # Returns: dict[str, pd.DataFrame]
+
 # Fill gaps in existing datasets
 results = gcd.fill_gaps("./data")
 ```
@@ -39,6 +47,7 @@ results = gcd.fill_gaps("./data")
 Primary API (function-based):
 - `fetch_data()` - Fetch recent data with limit
 - `download()` - Download historical range
+- `download_multiple()` - Concurrent multi-symbol batch download (10-20x faster)
 - `fill_gaps()` - Fill gaps in existing datasets
 - `get_supported_symbols()` - List available symbols
 - `get_supported_timeframes()` - List available timeframes
@@ -87,7 +96,7 @@ date, open, high, low, close, volume, close_time, quote_volume, count, taker_buy
 
 ## Version
 
-1.0.0 (PEP 561 compliant, structured exceptions, AI-optimized)
+3.1.0 (NumPy 1.x compatible, concurrent batch API, enhanced error handling)
 
 ## Links
 

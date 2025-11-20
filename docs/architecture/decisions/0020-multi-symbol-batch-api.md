@@ -11,6 +11,7 @@
 Alpha Forge AI agents identified a HIGH PRIORITY improvement: Multi-symbol batch API.
 
 **Current State**: Users must loop over symbols sequentially
+
 ```python
 # Current approach - slow for multiple symbols
 dataframes = {}
@@ -123,16 +124,19 @@ def download_multiple(symbols, timeframe, max_workers=5, **kwargs):
 ### Why Not Other Options
 
 **Option 2: Add `symbols` parameter to `download()`**:
+
 - ❌ Breaking change (different return type based on parameter)
 - ❌ Type safety issues (Union[DataFrame, dict[str, DataFrame]])
 - ❌ Confusing API (one function, two behaviors)
 
 **Option 3: Keep current API**:
+
 - ❌ Users reinvent concurrency (error-prone)
 - ❌ Misses high-value improvement opportunity
 - ❌ Alpha Forge explicitly requested this feature
 
 **Option 4: Add async API**:
+
 - ❌ Overkill (threading sufficient for I/O-bound)
 - ❌ Requires async ecosystem adoption
 - ❌ More complex for users (async/await syntax)
@@ -231,6 +235,7 @@ results = download_multiple(
 **Location**: After existing `download()` function
 
 **Export**: Add to `__init__.py`:
+
 ```python
 from gapless_crypto_clickhouse.api import download_multiple
 __all__ = [..., "download_multiple"]
