@@ -6,17 +6,18 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### ⚠ BREAKING CHANGES
 
-* Replace clickhouse-driver with clickhouse-connect
+- Replace clickhouse-driver with clickhouse-connect
 
-- Protocol change: Native TCP (port 9000) → HTTP (port 8123)
-- Driver: clickhouse-driver → clickhouse-connect v0.10.0
-- Add pyarrow >=14.0.0 for Apache Arrow support
-- Performance: 2x faster queries at scale (41K+ rows/s for >8000 rows)
-- Memory: 43-57% reduction for medium/large datasets
+* Protocol change: Native TCP (port 9000) → HTTP (port 8123)
+* Driver: clickhouse-driver → clickhouse-connect v0.10.0
+* Add pyarrow >=14.0.0 for Apache Arrow support
+* Performance: 2x faster queries at scale (41K+ rows/s for >8000 rows)
+* Memory: 43-57% reduction for medium/large datasets
 
 Addresses Alpha Forge performance concerns (ADR-0023)
 
 Dependencies:
+
 - Remove: clickhouse-driver
 - Add: clickhouse-connect >=0.7.0
 - Add: pyarrow >=14.0.0
@@ -25,18 +26,18 @@ Co-authored-by: Claude Code <claude@anthropic.com>
 
 ### Features
 
-* add AI agent discoverability (probe.py, llms.txt) ([1969b8c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1969b8c97f6c0dc5ddac24bf641a711cfe6dd013))
-* add query_ohlcv() with lazy auto-ingestion ([798600f](https://github.com/terrylica/gapless-crypto-clickhouse/commit/798600fe15a3ae06e2fd69c69a203d06ce56393f))
-* migrate to clickhouse-connect with Apache Arrow optimization ([5011703](https://github.com/terrylica/gapless-crypto-clickhouse/commit/50117038ee2da83c420681aea40d460a4b62169a))
-* rewrite ClickHouseConnection for Arrow-optimized queries ([1f31f0e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1f31f0e8de491483ad7150404dedfe788254d970))
+- add AI agent discoverability (probe.py, llms.txt) ([1969b8c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1969b8c97f6c0dc5ddac24bf641a711cfe6dd013))
+- add query_ohlcv() with lazy auto-ingestion ([798600f](https://github.com/terrylica/gapless-crypto-clickhouse/commit/798600fe15a3ae06e2fd69c69a203d06ce56393f))
+- migrate to clickhouse-connect with Apache Arrow optimization ([5011703](https://github.com/terrylica/gapless-crypto-clickhouse/commit/50117038ee2da83c420681aea40d460a4b62169a))
+- rewrite ClickHouseConnection for Arrow-optimized queries ([1f31f0e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1f31f0e8de491483ad7150404dedfe788254d970))
 
 ### Performance Improvements
 
-* validate Arrow performance with comprehensive benchmarks ([29e7d68](https://github.com/terrylica/gapless-crypto-clickhouse/commit/29e7d6811a32ce73e173f6afdc5a7ed40f152d24))
+- validate Arrow performance with comprehensive benchmarks ([29e7d68](https://github.com/terrylica/gapless-crypto-clickhouse/commit/29e7d6811a32ce73e173f6afdc5a7ed40f152d24))
 
 ### Documentation
 
-* update README and add v5→v6 migration guide ([b822a35](https://github.com/terrylica/gapless-crypto-clickhouse/commit/b822a354924a45401cd65b4584fed0b5e9efea27))
+- update README and add v5→v6 migration guide ([b822a35](https://github.com/terrylica/gapless-crypto-clickhouse/commit/b822a354924a45401cd65b4584fed0b5e9efea27))
 
 ## [5.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v4.0.0...v5.0.0) (2025-11-20)
 

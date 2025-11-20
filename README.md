@@ -79,7 +79,7 @@ docker-compose ps
 docker-compose logs -f clickhouse
 ```
 
-See [Database Integration](#️-database-integration) for complete setup guide and usage examples.
+See [Database Integration](#-database-integration) for complete setup guide and usage examples.
 
 ### Python API (Recommended)
 
@@ -270,6 +270,7 @@ df = query_ohlcv(
 ```
 
 **Performance (Apache Arrow optimization)**:
+
 - **2x faster** at scale: 41,272 rows/s vs 20,534 rows/s for large datasets (>8000 rows)
 - **43-57% less memory**: Arrow buffers reduce memory usage for medium/large queries
 - **Auto-ingestion**: Downloads missing data automatically on first query

@@ -10,6 +10,7 @@
 v6.0.0 introduces Apache Arrow optimization for 2x faster queries at scale, unified `query_ohlcv()` API with auto-ingestion, and AI discoverability features. This is a **major version** with breaking changes to the connection module.
 
 **Key Changes**:
+
 - ✅ **New**: `query_ohlcv()` with auto-ingestion (downloads data if missing)
 - ✅ **Performance**: 2x faster queries at scale (>8000 rows) via Apache Arrow
 - ✅ **Memory**: 43-57% less memory for medium/large datasets
@@ -35,18 +36,21 @@ v6.0.0 introduces Apache Arrow optimization for 2x faster queries at scale, unif
 ### 1. Protocol Change: TCP → HTTP
 
 **Before (v5.0.0)**:
+
 ```python
 # Native TCP protocol (port 9000)
 CLICKHOUSE_PORT=9000  # Default
 ```
 
 **After (v6.0.0)**:
+
 ```python
 # HTTP protocol (port 8123)
 CLICKHOUSE_HTTP_PORT=8123  # Default
 ```
 
 **Migration**:
+
 ```bash
 # Update .env file
 # OLD: CLICKHOUSE_PORT=9000
@@ -57,18 +61,20 @@ export CLICKHOUSE_HTTP_PORT=8123
 ```
 
 **If using Docker Compose**, update port mapping:
+
 ```yaml
 # docker-compose.yml
 services:
   clickhouse:
     ports:
-      - "8123:8123"  # HTTP port (NEW)
+      - "8123:8123" # HTTP port (NEW)
       # - "9000:9000"  # Native TCP (OLD, remove if not needed)
 ```
 
 ### 2. Driver Change: clickhouse-driver → clickhouse-connect
 
 **Before (v5.0.0)**:
+
 ```python
 from clickhouse_driver.errors import Error as ClickHouseError
 
@@ -79,6 +85,7 @@ except ClickHouseError as e:
 ```
 
 **After (v6.0.0)**:
+
 ```python
 # clickhouse-connect uses standard exceptions
 try:
@@ -88,6 +95,7 @@ except Exception as e:
 ```
 
 **Migration**:
+
 1. Remove `from clickhouse_driver.errors import Error as ClickHouseError`
 2. Replace `ClickHouseError` with `Exception` in error handling
 3. No functional change - error handling behavior unchanged
@@ -97,6 +105,7 @@ except Exception as e:
 If you're using the low-level `ClickHouseConnection` class directly:
 
 **Before (v5.0.0)**:
+
 ```python
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
@@ -109,6 +118,7 @@ with ClickHouseConnection() as conn:
 ```
 
 **After (v6.0.0)**:
+
 ```python
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
@@ -122,6 +132,7 @@ with ClickHouseConnection() as conn:
 ```
 
 **Migration**:
+
 - Update health check to use boolean return value
 - Prefer wrapper methods (`conn.execute()`, `conn.query_dataframe()`) over direct client access
 
@@ -134,6 +145,7 @@ with ClickHouseConnection() as conn:
 The **recommended way** to query data in v6.0.0+ is using the new unified API:
 
 **New in v6.0.0**:
+
 ```python
 from gapless_crypto_clickhouse import query_ohlcv
 
@@ -166,12 +178,14 @@ df = query_ohlcv(
 ```
 
 **Benefits**:
+
 - **Auto-ingestion**: No manual download step required
 - **Idempotent**: Safe to call repeatedly, downloads only if data missing
 - **Arrow-optimized**: 2x faster at scale, 43-57% less memory
 - **Simple**: Single function for most use cases
 
 **Migration from v5.0.0**:
+
 ```python
 # OLD (v5.0.0): Manual workflow
 from gapless_crypto_clickhouse import download
@@ -201,6 +215,7 @@ df = query_ohlcv("BTCUSDT", "1h", "2024-01-01", "2024-01-31")
 All queries use Apache Arrow internally for 2x speedup at scale:
 
 **Performance Characteristics**:
+
 - **Small queries** (<1000 rows): HTTP protocol overhead ~30-40%
 - **Medium queries** (1000-5000 rows): 1.5-1.8x faster
 - **Large queries** (>8000 rows): 2x faster ✅
@@ -231,6 +246,7 @@ print(f"Query speedup: {perf['arrow']['query_speedup']}")  # "2x faster"
 ```
 
 **Machine-readable documentation**:
+
 ```python
 # Read llms.txt for AI agents
 import requests
@@ -246,21 +262,22 @@ print(response.text)
 
 **Arrow vs Standard (within v6.0.0)**:
 
-| Dataset Size | Arrow Rows/s | Standard Rows/s | Speedup | Memory Reduction |
-|--------------|--------------|-----------------|---------|------------------|
-| Small (721)  | 16,844       | 13,972          | 1.21x   | -12% (noise)     |
-| Medium (4,345) | 35,768     | 20,188          | 1.77x   | +57%             |
-| Large (8,761) | 41,272      | 20,534          | **2.01x** ✅ | +43%        |
+| Dataset Size   | Arrow Rows/s | Standard Rows/s | Speedup      | Memory Reduction |
+| -------------- | ------------ | --------------- | ------------ | ---------------- |
+| Small (721)    | 16,844       | 13,972          | 1.21x        | -12% (noise)     |
+| Medium (4,345) | 35,768       | 20,188          | 1.77x        | +57%             |
+| Large (8,761)  | 41,272       | 20,534          | **2.01x** ✅ | +43%             |
 
 **Arrow vs Baseline (v5.0.0 clickhouse-driver)**:
 
-| Dataset Size | v6.0.0 Arrow | v5.0.0 TCP | Speedup |
-|--------------|--------------|------------|---------|
-| Small (721)  | 16,844       | 27,432     | 0.61x (HTTP overhead) |
-| Medium (4,345) | 35,768     | ~27,432    | 1.30x   |
-| Large (8,761) | 41,272      | ~27,432    | 1.50x   |
+| Dataset Size   | v6.0.0 Arrow | v5.0.0 TCP | Speedup               |
+| -------------- | ------------ | ---------- | --------------------- |
+| Small (721)    | 16,844       | 27,432     | 0.61x (HTTP overhead) |
+| Medium (4,345) | 35,768       | ~27,432    | 1.30x                 |
+| Large (8,761)  | 41,272       | ~27,432    | 1.50x                 |
 
 **Key Insights**:
+
 1. Arrow achieves **2x speedup target** at scale (>8000 rows)
 2. HTTP protocol adds overhead on small queries (trade-off for wider compatibility)
 3. Use case: Most analytical queries are medium/large datasets where Arrow excels
@@ -340,6 +357,7 @@ print(f"✅ Performance: {speed:,.0f} rows/s (expect >35K for ~8700 rows)")
 **Cause**: v6.0.0 uses HTTP (port 8123), not native TCP (port 9000)
 
 **Solution**:
+
 ```bash
 # Check ClickHouse is listening on port 8123
 docker-compose ps
@@ -364,6 +382,7 @@ export CLICKHOUSE_HTTP_PORT=8123
 **Cause**: HTTP protocol overhead on small queries
 
 **Solution**: This is expected for small queries (<1000 rows). Arrow benefits appear at scale:
+
 - Small queries: ~16K rows/s (HTTP overhead)
 - Medium queries: ~35K rows/s (Arrow benefits emerging)
 - Large queries: ~41K rows/s (Arrow benefits dominate)
