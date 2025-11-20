@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v3.0.0...v3.1.0) (2025-11-20)
+
+### Features
+
+* **api:** add NumPy 1.x compatibility, batch API, and enhanced error handling ([dbaf4c1](https://github.com/terrylica/gapless-crypto-clickhouse/commit/dbaf4c1b1f640d40b9641f3a808181d8f5934d8f))
+
 ## [3.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.5.0...v3.0.0) (2025-11-19)
 
 ### ⚠ BREAKING CHANGES
