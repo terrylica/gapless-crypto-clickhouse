@@ -212,9 +212,11 @@ See `docs/development/plan/0001-questdb-refactor/plan.yaml` for detailed impleme
 
 ## References
 
-- [QuestDB Performance Benchmarks](../research/questdb-docker-image-analysis.md)
 - [Colima vs Docker Desktop](https://github.com/abiosoft/colima)
 - [QuestDB Official Documentation](https://questdb.com/docs/)
+
+> **Note**: This ADR references QuestDB, which was later replaced with ClickHouse. See current architecture in [CURRENT_ARCHITECTURE_STATUS.yaml](../../CURRENT_ARCHITECTURE_STATUS.yaml).
+
 - [uv Python Package Manager](https://github.com/astral-sh/uv)
 
 ## Metadata

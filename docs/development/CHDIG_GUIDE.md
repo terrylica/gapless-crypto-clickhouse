@@ -9,7 +9,7 @@
 **License**: MIT
 **Status**: Pre-alpha (interface may change)
 
-**⚠️ Important**: chdig is monitoring-only (no data manipulation). For queries, use [clickhouse-client](./CLICKHOUSE_CLIENT_GUIDE.md) or [CH-UI](./CHUI_GUIDE.md).
+**⚠️ Important**: chdig is monitoring-only (no data manipulation). For queries, use [clickhouse-client](./CLICKHOUSE_CLIENT_GUIDE.md) or CH-UI web interface (see [Local Visualization Tools](../../README.md#local-visualization-tools)).
 
 ## Installation
 
@@ -440,7 +440,7 @@ open http://localhost:5521
 ## Next Steps
 
 - **For query execution**: Use [clickhouse-client](./CLICKHOUSE_CLIENT_GUIDE.md)
-- **For web interface**: Use [CH-UI](./CHUI_GUIDE.md)
+- **For web interface**: See [Local Visualization Tools](../../README.md#local-visualization-tools) (CH-UI at http://localhost:5521)
 - **For file analysis**: Use [clickhouse-local](./CLICKHOUSE_LOCAL_GUIDE.md)
 
 ## References

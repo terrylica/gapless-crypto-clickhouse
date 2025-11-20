@@ -18,6 +18,7 @@ Expand symbol coverage from 6 to 20 symbols with **dual coverage for both spot a
 ### Problem
 
 Current 6-symbol limitation prevents cross-sectional analysis strategies:
+
 - **Market Coverage**: Only ~30% of crypto market cap
 - **Strategy Limitation**: Insufficient for relative value/market-neutral strategies
 - **Alpha Forge Requirement**: Minimum 20 symbols for production deployment
@@ -25,6 +26,7 @@ Current 6-symbol limitation prevents cross-sectional analysis strategies:
 ### Solution
 
 Add 14 new symbols (total: 20) with **mandatory dual coverage**:
+
 - ✅ Available on Binance Spot market
 - ✅ Available on Binance UM-margined perpetual futures
 - ✅ Top 20 by market capitalization
@@ -50,6 +52,7 @@ Add 14 new symbols (total: 20) with **mandatory dual coverage**:
 ### Symbol Selection Criteria
 
 **Mandatory requirements**:
+
 1. Top 20 by market capitalization (CoinMarketCap/CoinGecko)
 2. Available on Binance Spot market
 3. Available on Binance UM-margined perpetual futures
@@ -58,22 +61,22 @@ Add 14 new symbols (total: 20) with **mandatory dual coverage**:
 
 ### Selected Symbols (14 New)
 
-| Symbol | Rank | Spot | Futures | Listing Date | Validation |
-|--------|------|------|---------|--------------|------------|
-| BNBUSDT | #3 | ✅ | ✅ | 2017-11-06 | Required |
-| XRPUSDT | #5 | ✅ | ✅ | 2018-05-04 | Required |
-| DOGEUSDT | #8 | ✅ | ✅ | 2021-05-05 | Required |
-| AVAXUSDT | #11 | ✅ | ✅ | 2020-09-22 | Required |
-| MATICUSDT | #16 | ✅ | ✅ | 2019-04-26 | Required |
-| LTCUSDT | #18 | ✅ | ✅ | 2018-01-23 | Required |
-| UNIUSDT | #19 | ✅ | ✅ | 2020-09-17 | Required |
-| ATOMUSDT | #21 | ✅ | ✅ | 2019-04-22 | Required |
-| FTMUSDT | #27 | ✅ | ✅ | 2019-10-31 | Required |
-| NEARUSDT | #28 | ✅ | ✅ | 2020-11-02 | Required |
-| ALGOUSDT | #31 | ✅ | ✅ | 2019-06-20 | Required |
-| SANDUSDT | #38 | ✅ | ✅ | 2020-08-13 | Required |
-| MANAUSDT | #42 | ✅ | ✅ | 2020-12-14 | Required |
-| APEUSDT | #48 | ✅ | ✅ | 2022-03-17 | Required |
+| Symbol    | Rank | Spot | Futures | Listing Date | Validation |
+| --------- | ---- | ---- | ------- | ------------ | ---------- |
+| BNBUSDT   | #3   | ✅   | ✅      | 2017-11-06   | Required   |
+| XRPUSDT   | #5   | ✅   | ✅      | 2018-05-04   | Required   |
+| DOGEUSDT  | #8   | ✅   | ✅      | 2021-05-05   | Required   |
+| AVAXUSDT  | #11  | ✅   | ✅      | 2020-09-22   | Required   |
+| MATICUSDT | #16  | ✅   | ✅      | 2019-04-26   | Required   |
+| LTCUSDT   | #18  | ✅   | ✅      | 2018-01-23   | Required   |
+| UNIUSDT   | #19  | ✅   | ✅      | 2020-09-17   | Required   |
+| ATOMUSDT  | #21  | ✅   | ✅      | 2019-04-22   | Required   |
+| FTMUSDT   | #27  | ✅   | ✅      | 2019-10-31   | Required   |
+| NEARUSDT  | #28  | ✅   | ✅      | 2020-11-02   | Required   |
+| ALGOUSDT  | #31  | ✅   | ✅      | 2019-06-20   | Required   |
+| SANDUSDT  | #38  | ✅   | ✅      | 2020-08-13   | Required   |
+| MANAUSDT  | #42  | ✅   | ✅      | 2020-12-14   | Required   |
+| APEUSDT   | #48  | ✅   | ✅      | 2022-03-17   | Required   |
 
 **Total**: 6 existing + 14 new = 20 symbols
 
@@ -88,6 +91,7 @@ Add 14 new symbols (total: 20) with **mandatory dual coverage**:
 **Location**: Lines 280-287
 
 **Change**:
+
 ```python
 # Before (6 symbols)
 self.known_symbols = {
@@ -134,6 +138,7 @@ self.known_symbols = {
 **Location**: Lines 69-88
 
 **Change**:
+
 ```python
 # Before
 SupportedSymbol = Literal[
@@ -182,6 +187,7 @@ SupportedSymbol = Literal[
 **Validation Method**: Manual curl test to Binance Public Data Repository
 
 **Spot Market Validation**:
+
 ```bash
 # Test each new symbol for spot data availability
 for symbol in BNBUSDT XRPUSDT DOGEUSDT AVAXUSDT MATICUSDT LTCUSDT UNIUSDT ATOMUSDT FTMUSDT NEARUSDT ALGOUSDT SANDUSDT MANAUSDT APEUSDT; do
@@ -196,6 +202,7 @@ done
 ```
 
 **Futures Market Validation**:
+
 ```bash
 # Test each new symbol for UM-margined futures data availability
 for symbol in BNBUSDT XRPUSDT DOGEUSDT AVAXUSDT MATICUSDT LTCUSDT UNIUSDT ATOMUSDT FTMUSDT NEARUSDT ALGOUSDT SANDUSDT MANAUSDT APEUSDT; do
@@ -216,6 +223,7 @@ done
 **Test Coverage Requirements**:
 
 1. **Unit Tests** (`tests/test_symbol_expansion.py`):
+
 ```python
 def test_symbol_count():
     """Verify 20 symbols available."""
@@ -251,6 +259,7 @@ def test_listing_dates_accurate():
 ```
 
 2. **Integration Tests** (spot + futures):
+
 ```python
 def test_spot_data_fetch_new_symbols():
     """Verify spot data fetching works for new symbols."""
@@ -323,6 +332,7 @@ def test_futures_data_fetch_new_symbols():
 ### Rollback Strategy
 
 If critical data availability issues found:
+
 1. Identify problematic symbols
 2. Remove from `known_symbols` in hotfix
 3. Release v2.4.1 with reduced symbol list
@@ -390,6 +400,7 @@ If critical data availability issues found:
 ## Log Files
 
 Implementation logs stored in:
+
 - `logs/0016-symbol-coverage-expansion-YYYYMMDD_HHMMSS.log`
 
 ---

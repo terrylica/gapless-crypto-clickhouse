@@ -474,7 +474,7 @@ ch
 
 ## Next Steps
 
-- **For web interface**: Use [CH-UI](./CHUI_GUIDE.md)
+- **For web interface**: See [Local Visualization Tools](../../README.md#local-visualization-tools) (CH-UI at http://localhost:5521)
 - **For performance monitoring**: Use [chdig](./CHDIG_GUIDE.md)
 - **For file analysis**: Use [clickhouse-local](./CLICKHOUSE_LOCAL_GUIDE.md)
 

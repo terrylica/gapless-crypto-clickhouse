@@ -776,9 +776,10 @@ See detailed plan: [docs/development/plan/0003-questdb-schema-robustness/plan.ya
 - [ADR-0002: E2E Validation Approach](./0002-e2e-validation-approach.md) - Defined validation pipeline structure
 - [Architecture Overview](../OVERVIEW.md) - SLO definitions and data flow
 - [Data Format Specification](../DATA_FORMAT.md) - 11-column OHLCV format
-- [Vision Futures Explorer Report](../../scratch/vision-futures-explorer/EXPLORATION_REPORT.md) - Futures compatibility investigation
 - [Validation Storage Specification](../../validation/STORAGE.md) - DuckDB persistence for validation results
-- [Current Architecture Status](../../CURRENT_ARCHITECTURE_STATUS.yaml) - v2.5.0 production state
+- [Current Architecture Status](../../CURRENT_ARCHITECTURE_STATUS.yaml) - Current production state
+
+> **Note**: This ADR references QuestDB, which was later replaced with ClickHouse. Futures support was successfully implemented in ClickHouse with 12-column format.
 
 ## Metadata
 

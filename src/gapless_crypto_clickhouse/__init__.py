@@ -92,6 +92,7 @@ __email__ = "terry@eonlabs.com"
 from . import __probe__
 from .api import (
     download,
+    download_multiple,
     fetch_data,
     fill_gaps,
     get_info,
@@ -116,6 +117,7 @@ __all__ = [
     # Simple function-based API (recommended for most users)
     "fetch_data",
     "download",
+    "download_multiple",
     "get_supported_symbols",
     "get_supported_timeframes",
     "get_supported_intervals",  # Legacy compatibility

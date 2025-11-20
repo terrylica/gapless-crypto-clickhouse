@@ -2,7 +2,7 @@
 
 **Version**: 1.0.0
 **Last Updated**: 2025-11-19
-**ADR**: [ADR-0013](../decisions/0013-autonomous-validation-framework.md)
+**ADR**: [ADR-0013](../architecture/decisions/0013-autonomous-validation-framework.md)
 
 ---
 

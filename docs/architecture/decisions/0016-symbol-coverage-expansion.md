@@ -4,7 +4,7 @@
 **Date**: 2025-11-19
 **Deciders**: Terry Li
 **Related ADRs**: ADR-0004 (USDT-Margined Futures Support)
-**Related Plans**: [0016-symbol-coverage-expansion](../development/plan/0016-symbol-coverage-expansion/plan.md)
+**Related Plans**: [0016-symbol-coverage-expansion](../../development/plan/0016-symbol-coverage-expansion/plan.md)
 
 ## Context and Problem Statement
 
@@ -15,6 +15,7 @@ Current package supports only 6 symbols for data collection, limiting cross-sect
 **Gap**: 14-44 symbols needed for minimum viable product
 
 **Critical Requirement**: Symbol expansion must cover BOTH:
+
 - **Spot markets** (current primary focus)
 - **UM-margined perpetual futures** (USDT-margined contracts per ADR-0004)
 
@@ -44,6 +45,7 @@ Current package supports only 6 symbols for data collection, limiting cross-sect
 ### Symbol Selection Methodology
 
 **Criteria for inclusion**:
+
 1. Top 20 by market capitalization (CoinMarketCap/CoinGecko)
 2. Available on Binance spot market
 3. Available on Binance UM-margined perpetual futures
@@ -52,30 +54,31 @@ Current package supports only 6 symbols for data collection, limiting cross-sect
 
 **Selected symbols** (14 new + 6 existing = 20 total):
 
-| Symbol | Market Cap Rank | Spot Available | Futures Available | Listing Date |
-|--------|----------------|----------------|-------------------|--------------|
-| BTCUSDT | #1 | ✅ | ✅ | 2017-08-17 |
-| ETHUSDT | #2 | ✅ | ✅ | 2017-08-17 |
-| BNBUSDT | #3 | ✅ | ✅ | 2017-11-06 |
-| SOLUSDT | #4 | ✅ | ✅ | 2020-08-11 |
-| XRPUSDT | #5 | ✅ | ✅ | 2018-05-04 |
-| DOGEUSDT | #8 | ✅ | ✅ | 2021-05-05 |
-| ADAUSDT | #9 | ✅ | ✅ | 2018-04-17 |
-| AVAXUSDT | #11 | ✅ | ✅ | 2020-09-22 |
-| DOTUSDT | #13 | ✅ | ✅ | 2020-08-19 |
-| LINKUSDT | #14 | ✅ | ✅ | 2019-01-16 |
-| MATICUSDT | #16 | ✅ | ✅ | 2019-04-26 |
-| LTCUSDT | #18 | ✅ | ✅ | 2018-01-23 |
-| UNIUSDT | #19 | ✅ | ✅ | 2020-09-17 |
-| ATOMUSDT | #21 | ✅ | ✅ | 2019-04-22 |
-| FTMUSDT | #27 | ✅ | ✅ | 2019-10-31 |
-| NEARUSDT | #28 | ✅ | ✅ | 2020-11-02 |
-| ALGOUSDT | #31 | ✅ | ✅ | 2019-06-20 |
-| SANDUSDT | #38 | ✅ | ✅ | 2020-08-13 |
-| MANAUSDT | #42 | ✅ | ✅ | 2020-12-14 |
-| APEUSDT | #48 | ✅ | ✅ | 2022-03-17 |
+| Symbol    | Market Cap Rank | Spot Available | Futures Available | Listing Date |
+| --------- | --------------- | -------------- | ----------------- | ------------ |
+| BTCUSDT   | #1              | ✅             | ✅                | 2017-08-17   |
+| ETHUSDT   | #2              | ✅             | ✅                | 2017-08-17   |
+| BNBUSDT   | #3              | ✅             | ✅                | 2017-11-06   |
+| SOLUSDT   | #4              | ✅             | ✅                | 2020-08-11   |
+| XRPUSDT   | #5              | ✅             | ✅                | 2018-05-04   |
+| DOGEUSDT  | #8              | ✅             | ✅                | 2021-05-05   |
+| ADAUSDT   | #9              | ✅             | ✅                | 2018-04-17   |
+| AVAXUSDT  | #11             | ✅             | ✅                | 2020-09-22   |
+| DOTUSDT   | #13             | ✅             | ✅                | 2020-08-19   |
+| LINKUSDT  | #14             | ✅             | ✅                | 2019-01-16   |
+| MATICUSDT | #16             | ✅             | ✅                | 2019-04-26   |
+| LTCUSDT   | #18             | ✅             | ✅                | 2018-01-23   |
+| UNIUSDT   | #19             | ✅             | ✅                | 2020-09-17   |
+| ATOMUSDT  | #21             | ✅             | ✅                | 2019-04-22   |
+| FTMUSDT   | #27             | ✅             | ✅                | 2019-10-31   |
+| NEARUSDT  | #28             | ✅             | ✅                | 2020-11-02   |
+| ALGOUSDT  | #31             | ✅             | ✅                | 2019-06-20   |
+| SANDUSDT  | #38             | ✅             | ✅                | 2020-08-13   |
+| MANAUSDT  | #42             | ✅             | ✅                | 2020-12-14   |
+| APEUSDT   | #48             | ✅             | ✅                | 2022-03-17   |
 
 **Coverage validation**:
+
 - ✅ All 20 symbols available on Binance Spot
 - ✅ All 20 symbols available on Binance UM-margined perpetual futures
 - ✅ Combined market cap: ~85% of total crypto market
@@ -109,6 +112,7 @@ Current package supports only 6 symbols for data collection, limiting cross-sect
 **File**: `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py`
 
 **Current Code** (lines 280-287):
+
 ```python
 self.known_symbols = {
     "BTCUSDT": "2017-08-17",
@@ -121,6 +125,7 @@ self.known_symbols = {
 ```
 
 **Updated Code**:
+
 ```python
 # Symbol coverage: Top 20 by market cap with dual spot + futures availability
 # All symbols validated for both Binance Spot and UM-margined perpetual futures
@@ -159,6 +164,7 @@ self.known_symbols = {
 **File**: `src/gapless_crypto_clickhouse/api.py`
 
 **Current Code** (lines 69-88):
+
 ```python
 SupportedSymbol = Literal[
     "BTCUSDT",
@@ -172,6 +178,7 @@ SupportedSymbol = Literal[
 ```
 
 **Updated Code**:
+
 ```python
 SupportedSymbol = Literal[
     # Top 20 by market cap (spot + futures dual coverage)
@@ -185,6 +192,7 @@ SupportedSymbol = Literal[
 ### Phase 3: Update Documentation
 
 **Files to update**:
+
 1. `README.md` - Update symbol count (6 → 20)
 2. `docs/architecture/DATA_FORMAT.md` - Update supported symbols list
 3. `docs/guides/python-api.md` - Update examples with new symbols
@@ -269,11 +277,13 @@ def test_listing_date_validation():
 ## Migration Path
 
 **For existing users**:
+
 - No breaking changes (additive only)
 - Existing 6-symbol code continues to work
 - New symbols immediately available after upgrade
 
 **For Alpha Forge integration**:
+
 - Enables cross-sectional strategies immediately
 - Both spot and futures markets available for all symbols
 - Listing date validation prevents invalid backtests

@@ -100,6 +100,7 @@ python_version = "3.11"  # Was: 3.12
 ```
 
 **Rationale**:
+
 - `requires-python`: Metadata for pip/uv installation validation
 - `classifiers`: PyPI metadata for discoverability
 - `ruff/black/mypy`: Ensure linters/formatters use Python 3.11 syntax rules
@@ -115,7 +116,7 @@ jobs:
   test:
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13"]  # Added 3.11
+        python-version: ["3.11", "3.12", "3.13"] # Added 3.11
 ```
 
 **Validation**: Full test suite runs on all 3 Python versions on every commit.
@@ -280,6 +281,7 @@ If critical issues discovered post-release:
 ## Log Files
 
 Implementation logs stored in:
+
 - `logs/0015-python-3-11-support-YYYYMMDD_HHMMSS.log`
 
 ---

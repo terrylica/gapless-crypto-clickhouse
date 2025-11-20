@@ -76,7 +76,7 @@ docker-compose ps
 docker-compose logs -f clickhouse
 ```
 
-See [Database Integration](#database-integration) for complete setup guide and usage examples.
+See [Database Integration](#️-database-integration) for complete setup guide and usage examples.
 
 ### Python API (Recommended)
 

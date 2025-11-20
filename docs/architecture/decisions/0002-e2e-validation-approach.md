@@ -54,9 +54,9 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 
 **Reusable Artifacts** (reduce context-token usage):
 
-- `tests/conftest.py` - Real Binance data download fixture (`real_btcusdt_1h_sample`)
+- Real Binance data download fixture (`real_btcusdt_1h_sample`) - see `tests/conftest.py` in repository
 - `tests/test_error_handling.py` - Error propagation testing patterns
-- `tests/test_gap_filler.py` - Gap detection logic (adapt for QuestDB)
+- `tests/test_gap_filler.py` - Gap detection logic (adapted for ClickHouse)
 - CloudFront download patterns from existing collectors
 
 ### Validation Scope
@@ -88,7 +88,7 @@ Implement **comprehensive e2e validation using parallel specialized agents** wit
 - Download from CloudFront: BTCUSDT 1m, Jan-Feb 2024 (~2 months)
 - Rationale: Tests real-world data format, parsing, CloudFront reliability
 - Size: ~5-10MB download (acceptable for comprehensive validation)
-- Reuse pattern from `conftest.py` fixture
+- Reuse pattern from test fixture in repository's `tests/conftest.py`
 
 **Additional Symbols** (for multi-symbol testing):
 
@@ -250,8 +250,9 @@ See `docs/development/plan/0002-e2e-validation/plan.yaml` for detailed execution
 
 - [ADR-0001: QuestDB as Single Source of Truth](0001-questdb-single-source-truth.md)
 - [Implementation Plan Phase 1-3](../../development/plan/0001-questdb-refactor/plan.yaml)
-- [Deployment Guide: macOS Colima](../deployment/macos-colima-setup.md)
-- [Test Fixtures](../../tests/conftest.py)
+- Test Fixtures: `tests/conftest.py` (see repository root)
+
+> **Note**: This ADR references QuestDB, which was later replaced with ClickHouse. See [E2E Testing Guide](../../validation/E2E_TESTING_GUIDE.md) for current validation approach.
 
 ## Metadata
 

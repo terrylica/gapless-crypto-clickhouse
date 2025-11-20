@@ -499,6 +499,16 @@ def fetch_data(
     start = start_date if start_date is not None else start
     end = end_date if end_date is not None else end
 
+    # Validate symbol parameter (None check)
+    if symbol is None:
+        raise ValueError(
+            "symbol parameter is required (cannot be None). "
+            "Specify a trading pair (e.g., symbol='BTCUSDT')"
+        )
+
+    # Normalize symbol case (auto-uppercase for user convenience)
+    symbol = symbol.upper()
+
     # Calculate date range from limit if needed
     start, end = _calculate_date_range_from_limit(limit, period, start, end)
 
@@ -604,6 +614,16 @@ def download(
     start = start_date if start_date is not None else start
     end = end_date if end_date is not None else end
 
+    # Validate symbol parameter (None check)
+    if symbol is None:
+        raise ValueError(
+            "symbol parameter is required (cannot be None). "
+            "Specify a trading pair (e.g., symbol='BTCUSDT')"
+        )
+
+    # Normalize symbol case (auto-uppercase for user convenience)
+    symbol = symbol.upper()
+
     return fetch_data(
         symbol=symbol,
         timeframe=timeframe,
@@ -614,6 +634,133 @@ def download(
         auto_fill_gaps=auto_fill_gaps,
         interval=interval,
     )
+
+
+def download_multiple(
+    symbols: List[str],
+    timeframe: str,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    limit: Optional[int] = None,
+    max_workers: int = 5,
+    raise_on_partial_failure: bool = False,
+    **kwargs
+) -> dict[str, pd.DataFrame]:
+    """Download historical data for multiple symbols concurrently.
+
+    Executes concurrent downloads using ThreadPoolExecutor for network-bound
+    operations. Returns dict mapping symbol → DataFrame.
+
+    Args:
+        symbols: List of trading pair symbols (e.g., ["BTCUSDT", "ETHUSDT"])
+        timeframe: Candle interval (e.g., "1h", "4h", "1d")
+        start_date: Start date (YYYY-MM-DD)
+        end_date: End date (YYYY-MM-DD)
+        limit: Maximum bars per symbol
+        max_workers: Maximum concurrent downloads (default: 5)
+        raise_on_partial_failure: Raise error if any symbol fails (default: False)
+        **kwargs: Additional parameters passed to download()
+
+    Returns:
+        dict[str, pd.DataFrame]: Mapping of symbol → DataFrame
+        Only includes successful downloads (failed symbols omitted unless raise_on_partial_failure=True)
+
+    Raises:
+        ValueError: If symbols list is empty
+        ValueError: If max_workers < 1
+        ValueError: If all symbols fail
+        ValueError: If raise_on_partial_failure=True and any symbol fails
+
+    Examples:
+        >>> # Download multiple symbols concurrently
+        >>> results = download_multiple(
+        ...     symbols=["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+        ...     timeframe="1h",
+        ...     start_date="2024-01-01",
+        ...     end_date="2024-06-30"
+        ... )
+        >>> len(results)
+        3
+        >>> results["BTCUSDT"].shape
+        (4344, 11)
+
+        >>> # With error handling (partial failure - some succeed)
+        >>> results = download_multiple(
+        ...     symbols=["BTCUSDT", "INVALID", "ETHUSDT"],
+        ...     timeframe="1h",
+        ...     start_date="2024-01-01"
+        ... )
+        >>> len(results)
+        2  # Only BTCUSDT and ETHUSDT succeeded
+
+        >>> # Strict mode (fail fast on any error)
+        >>> results = download_multiple(
+        ...     symbols=["BTCUSDT", "INVALID"],
+        ...     timeframe="1h",
+        ...     start_date="2024-01-01",
+        ...     raise_on_partial_failure=True
+        ... )
+        # → Raises ValueError immediately on first failure
+    """
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    import warnings
+
+    # Input validation
+    if not symbols:
+        raise ValueError("symbols list cannot be empty")
+
+    if max_workers < 1:
+        raise ValueError("max_workers must be >= 1")
+
+    results: dict[str, pd.DataFrame] = {}
+    errors: dict[str, str] = {}
+
+    # Concurrent execution with ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all download tasks
+        future_to_symbol = {
+            executor.submit(
+                download,
+                symbol=symbol,
+                timeframe=timeframe,
+                start_date=start_date,
+                end_date=end_date,
+                limit=limit,
+                **kwargs
+            ): symbol
+            for symbol in symbols
+        }
+
+        # Collect results as they complete
+        for future in as_completed(future_to_symbol):
+            symbol = future_to_symbol[future]
+            try:
+                results[symbol] = future.result()
+            except Exception as e:
+                errors[symbol] = str(e)
+
+                # Fail fast mode
+                if raise_on_partial_failure:
+                    executor.shutdown(wait=False, cancel_futures=True)
+                    raise ValueError(
+                        f"Download failed for {symbol}: {e}"
+                    ) from e
+
+    # Handle complete failure
+    if not results and errors:
+        raise ValueError(
+            f"All {len(symbols)} symbols failed. Errors: {errors}"
+        )
+
+    # Log warnings for partial failures
+    if errors:
+        warnings.warn(
+            f"Failed to download {len(errors)} symbols: {list(errors.keys())}. "
+            f"Errors: {errors}",
+            UserWarning
+        )
+
+    return results
 
 
 def fill_gaps(directory: Union[str, Path], symbols: Optional[List[str]] = None) -> dict:

@@ -4,7 +4,7 @@
 **Date**: 2025-11-19
 **Deciders**: Terry Li
 **Related ADRs**: None
-**Related Plans**: [0015-python-3-11-support](../development/plan/0015-python-3-11-support/plan.md)
+**Related Plans**: [0015-python-3-11-support](../../development/plan/0015-python-3-11-support/plan.md)
 
 ## Context and Problem Statement
 
@@ -47,6 +47,7 @@ $ python -m compileall src/gapless_crypto_clickhouse/ -q
 ```
 
 **No Python 3.12-specific features found**:
+
 - ❌ No structural pattern matching (`match`/`case` statements)
 - ❌ No PEP 695 type parameters (`type Foo = Bar`)
 - ✅ Uses standard typing features (`Literal`, `Optional`, `Union`) available in Python 3.11
@@ -134,7 +135,7 @@ uv pip list | grep -E "clickhouse|pandas|pydantic|httpx"
 ```yaml
 strategy:
   matrix:
-    python-version: ["3.11", "3.12", "3.13"]  # Added 3.11
+    python-version: ["3.11", "3.12", "3.13"] # Added 3.11
 ```
 
 ### Phase 4: Release (semantic-release)

@@ -214,7 +214,7 @@ docker exec -it gapless-clickhouse clickhouse-client
 
 ## Next Steps
 
-- **For richer exploration**: Use [CH-UI](./CHUI_GUIDE.md) (http://localhost:5521)
+- **For richer exploration**: See [Local Visualization Tools](../../README.md#local-visualization-tools) (CH-UI at http://localhost:5521)
 - **For automation**: Use [clickhouse-client](./CLICKHOUSE_CLIENT_GUIDE.md)
 - **For monitoring**: Use [chdig](./CHDIG_GUIDE.md)
 

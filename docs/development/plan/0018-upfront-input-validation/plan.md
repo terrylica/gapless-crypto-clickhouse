@@ -31,6 +31,7 @@ df = gcd.download("BTCUSDT", "1h", start="2024-13-01")  # datetime error
 ```
 
 **Issues**:
+
 - Slow feedback (errors after network operations)
 - Unclear error messages
 - No suggestions for correction
@@ -68,11 +69,13 @@ df = gcd.download("BTCUSD", "1h")
 **Principle**: Fail fast with actionable feedback
 
 **Validation Order**:
+
 1. Symbol validation (check against known_symbols)
 2. Timeframe validation (check against available_timeframes)
 3. Date format validation (YYYY-MM-DD regex + parsing)
 
 **Error Message Pattern**:
+
 ```
 ValueError: Invalid <parameter> '<value>'. <Suggestion>
 Supported <parameters>: <list> (see <function>())
@@ -85,6 +88,7 @@ Supported <parameters>: <list> (see <function>())
 **Location**: `src/gapless_crypto_clickhouse/api.py`
 
 **Function**:
+
 ```python
 def _validate_symbol(symbol: str) -> None:
     """Validate symbol against known supported symbols.
@@ -118,6 +122,7 @@ def _validate_symbol(symbol: str) -> None:
 ```
 
 **Why This Design**:
+
 - Simple prefix matching (fast, no external dependencies)
 - Shows first 5 symbols for brevity
 - Directs users to `get_supported_symbols()` for complete list
@@ -128,6 +133,7 @@ def _validate_symbol(symbol: str) -> None:
 **Location**: `src/gapless_crypto_clickhouse/api.py`
 
 **Function**:
+
 ```python
 def _validate_timeframe_value(timeframe: str) -> None:
     """Validate timeframe against supported timeframes.
@@ -151,6 +157,7 @@ def _validate_timeframe_value(timeframe: str) -> None:
 ```
 
 **Why This Design**:
+
 - Shows all supported timeframes (only 13, fits in error message)
 - No fuzzy matching needed (timeframes are short, typos less likely)
 - Clear enumeration guides users
@@ -160,6 +167,7 @@ def _validate_timeframe_value(timeframe: str) -> None:
 **Location**: `src/gapless_crypto_clickhouse/api.py`
 
 **Function**:
+
 ```python
 def _validate_date_format(date_str: Optional[str], param_name: str) -> None:
     """Validate date string format (YYYY-MM-DD).
@@ -194,6 +202,7 @@ def _validate_date_format(date_str: Optional[str], param_name: str) -> None:
 ```
 
 **Why This Design**:
+
 - Two-stage validation: format regex then parsing
 - Shows example format for clarity
 - Preserves datetime error message for invalid dates (e.g., "2024-13-01")
@@ -415,6 +424,7 @@ class TestFetchDataValidation:
 ### Rollback Strategy
 
 **If critical issues found**:
+
 - Remove validation calls from `fetch_data()`
 - Keep validation functions for future use
 - No breaking changes (validation is additive)
@@ -481,6 +491,7 @@ class TestFetchDataValidation:
 ## Log Files
 
 Implementation logs stored in:
+
 - `logs/0018-upfront-input-validation-YYYYMMDD_HHMMSS.log`
 
 ---

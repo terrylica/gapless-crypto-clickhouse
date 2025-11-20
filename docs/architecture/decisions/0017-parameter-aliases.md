@@ -4,7 +4,7 @@
 **Date**: 2025-11-19
 **Deciders**: Terry Li
 **Related ADRs**: None
-**Related Plans**: [0017-parameter-aliases](../development/plan/0017-parameter-aliases/plan.md)
+**Related Plans**: [0017-parameter-aliases](../../development/plan/0017-parameter-aliases/plan.md)
 
 ## Context and Problem Statement
 
@@ -13,6 +13,7 @@ Current API uses `start` and `end` parameters for date ranges, but parameter nam
 **Alpha Forge Feedback**: "Parameter names like `start`/`end` are ambiguous - add `start_date`/`end_date` aliases"
 
 **Current API**:
+
 ```python
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 collector = BinancePublicDataCollector(start_date="2024-01-01", end_date="2024-06-30")
@@ -46,16 +47,19 @@ collector = BinancePublicDataCollector(start_date="2024-01-01", end_date="2024-0
 ### Why Parameter Aliases
 
 **Backward Compatibility**:
+
 - Existing code using `start`/`end` continues working without changes
 - No deprecation warnings needed (both forms are first-class)
 - Zero migration burden for current users
 
 **API Clarity**:
+
 - `start_date="2024-01-01"` is more explicit than `start="2024-01-01"`
 - Aligns with class-based API naming (`BinancePublicDataCollector(start_date=...)`)
 - Reduces cognitive load for new users
 
 **Implementation Simplicity**:
+
 - No breaking changes required
 - Simple parameter normalization in function bodies
 - No deprecation timeline management
@@ -63,6 +67,7 @@ collector = BinancePublicDataCollector(start_date="2024-01-01", end_date="2024-0
 ### Implementation Strategy
 
 **Function Signatures**:
+
 ```python
 def download(
     symbol: str,
@@ -86,10 +91,12 @@ def download(
 ```
 
 **Class-based API**:
+
 - Already uses `start_date`/`end_date` (no changes needed)
 - Maintains consistency
 
 **Type Hints**:
+
 - All parameters remain `Optional[str]`
 - No breaking changes to type signatures
 
@@ -119,10 +126,12 @@ def download(
 ### Phase 1: Update Function Signatures
 
 **Files to modify**:
+
 1. `src/gapless_crypto_clickhouse/api.py` - Add aliases to `download()`, `fetch_data()`
 2. `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py` - Already uses `start_date`/`end_date`
 
 **Change Pattern**:
+
 ```python
 # Before
 def download(symbol: str, timeframe: str, start: Optional[str] = None, end: Optional[str] = None, ...)
@@ -142,6 +151,7 @@ def download(
 ### Phase 2: Add Parameter Normalization
 
 **Validation Logic**:
+
 ```python
 # Conflict detection
 if start is not None and start_date is not None:
@@ -156,6 +166,7 @@ actual_end = end_date if end_date is not None else end
 ```
 
 **Error Handling**:
+
 - Raise `ValueError` if both forms specified simultaneously
 - Clear error message explains conflict
 - No silent fallbacks or defaults
@@ -163,12 +174,14 @@ actual_end = end_date if end_date is not None else end
 ### Phase 3: Update Documentation
 
 **Files to update**:
+
 1. `README.md` - Show both parameter forms in examples
 2. `docs/guides/python-api.md` - Document parameter aliases
 3. Function docstrings - Explain alias behavior
 4. `llms.txt` - Update AI agent documentation
 
 **Documentation Pattern**:
+
 ```python
 def download(...):
     """
@@ -190,6 +203,7 @@ def download(...):
 ### Phase 4: Test Coverage
 
 **Test Cases**:
+
 ```python
 def test_start_end_legacy_parameters():
     """Legacy start/end parameters still work."""
@@ -228,15 +242,18 @@ def test_mixed_parameters_raise_error():
 ## Migration Path
 
 **For existing users**:
+
 - No migration required (backward compatible)
 - Can continue using `start`/`end` indefinitely
 - Can adopt `start_date`/`end_date` gradually
 
 **For new users**:
+
 - Documentation recommends `start_date`/`end_date` (clearer intent)
 - Both forms documented as first-class (no deprecation warnings)
 
 **For Alpha Forge integration**:
+
 - Can use preferred `start_date`/`end_date` naming immediately
 - No breaking changes to worry about
 

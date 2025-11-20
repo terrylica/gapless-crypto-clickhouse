@@ -18,11 +18,13 @@ Add parameter aliases to support both `start`/`end` AND `start_date`/`end_date` 
 ### Problem
 
 Current function-based API uses ambiguous parameter names:
+
 ```python
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 ```
 
 **Issues**:
+
 - `start` and `end` lack semantic clarity (start of what? end of what?)
 - Inconsistent with class-based API which uses `start_date`/`end_date`
 - Alpha Forge feedback requests more explicit parameter names
@@ -30,6 +32,7 @@ df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 ### Solution
 
 Add parameter aliases so both forms work:
+
 ```python
 # Legacy form (still works)
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
@@ -60,6 +63,7 @@ df = gcd.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30
 **Principle**: Accept both forms, normalize internally, validate conflicts
 
 **Implementation Pattern**:
+
 ```python
 def download(
     symbol: str,
@@ -100,10 +104,12 @@ def download(
 **File**: `src/gapless_crypto_clickhouse/api.py`
 
 **Functions to update**:
+
 - `download()` - Primary data download function
 - `fetch_data()` - Recent data fetching function
 
 **Current Signatures** (lines ~100-130):
+
 ```python
 def download(
     symbol: str,
@@ -127,6 +133,7 @@ def fetch_data(
 ```
 
 **Updated Signatures**:
+
 ```python
 def download(
     symbol: str,
@@ -180,13 +187,15 @@ def download(
 #### 2. Update Documentation
 
 **Files to update**:
+
 1. `README.md` - Show both parameter forms in Quick Start
 2. `docs/guides/python-api.md` - Document parameter aliases
 3. `docs/api/quick-start.md` - Update examples
 4. `llms.txt` - Update AI agent documentation
 
 **README.md Changes**:
-```markdown
+
+````markdown
 # Quick Start
 
 ## Function-based API
@@ -200,7 +209,9 @@ df = gcd.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30
 # Legacy form (still supported)
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 ```
-```
+````
+
+````
 
 #### 3. Test Coverage
 
@@ -257,7 +268,7 @@ def test_fetch_data_new_aliases():
     """fetch_data() supports new parameter aliases."""
     df = gcd.fetch_data("ETHUSDT", "4h", start_date="2024-01-01", end_date="2024-01-02")
     assert len(df) > 0
-```
+````
 
 ## Detailed Design
 
@@ -266,6 +277,7 @@ def test_fetch_data_new_aliases():
 **Principle**: Raise explicit errors for misuse, no silent fallbacks
 
 **Conflict Detection**:
+
 ```python
 if start is not None and start_date is not None:
     raise ValueError(
@@ -275,11 +287,13 @@ if start is not None and start_date is not None:
 ```
 
 **Why ValueError**:
+
 - Standard Python exception for invalid parameter combinations
 - Caught by testing frameworks for validation
 - Clear error message guides users to correct usage
 
 **No Silent Defaults**:
+
 - Do NOT silently prefer one parameter over the other
 - Do NOT issue warnings and continue (raise+propagate pattern)
 - Users must fix their code if both specified
@@ -287,6 +301,7 @@ if start is not None and start_date is not None:
 ### Type Hint Compatibility
 
 **No Breaking Changes**:
+
 ```python
 # Before and after - identical type hints
 start: Optional[str] = None
@@ -296,6 +311,7 @@ end_date: Optional[str] = None
 ```
 
 **Type Checkers**:
+
 - `mypy` validation passes (all optional strings)
 - IDE autocomplete shows all parameter forms
 - No deprecation warnings (both forms first-class)
@@ -303,6 +319,7 @@ end_date: Optional[str] = None
 ### Documentation Standards
 
 **Docstring Format**:
+
 ```python
 Parameters:
     start (str, optional): Start date (YYYY-MM-DD). Alias: start_date
@@ -375,6 +392,7 @@ Raises:
 ### Rollback Strategy
 
 **If critical issues found**:
+
 - Rollback is simple (remove new parameters, keep legacy)
 - No breaking changes introduced (backward compatible)
 - Users unaffected (legacy parameters unchanged)
@@ -439,6 +457,7 @@ Raises:
 ## Log Files
 
 Implementation logs stored in:
+
 - `logs/0017-parameter-aliases-YYYYMMDD_HHMMSS.log`
 
 ---

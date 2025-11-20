@@ -43,10 +43,11 @@ supersedes: []
 
 - [Installation](#installation)
 - [Import Changes](#import-changes)
+- [Why Migrate?](#why-migrate)
 - [Quick Migration Examples](#quick-migration-examples)
 - [Common Patterns](#common-patterns)
 - [Advanced Use Cases](#advanced-use-cases)
-- [Benefits of ClickHouse Integration](#benefits-of-clickhouse-integration)
+- [Benefits of Python API](#benefits-of-python-api)
 
 ---
 

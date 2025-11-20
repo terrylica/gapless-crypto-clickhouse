@@ -423,7 +423,7 @@ cat large.csv | clickhouse-local --input-format CSV --query "SELECT count() FROM
 
 - **For persistent database**: Use [ClickHouse server](../../docker-compose.yml)
 - **For automation**: Use [clickhouse-client](./CLICKHOUSE_CLIENT_GUIDE.md)
-- **For exploration**: Use [CH-UI](./CHUI_GUIDE.md)
+- **For web interface**: See [Local Visualization Tools](../../README.md#local-visualization-tools) (CH-UI at http://localhost:5521)
 
 ## References
 

@@ -6,11 +6,11 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### ⚠ BREAKING CHANGES
 
-* **api:** None (validation is additive, improves error clarity)
+- **api:** None (validation is additive, improves error clarity)
 
 ### Features
 
-* **api:** add upfront input validation with actionable error messages ([96c167d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/96c167df669e09d9ecf0d09c1dc8af894608c3f1)), closes [#4](https://github.com/terrylica/gapless-crypto-clickhouse/issues/4)
+- **api:** add upfront input validation with actionable error messages ([96c167d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/96c167df669e09d9ecf0d09c1dc8af894608c3f1)), closes [#4](https://github.com/terrylica/gapless-crypto-clickhouse/issues/4)
 
 ## [2.5.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v2.4.0...v2.5.0) (2025-11-19)
 
