@@ -73,12 +73,12 @@ Package Relationship:
         See docs/development/CLI_MIGRATION_GUIDE.md for migration guide.
         Note: This package never had a CLI (Python API only).
 
-Supported Symbols (20 USDT pairs - Spot + Futures Dual Coverage):
-    Top 20 by market cap: BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, XRPUSDT,
-    DOGEUSDT, ADAUSDT, AVAXUSDT, DOTUSDT, LINKUSDT, MATICUSDT, LTCUSDT,
-    UNIUSDT, ATOMUSDT, FTMUSDT, NEARUSDT, ALGOUSDT, SANDUSDT, MANAUSDT, APEUSDT
+Supported Symbols (713 perpetual symbols - Spot + Futures Aligned):
+    Both spot and futures-um support 713 validated perpetual symbols
+    sourced from binance-futures-availability package (95%+ SLA, daily S3 Vision probes).
 
-    All symbols validated for both Binance Spot and UM-margined perpetual futures markets.
+    See get_supported_symbols() for complete list.
+    Major pairs: BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, XRPUSDT, and 708 more.
 """
 
 __version__ = "1.0.0"

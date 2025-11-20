@@ -34,38 +34,50 @@ from .gap_filling.universal_gap_filler import UniversalGapFiller
 def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]:
     """Get list of supported trading pairs for the specified instrument type.
 
+    Returns 713 validated perpetual symbols for both spot and futures.
+    Symbol list sourced from binance-futures-availability package
+    (validated daily via S3 Vision probes, 95%+ SLA).
+
+    Note: The instrument_type parameter is retained for API compatibility,
+    but both "spot" and "futures-um" return the same 713-symbol list.
+    Rationale: Binance markets are aligned - perpetual futures symbols
+    correspond to spot pairs. See ADR-0022 for complete alignment rationale.
+
     Args:
         instrument_type: Type of instrument ("spot" or "futures-um"). Default: "spot"
 
     Returns:
-        List of supported symbol strings (e.g., ["BTCUSDT", "ETHUSDT", ...])
-        - spot: 20 USDT spot trading pairs
-        - futures-um: 713 USDT-margined perpetual futures symbols
+        List of 713 supported perpetual symbols (same for both spot and futures)
 
     Raises:
         ValueError: If instrument_type is invalid
 
     Examples:
-        >>> # Get spot symbols (default)
+        >>> # Get spot symbols (default) - returns 713 symbols
         >>> symbols = get_supported_symbols()
         >>> print(f"Found {len(symbols)} spot symbols")
-        Found 20 spot symbols
+        Found 713 spot symbols
 
-        >>> # Get futures symbols
+        >>> # Get futures symbols - returns same 713 symbols
         >>> futures = get_supported_symbols(instrument_type="futures-um")
         >>> print(f"Found {len(futures)} futures symbols")
         Found 713 futures symbols
-        >>> print(f"Bitcoin futures: {'BTCUSDT' in futures}")
-        Bitcoin futures: True
+
+        >>> # Verify alignment
+        >>> get_supported_symbols("spot") == get_supported_symbols("futures-um")
+        True
+
+        >>> # Check symbol availability
+        >>> print(f"Bitcoin supported: {'BTCUSDT' in symbols}")
+        Bitcoin supported: True
     """
+    from binance_futures_availability.config.symbol_loader import load_symbols
+
+    # Validate parameter (fail fast on invalid types)
     _validate_instrument_type(instrument_type)
 
-    if instrument_type == "futures-um":
-        from binance_futures_availability.config.symbol_loader import load_symbols
-        return load_symbols("perpetual")  # Returns 713 perpetual futures symbols
-    else:
-        collector = BinancePublicDataCollector()
-        return list(collector.known_symbols.keys())
+    # Return same 713 symbols for both types (ADR-0022)
+    return load_symbols("perpetual")
 
 
 def get_supported_timeframes() -> List[str]:
@@ -85,14 +97,19 @@ def get_supported_timeframes() -> List[str]:
     return collector.available_timeframes
 
 
-# Type aliases for better discoverability and coding agent support
-# Top 20 symbols by market cap with dual spot + futures coverage
-SupportedSymbol = Literal[
-    "BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT",
-    "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "DOTUSDT", "LINKUSDT",
-    "MATICUSDT", "LTCUSDT", "UNIUSDT", "ATOMUSDT", "FTMUSDT",
-    "NEARUSDT", "ALGOUSDT", "SANDUSDT", "MANAUSDT", "APEUSDT",
-]
+# DEPRECATED in v4.1.0: SupportedSymbol type alias removed (ADR-0022)
+# Reason: 713-symbol Literal exceeds practical type checker limits
+# Migration: Use `str` for symbol parameters, validate via get_supported_symbols()
+#
+# Before (v4.0.0):
+#   def my_function(symbol: SupportedSymbol) -> None: ...
+#
+# After (v4.1.0):
+#   def my_function(symbol: str) -> None:
+#       if symbol not in get_supported_symbols():
+#           raise ValueError(f"Unsupported symbol: {symbol}")
+#
+# Note: Spot and futures now both support 713 symbols (up from 20 spot symbols)
 
 SupportedTimeframe = Literal[
     "1s", "1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d"
@@ -495,7 +512,7 @@ def fetch_data(
         output_dir: Directory to save CSV files (optional)
         index_type: DEPRECATED - Use pandas operations directly
         auto_fill_gaps: Automatically fill detected gaps with authentic Binance API data (default: True)
-        instrument_type: Instrument type - "spot" (default, 20 symbols) or "futures-um" (713 symbols)
+        instrument_type: Instrument type - "spot" or "futures-um" (both support 713 symbols, default: "spot")
         interval: Legacy parameter name for timeframe (deprecated, use timeframe)
 
     Returns:
@@ -637,7 +654,7 @@ def download(
         output_dir: Directory to save CSV files
         index_type: DEPRECATED - Use standard pandas operations instead
         auto_fill_gaps: Automatically fill detected gaps with authentic Binance API data (default: True)
-        instrument_type: Instrument type - "spot" (default, 20 symbols) or "futures-um" (713 symbols)
+        instrument_type: Instrument type - "spot" or "futures-um" (both support 713 symbols, default: "spot")
         interval: Legacy parameter name for timeframe (deprecated)
 
     Returns:
@@ -742,7 +759,7 @@ def download_multiple(
         limit: Maximum bars per symbol
         max_workers: Maximum concurrent downloads (default: 5)
         raise_on_partial_failure: Raise error if any symbol fails (default: False)
-        instrument_type: Instrument type - "spot" (default, 20 symbols) or "futures-um" (713 symbols)
+        instrument_type: Instrument type - "spot" or "futures-um" (both support 713 symbols, default: "spot")
         **kwargs: Additional parameters passed to download()
 
     Returns:

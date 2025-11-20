@@ -84,8 +84,9 @@ class BinancePublicDataCollector:
         4h: 2190 bars
 
     Note:
-        This collector only supports USDT spot pairs (BTCUSDT, ETHUSDT, SOLUSDT, etc.).
-        It does not support futures, perpetuals, or non-USDT pairs.
+        This collector supports 713 USDT perpetual symbols for both spot and futures-um markets.
+        Symbol validation is handled in the API layer via get_supported_symbols().
+        See ADR-0022 for spot/futures alignment rationale.
     """
 
     def _validate_symbol(self, symbol: str) -> str:
@@ -187,7 +188,7 @@ class BinancePublicDataCollector:
                 CSV provides universal compatibility, Parquet offers 5-10x compression.
                 Defaults to "csv".
             instrument_type (str, optional): Instrument type - "spot" or "futures-um".
-                Defaults to "spot" (20 symbols). Use "futures-um" for 713 perpetual futures.
+                Both types support 713 perpetual symbols. Defaults to "spot".
 
         Raises:
             ValueError: If instrument_type is not "spot" or "futures-um"
@@ -298,35 +299,6 @@ class BinancePublicDataCollector:
             "1mo",
         ]
 
-        # Top 20 symbols by market cap (dual coverage: spot + UM-margined perpetual futures)
-        # All symbols validated 2025-11-19 for both Binance Spot and Futures markets
-        # Listing dates from Binance historical data repository
-        self.known_symbols = {
-            # Existing symbols (rank by market cap)
-            "BTCUSDT": "2017-08-17",   # #1 - Bitcoin
-            "ETHUSDT": "2017-08-17",   # #2 - Ethereum
-            "SOLUSDT": "2020-08-11",   # #4 - Solana
-            "ADAUSDT": "2018-04-17",   # #9 - Cardano
-            "DOTUSDT": "2020-08-19",   # #13 - Polkadot
-            "LINKUSDT": "2019-01-16",  # #14 - Chainlink
-
-            # New symbols (validated spot + futures dual coverage)
-            "BNBUSDT": "2017-11-06",   # #3 - Binance Coin
-            "XRPUSDT": "2018-05-04",   # #5 - Ripple
-            "DOGEUSDT": "2021-05-05",  # #8 - Dogecoin
-            "AVAXUSDT": "2020-09-22",  # #11 - Avalanche
-            "MATICUSDT": "2019-04-26", # #16 - Polygon
-            "LTCUSDT": "2018-01-23",   # #18 - Litecoin
-            "UNIUSDT": "2020-09-17",   # #19 - Uniswap
-            "ATOMUSDT": "2019-04-22",  # #21 - Cosmos
-            "FTMUSDT": "2019-10-31",   # #27 - Fantom
-            "NEARUSDT": "2020-11-02",  # #28 - NEAR Protocol
-            "ALGOUSDT": "2019-06-20",  # #31 - Algorand
-            "SANDUSDT": "2020-08-13",  # #38 - The Sandbox
-            "MANAUSDT": "2020-12-14",  # #42 - Decentraland
-            "APEUSDT": "2022-03-17",   # #48 - ApeCoin
-        }
-
         # Validate date range and symbol
         self._validate_parameters()
 
@@ -338,7 +310,12 @@ class BinancePublicDataCollector:
         print(f"Data Source: {self.base_url}")
 
     def _validate_parameters(self):
-        """Validate date range and symbol parameters."""
+        """Validate date range parameters.
+
+        Note: Symbol validation is handled in the API layer via get_supported_symbols().
+        See ADR-0022 for symbol alignment rationale (spot and futures both use
+        binance-futures-availability package for 713 validated symbols).
+        """
         today = datetime.now().date()
         yesterday = today - timedelta(days=1)
 
@@ -350,25 +327,6 @@ class BinancePublicDataCollector:
                 f"Recent data may not be available and requests may fail with 404 errors.",
                 UserWarning,
                 stacklevel=2,
-            )
-
-        # Check symbol availability
-        if self.symbol in self.known_symbols:
-            symbol_start = datetime.strptime(self.known_symbols[self.symbol], "%Y-%m-%d").date()
-            if self.start_date.date() < symbol_start:
-                warnings.warn(
-                    f"⚠️  Requested start date {self.start_date.strftime('%Y-%m-%d')} is before "
-                    f"{self.symbol} listing date ({symbol_start}). "
-                    f"Data before {symbol_start} is not available.",
-                    UserWarning,
-                    stacklevel=2,
-                )
-        else:
-            # Unknown symbol - provide general guidance
-            logging.info(
-                f"ℹ️  Symbol {self.symbol} availability not verified. "
-                f"Known symbols: {list(self.known_symbols.keys())}. "
-                f"If requests fail with 404 errors, check symbol availability on Binance."
             )
 
     def generate_monthly_urls(self, trading_timeframe: str) -> List[Tuple[str, str, str]]:
