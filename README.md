@@ -33,6 +33,8 @@ Both packages share the same 22x performance advantage via Binance public reposi
 ## Features
 
 - **22x faster** data collection via Binance public data repository
+- **2x faster queries** with Apache Arrow optimization (v6.0.0+, 41K+ rows/s at scale)
+- **Auto-ingestion**: Unified `query_ohlcv()` API downloads missing data automatically
 - **ClickHouse database** with ReplacingMergeTree for deterministic deduplication
 - **USDT-margined futures** support (perpetual contracts via `instrument_type` column)
 - **Zero gaps guarantee** through intelligent monthly-to-daily fallback
@@ -40,6 +42,7 @@ Both packages share the same 22x performance advantage via Binance public reposi
 - **11-column microstructure format** (spot) and 12-column format (futures with funding rate)
 - **Advanced SQL queries** for time-series analysis, multi-symbol joins, aggregations
 - **Persistent storage** with compression (DoubleDelta timestamps, Gorilla OHLCV)
+- **AI agent ready**: llms.txt + probe.py for capability discovery
 - **UV-based Python tooling** for modern dependency management
 - **Production-ready** with comprehensive test coverage
 
@@ -222,6 +225,57 @@ docker exec -it gapless-clickhouse clickhouse-client
 4. Sets up health checks and automatic restart
 
 **Schema auto-initialization**: The `schema.sql` file is automatically executed via Docker's `initdb.d` mechanism.
+
+### Quick Start: Unified Query API (v6.0.0+)
+
+The **recommended way** to query data in v6.0.0+ is using `query_ohlcv()` with auto-ingestion and Apache Arrow optimization:
+
+```python
+from gapless_crypto_clickhouse import query_ohlcv
+
+# Query with auto-ingestion (downloads data if missing)
+df = query_ohlcv(
+    "BTCUSDT",
+    "1h",
+    "2024-01-01",
+    "2024-01-31"
+)
+print(f"Retrieved {len(df)} rows")  # 744 rows (31 days * 24 hours)
+
+# Multi-symbol query
+df = query_ohlcv(
+    ["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+    "1h",
+    "2024-01-01",
+    "2024-01-31"
+)
+
+# Futures data
+df = query_ohlcv(
+    "BTCUSDT",
+    "1h",
+    "2024-01-01",
+    "2024-01-31",
+    instrument_type="futures-um"
+)
+
+# Query without auto-ingestion (faster, raises if data missing)
+df = query_ohlcv(
+    "BTCUSDT",
+    "1h",
+    "2024-01-01",
+    "2024-01-31",
+    auto_ingest=False
+)
+```
+
+**Performance (Apache Arrow optimization)**:
+- **2x faster** at scale: 41,272 rows/s vs 20,534 rows/s for large datasets (>8000 rows)
+- **43-57% less memory**: Arrow buffers reduce memory usage for medium/large queries
+- **Auto-ingestion**: Downloads missing data automatically on first query
+- **Best for**: Analytical queries, backtesting, multi-symbol analysis (typical use case)
+
+**When to use lower-level APIs**: Advanced use cases requiring custom SQL, bulk loading, or connection management.
 
 ### Basic Usage Examples
 
