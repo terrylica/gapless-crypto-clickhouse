@@ -48,6 +48,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
 ```
 
 **Rationale**:
+
 - Binance offers perpetual futures for most symbols → spot pairs also exist
 - Package validation already ensures symbols are actively traded
 - No need to differentiate symbol lists between markets
@@ -141,6 +142,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
 **Implementation Strategy**:
 
 1. **Simplify `get_supported_symbols()`**:
+
    ```python
    def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]:
        """Return 713 validated perpetual symbols for both spot and futures.
@@ -215,11 +217,13 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
 **Breaking Changes**: None - fully backward compatible
 
 **Additive Changes**:
+
 - Spot users can now access 693 additional symbols
 - `get_supported_symbols("spot")` returns 713 symbols (up from 20)
 - All existing code continues to work unchanged
 
 **Deprecations**:
+
 - `SupportedSymbol` type alias (removed in v4.1.0)
   - Replacement: Use `str` for symbol parameters
   - Validation: Call `get_supported_symbols()` to check validity

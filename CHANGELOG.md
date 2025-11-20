@@ -6,21 +6,21 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### ⚠ BREAKING CHANGES
 
-* None - fully backward compatible (additive only)
+- None - fully backward compatible (additive only)
 
 ### Features
 
-* align spot and futures to 713 symbols each ([32a8b9d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/32a8b9d3793bf95d67957bdb9a7581a0491f2c46))
+- align spot and futures to 713 symbols each ([32a8b9d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/32a8b9d3793bf95d67957bdb9a7581a0491f2c46))
 
 ## [4.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v3.1.1...v4.0.0) (2025-11-20)
 
 ### ⚠ BREAKING CHANGES
 
-* **api:** None - this release is fully backward compatible. All existing code continues to work unchanged with default instrument_type="spot" parameter.
+- **api:** None - this release is fully backward compatible. All existing code continues to work unchanged with default instrument_type="spot" parameter.
 
 ### Features
 
-* **api:** add USDT-margined perpetual futures support with 713 symbols ([4f5c5a3](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4f5c5a3cd315823aaf89d7864b1f9350a09e87d4)), closes [#ADR-0021](https://github.com/terrylica/gapless-crypto-clickhouse/issues/ADR-0021)
+- **api:** add USDT-margined perpetual futures support with 713 symbols ([4f5c5a3](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4f5c5a3cd315823aaf89d7864b1f9350a09e87d4)), closes [#ADR-0021](https://github.com/terrylica/gapless-crypto-clickhouse/issues/ADR-0021)
 
 ## [3.1.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v3.1.0...v3.1.1) (2025-11-20)
 

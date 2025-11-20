@@ -758,19 +758,19 @@ uv run pre-commit run --all-files
 
 ### Development Commands Reference
 
-| Task                   | Command                             |
-| ---------------------- | ----------------------------------- |
-| Install dependencies   | `uv sync --dev`                     |
-| Setup pre-commit hooks | `uv run pre-commit install`         |
-| Add new dependency     | `uv add package-name`               |
-| Add dev dependency     | `uv add --dev package-name`         |
+| Task                   | Command                                                                             |
+| ---------------------- | ----------------------------------------------------------------------------------- |
+| Install dependencies   | `uv sync --dev`                                                                     |
+| Setup pre-commit hooks | `uv run pre-commit install`                                                         |
+| Add new dependency     | `uv add package-name`                                                               |
+| Add dev dependency     | `uv add --dev package-name`                                                         |
 | Run Python API         | `uv run python -c "import gapless_crypto_clickhouse as gcd; print(gcd.get_info())"` |
-| Run tests              | `uv run pytest`                     |
-| Format code            | `uv run ruff format .`              |
-| Lint code              | `uv run ruff check --fix .`         |
-| Type check             | `uv run mypy src/`                  |
-| Validate pre-commit    | `uv run pre-commit run --all-files` |
-| Build package          | `uv build`                          |
+| Run tests              | `uv run pytest`                                                                     |
+| Format code            | `uv run ruff format .`                                                              |
+| Lint code              | `uv run ruff check --fix .`                                                         |
+| Type check             | `uv run mypy src/`                                                                  |
+| Validate pre-commit    | `uv run pre-commit run --all-files`                                                 |
+| Build package          | `uv build`                                                                          |
 
 ### E2E Validation Framework
 

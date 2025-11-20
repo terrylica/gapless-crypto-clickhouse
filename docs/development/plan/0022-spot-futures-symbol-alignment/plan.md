@@ -15,6 +15,7 @@
 Align spot and futures symbol coverage to 713 symbols each by using `binance-futures-availability` as the single source of truth for both instrument types, removing the artificial 20-symbol limitation on spot data.
 
 **Success Criteria**:
+
 - `get_supported_symbols("spot")` returns 713 symbols
 - `get_supported_symbols("futures-um")` returns 713 symbols
 - `BinancePublicDataCollector.known_symbols` hardcoded dict removed
@@ -34,6 +35,7 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
 - **Futures**: 713 validated symbols from `binance-futures-availability` package
 
 **User Requirement** (2025-11-20):
+
 > "as a matter of fact You have to do some additional change as well because it is wrong to have just 20 USDT pair for the spot. the spot and future should completely be aligned, meaning whenever we have the futures, we must have the spot. So the 713 applicable for both the spot and future"
 
 ### Why This Matters
@@ -58,6 +60,7 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
 #### Code Locations
 
 1. **`api.py` Line 66-68**: `get_supported_symbols()` implementation
+
    ```python
    # Current: Bifurcated logic (spot=20, futures=713)
    if instrument_type == "futures-um":
@@ -69,6 +72,7 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
    ```
 
 2. **`api.py` Lines 89-95**: `SupportedSymbol` type alias
+
    ```python
    # 20 hardcoded symbols in Literal (must deprecate - 713 too large)
    SupportedSymbol = Literal["BTCUSDT", "ETHUSDT", ...]
@@ -78,6 +82,7 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
    - "20 symbols" → "713 symbols"
 
 4. **`binance_public_data_collector.py` Lines 301-328**: `known_symbols` dict
+
    ```python
    # Hardcoded dict (28 lines) - remove entirely
    known_symbols = {
@@ -104,12 +109,14 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
 **Decision**: Use `binance-futures-availability` for BOTH spot and futures
 
 **Rationale**:
+
 - Binance markets are aligned (perpetual futures → spot pairs exist)
 - Package already validated in production (daily S3 Vision probes)
 - No need for separate symbol sources or validation logic
 - Simplifies codebase (single source of truth)
 
 **Alternative Considered**: Separate spot symbol package
+
 - **Rejected**: Over-engineering, duplication, maintenance burden
 
 **See**: [ADR-0022](../../../architecture/decisions/0022-spot-futures-symbol-alignment.md) for complete analysis
@@ -164,6 +171,7 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
 ```
 
 **Key Changes**:
+
 - ❌ Remove `BinancePublicDataCollector.known_symbols` dict
 - ✅ Single code path: `load_symbols("perpetual")` for both types
 - ✅ Consistent 713-symbol coverage for spot and futures
@@ -179,6 +187,7 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
 **File**: `src/gapless_crypto_clickhouse/api.py` (Lines 66-68)
 
 **Before**:
+
 ```python
 def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]:
     """Get list of supported symbols for given instrument type.
@@ -199,6 +208,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
 ```
 
 **After**:
+
 ```python
 def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]:
     """Get list of supported symbols for given instrument type.
@@ -238,6 +248,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
 ```
 
 **Changes**:
+
 - ✅ Remove if/else bifurcation logic
 - ✅ Import `load_symbols` at function level
 - ✅ Single code path for both instrument types
@@ -249,6 +260,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
 **File**: `src/gapless_crypto_clickhouse/api.py` (Lines 89-95)
 
 **Before**:
+
 ```python
 SupportedSymbol = Literal[
     "BTCUSDT", "ETHUSDT", "BNBUSDT", "ADAUSDT", "DOGEUSDT",
@@ -259,6 +271,7 @@ SupportedSymbol = Literal[
 ```
 
 **After**:
+
 ```python
 # DEPRECATED in v4.1.0: SupportedSymbol type alias removed
 # Reason: 713-symbol Literal exceeds practical type checker limits
@@ -274,6 +287,7 @@ SupportedSymbol = Literal[
 ```
 
 **Changes**:
+
 - ❌ Remove 20-symbol Literal type alias
 - ✅ Add deprecation notice with migration guide
 - ✅ Suggest runtime validation via `get_supported_symbols()`
@@ -283,6 +297,7 @@ SupportedSymbol = Literal[
 **File**: `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py` (Lines 301-328)
 
 **Before**:
+
 ```python
 known_symbols = {
     "BTCUSDT": "Bitcoin",
@@ -292,10 +307,12 @@ known_symbols = {
 ```
 
 **After**:
+
 - ❌ Delete entire dict (no replacement needed)
 - ✅ Symbol validation now handled by `get_supported_symbols()` in API layer
 
 **Rationale**:
+
 - Collector layer doesn't need symbol validation (API layer handles it)
 - Package provides authoritative symbol source
 - Reduces code duplication and maintenance burden
@@ -307,6 +324,7 @@ known_symbols = {
 **File**: `src/gapless_crypto_clickhouse/__init__.py` (Lines 76-82)
 
 **Before**:
+
 ```python
 """Gapless Crypto ClickHouse - ClickHouse-based cryptocurrency data collection
 
@@ -318,6 +336,7 @@ Features:
 ```
 
 **After**:
+
 ```python
 """Gapless Crypto ClickHouse - ClickHouse-based cryptocurrency data collection
 
@@ -336,6 +355,7 @@ Features:
 **Pattern**: Replace "20 symbols" → "713 symbols"
 
 **Locations**:
+
 1. `api.py` Line 42: Module-level docstring
 2. `api.py` Line 498: `fetch_data()` docstring
 3. `api.py` Line 640: `download()` docstring
@@ -344,6 +364,7 @@ Features:
 6. `binance_public_data_collector.py` Line 190: Parameter docstring
 
 **Example**:
+
 ```python
 # Before
 """Download OHLCV data for one of 20 supported USDT pairs"""
@@ -357,6 +378,7 @@ Features:
 #### Task 3.1: Run Test Suite
 
 **Command**:
+
 ```bash
 uv run pytest tests/ -v --cov=src/gapless_crypto_clickhouse --cov-report=term-missing
 ```
@@ -364,6 +386,7 @@ uv run pytest tests/ -v --cov=src/gapless_crypto_clickhouse --cov-report=term-mi
 **Expected**: All 27+ tests pass
 
 **Auto-Fix Strategy**:
+
 - If tests fail, analyze failure output
 - Fix issues immediately before proceeding
 - Re-run tests until all pass
@@ -371,6 +394,7 @@ uv run pytest tests/ -v --cov=src/gapless_crypto_clickhouse --cov-report=term-mi
 #### Task 3.2: Type Checking
 
 **Command**:
+
 ```bash
 uv run mypy src/gapless_crypto_clickhouse
 ```
@@ -380,6 +404,7 @@ uv run mypy src/gapless_crypto_clickhouse
 #### Task 3.3: Create Conventional Commit
 
 **Format**:
+
 ```bash
 git add -A
 git commit -m "feat: align spot and futures to 713 symbols each
@@ -399,6 +424,7 @@ BREAKING CHANGE: None - fully backward compatible (additive only)"
 #### Task 3.4: Release via semantic-release
 
 **Workflow**:
+
 1. Export GitHub token: `export GH_TOKEN="$(gh auth token)"`
 2. Run semantic-release: `npx semantic-release`
 3. Verify GitHub release created: `gh release view v4.1.0`
@@ -406,6 +432,7 @@ BREAKING CHANGE: None - fully backward compatible (additive only)"
 #### Task 3.5: Publish to PyPI via Doppler
 
 **Workflow** (from `~/.claude/skills/pypi-doppler`):
+
 ```bash
 # Retrieve token from Doppler and publish
 UV_PUBLISH_TOKEN=$(doppler secrets get PYPI_TOKEN --project claude-config --config prd --plain) uv publish
@@ -488,12 +515,12 @@ curl -s https://pypi.org/pypi/gapless-crypto-clickhouse/json | jq -r '.info.vers
 
 ## SLO Impact
 
-| SLO Target       | Before (v4.0.0)                    | After (v4.1.0)                        | Impact     |
-| ---------------- | ---------------------------------- | ------------------------------------- | ---------- |
-| **Availability** | Spot: 20 symbols, Futures: 713     | Spot: 713, Futures: 713               | ✅ Improved |
-| **Correctness**  | Spot: hardcoded, Futures: validated | Both: validated (binance-futures-availability) | ✅ Improved |
-| **Observability** | instrument_type tracked            | instrument_type tracked (same list)   | ➡️ No change |
-| **Maintainability** | 28-line hardcoded dict             | Single package dependency             | ✅ Improved |
+| SLO Target          | Before (v4.0.0)                     | After (v4.1.0)                                 | Impact       |
+| ------------------- | ----------------------------------- | ---------------------------------------------- | ------------ |
+| **Availability**    | Spot: 20 symbols, Futures: 713      | Spot: 713, Futures: 713                        | ✅ Improved  |
+| **Correctness**     | Spot: hardcoded, Futures: validated | Both: validated (binance-futures-availability) | ✅ Improved  |
+| **Observability**   | instrument_type tracked             | instrument_type tracked (same list)            | ➡️ No change |
+| **Maintainability** | 28-line hardcoded dict              | Single package dependency                      | ✅ Improved  |
 
 ---
 
@@ -502,6 +529,7 @@ curl -s https://pypi.org/pypi/gapless-crypto-clickhouse/json | jq -r '.info.vers
 **If issues discovered post-release**:
 
 1. **Revert Commit**:
+
    ```bash
    git revert HEAD
    git push origin main
@@ -518,6 +546,7 @@ curl -s https://pypi.org/pypi/gapless-crypto-clickhouse/json | jq -r '.info.vers
    - Plan alternative approach if needed
 
 **Rollback Triggers**:
+
 - Symbol validation failures (e.g., package unavailable)
 - Breaking changes discovered in user code
 - Performance degradation (unlikely - same package load)
@@ -541,6 +570,7 @@ curl -s https://pypi.org/pypi/gapless-crypto-clickhouse/json | jq -r '.info.vers
 ### Post-Release Verification
 
 **Command**:
+
 ```python
 import gapless_crypto_clickhouse as gcc
 
