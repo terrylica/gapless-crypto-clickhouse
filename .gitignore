@@ -68,3 +68,6 @@ scratch/
 *.sqlite
 *.sqlite3
 *.duckdb
+
+# Test data files (downloaded during benchmarking)
+src/gapless_crypto_clickhouse/sample_data/
