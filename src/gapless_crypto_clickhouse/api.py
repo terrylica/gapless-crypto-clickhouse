@@ -31,21 +31,41 @@ from .collectors.binance_public_data_collector import BinancePublicDataCollector
 from .gap_filling.universal_gap_filler import UniversalGapFiller
 
 
-def get_supported_symbols() -> List[str]:
-    """Get list of supported USDT spot trading pairs.
+def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]:
+    """Get list of supported trading pairs for the specified instrument type.
+
+    Args:
+        instrument_type: Type of instrument ("spot" or "futures-um"). Default: "spot"
 
     Returns:
         List of supported symbol strings (e.g., ["BTCUSDT", "ETHUSDT", ...])
+        - spot: 20 USDT spot trading pairs
+        - futures-um: 713 USDT-margined perpetual futures symbols
+
+    Raises:
+        ValueError: If instrument_type is invalid
 
     Examples:
+        >>> # Get spot symbols (default)
         >>> symbols = get_supported_symbols()
-        >>> print(f"Found {len(symbols)} supported symbols")
-        >>> print(f"Bitcoin: {'BTCUSDT' in symbols}")
-        Found 6 supported symbols
-        Bitcoin: True
+        >>> print(f"Found {len(symbols)} spot symbols")
+        Found 20 spot symbols
+
+        >>> # Get futures symbols
+        >>> futures = get_supported_symbols(instrument_type="futures-um")
+        >>> print(f"Found {len(futures)} futures symbols")
+        Found 713 futures symbols
+        >>> print(f"Bitcoin futures: {'BTCUSDT' in futures}")
+        Bitcoin futures: True
     """
-    collector = BinancePublicDataCollector()
-    return list(collector.known_symbols.keys())
+    _validate_instrument_type(instrument_type)
+
+    if instrument_type == "futures-um":
+        from binance_futures_availability.config.symbol_loader import load_symbols
+        return load_symbols("perpetual")  # Returns 713 perpetual futures symbols
+    else:
+        collector = BinancePublicDataCollector()
+        return list(collector.known_symbols.keys())
 
 
 def get_supported_timeframes() -> List[str]:
@@ -77,6 +97,36 @@ SupportedSymbol = Literal[
 SupportedTimeframe = Literal[
     "1s", "1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d"
 ]
+
+# Instrument type support (ADR-0021)
+InstrumentType = Literal["spot", "futures-um"]
+
+
+def _validate_instrument_type(instrument_type: str) -> None:
+    """Validate instrument_type parameter.
+
+    Args:
+        instrument_type: Instrument type to validate
+
+    Raises:
+        ValueError: If instrument_type is not supported
+
+    Examples:
+        >>> _validate_instrument_type("spot")  # Valid
+        >>> _validate_instrument_type("futures-um")  # Valid
+        >>> _validate_instrument_type("futures")  # Invalid
+        Traceback (most recent call last):
+            ...
+        ValueError: Invalid instrument_type 'futures'. Must be 'spot' or 'futures-um'
+    """
+    valid_types = {"spot", "futures-um"}
+    if instrument_type not in valid_types:
+        raise ValueError(
+            f"Invalid instrument_type '{instrument_type}'. "
+            f"Must be one of: {', '.join(sorted(valid_types))}. "
+            f"Use 'futures-um' for USDT-margined perpetual futures (713 symbols). "
+            f"See get_supported_symbols(instrument_type='{instrument_type}') for available symbols."
+        )
 
 
 def _validate_timeframe_parameters(
@@ -142,18 +192,19 @@ def _validate_index_type_parameter(index_type: Optional[str]) -> None:
         )
 
 
-def _validate_symbol(symbol: str) -> None:
-    """Validate symbol against known supported symbols.
+def _validate_symbol(symbol: str, instrument_type: str = "spot") -> None:
+    """Validate symbol against known supported symbols for instrument type.
 
     Args:
         symbol: Trading pair symbol to validate
+        instrument_type: Instrument type context for validation
 
     Raises:
         ValueError: If symbol is not supported, with suggestions
     """
     from gapless_crypto_clickhouse import get_supported_symbols
 
-    supported = get_supported_symbols()
+    supported = get_supported_symbols(instrument_type=instrument_type)
 
     if symbol not in supported:
         # Find close matches (simple prefix matching)
@@ -162,15 +213,16 @@ def _validate_symbol(symbol: str) -> None:
 
         if close_matches:
             raise ValueError(
-                f"Invalid symbol '{symbol}'. Did you mean '{close_matches[0]}'? "
-                f"Supported symbols: {', '.join(supported[:5])}, ... "
-                f"(see get_supported_symbols() for full list)"
+                f"Invalid symbol '{symbol}' for instrument_type='{instrument_type}'. "
+                f"Did you mean '{close_matches[0]}'? "
+                f"Supported {instrument_type} symbols: {', '.join(supported[:5])}, ... "
+                f"(see get_supported_symbols(instrument_type='{instrument_type}') for full list)"
             )
         else:
             raise ValueError(
-                f"Invalid symbol '{symbol}'. "
-                f"Supported symbols: {', '.join(supported[:10])}, ... "
-                f"(see get_supported_symbols() for full list of {len(supported)} symbols)"
+                f"Invalid symbol '{symbol}' for instrument_type='{instrument_type}'. "
+                f"Supported {instrument_type} symbols: {', '.join(supported[:10])}, ... "
+                f"(see get_supported_symbols(instrument_type='{instrument_type}') for full list of {len(supported)} symbols)"
             )
 
 
@@ -301,6 +353,7 @@ def _perform_gap_filling(
     auto_fill_gaps: bool,
     period: str,
     df: pd.DataFrame,
+    instrument_type: str = "spot",  # ADR-0021
 ) -> pd.DataFrame:
     """Perform automatic gap filling on collected data.
 
@@ -309,6 +362,7 @@ def _perform_gap_filling(
         auto_fill_gaps: Whether to auto-fill gaps
         period: Timeframe interval
         df: DataFrame with collected data
+        instrument_type: Instrument type for API endpoint selection
 
     Returns:
         DataFrame with gaps filled (if applicable)
@@ -321,7 +375,7 @@ def _perform_gap_filling(
     logger = logging.getLogger(__name__)
 
     csv_file = Path(result["filepath"])
-    gap_filler = UniversalGapFiller()
+    gap_filler = UniversalGapFiller(instrument_type=instrument_type)  # ADR-0021: Pass instrument type for API endpoint
 
     # Detect and fill gaps
     gap_result = gap_filler.process_file(csv_file, period)
@@ -412,6 +466,7 @@ def fetch_data(
     output_dir: Optional[Union[str, Path]] = None,
     index_type: Optional[Literal["datetime", "range", "auto"]] = None,  # Deprecated parameter
     auto_fill_gaps: bool = True,
+    instrument_type: InstrumentType = "spot",  # ADR-0021: UM futures support
     *,
     interval: Optional[Union[str, SupportedTimeframe]] = None,
 ) -> pd.DataFrame:
@@ -422,6 +477,12 @@ def fetch_data(
 
     By default, automatically detects and fills gaps using authentic Binance API data
     to deliver on the "zero gaps guarantee" promise.
+
+    **⚠️ IMPORTANT - funding_rate Column (v3.2.0+)**:
+    The DataFrame includes a `funding_rate` column for futures data, but it is **NULL**
+    in v3.2.0 (not yet populated). Funding rate collection will be implemented in v3.3.0
+    via a separate `/fapi/v1/fundingRate` API endpoint. Do not use this column for
+    calculations until it is populated.
 
     Args:
         symbol: Trading pair symbol (e.g., "BTCUSDT", "ETHUSDT")
@@ -434,6 +495,7 @@ def fetch_data(
         output_dir: Directory to save CSV files (optional)
         index_type: DEPRECATED - Use pandas operations directly
         auto_fill_gaps: Automatically fill detected gaps with authentic Binance API data (default: True)
+        instrument_type: Instrument type - "spot" (default, 20 symbols) or "futures-um" (713 symbols)
         interval: Legacy parameter name for timeframe (deprecated, use timeframe)
 
     Returns:
@@ -446,16 +508,21 @@ def fetch_data(
         - number_of_trades: Trade count
         - taker_buy_base_asset_volume: Taker buy base volume
         - taker_buy_quote_asset_volume: Taker buy quote volume
+        - funding_rate: Funding rate (⚠️ NULL in v3.2.0, will be populated in v3.3.0)
 
     Raises:
         ValueError: If both 'start' and 'start_date' specified, or both 'end' and 'end_date' specified
         ValueError: If symbol is not supported (with suggestions for correction)
         ValueError: If timeframe is not supported (with list of supported timeframes)
         ValueError: If date format is invalid (expected YYYY-MM-DD)
+        ValueError: If instrument_type is invalid (must be "spot" or "futures-um")
 
     Examples:
-        # Simple data fetching
+        # Simple spot data fetching (default)
         df = fetch_data("BTCUSDT", "1h", limit=1000)
+
+        # Fetch futures data (713 symbols available)
+        df = fetch_data("BTCUSDT", "1h", limit=1000, instrument_type="futures-um")
 
         # Standard pandas operations for analysis
         returns = df['close'].pct_change()                    # Returns calculation
@@ -465,17 +532,12 @@ def fetch_data(
             'close': 'last', 'volume': 'sum'
         })  # OHLCV resampling
 
-        # Fetch specific date range (legacy form)
-        df = fetch_data("ETHUSDT", "4h", start="2024-01-01", end="2024-06-30")
-
         # Fetch specific date range (explicit form - recommended)
         df = fetch_data("ETHUSDT", "4h", start_date="2024-01-01", end_date="2024-06-30")
 
-        # Save to custom directory
-        df = fetch_data("SOLUSDT", "1h", limit=500, output_dir="./crypto_data")
-
-        # Legacy interval parameter (deprecated)
-        df = fetch_data("BTCUSDT", interval="1h", limit=1000)
+        # Fetch futures with date range
+        df = fetch_data("SOLUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30",
+                        instrument_type="futures-um")
     """
     # Validate and resolve timeframe parameters
     period = _validate_timeframe_parameters(timeframe, interval)
@@ -516,14 +578,16 @@ def fetch_data(
     start, end = _apply_default_date_range(start, end)
 
     # Upfront input validation (fast failure before expensive operations)
-    _validate_symbol(symbol)
+    _validate_instrument_type(instrument_type)  # ADR-0021: Validate instrument type first
+    _validate_symbol(symbol, instrument_type=instrument_type)  # ADR-0021: Pass instrument type for context-aware validation
     _validate_timeframe_value(period)
     _validate_date_format(start, "start/start_date")
     _validate_date_format(end, "end/end_date")
 
     # Initialize collector and collect data
     collector = BinancePublicDataCollector(
-        symbol=symbol, start_date=start, end_date=end, output_dir=output_dir
+        symbol=symbol, start_date=start, end_date=end, output_dir=output_dir,
+        instrument_type=instrument_type  # ADR-0021: Pass instrument type for URL routing
     )
     result = collector.collect_timeframe_data(period)
 
@@ -532,7 +596,7 @@ def fetch_data(
         df = result["dataframe"]
 
         # Auto-fill gaps if enabled (delivers "zero gaps guarantee")
-        df = _perform_gap_filling(result, auto_fill_gaps, period, df)
+        df = _perform_gap_filling(result, auto_fill_gaps, period, df, instrument_type)
 
         # Apply limit and index_type
         return _apply_limit_and_index(df, limit, index_type)
@@ -551,6 +615,7 @@ def download(
     output_dir: Optional[Union[str, Path]] = None,
     index_type: Optional[Literal["datetime", "range", "auto"]] = None,  # Deprecated parameter
     auto_fill_gaps: bool = True,
+    instrument_type: InstrumentType = "spot",  # ADR-0021: UM futures support
     *,
     interval: Optional[Union[str, SupportedTimeframe]] = None,
 ) -> pd.DataFrame:
@@ -559,6 +624,8 @@ def download(
     Provides familiar API patterns for intuitive data collection.
     By default, automatically detects and fills gaps using authentic Binance API data
     to deliver on the package's core promise of zero gaps.
+
+    **NEW in v3.2.0**: USDT-margined perpetual futures support (713 symbols).
 
     Args:
         symbol: Trading pair symbol (e.g., "BTCUSDT")
@@ -570,20 +637,32 @@ def download(
         output_dir: Directory to save CSV files
         index_type: DEPRECATED - Use standard pandas operations instead
         auto_fill_gaps: Automatically fill detected gaps with authentic Binance API data (default: True)
+        instrument_type: Instrument type - "spot" (default, 20 symbols) or "futures-um" (713 symbols)
         interval: Legacy parameter name for timeframe (deprecated)
 
     Returns:
-        pd.DataFrame with complete OHLCV and microstructure data (gapless by default)
+        pd.DataFrame with complete OHLCV and microstructure data (gapless by default).
+        Includes funding_rate column (⚠️ NULL in v3.2.0, populated in future release).
 
     Raises:
+        ValueError: If instrument_type is invalid (must be "spot" or "futures-um")
         ValueError: If both 'start' and 'start_date' specified, or both 'end' and 'end_date' specified
         ValueError: If symbol is not supported (with suggestions for correction)
         ValueError: If timeframe is not supported (with list of supported timeframes)
         ValueError: If date format is invalid (expected YYYY-MM-DD)
 
+    Warning:
+        The funding_rate column exists but is NULL for all rows in v3.2.0.
+        Funding rate data requires separate API endpoint (/fapi/v1/fundingRate)
+        and will be implemented in v3.3.0. Do not rely on funding_rate values.
+
     Examples:
-        # Simple data download (automatically fills gaps) - legacy form
+        # Simple spot data download (default)
         df = download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+
+        # Futures data download (NEW in v3.2.0)
+        df = download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30",
+                     instrument_type="futures-um")
 
         # Explicit form (recommended)
         df = download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
@@ -632,6 +711,7 @@ def download(
         output_dir=output_dir,
         index_type=index_type,
         auto_fill_gaps=auto_fill_gaps,
+        instrument_type=instrument_type,  # ADR-0021
         interval=interval,
     )
 
@@ -644,12 +724,15 @@ def download_multiple(
     limit: Optional[int] = None,
     max_workers: int = 5,
     raise_on_partial_failure: bool = False,
+    instrument_type: InstrumentType = "spot",  # ADR-0021
     **kwargs
 ) -> dict[str, pd.DataFrame]:
     """Download historical data for multiple symbols concurrently.
 
     Executes concurrent downloads using ThreadPoolExecutor for network-bound
     operations. Returns dict mapping symbol → DataFrame.
+
+    **NEW in v3.2.0**: Supports USDT-margined perpetual futures (713 symbols).
 
     Args:
         symbols: List of trading pair symbols (e.g., ["BTCUSDT", "ETHUSDT"])
@@ -659,20 +742,26 @@ def download_multiple(
         limit: Maximum bars per symbol
         max_workers: Maximum concurrent downloads (default: 5)
         raise_on_partial_failure: Raise error if any symbol fails (default: False)
+        instrument_type: Instrument type - "spot" (default, 20 symbols) or "futures-um" (713 symbols)
         **kwargs: Additional parameters passed to download()
 
     Returns:
         dict[str, pd.DataFrame]: Mapping of symbol → DataFrame
         Only includes successful downloads (failed symbols omitted unless raise_on_partial_failure=True)
+        Each DataFrame includes funding_rate column (⚠️ NULL in v3.2.0, populated in future release)
 
     Raises:
+        ValueError: If instrument_type is invalid
         ValueError: If symbols list is empty
         ValueError: If max_workers < 1
         ValueError: If all symbols fail
         ValueError: If raise_on_partial_failure=True and any symbol fails
 
+    Warning:
+        The funding_rate column exists but is NULL for all rows in v3.2.0.
+
     Examples:
-        >>> # Download multiple symbols concurrently
+        >>> # Download multiple spot symbols concurrently (default)
         >>> results = download_multiple(
         ...     symbols=["BTCUSDT", "ETHUSDT", "SOLUSDT"],
         ...     timeframe="1h",
@@ -681,8 +770,16 @@ def download_multiple(
         ... )
         >>> len(results)
         3
-        >>> results["BTCUSDT"].shape
-        (4344, 11)
+
+        >>> # Download multiple futures symbols concurrently (NEW in v3.2.0)
+        >>> futures = download_multiple(
+        ...     symbols=["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+        ...     timeframe="1h",
+        ...     start_date="2024-01-01",
+        ...     instrument_type="futures-um"
+        ... )
+        >>> len(futures)
+        3
 
         >>> # With error handling (partial failure - some succeed)
         >>> results = download_multiple(
@@ -726,6 +823,7 @@ def download_multiple(
                 start_date=start_date,
                 end_date=end_date,
                 limit=limit,
+                instrument_type=instrument_type,  # ADR-0021
                 **kwargs
             ): symbol
             for symbol in symbols

@@ -8,13 +8,16 @@
 -- SLOs: Availability, Correctness (zero-gap via _version), Observability, Maintainability
 
 CREATE TABLE IF NOT EXISTS ohlcv (
-    -- Primary timestamp (millisecond precision)
-    timestamp DateTime64(3) CODEC(DoubleDelta, LZ4),
+    -- Primary timestamp (microsecond precision - ADR-0021)
+    -- Upgraded from DateTime64(3) to support Binance's 2025-01-01 format transition:
+    --   Spot data: microseconds (16 digits) after 2025-01-01
+    --   Futures data: milliseconds (13 digits), converted to microseconds during ingestion
+    timestamp DateTime64(6) CODEC(DoubleDelta, LZ4),
 
     -- Metadata columns (low-cardinality, optimized for indexing)
     symbol LowCardinality(String) CODEC(ZSTD(3)),           -- Trading pair (e.g., "BTCUSDT")
     timeframe LowCardinality(String) CODEC(ZSTD(3)),       -- Timeframe (e.g., "1h", "1mo")
-    instrument_type LowCardinality(String) CODEC(ZSTD(3)), -- 'spot' or 'futures' (ADR-0004)
+    instrument_type LowCardinality(String) CODEC(ZSTD(3)), -- 'spot' or 'futures-um' (ADR-0004, ADR-0021)
     data_source LowCardinality(String) CODEC(ZSTD(3)),     -- 'cloudfront'
 
     -- OHLCV data (core price/volume metrics)
@@ -25,11 +28,14 @@ CREATE TABLE IF NOT EXISTS ohlcv (
     volume Float64 CODEC(Gorilla, LZ4),
 
     -- Additional microstructure metrics (Binance 11-column format)
-    close_time DateTime64(3) CODEC(DoubleDelta, LZ4),
+    close_time DateTime64(6) CODEC(DoubleDelta, LZ4),  -- Upgraded to microsecond precision
     quote_asset_volume Float64 CODEC(Gorilla, LZ4),
     number_of_trades Int64 CODEC(Delta, LZ4),
     taker_buy_base_asset_volume Float64 CODEC(Gorilla, LZ4),
     taker_buy_quote_asset_volume Float64 CODEC(Gorilla, LZ4),
+
+    -- Futures-specific data (ADR-0021, v3.2.0+)
+    funding_rate Nullable(Float64) CODEC(Gorilla, LZ4),  -- NULL for spot, initially NULL for futures
 
     -- Deduplication support (application-level, preserves zero-gap guarantee)
     _version UInt64 CODEC(Delta, LZ4),  -- Deterministic hash of row content
@@ -67,8 +73,11 @@ SETTINGS
 --    - Delta: Optimized for integer sequences (number_of_trades)
 --    - ZSTD: General-purpose compression for string columns
 --
--- 6. DateTime64(3): Millisecond precision
---    - Matches Binance kline data timestamp format
+-- 6. DateTime64(6): Microsecond precision (ADR-0021)
+--    - Upgraded from DateTime64(3) to support Binance's 2025-01-01 format transition
+--    - Spot data: microseconds (16 digits) after 2025-01-01
+--    - Futures data: milliseconds (13 digits), converted to microseconds during ingestion
+--    - Universal microsecond precision prevents timestamp errors
 --    - ClickHouse equivalent to QuestDB TIMESTAMP type
 
 -- Zero-Gap Guarantee:

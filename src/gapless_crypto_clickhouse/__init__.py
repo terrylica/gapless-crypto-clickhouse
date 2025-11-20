@@ -91,6 +91,7 @@ __email__ = "terry@eonlabs.com"
 # API-only probe hooks for AI coding agents
 from . import __probe__
 from .api import (
+    InstrumentType,  # ADR-0021: Type alias for instrument type hints
     download,
     download_multiple,
     fetch_data,
@@ -125,6 +126,8 @@ __all__ = [
     "get_info",
     "save_parquet",
     "load_parquet",
+    # Type aliases (v3.2.0 - ADR-0021)
+    "InstrumentType",  # Literal["spot", "futures-um"]
     # Advanced class-based API (for complex workflows)
     "BinancePublicDataCollector",
     "UniversalGapFiller",

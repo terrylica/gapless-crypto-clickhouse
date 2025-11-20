@@ -106,8 +106,32 @@ class UniversalGapFiller:
         respect API limits during gap filling operations.
     """
 
-    def __init__(self):
-        self.binance_base_url = "https://api.binance.com/api/v3/klines"
+    # ADR-0021: API endpoint constants for spot and futures
+    SPOT_API_URL = "https://api.binance.com/api/v3/klines"
+    FUTURES_API_URL = "https://fapi.binance.com/fapi/v1/klines"
+
+    def __init__(self, instrument_type: str = "spot"):
+        """Initialize UniversalGapFiller with instrument type support.
+
+        Args:
+            instrument_type: Instrument type - "spot" or "futures-um" (default: "spot")
+
+        Raises:
+            ValueError: If instrument_type is invalid
+        """
+        # ADR-0021: Validate instrument type and set API endpoint
+        if instrument_type not in ("spot", "futures-um"):
+            raise ValueError(
+                f"Invalid instrument_type '{instrument_type}'. "
+                f"Must be 'spot' or 'futures-um'"
+            )
+        self.instrument_type = instrument_type
+
+        # ADR-0021: API endpoint selection based on instrument type
+        if instrument_type == "spot":
+            self.binance_base_url = self.SPOT_API_URL
+        else:  # futures-um
+            self.binance_base_url = self.FUTURES_API_URL
 
     def extract_symbol_from_filename(self, csv_path) -> str:
         """Extract symbol from CSV filename

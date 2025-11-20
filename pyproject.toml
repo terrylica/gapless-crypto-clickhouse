@@ -38,13 +38,14 @@ classifiers = [
 ]
 requires-python = ">=3.11"
 dependencies = [
+    "binance-futures-availability>=1.1.0",  # 713 validated USDT-margined futures symbols with daily S3 Vision probes (ADR-0021)
     "clickhouse-driver>=0.2.9",  # ClickHouse native protocol client for bulk ingestion and queries
     "duckdb>=1.1.0",  # Single-file OLAP database for validation report persistence
     "httpx>=0.25.0",
     "numpy>=1.23.2,<2.0.0",  # Explicit NumPy 1.x constraint for Alpha Forge compatibility (TA-Lib requires <2.0)
     "pandas>=2.0.0,<2.2.0",  # Upper bound for NumPy 1.x compatibility (pandas 2.2+ supports NumPy 2.x)
     "pydantic>=2.0.0",  # Data validation and OpenAPI schema generation for validation reports
-    "pyarrow>=16.0.0",  # Required by pandas for Parquet I/O (df.to_parquet/read_parquet engine)
+    "pyarrow>=18.0.0",  # Required by pandas for Parquet I/O, upgraded to align with binance-futures-availability (ADR-0021)
     "python-dotenv>=1.0.0",  # Environment variable management
 ]
 

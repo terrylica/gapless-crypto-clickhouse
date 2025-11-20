@@ -151,6 +151,10 @@ class BinancePublicDataCollector:
 
         return symbol
 
+    # ADR-0021: URL constants for spot and futures
+    SPOT_BASE_URL = "https://data.binance.vision/data/spot"
+    FUTURES_BASE_URL = "https://data.binance.vision/data/futures/um"
+
     def __init__(
         self,
         symbol: str = "SOLUSDT",
@@ -158,6 +162,7 @@ class BinancePublicDataCollector:
         end_date: str = "2025-03-20",
         output_dir: Optional[Union[str, Path]] = None,
         output_format: str = "csv",
+        instrument_type: str = "spot",  # ADR-0021: UM futures support
     ) -> None:
         """Initialize the Binance Public Data Collector.
 
@@ -181,8 +186,11 @@ class BinancePublicDataCollector:
             output_format (str, optional): Output format ("csv" or "parquet").
                 CSV provides universal compatibility, Parquet offers 5-10x compression.
                 Defaults to "csv".
+            instrument_type (str, optional): Instrument type - "spot" or "futures-um".
+                Defaults to "spot" (20 symbols). Use "futures-um" for 713 perpetual futures.
 
         Raises:
+            ValueError: If instrument_type is not "spot" or "futures-um"
             ValueError: If symbol is None, empty, or contains invalid characters
                 (path traversal, special characters, non-alphanumeric).
             ValueError: If date format is incorrect (not YYYY-MM-DD).
@@ -198,14 +206,15 @@ class BinancePublicDataCollector:
             - Normalizing inputs to uppercase
 
         Examples:
-            >>> # Default configuration (SOLUSDT, 4+ years of data)
+            >>> # Default configuration (SOLUSDT spot, 4+ years of data)
             >>> collector = BinancePublicDataCollector()
 
-            >>> # Custom symbol and shorter timeframe
+            >>> # Futures data collection (NEW in v3.2.0)
             >>> collector = BinancePublicDataCollector(
             ...     symbol="BTCUSDT",
             ...     start_date="2024-01-01",
-            ...     end_date="2024-12-31"
+            ...     end_date="2024-12-31",
+            ...     instrument_type="futures-um"
             ... )
 
             >>> # Custom output directory with Parquet format
@@ -215,6 +224,14 @@ class BinancePublicDataCollector:
             ...     output_format="parquet"
             ... )
         """
+        # ADR-0021: Validate instrument type first (fail fast)
+        if instrument_type not in ("spot", "futures-um"):
+            raise ValueError(
+                f"Invalid instrument_type '{instrument_type}'. "
+                f"Must be 'spot' or 'futures-um'"
+            )
+        self.instrument_type = instrument_type
+
         # Validate and assign symbol (SEC-01, SEC-02, SEC-03)
         self.symbol = self._validate_symbol(symbol)
 
@@ -234,7 +251,12 @@ class BinancePublicDataCollector:
                 f"Invalid date range: end_date ({self.end_date.strftime('%Y-%m-%d')}) "
                 f"is before start_date ({self.start_date.strftime('%Y-%m-%d')})"
             )
-        self.base_url = "https://data.binance.vision/data/spot/monthly/klines"
+
+        # ADR-0021: URL routing based on instrument type
+        if instrument_type == "spot":
+            self.base_url = f"{self.SPOT_BASE_URL}/monthly/klines"
+        else:  # futures-um
+            self.base_url = f"{self.FUTURES_BASE_URL}/monthly/klines"
 
         # Initialize ETag cache for bandwidth optimization (90% reduction on re-runs)
         self.etag_cache = ETagCache()
