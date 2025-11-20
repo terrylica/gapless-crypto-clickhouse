@@ -89,7 +89,7 @@ __email__ = "terry@eonlabs.com"
 # Enhanced DataFrame for domain-specific operations
 # Convenience functions (simple/intuitive API)
 # API-only probe hooks for AI coding agents
-from . import __probe__
+from . import __probe__, probe
 from .api import (
     InstrumentType,  # ADR-0021: Type alias for instrument type hints
     download,
@@ -103,6 +103,7 @@ from .api import (
     load_parquet,
     save_parquet,
 )
+from .query_api import query_ohlcv  # v6.0.0: Unified query API with auto-ingestion (ADR-0023)
 from .collectors.binance_public_data_collector import BinancePublicDataCollector
 from .exceptions import (
     DataCollectionError,
@@ -116,6 +117,7 @@ from .gap_filling.universal_gap_filler import UniversalGapFiller
 
 __all__ = [
     # Simple function-based API (recommended for most users)
+    "query_ohlcv",  # v6.0.0: Unified query API with auto-ingestion (ADR-0023)
     "fetch_data",
     "download",
     "download_multiple",
@@ -139,6 +141,7 @@ __all__ = [
     "ValidationError",
     "NetworkError",
     "GapFillingError",
-    # AI agent probe hooks
+    # AI agent probe hooks (v6.0.0)
     "__probe__",
+    "probe",
 ]
