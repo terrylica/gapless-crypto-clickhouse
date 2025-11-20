@@ -1,6 +1,6 @@
 {
   "name": "gapless-crypto-clickhouse",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "private": true,
   "description": "ClickHouse-based cryptocurrency data collection with zero-gap guarantee",
   "repository": {
@@ -8,6 +8,10 @@
     "url": "https://github.com/terrylica/gapless-crypto-clickhouse.git"
   },
   "license": "MIT",
+  "scripts": {
+    "release": "semantic-release",
+    "release:dry": "semantic-release --dry-run"
+  },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
