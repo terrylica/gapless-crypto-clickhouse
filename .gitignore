@@ -33,3 +33,38 @@ htmlcov/
 .lycheecache/
 .lychee-results.json
 .lychee-results.txt
+
+# Node.js dependencies (semantic-release)
+node_modules/
+
+# Application logs
+logs/
+*.log
+
+# Environment files (use .env.example as template)
+.env
+.env.local
+.env.*.local
+
+# Temporary directories
+tmp/
+temp/
+scratch/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Editor-specific
+.idea/
+.vscode/settings.json
+.vscode/launch.json
+*.swp
+*.swo
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.duckdb

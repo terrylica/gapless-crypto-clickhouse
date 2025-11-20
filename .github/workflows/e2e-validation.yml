@@ -1,8 +1,8 @@
 name: E2E Validation
 
 on:
-  schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+  # schedule:
+  #   - cron: '0 */6 * * *'  # Every 6 hours (disabled - run manually)
   workflow_dispatch:  # Manual trigger
 
 env:
@@ -37,16 +37,13 @@ jobs:
           python-version: "3.12"
 
       - name: Install UV
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
-
-      - name: Add UV to PATH
-        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
 
       - name: Install dependencies
-        run: |
-          uv venv
-          source .venv/bin/activate
-          uv sync
+        run: uv sync
 
       - name: Cache Playwright browsers
         uses: actions/cache@v4
@@ -59,24 +56,18 @@ jobs:
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: |
-          source .venv/bin/activate
-          uv run playwright install ${{ matrix.browser }} --with-deps
+        run: uv run playwright install ${{ matrix.browser }} --with-deps
 
       - name: Install Playwright dependencies only
         if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: |
-          source .venv/bin/activate
-          uv run playwright install-deps ${{ matrix.browser }}
+        run: uv run playwright install-deps ${{ matrix.browser }}
 
       - name: Wait for ClickHouse
         run: |
           timeout 60 bash -c 'until wget --spider http://localhost:8123/ping; do sleep 2; done'
 
       - name: Run comprehensive E2E validation
-        run: |
-          source .venv/bin/activate
-          uv run scripts/run_validation.py --e2e-only --ci
+        run: uv run scripts/run_validation.py --e2e-only --ci
 
       - name: Upload test artifacts
         if: always()

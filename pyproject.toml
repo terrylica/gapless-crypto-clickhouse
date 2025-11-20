@@ -28,7 +28,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Database",
@@ -36,7 +35,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Information Analysis",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
     "binance-futures-availability>=1.1.0",  # 713 validated USDT-margined futures symbols with daily S3 Vision probes (ADR-0021)
     "clickhouse-driver>=0.2.9",  # ClickHouse native protocol client for bulk ingestion and queries
@@ -46,7 +45,6 @@ dependencies = [
     "pandas>=2.0.0,<2.2.0",  # Upper bound for NumPy 1.x compatibility (pandas 2.2+ supports NumPy 2.x)
     "pydantic>=2.0.0",  # Data validation and OpenAPI schema generation for validation reports
     "pyarrow>=18.0.0",  # Required by pandas for Parquet I/O, upgraded to align with binance-futures-availability (ADR-0021)
-    "python-dotenv>=1.0.0",  # Environment variable management
 ]
 
 [project.urls]
@@ -143,12 +141,9 @@ dev = [
     "pytest-cov>=7.0.0",
     "pytest-asyncio>=0.26.0",  # Required for session-scoped async fixtures
     "pytest-timeout>=2.3.1",
-    "pytest-html>=4.1.1",
     "playwright>=1.56.0",
     "pytest-playwright-asyncio>=0.7.1",  # Official async support (replaces pytest-playwright)
-    "docker>=7.1.0",
     "ruff>=0.13.0",
-    "types-requests>=2.32.4.20250913",
     "yamllint>=1.37.1",
     "commitizen>=4.9.1",
 ]

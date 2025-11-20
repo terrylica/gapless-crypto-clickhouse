@@ -1,5 +1,5 @@
 """
-Gapless Crypto ClickHouse v1.0.0 - ClickHouse-based cryptocurrency data collection with zero-gap guarantee
+Gapless Crypto ClickHouse v5.0.0 - ClickHouse-based cryptocurrency data collection with zero-gap guarantee
 
 Market Compatibility:
 - USDT SPOT PAIRS (BTCUSDT, ETHUSDT, SOLUSDT, etc.)

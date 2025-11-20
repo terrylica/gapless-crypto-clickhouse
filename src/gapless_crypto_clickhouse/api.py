@@ -473,7 +473,7 @@ def _create_empty_dataframe() -> pd.DataFrame:
 
 
 def fetch_data(
-    symbol: Union[str, SupportedSymbol],
+    symbol: str,
     timeframe: Optional[Union[str, SupportedTimeframe]] = None,
     limit: Optional[int] = None,
     start: Optional[str] = None,
@@ -623,7 +623,7 @@ def fetch_data(
 
 
 def download(
-    symbol: Union[str, SupportedSymbol],
+    symbol: str,
     timeframe: Optional[Union[str, SupportedTimeframe]] = None,
     start: Optional[str] = None,
     end: Optional[str] = None,

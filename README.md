@@ -415,48 +415,9 @@ See [`docs/CLICKHOUSE_MIGRATION.md`](docs/CLICKHOUSE_MIGRATION.md) for:
 
 See ClickHouse documentation for production deployment best practices.
 
-## 📝 CLI Options
-
-### Data Collection
-
-```bash
-gapless-crypto-data [OPTIONS]
-
-Options:
-  --symbol TEXT          Trading pair symbol(s) - single symbol or comma-separated list (e.g., SOLUSDT, BTCUSDT,ETHUSDT)
-  --timeframes TEXT      Comma-separated timeframes (1m,3m,5m,15m,30m,1h,2h,4h)
-  --start TEXT          Start date (YYYY-MM-DD)
-  --end TEXT            End date (YYYY-MM-DD)
-  --output-dir TEXT     Output directory for CSV files (default: src/gapless_crypto_clickhouse/sample_data/)
-  --help                Show this message and exit
-```
-
-### Gap Filling
-
-```bash
-gapless-crypto-clickhouse --fill-gaps [OPTIONS]
-
-Options:
-  --directory TEXT      Data directory to scan for gaps
-  --symbol TEXT         Specific symbol to process (optional)
-  --timeframe TEXT      Specific timeframe to process (optional)
-  --help               Show this message and exit
-```
-
 ## 🔧 Advanced Usage
 
 ### Batch Processing
-
-#### CLI Multi-Symbol (Recommended)
-
-```bash
-# Native multi-symbol support
-gapless-crypto-clickhouse --symbol BTCUSDT,ETHUSDT,SOLUSDT,ADAUSDT --timeframes 1m,5m,15m,1h,4h --start 2023-01-01 --end 2023-12-31
-
-# Alternative: Multiple separate commands for different settings
-gapless-crypto-clickhouse --symbol BTCUSDT,ETHUSDT --timeframes 1m,1h --start 2023-01-01 --end 2023-06-30
-gapless-crypto-clickhouse --symbol SOLUSDT,ADAUSDT --timeframes 5m,4h --start 2023-07-01 --end 2023-12-31
-```
 
 #### Simple API (Recommended)
 
@@ -706,14 +667,8 @@ uv sync --dev
 #### Step 3: Verify Installation
 
 ```bash
-# Test CLI functionality
-uv run gapless-crypto-clickhouse --help
-
 # Run test suite
 uv run pytest
-
-# Quick data collection test
-uv run gapless-crypto-clickhouse --symbol BTCUSDT --timeframes 1h --start 2024-01-01 --end 2024-01-01 --output-dir ./test_data
 ```
 
 #### Step 3a: Database Setup (Optional - ClickHouse)
@@ -809,7 +764,7 @@ uv run pre-commit run --all-files
 | Setup pre-commit hooks | `uv run pre-commit install`         |
 | Add new dependency     | `uv add package-name`               |
 | Add dev dependency     | `uv add --dev package-name`         |
-| Run CLI                | `uv run gapless-crypto-data [args]` |
+| Run Python API         | `uv run python -c "import gapless_crypto_clickhouse as gcd; print(gcd.get_info())"` |
 | Run tests              | `uv run pytest`                     |
 | Format code            | `uv run ruff format .`              |
 | Lint code              | `uv run ruff check --fix .`         |

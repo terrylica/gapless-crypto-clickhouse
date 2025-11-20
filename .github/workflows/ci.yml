@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13"]
+        python-version: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
 
@@ -32,31 +32,22 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install UV
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
-
-      - name: Add UV to PATH
-        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
 
       - name: Install dependencies
-        run: |
-          uv venv
-          source .venv/bin/activate
-          uv sync
+        run: uv sync
 
       - name: Run Ruff linting
-        run: |
-          source .venv/bin/activate
-          uv run ruff check .
+        run: uv run ruff check .
 
       - name: Run Ruff formatting check
-        run: |
-          source .venv/bin/activate
-          uv run ruff format --check .
+        run: uv run ruff format --check .
 
       - name: Run unit and integration tests
-        run: |
-          source .venv/bin/activate
-          uv run pytest -v --cov=src --cov-report=xml --cov-report=term -m "not e2e"
+        run: uv run pytest -v --cov=src --cov-report=xml --cov-report=term -m "not e2e"
 
       - name: Upload coverage
         if: matrix.python-version == '3.12'
@@ -89,16 +80,13 @@ jobs:
           python-version: "3.12"
 
       - name: Install UV
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
-
-      - name: Add UV to PATH
-        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
 
       - name: Install dependencies
-        run: |
-          uv venv
-          source .venv/bin/activate
-          uv sync
+        run: uv sync
 
       - name: Cache Playwright browsers
         uses: actions/cache@v4
@@ -111,15 +99,11 @@ jobs:
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: |
-          source .venv/bin/activate
-          uv run playwright install chromium --with-deps
+        run: uv run playwright install chromium --with-deps
 
       - name: Install Playwright dependencies only
         if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: |
-          source .venv/bin/activate
-          uv run playwright install-deps chromium
+        run: uv run playwright install-deps chromium
 
       - name: Wait for ClickHouse
         run: |
@@ -127,7 +111,6 @@ jobs:
 
       - name: Run E2E tests
         run: |
-          source .venv/bin/activate
           # Skip CH-UI tests in CI (requires interactive configuration)
           # ClickHouse Play tests validate E2E framework and async event loop resolution
           uv run pytest tests/e2e/test_clickhouse_play.py -v --screenshot=only-on-failure --tracing=retain-on-failure
