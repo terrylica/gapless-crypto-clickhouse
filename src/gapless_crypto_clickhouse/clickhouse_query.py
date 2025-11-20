@@ -50,7 +50,6 @@ import logging
 from typing import Any, Dict, List, Optional
 
 import pandas as pd
-from clickhouse_driver.errors import Error as ClickHouseError
 
 from .clickhouse.connection import ClickHouseConnection
 
@@ -69,7 +68,7 @@ class OHLCVQuery:
 
     Error Handling:
         - Connection failures raise ConnectionError
-        - Query failures raise ClickHouseError
+        - Query failures raise Exception
         - Invalid parameters raise ValueError
         - No retries, no fallbacks
 
@@ -141,7 +140,7 @@ class OHLCVQuery:
 
         Raises:
             ValueError: If parameters are invalid
-            ClickHouseError: If query fails
+            Exception: If query fails
             ConnectionError: If database connection fails
 
         Example:
@@ -216,8 +215,8 @@ class OHLCVQuery:
             logger.info(f"Retrieved {len(df)} bars for {symbol} {timeframe} ({instrument_type})")
             return df
 
-        except ClickHouseError as e:
-            raise ClickHouseError(
+        except Exception as e:
+            raise Exception(
                 f"Query failed for {symbol} {timeframe} ({instrument_type}): {e}"
             ) from e
 
@@ -244,7 +243,7 @@ class OHLCVQuery:
 
         Raises:
             ValueError: If parameters are invalid
-            ClickHouseError: If query fails
+            Exception: If query fails
             ConnectionError: If database connection fails
 
         Example:
@@ -336,8 +335,8 @@ class OHLCVQuery:
             )
             return df
 
-        except ClickHouseError as e:
-            raise ClickHouseError(
+        except Exception as e:
+            raise Exception(
                 f"Query failed for {symbol} {timeframe} ({instrument_type}) {start} to {end}: {e}"
             ) from e
 
@@ -366,7 +365,7 @@ class OHLCVQuery:
 
         Raises:
             ValueError: If parameters are invalid
-            ClickHouseError: If query fails
+            Exception: If query fails
             ConnectionError: If database connection fails
 
         Example:
@@ -466,8 +465,8 @@ class OHLCVQuery:
             )
             return df
 
-        except ClickHouseError as e:
-            raise ClickHouseError(
+        except Exception as e:
+            raise Exception(
                 f"Multi-symbol query failed for {timeframe} ({instrument_type}) {start} to {end}: {e}"
             ) from e
 
@@ -486,7 +485,7 @@ class OHLCVQuery:
 
         Raises:
             ValueError: If SQL is empty
-            ClickHouseError: If query fails
+            Exception: If query fails
             ConnectionError: If database connection fails
 
         Security:
@@ -514,8 +513,8 @@ class OHLCVQuery:
             logger.info(f"Raw SQL query returned {len(df)} rows")
             return df
 
-        except ClickHouseError as e:
-            raise ClickHouseError(f"Raw SQL query failed: {e}") from e
+        except Exception as e:
+            raise Exception(f"Raw SQL query failed: {e}") from e
 
     def detect_gaps(
         self, symbol: str, timeframe: str, start: str, end: str, instrument_type: str = "spot"
@@ -541,7 +540,7 @@ class OHLCVQuery:
 
         Raises:
             ValueError: If parameters are invalid
-            ClickHouseError: If query fails
+            Exception: If query fails
 
         Example:
             gaps = query.detect_gaps("BTCUSDT", "1h", "2024-01-01", "2024-12-31")
@@ -637,7 +636,7 @@ class OHLCVQuery:
 
             return df
 
-        except ClickHouseError as e:
-            raise ClickHouseError(
+        except Exception as e:
+            raise Exception(
                 f"Gap detection query failed for {symbol} {timeframe} ({instrument_type}): {e}"
             ) from e

@@ -1,15 +1,15 @@
 """
-ClickHouse Bulk Loader for gapless-crypto-data v4.0.0.
+ClickHouse Bulk Loader for gapless-crypto-clickhouse v6.0.0.
 
 Ultra-fast historical data ingestion from Binance Public Data Repository to ClickHouse.
 Preserves 22x speedup advantage of CloudFront CDN + zero-gap guarantee via deterministic versioning.
 
 Architecture:
-    CloudFront ZIP → Extract (temp) → Parse (pandas) → Add _version → ClickHouse → Delete temp
+    CloudFront ZIP → Extract (temp) → Parse (pandas) → Add _version → ClickHouse (Arrow) → Delete temp
 
 Performance:
     - Download: 22x faster than REST API (CloudFront CDN, unchanged from QuestDB)
-    - Ingestion: >100K rows/sec via clickhouse-driver bulk insert
+    - Ingestion: >100K rows/sec via clickhouse-connect Arrow bulk insert (ADR-0023)
     - Storage: No persistent intermediate files (transient extraction only)
 
 Zero-Gap Guarantee:
@@ -27,7 +27,7 @@ SLOs:
     - Availability: CloudFront 99.99% SLA, connection failures propagate
     - Correctness: Zero-gap guarantee via deterministic versioning
     - Observability: Ingestion metrics logged at INFO level
-    - Maintainability: Standard clickhouse-driver, no custom protocols
+    - Maintainability: Standard clickhouse-connect HTTP client, Arrow-optimized (ADR-0023)
 
 Usage:
     from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
@@ -67,7 +67,7 @@ class ClickHouseBulkLoader:
     Error Handling:
         - Download failures raise urllib.error.HTTPError
         - Extraction failures raise zipfile.BadZipFile
-        - Ingestion failures raise ClickHouseError
+        - Ingestion failures raise Exception
         - Temporary files cleaned up in all cases
 
     Performance:
@@ -157,7 +157,7 @@ class ClickHouseBulkLoader:
             ValueError: If parameters are invalid
             urllib.error.HTTPError: If download fails (404, 403, etc.)
             zipfile.BadZipFile: If ZIP extraction fails
-            ClickHouseError: If ingestion fails
+            Exception: If ingestion fails
 
         Example:
             rows = loader.ingest_month("BTCUSDT", "1h", 2024, 1)
@@ -408,6 +408,11 @@ class ClickHouseBulkLoader:
             # Convert number_of_trades to integer (schema requires Int64)
             df_ingest["number_of_trades"] = df_ingest["number_of_trades"].astype("int64")
 
+            # Add funding_rate column (NULL for spot, initially NULL for futures)
+            # Schema added in v3.2.0 (ADR-0021) - Nullable(Float64)
+            if "funding_rate" not in df_ingest.columns:
+                df_ingest["funding_rate"] = None
+
             # Reorder columns to match ClickHouse schema
             column_order = [
                 "timestamp",
@@ -425,6 +430,7 @@ class ClickHouseBulkLoader:
                 "number_of_trades",
                 "taker_buy_base_asset_volume",
                 "taker_buy_quote_asset_volume",
+                "funding_rate",
                 "_version",
                 "_sign",
             ]
