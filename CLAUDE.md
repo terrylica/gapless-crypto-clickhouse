@@ -60,6 +60,16 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 **Key principle**: Credentials proxied through Doppler/1Password, never hardcoded. Prescriptive workflows for repeatable cloud infrastructure setup.
 
+### Company Employee Onboarding
+
+**Claude Code CLI Optimized** - Step-by-step workflow for 3-10 company employees using ClickHouse Cloud
+
+- [`gapless-crypto-clickhouse-onboarding`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md) - Complete onboarding workflow (Doppler OR .env file, <15 minute setup, connection testing, troubleshooting guide)
+
+**When to use**: Company employee first-time setup, credential configuration, connection errors, mentions "onboarding" or "how do I connect to ClickHouse Cloud"
+
+**Key principle**: Binary access model (admins have full Cloud access, non-admins use file-based API only). Flexible credential methods (Doppler recommended, .env fallback). Claude Code CLI agents guide through complete onboarding workflow with diagnostic test scripts and actionable troubleshooting.
+
 ## SDK Quality Standards
 
 **Primary Use Case**: Programmatic API consumption (`import gapless_crypto_clickhouse`) by downstream packages and AI coding agents

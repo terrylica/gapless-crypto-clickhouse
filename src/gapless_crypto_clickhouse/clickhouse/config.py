@@ -23,6 +23,7 @@ class ClickHouseConfig:
         database: Database name (default: default)
         user: Username (default: default)
         password: Password (default: empty)
+        secure: Enable TLS/SSL for secure connections (default: False, required for ClickHouse Cloud)
 
     Environment Variables:
         CLICKHOUSE_HOST: Override host
@@ -31,6 +32,7 @@ class ClickHouseConfig:
         CLICKHOUSE_DATABASE: Override database name
         CLICKHOUSE_USER: Override username
         CLICKHOUSE_PASSWORD: Override password
+        CLICKHOUSE_SECURE: Enable TLS/SSL (set to 'true' for ClickHouse Cloud)
 
     Example:
         # Default configuration (localhost)
@@ -46,6 +48,7 @@ class ClickHouseConfig:
     database: str = "default"
     user: str = "default"
     password: str = ""
+    secure: bool = False
 
     @classmethod
     def from_env(cls) -> "ClickHouseConfig":
@@ -78,6 +81,7 @@ class ClickHouseConfig:
             database=os.getenv("CLICKHOUSE_DATABASE", "default"),
             user=os.getenv("CLICKHOUSE_USER", "default"),
             password=os.getenv("CLICKHOUSE_PASSWORD", ""),
+            secure=os.getenv("CLICKHOUSE_SECURE", "false").lower() in ("true", "1", "yes"),
         )
 
     def validate(self) -> None:
@@ -111,5 +115,5 @@ class ClickHouseConfig:
         return (
             f"ClickHouseConfig(host='{self.host}', port={self.port}, "
             f"http_port={self.http_port}, database='{self.database}', "
-            f"user='{self.user}', password='***')"
+            f"user='{self.user}', password='***', secure={self.secure})"
         )

@@ -89,13 +89,14 @@ class ClickHouseConnection:
         )
 
         try:
-            # clickhouse-connect uses HTTP protocol (port 8123)
+            # clickhouse-connect uses HTTP protocol (port 8123 local, 8443 Cloud)
             self.client = clickhouse_connect.get_client(
                 host=self.config.host,
                 port=self.config.http_port,
                 database=self.config.database,
                 username=self.config.user,
                 password=self.config.password,
+                secure=self.config.secure,  # Enable TLS/SSL for ClickHouse Cloud
                 # Performance settings
                 settings={
                     "max_block_size": 100000,  # Batch size for queries
