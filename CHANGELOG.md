@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.4...v6.0.5) (2025-11-21)
+
+### Bug Fixes
+
+* **ci:** separate slow integration tests from fast unit tests ([da01ff5](https://github.com/terrylica/gapless-crypto-clickhouse/commit/da01ff52bff03c7b8dc6a80e037e30e9480d0db7))
+
 ## [6.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.3...v6.0.4) (2025-11-21)
 
 ### Bug Fixes
