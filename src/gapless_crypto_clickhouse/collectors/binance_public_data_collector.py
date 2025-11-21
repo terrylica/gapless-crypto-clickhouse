@@ -227,8 +227,7 @@ class BinancePublicDataCollector:
         # ADR-0021: Validate instrument type first (fail fast)
         if instrument_type not in ("spot", "futures-um"):
             raise ValueError(
-                f"Invalid instrument_type '{instrument_type}'. "
-                f"Must be 'spot' or 'futures-um'"
+                f"Invalid instrument_type '{instrument_type}'. Must be 'spot' or 'futures-um'"
             )
         self.instrument_type = instrument_type
 

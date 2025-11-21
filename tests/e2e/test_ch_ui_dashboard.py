@@ -51,10 +51,7 @@ async def test_ch_ui_landing_page_loads(page: Page, screenshot_dir: Path):
 
     # Automated visual regression testing (Playwright compares to baseline)
     await expect(page).to_have_screenshot(
-        "ch-ui-landing.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "ch-ui-landing.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )
 
 
@@ -92,10 +89,7 @@ async def test_ch_ui_simple_query_execution(page: Page, screenshot_dir: Path):
 
     # Automated visual regression testing
     await expect(page).to_have_screenshot(
-        "ch-ui-simple-query.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "ch-ui-simple-query.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )
 
 
@@ -128,10 +122,7 @@ async def test_ch_ui_invalid_query_error_handling(page: Page, screenshot_dir: Pa
 
     # Automated visual regression testing (error state)
     await expect(page).to_have_screenshot(
-        "ch-ui-error-invalid-query.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "ch-ui-error-invalid-query.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )
 
     # Verify page is still interactive (can type in query input)
@@ -169,10 +160,7 @@ async def test_ch_ui_large_result_set_rendering(page: Page, screenshot_dir: Path
 
     # Automated visual regression testing (large result set)
     await expect(page).to_have_screenshot(
-        "ch-ui-large-results.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "ch-ui-large-results.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )
 
 
@@ -206,10 +194,7 @@ async def test_ch_ui_empty_result_set(page: Page, screenshot_dir: Path):
 
     # Automated visual regression testing (empty result set)
     await expect(page).to_have_screenshot(
-        "ch-ui-empty-results.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "ch-ui-empty-results.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )
 
 
@@ -243,8 +228,5 @@ async def test_ch_ui_special_characters_in_query(page: Page, screenshot_dir: Pat
 
     # Automated visual regression testing (special characters)
     await expect(page).to_have_screenshot(
-        "ch-ui-special-characters.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "ch-ui-special-characters.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )

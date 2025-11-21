@@ -29,6 +29,7 @@ def measure_memory_mb() -> float:
     """Get current memory usage in MB."""
     try:
         import psutil
+
         process = psutil.Process()
         return process.memory_info().rss / 1024 / 1024
     except ImportError:

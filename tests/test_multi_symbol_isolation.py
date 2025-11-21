@@ -26,16 +26,17 @@ def test_btcusdt_query_does_not_return_ethusdt_data():
             timeframe="1h",
             start_date="2024-01-01",
             end_date="2024-01-07",
-            instrument_type="spot"
+            instrument_type="spot",
         )
 
         if len(df) > 0:
             # Verify all rows are BTCUSDT
-            assert (df['symbol'] == 'BTCUSDT').all(), \
+            assert (df["symbol"] == "BTCUSDT").all(), (
                 f"BTCUSDT query returned other symbols: {df['symbol'].unique()}"
+            )
 
             # Verify no ETHUSDT rows
-            ethusdt_count = (df['symbol'] == 'ETHUSDT').sum()
+            ethusdt_count = (df["symbol"] == "ETHUSDT").sum()
             assert ethusdt_count == 0, f"BTCUSDT query returned {ethusdt_count} ETHUSDT rows"
 
 
@@ -52,7 +53,7 @@ def test_multi_symbol_ingestion_isolation():
             timeframe="1h",
             start_date="2024-01-01",
             end_date="2024-01-07",
-            instrument_type="spot"
+            instrument_type="spot",
         )
         eth_count_before = len(df_eth_before)
 
@@ -65,13 +66,14 @@ def test_multi_symbol_ingestion_isolation():
             timeframe="1h",
             start_date="2024-01-01",
             end_date="2024-01-07",
-            instrument_type="spot"
+            instrument_type="spot",
         )
         eth_count_after = len(df_eth_after)
 
         # Verify ETHUSDT data unchanged (BTCUSDT operations didn't affect it)
-        assert eth_count_before == eth_count_after, \
+        assert eth_count_before == eth_count_after, (
             f"ETHUSDT row count changed: {eth_count_before} → {eth_count_after}"
+        )
 
 
 @pytest.mark.integration
@@ -86,7 +88,7 @@ def test_spot_futures_isolation():
             timeframe="1h",
             start_date="2024-01-01",
             end_date="2024-01-07",
-            instrument_type="spot"
+            instrument_type="spot",
         )
 
         # Query futures BTCUSDT
@@ -95,22 +97,24 @@ def test_spot_futures_isolation():
             timeframe="1h",
             start_date="2024-01-01",
             end_date="2024-01-07",
-            instrument_type="um"  # futures-um
+            instrument_type="um",  # futures-um
         )
 
         # Verify instrument_type isolation
         if len(df_spot) > 0:
-            assert (df_spot['instrument_type'] == 'spot').all(), \
+            assert (df_spot["instrument_type"] == "spot").all(), (
                 f"Spot query returned non-spot data: {df_spot['instrument_type'].unique()}"
+            )
 
         if len(df_futures) > 0:
-            assert (df_futures['instrument_type'] == 'um').all(), \
+            assert (df_futures["instrument_type"] == "um").all(), (
                 f"Futures query returned non-futures data: {df_futures['instrument_type'].unique()}"
+            )
 
         # Verify no overlap (spot and futures are separate)
         if len(df_spot) > 0 and len(df_futures) > 0:
-            spot_timestamps = set(df_spot['timestamp'])
-            futures_timestamps = set(df_futures['timestamp'])
+            spot_timestamps = set(df_spot["timestamp"])
+            futures_timestamps = set(df_futures["timestamp"])
             # Same timestamps can exist, but instrument_type must differ
             # This is correct behavior (same symbol, same time, different market)
 
@@ -132,8 +136,10 @@ def test_instrument_type_filter_correctness():
         # Verify all rows are spot
         for row in result:
             instrument_type, symbol = row
-            assert instrument_type == 'spot', f"Got instrument_type={instrument_type}, expected 'spot'"
-            assert symbol == 'BTCUSDT', f"Got symbol={symbol}, expected 'BTCUSDT'"
+            assert instrument_type == "spot", (
+                f"Got instrument_type={instrument_type}, expected 'spot'"
+            )
+            assert symbol == "BTCUSDT", f"Got symbol={symbol}, expected 'BTCUSDT'"
 
 
 @pytest.mark.integration
@@ -148,7 +154,7 @@ def test_timeframe_isolation():
             timeframe="1h",
             start_date="2024-01-01",
             end_date="2024-01-07",
-            instrument_type="spot"
+            instrument_type="spot",
         )
 
         # Query 4h data
@@ -157,19 +163,22 @@ def test_timeframe_isolation():
             timeframe="4h",
             start_date="2024-01-01",
             end_date="2024-01-07",
-            instrument_type="spot"
+            instrument_type="spot",
         )
 
         # Verify timeframe isolation
         if len(df_1h) > 0:
-            assert (df_1h['timeframe'] == '1h').all(), \
+            assert (df_1h["timeframe"] == "1h").all(), (
                 f"1h query returned other timeframes: {df_1h['timeframe'].unique()}"
+            )
 
         if len(df_4h) > 0:
-            assert (df_4h['timeframe'] == '4h').all(), \
+            assert (df_4h["timeframe"] == "4h").all(), (
                 f"4h query returned other timeframes: {df_4h['timeframe'].unique()}"
+            )
 
         # Verify different row counts (1h has more bars than 4h for same period)
         if len(df_1h) > 0 and len(df_4h) > 0:
-            assert len(df_1h) > len(df_4h), \
+            assert len(df_1h) > len(df_4h), (
                 f"1h data ({len(df_1h)} rows) should have more bars than 4h data ({len(df_4h)} rows)"
+            )

@@ -113,6 +113,7 @@ class ClickHouseConnection:
 
         # Schema validation (ADR-0024)
         from .schema_validator import SchemaValidationError, SchemaValidator
+
         try:
             validator = SchemaValidator(self)
             validator.validate_schema()
@@ -262,8 +263,6 @@ class ClickHouseConnection:
             return len(df)
 
         except Exception as e:
-            raise Exception(
-                f"Bulk insert failed for table {table} ({len(df)} rows): {e}"
-            ) from e
+            raise Exception(f"Bulk insert failed for table {table} ({len(df)} rows): {e}") from e
         except ValueError as e:
             raise ValueError(f"Invalid DataFrame schema for table {table}: {e}") from e

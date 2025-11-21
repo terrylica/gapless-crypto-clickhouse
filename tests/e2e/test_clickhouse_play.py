@@ -49,10 +49,7 @@ async def test_clickhouse_play_landing_page_loads(page: Page, screenshot_dir: Pa
 
     # Automated visual regression testing (Playwright compares to baseline)
     await expect(page).to_have_screenshot(
-        "clickhouse-play-landing.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "clickhouse-play-landing.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )
 
 
@@ -97,10 +94,7 @@ async def test_clickhouse_play_simple_query_execution(page: Page, screenshot_dir
 
     # Automated visual regression testing
     await expect(page).to_have_screenshot(
-        "clickhouse-play-simple-query.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "clickhouse-play-simple-query.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )
 
 
@@ -141,7 +135,7 @@ async def test_clickhouse_play_invalid_query_error_handling(page: Page, screensh
         "clickhouse-play-error-invalid-query.png",
         full_page=True,
         max_diff_pixels=100,
-        threshold=0.2
+        threshold=0.2,
     )
 
 
@@ -181,10 +175,7 @@ async def test_clickhouse_play_large_result_set_rendering(page: Page, screenshot
 
     # Automated visual regression testing (large result set)
     await expect(page).to_have_screenshot(
-        "clickhouse-play-large-results.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "clickhouse-play-large-results.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )
 
 
@@ -223,10 +214,7 @@ async def test_clickhouse_play_empty_result_set(page: Page, screenshot_dir: Path
 
     # Automated visual regression testing (empty result set)
     await expect(page).to_have_screenshot(
-        "clickhouse-play-empty-results.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "clickhouse-play-empty-results.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )
 
 
@@ -265,8 +253,5 @@ async def test_clickhouse_play_special_characters_in_query(page: Page, screensho
 
     # Automated visual regression testing (special characters)
     await expect(page).to_have_screenshot(
-        "clickhouse-play-special-characters.png",
-        full_page=True,
-        max_diff_pixels=100,
-        threshold=0.2
+        "clickhouse-play-special-characters.png", full_page=True, max_diff_pixels=100, threshold=0.2
     )

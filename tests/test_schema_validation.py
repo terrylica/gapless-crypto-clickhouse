@@ -37,7 +37,9 @@ def test_schema_validation_detects_missing_column():
                 validator.validate_schema()
         finally:
             # Cleanup: restore column
-            conn.execute("ALTER TABLE ohlcv ADD COLUMN IF NOT EXISTS funding_rate Nullable(Float64)")
+            conn.execute(
+                "ALTER TABLE ohlcv ADD COLUMN IF NOT EXISTS funding_rate Nullable(Float64)"
+            )
 
 
 @pytest.mark.integration
@@ -49,7 +51,7 @@ def test_schema_validation_detects_wrong_type():
             "SELECT type FROM system.columns "
             "WHERE database = 'default' AND table = 'ohlcv' AND name = 'timestamp'"
         )
-        original_type = result[0][0] if result else 'DateTime64(6)'
+        original_type = result[0][0] if result else "DateTime64(6)"
 
         # Change timestamp to DateTime64(3) (simulate old schema)
         conn.execute("ALTER TABLE ohlcv MODIFY COLUMN timestamp DateTime64(3)")
@@ -292,4 +294,6 @@ def test_schema_validation_exception_propagation():
                 pytest.fail("Should raise SchemaValidationError, not generic Exception")
         finally:
             # Cleanup: restore column
-            conn.execute("ALTER TABLE ohlcv ADD COLUMN IF NOT EXISTS funding_rate Nullable(Float64)")
+            conn.execute(
+                "ALTER TABLE ohlcv ADD COLUMN IF NOT EXISTS funding_rate Nullable(Float64)"
+            )

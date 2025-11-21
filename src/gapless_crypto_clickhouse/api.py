@@ -392,7 +392,9 @@ def _perform_gap_filling(
     logger = logging.getLogger(__name__)
 
     csv_file = Path(result["filepath"])
-    gap_filler = UniversalGapFiller(instrument_type=instrument_type)  # ADR-0021: Pass instrument type for API endpoint
+    gap_filler = UniversalGapFiller(
+        instrument_type=instrument_type
+    )  # ADR-0021: Pass instrument type for API endpoint
 
     # Detect and fill gaps
     gap_result = gap_filler.process_file(csv_file, period)
@@ -479,7 +481,7 @@ def fetch_data(
     start: Optional[str] = None,
     end: Optional[str] = None,
     start_date: Optional[str] = None,  # Alias for start
-    end_date: Optional[str] = None,    # Alias for end
+    end_date: Optional[str] = None,  # Alias for end
     output_dir: Optional[Union[str, Path]] = None,
     index_type: Optional[Literal["datetime", "range", "auto"]] = None,  # Deprecated parameter
     auto_fill_gaps: bool = True,
@@ -570,8 +572,7 @@ def fetch_data(
         )
     if end is not None and end_date is not None:
         raise ValueError(
-            "Cannot specify both 'end' and 'end_date'. "
-            "Use either 'end' OR 'end_date', not both."
+            "Cannot specify both 'end' and 'end_date'. Use either 'end' OR 'end_date', not both."
         )
 
     # Normalize: prefer explicit _date parameters
@@ -596,15 +597,20 @@ def fetch_data(
 
     # Upfront input validation (fast failure before expensive operations)
     _validate_instrument_type(instrument_type)  # ADR-0021: Validate instrument type first
-    _validate_symbol(symbol, instrument_type=instrument_type)  # ADR-0021: Pass instrument type for context-aware validation
+    _validate_symbol(
+        symbol, instrument_type=instrument_type
+    )  # ADR-0021: Pass instrument type for context-aware validation
     _validate_timeframe_value(period)
     _validate_date_format(start, "start/start_date")
     _validate_date_format(end, "end/end_date")
 
     # Initialize collector and collect data
     collector = BinancePublicDataCollector(
-        symbol=symbol, start_date=start, end_date=end, output_dir=output_dir,
-        instrument_type=instrument_type  # ADR-0021: Pass instrument type for URL routing
+        symbol=symbol,
+        start_date=start,
+        end_date=end,
+        output_dir=output_dir,
+        instrument_type=instrument_type,  # ADR-0021: Pass instrument type for URL routing
     )
     result = collector.collect_timeframe_data(period)
 
@@ -628,7 +634,7 @@ def download(
     start: Optional[str] = None,
     end: Optional[str] = None,
     start_date: Optional[str] = None,  # Alias for start
-    end_date: Optional[str] = None,    # Alias for end
+    end_date: Optional[str] = None,  # Alias for end
     output_dir: Optional[Union[str, Path]] = None,
     index_type: Optional[Literal["datetime", "range", "auto"]] = None,  # Deprecated parameter
     auto_fill_gaps: bool = True,
@@ -702,8 +708,7 @@ def download(
         )
     if end is not None and end_date is not None:
         raise ValueError(
-            "Cannot specify both 'end' and 'end_date'. "
-            "Use either 'end' OR 'end_date', not both."
+            "Cannot specify both 'end' and 'end_date'. Use either 'end' OR 'end_date', not both."
         )
 
     # Normalize: prefer explicit _date parameters
@@ -742,7 +747,7 @@ def download_multiple(
     max_workers: int = 5,
     raise_on_partial_failure: bool = False,
     instrument_type: InstrumentType = "spot",  # ADR-0021
-    **kwargs
+    **kwargs,
 ) -> dict[str, pd.DataFrame]:
     """Download historical data for multiple symbols concurrently.
 
@@ -841,7 +846,7 @@ def download_multiple(
                 end_date=end_date,
                 limit=limit,
                 instrument_type=instrument_type,  # ADR-0021
-                **kwargs
+                **kwargs,
             ): symbol
             for symbol in symbols
         }
@@ -857,22 +862,18 @@ def download_multiple(
                 # Fail fast mode
                 if raise_on_partial_failure:
                     executor.shutdown(wait=False, cancel_futures=True)
-                    raise ValueError(
-                        f"Download failed for {symbol}: {e}"
-                    ) from e
+                    raise ValueError(f"Download failed for {symbol}: {e}") from e
 
     # Handle complete failure
     if not results and errors:
-        raise ValueError(
-            f"All {len(symbols)} symbols failed. Errors: {errors}"
-        )
+        raise ValueError(f"All {len(symbols)} symbols failed. Errors: {errors}")
 
     # Log warnings for partial failures
     if errors:
         warnings.warn(
-            f"Failed to download {len(errors)} symbols: {list(errors.keys())}. "
-            f"Errors: {errors}",
-            UserWarning, stacklevel=2
+            f"Failed to download {len(errors)} symbols: {list(errors.keys())}. Errors: {errors}",
+            UserWarning,
+            stacklevel=2,
         )
 
     return results

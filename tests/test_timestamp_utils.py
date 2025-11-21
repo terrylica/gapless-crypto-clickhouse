@@ -193,17 +193,17 @@ class TestTimestampConversionConsistency:
     def test_multiple_timestamps_batch(self):
         """Test batch processing of mixed precision timestamps."""
         timestamps = [
-            1704067200000,      # Milliseconds
-            1704067200000000,   # Microseconds
-            1735689600000,      # Milliseconds (2025)
-            1735689600000000,   # Microseconds (2025)
+            1704067200000,  # Milliseconds
+            1704067200000000,  # Microseconds
+            1735689600000,  # Milliseconds (2025)
+            1735689600000000,  # Microseconds (2025)
         ]
 
         expected_results = [
-            1704067200000000,   # Converted
-            1704067200000000,   # Passthrough
-            1735689600000000,   # Converted
-            1735689600000000,   # Passthrough
+            1704067200000000,  # Converted
+            1704067200000000,  # Passthrough
+            1735689600000000,  # Converted
+            1735689600000000,  # Passthrough
         ]
 
         results = [normalize_timestamp_auto(ts) for ts in timestamps]

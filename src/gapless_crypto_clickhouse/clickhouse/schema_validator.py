@@ -22,54 +22,54 @@ class ExpectedSchema:
     Reference: src/gapless_crypto_clickhouse/clickhouse/schema.sql
     """
 
-    columns: Dict[str, str] = field(default_factory=lambda: {
-        # Metadata columns
-        'symbol': 'LowCardinality(String)',
-        'timeframe': 'LowCardinality(String)',
-        'instrument_type': 'LowCardinality(String)',
-        'data_source': 'LowCardinality(String)',
-        'timestamp': 'DateTime64(6)',  # Microsecond precision (ADR-0021)
+    columns: Dict[str, str] = field(
+        default_factory=lambda: {
+            # Metadata columns
+            "symbol": "LowCardinality(String)",
+            "timeframe": "LowCardinality(String)",
+            "instrument_type": "LowCardinality(String)",
+            "data_source": "LowCardinality(String)",
+            "timestamp": "DateTime64(6)",  # Microsecond precision (ADR-0021)
+            # OHLCV columns
+            "open": "Float64",
+            "high": "Float64",
+            "low": "Float64",
+            "close": "Float64",
+            "volume": "Float64",
+            # Microstructure columns
+            "close_time": "DateTime64(6)",  # Microsecond precision (ADR-0021)
+            "quote_asset_volume": "Float64",
+            "number_of_trades": "Int64",
+            "taker_buy_base_asset_volume": "Float64",
+            "taker_buy_quote_asset_volume": "Float64",
+            # Futures-specific column
+            "funding_rate": "Nullable(Float64)",
+            # Internal deduplication columns
+            "_version": "UInt64",
+            "_sign": "Int8",
+        }
+    )
 
-        # OHLCV columns
-        'open': 'Float64',
-        'high': 'Float64',
-        'low': 'Float64',
-        'close': 'Float64',
-        'volume': 'Float64',
-
-        # Microstructure columns
-        'close_time': 'DateTime64(6)',  # Microsecond precision (ADR-0021)
-        'quote_asset_volume': 'Float64',
-        'number_of_trades': 'Int64',
-        'taker_buy_base_asset_volume': 'Float64',
-        'taker_buy_quote_asset_volume': 'Float64',
-
-        # Futures-specific column
-        'funding_rate': 'Nullable(Float64)',
-
-        # Internal deduplication columns
-        '_version': 'UInt64',
-        '_sign': 'Int8'
-    })
-
-    engine: str = 'ReplacingMergeTree'
-    partition_key: str = 'toYYYYMMDD(timestamp)'
-    sorting_key: Tuple[str, ...] = ('timestamp', 'symbol', 'timeframe', 'instrument_type')
+    engine: str = "ReplacingMergeTree"
+    partition_key: str = "toYYYYMMDD(timestamp)"
+    sorting_key: Tuple[str, ...] = ("timestamp", "symbol", "timeframe", "instrument_type")
 
     # Expected compression codecs (optional validation)
-    expected_codecs: Dict[str, str] = field(default_factory=lambda: {
-        'timestamp': 'DoubleDelta',
-        'close_time': 'DoubleDelta',
-        'open': 'Gorilla',
-        'high': 'Gorilla',
-        'low': 'Gorilla',
-        'close': 'Gorilla',
-        'volume': 'Gorilla',
-        'quote_asset_volume': 'Gorilla',
-        'taker_buy_base_asset_volume': 'Gorilla',
-        'taker_buy_quote_asset_volume': 'Gorilla',
-        'funding_rate': 'Gorilla',
-    })
+    expected_codecs: Dict[str, str] = field(
+        default_factory=lambda: {
+            "timestamp": "DoubleDelta",
+            "close_time": "DoubleDelta",
+            "open": "Gorilla",
+            "high": "Gorilla",
+            "low": "Gorilla",
+            "close": "Gorilla",
+            "volume": "Gorilla",
+            "quote_asset_volume": "Gorilla",
+            "taker_buy_base_asset_volume": "Gorilla",
+            "taker_buy_quote_asset_volume": "Gorilla",
+            "funding_rate": "Gorilla",
+        }
+    )
 
 
 class SchemaValidationError(Exception):
@@ -78,6 +78,7 @@ class SchemaValidationError(Exception):
     **Behavior**: STRICT - No fallback, no retry, no silent failures.
     Propagate to caller (SLO requirement).
     """
+
     pass
 
 
@@ -149,8 +150,8 @@ class SchemaValidator:
 
         if errors:
             raise SchemaValidationError(
-                f"Schema validation failed ({len(errors)} errors):\n" +
-                "\n".join(f"  - {e}" for e in errors)
+                f"Schema validation failed ({len(errors)} errors):\n"
+                + "\n".join(f"  - {e}" for e in errors)
             )
 
         logger.info("Schema validation passed: ohlcv table matches expected schema")
@@ -184,13 +185,12 @@ class SchemaValidator:
                 actual_type = actual_columns[col]
                 if actual_type != expected_type:
                     errors.append(
-                        f"Type mismatch: {col} "
-                        f"(expected {expected_type}, got {actual_type})"
+                        f"Type mismatch: {col} (expected {expected_type}, got {actual_type})"
                     )
 
                     # Special warning for DateTime64 precision mismatch
-                    if 'DateTime64' in expected_type and 'DateTime64' in actual_type:
-                        if 'DateTime64(6)' in expected_type and 'DateTime64(3)' in actual_type:
+                    if "DateTime64" in expected_type and "DateTime64" in actual_type:
+                        if "DateTime64(6)" in expected_type and "DateTime64(3)" in actual_type:
                             errors.append(
                                 f"  ⚠️  CRITICAL: {col} has millisecond precision (3) "
                                 f"but microsecond precision (6) required. "
@@ -226,7 +226,7 @@ class SchemaValidator:
             )
 
         # Verify _version column is used for deduplication
-        if '_version' not in engine_full:
+        if "_version" not in engine_full:
             errors.append(
                 f"ReplacingMergeTree version column missing. "
                 f"Expected '_version' in engine definition, got: {engine_full}"
@@ -270,7 +270,7 @@ class SchemaValidator:
             return ["Cannot retrieve sorting_key for ohlcv table"]
 
         actual_sorting_key = result[0][0]
-        expected_sorting_key = ', '.join(self.expected.sorting_key)
+        expected_sorting_key = ", ".join(self.expected.sorting_key)
 
         if actual_sorting_key != expected_sorting_key:
             return [

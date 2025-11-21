@@ -93,8 +93,9 @@ def test_http_error_propagation_invalid_query():
         # Verify exception contains useful error message
         error_msg = str(exc_info.value).lower()
         # ClickHouse error messages typically contain "syntax" or "unknown" or "parse"
-        assert any(keyword in error_msg for keyword in ["syntax", "unknown", "parse", "error"]), \
+        assert any(keyword in error_msg for keyword in ["syntax", "unknown", "parse", "error"]), (
             f"Expected error message to contain syntax/unknown/parse, got: {error_msg}"
+        )
 
 
 @pytest.mark.integration
@@ -107,8 +108,9 @@ def test_http_error_propagation_table_not_found():
 
         # Verify exception contains table name or "not found"
         error_msg = str(exc_info.value).lower()
-        assert "non_existent_table_12345" in error_msg or "not" in error_msg or "unknown" in error_msg, \
-            f"Expected error message to mention table or 'not found', got: {error_msg}"
+        assert (
+            "non_existent_table_12345" in error_msg or "not" in error_msg or "unknown" in error_msg
+        ), f"Expected error message to mention table or 'not found', got: {error_msg}"
 
 
 @pytest.mark.integration

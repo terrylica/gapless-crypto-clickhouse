@@ -66,37 +66,42 @@ def test_final_keyword_without_final_may_return_duplicates():
         """)[0][0]
 
         # Without FINAL >= With FINAL (might have duplicates before merge)
-        assert count_without_final >= count_with_final, \
+        assert count_without_final >= count_with_final, (
             f"Without FINAL ({count_without_final}) should be >= With FINAL ({count_with_final})"
+        )
 
 
 @pytest.mark.integration
 def test_version_hash_determinism():
     """Verify identical inputs produce identical _version hashes."""
     # Create two identical rows
-    row1 = pd.Series({
-        'timestamp': pd.Timestamp('2024-01-01 00:00:00'),
-        'open': 42000.0,
-        'high': 42100.0,
-        'low': 41900.0,
-        'close': 42050.0,
-        'volume': 1000.0,
-        'symbol': 'BTCUSDT',
-        'timeframe': '1h',
-        'instrument_type': 'spot'
-    })
+    row1 = pd.Series(
+        {
+            "timestamp": pd.Timestamp("2024-01-01 00:00:00"),
+            "open": 42000.0,
+            "high": 42100.0,
+            "low": 41900.0,
+            "close": 42050.0,
+            "volume": 1000.0,
+            "symbol": "BTCUSDT",
+            "timeframe": "1h",
+            "instrument_type": "spot",
+        }
+    )
 
-    row2 = pd.Series({
-        'timestamp': pd.Timestamp('2024-01-01 00:00:00'),
-        'open': 42000.0,
-        'high': 42100.0,
-        'low': 41900.0,
-        'close': 42050.0,
-        'volume': 1000.0,
-        'symbol': 'BTCUSDT',
-        'timeframe': '1h',
-        'instrument_type': 'spot'
-    })
+    row2 = pd.Series(
+        {
+            "timestamp": pd.Timestamp("2024-01-01 00:00:00"),
+            "open": 42000.0,
+            "high": 42100.0,
+            "low": 41900.0,
+            "close": 42050.0,
+            "volume": 1000.0,
+            "symbol": "BTCUSDT",
+            "timeframe": "1h",
+            "instrument_type": "spot",
+        }
+    )
 
     # Compute version hashes (using ClickHouseBulkLoader logic)
     def compute_hash(row):
@@ -122,17 +127,19 @@ def test_version_hash_collision_resistance():
     # Generate 1000 similar rows
     hashes = set()
     for i in range(1000):
-        row = pd.Series({
-            'timestamp': pd.Timestamp(f'2024-01-{(i % 28) + 1:02d} {(i % 24):02d}:00:00'),
-            'open': 42000.0 + i,
-            'high': 42100.0 + i,
-            'low': 41900.0 + i,
-            'close': 42050.0 + i,
-            'volume': 1000.0 + i,
-            'symbol': 'BTCUSDT',
-            'timeframe': '1h',
-            'instrument_type': 'spot'
-        })
+        row = pd.Series(
+            {
+                "timestamp": pd.Timestamp(f"2024-01-{(i % 28) + 1:02d} {(i % 24):02d}:00:00"),
+                "open": 42000.0 + i,
+                "high": 42100.0 + i,
+                "low": 41900.0 + i,
+                "close": 42050.0 + i,
+                "volume": 1000.0 + i,
+                "symbol": "BTCUSDT",
+                "timeframe": "1h",
+                "instrument_type": "spot",
+            }
+        )
 
         version_input = (
             f"{row['timestamp']}"
@@ -163,7 +170,7 @@ def test_deduplication_across_ingestion_sessions():
             timeframe="1h",
             start_date="2024-01-01",
             end_date="2024-01-31",
-            instrument_type="spot"
+            instrument_type="spot",
         )
         count_before = len(df_before)
 
@@ -180,13 +187,14 @@ def test_deduplication_across_ingestion_sessions():
             timeframe="1h",
             start_date="2024-01-01",
             end_date="2024-01-31",
-            instrument_type="spot"
+            instrument_type="spot",
         )
         count_after = len(df_after)
 
         # Verify row count unchanged (deduplication worked)
-        assert count_before == count_after, \
+        assert count_before == count_after, (
             f"Row count changed after re-ingestion: {count_before} → {count_after} (deduplication failed)"
+        )
 
 
 @pytest.mark.integration
@@ -212,8 +220,9 @@ def test_deduplication_preserves_latest_version():
         timestamps_seen = set()
         for row in result_final:
             timestamp = row[0]
-            assert timestamp not in timestamps_seen, \
+            assert timestamp not in timestamps_seen, (
                 f"FINAL returned duplicate timestamp: {timestamp} (deduplication failed)"
+            )
             timestamps_seen.add(timestamp)
 
         # Verify _version values are consistent (should be UInt64)

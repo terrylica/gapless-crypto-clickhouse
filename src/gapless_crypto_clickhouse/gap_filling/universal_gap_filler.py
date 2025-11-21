@@ -122,8 +122,7 @@ class UniversalGapFiller:
         # ADR-0021: Validate instrument type and set API endpoint
         if instrument_type not in ("spot", "futures-um"):
             raise ValueError(
-                f"Invalid instrument_type '{instrument_type}'. "
-                f"Must be 'spot' or 'futures-um'"
+                f"Invalid instrument_type '{instrument_type}'. Must be 'spot' or 'futures-um'"
             )
         self.instrument_type = instrument_type
 
@@ -167,10 +166,26 @@ class UniversalGapFiller:
 
         # Fallback: look for common trading pairs (top 20 by market cap)
         common_symbols = [
-            "BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT",
-            "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "DOTUSDT", "LINKUSDT",
-            "MATICUSDT", "LTCUSDT", "UNIUSDT", "ATOMUSDT", "FTMUSDT",
-            "NEARUSDT", "ALGOUSDT", "SANDUSDT", "MANAUSDT", "APEUSDT"
+            "BTCUSDT",
+            "ETHUSDT",
+            "BNBUSDT",
+            "SOLUSDT",
+            "XRPUSDT",
+            "DOGEUSDT",
+            "ADAUSDT",
+            "AVAXUSDT",
+            "DOTUSDT",
+            "LINKUSDT",
+            "MATICUSDT",
+            "LTCUSDT",
+            "UNIUSDT",
+            "ATOMUSDT",
+            "FTMUSDT",
+            "NEARUSDT",
+            "ALGOUSDT",
+            "SANDUSDT",
+            "MANAUSDT",
+            "APEUSDT",
         ]
         filename_upper = filename.upper()
         for symbol in common_symbols:

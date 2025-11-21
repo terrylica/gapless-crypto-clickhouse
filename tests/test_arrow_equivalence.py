@@ -29,7 +29,7 @@ def test_arrow_standard_query_equivalence_simple():
         df_standard.reset_index(drop=True),
         check_dtype=True,
         check_exact=False,  # Allow floating point tolerance
-        rtol=1e-10
+        rtol=1e-10,
     )
 
 
@@ -48,7 +48,9 @@ def test_arrow_standard_query_equivalence_large():
         df_standard = conn.client.query_df(query, use_arrow=False)
 
     # Verify row count
-    assert len(df_arrow) == len(df_standard), f"Row count mismatch: Arrow={len(df_arrow)}, Standard={len(df_standard)}"
+    assert len(df_arrow) == len(df_standard), (
+        f"Row count mismatch: Arrow={len(df_arrow)}, Standard={len(df_standard)}"
+    )
 
     # Verify data equivalence
     pd.testing.assert_frame_equal(
@@ -56,7 +58,7 @@ def test_arrow_standard_query_equivalence_large():
         df_standard.reset_index(drop=True),
         check_dtype=True,
         check_exact=False,
-        rtol=1e-10
+        rtol=1e-10,
     )
 
 
@@ -75,8 +77,9 @@ def test_arrow_standard_column_order_preserved():
         df_standard = conn.client.query_df(query, use_arrow=False)
 
     # Verify column names match exactly
-    assert list(df_arrow.columns) == list(df_standard.columns), \
+    assert list(df_arrow.columns) == list(df_standard.columns), (
         f"Column order mismatch: Arrow={list(df_arrow.columns)}, Standard={list(df_standard.columns)}"
+    )
 
 
 @pytest.mark.integration
@@ -100,14 +103,17 @@ def test_arrow_standard_data_types_match():
 
         # Allow minor type variations (e.g., datetime64[ns] vs datetime64[us])
         if pd.api.types.is_datetime64_any_dtype(arrow_dtype):
-            assert pd.api.types.is_datetime64_any_dtype(standard_dtype), \
+            assert pd.api.types.is_datetime64_any_dtype(standard_dtype), (
                 f"Column {col}: Arrow is datetime but Standard is {standard_dtype}"
+            )
         elif pd.api.types.is_numeric_dtype(arrow_dtype):
-            assert pd.api.types.is_numeric_dtype(standard_dtype), \
+            assert pd.api.types.is_numeric_dtype(standard_dtype), (
                 f"Column {col}: Arrow is numeric but Standard is {standard_dtype}"
+            )
         else:
-            assert arrow_dtype == standard_dtype, \
+            assert arrow_dtype == standard_dtype, (
                 f"Column {col}: dtype mismatch (Arrow={arrow_dtype}, Standard={standard_dtype})"
+            )
 
 
 @pytest.mark.integration
@@ -125,15 +131,18 @@ def test_arrow_standard_null_handling():
         df_standard = conn.client.query_df(query, use_arrow=False)
 
     # Verify funding_rate is NULL for spot
-    assert df_arrow['funding_rate'].isna().all(), "Arrow: funding_rate should be NULL for spot"
-    assert df_standard['funding_rate'].isna().all(), "Standard: funding_rate should be NULL for spot"
+    assert df_arrow["funding_rate"].isna().all(), "Arrow: funding_rate should be NULL for spot"
+    assert df_standard["funding_rate"].isna().all(), (
+        "Standard: funding_rate should be NULL for spot"
+    )
 
     # Verify NULL counts match
     for col in df_arrow.columns:
         arrow_nulls = df_arrow[col].isna().sum()
         standard_nulls = df_standard[col].isna().sum()
-        assert arrow_nulls == standard_nulls, \
+        assert arrow_nulls == standard_nulls, (
             f"Column {col}: NULL count mismatch (Arrow={arrow_nulls}, Standard={standard_nulls})"
+        )
 
 
 @pytest.mark.integration
@@ -180,7 +189,7 @@ def test_arrow_standard_single_row():
         df_standard.reset_index(drop=True),
         check_dtype=True,
         check_exact=False,
-        rtol=1e-10
+        rtol=1e-10,
     )
 
 
@@ -207,14 +216,15 @@ def test_arrow_standard_special_characters():
         df_standard.reset_index(drop=True),
         check_dtype=True,
         check_exact=False,
-        rtol=1e-10
+        rtol=1e-10,
     )
 
     # Verify symbol values are correct
-    unique_symbols_arrow = set(df_arrow['symbol'].unique())
-    unique_symbols_standard = set(df_standard['symbol'].unique())
-    assert unique_symbols_arrow == unique_symbols_standard, \
+    unique_symbols_arrow = set(df_arrow["symbol"].unique())
+    unique_symbols_standard = set(df_standard["symbol"].unique())
+    assert unique_symbols_arrow == unique_symbols_standard, (
         f"Symbol mismatch: Arrow={unique_symbols_arrow}, Standard={unique_symbols_standard}"
+    )
 
 
 @pytest.mark.integration
@@ -244,5 +254,5 @@ def test_arrow_standard_aggregation_equivalence():
         df_standard.reset_index(drop=True),
         check_dtype=True,
         check_exact=False,
-        rtol=1e-8  # Allow slightly higher tolerance for aggregations
+        rtol=1e-8,  # Allow slightly higher tolerance for aggregations
     )

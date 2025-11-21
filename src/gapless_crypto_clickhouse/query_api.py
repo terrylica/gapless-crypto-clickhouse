@@ -182,9 +182,7 @@ def query_ohlcv(
                     loader, sym, timeframe, start_date, end_date, instrument_type
                 )
             elif existing_count == 0:
-                logger.warning(
-                    f"{sym}: No data found in ClickHouse and auto_ingest={auto_ingest}"
-                )
+                logger.warning(f"{sym}: No data found in ClickHouse and auto_ingest={auto_ingest}")
 
             # Step 3: Query data with FINAL
             df = query.get_range(
@@ -363,8 +361,7 @@ def _auto_ingest_date_range(
             logger.info(f"Ingested {rows} rows for {symbol} {year}-{month:02d}")
         except Exception as e:
             logger.warning(
-                f"Failed to ingest {symbol} {year}-{month:02d}: {e} "
-                f"(month may not exist yet)"
+                f"Failed to ingest {symbol} {year}-{month:02d}: {e} (month may not exist yet)"
             )
 
         # Move to next month

@@ -25,17 +25,14 @@ def measure_memory_mb() -> float:
     """Get current memory usage in MB."""
     try:
         import psutil
+
         process = psutil.Process()
         return process.memory_info().rss / 1024 / 1024
     except ImportError:
         return 0.0
 
 
-def benchmark_query_at_scale(
-    query: str,
-    method: str,
-    use_arrow: bool
-) -> Dict[str, Any]:
+def benchmark_query_at_scale(query: str, method: str, use_arrow: bool) -> Dict[str, Any]:
     """Benchmark a single query."""
     from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
@@ -117,38 +114,43 @@ def run_scale_analysis() -> List[Dict[str, Any]]:
     ]
 
     for test in test_cases:
-        print(f"\n{'='*70}")
+        print(f"\n{'=' * 70}")
         print(f"BENCHMARK: {test['name']}")
-        print("="*70)
+        print("=" * 70)
 
         # Test Arrow-optimized
         print("\n  Testing Arrow-optimized query...")
         result_arrow = benchmark_query_at_scale(
-            test["query"],
-            f"{test['name']} (Arrow)",
-            use_arrow=True
+            test["query"], f"{test['name']} (Arrow)", use_arrow=True
         )
-        print(f"  ✅ Arrow: {result_arrow['rows']:,} rows in {result_arrow['duration_s']:.4f}s "
-              f"({result_arrow['speed_rows_per_sec']:,.0f} rows/s, {result_arrow['memory_traced_mb']:.2f} MB)")
+        print(
+            f"  ✅ Arrow: {result_arrow['rows']:,} rows in {result_arrow['duration_s']:.4f}s "
+            f"({result_arrow['speed_rows_per_sec']:,.0f} rows/s, {result_arrow['memory_traced_mb']:.2f} MB)"
+        )
         results.append(result_arrow)
 
         # Test standard query_df
         print("  Testing standard query_df...")
         result_standard = benchmark_query_at_scale(
-            test["query"],
-            f"{test['name']} (Standard)",
-            use_arrow=False
+            test["query"], f"{test['name']} (Standard)", use_arrow=False
         )
-        print(f"  ✅ Standard: {result_standard['rows']:,} rows in {result_standard['duration_s']:.4f}s "
-              f"({result_standard['speed_rows_per_sec']:,.0f} rows/s, {result_standard['memory_traced_mb']:.2f} MB)")
+        print(
+            f"  ✅ Standard: {result_standard['rows']:,} rows in {result_standard['duration_s']:.4f}s "
+            f"({result_standard['speed_rows_per_sec']:,.0f} rows/s, {result_standard['memory_traced_mb']:.2f} MB)"
+        )
         results.append(result_standard)
 
         # Calculate speedup
-        speedup = result_arrow['speed_rows_per_sec'] / result_standard['speed_rows_per_sec']
+        speedup = result_arrow["speed_rows_per_sec"] / result_standard["speed_rows_per_sec"]
         mem_reduction = (
-            (result_standard['memory_traced_mb'] - result_arrow['memory_traced_mb'])
-            / result_standard['memory_traced_mb'] * 100
-        ) if result_standard['memory_traced_mb'] > 0 else 0
+            (
+                (result_standard["memory_traced_mb"] - result_arrow["memory_traced_mb"])
+                / result_standard["memory_traced_mb"]
+                * 100
+            )
+            if result_standard["memory_traced_mb"] > 0
+            else 0
+        )
 
         print("\n  📊 Arrow vs Standard:")
         print(f"     Speedup: {speedup:.2f}x")
@@ -159,25 +161,27 @@ def run_scale_analysis() -> List[Dict[str, Any]]:
 
 def print_summary(results: List[Dict[str, Any]], baseline_speed: int = 27432):
     """Print comprehensive summary."""
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("SCALE ANALYSIS SUMMARY")
-    print("="*70)
+    print("=" * 70)
 
     # Group by scale
     scales = {}
     for r in results:
-        scale_name = r['method'].split(' (')[0]
+        scale_name = r["method"].split(" (")[0]
         if scale_name not in scales:
             scales[scale_name] = {}
-        method_type = 'Arrow' if r['use_arrow'] else 'Standard'
+        method_type = "Arrow" if r["use_arrow"] else "Standard"
         scales[scale_name][method_type] = r
 
     # Print comparison table
-    print(f"\n{'Scale':<20} {'Method':<15} {'Rows':>10} {'Time (s)':>10} {'Rows/s':>12} {'Mem (MB)':>10}")
+    print(
+        f"\n{'Scale':<20} {'Method':<15} {'Rows':>10} {'Time (s)':>10} {'Rows/s':>12} {'Mem (MB)':>10}"
+    )
     print("-" * 85)
 
     for scale_name, methods in scales.items():
-        for method_type in ['Arrow', 'Standard']:
+        for method_type in ["Arrow", "Standard"]:
             if method_type in methods:
                 r = methods[method_type]
                 print(
@@ -187,23 +191,28 @@ def print_summary(results: List[Dict[str, Any]], baseline_speed: int = 27432):
                 )
 
     # Analyze trends
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("PERFORMANCE ANALYSIS")
-    print("="*70)
+    print("=" * 70)
 
     print(f"\nBaseline (v5.0.0 clickhouse-driver): {baseline_speed:,} rows/sec")
 
     for scale_name, methods in scales.items():
-        if 'Arrow' in methods and 'Standard' in methods:
-            arrow = methods['Arrow']
-            standard = methods['Standard']
+        if "Arrow" in methods and "Standard" in methods:
+            arrow = methods["Arrow"]
+            standard = methods["Standard"]
 
-            speedup = arrow['speed_rows_per_sec'] / standard['speed_rows_per_sec']
-            vs_baseline = arrow['speed_rows_per_sec'] / baseline_speed
+            speedup = arrow["speed_rows_per_sec"] / standard["speed_rows_per_sec"]
+            vs_baseline = arrow["speed_rows_per_sec"] / baseline_speed
             mem_reduction = (
-                (standard['memory_traced_mb'] - arrow['memory_traced_mb'])
-                / standard['memory_traced_mb'] * 100
-            ) if standard['memory_traced_mb'] > 0 else 0
+                (
+                    (standard["memory_traced_mb"] - arrow["memory_traced_mb"])
+                    / standard["memory_traced_mb"]
+                    * 100
+                )
+                if standard["memory_traced_mb"] > 0
+                else 0
+            )
 
             print(f"\n{scale_name} ({arrow['rows']:,} rows):")
             print(f"  Arrow vs Standard: {speedup:.2f}x speedup")
@@ -220,9 +229,9 @@ def print_summary(results: List[Dict[str, Any]], baseline_speed: int = 27432):
                 print(f"  ⚠️  SLOWER: {vs_baseline:.2f}x baseline")
 
     # Protocol overhead analysis
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("KEY FINDINGS")
-    print("="*70)
+    print("=" * 70)
 
     print("\n1. Protocol Overhead:")
     print("   - HTTP protocol (port 8123) adds latency vs native TCP (port 9000)")
@@ -242,10 +251,10 @@ def print_summary(results: List[Dict[str, Any]], baseline_speed: int = 27432):
 
 def main():
     """Run scale analysis."""
-    print("="*70)
+    print("=" * 70)
     print("Arrow Performance Scale Analysis - ADR-0023")
     print(f"Started: {datetime.now()}")
-    print("="*70)
+    print("=" * 70)
 
     results = run_scale_analysis()
     print_summary(results)

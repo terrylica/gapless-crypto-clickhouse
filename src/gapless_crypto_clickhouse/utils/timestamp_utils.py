@@ -96,8 +96,7 @@ def normalize_timestamp_to_microseconds(timestamp: int, source_precision: str) -
         return timestamp * 1000  # Convert ms → μs
     else:
         raise ValueError(
-            f"Unknown precision: {source_precision}. "
-            f"Must be 'milliseconds' or 'microseconds'."
+            f"Unknown precision: {source_precision}. Must be 'milliseconds' or 'microseconds'."
         )
 
 
