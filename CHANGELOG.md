@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.2...v6.0.3) (2025-11-21)
+
+### Bug Fixes
+
+* **e2e:** temporarily disable screenshot assertions ([8350b54](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8350b54cd023a5f1d478f515a13698e8f5c985d8))
+* **tests:** register pytest markers to fix test collection ([346a9d5](https://github.com/terrylica/gapless-crypto-clickhouse/commit/346a9d5f9e58e8952d7fc7ded84b9dfe24d7dddd))
+
 ## [6.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.1...v6.0.2) (2025-11-21)
 
 ### Bug Fixes
