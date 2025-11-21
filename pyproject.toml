@@ -67,15 +67,7 @@ packages = ["src/gapless_crypto_clickhouse"]
 [tool.hatch.build.targets.wheel.force-include]
 "src/gapless_crypto_clickhouse/py.typed" = "gapless_crypto_clickhouse/py.typed"
 
-[tool.pytest.ini_options]
-markers = [
-    "slow: marks tests as slow (require ClickHouse database)",
-    "e2e: end-to-end tests with Playwright (require Docker services)",
-]
-testpaths = ["tests"]
-asyncio_mode = "auto"
-# Explicit asyncio_default_fixture_loop_scope for pytest-asyncio 0.24+
-asyncio_default_fixture_loop_scope = "function"
+# NOTE: pytest configuration in pytest.ini (takes precedence over pyproject.toml)
 
 [tool.ruff]
 target-version = "py311"
