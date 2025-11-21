@@ -8,8 +8,8 @@ import pytest
 
 from gapless_crypto_clickhouse.utils.timestamp_utils import (
     detect_timestamp_precision,
-    normalize_timestamp_to_microseconds,
     normalize_timestamp_auto,
+    normalize_timestamp_to_microseconds,
 )
 
 

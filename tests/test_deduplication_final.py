@@ -8,9 +8,11 @@ Critical for zero-gap guarantee (ReplacingMergeTree with deterministic versionin
 **ADR**: ADR-0024 (Comprehensive Validation Canonicity)
 """
 
-import pytest
 import hashlib
+
 import pandas as pd
+import pytest
+
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader

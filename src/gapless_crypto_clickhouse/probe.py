@@ -22,7 +22,7 @@ Usage (for AI agents):
 """
 
 import json
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from .api import get_supported_symbols, get_supported_timeframes
 
@@ -188,39 +188,6 @@ def get_capabilities() -> Dict[str, Any]:
             },
         },
     }
-
-
-def get_supported_symbols() -> List[str]:
-    """
-    Get list of supported trading pair symbols.
-
-    Returns:
-        List of 713 validated symbols
-
-    Example:
-        symbols = probe.get_supported_symbols()
-        print(f"Total symbols: {len(symbols)}")
-        print(f"Top 10: {symbols[:10]}")
-    """
-    from .api import get_supported_symbols
-
-    return get_supported_symbols()
-
-
-def get_supported_timeframes() -> List[str]:
-    """
-    Get list of supported timeframes.
-
-    Returns:
-        List of timeframes: ['1s', '1m', ..., '1d']
-
-    Example:
-        timeframes = probe.get_supported_timeframes()
-        print(f"Timeframes: {timeframes}")
-    """
-    from .api import get_supported_timeframes
-
-    return get_supported_timeframes()
 
 
 def get_performance_info() -> Dict[str, Any]:

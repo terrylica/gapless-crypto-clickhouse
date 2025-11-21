@@ -112,7 +112,7 @@ class ClickHouseConnection:
             raise Exception("ClickHouse health check failed during context manager entry")
 
         # Schema validation (ADR-0024)
-        from .schema_validator import SchemaValidator, SchemaValidationError
+        from .schema_validator import SchemaValidationError, SchemaValidator
         try:
             validator = SchemaValidator(self)
             validator.validate_schema()

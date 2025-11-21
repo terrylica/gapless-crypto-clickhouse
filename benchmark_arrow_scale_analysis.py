@@ -18,9 +18,7 @@ import gc
 import time
 import tracemalloc
 from datetime import datetime
-from typing import Dict, Any, List
-
-import pandas as pd
+from typing import Any, Dict, List
 
 
 def measure_memory_mb() -> float:
@@ -124,7 +122,7 @@ def run_scale_analysis() -> List[Dict[str, Any]]:
         print("="*70)
 
         # Test Arrow-optimized
-        print(f"\n  Testing Arrow-optimized query...")
+        print("\n  Testing Arrow-optimized query...")
         result_arrow = benchmark_query_at_scale(
             test["query"],
             f"{test['name']} (Arrow)",
@@ -135,7 +133,7 @@ def run_scale_analysis() -> List[Dict[str, Any]]:
         results.append(result_arrow)
 
         # Test standard query_df
-        print(f"  Testing standard query_df...")
+        print("  Testing standard query_df...")
         result_standard = benchmark_query_at_scale(
             test["query"],
             f"{test['name']} (Standard)",
@@ -152,7 +150,7 @@ def run_scale_analysis() -> List[Dict[str, Any]]:
             / result_standard['memory_traced_mb'] * 100
         ) if result_standard['memory_traced_mb'] > 0 else 0
 
-        print(f"\n  📊 Arrow vs Standard:")
+        print("\n  📊 Arrow vs Standard:")
         print(f"     Speedup: {speedup:.2f}x")
         print(f"     Memory: {mem_reduction:+.1f}%")
 
@@ -213,11 +211,11 @@ def print_summary(results: List[Dict[str, Any]], baseline_speed: int = 27432):
             print(f"  Memory reduction: {mem_reduction:+.1f}%")
 
             if vs_baseline >= 3.0:
-                print(f"  ✅ EXCELLENT: Achieved 3x vs baseline")
+                print("  ✅ EXCELLENT: Achieved 3x vs baseline")
             elif vs_baseline >= 2.0:
-                print(f"  ✅ GOOD: Achieved 2x vs baseline")
+                print("  ✅ GOOD: Achieved 2x vs baseline")
             elif vs_baseline >= 1.0:
-                print(f"  ✅ ON PAR: Similar to baseline")
+                print("  ✅ ON PAR: Similar to baseline")
             else:
                 print(f"  ⚠️  SLOWER: {vs_baseline:.2f}x baseline")
 

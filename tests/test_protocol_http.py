@@ -9,6 +9,7 @@ Critical for ensuring proper protocol configuration and error handling.
 """
 
 import pytest
+
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
 

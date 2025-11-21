@@ -6,11 +6,11 @@ ADR: ADR-0024 (Comprehensive Validation Canonicity)
 """
 
 import pytest
+
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 from gapless_crypto_clickhouse.clickhouse.schema_validator import (
-    SchemaValidator,
     SchemaValidationError,
-    ExpectedSchema
+    SchemaValidator,
 )
 
 

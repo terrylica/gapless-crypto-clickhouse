@@ -30,6 +30,9 @@ import pandas as pd
 from .collectors.binance_public_data_collector import BinancePublicDataCollector
 from .gap_filling.universal_gap_filler import UniversalGapFiller
 
+# Instrument type support (ADR-0021)
+InstrumentType = Literal["spot", "futures-um"]
+
 
 def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]:
     """Get list of supported trading pairs for the specified instrument type.
@@ -114,9 +117,6 @@ def get_supported_timeframes() -> List[str]:
 SupportedTimeframe = Literal[
     "1s", "1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d"
 ]
-
-# Instrument type support (ADR-0021)
-InstrumentType = Literal["spot", "futures-um"]
 
 
 def _validate_instrument_type(instrument_type: str) -> None:
@@ -816,8 +816,8 @@ def download_multiple(
         ... )
         # → Raises ValueError immediately on first failure
     """
-    from concurrent.futures import ThreadPoolExecutor, as_completed
     import warnings
+    from concurrent.futures import ThreadPoolExecutor, as_completed
 
     # Input validation
     if not symbols:
@@ -872,7 +872,7 @@ def download_multiple(
         warnings.warn(
             f"Failed to download {len(errors)} symbols: {list(errors.keys())}. "
             f"Errors: {errors}",
-            UserWarning
+            UserWarning, stacklevel=2
         )
 
     return results

@@ -8,12 +8,11 @@ Core v6.0.0 feature (ADR-0023) currently has zero dedicated tests.
 **ADR**: ADR-0024 (Comprehensive Validation Canonicity)
 """
 
-import pytest
-import pandas as pd
-from datetime import datetime
-from gapless_crypto_clickhouse import query_ohlcv
-from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
+import pandas as pd
+import pytest
+
+from gapless_crypto_clickhouse import query_ohlcv
 
 # ============================================================================
 # Auto-Ingestion Tests (4 tests)

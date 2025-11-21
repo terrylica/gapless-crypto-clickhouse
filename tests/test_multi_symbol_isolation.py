@@ -9,7 +9,7 @@ Critical for data integrity in multi-symbol ingestion scenarios.
 """
 
 import pytest
-import pandas as pd
+
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 

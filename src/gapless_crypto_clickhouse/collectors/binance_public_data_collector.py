@@ -12,7 +12,6 @@ import argparse
 import csv
 import hashlib
 import json
-import logging
 import shutil
 import tempfile
 import urllib.request

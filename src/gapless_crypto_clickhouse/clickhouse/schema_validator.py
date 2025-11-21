@@ -8,9 +8,9 @@ Raises SchemaValidationError on mismatch (no fallback, no retry).
 **ADR**: ADR-0024 (Comprehensive Validation Canonicity)
 """
 
+import logging
 from dataclasses import dataclass, field
 from typing import Dict, List, Tuple
-import logging
 
 logger = logging.getLogger(__name__)
 

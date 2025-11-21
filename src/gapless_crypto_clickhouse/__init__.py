@@ -103,7 +103,6 @@ from .api import (
     load_parquet,
     save_parquet,
 )
-from .query_api import query_ohlcv  # v6.0.0: Unified query API with auto-ingestion (ADR-0023)
 from .collectors.binance_public_data_collector import BinancePublicDataCollector
 from .exceptions import (
     DataCollectionError,
@@ -114,6 +113,7 @@ from .exceptions import (
 )
 from .gap_filling.safe_file_operations import AtomicCSVOperations, SafeCSVMerger
 from .gap_filling.universal_gap_filler import UniversalGapFiller
+from .query_api import query_ohlcv  # v6.0.0: Unified query API with auto-ingestion (ADR-0023)
 
 __all__ = [
     # Simple function-based API (recommended for most users)

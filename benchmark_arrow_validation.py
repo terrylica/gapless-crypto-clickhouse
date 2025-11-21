@@ -18,14 +18,11 @@ Compares:
 """
 
 import gc
-import os
-import sys
 import time
+import traceback
 import tracemalloc
 from datetime import datetime
-from typing import Dict, Any
-
-import pandas as pd
+from typing import Any, Dict
 
 
 def measure_memory_mb() -> float:
@@ -78,7 +75,7 @@ def benchmark_arrow_query() -> Dict[str, Any]:
         mem_used_mb = mem_after - mem_before
         mem_traced_mb = peak / 1024 / 1024
 
-        print(f"✅ Arrow-optimized query completed")
+        print("✅ Arrow-optimized query completed")
         print(f"   Rows: {rows:,}")
         print(f"   Duration: {duration:.4f}s")
         print(f"   Speed: {speed:,.0f} rows/sec")
@@ -141,7 +138,7 @@ def benchmark_standard_query() -> Dict[str, Any]:
         mem_used_mb = mem_after - mem_before
         mem_traced_mb = peak / 1024 / 1024
 
-        print(f"✅ Standard query completed")
+        print("✅ Standard query completed")
         print(f"   Rows: {rows:,}")
         print(f"   Duration: {duration:.4f}s")
         print(f"   Speed: {speed:,.0f} rows/sec")
@@ -202,7 +199,7 @@ def benchmark_large_query() -> Dict[str, Any]:
         mem_used_mb = mem_after - mem_before
         mem_traced_mb = peak / 1024 / 1024
 
-        print(f"✅ Large query completed")
+        print("✅ Large query completed")
         print(f"   Rows: {rows:,}")
         print(f"   Duration: {duration:.4f}s")
         print(f"   Speed: {speed:,.0f} rows/sec")
@@ -259,7 +256,7 @@ def benchmark_query_ohlcv() -> Dict[str, Any]:
         mem_used_mb = mem_after - mem_before
         mem_traced_mb = peak / 1024 / 1024
 
-        print(f"✅ query_ohlcv() completed")
+        print("✅ query_ohlcv() completed")
         print(f"   Rows: {rows:,}")
         print(f"   Duration: {duration:.4f}s")
         print(f"   Speed: {speed:,.0f} rows/sec")
@@ -331,7 +328,7 @@ def print_summary(results, baseline_speed=27432):
             / standard_result["memory_traced_mb"]
             * 100
         )
-        print(f"\nMemory Comparison:")
+        print("\nMemory Comparison:")
         print(f"  Standard: {standard_result['memory_traced_mb']:.2f} MB")
         print(f"  Arrow: {arrow_result['memory_traced_mb']:.2f} MB")
         print(f"  Reduction: {mem_reduction:.1f}%")

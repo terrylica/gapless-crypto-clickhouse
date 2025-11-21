@@ -1,6 +1,7 @@
 """Tests for parameter aliases (start/end vs start_date/end_date)."""
 
 import pytest
+
 import gapless_crypto_clickhouse as gcd
 
 

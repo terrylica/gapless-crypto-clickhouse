@@ -12,9 +12,9 @@ Measures:
 """
 
 import time
-import os
 from datetime import datetime
 from pathlib import Path
+
 
 def measure_memory():
     """Get current memory usage in MB (simplified, no psutil)"""
@@ -271,18 +271,18 @@ def print_summary(results):
     if csv_result and ch_result:
         speedup = csv_result["duration_s"] / ch_result["duration_s"]
         print("\n" + "="*70)
-        print(f"📊 COMPARISON: CSV vs ClickHouse Download")
+        print("📊 COMPARISON: CSV vs ClickHouse Download")
         print(f"   Speedup: {speedup:.2f}x {'faster' if speedup > 1 else 'slower'}")
         print(f"   CSV time: {csv_result['duration_s']:.2f}s")
         print(f"   ClickHouse time: {ch_result['duration_s']:.2f}s")
 
         if speedup < 5:
-            print(f"\n⚠️  WARNING: Claimed '22x faster' not validated")
+            print("\n⚠️  WARNING: Claimed '22x faster' not validated")
             print(f"   Actual speedup: {speedup:.2f}x")
-            print(f"   This may be due to:")
-            print(f"   - Network speed differences")
-            print(f"   - Cache warming")
-            print(f"   - Dataset size (small test)")
+            print("   This may be due to:")
+            print("   - Network speed differences")
+            print("   - Cache warming")
+            print("   - Dataset size (small test)")
 
 def main():
     """Run all benchmarks"""

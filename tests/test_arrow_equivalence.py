@@ -8,8 +8,9 @@ Critical for proving v6.0.0 correctness (ADR-0023 performance optimization).
 **ADR**: ADR-0024 (Comprehensive Validation Canonicity)
 """
 
-import pytest
 import pandas as pd
+import pytest
+
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
 
