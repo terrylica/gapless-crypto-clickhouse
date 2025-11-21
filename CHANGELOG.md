@@ -2,6 +2,52 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.7...v7.0.0) (2025-11-21)
+
+### ⚠ BREAKING CHANGES
+
+* **cloud:** None (secure defaults to False for backward compatibility)
+
+Code Changes:
+- Add CLICKHOUSE_SECURE env var support for TLS/SSL connections (config.py)
+- Pass secure parameter to clickhouse-connect client (connection.py)
+- Add .env.cloud template for ClickHouse Cloud configuration
+
+Onboarding Skill (Claude Code CLI Optimized):
+- Create gapless-crypto-clickhouse-onboarding skill (workflow pattern)
+- Add test_connection_cloud.py script (Doppler + .env support)
+- Add troubleshooting.md (7 common errors + fixes)
+- Add doppler-setup.md (centralized credential management)
+- Add env-setup.md (local .env fallback method)
+
+Documentation:
+- Update CLAUDE.md with Company Employee Onboarding section
+- Add ADR-0026 for data pipeline design decision
+- Add plan/0026-clickhouse-cloud-data-pipeline/plan.md (Google Design Doc format)
+
+Fixes critical bug preventing ClickHouse Cloud connections (missing secure=True).
+Enables <15 minute onboarding for 3-10 company employees via Doppler or .env.
+
+Target Audience: Claude Code CLI users (company employees)
+Access Model: Binary (admins have full Cloud access, non-admins use file-based API)
+Credential Methods: Doppler (recommended) + .env (fallback)
+
+Refs: ADR-0026
+
+### Features
+
+* **cloud:** add secure parameter + onboarding skill for company ClickHouse Cloud access ([4a17c94](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4a17c944ba475f2f7f704cbdde9e46c87c40d025))
+* **release:** add automated PyPI publishing to semantic-release ([4dc9c3b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4dc9c3bd1e2108f4c014c0989ceaeb1ff6950497))
+
+### Bug Fixes
+
+* **ci:** add uv installation to semantic-release workflow ([2ee96b7](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2ee96b7fc3a4564ff17e084fa90b2a4ad99af1ac))
+* update tests for Binance symbol changes and correct CI badge URL ([e2e9253](https://github.com/terrylica/gapless-crypto-clickhouse/commit/e2e9253fa84ed56f9c6bcdb07c2d8fd05556da6e))
+
+### Documentation
+
+* **skills:** extract ClickHouse Cloud setup workflows into atomic skills ([a5ead69](https://github.com/terrylica/gapless-crypto-clickhouse/commit/a5ead691b1718d6bafec5512a6d0bc73e93b497b))
+
 ## [6.0.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.6...v6.0.7) (2025-11-21)
 
 ### Documentation
