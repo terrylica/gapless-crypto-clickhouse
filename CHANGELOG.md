@@ -12,32 +12,32 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### Bug Fixes
 
-* **ci:** separate slow integration tests from fast unit tests ([da01ff5](https://github.com/terrylica/gapless-crypto-clickhouse/commit/da01ff52bff03c7b8dc6a80e037e30e9480d0db7))
+- **ci:** separate slow integration tests from fast unit tests ([da01ff5](https://github.com/terrylica/gapless-crypto-clickhouse/commit/da01ff52bff03c7b8dc6a80e037e30e9480d0db7))
 
 ## [6.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.3...v6.0.4) (2025-11-21)
 
 ### Bug Fixes
 
-* **tests:** add 'slow' marker to pytest.ini (not pyproject.toml) ([2b99cf8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2b99cf8228c4be738a73d26e6f16fcb15b10dd3b))
+- **tests:** add 'slow' marker to pytest.ini (not pyproject.toml) ([2b99cf8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2b99cf8228c4be738a73d26e6f16fcb15b10dd3b))
 
 ## [6.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.2...v6.0.3) (2025-11-21)
 
 ### Bug Fixes
 
-* **e2e:** temporarily disable screenshot assertions ([8350b54](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8350b54cd023a5f1d478f515a13698e8f5c985d8))
-* **tests:** register pytest markers to fix test collection ([346a9d5](https://github.com/terrylica/gapless-crypto-clickhouse/commit/346a9d5f9e58e8952d7fc7ded84b9dfe24d7dddd))
+- **e2e:** temporarily disable screenshot assertions ([8350b54](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8350b54cd023a5f1d478f515a13698e8f5c985d8))
+- **tests:** register pytest markers to fix test collection ([346a9d5](https://github.com/terrylica/gapless-crypto-clickhouse/commit/346a9d5f9e58e8952d7fc7ded84b9dfe24d7dddd))
 
 ## [6.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.1...v6.0.2) (2025-11-21)
 
 ### Bug Fixes
 
-* **lint:** resolve Ruff linting errors blocking CI ([79b5185](https://github.com/terrylica/gapless-crypto-clickhouse/commit/79b518561009c0889c8b5f02991eeaac5d0a09e3))
+- **lint:** resolve Ruff linting errors blocking CI ([79b5185](https://github.com/terrylica/gapless-crypto-clickhouse/commit/79b518561009c0889c8b5f02991eeaac5d0a09e3))
 
 ## [6.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.0...v6.0.1) (2025-11-21)
 
 ### Documentation
 
-* add ADR-0024 implementation completion report ([8594101](https://github.com/terrylica/gapless-crypto-clickhouse/commit/85941014c4325483f39e1500aa4ded4715b56acf))
+- add ADR-0024 implementation completion report ([8594101](https://github.com/terrylica/gapless-crypto-clickhouse/commit/85941014c4325483f39e1500aa4ded4715b56acf))
 
 ## [6.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v5.0.0...v6.0.0) (2025-11-20)
 
