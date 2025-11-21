@@ -48,6 +48,18 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 **Key principle**: Spawn multiple investigation agents in parallel using single message with multiple Task calls → integrate findings → prioritize fixes by severity/impact
 
+### ClickHouse Cloud Setup
+
+**Production Infrastructure** - Credentials stored in Doppler (`aws-credentials/prd`) + 1Password (Engineering vault)
+
+- [`clickhouse-cloud-service-setup`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-service-setup/SKILL.md) - Fetch service details from ClickHouse Cloud API (organization ID, service endpoints, configuration)
+- [`clickhouse-cloud-credentials`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/SKILL.md) - Store API keys and connection details in Doppler + 1Password
+- [`clickhouse-cloud-connection`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/SKILL.md) - Test and validate ClickHouse Cloud connectivity
+
+**When to use**: Setting up new ClickHouse Cloud services, rotating credentials, validating cloud connections
+
+**Key principle**: Credentials proxied through Doppler/1Password, never hardcoded. Prescriptive workflows for repeatable cloud infrastructure setup.
+
 ## SDK Quality Standards
 
 **Primary Use Case**: Programmatic API consumption (`import gapless_crypto_clickhouse`) by downstream packages and AI coding agents
