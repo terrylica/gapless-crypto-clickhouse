@@ -107,9 +107,20 @@ class ClickHouseConnection:
             ) from e
 
     def __enter__(self) -> "ClickHouseConnection":
-        """Context manager entry."""
+        """Context manager entry with schema validation."""
         if not self.health_check():
             raise Exception("ClickHouse health check failed during context manager entry")
+
+        # Schema validation (ADR-0024)
+        from .schema_validator import SchemaValidator, SchemaValidationError
+        try:
+            validator = SchemaValidator(self)
+            validator.validate_schema()
+            logger.info("Schema validation passed")
+        except SchemaValidationError as e:
+            logger.error(f"Schema validation failed: {e}")
+            raise
+
         logger.debug("ClickHouse connection opened")
         return self
 

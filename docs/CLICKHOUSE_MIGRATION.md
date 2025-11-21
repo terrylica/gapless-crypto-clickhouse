@@ -55,7 +55,7 @@ Performance: 1,180 rows/sec (bulk insert), FINAL query overhead 10-30%
 | `symbol` (SYMBOL)                                 | `symbol` (LowCardinality(String))          | Space-efficient string               |
 | `timeframe` (SYMBOL)                              | `timeframe` (LowCardinality(String))       | Space-efficient string               |
 | `instrument_type` (SYMBOL)                        | `instrument_type` (LowCardinality(String)) | ADR-0004 futures support             |
-| `timestamp` (TIMESTAMP)                           | `timestamp` (DateTime64(3))                | Millisecond precision                |
+| `timestamp` (TIMESTAMP)                           | `timestamp` (DateTime64(6))                | Microsecond precision (ADR-0021)     |
 | `open`, `high`, `low`, `close`, `volume` (DOUBLE) | Float64                                    | Same precision                       |
 | `number_of_trades` (LONG)                         | Int64                                      | Same precision                       |
 | N/A                                               | `_version` (UInt64)                        | Deterministic hash for deduplication |

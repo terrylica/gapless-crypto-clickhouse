@@ -1,8 +1,8 @@
 ---
-version: "1.0.0"
-last_updated: "2025-10-27"
+version: "6.0.0"
+last_updated: "2025-11-20"
 canonical_source: true
-supersedes: []
+supersedes: ["1.0.0"]
 ---
 
 # Validation Architecture
@@ -12,6 +12,14 @@ supersedes: []
 5-layer validation engine with DuckDB-based persistence for CSV data quality assurance, optimized for AI coding agent queries and research workflows.
 
 **Version**: v3.3.0+ (DuckDB persistence added)
+
+**v6.0.0 Compatibility**: CSV validation system unchanged in v6.0.0. The Apache Arrow migration ([ADR-0023](../architecture/decisions/0023-arrow-migration.md)) only affected ClickHouse query layer. CSV validation continues to use DuckDB persistence with identical API and performance characteristics.
+
+**Related Validation Layers**:
+
+- For ClickHouse query validation, see [E2E Testing Guide](E2E_TESTING_GUIDE.md)
+- For query performance validation, see [ADR-0023](../architecture/decisions/0023-arrow-migration.md) and `benchmark_arrow_scale_analysis.py`
+- For validation architecture overview, see [Validation Architecture](ARCHITECTURE.md)
 
 ## Architecture Components
 

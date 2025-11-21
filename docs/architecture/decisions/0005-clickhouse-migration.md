@@ -8,6 +8,8 @@
 - Validation: 15/15 checks passed (100% success rate)
 - Migration guide: `docs/CLICKHOUSE_MIGRATION.md`
 
+**Note**: Schema initially used DateTime64(3) for millisecond precision. **Superseded by [ADR-0021](0021-um-futures-support.md)** which upgraded to DateTime64(6) for microsecond precision to support Binance Vision API changes (effective January 1, 2025).
+
 ## Context
 
 ### Problem Statement

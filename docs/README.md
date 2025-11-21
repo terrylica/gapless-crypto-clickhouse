@@ -49,6 +49,15 @@ For users leveraging ClickHouse database features:
 
 **Breaking Changes**: v4.0.0 introduces optional ClickHouse database support. File-based workflows remain supported for backward compatibility.
 
+### Validation System (v3.3.0+, v6.0.0 canonical)
+
+Comprehensive data quality validation framework:
+
+1. **[Validation Architecture](validation/ARCHITECTURE.md)** - Three-layer validation system (CSV, ClickHouse, Performance)
+2. **[Validation Overview](validation/OVERVIEW.md)** - 5-layer CSV validation pipeline with DuckDB persistence
+3. **[E2E Testing Guide](validation/E2E_TESTING_GUIDE.md)** - Playwright E2E validation with visual regression
+4. **[ADR-0024: Validation Canonicity](architecture/decisions/0024-comprehensive-validation-canonicity.md)** - v6.0.0 comprehensive validation update
+
 ## Development
 
 For contributors and developers:

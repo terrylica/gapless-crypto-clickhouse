@@ -165,7 +165,7 @@ grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
 
 | CSV Column | Database Column | Type          | Notes                      |
 | ---------- | --------------- | ------------- | -------------------------- |
-| `date`     | `timestamp`     | DateTime64(3) | Converted during ingestion |
+| `date`     | `timestamp`     | DateTime64(6) | Converted during ingestion |
 | `open`     | `open`          | Float64       | Direct mapping             |
 
 ...

@@ -22,6 +22,7 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 ### Validation System
 
+- [Validation Architecture](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/ARCHITECTURE.md) - Three-layer model (CSV/ClickHouse/Performance), v6.0.0 compatibility
 - [Validation Overview](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md) - 5-layer validation pipeline, DuckDB persistence
 - [ValidationStorage Specification](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md) - Database schema, API methods
 - [AI Agent Query Patterns](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md) - Common patterns for validation analysis

@@ -4,7 +4,7 @@ info:
   description: |
     Consolidated status of current system architecture for gapless-crypto-clickhouse.
     All references should point to this canonical source for current capabilities.
-  version: "1.0.0"
+  version: "6.0.0"
 
 paths: {}
 
@@ -15,15 +15,15 @@ components:
       properties:
         current_version:
           type: string
-          example: "1.0.0"
+          example: "6.0.0"
         architecture_complete:
           type: boolean
         capabilities:
           type: array
 
-# CURRENT ARCHITECTURE STATUS (2025-11-19)
+# CURRENT ARCHITECTURE STATUS (2025-11-20)
 x-current-status:
-  canonical_version: "v1.0.0"
+  canonical_version: "v6.0.0"
   architecture_phase: "PRODUCTION_READY"
 
   implemented_capabilities:

@@ -129,7 +129,7 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
 - `timeframe` (String): Candle interval (e.g., "1m", "1h")
 - `instrument_type` (String): Market type ("spot" or "um" for USDT-margined futures)
 - `data_source` (String): Source identifier ("binance_public_data")
-- `timestamp` (DateTime64(3)): Candle open time in UTC with millisecond precision
+- `timestamp` (DateTime64(6)): Candle open time in UTC with microsecond precision
 
 **OHLCV** (5 columns):
 
@@ -141,7 +141,7 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
 
 **Microstructure** (5 columns):
 
-- `close_time` (DateTime64(3)): Candle close time
+- `close_time` (DateTime64(6)): Candle close time in UTC with microsecond precision
 - `quote_asset_volume` (Float64): Quote asset volume
 - `number_of_trades` (Int64): Trade count in period
 - `taker_buy_base_asset_volume` (Float64): Taker buy base volume

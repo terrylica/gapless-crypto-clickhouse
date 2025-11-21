@@ -33,13 +33,13 @@ Gapless Crypto Data produces CSV files in 11-column microstructure format, provi
 
 | CSV Column Name                | Database Column Name           | Type          | Conversion               |
 | ------------------------------ | ------------------------------ | ------------- | ------------------------ |
-| `date`                         | `timestamp`                    | DateTime64(3) | Renamed during ingestion |
+| `date`                         | `timestamp`                    | DateTime64(6) | Renamed during ingestion |
 | `open`                         | `open`                         | Float64       | Direct mapping           |
 | `high`                         | `high`                         | Float64       | Direct mapping           |
 | `low`                          | `low`                          | Float64       | Direct mapping           |
 | `close`                        | `close`                        | Float64       | Direct mapping           |
 | `volume`                       | `volume`                       | Float64       | Direct mapping           |
-| `close_time`                   | `close_time`                   | DateTime64(3) | Direct mapping           |
+| `close_time`                   | `close_time`                   | DateTime64(6) | Direct mapping           |
 | `quote_asset_volume`           | `quote_asset_volume`           | Float64       | Direct mapping           |
 | `number_of_trades`             | `number_of_trades`             | Int64         | Direct mapping           |
 | `taker_buy_base_asset_volume`  | `taker_buy_base_asset_volume`  | Float64       | Direct mapping           |

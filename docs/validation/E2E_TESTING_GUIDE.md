@@ -1,7 +1,7 @@
 # E2E Testing Guide
 
-**Version**: 1.0.0
-**Last Updated**: 2025-11-19
+**Version**: 6.0.0
+**Last Updated**: 2025-11-20
 **ADR**: [ADR-0013](../architecture/decisions/0013-autonomous-validation-framework.md)
 
 ---
