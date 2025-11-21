@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.1...v6.0.2) (2025-11-21)
+
+### Bug Fixes
+
+* **lint:** resolve Ruff linting errors blocking CI ([79b5185](https://github.com/terrylica/gapless-crypto-clickhouse/commit/79b518561009c0889c8b5f02991eeaac5d0a09e3))
+
 ## [6.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.0...v6.0.1) (2025-11-21)
 
 ### Documentation
