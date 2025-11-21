@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.6...v6.0.7) (2025-11-21)
+
+### Documentation
+
+* **adr-0024:** mark implementation complete with CI validation ([dcdf461](https://github.com/terrylica/gapless-crypto-clickhouse/commit/dcdf4618f60aaa7e9033cf7bc168d45d9db749f1))
+* **adr-0024:** update completion report with final CI validation results ([8da00c4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8da00c409a23ead6fb2f6def508687f3f9a4277c))
+
 ## [6.0.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.5...v6.0.6) (2025-11-21)
 
 ### Bug Fixes
