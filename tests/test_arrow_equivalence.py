@@ -15,6 +15,7 @@ from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_arrow_standard_query_equivalence_simple():
     """Verify Arrow and standard queries return identical data for simple query."""
     query = "SELECT * FROM ohlcv FINAL WHERE symbol = 'BTCUSDT' AND timeframe = '1h' LIMIT 100"
@@ -34,6 +35,7 @@ def test_arrow_standard_query_equivalence_simple():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_arrow_standard_query_equivalence_large():
     """Verify Arrow and standard queries return identical data for large dataset (10K rows)."""
     query = """
@@ -63,6 +65,7 @@ def test_arrow_standard_query_equivalence_large():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_arrow_standard_column_order_preserved():
     """Verify Arrow preserves column ordering."""
     query = """
@@ -83,6 +86,7 @@ def test_arrow_standard_column_order_preserved():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_arrow_standard_data_types_match():
     """Verify Arrow and standard queries return same data types (especially DateTime64(6))."""
     query = """
@@ -117,6 +121,7 @@ def test_arrow_standard_data_types_match():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_arrow_standard_null_handling():
     """Verify Arrow and standard handle NULL values identically (funding_rate for spot)."""
     query = """
@@ -146,6 +151,7 @@ def test_arrow_standard_null_handling():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_arrow_standard_empty_result_set():
     """Verify Arrow and standard handle empty result sets identically."""
     query = """
@@ -166,6 +172,7 @@ def test_arrow_standard_empty_result_set():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_arrow_standard_single_row():
     """Verify Arrow and standard handle single-row result sets identically (edge case)."""
     query = """
@@ -194,6 +201,7 @@ def test_arrow_standard_single_row():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_arrow_standard_special_characters():
     """Verify Arrow and standard handle special characters identically (Unicode symbols)."""
     # Query with symbol that might have special handling
@@ -228,6 +236,7 @@ def test_arrow_standard_special_characters():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_arrow_standard_aggregation_equivalence():
     """Verify Arrow and standard return identical aggregation results."""
     query = """

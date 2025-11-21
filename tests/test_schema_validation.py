@@ -15,6 +15,7 @@ from gapless_crypto_clickhouse.clickhouse.schema_validator import (
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_schema_validation_passes_on_correct_schema():
     """Verify schema validator accepts correct schema.sql."""
     with ClickHouseConnection() as conn:
@@ -25,6 +26,7 @@ def test_schema_validation_passes_on_correct_schema():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_schema_validation_detects_missing_column():
     """Verify schema validator detects missing columns."""
     with ClickHouseConnection() as conn:
@@ -43,6 +45,7 @@ def test_schema_validation_detects_missing_column():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_schema_validation_detects_wrong_type():
     """Verify schema validator detects type mismatches (DateTime64(3) vs DateTime64(6))."""
     with ClickHouseConnection() as conn:
@@ -72,6 +75,7 @@ def test_schema_validation_detects_wrong_type():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_schema_validation_detects_wrong_engine():
     """Verify schema validator detects wrong engine (MergeTree vs ReplacingMergeTree).
 
@@ -122,6 +126,7 @@ def test_schema_validation_detects_wrong_engine():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_schema_validation_detects_missing_version_column():
     """Verify schema validator detects missing _version in ReplacingMergeTree.
 
@@ -172,6 +177,7 @@ def test_schema_validation_detects_missing_version_column():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_schema_validation_detects_wrong_partition_key():
     """Verify schema validator detects wrong partitioning.
 
@@ -222,6 +228,7 @@ def test_schema_validation_detects_wrong_partition_key():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_schema_validation_detects_wrong_sorting_key():
     """Verify schema validator detects wrong ORDER BY clause.
 
@@ -272,6 +279,7 @@ def test_schema_validation_detects_wrong_sorting_key():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_schema_validation_exception_propagation():
     """Verify SchemaValidationError propagates correctly (no silent failures)."""
     with ClickHouseConnection() as conn:

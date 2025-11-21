@@ -14,6 +14,7 @@ from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_clickhouse_connection_uses_http_port_8123():
     """Verify ClickHouseConnection uses HTTP port 8123 (not native TCP 9000).
 
@@ -37,6 +38,7 @@ def test_clickhouse_connection_uses_http_port_8123():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_http_protocol_health_check():
     """Verify health check via HTTP interface succeeds."""
     with ClickHouseConnection() as conn:
@@ -51,6 +53,7 @@ def test_http_protocol_health_check():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_http_query_execution():
     """Verify query execution via HTTP returns results."""
     with ClickHouseConnection() as conn:
@@ -70,6 +73,7 @@ def test_http_query_execution():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_http_query_execution_with_dataframe():
     """Verify HTTP queries can return DataFrames (Arrow-optimized path)."""
     with ClickHouseConnection() as conn:
@@ -83,6 +87,7 @@ def test_http_query_execution_with_dataframe():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_http_error_propagation_invalid_query():
     """Verify HTTP errors (400 Bad Request) are raised as exceptions for invalid queries."""
     with ClickHouseConnection() as conn:
@@ -99,6 +104,7 @@ def test_http_error_propagation_invalid_query():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_http_error_propagation_table_not_found():
     """Verify HTTP errors (404-like) are raised for non-existent tables."""
     with ClickHouseConnection() as conn:
@@ -114,6 +120,7 @@ def test_http_error_propagation_table_not_found():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_http_connection_context_manager_cleanup():
     """Verify HTTP connection is properly cleaned up after context exit."""
     # Create connection
@@ -132,6 +139,7 @@ def test_http_connection_context_manager_cleanup():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_http_concurrent_queries():
     """Verify multiple queries can execute in sequence via HTTP (connection reuse)."""
     with ClickHouseConnection() as conn:
@@ -147,6 +155,7 @@ def test_http_concurrent_queries():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_http_large_query_result():
     """Verify HTTP can handle large query results (1000+ rows)."""
     with ClickHouseConnection() as conn:
@@ -161,6 +170,7 @@ def test_http_large_query_result():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_http_query_with_parameters():
     """Verify HTTP queries support parameterized queries (prevent SQL injection)."""
     with ClickHouseConnection() as conn:

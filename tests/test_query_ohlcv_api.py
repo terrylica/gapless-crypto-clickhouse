@@ -20,6 +20,7 @@ from gapless_crypto_clickhouse import query_ohlcv
 
 @pytest.mark.integration
 @pytest.mark.slow
+@pytest.mark.slow
 def test_query_ohlcv_auto_ingestion_downloads_missing_data():
     """Verify query_ohlcv() downloads data if missing (auto-ingestion)."""
     # Query a small date range that might not exist
@@ -42,6 +43,7 @@ def test_query_ohlcv_auto_ingestion_downloads_missing_data():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_query_ohlcv_auto_ingestion_idempotent():
     """Verify query_ohlcv() is idempotent (repeated calls don't re-download)."""
     # First call (might download)
@@ -60,6 +62,7 @@ def test_query_ohlcv_auto_ingestion_idempotent():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_query_ohlcv_auto_ingest_false_raises_on_missing_data():
     """Verify query_ohlcv(auto_ingest=False) raises if data missing."""
     # Clear any existing data for a specific symbol/timeframe (if possible)
@@ -79,6 +82,7 @@ def test_query_ohlcv_auto_ingest_false_raises_on_missing_data():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 @pytest.mark.slow
 def test_query_ohlcv_auto_ingestion_respects_date_range():
     """Verify query_ohlcv() only downloads requested date range."""
@@ -108,6 +112,7 @@ def test_query_ohlcv_auto_ingestion_respects_date_range():
 
 @pytest.mark.integration
 @pytest.mark.slow
+@pytest.mark.slow
 def test_query_ohlcv_multi_symbol_list():
     """Verify query_ohlcv() handles list of symbols."""
     symbols = ["BTCUSDT", "ETHUSDT"]
@@ -126,6 +131,7 @@ def test_query_ohlcv_multi_symbol_list():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_query_ohlcv_multi_symbol_isolation():
     """Verify query_ohlcv() correctly isolates symbol data (no cross-contamination)."""
     symbols = ["BTCUSDT", "ETHUSDT"]
@@ -137,6 +143,7 @@ def test_query_ohlcv_multi_symbol_isolation():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_query_ohlcv_multi_symbol_empty_list_raises():
     """Verify query_ohlcv() raises on empty symbol list."""
     with pytest.raises(ValueError, match="symbol.*empty|symbol.*required"):
@@ -149,6 +156,7 @@ def test_query_ohlcv_multi_symbol_empty_list_raises():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 @pytest.mark.slow
 def test_query_ohlcv_spot_instrument_type():
     """Verify query_ohlcv() defaults to spot instrument type."""
@@ -166,6 +174,7 @@ def test_query_ohlcv_spot_instrument_type():
 @pytest.mark.integration
 @pytest.mark.slow
 @pytest.mark.skipif(True, reason="Futures data might not be available in test environment")
+@pytest.mark.slow
 def test_query_ohlcv_futures_instrument_type():
     """Verify query_ohlcv() handles futures-um instrument type."""
     df = query_ohlcv(
@@ -182,6 +191,7 @@ def test_query_ohlcv_futures_instrument_type():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 @pytest.mark.slow
 def test_query_ohlcv_instrument_type_isolation():
     """Verify query_ohlcv() isolates spot vs futures data."""
@@ -200,6 +210,7 @@ def test_query_ohlcv_instrument_type_isolation():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_query_ohlcv_invalid_symbol_raises():
     """Verify query_ohlcv() raises on invalid symbol."""
     with pytest.raises((ValueError, Exception), match="symbol|FAKESYMBOL|not found"):
@@ -207,6 +218,7 @@ def test_query_ohlcv_invalid_symbol_raises():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_query_ohlcv_invalid_timeframe_raises():
     """Verify query_ohlcv() raises on invalid timeframe."""
     with pytest.raises((ValueError, Exception), match="timeframe|99h|not.*support"):
@@ -220,6 +232,7 @@ def test_query_ohlcv_invalid_timeframe_raises():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_query_ohlcv_invalid_date_format_raises():
     """Verify query_ohlcv() raises on invalid date format."""
     with pytest.raises((ValueError, Exception), match="date|format|2024/01/01"):
@@ -238,6 +251,7 @@ def test_query_ohlcv_invalid_date_format_raises():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_query_ohlcv_empty_result_set():
     """Verify query_ohlcv() handles empty result sets gracefully."""
     # Query a date range in the far future (no data)
@@ -258,6 +272,7 @@ def test_query_ohlcv_empty_result_set():
 @pytest.mark.integration
 @pytest.mark.slow
 @pytest.mark.timeout(10)
+@pytest.mark.slow
 def test_query_ohlcv_large_date_range_performance():
     """Verify query_ohlcv() completes large queries in reasonable time (<10s)."""
     # Query a full year (should complete quickly with Arrow optimization)

@@ -20,6 +20,7 @@ from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHou
 
 @pytest.mark.integration
 @pytest.mark.slow
+@pytest.mark.slow
 def test_final_keyword_deduplicates_identical_rows():
     """Verify FINAL keyword deduplicates when same row ingested twice.
 
@@ -47,6 +48,7 @@ def test_final_keyword_deduplicates_identical_rows():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_final_keyword_without_final_may_return_duplicates():
     """Verify querying without FINAL may return duplicates (control test).
 
@@ -72,6 +74,7 @@ def test_final_keyword_without_final_may_return_duplicates():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_version_hash_determinism():
     """Verify identical inputs produce identical _version hashes."""
     # Create two identical rows
@@ -122,6 +125,7 @@ def test_version_hash_determinism():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_version_hash_collision_resistance():
     """Verify different rows produce different _version hashes (no collisions)."""
     # Generate 1000 similar rows
@@ -155,6 +159,7 @@ def test_version_hash_collision_resistance():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 @pytest.mark.slow
 def test_deduplication_across_ingestion_sessions():
     """Verify re-ingesting same month doesn't change row count (idempotency).
@@ -198,6 +203,7 @@ def test_deduplication_across_ingestion_sessions():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_deduplication_preserves_latest_version():
     """Verify ReplacingMergeTree keeps latest version when deduplicating.
 

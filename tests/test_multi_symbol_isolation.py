@@ -15,6 +15,7 @@ from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_btcusdt_query_does_not_return_ethusdt_data():
     """Verify BTCUSDT query doesn't return ETHUSDT data (no cross-contamination)."""
     with ClickHouseConnection() as conn:
@@ -41,6 +42,7 @@ def test_btcusdt_query_does_not_return_ethusdt_data():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 @pytest.mark.slow
 def test_multi_symbol_ingestion_isolation():
     """Verify ingesting BTCUSDT doesn't affect ETHUSDT queries (isolation)."""
@@ -77,6 +79,7 @@ def test_multi_symbol_ingestion_isolation():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_spot_futures_isolation():
     """Verify spot BTCUSDT doesn't appear in futures query (instrument_type isolation)."""
     with ClickHouseConnection() as conn:
@@ -120,6 +123,7 @@ def test_spot_futures_isolation():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_instrument_type_filter_correctness():
     """Verify instrument_type filter correctly isolates data."""
     with ClickHouseConnection() as conn:
@@ -143,6 +147,7 @@ def test_instrument_type_filter_correctness():
 
 
 @pytest.mark.integration
+@pytest.mark.slow
 def test_timeframe_isolation():
     """Verify 1h data doesn't appear in 4h query (timeframe isolation)."""
     with ClickHouseConnection() as conn:
