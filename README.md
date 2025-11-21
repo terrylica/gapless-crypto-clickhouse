@@ -6,7 +6,7 @@
 [![Downloads](https://img.shields.io/pypi/dm/gapless-crypto-clickhouse.svg)](https://pypi.org/project/gapless-crypto-clickhouse/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![UV Managed](https://img.shields.io/badge/uv-managed-blue.svg)](https://github.com/astral-sh/uv)
-[![Tests](https://github.com/terrylica/gapless-crypto-clickhouse/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/terrylica/gapless-crypto-clickhouse/actions)
+[![Tests](https://github.com/terrylica/gapless-crypto-clickhouse/workflows/CI/badge.svg)](https://github.com/terrylica/gapless-crypto-clickhouse/actions)
 [![AI Agent Ready](https://img.shields.io/badge/AI%20Agent-Ready-brightgreen.svg)](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/PROBE_USAGE_EXAMPLE.md)
 
 ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x faster via Binance public repository with persistent database storage, USDT-margined futures support, and production-ready ReplacingMergeTree schema.

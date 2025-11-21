@@ -39,10 +39,11 @@ class TestSimpleAPI:
         assert "ETHUSDT" in symbols
         assert "SOLUSDT" in symbols
 
-        # All symbols should be strings and end with USDT
+        # All symbols should be strings and end with common quote currencies
         for symbol in symbols:
             assert isinstance(symbol, str)
-            assert symbol.endswith("USDT")
+            # Binance supports multiple quote currencies (USDT, USDC, BUSD, BNB, BTC, ETH)
+            assert any(symbol.endswith(quote) for quote in ["USDT", "USDC", "BUSD", "BNB", "BTC", "ETH"])
 
     def test_get_supported_timeframes(self):
         """Test getting supported timeframe intervals"""
