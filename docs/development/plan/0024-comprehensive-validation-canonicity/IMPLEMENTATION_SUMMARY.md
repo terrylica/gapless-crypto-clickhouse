@@ -2,10 +2,10 @@
 
 **Status**: 🚀 **78% COMPLETE** (28/36 tasks)
 
-**Date**: 2025-11-20  
-**Version**: v6.0.0  
-**ADR**: [ADR-0024](docs/architecture/decisions/0024-comprehensive-validation-canonicity.md)  
-**Plan**: [Plan Document](docs/development/plan/0024-comprehensive-validation-canonicity/plan.md)
+**Date**: 2025-11-20
+**Version**: v6.0.0
+**ADR**: [ADR-0024](../../../architecture/decisions/0024-comprehensive-validation-canonicity.md)
+**Plan**: [Plan Document](plan.md)
 
 ---
 
