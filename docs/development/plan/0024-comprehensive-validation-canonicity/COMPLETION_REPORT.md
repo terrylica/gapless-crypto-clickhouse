@@ -86,6 +86,7 @@ Successfully implemented and validated ADR-0024 comprehensive validation system 
 ```
 
 **Test Separation Success**:
+
 - **Before fixes**: 39 ClickHouse tests failing in Fast Tests (no database)
 - **After fixes**: 0 ClickHouse tests in Fast Tests (65 moved to E2E job)
 
@@ -93,6 +94,7 @@ Successfully implemented and validated ADR-0024 comprehensive validation system 
 
 **Status**: ✅ Properly configured for E2E job execution
 **Count**: 55 tests across 6 files
+
 - test_arrow_equivalence.py (9 tests) - Arrow vs standard query equivalence
 - test_protocol_http.py (10 tests) - HTTP protocol validation
 - test_schema_validation.py (8 tests) - Runtime schema enforcement
@@ -105,6 +107,7 @@ Successfully implemented and validated ADR-0024 comprehensive validation system 
 ### E2E Tests (Playwright)
 
 **Status**: ⚠️ Partial (CH-UI connectivity issue, not blocking ADR-0024)
+
 - ClickHouse Play: 6 tests PASSED ✅
 - CH-UI: 6 tests FAILED (service connectivity) ⚠️
 
@@ -221,7 +224,7 @@ nothing to commit, working tree clean
 
 4. **Screenshot baseline generation**:
    - Status: Temporarily disabled pending Playwright API resolution
-   - Files: tests/e2e/**/*.png (12 baseline images)
+   - Files: tests/e2e/\*_/_.png (12 baseline images)
    - Process: Will auto-generate once API issue resolved
 
 ---
@@ -294,17 +297,20 @@ nothing to commit, working tree clean
 ## Recommendations
 
 ### Completed ✅
+
 1. ~~Push to remote~~ → Done (11 commits pushed)
 2. ~~Monitor CI~~ → Done (Run 19559900459 validated)
 3. ~~Validate test execution~~ → Done (354 unit tests passing, 65 integration tests properly excluded)
 
 ### Optional (Not Blocking)
+
 1. **Fix 3 pre-existing test failures** (existed before ADR-0024)
 2. **Debug CH-UI E2E connectivity** (ClickHouse Play tests passing)
 3. **Research Playwright screenshot API** (deferred to future work)
 4. **Create GitHub release** for v6.0.0 milestone (if desired)
 
 ### Future Enhancements
+
 1. **Upgrade pandas** to 2.2+ for Python 3.14 compatibility
 2. **Implement E2E screenshot baselines** once Playwright API resolved
 3. **Add visual regression** to automated CI checks
@@ -316,24 +322,28 @@ nothing to commit, working tree clean
 ADR-0024 implementation is **COMPLETE** and **CI-VALIDATED** ✅
 
 **Implementation Phase**: ✅ Complete (fece5db, 2025-11-20)
+
 - 3,142 insertions, 30 files modified
 - 55 integration tests created (140% of plan)
 - SchemaValidator with STRICT mode
 - Comprehensive documentation
 
 **CI Validation Phase**: ✅ Complete (1d1b818, 2025-11-21)
+
 - 354 unit tests passing
 - Linting/formatting passing
 - 65 integration tests properly configured
 - 5 semantic-release version bumps (6.0.1 → 6.0.5)
 
 **Confidence Level**: VERY HIGH
+
 - Code: Syntax-validated, linting/formatting passed
 - Tests: 354 passing, 55 integration tests marked
 - CI: Properly configured, test separation working
 - Documentation: Canonical, comprehensive, synchronized
 
 **Risk Level**: MINIMAL
+
 - 3 pre-existing test failures (unrelated to ADR-0024)
 - CH-UI E2E tests deferred (ClickHouse Play working)
 - Screenshot baselines deferred (API research needed)

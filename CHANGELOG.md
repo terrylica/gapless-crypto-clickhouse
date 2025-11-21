@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### Bug Fixes
 
-* **tests:** add [@pytest](https://github.com/pytest).mark.slow to all ClickHouse-dependent tests ([7368049](https://github.com/terrylica/gapless-crypto-clickhouse/commit/7368049c63b428208b1befbcec46fd0cf56a0287))
+- **tests:** add [@pytest](https://github.com/pytest).mark.slow to all ClickHouse-dependent tests ([7368049](https://github.com/terrylica/gapless-crypto-clickhouse/commit/7368049c63b428208b1befbcec46fd0cf56a0287))
 
 ## [6.0.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.4...v6.0.5) (2025-11-21)
 
