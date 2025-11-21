@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.0...v6.0.1) (2025-11-21)
+
+### Documentation
+
+* add ADR-0024 implementation completion report ([8594101](https://github.com/terrylica/gapless-crypto-clickhouse/commit/85941014c4325483f39e1500aa4ded4715b56acf))
+
 ## [6.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v5.0.0...v6.0.0) (2025-11-20)
 
 ### ⚠ BREAKING CHANGES
