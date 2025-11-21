@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.3...v6.0.4) (2025-11-21)
+
+### Bug Fixes
+
+* **tests:** add 'slow' marker to pytest.ini (not pyproject.toml) ([2b99cf8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2b99cf8228c4be738a73d26e6f16fcb15b10dd3b))
+
 ## [6.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.2...v6.0.3) (2025-11-21)
 
 ### Bug Fixes
