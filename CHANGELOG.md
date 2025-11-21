@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.5...v6.0.6) (2025-11-21)
+
+### Bug Fixes
+
+* **tests:** add [@pytest](https://github.com/pytest).mark.slow to all ClickHouse-dependent tests ([7368049](https://github.com/terrylica/gapless-crypto-clickhouse/commit/7368049c63b428208b1befbcec46fd0cf56a0287))
+
 ## [6.0.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.4...v6.0.5) (2025-11-21)
 
 ### Bug Fixes
