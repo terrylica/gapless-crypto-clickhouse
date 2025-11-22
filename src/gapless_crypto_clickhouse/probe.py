@@ -1,5 +1,5 @@
 """
-Probe module for AI agent discoverability (v6.0.0).
+Probe module for AI agent discoverability.
 
 Provides introspection capabilities for AI coding agents to discover:
 - Available query methods and their signatures

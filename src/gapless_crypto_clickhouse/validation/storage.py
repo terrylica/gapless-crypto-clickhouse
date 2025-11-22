@@ -9,7 +9,7 @@ Examples:
     >>> from gapless_crypto_clickhouse.validation.models import ValidationReport
     >>> from datetime import datetime, timezone
     >>>
-    >>> # Initialize storage (creates DB at ~/.cache/gapless-crypto-data/validation.duckdb)
+    >>> # Initialize storage (creates DB at ~/.cache/gapless-crypto-clickhouse/validation.duckdb)
     >>> storage = ValidationStorage()
     >>>
     >>> # Create a validation report
@@ -62,9 +62,9 @@ def get_validation_db_path() -> Path:
     Examples:
         >>> path = get_validation_db_path()
         >>> str(path)
-        '/Users/username/.cache/gapless-crypto-data/validation.duckdb'
+        '/Users/username/.cache/gapless-crypto-clickhouse/validation.duckdb'
     """
-    cache_dir = Path.home() / ".cache" / "gapless-crypto-data"
+    cache_dir = Path.home() / ".cache" / "gapless-crypto-clickhouse"
     cache_dir.mkdir(parents=True, exist_ok=True)
     return cache_dir / "validation.duckdb"
 

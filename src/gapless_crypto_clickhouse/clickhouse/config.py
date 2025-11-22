@@ -1,5 +1,5 @@
 """
-ClickHouse configuration for gapless-crypto-data v4.0.0.
+ClickHouse configuration for gapless-crypto-clickhouse.
 
 Environment variable support for connection parameters.
 Follows same pattern as QuestDBConfig (ADR-0003).

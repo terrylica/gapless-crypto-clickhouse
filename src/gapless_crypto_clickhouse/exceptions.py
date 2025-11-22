@@ -1,4 +1,4 @@
-"""Structured exception hierarchy for gapless-crypto-data.
+"""Structured exception hierarchy for gapless-crypto-clickhouse.
 
 Provides machine-parseable error details via .details dict attribute,
 enabling AI agents and downstream packages to programmatically handle errors.
@@ -17,7 +17,7 @@ from typing import Any
 
 
 class GaplessCryptoDataError(Exception):
-    """Base exception for all gapless-crypto-data errors.
+    """Base exception for all gapless-crypto-clickhouse errors.
 
     Provides structured error details via .details dict for machine-parseable
     error handling by AI agents and downstream packages.

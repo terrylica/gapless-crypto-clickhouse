@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Convenience API functions for gapless-crypto-data
+Convenience API functions for gapless-crypto-clickhouse
 
 Provides function-based API following financial data library conventions.
 Simple and intuitive data collection returning standard pandas DataFrames.
@@ -952,7 +952,7 @@ def get_info() -> dict:
 
     return {
         "version": __version__,
-        "name": "gapless-crypto-data",
+        "name": "gapless-crypto-clickhouse",
         "description": "Ultra-fast cryptocurrency data collection with zero gaps guarantee",
         "supported_symbols": get_supported_symbols(),
         "supported_timeframes": get_supported_timeframes(),

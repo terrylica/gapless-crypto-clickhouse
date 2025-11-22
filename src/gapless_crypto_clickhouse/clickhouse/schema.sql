@@ -1,4 +1,4 @@
--- ClickHouse Schema for gapless-crypto-data v4.0.0
+-- ClickHouse Schema for gapless-crypto-clickhouse
 -- ADR-0005: ClickHouse Migration for Future-Proofing
 --
 -- ReplacingMergeTree engine with deterministic versioning for zero-gap guarantee.

@@ -1,4 +1,4 @@
-"""ClickHouse Schema Validator for v6.0.0.
+"""ClickHouse Schema Validator for gapless-crypto-clickhouse.
 
 Validates runtime schema matches expected schema.sql definition.
 Raises SchemaValidationError on mismatch (no fallback, no retry).
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class ExpectedSchema:
-    """Expected ohlcv table schema (v4.0.0+ with DateTime64(6) microsecond precision).
+    """Expected ohlcv table schema with DateTime64(6) microsecond precision.
 
     Reference: src/gapless_crypto_clickhouse/clickhouse/schema.sql
     """

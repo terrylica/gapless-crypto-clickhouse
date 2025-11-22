@@ -1,5 +1,5 @@
 """
-ClickHouse Bulk Loader for gapless-crypto-clickhouse v6.0.0.
+ClickHouse Bulk Loader for gapless-crypto-clickhouse.
 
 Ultra-fast historical data ingestion from Binance Public Data Repository to ClickHouse.
 Preserves 22x speedup advantage of CloudFront CDN + zero-gap guarantee via deterministic versioning.

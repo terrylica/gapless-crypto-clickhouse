@@ -47,8 +47,8 @@ class ProbeAPI:
 
         api_map = {
             "metadata": {
-                "package": "gapless-crypto-data",
-                "version": "2.15.0",
+                "package": "gapless-crypto-clickhouse",
+                "version": self._get_version(),
                 "probe_version": "1.0.0",
                 "type": "cryptocurrency-data-collection",
                 "compatibility": "uv-native",
@@ -276,14 +276,18 @@ class ProbeAPI:
         return classes
 
     def _discover_cli(self) -> Dict[str, Any]:
-        """Discover CLI interface."""
+        """Discover CLI interface.
+
+        Note: This package provides a Python API only (no CLI interface).
+        For CLI-based workflows, use the parent package gapless-crypto-data.
+        """
         return {
-            "entry_point": "gapless-crypto-data",
-            "uv_usage": "uv run gapless-crypto-data",
+            "entry_point": None,
+            "uv_usage": "import gapless_crypto_clickhouse as gcd",
             "common_patterns": [
-                "uv run gapless-crypto-data --symbol BTCUSDT --timeframes 1h,4h",
-                "uv run gapless-crypto-data --fill-gaps --directory ./data",
-                "uv run gapless-crypto-data --symbol BTCUSDT,ETHUSDT --timeframes 1s,1d",
+                "import gapless_crypto_clickhouse as gcd; df = gcd.download('BTCUSDT', '1h')",
+                "from gapless_crypto_clickhouse import query_ohlcv; df = query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')",
+                "from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection; conn = ClickHouseConnection()",
             ],
         }
 

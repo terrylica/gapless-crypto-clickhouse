@@ -1,5 +1,5 @@
 """
-ClickHouse connection and schema management for gapless-crypto-data v4.0.0.
+ClickHouse connection and schema management for gapless-crypto-clickhouse.
 
 Provides ClickHouseConnection class for database operations using clickhouse-driver.
 Replaces QuestDB implementation (ADR-0003) for future-proofing and ecosystem maturity.

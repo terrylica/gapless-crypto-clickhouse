@@ -1,5 +1,5 @@
 """
-Query API for gapless-crypto-clickhouse v6.0.0.
+Query API for gapless-crypto-clickhouse.
 
 Provides unified query_ohlcv() function with lazy auto-ingestion addressing Alpha Forge's request.
 

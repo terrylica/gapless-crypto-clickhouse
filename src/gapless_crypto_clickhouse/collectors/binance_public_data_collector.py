@@ -783,7 +783,7 @@ class BinancePublicDataCollector:
         if trading_timeframe not in self.available_timeframes:
             print(f"❌ Timeframe '{trading_timeframe}' not available")
             print(f"📊 Available timeframes: {', '.join(self.available_timeframes)}")
-            print("💡 Use 'gapless-crypto-data --list-timeframes' for detailed descriptions")
+            print("💡 Use get_supported_timeframes() for detailed descriptions")
             return None
 
         # Generate monthly URLs

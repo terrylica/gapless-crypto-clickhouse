@@ -1,5 +1,5 @@
 """
-Standardized error handling framework for gapless-crypto-data.
+Standardized error handling framework for gapless-crypto-clickhouse.
 
 Provides consistent exception handling, logging, and error reporting across all modules.
 Eliminates duplicate error handling patterns and ensures consistent debugging experience.
@@ -12,7 +12,7 @@ from typing import Any, Callable, Dict, Optional, Union
 
 
 class GaplessCryptoError(Exception):
-    """Base exception for all gapless-crypto-data errors."""
+    """Base exception for all gapless-crypto-clickhouse errors."""
 
     def __init__(self, message: str, context: Optional[Dict[str, Any]] = None):
         super().__init__(message)

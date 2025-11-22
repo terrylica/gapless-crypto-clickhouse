@@ -11,7 +11,7 @@ SLO Targets:
     Maintainability: Follows XDG Base Directory Specification
 
 Architecture:
-    - Cache location: $HOME/.cache/gapless-crypto-data/etags.json
+    - Cache location: $HOME/.cache/gapless-crypto-clickhouse/etags.json
     - Standard library only (pathlib + json)
     - Exception-only failure (no silent fallbacks)
 """
@@ -57,7 +57,7 @@ class ETagCache:
 
         Args:
             cache_dir: Override default cache directory location.
-                      Default: $HOME/.cache/gapless-crypto-data/
+                      Default: $HOME/.cache/gapless-crypto-clickhouse/
 
         Raises:
             OSError: If cache directory creation fails
@@ -65,7 +65,7 @@ class ETagCache:
         if cache_dir is None:
             # Follow XDG Base Directory Specification
             home = Path.home()
-            self.cache_dir = home / ".cache" / "gapless-crypto-data"
+            self.cache_dir = home / ".cache" / "gapless-crypto-clickhouse"
         else:
             self.cache_dir = cache_dir
 

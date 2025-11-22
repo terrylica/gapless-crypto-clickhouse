@@ -1,5 +1,5 @@
 """
-Resume system for gapless-crypto-data.
+Resume system for gapless-crypto-clickhouse.
 
 Provides intelligent checkpointing and resume capabilities for large-scale data collection.
 """

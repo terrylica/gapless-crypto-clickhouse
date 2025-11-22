@@ -1,5 +1,5 @@
 """
-ClickHouse query interface for gapless-crypto-data v4.0.0.
+ClickHouse query interface for gapless-crypto-clickhouse.
 
 SQL query abstraction returning pandas DataFrames for backward compatibility.
 Provides high-level methods for common OHLCV queries with automatic connection management.

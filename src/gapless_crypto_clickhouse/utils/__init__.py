@@ -1,4 +1,4 @@
-"""Utility modules for gapless-crypto-data."""
+"""Utility modules for gapless-crypto-clickhouse."""
 
 from .error_handling import (
     DataCollectionError,

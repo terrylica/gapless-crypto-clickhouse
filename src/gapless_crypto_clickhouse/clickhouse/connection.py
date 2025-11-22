@@ -1,5 +1,5 @@
 """
-ClickHouse connection management for gapless-crypto-clickhouse v6.0.0.
+ClickHouse connection management for gapless-crypto-clickhouse.
 
 Provides context-managed connection to ClickHouse using clickhouse-connect with Apache Arrow support.
 Replaces clickhouse-driver (ADR-0023) for 3x faster queries and 4x less memory.
