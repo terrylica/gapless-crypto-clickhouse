@@ -93,8 +93,8 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "sed -i.bak 's/^version = \".*\"/version = \"${nextRelease.version}\"/' pyproject.toml && sed -i.bak 's/\"version\": \".*\"/\"version\": \"${nextRelease.version}\"/' package.json && rm -f pyproject.toml.bak package.json.bak && uv build",
-        "publishCmd": "UV_PUBLISH_TOKEN=$(doppler secrets get PYPI_TOKEN --project claude-config --config prd --plain) uv publish"
+        "_comment": "LOCAL-ONLY PUBLISHING: prepareCmd updates versions only (no building in CI). PyPI publishing happens locally via scripts/publish-to-pypi.sh using pypi-doppler skill. See docs/development/PUBLISHING.md for complete workflow.",
+        "prepareCmd": "sed -i.bak 's/^version = \".*\"/version = \"${nextRelease.version}\"/' pyproject.toml && sed -i.bak 's/\"version\": \".*\"/\"version\": \"${nextRelease.version}\"/' package.json && rm -f pyproject.toml.bak package.json.bak"
       }
     ],
     [

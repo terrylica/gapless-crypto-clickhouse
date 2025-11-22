@@ -5,6 +5,52 @@
 
 set -e
 
+# ============================================================================
+# CRITICAL: CI DETECTION GUARD (Prevents accidental CI execution)
+# ============================================================================
+# This script enforces WORKSPACE-WIDE POLICY: PyPI publishing must ONLY
+# happen on local machines, NEVER in CI/CD pipelines.
+# See: docs/development/PUBLISHING.md and ADR-0027
+# ============================================================================
+
+if [ -n "$CI" ] || [ -n "$GITHUB_ACTIONS" ] || [ -n "$GITLAB_CI" ] || [ -n "$JENKINS_URL" ] || [ -n "$CIRCLECI" ]; then
+    echo "❌ ERROR: This script must ONLY be run on your LOCAL machine"
+    echo ""
+    echo "   Detected CI environment variables:"
+    echo "   - CI: ${CI:-<not set>}"
+    echo "   - GITHUB_ACTIONS: ${GITHUB_ACTIONS:-<not set>}"
+    echo "   - GITLAB_CI: ${GITLAB_CI:-<not set>}"
+    echo "   - JENKINS_URL: ${JENKINS_URL:-<not set>}"
+    echo "   - CIRCLECI: ${CIRCLECI:-<not set>}"
+    echo ""
+    echo "   This project enforces LOCAL-ONLY PyPI publishing for:"
+    echo "   - Security: No long-lived PyPI tokens in GitHub secrets"
+    echo "   - Speed: 30 seconds locally vs 3-5 minutes in CI"
+    echo "   - Control: Manual approval step before production release"
+    echo ""
+    echo "   Publishing should NEVER happen in CI/CD pipelines."
+    echo "   This is a WORKSPACE-WIDE POLICY for all repositories."
+    echo ""
+    echo "   See: docs/development/PUBLISHING.md (ADR-0027)"
+    exit 1
+fi
+
+# ============================================================================
+# REPOSITORY VERIFICATION (Prevents fork abuse)
+# ============================================================================
+
+EXPECTED_REPO="terrylica/gapless-crypto-clickhouse"
+if [ -n "$GITHUB_REPOSITORY" ] && [ "$GITHUB_REPOSITORY" != "$EXPECTED_REPO" ]; then
+    echo "❌ ERROR: Wrong repository detected"
+    echo ""
+    echo "   Expected: $EXPECTED_REPO"
+    echo "   Got: $GITHUB_REPOSITORY"
+    echo ""
+    echo "   This script should only run in the official repository."
+    echo "   If you forked this repo, update EXPECTED_REPO in this script."
+    exit 1
+fi
+
 echo "🚀 Publishing to PyPI (Local Workflow)"
 echo "======================================"
 

@@ -56,6 +56,10 @@ jobs:
           GIT_COMMITTER_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
         run: semantic-release
+        # ⚠️ VERSIONING ONLY - NO PYPI PUBLISHING IN CI
+        # This workflow creates GitHub releases, tags, and CHANGELOG.md only.
+        # PyPI publishing happens locally via scripts/publish-to-pypi.sh (ADR-0027).
+        # See: docs/development/PUBLISHING.md for complete workflow.
 
       - name: Summary
         if: success()

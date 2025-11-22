@@ -37,6 +37,34 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 - [Publishing Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md) - PyPI publishing workflow
 - [`semantic-release`](/Users/terryli/.claude/skills/semantic-release/SKILL.md) - Automated versioning with Node.js semantic-release v25+, PyPI publishing with Doppler
 
+## PyPI Publishing Architecture
+
+**WORKSPACE-WIDE POLICY** (ADR-0027): All repositories enforce **local-only PyPI publishing**, never through CI/CD.
+
+**GitHub Actions Role** (Versioning Only):
+- ✅ Analyze conventional commits → determine version
+- ✅ Update `pyproject.toml`, `package.json` versions
+- ✅ Generate/update `CHANGELOG.md`
+- ✅ Create git tag + GitHub release
+- ✅ Commit version files back to repo `[skip ci]`
+- ❌ **NO** package building (removed from `.releaserc.json`)
+- ❌ **NO** PyPI publishing (publishCmd deleted entirely)
+
+**Local Publishing** (via `pypi-doppler` skill):
+- ✅ Pull latest release commit from GitHub
+- ✅ Build package locally (`uv build`)
+- ✅ Publish to PyPI (`uv publish` with Doppler credentials)
+- ✅ CI detection guards (blocks if CI=true)
+- ✅ Repository verification (prevents fork abuse)
+
+**Rationale**:
+- **Security**: No long-lived PyPI tokens in GitHub secrets
+- **Speed**: 30s local vs 3-5min CI
+- **Control**: Manual approval before production release
+- **Flexibility**: Centralized credential management via Doppler
+
+**Complete Workflow**: See [PUBLISHING.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md) for step-by-step guide, troubleshooting, and safety mechanisms.
+
 ### Validated Workflows
 
 **Multi-Agent Methodologies** - Extracted from production use (ClickHouse migration):
