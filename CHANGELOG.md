@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v7.1.0...v8.0.0) (2025-11-22)
+
+### ⚠ BREAKING CHANGES
+
+* Cache directory migrated from ~/.cache/gapless-crypto-data/ to ~/.cache/gapless-crypto-clickhouse/
+
+Users must manually clear old cache or migrate:
+- Clear: rm -rf ~/.cache/gapless-crypto-data/
+- Migrate: mv ~/.cache/gapless-crypto-data/ ~/.cache/gapless-crypto-clickhouse/
+
+Changes:
+- Replace all gapless-crypto-data → gapless-crypto-clickhouse in docstrings
+- Remove stale version strings (v3.x, v4.x, v5.x, v6.x) from module headers
+- Fix __probe__.py to reflect API-only interface (no CLI)
+- Update cache directory paths to match actual package name
+- Fix api.py get_info() to return correct package name
+
+Rationale:
+- Version strings in docstrings violate DRY (single source: __version__)
+- Cache directory should match package name to avoid conflicts
+- Package forked from gapless-crypto-data but docstrings not updated
+- __probe__.py incorrectly advertised CLI that never existed
+
+ADR: docs/architecture/decisions/0029-docstring-package-version-alignment.md
+Plan: docs/development/plan/0029-docstring-package-version-alignment/plan.md
+
+### Bug Fixes
+
+* align package references and remove stale version strings ([2e96cfd](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2e96cfd941ee0d2f00848bc6e563215b23d76ee6))
+
 ## [7.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v7.0.1...v7.1.0) (2025-11-22)
 
 ### Features
