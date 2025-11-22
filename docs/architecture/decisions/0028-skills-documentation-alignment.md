@@ -19,6 +19,7 @@ After implementing ADR-0027 (local-only PyPI publishing enforcement), a comprehe
 ## Investigation Summary
 
 **Multi-Agent Parallel Investigation** (DCTL methodology):
+
 - 5 sub-agents investigated global skills, project skills, pypi-doppler, semantic-release, and full documentation
 - **Global skills**: 5 of 6 aligned, 1 critical issue (pypi-doppler)
 - **Project skills**: All 4 aligned (ClickHouse infrastructure only)
@@ -36,6 +37,7 @@ After implementing ADR-0027 (local-only PyPI publishing enforcement), a comprehe
 ### Prevent Policy Violations
 
 AI agents following contradictory guidance could:
+
 - Recreate `publishCmd` in `.releaserc.json` (ADR-0027 explicitly deleted this)
 - Add Doppler credentials to GitHub secrets
 - Bypass CI detection guards
@@ -44,6 +46,7 @@ AI agents following contradictory guidance could:
 ### Maintain Single Source of Truth
 
 **Canonical Documentation**:
+
 - Policy: ADR-0027
 - Workflow: `docs/development/PUBLISHING.md`
 - Implementation: `scripts/publish-to-pypi.sh`
@@ -55,6 +58,7 @@ All other documentation must align with these sources.
 ### Option 1: Complete Rewrite of pypi-doppler Skill (SELECTED)
 
 **Approach**:
+
 - Remove ALL CI/CD publishing examples
 - Add workspace policy header with FORBIDDEN patterns
 - Reference canonical implementation (`scripts/publish-to-pypi.sh`)
@@ -62,25 +66,30 @@ All other documentation must align with these sources.
 - Add ADR-0027 cross-references
 
 **Pros**:
+
 - ✅ Prevents AI agents from reintroducing forbidden patterns
 - ✅ Clear single source of truth
 - ✅ Idiomatic alignment improves to 9-10/10
 - ✅ Enforces workspace-wide policy
 
 **Cons**:
+
 - Requires significant rewrite (~150 lines)
 - Removes "advanced" CI/CD options
 
 ### Option 2: Soft Update with Warnings
 
 **Approach**:
+
 - Keep CI/CD examples but add "⚠️ WORKSPACE POLICY VIOLATION" warnings
 - Less disruptive
 
 **Pros**:
+
 - Faster to implement
 
 **Cons**:
+
 - ❌ Users might skip warnings
 - ❌ Still shows forbidden patterns
 - ❌ Contradictory information remains
@@ -90,13 +99,16 @@ All other documentation must align with these sources.
 ### Option 3: Archive and Replace
 
 **Approach**:
+
 - Move to `pypi-doppler-deprecated/`
 - Create new `pypi-local-publishing` skill
 
 **Pros**:
+
 - Preserves history
 
 **Cons**:
+
 - ❌ Requires updating all references
 - ❌ Adds complexity
 - ❌ More files to maintain
@@ -114,6 +126,7 @@ All other documentation must align with these sources.
 **Location**: `~/.claude/skills/pypi-doppler/SKILL.md`
 
 **Changes**:
+
 - Add workspace policy statement at top
 - Delete semantic-release integration section (lines 158-174 showing `publishCmd`)
 - Delete GitHub Actions integration section (lines 221-237)
@@ -123,15 +136,18 @@ All other documentation must align with these sources.
 - Update description to emphasize LOCAL-ONLY constraint
 
 **New Sections**:
+
 ```markdown
 ## ⚠️ WORKSPACE-WIDE POLICY: LOCAL-ONLY PUBLISHING
 
 FORBIDDEN:
+
 - Publishing from GitHub Actions
 - Publishing from any CI/CD pipeline
 - `publishCmd` in semantic-release configuration
 
 REQUIRED:
+
 - Use `scripts/publish-to-pypi.sh` on local machine
 - CI detection guards in publish script
 - Manual approval before each release
@@ -146,6 +162,7 @@ Rationale: Security, Speed, Control (see ADR-0027)
 **Action**: Delete entirely
 
 **Rationale**:
+
 - Describes OIDC Trusted Publishing (superseded by ADR-0027 on 2025-11-22)
 - References wrong repository (`gapless-crypto-data` vs `gapless-crypto-clickhouse`)
 - References non-existent workflow (`publish.yml`)
@@ -156,11 +173,13 @@ Rationale: Security, Speed, Control (see ADR-0027)
 **File**: `docs/development/COMMANDS.md`
 
 **Changes**:
+
 - Delete lines 296-298 (Job 7: Publish to PyPI - phantom job)
 - Delete lines 300-318 (Continuous Deployment section - non-existent workflow)
 - Replace lines 333-346 (Manual Publishing) with ADR-0027 compliant workflow
 
 **New Content**:
+
 - Reference to `PUBLISHING.md` for complete workflow
 - Quick reference to `./scripts/publish-to-pypi.sh`
 - Key points: Doppler credentials, CI guards, local-only policy
@@ -170,23 +189,25 @@ Rationale: Security, Speed, Control (see ADR-0027)
 
 **Defense-in-Depth** (extends ADR-0027's 4 layers):
 
-| Layer | ADR-0027 Implementation | ADR-0028 Extension |
-|-------|------------------------|-------------------|
+| Layer                           | ADR-0027 Implementation              | ADR-0028 Extension                          |
+| ------------------------------- | ------------------------------------ | ------------------------------------------- |
 | **1. Configuration Prevention** | No `publishCmd` in `.releaserc.json` | pypi-doppler shows no `publishCmd` examples |
-| **2. Script Guards** | CI detection in `publish-to-pypi.sh` | pypi-doppler documents CI guards |
-| **3. Repository Verification** | Prevent fork abuse | pypi-doppler references canonical script |
-| **4. Documentation** | PUBLISHING.md | COMMANDS.md aligned |
-| **5. Skills Alignment** | (New) | pypi-doppler enforces workspace policy |
+| **2. Script Guards**            | CI detection in `publish-to-pypi.sh` | pypi-doppler documents CI guards            |
+| **3. Repository Verification**  | Prevent fork abuse                   | pypi-doppler references canonical script    |
+| **4. Documentation**            | PUBLISHING.md                        | COMMANDS.md aligned                         |
+| **5. Skills Alignment**         | (New)                                | pypi-doppler enforces workspace policy      |
 
 ### Validation
 
 **Consistency Verification**:
+
 - All ADR-0027 references resolve correctly
 - No remaining OIDC/CI-CD publishing references (16 search patterns validated)
 - semantic-release skill already aligned (no changes needed)
 - All project skills aligned (infrastructure only, no publishing concerns)
 
 **Expected Outcome**:
+
 - Internal consistency score: 6/10 → 10/10
 - pypi-doppler idiomatic alignment: 4/10 → 9-10/10
 - Files modified: 3 (skill + 2 docs)

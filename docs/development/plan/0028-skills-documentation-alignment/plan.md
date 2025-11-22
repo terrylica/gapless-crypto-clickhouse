@@ -2,8 +2,10 @@
 
 **ADR ID**: 0028
 **Date**: 2025-11-22
-**Status**: In Progress
+**Status**: Completed
 **Owner**: Terry Li
+**Completion Date**: 2025-11-22
+**Commit**: 08bf588
 
 ## Objective
 
@@ -24,6 +26,7 @@ Spawned 5 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 5. **Documentation Audit Agent**: Performed 16 search patterns, found only COMMANDS.md with issues
 
 **User Requirement** (explicit mandate):
+
 > "None of my workspace should be used CI/CD pipeline to publish ever again. Everything must not be used GitHub Actions to publish to PyPI but to use my publishing skill identified by pypi-doppler skill"
 
 ### Goals
@@ -87,15 +90,18 @@ Project Documentation (docs/)
 
 6. Read current pypi-doppler skill (if exists, else create from scratch)
 7. Add workspace policy header:
+
    ```markdown
    ## ⚠️ WORKSPACE-WIDE POLICY: LOCAL-ONLY PUBLISHING
 
    FORBIDDEN:
+
    - Publishing from GitHub Actions
    - Publishing from any CI/CD pipeline
    - `publishCmd` in semantic-release configuration
 
    REQUIRED:
+
    - Use `scripts/publish-to-pypi.sh` on local machine
    - CI detection guards prevent accidental CI execution
    - Manual approval before each release
@@ -113,6 +119,7 @@ Project Documentation (docs/)
    - Delete CI publishing steps
 
 10. Add CI detection guard documentation:
+
     ```markdown
     ## CI Detection Enforcement
 
@@ -124,7 +131,8 @@ Project Documentation (docs/)
     ```
 
 11. Add canonical implementation reference:
-    ```markdown
+
+    ````markdown
     ## Publishing Command (Local Machine Only)
 
     **CRITICAL**: This command must ONLY run on your local machine, NEVER in CI/CD.
@@ -136,9 +144,14 @@ Project Documentation (docs/)
     git pull origin main
     ./scripts/publish-to-pypi.sh
     ```
+    ````
+
+    ```
+
     ```
 
 12. Add ADR-0027 cross-references:
+
     ```markdown
     ## Related Documentation
 
@@ -165,7 +178,8 @@ Project Documentation (docs/)
     - Old OIDC Trusted Publishing workflow
 
 16. Replace lines 333-346 (Manual PyPI Publishing):
-    ```markdown
+
+    ````markdown
     ### PyPI Publishing
 
     **Canonical Guide**: See [PUBLISHING.md] for complete workflow.
@@ -179,6 +193,7 @@ Project Documentation (docs/)
     # Publish using Doppler-managed credentials
     ./scripts/publish-to-pypi.sh
     ```
+    ````
 
     **Key Points**:
     - ✅ Uses Doppler for credential management (no plaintext tokens)
@@ -187,6 +202,9 @@ Project Documentation (docs/)
     - ✅ ~30 seconds locally vs 3-5 minutes in CI
 
     **Why Local-Only?** See ADR-0027 for architectural decision.
+
+    ```
+
     ```
 
 #### Phase 5: Validation
@@ -207,6 +225,7 @@ Project Documentation (docs/)
 #### Phase 6: Commit
 
 20. Create conventional commit:
+
     ```
     docs(publish): align all skills and docs with ADR-0027 local-only policy
 
@@ -303,23 +322,26 @@ plugins:
   - - "@semantic-release/exec"
     - prepareCmd: |
         uv build  # ❌ ADR-0027 removed this from CI
-      publishCmd: |  # ❌ ADR-0027 deleted this entirely
+      publishCmd: | # ❌ ADR-0027 deleted this entirely
         UV_PUBLISH_TOKEN=$(doppler secrets get PYPI_TOKEN ...) uv publish
 ```
 
 **Evidence of Contradiction**:
+
 - ADR-0027 decision: "Delete `publishCmd` from `.releaserc.json` (cleanest approach)"
 - pypi-doppler shows: Exact `publishCmd` configuration ADR-0027 forbids
 - ADR-0027 decision: "Remove `uv build` from `prepareCmd`"
 - pypi-doppler shows: `uv build` in prepareCmd
 
 **PYPI_PUBLISHING_CONFIGURATION.yaml Issues**:
+
 - Version 2.6.0 (2025-09-18) - before ADR-0027 (2025-11-22)
 - Describes OIDC Trusted Publishing (superseded)
 - References `gapless-crypto-data` (wrong repository)
 - References `publish.yml` (workflow doesn't exist)
 
 **COMMANDS.md Issues**:
+
 - Lines 296-298: Describes phantom CI publishing job
 - Lines 300-318: Describes non-existent `publish.yml` workflow
 - Lines 333-346: Shows incomplete manual publishing (missing Doppler, CI guards, canonical script)
@@ -340,37 +362,39 @@ plugins:
 
 ## Task List
 
-**Status**: 1/9 tasks complete (11%)
+**Status**: 9/9 tasks complete (100%) ✅
 
 **Completed**:
 
 - [x] Create ADR-0028
+- [x] Create plan directory and plan.md
+- [x] Initialize log file
+- [x] Create pypi-doppler skill with workspace policy (from scratch, ADR-0027 aligned)
+- [x] Delete PYPI_PUBLISHING_CONFIGURATION.yaml
+- [x] Update COMMANDS.md with ADR-0027 workflow
+- [x] Validate all cross-references
+- [x] Create conventional commit (08bf588)
+- [x] Update plan.md with completion status
 
-**In Progress**:
+**Final Commit**: 08bf588
+**Total Changes**: 4 files changed, 656 insertions(+), 120 deletions(-)
+**Files Modified**:
 
-- [ ] Create plan directory and plan.md
-
-**Pending**:
-
-- [ ] Initialize log file
-- [ ] Rewrite pypi-doppler skill with workspace policy
-- [ ] Delete PYPI_PUBLISHING_CONFIGURATION.yaml
-- [ ] Update COMMANDS.md with ADR-0027 workflow
-- [ ] Validate all cross-references
-- [ ] Create conventional commit
-- [ ] Update plan.md with completion status
-
-**Sync with TodoWrite**: This task list mirrors TodoWrite tool state (9 todos tracked)
+- Created: `docs/architecture/decisions/0028-skills-documentation-alignment.md`
+- Created: `docs/development/plan/0028-skills-documentation-alignment/plan.md`
+- Created: `~/.claude/skills/pypi-doppler/SKILL.md` (workspace skill, not in git)
+- Deleted: `docs/PYPI_PUBLISHING_CONFIGURATION.yaml`
+- Updated: `docs/development/COMMANDS.md`
 
 ## Risks and Mitigations
 
-| Risk                                      | Impact | Mitigation                                                      |
-| ----------------------------------------- | ------ | --------------------------------------------------------------- |
-| pypi-doppler skill doesn't exist yet      | Low    | Create from scratch with ADR-0027 alignment from start          |
-| AI agents might reference old examples    | High   | Complete rewrite removes all forbidden patterns                 |
-| Future maintainers might add CI publishing| High   | Workspace policy header + ADR-0027 references prevent this      |
-| Documentation becomes stale               | Medium | Add date + ADR reference to each section                        |
-| Cross-reference links break               | Low    | Validate all links before committing                            |
+| Risk                                       | Impact | Mitigation                                                 |
+| ------------------------------------------ | ------ | ---------------------------------------------------------- |
+| pypi-doppler skill doesn't exist yet       | Low    | Create from scratch with ADR-0027 alignment from start     |
+| AI agents might reference old examples     | High   | Complete rewrite removes all forbidden patterns            |
+| Future maintainers might add CI publishing | High   | Workspace policy header + ADR-0027 references prevent this |
+| Documentation becomes stale                | Medium | Add date + ADR reference to each section                   |
+| Cross-reference links break                | Low    | Validate all links before committing                       |
 
 ## Timeline
 

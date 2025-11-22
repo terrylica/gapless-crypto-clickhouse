@@ -344,6 +344,7 @@ git pull origin main
 ```
 
 **Key Points**:
+
 - ✅ Uses Doppler for credential management (no plaintext tokens)
 - ✅ CI detection guards prevent accidental CI publishing
 - ✅ Repository verification prevents fork abuse
