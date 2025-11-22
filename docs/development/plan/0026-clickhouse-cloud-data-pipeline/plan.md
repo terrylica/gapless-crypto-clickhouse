@@ -237,35 +237,36 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 
 ## Task List
 
-**Status**: 5/21 tasks complete (24%)
+**Status**: 21/21 tasks complete (100%) ✅
 
-**Completed**:
+**All Tasks Completed**:
 
 - [x] Create ADR-0026
 - [x] Create plan directory and plan.md
 - [x] Initialize TodoWrite task list
 - [x] Initialize log file
-- [x] **In Progress** → Add secure parameter to ClickHouseConfig
+- [x] Add secure parameter to ClickHouseConfig
+- [x] Pass secure to clickhouse-connect client
+- [x] Create .env.cloud template
+- [x] Initialize onboarding skill
+- [x] Write SKILL.md
+- [x] Create scripts/test_connection_cloud.py
+- [x] Create references/troubleshooting.md
+- [x] Create references/doppler-setup.md
+- [x] Create references/env-setup.md
+- [x] Validate skill (passed marketplace validator)
+- [x] Test secure parameter with local Docker
+- [x] Update CLAUDE.md
+- [x] Run tests with Cloud configuration
+- [x] Verify build succeeds
+- [x] Create conventional commit
+- [x] Publish v7.0.0 to PyPI (semantic-release local-first workflow)
+- [x] Create GitHub v7.0.0 release
 
-**Pending**:
-
-- [ ] Pass secure to clickhouse-connect client
-- [ ] Create .env.cloud template
-- [ ] Initialize onboarding skill
-- [ ] Write SKILL.md
-- [ ] Create scripts/test_connection_cloud.py
-- [ ] Create references/troubleshooting.md
-- [ ] Create references/doppler-setup.md
-- [ ] Create references/env-setup.md
-- [ ] Validate skill
-- [ ] Test secure parameter with local Docker
-- [ ] Update CLAUDE.md
-- [ ] Run tests with Cloud configuration
-- [ ] Verify build succeeds
-- [ ] Create conventional commit
-- [ ] Log completion
-
-**Sync with TodoWrite**: This task list mirrors TodoWrite tool state (11 todos tracked)
+**Release Method**: Local-first semantic-release workflow (recommended by semantic-release skill)
+- GitHub Actions failed (doppler not installed, 403 PyPI auth)
+- Successfully completed via local `uv build` + `uv publish` with Doppler credentials
+- Total time: ~25 minutes (vs 2-5 min estimated for GitHub Actions if working)
 
 ## Risks and Mitigations
 
