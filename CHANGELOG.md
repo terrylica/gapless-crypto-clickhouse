@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v7.0.1...v7.1.0) (2025-11-22)
+
+### Features
+
+* **publish:** enforce local-only PyPI publishing workspace-wide ([62cd04e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/62cd04e97fd671a9aae45d54e332ae8432a7fe25))
+
+### Documentation
+
+* **publish:** align all skills and docs with ADR-0027 local-only policy ([cf02204](https://github.com/terrylica/gapless-crypto-clickhouse/commit/cf02204921fbf102f9cd8c1f63a80078e34926f4))
+
 ## [7.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v7.0.0...v7.0.1) (2025-11-22)
 
 ### Documentation
