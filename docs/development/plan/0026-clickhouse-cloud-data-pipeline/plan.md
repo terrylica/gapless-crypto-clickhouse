@@ -104,6 +104,7 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 #### Phase 3: Onboarding Skill Creation
 
 9. Initialize skill using marketplace script:
+
    ```bash
    /Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/init_skill.py gapless-crypto-clickhouse-onboarding --path ./skills/
    ```
@@ -138,6 +139,7 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 #### Phase 4: Validation
 
 15. Validate skill with marketplace validator:
+
     ```bash
     /Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py ./skills/gapless-crypto-clickhouse-onboarding/
     ```
@@ -155,6 +157,7 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 #### Phase 5: Testing
 
 18. Run tests with Cloud configuration:
+
     ```bash
     uv run pytest tests/ -v
     ```
@@ -167,6 +170,7 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 #### Phase 6: Commit
 
 20. Create conventional commit:
+
     ```
     feat(cloud): add secure parameter + onboarding skill for company ClickHouse Cloud access
 
@@ -264,19 +268,20 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 - [x] Create GitHub v7.0.0 release
 
 **Release Method**: Local-first semantic-release workflow (recommended by semantic-release skill)
+
 - GitHub Actions failed (doppler not installed, 403 PyPI auth)
 - Successfully completed via local `uv build` + `uv publish` with Doppler credentials
 - Total time: ~25 minutes (vs 2-5 min estimated for GitHub Actions if working)
 
 ## Risks and Mitigations
 
-| Risk                                      | Impact | Mitigation                                                      |
-| ----------------------------------------- | ------ | --------------------------------------------------------------- |
-| Tests fail with `secure=True` locally     | Medium | Test only validates parameter passing, Cloud test manual        |
-| Skill validation fails                    | Medium | Use quick_validate.py iteratively during development            |
-| CLAUDE.md Link Farm pattern inconsistent  | Low    | Follow existing ADR-0025 pattern exactly                        |
-| Doppler access not documented clearly     | High   | Create dedicated reference doc with step-by-step verification   |
-| .env fallback creates credential leakage  | High   | Add security warnings, confirm .env in .gitignore               |
+| Risk                                     | Impact | Mitigation                                                    |
+| ---------------------------------------- | ------ | ------------------------------------------------------------- |
+| Tests fail with `secure=True` locally    | Medium | Test only validates parameter passing, Cloud test manual      |
+| Skill validation fails                   | Medium | Use quick_validate.py iteratively during development          |
+| CLAUDE.md Link Farm pattern inconsistent | Low    | Follow existing ADR-0025 pattern exactly                      |
+| Doppler access not documented clearly    | High   | Create dedicated reference doc with step-by-step verification |
+| .env fallback creates credential leakage | High   | Add security warnings, confirm .env in .gitignore             |
 
 ## Timeline
 

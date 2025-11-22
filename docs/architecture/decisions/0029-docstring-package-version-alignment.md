@@ -16,6 +16,7 @@ Schema audit revealed 29 instances of outdated or incorrect package references a
 ### Root Cause
 
 This package was forked from `gapless-crypto-data` and migrated to ClickHouse architecture. During migration:
+
 - Module docstrings were copied without updating package references
 - Version numbers became stale as features evolved
 - CLI probe metadata was copied despite this package being API-only
@@ -30,6 +31,7 @@ This package was forked from `gapless-crypto-data` and migrated to ClickHouse ar
 ### Affected Files
 
 **Schema and ClickHouse modules** (5 files):
+
 - `clickhouse/schema.sql` - Header references gapless-crypto-data v4.0.0
 - `clickhouse/config.py` - Docstring references gapless-crypto-data v4.0.0
 - `clickhouse/__init__.py` - Docstring references gapless-crypto-data v4.0.0
@@ -37,6 +39,7 @@ This package was forked from `gapless-crypto-data` and migrated to ClickHouse ar
 - `clickhouse_query.py` - References gapless-crypto-data v4.0.0
 
 **Core modules** (5 files):
+
 - `api.py` - Docstring and get_info() name field
 - `exceptions.py` - Docstring header
 - `resume/__init__.py` - Docstring header
@@ -44,9 +47,11 @@ This package was forked from `gapless-crypto-data` and migrated to ClickHouse ar
 - `utils/error_handling.py` - Docstring header
 
 **Probe metadata** (1 file):
+
 - `__probe__.py` - Invalid CLI references (lines 50, 281-286)
 
 **Cache paths** (2 files):
+
 - `utils/etag_cache.py` - ~/.cache/gapless-crypto-data/
 - `validation/storage.py` - ~/.cache/gapless-crypto-data/
 
@@ -60,6 +65,7 @@ This package was forked from `gapless-crypto-data` and migrated to ClickHouse ar
 
 **Pros**: Fast, comprehensive
 **Cons**:
+
 - Version numbers become stale again immediately after next release
 - Violates DRY principle (version in multiple places)
 - High maintenance burden
@@ -67,22 +73,26 @@ This package was forked from `gapless-crypto-data` and migrated to ClickHouse ar
 ### Option 2: Remove Version Strings, Keep Package Name (SELECTED)
 
 **Approach**:
+
 - Replace package name: gapless-crypto-data → gapless-crypto-clickhouse
-- Remove explicit version strings from docstrings (use __version__ dynamically where needed)
-- Fix CLI references in __probe__.py (document API-only interface)
+- Remove explicit version strings from docstrings (use **version** dynamically where needed)
+- Fix CLI references in **probe**.py (document API-only interface)
 - Update cache directory paths to gapless-crypto-clickhouse (breaking change with migration)
 
 **Pros**:
-- Single source of truth for version (__version__ in __init__.py)
+
+- Single source of truth for version (**version** in **init**.py)
 - No future staleness issues
 - Clear package identity
 - Prevents copy-paste errors
 
 **Cons**:
+
 - Breaking change for cache directory migration
 - Requires users to clear old cache or migrate manually
 
 **Justification**:
+
 - Docstrings should describe WHAT and WHY, not version history
 - Version tracking belongs in CHANGELOG.md and git tags (semantic-release)
 - Cache directory should match actual package name to avoid conflicts
@@ -99,6 +109,7 @@ This package was forked from `gapless-crypto-data` and migrated to ClickHouse ar
 ### Phase 1: Package Name Corrections
 
 Replace all `gapless-crypto-data` → `gapless-crypto-clickhouse` in:
+
 - Module docstrings
 - Schema comments
 - Error messages
@@ -107,15 +118,17 @@ Replace all `gapless-crypto-data` → `gapless-crypto-clickhouse` in:
 ### Phase 2: Version String Removal
 
 Remove explicit version numbers from docstrings in:
+
 - clickhouse/schema.sql (remove v4.0.0, keep ADR-0021 reference to v3.2.0+ for historical context)
 - clickhouse/config.py
-- clickhouse/__init__.py
+- clickhouse/**init**.py
 - clickhouse/connection.py
 - clickhouse_query.py
 
 ### Phase 3: CLI Reference Cleanup
 
-Fix __probe__.py to document API-only interface:
+Fix **probe**.py to document API-only interface:
+
 - Remove invalid CLI entry_point references
 - Remove CLI uv_usage examples
 - Document correct Python API usage patterns
@@ -125,6 +138,7 @@ Fix __probe__.py to document API-only interface:
 **Breaking Change**: Update cache paths from `~/.cache/gapless-crypto-data/` to `~/.cache/gapless-crypto-clickhouse/`
 
 **Migration Strategy**:
+
 - Update code to use new path
 - Document breaking change in CHANGELOG.md
 - Provide migration note: users should clear old cache or copy manually
@@ -137,7 +151,7 @@ Fix __probe__.py to document API-only interface:
 - **Correctness**: Accurate package identity in all documentation
 - **Maintainability**: No version staleness (single source of truth)
 - **Observability**: Clear separation from parent package
-- **DRY Compliance**: Version managed in one place (__version__)
+- **DRY Compliance**: Version managed in one place (**version**)
 
 ### Negative
 
@@ -168,7 +182,7 @@ grep -r "\.cache/gapless-crypto-data" src/gapless_crypto_clickhouse/
 ### Manual Review
 
 - [ ] Schema docstring accurate
-- [ ] __probe__.py reflects API-only interface
+- [ ] **probe**.py reflects API-only interface
 - [ ] Cache directory paths updated
 - [ ] CHANGELOG.md documents breaking change
 - [ ] Tests pass
@@ -183,6 +197,7 @@ grep -r "\.cache/gapless-crypto-data" src/gapless_crypto_clickhouse/
 ## Notes
 
 **Cache Directory Breaking Change**: Users upgrading from v7.1.0 to v8.0.0 will need to:
+
 ```bash
 # Option 1: Clear old cache
 rm -rf ~/.cache/gapless-crypto-data/
@@ -192,6 +207,7 @@ mv ~/.cache/gapless-crypto-data/ ~/.cache/gapless-crypto-clickhouse/
 ```
 
 This is acceptable because:
+
 1. Cache is ephemeral (can be regenerated)
 2. Most users won't have existing cache
 3. Prevents conflicts between packages

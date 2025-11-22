@@ -129,18 +129,21 @@ Local Machine (scripts/publish-to-pypi.sh)
 #### Phase 5: Validation
 
 13. Test GitHub Actions workflow:
+
     ```bash
     # Push a test commit, verify GitHub release created
     # Check workflow logs for no publishing attempt
     ```
 
 14. Test local publishing script:
+
     ```bash
     ./scripts/publish-to-pypi.sh
     # Verify executes successfully
     ```
 
 15. Test CI detection:
+
     ```bash
     CI=true ./scripts/publish-to-pypi.sh
     # Verify blocks with error message
@@ -154,6 +157,7 @@ Local Machine (scripts/publish-to-pypi.sh)
 #### Phase 6: Commit
 
 17. Create conventional commit:
+
     ```
     feat(publish): enforce local-only PyPI publishing workspace-wide
 
@@ -218,15 +222,18 @@ Local Machine (scripts/publish-to-pypi.sh)
 ### Existing Configuration
 
 **Current `.releaserc.json`**:
+
 - Line 96: `prepareCmd` includes `&& uv build` (unnecessary in CI)
 - Line 97: `publishCmd` attempts PyPI publishing with Doppler (vulnerability)
 
 **Current `scripts/publish-to-pypi.sh`**:
+
 - No CI detection guards
 - No repository verification
 - Works locally but could be triggered in CI
 
 **Current Documentation**:
+
 - `PUBLISHING.md` describes old OIDC workflow (outdated)
 - No mention of local-only policy
 
@@ -275,12 +282,12 @@ Local Machine (scripts/publish-to-pypi.sh)
 
 ## Risks and Mitigations
 
-| Risk                                          | Impact | Mitigation                                                    |
-| --------------------------------------------- | ------ | ------------------------------------------------------------- |
+| Risk                                          | Impact | Mitigation                                                   |
+| --------------------------------------------- | ------ | ------------------------------------------------------------ |
 | GitHub Actions fails after publishCmd removal | Medium | Test dry-run first, semantic-release handles missing publish |
-| Local script fails with new CI guards         | Medium | Test with CI=true before committing                           |
-| Documentation becomes stale                   | Low    | Add date + ADR reference to each doc section                  |
-| Future maintainer re-adds publishCmd          | High   | Clear documentation + workspace policy in CLAUDE.md           |
+| Local script fails with new CI guards         | Medium | Test with CI=true before committing                          |
+| Documentation becomes stale                   | Low    | Add date + ADR reference to each doc section                 |
+| Future maintainer re-adds publishCmd          | High   | Clear documentation + workspace policy in CLAUDE.md          |
 
 ## Timeline
 

@@ -13,20 +13,24 @@
 Following ADR-0025 (ClickHouse Cloud skills extraction), we identified gaps in enabling company-wide usage of `gapless-crypto-clickhouse` package with ClickHouse Cloud credentials. Four parallel investigation agents (Infrastructure, Package Architecture, User Experience, Security) revealed:
 
 **Critical Blocker**:
+
 - Package cannot connect to ClickHouse Cloud (missing `secure=True` parameter for TLS/SSL)
 - Code fix required in `connection.py:93` and `config.py`
 
 **User Experience Gaps**:
+
 - No onboarding documentation for company employees using Claude Code CLI
 - No Cloud-specific `.env` template (current template is Docker localhost-only)
 - Skills are infrastructure-focused, not SDK end-user focused
 
 **Target Audience**:
+
 - 3-10 company employees (Claude Code CLI users)
 - All have admin access to ClickHouse Cloud (binary access model)
 - Non-admin employees use file-based API only (no ClickHouse features)
 
 **Design Constraints** (from user clarification):
+
 - Doppler + local `.env` fallback for credential access
 - No RBAC needed (all authorized users are trusted admins)
 - Documentation optimized for Claude Code CLI agent consumption
@@ -41,11 +45,13 @@ Implement robust data pipeline for company-wide ClickHouse Cloud access via:
 **Intent**: Enable TLS/SSL connections to ClickHouse Cloud
 
 **Abstractions**:
+
 - Add `secure` field to `ClickHouseConfig` dataclass
 - Load from `CLICKHOUSE_SECURE` environment variable (default: `false`)
 - Pass to `clickhouse_connect.get_client(secure=...)` parameter
 
 **Files**:
+
 - `src/gapless_crypto_clickhouse/clickhouse/config.py` (config layer)
 - `src/gapless_crypto_clickhouse/clickhouse/connection.py` (client layer)
 - `.env.example` (documentation)
@@ -59,12 +65,14 @@ Implement robust data pipeline for company-wide ClickHouse Cloud access via:
 **Pattern**: Workflow Pattern (prescriptive multi-step procedure)
 
 **Bundled Resources**:
+
 - `scripts/test_connection_cloud.py` - Connection validator with diagnostics
 - `references/troubleshooting.md` - Common errors + actionable fixes
 - `references/doppler-setup.md` - Doppler CLI configuration workflow
 - `references/env-setup.md` - Local `.env` file configuration (fallback)
 
 **Progressive Disclosure**:
+
 - **Level 1** (metadata): Name + description with trigger phrases ("onboarding", "company employees", "ClickHouse Cloud")
 - **Level 2** (SKILL.md): Step-by-step workflow (5-minute onboarding path)
 - **Level 3** (resources): Detailed troubleshooting, test scripts, Doppler setup
@@ -76,6 +84,7 @@ Implement robust data pipeline for company-wide ClickHouse Cloud access via:
 **Intent**: ClickHouse Cloud-specific environment variable template
 
 **Content**:
+
 - Service hostname pattern (`*.aws.clickhouse.cloud`)
 - Port 8443 (HTTPS, not 8123)
 - `CLICKHOUSE_SECURE=true` (required for Cloud)
@@ -89,6 +98,7 @@ Implement robust data pipeline for company-wide ClickHouse Cloud access via:
 **Pattern**: Link Farm + Hub-and-Spoke progressive disclosure
 
 **Content**:
+
 - Absolute path to onboarding skill
 - "When to use" trigger guidance
 - Key principle statement (Claude Code CLI optimized)

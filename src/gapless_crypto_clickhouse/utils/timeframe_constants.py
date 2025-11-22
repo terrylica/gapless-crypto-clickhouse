@@ -6,8 +6,8 @@ preventing calculation bugs.
 
 SLO Targets:
     Maintainability: Single source of truth eliminates 3+ code duplications
-    Correctness: All 13 timeframes map to accurate minute values
-    Availability: Supports full spectrum from 1s to 1d timeframes
+    Correctness: All 16 timeframes map to accurate minute values
+    Availability: Supports full spectrum from 1s to 1mo (13 standard + 3 exotic)
 """
 
 from datetime import timedelta

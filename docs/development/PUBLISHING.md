@@ -17,6 +17,7 @@ adr: "ADR-0027"
 > - ✅ **Local Machine**: Manual PyPI publishing via `./scripts/publish-to-pypi.sh`
 >
 > **Why Local-Only?**
+>
 > - **Security**: No long-lived PyPI tokens in GitHub secrets
 > - **Speed**: 30 seconds locally vs 3-5 minutes in CI
 > - **Control**: Manual approval step before production release
@@ -46,6 +47,7 @@ git push origin main
 ```
 
 **Conventional Commit Types**:
+
 - `feat:` - New feature (MINOR version bump)
 - `fix:` - Bug fix (PATCH version bump)
 - `docs:` - Documentation only (PATCH version bump)
@@ -60,6 +62,7 @@ git push origin main
 **Automatically happens** when you push to main with conventional commits.
 
 GitHub Actions workflow (`.github/workflows/release.yml`) will:
+
 1. ✅ Analyze commits using `@semantic-release/commit-analyzer`
 2. ✅ Determine next version (e.g., `v7.1.0`)
 3. ✅ Update `pyproject.toml`, `package.json` versions
@@ -85,6 +88,7 @@ git pull origin main
 ```
 
 **Expected output**:
+
 ```
 🚀 Publishing to PyPI (Local Workflow)
 ======================================
@@ -139,6 +143,7 @@ git pull origin main
 ```
 
 **Key Configuration** (`.releaserc.json`):
+
 ```json
 {
   "@semantic-release/exec": {
@@ -164,6 +169,7 @@ scripts/publish-to-pypi.sh
 ```
 
 **Credential Management**:
+
 - Token stored in Doppler: `claude-config/prd` → `PYPI_TOKEN`
 - Script retrieves token: `doppler secrets get PYPI_TOKEN --plain`
 - No plaintext token storage (encrypted Doppler vault)
@@ -173,6 +179,7 @@ scripts/publish-to-pypi.sh
 ### Layer 1: No Publishing Config in `.releaserc.json`
 
 **Configuration removed**:
+
 - ❌ `publishCmd` deleted entirely (cleanest approach)
 - ❌ `uv build` removed from `prepareCmd` (no artifacts in CI)
 
@@ -181,6 +188,7 @@ scripts/publish-to-pypi.sh
 ### Layer 2: CI Detection Guards in Script
 
 **Environment variables checked**:
+
 - `CI` - Generic CI indicator
 - `GITHUB_ACTIONS` - GitHub Actions
 - `GITLAB_CI` - GitLab CI
@@ -190,6 +198,7 @@ scripts/publish-to-pypi.sh
 **Behavior**: Script exits with error if any detected.
 
 **Test locally**:
+
 ```bash
 # This should FAIL with error message
 CI=true ./scripts/publish-to-pypi.sh
@@ -202,6 +211,7 @@ CI=true ./scripts/publish-to-pypi.sh
 ### Layer 3: Repository Verification
 
 **Checks**:
+
 - `GITHUB_REPOSITORY` environment variable
 - Must match: `terrylica/gapless-crypto-clickhouse`
 
@@ -210,8 +220,9 @@ CI=true ./scripts/publish-to-pypi.sh
 ### Layer 4: Documentation
 
 **Clear warnings in**:
+
 - This file (PUBLISHING.md)
-- `.releaserc.json` (_comment field)
+- `.releaserc.json` (\_comment field)
 - `.github/workflows/release.yml` (inline comment)
 - `CLAUDE.md` (project memory)
 
@@ -247,6 +258,7 @@ doppler secrets set PYPI_TOKEN='pypi-AgEIcHlwaS5vcmc...' --project claude-config
 **Symptom**: Script fails at Step 0
 
 **Fix**:
+
 ```bash
 # Verify token exists
 doppler secrets --project claude-config --config prd | grep PYPI_TOKEN
@@ -265,6 +277,7 @@ doppler secrets set PYPI_TOKEN='your-token' --project claude-config --config prd
 **Root Cause**: Token expired or invalid (PyPI requires 2FA since 2024)
 
 **Fix**:
+
 1. Verify 2FA enabled on PyPI account
 2. Create new token: https://pypi.org/manage/account/token/
 3. Update Doppler: `doppler secrets set PYPI_TOKEN='new-token' --project claude-config --config prd`
@@ -273,6 +286,7 @@ doppler secrets set PYPI_TOKEN='your-token' --project claude-config --config prd
 ### Issue: "Script blocked with CI detection error"
 
 **Symptom**:
+
 ```
 ❌ ERROR: This script must ONLY be run on your LOCAL machine
 Detected CI environment variables:
@@ -282,6 +296,7 @@ Detected CI environment variables:
 **Root Cause**: Running in CI environment OR `CI` variable set locally
 
 **Fix**:
+
 ```bash
 # Check if CI variable set in your shell
 env | grep CI
@@ -303,6 +318,7 @@ unset GITHUB_ACTIONS
 **Root Cause**: Didn't pull latest release commit from GitHub
 
 **Fix**:
+
 ```bash
 # Always pull before publishing
 git pull origin main
@@ -319,11 +335,13 @@ grep '^version = ' pyproject.toml
 **Symptom**: Release workflow shows red X
 
 **Possible Causes**:
+
 1. **Invalid conventional commit format** - Check commit message follows `type: description`
 2. **No version bump warranted** - `chore:` and `refactor:` don't trigger releases
 3. **`[skip ci]` in commit message** - Workflow intentionally skipped
 
 **Fix**:
+
 ```bash
 # Check recent workflow runs
 gh run list --workflow=release.yml --limit 3
@@ -341,6 +359,7 @@ gh run view <run-id> --log
 **Current setup** (v2.0.0): Local-only publishing with Doppler credential management.
 
 **Why changed**:
+
 - Workspace-wide policy: No CI/CD for PyPI publishing
 - Faster: 30s local vs 3-5min CI
 - More control: Manual approval before production release
@@ -353,6 +372,7 @@ gh run view <run-id> --log
 ### Q: Why not use GitHub Actions for publishing?
 
 **A**: Workspace-wide policy decision (ADR-0027). Benefits:
+
 - **Security**: No long-lived tokens in GitHub secrets
 - **Speed**: 10x faster (30s vs 3-5min)
 - **Control**: Manual review before each release
@@ -361,6 +381,7 @@ gh run view <run-id> --log
 ### Q: What if I want to publish from CI?
 
 **A**: Not supported by design. This is a workspace-wide policy for all repositories. If you need automated publishing, consider:
+
 1. Re-evaluate if manual control is valuable (it usually is)
 2. If absolutely necessary, fork and modify (not recommended)
 3. Discuss with repository owner about policy exceptions
@@ -401,6 +422,7 @@ uv publish --token "${PYPI_TOKEN}"
 ### Q: How do I publish a hotfix without waiting for GitHub Actions?
 
 **A**: You can't skip GitHub Actions versioning. Workflow:
+
 1. Push hotfix commit: `git commit -m "fix: critical bug"`
 2. Wait for GitHub Actions (~1 min)
 3. Pull and publish locally (~30s)

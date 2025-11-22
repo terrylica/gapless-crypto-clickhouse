@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection tool providing authentic Binance data with zero-gap guarantee. 22x faster than API-only approaches via Binance Public Data Repository (CloudFront CDN).
 
-**Core Capability**: Collect complete historical OHLCV data with microstructure metrics (11-column format) for 13 timeframes (1s to 1d) across 400+ trading pairs.
+**Core Capability**: Collect complete historical OHLCV data with microstructure metrics (11-column format) for 16 timeframes (13 standard: 1s-1d + 3 exotic: 3d, 1w, 1mo) across 400+ trading pairs.
 
 ## Quick Navigation
 
@@ -42,6 +42,7 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 **WORKSPACE-WIDE POLICY** (ADR-0027): All repositories enforce **local-only PyPI publishing**, never through CI/CD.
 
 **GitHub Actions Role** (Versioning Only):
+
 - ✅ Analyze conventional commits → determine version
 - ✅ Update `pyproject.toml`, `package.json` versions
 - ✅ Generate/update `CHANGELOG.md`
@@ -51,6 +52,7 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 - ❌ **NO** PyPI publishing (publishCmd deleted entirely)
 
 **Local Publishing** (via `pypi-doppler` skill):
+
 - ✅ Pull latest release commit from GitHub
 - ✅ Build package locally (`uv build`)
 - ✅ Publish to PyPI (`uv publish` with Doppler credentials)
@@ -58,6 +60,7 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 - ✅ Repository verification (prevents fork abuse)
 
 **Rationale**:
+
 - **Security**: No long-lived PyPI tokens in GitHub secrets
 - **Speed**: 30s local vs 3-5min CI
 - **Control**: Manual approval before production release

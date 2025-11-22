@@ -62,10 +62,11 @@ def example_ultra_high_frequency_collection():
     except Exception as e:
         print(f"❌ Extended collection error: {e}")
 
-    print("\n💡 Note: All 13 timeframes supported with intelligent fallback system")
+    print("\n💡 Note: All 16 timeframes supported with intelligent fallback system")
     print("   • Ultra-high frequency: 1s (use short date ranges)")
     print("   • Standard: 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h")
     print("   • Extended: 6h, 8h, 12h, 1d (automatic monthly-to-daily fallback)")
+    print("   • Exotic: 3d, 1w, 1mo")
     print()
 
 

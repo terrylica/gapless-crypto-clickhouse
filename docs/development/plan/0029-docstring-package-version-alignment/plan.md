@@ -11,14 +11,16 @@ Correct 29 instances of outdated package references and version strings across t
 ## Background
 
 Schema audit revealed systematic staleness in docstrings and package references:
+
 - **13 instances**: Wrong package name (gapless-crypto-data → gapless-crypto-clickhouse)
 - **6 instances**: Outdated version strings (v3.2.0, v4.0.0, v6.0.0)
-- **6 instances**: Invalid CLI references in __probe__.py (package is API-only)
+- **6 instances**: Invalid CLI references in **probe**.py (package is API-only)
 - **4 instances**: Inconsistent cache directory paths
 
 **Root Cause**: Fork from gapless-crypto-data without systematic reference updates
 
 **Impact**:
+
 - Correctness: Misleading user-facing documentation
 - Maintainability: Version staleness and technical debt
 - Observability: Unclear package boundaries
@@ -28,6 +30,7 @@ Schema audit revealed systematic staleness in docstrings and package references:
 ### Phase 1: Schema and ClickHouse Modules (5 files)
 
 **Files**:
+
 1. `clickhouse/schema.sql` - Fix header comment
 2. `clickhouse/config.py` - Fix module docstring
 3. `clickhouse/__init__.py` - Fix module docstring
@@ -35,6 +38,7 @@ Schema audit revealed systematic staleness in docstrings and package references:
 5. `clickhouse_query.py` - Fix module docstring
 
 **Changes**:
+
 - Replace: `gapless-crypto-data` → `gapless-crypto-clickhouse`
 - Remove: Explicit version strings (v4.0.0, v6.0.0)
 - Preserve: ADR references with historical context (e.g., "ADR-0021, v3.2.0+")
@@ -42,6 +46,7 @@ Schema audit revealed systematic staleness in docstrings and package references:
 ### Phase 2: Core Modules (5 files)
 
 **Files**:
+
 1. `api.py` - Fix docstring + get_info() return value
 2. `exceptions.py` - Fix module docstring
 3. `resume/__init__.py` - Fix module docstring
@@ -49,6 +54,7 @@ Schema audit revealed systematic staleness in docstrings and package references:
 5. `utils/error_handling.py` - Fix module docstring
 
 **Changes**:
+
 - Replace: `gapless-crypto-data` → `gapless-crypto-clickhouse`
 - Fix: `api.py:955` name field in get_info() function
 
@@ -57,6 +63,7 @@ Schema audit revealed systematic staleness in docstrings and package references:
 **File**: `__probe__.py`
 
 **Changes**:
+
 - Remove: Lines 281-286 (invalid CLI references)
 - Update: Line 50 package name
 - Replace: CLI examples with API usage patterns
@@ -66,10 +73,12 @@ Schema audit revealed systematic staleness in docstrings and package references:
 ### Phase 4: Cache Directory Migration (2 files)
 
 **Files**:
+
 1. `utils/etag_cache.py` - Lines 14, 68
 2. `validation/storage.py` - Lines 12, 65, 67
 
 **Changes**:
+
 - Replace: `~/.cache/gapless-crypto-data/` → `~/.cache/gapless-crypto-clickhouse/`
 
 **Breaking Change**: Users must clear or migrate cache manually
@@ -77,6 +86,7 @@ Schema audit revealed systematic staleness in docstrings and package references:
 ### Phase 5: Validation
 
 **Automated Checks**:
+
 ```bash
 # No stray package name references (except migration docs)
 grep -r "gapless-crypto-data" src/ | grep -v "__init__.py" | grep -v "migration"
@@ -89,6 +99,7 @@ grep -r "\.cache/gapless-crypto-data" src/
 ```
 
 **Tests**:
+
 ```bash
 uv run pytest -xvs  # All tests must pass
 ```
@@ -96,6 +107,7 @@ uv run pytest -xvs  # All tests must pass
 ### Phase 6: Documentation
 
 Update CHANGELOG.md with breaking change note:
+
 ```markdown
 ## [8.0.0] - YYYY-MM-DD
 
@@ -111,21 +123,24 @@ Update CHANGELOG.md with breaking change note:
 ### Files Changed (Total: 13)
 
 **Schema/ClickHouse** (5):
+
 - clickhouse/schema.sql
 - clickhouse/config.py
-- clickhouse/__init__.py
+- clickhouse/**init**.py
 - clickhouse/connection.py
 - clickhouse_query.py
 
 **Core Modules** (5):
+
 - api.py
 - exceptions.py
-- resume/__init__.py
-- utils/__init__.py
+- resume/**init**.py
+- utils/**init**.py
 - utils/error_handling.py
 
 **Metadata/Cache** (3):
-- __probe__.py
+
+- **probe**.py
 - utils/etag_cache.py
 - validation/storage.py
 
@@ -152,12 +167,12 @@ Update CHANGELOG.md with breaking change note:
 
 - [ ] **Task 1**: Fix schema.sql header (package name, remove version)
 - [ ] **Task 2**: Fix clickhouse/config.py docstring
-- [ ] **Task 3**: Fix clickhouse/__init__.py docstring
+- [ ] **Task 3**: Fix clickhouse/**init**.py docstring
 - [ ] **Task 4**: Fix clickhouse/connection.py docstring
 - [ ] **Task 5**: Fix clickhouse_query.py docstring
 - [ ] **Task 6**: Fix api.py docstring + get_info() name field
-- [ ] **Task 7**: Fix exceptions.py, resume/__init__.py, utils/__init__.py, utils/error_handling.py
-- [ ] **Task 8**: Fix __probe__.py CLI references
+- [ ] **Task 7**: Fix exceptions.py, resume/**init**.py, utils/**init**.py, utils/error_handling.py
+- [ ] **Task 8**: Fix **probe**.py CLI references
 - [ ] **Task 9**: Update cache directory paths (etag_cache.py, storage.py)
 - [ ] **Task 10**: Run validation checks (grep + tests)
 - [ ] **Task 11**: Update CHANGELOG.md with breaking change note
@@ -186,7 +201,7 @@ Update CHANGELOG.md with breaking change note:
 
 ## Success Criteria
 
-- [ ] Zero grep matches for "gapless-crypto-data" (except __init__.py migration notes)
+- [ ] Zero grep matches for "gapless-crypto-data" (except **init**.py migration notes)
 - [ ] Zero grep matches for stale version strings (v3.x, v4.x, v6.x)
 - [ ] All tests pass (uv run pytest)
 - [ ] CHANGELOG.md documents breaking change

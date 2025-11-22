@@ -55,7 +55,17 @@ class ValidationReport(BaseModel):
     )
     file_path: str = Field(description="Absolute path to validated CSV file")
     file_size_mb: float = Field(description="File size in megabytes", ge=0)
-    validator_version: str = Field(default="3.3.0", description="Validator version (SemVer)")
+    validator_version: str = Field(
+        default="3.3.0",
+        description=(
+            "Validator algorithm version (SemVer, independent of package version). "
+            "Tracks validation logic changes for historical report comparability. "
+            "Current: 3.3.0 represents 5-layer validation pipeline (structure + datetime + OHLCV + coverage + anomaly). "
+            "Inherited from gapless-crypto-data v2.15.0 during fork. "
+            "Bump when: add/remove validation layers, change algorithms, modify report schema. "
+            "Do NOT bump for: bug fixes, package version changes, non-validation features."
+        )
+    )
 
     # Extracted context from file path
     symbol: Optional[str] = Field(

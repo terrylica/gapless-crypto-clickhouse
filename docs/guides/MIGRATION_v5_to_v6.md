@@ -238,7 +238,7 @@ print(caps["query_methods"]["query_ohlcv"])
 symbols = probe.get_supported_symbols()  # 713 symbols
 
 # Get supported timeframes
-timeframes = probe.get_supported_timeframes()  # 13 timeframes
+timeframes = probe.get_supported_timeframes()  # 16 timeframes
 
 # Get performance info
 perf = probe.get_performance_info()

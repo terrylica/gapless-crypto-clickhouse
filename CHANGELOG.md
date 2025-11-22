@@ -6,60 +6,65 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### ⚠ BREAKING CHANGES
 
-* Cache directory migrated from ~/.cache/gapless-crypto-data/ to ~/.cache/gapless-crypto-clickhouse/
+- Cache directory migrated from ~/.cache/gapless-crypto-data/ to ~/.cache/gapless-crypto-clickhouse/
 
 Users must manually clear old cache or migrate:
+
 - Clear: rm -rf ~/.cache/gapless-crypto-data/
 - Migrate: mv ~/.cache/gapless-crypto-data/ ~/.cache/gapless-crypto-clickhouse/
 
 Changes:
+
 - Replace all gapless-crypto-data → gapless-crypto-clickhouse in docstrings
 - Remove stale version strings (v3.x, v4.x, v5.x, v6.x) from module headers
-- Fix __probe__.py to reflect API-only interface (no CLI)
+- Fix **probe**.py to reflect API-only interface (no CLI)
 - Update cache directory paths to match actual package name
 - Fix api.py get_info() to return correct package name
 
 Rationale:
-- Version strings in docstrings violate DRY (single source: __version__)
+
+- Version strings in docstrings violate DRY (single source: **version**)
 - Cache directory should match package name to avoid conflicts
 - Package forked from gapless-crypto-data but docstrings not updated
-- __probe__.py incorrectly advertised CLI that never existed
+- **probe**.py incorrectly advertised CLI that never existed
 
 ADR: docs/architecture/decisions/0029-docstring-package-version-alignment.md
 Plan: docs/development/plan/0029-docstring-package-version-alignment/plan.md
 
 ### Bug Fixes
 
-* align package references and remove stale version strings ([2e96cfd](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2e96cfd941ee0d2f00848bc6e563215b23d76ee6))
+- align package references and remove stale version strings ([2e96cfd](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2e96cfd941ee0d2f00848bc6e563215b23d76ee6))
 
 ## [7.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v7.0.1...v7.1.0) (2025-11-22)
 
 ### Features
 
-* **publish:** enforce local-only PyPI publishing workspace-wide ([62cd04e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/62cd04e97fd671a9aae45d54e332ae8432a7fe25))
+- **publish:** enforce local-only PyPI publishing workspace-wide ([62cd04e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/62cd04e97fd671a9aae45d54e332ae8432a7fe25))
 
 ### Documentation
 
-* **publish:** align all skills and docs with ADR-0027 local-only policy ([cf02204](https://github.com/terrylica/gapless-crypto-clickhouse/commit/cf02204921fbf102f9cd8c1f63a80078e34926f4))
+- **publish:** align all skills and docs with ADR-0027 local-only policy ([cf02204](https://github.com/terrylica/gapless-crypto-clickhouse/commit/cf02204921fbf102f9cd8c1f63a80078e34926f4))
 
 ## [7.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v7.0.0...v7.0.1) (2025-11-22)
 
 ### Documentation
 
-* **adr-0026:** mark implementation complete with v7.0.0 release ([5ef87a7](https://github.com/terrylica/gapless-crypto-clickhouse/commit/5ef87a74402cdc090d9095a6845ec62ce77b457c))
+- **adr-0026:** mark implementation complete with v7.0.0 release ([5ef87a7](https://github.com/terrylica/gapless-crypto-clickhouse/commit/5ef87a74402cdc090d9095a6845ec62ce77b457c))
 
 ## [7.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.7...v7.0.0) (2025-11-21)
 
 ### ⚠ BREAKING CHANGES
 
-* **cloud:** None (secure defaults to False for backward compatibility)
+- **cloud:** None (secure defaults to False for backward compatibility)
 
 Code Changes:
+
 - Add CLICKHOUSE_SECURE env var support for TLS/SSL connections (config.py)
 - Pass secure parameter to clickhouse-connect client (connection.py)
 - Add .env.cloud template for ClickHouse Cloud configuration
 
 Onboarding Skill (Claude Code CLI Optimized):
+
 - Create gapless-crypto-clickhouse-onboarding skill (workflow pattern)
 - Add test_connection_cloud.py script (Doppler + .env support)
 - Add troubleshooting.md (7 common errors + fixes)
@@ -67,6 +72,7 @@ Onboarding Skill (Claude Code CLI Optimized):
 - Add env-setup.md (local .env fallback method)
 
 Documentation:
+
 - Update CLAUDE.md with Company Employee Onboarding section
 - Add ADR-0026 for data pipeline design decision
 - Add plan/0026-clickhouse-cloud-data-pipeline/plan.md (Google Design Doc format)
@@ -82,17 +88,17 @@ Refs: ADR-0026
 
 ### Features
 
-* **cloud:** add secure parameter + onboarding skill for company ClickHouse Cloud access ([4a17c94](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4a17c944ba475f2f7f704cbdde9e46c87c40d025))
-* **release:** add automated PyPI publishing to semantic-release ([4dc9c3b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4dc9c3bd1e2108f4c014c0989ceaeb1ff6950497))
+- **cloud:** add secure parameter + onboarding skill for company ClickHouse Cloud access ([4a17c94](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4a17c944ba475f2f7f704cbdde9e46c87c40d025))
+- **release:** add automated PyPI publishing to semantic-release ([4dc9c3b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4dc9c3bd1e2108f4c014c0989ceaeb1ff6950497))
 
 ### Bug Fixes
 
-* **ci:** add uv installation to semantic-release workflow ([2ee96b7](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2ee96b7fc3a4564ff17e084fa90b2a4ad99af1ac))
-* update tests for Binance symbol changes and correct CI badge URL ([e2e9253](https://github.com/terrylica/gapless-crypto-clickhouse/commit/e2e9253fa84ed56f9c6bcdb07c2d8fd05556da6e))
+- **ci:** add uv installation to semantic-release workflow ([2ee96b7](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2ee96b7fc3a4564ff17e084fa90b2a4ad99af1ac))
+- update tests for Binance symbol changes and correct CI badge URL ([e2e9253](https://github.com/terrylica/gapless-crypto-clickhouse/commit/e2e9253fa84ed56f9c6bcdb07c2d8fd05556da6e))
 
 ### Documentation
 
-* **skills:** extract ClickHouse Cloud setup workflows into atomic skills ([a5ead69](https://github.com/terrylica/gapless-crypto-clickhouse/commit/a5ead691b1718d6bafec5512a6d0bc73e93b497b))
+- **skills:** extract ClickHouse Cloud setup workflows into atomic skills ([a5ead69](https://github.com/terrylica/gapless-crypto-clickhouse/commit/a5ead691b1718d6bafec5512a6d0bc73e93b497b))
 
 ## [6.0.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v6.0.6...v6.0.7) (2025-11-21)
 

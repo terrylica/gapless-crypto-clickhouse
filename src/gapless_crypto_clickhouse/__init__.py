@@ -13,7 +13,7 @@ Core Features:
 - Zero gaps guarantee through authentic API-first validation
 - UV-based Python tooling
 - Atomic file operations
-- Complete 13-timeframe support (1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d)
+- Complete 16-timeframe support (13 standard: 1s-1d + 3 exotic: 3d, 1w, 1mo)
 - Ultra-high frequency (1s) to daily (1d) data collection
 - Intelligent monthly-to-daily fallback for seamless recent data access
 - Gap detection and filling with authentic data only

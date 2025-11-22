@@ -152,21 +152,18 @@ if uhf_result and "dataframe" in uhf_result:
     print(f"1s data: {len(df)} bars (ultra-high frequency)")
 ```
 
-**Note**: All 13 timeframes supported with intelligent fallback:
+**Note**: All 16 timeframes supported with intelligent fallback:
 
 - Ultra-high frequency: **1s** (short date ranges)
 - Standard: **1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h**
 - Extended: **6h, 8h, 12h, 1d** (automatic monthly-to-daily fallback)
+- Exotic: **3d, 1w, 1mo**
 
 ### Multi-Symbol Collection
 
-For multiple symbols, use CLI multi-symbol support (recommended):
+> **Note**: This package provides a Python API only (no CLI interface). For CLI-based workflows, use the parent package [gapless-crypto-data](https://github.com/terrylica/gapless-crypto-data).
 
-```bash
-uv run gapless-crypto-data --symbol BTCUSDT,ETHUSDT,SOLUSDT --timeframes 1h,4h
-```
-
-Or loop for complex per-symbol logic:
+Loop for per-symbol collection:
 
 ```python
 symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]

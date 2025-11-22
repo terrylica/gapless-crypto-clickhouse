@@ -24,6 +24,8 @@ Usage (for AI agents):
 import json
 from typing import Any, Dict
 
+from . import __version__
+
 from .api import get_supported_symbols, get_supported_timeframes
 
 
@@ -48,7 +50,7 @@ def get_capabilities() -> Dict[str, Any]:
     return {
         "package": {
             "name": "gapless-crypto-clickhouse",
-            "version": "6.0.0",
+            "version": __version__,
             "description": "ClickHouse-based cryptocurrency data with zero-gap guarantee and Arrow optimization",
         },
         "query_methods": {
@@ -143,10 +145,11 @@ def get_capabilities() -> Dict[str, Any]:
         },
         "timeframes": {
             "supported": get_supported_timeframes(),
-            "description": "13 timeframes from 1 second to 1 day",
+            "description": "16 timeframes (13 standard: 1s-1d + 3 exotic: 3d, 1w, 1mo)",
             "ultra_high_frequency": ["1s", "1m", "3m", "5m"],
             "intraday": ["15m", "30m", "1h", "2h", "4h"],
             "daily": ["6h", "8h", "12h", "1d"],
+            "exotic": ["3d", "1w", "1mo"],
         },
         "instrument_types": {
             "spot": {
@@ -179,7 +182,7 @@ def get_capabilities() -> Dict[str, Any]:
                 "enabled_by_default": True,
             },
             "gap_detection": {
-                "description": "SQL-based gap detection for all 13 timeframes",
+                "description": "SQL-based gap detection for all 16 timeframes",
                 "method": "Window functions with expected interval analysis",
             },
             "gap_filling": {

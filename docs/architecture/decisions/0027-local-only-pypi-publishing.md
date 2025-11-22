@@ -17,12 +17,14 @@ Following ADR-0026 (ClickHouse Cloud Data Pipeline), v7.0.0 was successfully rel
 **Workspace-Wide Requirement**: User requires **all repositories** in `~/` to enforce local-only PyPI publishing. No workspace should ever use CI/CD pipelines for PyPI publishing.
 
 **Design Goals**:
+
 - Guarantee PyPI publishing happens ONLY on local machines
 - Use `pypi-doppler` skill for credential management
 - Preserve GitHub Actions for versioning automation (tags, releases, changelogs)
 - Apply cleanest configuration possible (minimal complexity)
 
 **Current Vulnerability**:
+
 - `publishCmd` exists in `.releaserc.json` with Doppler token retrieval
 - `prepareCmd` includes `uv build` (unnecessary in CI, creates attack surface)
 - No safeguards in `scripts/publish-to-pypi.sh` against CI execution
@@ -37,11 +39,13 @@ Enforce **local-only PyPI publishing** through configuration simplification and 
 **Intent**: Eliminate all PyPI publishing capability from GitHub Actions
 
 **Abstractions**:
+
 - Delete `publishCmd` from `@semantic-release/exec` plugin (cleanest approach)
 - Remove `uv build` from `prepareCmd` (versioning-only workflow)
 - No publishing credentials in GitHub secrets (zero-trust model)
 
 **Files**:
+
 - `.releaserc.json` (semantic-release configuration)
 
 ### 2. Add CI Detection Guards to Publishing Script
@@ -49,11 +53,13 @@ Enforce **local-only PyPI publishing** through configuration simplification and 
 **Intent**: Block accidental CI execution with explicit error messages
 
 **Abstractions**:
+
 - Environment variable detection (CI, GITHUB_ACTIONS, GITLAB_CI, etc.)
 - Repository verification (prevent fork abuse)
 - Clear error messages explaining architecture
 
 **Files**:
+
 - `scripts/publish-to-pypi.sh` (local publishing script)
 
 ### 3. Document Local-Only Architecture
@@ -61,11 +67,13 @@ Enforce **local-only PyPI publishing** through configuration simplification and 
 **Intent**: Prevent future misconfiguration through clear documentation
 
 **Abstractions**:
+
 - Workspace-wide policy statement
 - Architecture rationale (security, speed, control)
 - Complete workflow documentation
 
 **Files**:
+
 - `docs/development/PUBLISHING.md` (comprehensive publishing guide)
 - `CLAUDE.md` (project memory for AI assistants)
 - `.github/workflows/release.yml` (inline comment)

@@ -38,7 +38,7 @@ Both packages share the same 22x performance advantage via Binance public reposi
 - **ClickHouse database** with ReplacingMergeTree for deterministic deduplication
 - **USDT-margined futures** support (perpetual contracts via `instrument_type` column)
 - **Zero gaps guarantee** through intelligent monthly-to-daily fallback
-- **Complete 13-timeframe support**: 1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d
+- **Complete 16-timeframe support**: 13 standard (1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d) + 3 exotic (3d, 1w, 1mo)
 - **11-column microstructure format** (spot) and 12-column format (futures with funding rate)
 - **Advanced SQL queries** for time-series analysis, multi-symbol joins, aggregations
 - **Persistent storage** with compression (DoubleDelta timestamps, Gorilla OHLCV)

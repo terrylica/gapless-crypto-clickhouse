@@ -60,53 +60,7 @@ output_dir/
 - Data source information
 - Version tracking
 
-## CLI Usage
-
-### Standard Collection
-
-Default collection (SOLUSDT, all timeframes):
-
-```bash
-uv run gapless-crypto-data
-```
-
-Custom symbol and timeframes:
-
-```bash
-uv run gapless-crypto-data --symbol BTCUSDT --timeframes 1h,4h
-```
-
-Multiple symbols (native multi-symbol support):
-
-```bash
-uv run gapless-crypto-data --symbol BTCUSDT,ETHUSDT,SOLUSDT --timeframes 1h,4h
-```
-
-Custom date range:
-
-```bash
-uv run gapless-crypto-data --start 2023-01-01 --end 2023-12-31
-```
-
-Custom output directory:
-
-```bash
-uv run gapless-crypto-data --symbol BTCUSDT --timeframes 1h,4h --output-dir ./crypto_data
-```
-
-### Gap Filling Operations
-
-Manual gap filling for existing datasets:
-
-```bash
-uv run gapless-crypto-data --fill-gaps --directory ./data
-```
-
-Gap filling with specific filters:
-
-```bash
-uv run gapless-crypto-data --fill-gaps --directory ./data --symbol BTCUSDT --timeframe 1h
-```
+> **Note**: This package provides a Python API only (no CLI interface). For CLI-based workflows, use the parent package [gapless-crypto-data](https://github.com/terrylica/gapless-crypto-data).
 
 ## Python API Usage
 
@@ -126,13 +80,7 @@ collector.collect_data(
 
 ### Multi-Symbol Collection
 
-For multiple symbols, use CLI multi-symbol support (recommended):
-
-```bash
-uv run gapless-crypto-data --symbol BTCUSDT,ETHUSDT --timeframes 1h,4h
-```
-
-Or loop for complex per-symbol logic:
+Loop for per-symbol collection:
 
 ```python
 symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
@@ -196,8 +144,9 @@ print(timeframes)
 - Minutes: 1m, 3m, 5m, 15m, 30m
 - Hours: 1h, 2h, 4h, 6h, 8h, 12h
 - Daily: 1d
+- Exotic: 3d, 1w, 1mo
 
-**Total**: 13 timeframes
+**Total**: 16 timeframes (13 standard + 3 exotic)
 
 ## Collection Workflow
 

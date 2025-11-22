@@ -14,6 +14,7 @@ Extract validated ClickHouse Cloud setup workflows from production session (`/tm
 ### Context
 
 During ClickHouse Cloud migration (2025-11-20 22:49 PST):
+
 - Successfully provisioned ClickHouse Cloud service (service ID: `a3163f31-21f4-4e22-844e-ef3fbc26ace2`)
 - Stored credentials in Doppler (`aws-credentials/prd` project) + 1Password (Engineering vault)
 - Validated connection to ClickHouse Cloud (version: 25.8.1.8702)
@@ -64,6 +65,7 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 ### Implementation Steps
 
 #### Phase 1: Documentation Structure (ADR + Plan)
+
 1. ✅ Create ADR-0025 (MADR format)
 2. ✅ Create plan directory: `docs/development/plan/0025-clickhouse-cloud-skills/`
 3. ✅ Create plan.md (this file, Google Design Doc format)
@@ -71,6 +73,7 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 5. ✅ Initialize log file: `logs/0025-clickhouse-cloud-skills-20251121_124019.log`
 
 #### Phase 2: Skill Initialization
+
 6. Create project-local skills directory: `./skills/`
 7. Initialize 3 skills using marketplace script:
    - `clickhouse-cloud-service-setup`
@@ -78,6 +81,7 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
    - `clickhouse-cloud-connection`
 
 #### Phase 3: Skill Content Creation
+
 8. Write `clickhouse-cloud-service-setup/SKILL.md`:
    - Extract API-driven service discovery workflow
    - Document authentication (API Key ID + Secret from Doppler)
@@ -119,7 +123,9 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
     - Shows Doppler integration pattern
 
 #### Phase 4: Validation
+
 15. Validate each skill with marketplace validator:
+
     ```bash
     quick_validate.py skills/clickhouse-cloud-service-setup/
     quick_validate.py skills/clickhouse-cloud-credentials/
@@ -129,6 +135,7 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 16. Verify no secrets exposed (grep for actual values)
 
 #### Phase 5: Integration
+
 17. Update `CLAUDE.md`:
     - Add "ClickHouse Cloud Setup" section after line 49
     - Use Link Farm pattern (absolute paths)
@@ -138,7 +145,9 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 18. Run build validation (if applicable)
 
 #### Phase 6: Commit
+
 19. Create conventional commit:
+
     ```
     docs(skills): extract ClickHouse Cloud setup workflows into atomic skills
 
@@ -168,6 +177,7 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 ### Source Material
 
 **Primary**: `/tmp/clickhouse_setup_final_summary.md`
+
 - Validated production setup (2025-11-20 22:49 PST)
 - 100% success rate
 - Contains complete workflows with actual (sanitized) examples
@@ -200,11 +210,13 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 **Status**: 2/19 tasks complete (11%)
 
 **In Progress**:
+
 - [x] Create ADR-0025
 - [x] Create plan directory and plan.md
 - [ ] ⏳ Initialize 3 atomic skills
 
 **Pending**:
+
 - [ ] Write clickhouse-cloud-service-setup/SKILL.md
 - [ ] Write clickhouse-cloud-service-setup/references/api-endpoints.md
 - [ ] Write clickhouse-cloud-credentials/SKILL.md
@@ -225,12 +237,12 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 
 ## Risks and Mitigations
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Secrets accidentally exposed | High | grep verification before commit, credential store references only |
-| Marketplace validation failure | Medium | Use quick_validate.py iteratively during development |
-| CLAUDE.md Link Farm pattern mismatch | Low | Follow existing semantic-release, multi-agent-* pattern exactly |
-| Skills not discoverable | Medium | Test with relevant trigger phrases ("ClickHouse Cloud", "credentials") |
+| Risk                                 | Impact | Mitigation                                                             |
+| ------------------------------------ | ------ | ---------------------------------------------------------------------- |
+| Secrets accidentally exposed         | High   | grep verification before commit, credential store references only      |
+| Marketplace validation failure       | Medium | Use quick_validate.py iteratively during development                   |
+| CLAUDE.md Link Farm pattern mismatch | Low    | Follow existing semantic-release, multi-agent-\* pattern exactly       |
+| Skills not discoverable              | Medium | Test with relevant trigger phrases ("ClickHouse Cloud", "credentials") |
 
 ## Timeline
 

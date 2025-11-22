@@ -11,6 +11,7 @@
 ## Context
 
 During ClickHouse Cloud migration (2025-11-20), we established production workflows for:
+
 - Fetching service details from ClickHouse Cloud API
 - Storing credentials in Doppler + 1Password
 - Testing connection to ClickHouse Cloud services
@@ -22,6 +23,7 @@ These workflows are **prescriptive, stepwise, and task-like**—ideal candidates
 ### Problem
 
 Validated ClickHouse Cloud workflows exist only as ephemeral documentation (`/tmp/*.md`). Without codification:
+
 - **Not repeatable**: Future service setup requires rediscovery
 - **Not discoverable**: Claude cannot proactively suggest these workflows
 - **Not maintainable**: No canonical source for updates
@@ -43,9 +45,11 @@ Source: Iterative clarification loop (2025-11-21 12:35-12:38 PST)
 Create **3 project-local atomic skills** extracting validated workflows from production ClickHouse Cloud setup:
 
 ### Skill 1: `clickhouse-cloud-service-setup`
+
 **Intent**: Automate service metadata discovery via ClickHouse Cloud API
 
 **Abstractions**:
+
 - Organization ID resolution (API → Doppler)
 - Service endpoint extraction (HTTPS 8443 recommended, Native 9440 available)
 - Configuration discovery (idle scaling, memory tier, IP access)
@@ -53,9 +57,11 @@ Create **3 project-local atomic skills** extracting validated workflows from pro
 **When to use**: Initial service provisioning, service discovery, endpoint resolution
 
 ### Skill 2: `clickhouse-cloud-credentials`
+
 **Intent**: Establish dual credential storage pattern (Doppler + 1Password)
 
 **Abstractions**:
+
 - Credential storage contract (8 Doppler secrets, 8 1Password fields)
 - Project-specific paths (`aws-credentials/prd`, Engineering vault)
 - Secret naming convention (`CLICKHOUSE_CLOUD_*`, `CLICKHOUSE_*`)
@@ -63,9 +69,11 @@ Create **3 project-local atomic skills** extracting validated workflows from pro
 **When to use**: New service credential storage, credential rotation, backup verification
 
 ### Skill 3: `clickhouse-cloud-connection`
+
 **Intent**: Validate ClickHouse Cloud connectivity and troubleshoot issues
 
 **Abstractions**:
+
 - clickhouse-connect client configuration (secure=True for Cloud)
 - Doppler environment integration pattern
 - Connection test queries (version, user, table count)
@@ -75,9 +83,10 @@ Create **3 project-local atomic skills** extracting validated workflows from pro
 ### Integration Pattern
 
 **CLAUDE.md Update**: New "ClickHouse Cloud Setup" section after "Validated Workflows" (line 49)
+
 - Link Farm: Absolute paths to 3 skills
 - Progressive Disclosure: "When to use" + "Key principle"
-- Follows existing pattern from semantic-release, multi-agent-* skills
+- Follows existing pattern from semantic-release, multi-agent-\* skills
 
 ## Consequences
 
@@ -102,15 +111,19 @@ Create **3 project-local atomic skills** extracting validated workflows from pro
 ## Alternatives Considered
 
 ### Alternative 1: Single comprehensive skill
+
 **Rejected**: User explicitly requested "multiple atomic skills" for modularity
 
 ### Alternative 2: Generic ClickHouse Cloud skill
+
 **Rejected**: User requested project-specific with gapless-crypto-clickhouse context
 
 ### Alternative 3: Include executable scripts/
+
 **Rejected**: User requested "documentation only" for flexibility
 
 ### Alternative 4: Store in ~/.claude/skills/
+
 **Rejected**: User requested project-local for version control integration
 
 ## Implementation
