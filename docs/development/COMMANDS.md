@@ -293,28 +293,27 @@ uv lock
    - Build package with `uv build`
    - Verify wheel integrity
 
-7. **Publish** (on GitHub release)
-   - Publish to PyPI
-   - Sign with Sigstore
+**IMPORTANT**: Automated PyPI publishing was removed in v3.0.0 (ADR-0027).
 
-#### Continuous Deployment (`publish.yml`)
+**Workspace Policy**: Local-only PyPI publishing enforced across all repositories.
 
-**Triggers**:
+**Current Workflow**:
 
-- Push to `main` branch
-- Manual dispatch
+1. **GitHub Actions** (`.github/workflows/release.yml`): Automated versioning ONLY
+   - Analyzes conventional commits
+   - Updates versions in pyproject.toml, package.json
+   - Creates GitHub release and tag
+   - Generates CHANGELOG.md
 
-**Jobs**:
+2. **Local Publishing** (`./scripts/publish-to-pypi.sh`): Manual PyPI upload
+   - Pulls latest release commit
+   - Builds package locally
+   - Publishes to PyPI with Doppler credentials
+   - CI detection guards prevent accidental CI execution
 
-1. **Build and Test**
-   - Same as CI pipeline
+**See**: [PUBLISHING.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md) for complete workflow.
 
-2. **Publish to PyPI**
-   - Auto-publish on main push
-   - Use trusted publishing (OIDC)
-   - Include Sigstore signatures
-
-**PyPI Credentials**: Configured via GitHub Secrets (PYPI_API_TOKEN)
+---
 
 ### Local CI Simulation
 
@@ -330,20 +329,27 @@ uv build
 
 **Use case**: Verify changes before pushing (catch CI failures early)
 
-### Manual PyPI Publishing
+### PyPI Publishing
+
+**Canonical Guide**: See [PUBLISHING.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md) for complete workflow.
+
+**Quick Reference** (Local-Only Publishing):
 
 ```bash
-# Build package
-uv build
+# After GitHub Actions completes versioning
+git pull origin main
 
-# Upload to PyPI (requires API token)
-uv publish
-
-# Upload to TestPyPI (for testing)
-uv publish --repository testpypi
+# Publish using Doppler-managed credentials
+./scripts/publish-to-pypi.sh
 ```
 
-**Authentication**: Set `UV_PUBLISH_TOKEN` environment variable or use `~/.pypirc`
+**Key Points**:
+- ✅ Uses Doppler for credential management (no plaintext tokens)
+- ✅ CI detection guards prevent accidental CI publishing
+- ✅ Repository verification prevents fork abuse
+- ✅ ~30 seconds locally vs 3-5 minutes in CI
+
+**Why Local-Only?** See [ADR-0027](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0027-local-only-pypi-publishing.md) for architectural decision.
 
 ## Performance Profiling
 
