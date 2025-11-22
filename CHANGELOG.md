@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.0...v8.0.1) (2025-11-22)
+
+### Bug Fixes
+
+* **docs:** correct timeframe count and fix documentation issues ([15b2886](https://github.com/terrylica/gapless-crypto-clickhouse/commit/15b28860f716b122d9722363d230a770fb728172))
+
 ## [8.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v7.1.0...v8.0.0) (2025-11-22)
 
 ### ⚠ BREAKING CHANGES
