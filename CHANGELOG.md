@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.2...v8.0.3) (2025-11-23)
+
+### Documentation
+
+* **plan:** update ADR-0032 plan with completion status and progress log ([253048c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/253048c9ee07c0a9dcf60e5598403d6534770bcd))
+
 ## [8.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.1...v8.0.2) (2025-11-23)
 
 ### Bug Fixes
