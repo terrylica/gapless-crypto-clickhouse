@@ -42,7 +42,7 @@ dependencies = [
     "duckdb>=1.1.0",  # Single-file OLAP database for validation report persistence
     "httpx>=0.25.0",
     "numpy>=1.23.2,<2.0.0",  # Explicit NumPy 1.x constraint for Alpha Forge compatibility (TA-Lib requires <2.0)
-    "pandas>=2.0.0,<2.2.0",  # Upper bound for NumPy 1.x compatibility (pandas 2.2+ supports NumPy 2.x)
+    "pandas>=2.2.0,<3.0.0",  # Python 3.14 compatibility (pandas 2.2+ required for C API fixes)
     "pydantic>=2.0.0",  # Data validation and OpenAPI schema generation for validation reports
     "pyarrow>=14.0.0",  # Apache Arrow for zero-copy DataFrame creation (ADR-0023: 4x less memory)
 ]

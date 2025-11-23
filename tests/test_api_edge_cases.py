@@ -181,8 +181,8 @@ class TestGetInfo:
     def test_get_info_structure(self):
         """Test get_info returns expected structure."""
         info = gcd.get_info()
-        assert info["version"] == "1.0.0"
-        assert info["name"] == "gapless-crypto-data"
+        assert info["version"] == "8.0.0"  # Current package version (from __init__.py)
+        assert info["name"] == "gapless-crypto-clickhouse"  # ADR-0029: package name alignment
         assert "description" in info
         assert "supported_symbols" in info
         assert "supported_timeframes" in info
