@@ -112,6 +112,7 @@ ORDER BY (symbol, timeframe, toStartOfHour(timestamp), timestamp)
 ```
 
 **Rationale** (ADR-0034):
+
 - **Symbol-first**: Trading queries filter by symbol first (e.g., "BTCUSDT") - 80% of query patterns
 - **Timeframe-second**: Usually query one timeframe at a time (e.g., "1h")
 - **Hour-bucketed timestamp**: Groups data by hour for efficient range scans
@@ -142,6 +143,63 @@ result = client.query("SELECT * FROM ohlcv FINAL WHERE symbol = 'BTCUSDT'")
 ```
 
 **Reference**: [ADR-0034](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0034-schema-optimization-prop-trading.md) - Schema optimization for prop trading production readiness
+
+### CI/CD Production Validation
+
+**Policy** (ADR-0035): Local-first development + production validation exception
+
+**Local-First Development** (Developers run before commit):
+```bash
+# Code quality (local-only, NOT in CI/CD)
+uv run ruff check .
+uv run ruff format --check .
+
+# Unit tests (local-only, NOT in CI/CD)
+uv run pytest -v --cov=src
+
+# Integration tests against Homebrew ClickHouse (local-only)
+uv run pytest -m integration
+```
+
+**Production Validation** (GitHub Actions, scheduled every 6 hours):
+
+**Workflow**: `.github/workflows/production-validation.yml`
+- **Trigger**: Cron `0 */6 * * *` (00:00, 06:00, 12:00, 18:00 UTC)
+- **Credentials**: Doppler token (GitHub Actions secret `DOPPLER_TOKEN`)
+
+**Validation Checks**:
+
+1. **ClickHouse Cloud Validation**:
+   - Schema validation (ORDER BY symbol-first from ADR-0034)
+   - Write/read round-trip (100 BTCUSDT 1h bars)
+   - Deduplication correctness (ReplacingMergeTree + FINAL)
+   - Cleanup test data after validation
+
+2. **Binance CDN Availability**:
+   - HTTP HEAD request to CloudFront CDN
+   - 5s timeout
+   - Detects outages within 6 hours (22x performance advantage)
+
+3. **Simplified E2E Validation** (3-layer):
+   - Layer 1: Environment (ClickHouse Cloud connection + schema exists)
+   - Layer 2: Data flow (write test data → verify ingestion)
+   - Layer 3: Query (read with FINAL → verify deduplication)
+
+**Manual Production Validation**:
+```bash
+# Run ClickHouse Cloud validation locally
+doppler run --project aws-credentials --config prd -- uv run scripts/validate_clickhouse_cloud.py
+
+# Run Binance CDN availability check
+uv run scripts/validate_binance_cdn.py
+```
+
+**Rationale**:
+- Production environments require Doppler credentials unavailable in local development
+- Scheduled monitoring detects infrastructure degradation independent of code changes
+- Aligns with ADR-0027 philosophy (local development, CI/CD for production only)
+
+**Reference**: [ADR-0035](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0035-cicd-production-validation.md) - CI/CD production validation policy
 
 ### Company Employee Onboarding
 
