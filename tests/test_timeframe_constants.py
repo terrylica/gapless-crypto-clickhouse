@@ -10,7 +10,7 @@ Expected (POST-FIX):
     TIMEFRAME_TO_MINUTES["2h"] = 120 minutes (CORRECT!)
 
 SLO Targets:
-    Correctness: 100% accurate interval mappings for all 13 timeframes
+    Correctness: 100% accurate interval mappings for all 16 timeframes
     Maintainability: Centralized constants prevent future parsing bugs
 """
 
@@ -30,8 +30,8 @@ from gapless_crypto_clickhouse.utils.timeframe_constants import (
 class TestTimeframeConstants:
     """Test centralized timeframe constant mappings."""
 
-    def test_timeframe_to_minutes_all_13_timeframes(self):
-        """Verify all 13 supported timeframes have correct minute mappings."""
+    def test_timeframe_to_minutes_all_16_timeframes(self):
+        """Verify all 16 supported timeframes have correct minute mappings."""
         expected_mappings = {
             "1s": 1 / 60,  # 1 second
             "1m": 1,
@@ -46,6 +46,9 @@ class TestTimeframeConstants:
             "8h": 480,  # Critical: Must be 480, not 8
             "12h": 720,  # Critical: Must be 720, not 12
             "1d": 1440,
+            "3d": 4320,  # 3 days * 24 * 60
+            "1w": 10080,  # 7 days * 24 * 60
+            "1mo": 43200,  # 30 days * 24 * 60 (approximate)
         }
 
         assert TIMEFRAME_TO_MINUTES == expected_mappings, (
@@ -107,12 +110,36 @@ class TestTimeframeConstants:
             "Binance interval mapping missing timeframes"
         )
 
-        # All mappings should be identity (timeframe string = Binance interval)
+        # Most mappings are identity, except 1mo→1M for REST API compatibility
         for timeframe in TIMEFRAME_TO_MINUTES.keys():
-            assert TIMEFRAME_TO_BINANCE_INTERVAL[timeframe] == timeframe, (
-                f"Binance interval for {timeframe} should be '{timeframe}', "
+            expected = "1M" if timeframe == "1mo" else timeframe
+            assert TIMEFRAME_TO_BINANCE_INTERVAL[timeframe] == expected, (
+                f"Binance interval for {timeframe} should be '{expected}', "
                 f"got '{TIMEFRAME_TO_BINANCE_INTERVAL[timeframe]}'"
             )
+
+    def test_binance_monthly_dual_notation(self):
+        """Verify 1mo→1M mapping for REST API compatibility.
+
+        Binance uses different notation for monthly timeframe:
+        - Public Data Repository: "1mo" (data.binance.vision)
+        - REST API: "1M" (api.binance.com/api/v3/klines)
+
+        This is intentional and empirically validated against live endpoints.
+
+        Evidence (validated 2025-01-22):
+        - Public Data: "1mo" → HTTP 200, "1M" → HTTP 404
+        - REST API: "1M" → HTTP 200 + data, "1mo" → error "Invalid interval"
+        - Other exotic (3d, 1w): Identity mapping on both systems
+        """
+        # Verify 1mo uses REST API notation
+        assert TIMEFRAME_TO_BINANCE_INTERVAL["1mo"] == "1M", (
+            "Monthly timeframe must map to '1M' for Binance REST API compatibility"
+        )
+
+        # Verify other exotic timeframes use identity mapping
+        assert TIMEFRAME_TO_BINANCE_INTERVAL["3d"] == "3d"
+        assert TIMEFRAME_TO_BINANCE_INTERVAL["1w"] == "1w"
 
     def test_gap_detection_scenario_2h_timeframe(self):
         """Simulate gap detection with 2h timeframe to verify correct interval."""
@@ -140,7 +167,7 @@ class TestTimeframeConstants:
         )
 
     def test_all_mappings_have_same_timeframes(self):
-        """Ensure all mapping dictionaries cover the same 13 timeframes."""
+        """Ensure all mapping dictionaries cover the same 16 timeframes."""
         expected_timeframes = {
             "1s",
             "1m",
@@ -155,6 +182,9 @@ class TestTimeframeConstants:
             "8h",
             "12h",
             "1d",
+            "3d",
+            "1w",
+            "1mo",
         }
 
         assert set(TIMEFRAME_TO_MINUTES.keys()) == expected_timeframes

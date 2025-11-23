@@ -1,0 +1,1253 @@
+
+AGENTS.md:
+  - CHANGELOG.md
+  - README.md
+  - api.py
+  - docs/DOCUMENTATION_INVENTORY.yaml
+  - docs/SSOT_DOCUMENTATION_ARCHITECTURE.yaml
+  - docs/SSOT_PLANNING_SUMMARY.md
+  - tests/conftest.py
+
+CHANGELOG.md:
+  - .pre-commit-config.yaml
+  - .sessions/protect_sessions.sh
+  - /tmp/github_issue_gapless_crypto_data.md
+  - AUTHORS.md
+  - CHANGELOG.md
+  - CLAUDE.md
+  - CURRENT_ARCHITECTURE_STATUS.yaml
+  - DOCUMENTATION.md
+  - PUBLISHING.md
+  - PYPI_PUBLISHING_CONFIGURATION.yaml
+  - README.md
+  - api.py
+  - binance_public_data_collector.py
+  - cli.py
+  - cli_usage_examples.sh
+  - docs/architecture/decisions/0029-docstring-package-version-alignment.md
+  - docs/development/CLI_MIGRATION_GUIDE.md
+  - docs/development/plan/0029-docstring-package-version-alignment/plan.md
+  - doppler-setup.md
+  - entry_points.txt
+  - env-setup.md
+  - examples/safe_data_collection.py
+  - llms.txt
+  - package.json
+  - plan/0026-clickhouse-cloud-data-pipeline/plan.md
+  - safe_data_collection.py
+  - src/gapless_crypto_data/cli.py
+  - src/gapless_crypto_data/collectors/binance_public_data_collector.py
+  - src/gapless_crypto_data/collectors/concurrent_collection_orchestrator.py
+  - src/gapless_crypto_data/collectors/httpx_downloader.py
+  - src/gapless_crypto_data/collectors/hybrid_url_generator.py
+  - src/gapless_crypto_data/gap_filling/universal_gap_filler.py
+  - test_connection_cloud.py
+  - test_gap_filler.py
+  - test_gapless_dataframe.py
+  - tests/test_atomic_operations.py
+  - tests/test_binance_collector.py
+  - tests/test_cli.py
+  - tests/test_gap_filler.py
+  - tests/test_integration.py
+  - tests/test_output_dir_dataframe_fix.py
+  - tests/test_regression.py
+  - tests/test_streaming.py
+  - tmp/e2e-implementation-status.md
+  - troubleshooting.md
+  - uv_build.py
+
+CLAUDE.md:
+  - .releaserc.json
+  - /Users/terryli/.claude/skills/multi-agent-e2e-validation/SKILL.md
+  - /Users/terryli/.claude/skills/multi-agent-performance-profiling/SKILL.md
+  - /Users/terryli/.claude/skills/semantic-release/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/DATA_FORMAT.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/COMMANDS.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/SETUP.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/DATA_COLLECTION.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/python-api.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/sdk-quality-standards.yaml
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/ARCHITECTURE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/E2E_TESTING_GUIDE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/SCREENSHOT_BASELINE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-service-setup/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md
+  - CHANGELOG.md
+  - CLAUDE.md
+  - docs/CURRENT_ARCHITECTURE_STATUS.yaml
+  - docs/sdk-quality-standards.yaml
+  - llms.txt
+  - package.json
+
+CONTRIBUTING.md:
+  - CHANGELOG.md
+  - README.md
+  - tests/test_specific.py
+
+CROSS_REFERENCE_REPORT.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/CORE_COMPONENTS.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/network.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/DATA_COLLECTION.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/GAP_FILLING.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/verify_cross_references.py
+  - 0001-questdb-single-source-truth.md
+  - 0002-e2e-validation-approach.md
+  - 0003-questdb-schema-robustness-validation.md
+  - 0004-futures-support-implementation.md
+  - 0005-clickhouse-migration.md
+  - 0006-v4-audit-remediation.md
+  - 0007-release-validation-remediation.md
+  - 0008-clickhouse-local-visualization-toolchain.md
+  - 0009-port-reconfiguration-ch-ui-enablement.md
+  - 0010-optional-development-tooling-chdig.md
+  - 0011-pypi-package-fork-clickhouse.md
+  - 0012-documentation-accuracy-remediation.md
+  - 0013-autonomous-validation-framework.md
+  - 0014-codebase-housekeeping.md
+  - 0015-python-3-11-support.md
+  - 0016-symbol-coverage-expansion.md
+  - 0017-parameter-aliases.md
+  - 0018-upfront-input-validation.md
+  - 0019-numpy-1x-compatibility.md
+  - 0020-multi-symbol-batch-api.md
+  - 0021-um-futures-support.md
+  - 0022-spot-futures-symbol-alignment.md
+  - 0023-arrow-migration.md
+  - 0024-comprehensive-validation-canonicity.md
+  - 0025-clickhouse-cloud-skills-extraction.md
+  - 0026-clickhouse-cloud-data-pipeline.md
+  - 0027-local-only-pypi-publishing.md
+  - 0028-skills-documentation-alignment.md
+  - 0029-docstring-package-version-alignment.md
+  - CLAUDE.md
+  - CORE_COMPONENTS.md
+  - GAP_FILLING.md
+  - OVERVIEW.md
+  - README.md
+  - network.md
+  - schema_validator.py
+  - verify_cross_references.py
+
+README.md:
+  - .metadata.json
+  - LICENSE
+  - README.md
+  - __init__.py
+  - binance_public_data_collector.py
+  - docs/CLICKHOUSE_MIGRATION.md
+  - docs/architecture/decisions/0013-autonomous-validation-framework.md
+  - docs/development/
+  - docs/validation/E2E_TESTING_GUIDE.md
+  - docs/validation/SCREENSHOT_BASELINE.md
+  - llms.txt
+  - probe.py
+  - safe_file_operations.py
+  - scripts/run_validation.py
+  - scripts/validate-clickhouse-tools.sh
+  - test_clickhouse.py
+  - tests/test_binance_collector.py
+  - universal_gap_filler.py
+
+docs/CLICKHOUSE_MIGRATION.md:
+  - architecture/decisions/0003-questdb-schema-robustness-validation.md
+  - architecture/decisions/0004-futures-support-implementation.md
+  - architecture/decisions/0005-clickhouse-migration.md
+  - clickhouse_bulk_loader.py
+  - development/plan/0005-clickhouse-migration/plan.yaml
+  - tmp/clickhouse_futures_validation.py
+  - tmp/clickhouse_quick_validation.py
+
+docs/MIGRATION_v3_to_v4.md:
+  - ../docker-compose.yml
+  - CLICKHOUSE_MIGRATION.md
+  - architecture/decisions/0005-clickhouse-migration.md
+  - release-notes.md
+  - tests/test_cli.py
+  - tests/test_cli_integration.py
+
+docs/README.md:
+  - ../CONTRIBUTING.md
+  - ../README.md
+  - ../docker-compose.yml
+  - CLICKHOUSE_MIGRATION.md
+  - CURRENT_ARCHITECTURE_STATUS.yaml
+  - PYPI_PUBLISHING_CONFIGURATION.yaml
+  - api/dual-parameter-enhancement.yaml
+  - api/quick-start.md
+  - architecture/decisions/0005-clickhouse-migration.md
+  - architecture/decisions/0024-comprehensive-validation-canonicity.md
+  - development/PUBLISHING.md
+  - guides/pypi-documentation.md
+  - milestones/
+  - release-notes.md
+  - validation/ARCHITECTURE.md
+  - validation/E2E_TESTING_GUIDE.md
+  - validation/OVERVIEW.md
+
+docs/SSOT_PLANNING_SUMMARY.md:
+  - CLAUDE.md
+  - CLI_MIGRATION_GUIDE.md
+  - COMMANDS.md
+  - DATA_COLLECTION.md
+  - DATA_FORMAT.md
+  - GAP_FILLING.md
+  - OVERVIEW.md
+  - PUBLISHING.md
+  - QUERY_PATTERNS.md
+  - README.md
+  - SETUP.md
+  - STORAGE.md
+  - advanced_api_examples.py
+  - complete_workflow.py
+  - docs/CLI_MIGRATION_GUIDE.md
+  - docs/CURRENT_ARCHITECTURE_STATUS.yaml
+  - docs/PUBLISHING.md
+  - docs/README.md
+  - docs/SSOT_DOCUMENTATION_ARCHITECTURE.yaml
+  - docs/SSOT_PLANNING_SUMMARY.md
+  - docs/api/quick-start.md
+  - docs/architecture/CORE_COMPONENTS.md
+  - docs/architecture/DATA_FORMAT.md
+  - docs/architecture/OVERVIEW.md
+  - docs/architecture/network.md
+  - docs/development/COMMANDS.md
+  - docs/development/SETUP.md
+  - docs/guides/DATA_COLLECTION.md
+  - docs/guides/python-api.md
+  - docs/validation/OVERVIEW.md
+  - examples/gap_filling_example.py
+  - python-api.md
+
+docs/api/quick-start.md:
+  - examples/advanced_api_examples.py
+  - examples/simple_api_examples.py
+
+docs/architecture/CORE_COMPONENTS.md:
+  - ../validation/OVERVIEW.md
+  - ../validation/STORAGE.md
+  - DATA_FORMAT.md
+  - OVERVIEW.md
+  - OVERVIEW.md#clickhouse-integration-primary-storage-mode
+  - src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+  - src/gapless_crypto_clickhouse/gap_filling/safe_file_operations.py
+  - src/gapless_crypto_clickhouse/gap_filling/universal_gap_filler.py
+  - src/gapless_crypto_clickhouse/validation/csv_validator.py
+  - src/gapless_crypto_clickhouse/validation/storage.py
+
+docs/architecture/DATA_FORMAT.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/api/pruning-parquet-implementation.yaml
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/DATA_COLLECTION.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md
+
+docs/architecture/OVERVIEW.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/CURRENT_ARCHITECTURE_STATUS.yaml
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/api/quick-start.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/CORE_COMPONENTS.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/DATA_FORMAT.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/network.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/diagrams/
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/DATA_COLLECTION.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/GAP_FILLING.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/clickhouse/config.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/clickhouse/connection.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/collectors/clickhouse_bulk_loader.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/gap_filling/safe_file_operations.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/gap_filling/universal_gap_filler.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/csv_validator.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py
+
+docs/architecture/decisions/0001-questdb-single-source-truth.md:
+  - ../../CURRENT_ARCHITECTURE_STATUS.yaml
+  - 0005-clickhouse-migration.md
+  - docs/development/plan/0001-questdb-refactor/plan.yaml
+
+docs/architecture/decisions/0002-e2e-validation-approach.md:
+  - ../../development/plan/0001-questdb-refactor/plan.yaml
+  - ../../validation/E2E_TESTING_GUIDE.md
+  - 0001-questdb-single-source-truth.md
+  - docs/development/plan/0002-e2e-validation/plan.yaml
+  - test_error_handling.py
+  - tests/conftest.py
+  - tests/test_error_handling.py
+  - tests/test_gap_filler.py
+  - tmp/e2e-validation/VALIDATION_REPORT.md
+
+docs/architecture/decisions/0003-questdb-schema-robustness-validation.md:
+  - ../../CURRENT_ARCHITECTURE_STATUS.yaml
+  - ../../development/plan/0003-questdb-schema-robustness/plan.yaml
+  - ../../validation/STORAGE.md
+  - ../DATA_FORMAT.md
+  - ../OVERVIEW.md
+  - ./0001-questdb-single-source-truth.md
+  - ./0002-e2e-validation-approach.md
+  - 0005-clickhouse-migration.md
+  - DATA_QUALITY_VALIDATION.md
+  - MULTI_SYMBOL_STRESS_REPORT.md
+  - MULTI_SYMBOL_STRESS_VALIDATION.md
+  - QUERY_PERFORMANCE_VALIDATION.md
+  - SCHEMA_EXTENSIBILITY_REPORT.md
+  - SCHEMA_EXTENSIBILITY_VALIDATION.md
+  - SUMMARY.txt
+  - TEMPORAL_BOUNDARY_REPORT.md
+  - TEMPORAL_BOUNDARY_VALIDATION.md
+  - TIMEFRAME_SPECTRUM_REPORT.md
+  - TIMEFRAME_SPECTRUM_VALIDATION.md
+  - boundary_calculator.py
+  - boundary_test_cases.py
+  - clear_database.py
+  - docs/development/plan/0003-questdb-schema-robustness/plan.yaml
+  - ingest_1mo_only.py
+  - ingest_comprehensive.py
+  - ingestion_log.txt
+  - ingestion_log_corrected.txt
+  - schema_analysis.py
+  - spectrum_validation.py
+  - spectrum_validation_results.json
+  - stress_test_design.py
+  - test_cases.json
+
+docs/architecture/decisions/0004-futures-support-implementation.md:
+  - 0005-clickhouse-migration.md
+  - docs/development/plan/0004-futures-support/plan.yaml
+  - src/gapless_crypto_clickhouse/cli.py
+  - src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py
+  - src/gapless_crypto_clickhouse/query.py
+  - tmp/schema-robustness/futures-design/FUTURES_ROADMAP.md
+
+docs/architecture/decisions/0005-clickhouse-migration.md:
+  - 0021-um-futures-support.md
+  - docs/CLICKHOUSE_MIGRATION.md
+  - docs/development/plan/0005-clickhouse-migration/plan.yaml
+  - src/gapless_crypto_clickhouse/clickhouse/connection.py
+  - src/gapless_crypto_clickhouse/collectors/clickhouse_bulk_loader.py
+  - src/gapless_crypto_clickhouse/query.py
+
+docs/architecture/decisions/0006-v4-audit-remediation.md:
+  - CLAUDE.md
+  - __init__.py
+  - cli.py
+  - docs/MIGRATION_v3_to_v4.md
+  - docs/development/plan/0006-v4-audit-remediation/plan.yaml
+  - tests/test_cli.py
+  - tests/test_cli_integration.py
+
+docs/architecture/decisions/0007-release-validation-remediation.md:
+  - CHANGELOG.md
+  - __init__.py
+  - docs/development/CLI_MIGRATION_GUIDE.md
+  - docs/development/plan/0007-release-validation-remediation/plan.yaml
+  - src/gapless_crypto_clickhouse/__init__.py
+  - test_api_edge_cases.py
+
+docs/architecture/decisions/0008-clickhouse-local-visualization-toolchain.md:
+  - data.json
+  - docs/development/CLICKHOUSE_CLIENT_GUIDE.md
+  - docs/development/CLICKHOUSE_LOCAL_GUIDE.md
+  - docs/development/plan/0008-clickhouse-local-visualization-toolchain/plan.yaml
+  - scripts/validate-clickhouse-tools.sh
+
+docs/architecture/decisions/0009-port-reconfiguration-ch-ui-enablement.md:
+  - docs/development/plan/0009-port-reconfiguration-ch-ui-enablement/plan.yaml
+  - scripts/validate-clickhouse-tools.sh
+
+docs/architecture/decisions/0010-optional-development-tooling-chdig.md:
+  - docs/development/plan/0010-optional-development-tooling-chdig/plan.yaml
+  - scripts/validate-clickhouse-tools.sh
+
+docs/architecture/decisions/0011-pypi-package-fork-clickhouse.md:
+  - CLAUDE.md
+  - __probe__.py
+  - docs/development/plan/0011-pypi-package-fork-clickhouse/plan.md
+  - llms.txt
+
+docs/architecture/decisions/0012-documentation-accuracy-remediation.md:
+  - CLAUDE.md
+  - OVERVIEW.md
+  - QUERY_PATTERNS.md
+  - clickhouse/config.py
+  - clickhouse/connection.py
+  - collectors/clickhouse_bulk_loader.py
+  - docs/CURRENT_ARCHITECTURE_STATUS.yaml
+  - docs/api/quick-start.md
+  - docs/architecture/DATA_FORMAT.md
+  - docs/architecture/OVERVIEW.md
+  - docs/development/CLI_MIGRATION_GUIDE.md
+  - docs/development/plan/0012-documentation-accuracy-remediation/plan.md
+  - docs/guides/DATA_COLLECTION.md
+  - docs/guides/pypi-documentation.md
+  - docs/guides/python-api.md
+  - docs/validation/OVERVIEW.md
+  - docs/validation/QUERY_PATTERNS.md
+  - docs/validation/STORAGE.md
+  - examples/cli_usage_examples.sh
+  - python-api.md
+  - src/gapless_crypto_clickhouse/__init__.py
+  - utils/timeframe_constants.py
+
+docs/architecture/decisions/0013-autonomous-validation-framework.md:
+  - docs/development/plan/0013-autonomous-validation-framework/plan.md
+  - scripts/run_validation.py
+
+docs/architecture/decisions/0014-codebase-housekeeping.md:
+  - README.md
+
+docs/architecture/decisions/0015-python-3-11-support.md:
+  - ../../development/plan/0015-python-3-11-support/plan.md
+  - ./scripts/publish-to-pypi.sh
+  - /tmp/GCC_TECHNICAL_FEEDBACK_FOR_ALPHA_FORGE.md
+  - /tmp/RESPONSE_TO_ALPHA_FORGE_FEEDBACK.md
+
+docs/architecture/decisions/0016-symbol-coverage-expansion.md:
+  - ../../development/plan/0016-symbol-coverage-expansion/plan.md
+  - /tmp/GCC_TECHNICAL_FEEDBACK_FOR_ALPHA_FORGE.md
+  - README.md
+  - docs/architecture/DATA_FORMAT.md
+  - docs/guides/python-api.md
+  - src/gapless_crypto_clickhouse/api.py
+  - src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+  - tests/test_symbol_expansion.py
+
+docs/architecture/decisions/0017-parameter-aliases.md:
+  - ../../development/plan/0017-parameter-aliases/plan.md
+  - /tmp/RESPONSE_TO_ALPHA_FORGE_FEEDBACK.md
+  - README.md
+  - docs/guides/python-api.md
+  - llms.txt
+  - src/gapless_crypto_clickhouse/api.py
+  - src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+
+docs/architecture/decisions/0018-upfront-input-validation.md:
+  - ../../development/plan/0018-upfront-input-validation/plan.md
+  - /tmp/RESPONSE_TO_ALPHA_FORGE_FEEDBACK.md
+  - src/gapless_crypto_clickhouse/api.py
+
+docs/architecture/decisions/0019-numpy-1x-compatibility.md:
+  - ../../development/plan/0019-numpy-1x-compatibility/plan.md
+  - validation/storage.py
+
+docs/architecture/decisions/0020-multi-symbol-batch-api.md:
+  - ../../development/plan/0020-multi-symbol-batch-api/plan.md
+  - __init__.py
+  - api.py
+  - src/gapless_crypto_clickhouse/api.py
+
+docs/architecture/decisions/0021-um-futures-support.md:
+  - ../../development/plan/0021-um-futures-support/plan.md
+  - 0004-futures-support-implementation.md
+  - 0020-multi-symbol-batch-api.md
+  - README/llms.txt/CLAUDE.md
+  - utils/validation.py
+
+docs/architecture/decisions/0022-spot-futures-symbol-alignment.md:
+  - ../../development/plan/0022-spot-futures-symbol-alignment/plan.md
+  - 0021-um-futures-support.md
+  - src/gapless_crypto_clickhouse/__init__.py
+  - src/gapless_crypto_clickhouse/api.py
+  - src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+
+docs/architecture/decisions/0023-arrow-migration.md:
+  - benchmark_arrow_scale_analysis.py
+  - benchmark_gapless_clickhouse.py
+  - llms.txt
+  - probe.py
+
+docs/architecture/decisions/0024-comprehensive-validation-canonicity.md:
+  - ../../development/plan/0024-comprehensive-validation-canonicity/COMPLETION_REPORT.md
+  - /docs/development/plan/0024-comprehensive-validation-canonicity/plan.md
+  - ARCHITECTURE.md
+  - CURRENT_ARCHITECTURE_STATUS.yaml
+  - SCREENSHOT_BASELINE.md
+  - scripts/run_validation.py
+
+docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md:
+  - /Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py
+  - /Users/terryli/.claude/skills/skill-architecture/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/CLAUDE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0025-clickhouse-cloud-skills/plan.md
+  - /tmp/clickhouse_setup_final_summary.md
+  - CLAUDE.md
+  - SKILL.md
+  - docs/development/plan/0025-clickhouse-cloud-skills/plan.md
+  - quick_validate.py
+
+docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md:
+  - /Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py
+  - /Users/terryli/.claude/skills/skill-architecture/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/CLAUDE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md
+  - CLAUDE.md
+  - config.py
+  - docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md
+  - references/doppler-setup.md
+  - references/env-setup.md
+  - references/troubleshooting.md
+  - scripts/test_connection_cloud.py
+  - src/gapless_crypto_clickhouse/clickhouse/config.py
+  - src/gapless_crypto_clickhouse/clickhouse/connection.py
+
+docs/architecture/decisions/0027-local-only-pypi-publishing.md:
+  - ./scripts/publish-to-pypi.sh
+  - .releaserc.json
+  - /Users/terryli/.claude/skills/semantic-release/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0027-local-only-pypi-publishing/plan.md
+  - CLAUDE.md
+  - PUBLISHING.md
+  - docs/development/PUBLISHING.md
+  - docs/development/plan/0027-local-only-pypi-publishing/plan.md
+  - scripts/publish-to-pypi.sh
+
+docs/architecture/decisions/0028-skills-documentation-alignment.md:
+  - ./scripts/publish-to-pypi.sh
+  - .releaserc.json
+  - CLAUDE.md
+  - COMMANDS.md
+  - PUBLISHING.md
+  - docs/PYPI_PUBLISHING_CONFIGURATION.yaml
+  - docs/development/COMMANDS.md
+  - docs/development/PUBLISHING.md
+  - docs/development/plan/0028-skills-documentation-alignment/plan.md
+  - publish-to-pypi.sh
+  - scripts/publish-to-pypi.sh
+
+docs/architecture/decisions/0029-docstring-package-version-alignment.md:
+  - CHANGELOG.md
+  - __probe__.py
+  - api.py
+  - clickhouse/__init__.py
+  - clickhouse/config.py
+  - clickhouse/connection.py
+  - clickhouse_query.py
+  - exceptions.py
+  - resume/__init__.py
+  - utils/__init__.py
+  - utils/error_handling.py
+  - utils/etag_cache.py
+  - validation/storage.py
+
+docs/architecture/decisions/0030-documentation-cleanup-deferred.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/CROSS_REFERENCE_REPORT.md
+  - AGENTS.md
+  - CHANGELOG.md
+  - CLAUDE.md
+  - CONTRIBUTING.md
+  - DATA_COLLECTION.md
+  - GAP_FILLING.md
+  - README.md
+  - docs/CLICKHOUSE_MIGRATION.md
+  - docs/README.md
+  - docs/guides/DATA_COLLECTION.md
+  - docs/guides/python-api.md
+  - network.md
+  - probe.py
+
+docs/architecture/network.md:
+  - ../guides/DATA_COLLECTION.md
+  - CORE_COMPONENTS.md
+  - OVERVIEW.md
+
+docs/deployment/linux-docker-setup.md:
+  - linux-native-setup.md
+
+docs/deployment/macos-colima-setup.md:
+  - linux-native-setup.md
+
+docs/deployment/python-uv-setup.md:
+  - .pre-commit-config.yaml
+  - docs/deployment/linux-native-setup.md
+  - fetch_data.py
+  - macos-colima-setup.md
+  - requirements.txt
+  - scripts/example.py
+
+docs/development/CHDIG_GUIDE.md:
+  - ../../README.md#local-visualization-tools
+  - ./CLICKHOUSE_CLIENT_GUIDE.md
+  - ./CLICKHOUSE_LOCAL_GUIDE.md
+
+docs/development/CLICKHOUSE_CLIENT_GUIDE.md:
+  - ../../README.md#local-visualization-tools
+  - ./CHDIG_GUIDE.md
+  - ./CLICKHOUSE_LOCAL_GUIDE.md
+  - data.json
+  - data.jsonl
+  - data.jsonl.gz
+  - ohlcv.jsonl.gz
+
+docs/development/CLICKHOUSE_LOCAL_GUIDE.md:
+  - ../../README.md#local-visualization-tools
+  - ../../docker-compose.yml
+  - ./CLICKHOUSE_CLIENT_GUIDE.md
+  - data.jsonl
+
+docs/development/CLICKHOUSE_PLAY_GUIDE.md:
+  - ../../README.md#local-visualization-tools
+  - ./CHDIG_GUIDE.md
+  - ./CLICKHOUSE_CLIENT_GUIDE.md
+
+docs/development/CLI_MIGRATION_GUIDE.md:
+  - ../../README.md
+  - ../../examples/
+  - matplotlib.pyplot
+
+docs/development/COMMANDS.md:
+  - ./scripts/publish-to-pypi.sh
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0027-local-only-pypi-publishing.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/SETUP.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/sdk-quality-standards.yaml
+  - CHANGELOG.md
+  - __init__.py
+  - examples/complete_workflow.py
+  - package.json
+  - scripts/run_validation.py
+  - src/gapless_crypto_clickhouse/__init__.py
+  - src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+  - tests/e2e/test_clickhouse_play.py
+  - tests/test_binance_collector.py
+  - tests/test_gap_filler.py
+  - tests/test_validation_storage.py
+
+docs/development/PUBLISHING.md:
+  - ./scripts/publish-to-pypi.sh
+  - .releaserc.json
+  - /Users/terryli/.claude/skills/semantic-release/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0027-local-only-pypi-publishing.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0027-local-only-pypi-publishing/plan.md
+  - CHANGELOG.md
+  - CLAUDE.md
+  - docs/architecture/decisions/0027-local-only-pypi-publishing.md
+  - docs/development/plan/0027-local-only-pypi-publishing/plan.md
+  - package.json
+  - publish-to-testpypi.sh
+  - scripts/publish-to-pypi.sh
+
+docs/development/SETUP.md:
+  - .vscode/settings.json
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/COMMANDS.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/sdk-quality-standards.yaml
+  - examples/simple_api_examples.py
+  - src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+  - tests/test_binance_collector.py
+  - tests/test_validation_storage.py
+
+docs/development/plan/0008-clickhouse-local-visualization-toolchain/VALIDATION_REPORT.md:
+  - README.md
+  - docs/architecture/decisions/0008-clickhouse-local-visualization-toolchain.md
+  - docs/development/CHDIG_GUIDE.md
+  - docs/development/CLICKHOUSE_CLIENT_GUIDE.md
+  - docs/development/CLICKHOUSE_LOCAL_GUIDE.md
+  - docs/development/CLICKHOUSE_PLAY_GUIDE.md
+  - docs/development/plan/0008-clickhouse-local-visualization-toolchain/plan.yaml
+  - plan.yaml
+  - scripts/validate-clickhouse-tools.sh
+
+docs/development/plan/0011-pypi-package-fork-clickhouse/plan.md:
+  - ../../../architecture/decisions/0011-pypi-package-fork-clickhouse.md
+  - CHANGELOG.md
+  - CLAUDE.md
+  - api.py
+  - collectors/binance_public_data_collector.py
+
+docs/development/plan/0012-documentation-accuracy-remediation/plan.md:
+  - ../../../architecture/decisions/0012-documentation-accuracy-remediation.md
+  - ./run_tests.sh
+  - /Users/terryli/eon/gapless-crypto-clickhouse/examples/cli_usage_examples.sh
+  - /tmp/doc-audit/validation/REPORT.md
+  - /tmp/doc-audit/validation/run_tests.sh
+  - CLAUDE.md
+  - DATA_COLLECTION.md
+  - DATA_FORMAT.md
+  - OVERVIEW.md
+  - QUERY_PATTERNS.md
+  - cli_usage_examples.sh
+  - docs/CURRENT_ARCHITECTURE_STATUS.yaml
+  - docs/api/quick-start.md
+  - docs/architecture/DATA_FORMAT.md
+  - docs/architecture/OVERVIEW.md
+  - docs/development/CLI_MIGRATION_GUIDE.md
+  - docs/guides/DATA_COLLECTION.md
+  - docs/guides/pypi-documentation.md
+  - docs/guides/python-api.md
+  - docs/validation/OVERVIEW.md
+  - docs/validation/QUERY_PATTERNS.md
+  - docs/validation/STORAGE.md
+  - examples/cli_usage_examples.sh
+  - python-api.md
+  - quick-start.md
+  - scripts/extract_code_blocks.py
+  - src/gapless_crypto_clickhouse/__init__.py
+  - src/gapless_crypto_clickhouse/clickhouse/config.py
+  - src/gapless_crypto_clickhouse/clickhouse/connection.py
+  - src/gapless_crypto_clickhouse/collectors/clickhouse_bulk_loader.py
+  - src/gapless_crypto_clickhouse/utils/timeframe_constants.py
+  - test_basic_api.py
+  - test_collection.py
+  - test_collector.py
+  - test_gap_filling.py
+  - test_query_export.py
+  - test_query_recent.py
+  - test_query_stats.py
+  - test_quick_start_1.py
+  - test_quick_start_2.py
+  - test_validation.py
+
+docs/development/plan/0013-autonomous-validation-framework/plan.md:
+  - ../../../architecture/decisions/0013-autonomous-validation-framework.md
+  - CLAUDE.md
+  - E2E_TESTING_GUIDE.md
+  - README.md
+  - SCREENSHOT_BASELINE.md
+  - conftest.py
+  - docs/validation/E2E_TESTING_GUIDE.md
+  - docs/validation/SCREENSHOT_BASELINE.md
+  - scripts/run_validation.py
+  - test_ch_ui_dashboard.py
+  - test_clickhouse_play.py
+  - tests/e2e/conftest.py
+  - tests/e2e/test_ch_ui_dashboard.py
+  - tests/e2e/test_clickhouse_play.py
+
+docs/development/plan/0014-codebase-housekeeping/plan.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md
+  - CLAUDE.md
+  - CLI_MIGRATION_GUIDE.md
+  - COMMANDS.md
+  - E2E_TESTING_GUIDE.md
+  - README.md
+  - adr-plan-code-sync-verification.md
+  - build-validation.md
+  - code-quality-validation.md
+  - docs/development/COMMANDS.md
+  - docs/validation/E2E_TESTING_GUIDE.md
+  - documentation-validation.md
+  - e2e-implementation-status.md
+  - e2e-resolution-complete.md
+  - git-history-audit.md
+  - scripts/run_validation.py
+  - test-coverage-validation.md
+  - tests/e2e/test_ch_ui_dashboard.py
+  - tests/e2e/test_clickhouse_play.py
+  - tmp/adr-plan-code-sync-verification.md
+  - tmp/clickhouse-local-viz-research/ide-integrations/IDE_INTEGRATIONS_REPORT.md
+  - tmp/clickhouse_futures_validation.py
+  - tmp/clickhouse_validation.py
+  - tmp/clickhouse_validation_results.txt
+  - tmp/comprehensive_validation_report.txt
+  - tmp/e2e-implementation-status.md
+  - tmp/e2e-resolution-complete.md
+  - tmp/full-validation/build-distribution/METADATA.txt
+  - tmp/full-validation/build-distribution/VALIDATION_REPORT.md
+  - tmp/full-validation/build-distribution/wheel-contents.txt
+  - tmp/full-validation/code-quality/REPORT.md
+  - tmp/full-validation/code-quality/mypy-analysis.md
+  - tmp/full-validation/code-quality/mypy-check.txt
+  - tmp/full-validation/code-quality/pre-commit.txt
+  - tmp/full-validation/code-quality/ruff-check.txt
+  - tmp/full-validation/documentation/validation-report.md
+  - tmp/full-validation/git-history/GIT_HISTORY_VALIDATION_REPORT.md
+  - tmp/full-validation/git-history/commit-details.txt
+  - tmp/full-validation/git-history/commit-subjects.txt
+  - tmp/full-validation/git-history/conventional-commits-analysis.txt
+  - tmp/full-validation/test-coverage/SUMMARY.txt
+  - tmp/full-validation/test-coverage/VALIDATION_REPORT.md
+  - tmp/full-validation/test-coverage/coverage.json
+  - tmp/full-validation/test-coverage/pytest-output.txt
+  - tmp/full-validation/test-coverage/test-inventory.txt
+  - tmp/pypi-package-split/agent1-publishing/INVESTIGATION_REPORT.md
+  - type-checking-analysis.md
+
+docs/development/plan/0015-python-3-11-support/plan.md:
+  - ./scripts/publish-to-pypi.sh
+  - /tmp/GCC_TECHNICAL_FEEDBACK_FOR_ALPHA_FORGE.md
+  - /tmp/RESPONSE_TO_ALPHA_FORGE_FEEDBACK.md
+  - scripts/run_validation.py
+
+docs/development/plan/0016-symbol-coverage-expansion/plan.md:
+  - README.md
+  - api.py
+  - docs/architecture/DATA_FORMAT.md
+  - docs/guides/python-api.md
+  - src/gapless_crypto_clickhouse/api.py
+  - src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+  - tests/test_symbol_expansion.py
+
+docs/development/plan/0017-parameter-aliases/plan.md:
+  - /tmp/RESPONSE_TO_ALPHA_FORGE_FEEDBACK.md
+  - README.md
+  - api.py
+  - docs/api/quick-start.md
+  - docs/guides/python-api.md
+  - llms.txt
+  - src/gapless_crypto_clickhouse/api.py
+  - tests/test_parameter_aliases.py
+
+docs/development/plan/0018-upfront-input-validation/plan.md:
+  - /tmp/RESPONSE_TO_ALPHA_FORGE_FEEDBACK.md
+  - api.py
+  - src/gapless_crypto_clickhouse/api.py
+  - tests/test_input_validation.py
+
+docs/development/plan/0019-numpy-1x-compatibility/plan.md:
+  - CHANGELOG.md
+  - validation/storage.py
+
+docs/development/plan/0020-multi-symbol-batch-api/plan.md:
+  - README.md
+  - __init__.py
+  - api.py
+  - llms.txt
+  - src/gapless_crypto_clickhouse/api.py
+  - tests/test_download_multiple.py
+
+docs/development/plan/0021-um-futures-support/plan.md:
+  - ./scripts/publish-to-pypi.sh
+  - /tmp/um-futures-audit/improved_examples.md
+  - CHANGELOG.md
+  - CLAUDE.md
+  - DATA_FORMAT.md
+  - MIGRATION.md
+  - README.md
+  - api.py
+  - docs/development/plan/0021-um-futures-support/rollback.md
+  - llms.txt
+  - scripts/verify_schema_migration.py
+  - src/gapless_crypto_clickhouse/__init__.py
+  - src/gapless_crypto_clickhouse/api.py
+  - src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+  - src/gapless_crypto_clickhouse/utils/timestamp_utils.py
+  - tests/test_api.py
+  - tests/test_binance_public_data_collector.py
+  - tests/test_timestamp_utils.py
+  - tests/test_um_futures_support.py
+  - tests/test_universal_gap_filler.py
+
+docs/development/plan/0022-spot-futures-symbol-alignment/plan.md:
+  - ../../../architecture/decisions/0021-um-futures-support.md
+  - ../../../architecture/decisions/0022-spot-futures-symbol-alignment.md
+  - __init__.py
+  - api.py
+  - binance_public_data_collector.py
+  - src/gapless_crypto_clickhouse/__init__.py
+  - src/gapless_crypto_clickhouse/api.py
+  - src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+  - tests/test_timestamp_utils.py
+
+docs/development/plan/0023-arrow-migration/plan.md:
+  - ../../../architecture/decisions/0023-arrow-migration.md
+  - CHANGELOG.md
+  - MIGRATION_v5_to_v6.md
+  - README.md
+  - benchmark_arrow_comparison.py
+  - docs/guides/MIGRATION_v5_to_v6.md
+  - llms.txt
+  - probe.py
+  - query_api.py
+  - src/gapless_crypto_clickhouse/clickhouse/connection.py
+  - src/gapless_crypto_clickhouse/clickhouse_query.py
+  - src/gapless_crypto_clickhouse/collectors/clickhouse_bulk_loader.py
+  - src/gapless_crypto_clickhouse/llms.txt
+  - src/gapless_crypto_clickhouse/probe.py
+  - src/gapless_crypto_clickhouse/query_api.py
+  - tests/unit/test_clickhouse_connection.py
+
+docs/development/plan/0024-comprehensive-validation-canonicity/COMPLETION_REPORT.md:
+  - docs/architecture/decisions/0024-comprehensive-validation-canonicity.md
+  - docs/development/plan/0024-comprehensive-validation-canonicity/IMPLEMENTATION_SUMMARY.md
+  - docs/development/plan/0024-comprehensive-validation-canonicity/plan.md
+  - docs/validation/ARCHITECTURE.md
+  - src/gapless_crypto_clickhouse/clickhouse/schema_validator.py
+  - test_arrow_equivalence.py
+  - test_deduplication_final.py
+  - test_multi_symbol_isolation.py
+  - test_protocol_http.py
+  - test_query_ohlcv_api.py
+  - test_schema_validation.py
+  - tests/test_arrow_equivalence.py
+  - tests/test_ch_ui_dashboard.py
+  - tests/test_clickhouse_play.py
+  - tests/test_deduplication_final.py
+  - tests/test_multi_symbol_isolation.py
+  - tests/test_protocol_http.py
+  - tests/test_query_ohlcv_api.py
+  - tests/test_schema_validation.py
+
+docs/development/plan/0024-comprehensive-validation-canonicity/IMPLEMENTATION_SUMMARY.md:
+  - ../../../architecture/decisions/0024-comprehensive-validation-canonicity.md
+  - ARCHITECTURE.md
+  - benchmark_arrow_scale_analysis.py
+  - docs/CLICKHOUSE_MIGRATION.md
+  - docs/CURRENT_ARCHITECTURE_STATUS.yaml
+  - docs/architecture/DATA_FORMAT.md
+  - docs/architecture/OVERVIEW.md
+  - docs/architecture/decisions/0005-clickhouse-migration.md
+  - docs/architecture/decisions/0012-documentation-accuracy-remediation.md
+  - docs/architecture/decisions/0024-comprehensive-validation-canonicity.md
+  - docs/development/plan/0012-documentation-accuracy-remediation/plan.md
+  - docs/development/plan/0024-comprehensive-validation-canonicity/plan.md
+  - docs/validation/ARCHITECTURE.md
+  - docs/validation/E2E_TESTING_GUIDE.md
+  - docs/validation/SCREENSHOT_BASELINE.md
+  - plan.md
+  - src/gapless_crypto_clickhouse/clickhouse/connection.py
+  - src/gapless_crypto_clickhouse/clickhouse/schema_validator.py
+  - test_arrow_equivalence.py
+  - test_deduplication_final.py
+  - test_multi_symbol_isolation.py
+  - test_protocol_http.py
+  - test_query_ohlcv_api.py
+  - test_schema_validation.py
+  - tests/e2e/test_ch_ui_dashboard.py
+  - tests/e2e/test_clickhouse_play.py
+  - tests/test_arrow_equivalence.py
+  - tests/test_deduplication_final.py
+  - tests/test_multi_symbol_isolation.py
+  - tests/test_protocol_http.py
+  - tests/test_query_ohlcv_api.py
+  - tests/test_schema_validation.py
+
+docs/development/plan/0024-comprehensive-validation-canonicity/plan.md:
+  - ARCHITECTURE.md
+  - CHANGELOG.md
+  - CLAUDE.md
+  - E2E_TESTING_GUIDE.md
+  - README.md
+  - SCREENSHOT_BASELINE.md
+  - benchmark_arrow_scale_analysis.py
+  - docs/validation/ARCHITECTURE.md
+  - docs/validation/COVERAGE_REPORT.md
+  - docs/validation/OVERVIEW.md
+  - scripts/run_validation.py
+  - src/gapless_crypto_clickhouse/clickhouse/connection.py
+  - src/gapless_crypto_clickhouse/clickhouse/schema_validator.py
+  - tests/e2e/test_ch_ui_dashboard.py
+  - tests/e2e/test_clickhouse_play.py
+  - tests/test_arrow_equivalence.py
+  - tests/test_deduplication_final.py
+  - tests/test_multi_symbol_isolation.py
+  - tests/test_protocol_http.py
+  - tests/test_query_ohlcv_api.py
+  - tests/test_schema_validation.py
+
+docs/development/plan/0025-clickhouse-cloud-skills/plan.md:
+  - /Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py
+  - /Users/terryli/.claude/skills/semantic-release/SKILL.md
+  - /Users/terryli/.claude/skills/skill-architecture/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/CLAUDE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md
+  - /tmp/clickhouse_setup_final_summary.md
+  - CLAUDE.md
+  - SKILL.md
+  - api-endpoints.md
+  - clickhouse-cloud-connection/SKILL.md
+  - clickhouse-cloud-connection/references/connection-test.py
+  - clickhouse-cloud-credentials/SKILL.md
+  - clickhouse-cloud-credentials/references/doppler-schema.md
+  - clickhouse-cloud-credentials/references/onepassword-schema.md
+  - clickhouse-cloud-service-setup/SKILL.md
+  - clickhouse-cloud-service-setup/references/api-endpoints.md
+  - connection-test.py
+  - docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md
+  - doppler-schema.md
+  - onepassword-schema.md
+  - plan.md
+  - quick_validate.py
+
+docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md:
+  - /Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/init_skill.py
+  - /Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py
+  - /Users/terryli/.claude/skills/skill-architecture/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/CLAUDE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md
+  - CLAUDE.md
+  - SKILL.md
+  - config.py
+  - connection.py
+  - docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md
+  - doppler-setup.md
+  - env-setup.md
+  - plan.md
+  - quick_validate.py
+  - references/doppler-setup.md
+  - references/env-setup.md
+  - references/troubleshooting.md
+  - scripts/test_connection_cloud.py
+  - troubleshooting.md
+
+docs/development/plan/0027-local-only-pypi-publishing/plan.md:
+  - ./scripts/publish-to-pypi.sh
+  - .releaserc.json
+  - /Users/terryli/.claude/skills/semantic-release/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/CLAUDE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0027-local-only-pypi-publishing.md
+  - CHANGELOG.md
+  - CLAUDE.md
+  - PUBLISHING.md
+  - docs/architecture/decisions/0027-local-only-pypi-publishing.md
+  - docs/development/PUBLISHING.md
+  - package.json
+  - plan.md
+  - scripts/publish-to-pypi.sh
+
+docs/development/plan/0028-skills-documentation-alignment/plan.md:
+  - ./scripts/publish-to-pypi.sh
+  - .releaserc.json
+  - CLAUDE.md
+  - COMMANDS.md
+  - PUBLISHING.md
+  - PYPI_PUBLISHING_CONFIGURATION.yaml
+  - development/COMMANDS.md
+  - development/PUBLISHING.md
+  - docs/PYPI_PUBLISHING_CONFIGURATION.yaml
+  - docs/architecture/decisions/0027-local-only-pypi-publishing.md
+  - docs/architecture/decisions/0028-skills-documentation-alignment.md
+  - docs/development/COMMANDS.md
+  - docs/development/PUBLISHING.md
+  - docs/development/plan/0028-skills-documentation-alignment/plan.md
+  - plan.md
+  - scripts/publish-to-pypi.sh
+
+docs/development/plan/0029-docstring-package-version-alignment/plan.md:
+  - ../../../architecture/decisions/0029-docstring-package-version-alignment.md
+  - CHANGELOG.md
+  - __init__.py
+  - __probe__.py
+  - api.py
+  - clickhouse/__init__.py
+  - clickhouse/config.py
+  - clickhouse/connection.py
+  - clickhouse_query.py
+  - exceptions.py
+  - resume/__init__.py
+  - storage.py
+  - utils/__init__.py
+  - utils/error_handling.py
+  - utils/etag_cache.py
+  - validation/storage.py
+
+docs/development/plan/0030-documentation-audit-fixes/plan.md:
+  - ../../../architecture/decisions/0030-documentation-cleanup-deferred.md
+  - AGENTS.md
+  - CLAUDE.md
+  - CONTRIBUTING.md
+  - CORE_COMPONENTS.md
+  - DATA_COLLECTION.md
+  - DATA_FORMAT.md
+  - GAP_FILLING.md
+  - OVERVIEW.md
+  - README.md
+  - docs/CLICKHOUSE_MIGRATION.md
+  - docs/README.md
+  - docs/architecture/CORE_COMPONENTS.md
+  - docs/architecture/DATA_FORMAT.md
+  - docs/architecture/OVERVIEW.md
+  - docs/architecture/network.md
+  - docs/guides/DATA_COLLECTION.md
+  - docs/guides/GAP_FILLING.md
+  - docs/guides/python-api.md
+  - models.py
+  - network.md
+  - probe.py
+  - src/gapless_crypto_clickhouse/probe.py
+  - src/gapless_crypto_clickhouse/validation/models.py
+
+docs/diagrams/README.md:
+  - ./assets/collection-pipeline.png
+  - ./docs/diagrams/01-collection-pipeline.mmd
+  - README.md
+  - conf.py
+  - src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
+
+docs/guides/DATA_COLLECTION.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/DATA_FORMAT.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/GAP_FILLING.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/python-api.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/tests/test_binance_collector.py
+
+docs/guides/GAP_FILLING.md:
+  - ../architecture/OVERVIEW.md
+  - ../validation/OVERVIEW.md
+  - DATA_COLLECTION.md
+
+docs/guides/MIGRATION_v5_to_v6.md:
+  - ../../README.md
+  - ../architecture/decisions/0023-arrow-migration.md
+  - benchmark_arrow_scale_analysis.py
+  - llms.txt
+  - probe.py
+
+docs/guides/python-api.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/DATA_FORMAT.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/DATA_COLLECTION.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md
+  - advanced_api_examples.py
+  - basic_data_collection.py
+  - complete_workflow.py
+  - examples/advanced_api_examples.py
+  - examples/simple_api_examples.py
+  - gap_filling_example.py
+  - safe_data_collection.py
+  - simple_api_examples.py
+
+docs/research/questdb-docker-image-analysis.md:
+  - ./questdb.sh
+
+docs/validation/ARCHITECTURE.md:
+  - ../architecture/decisions/0013-autonomous-validation-framework.md
+  - ../architecture/decisions/0023-arrow-migration.md
+  - ../architecture/decisions/0024-comprehensive-validation-canonicity.md
+  - E2E_TESTING_GUIDE.md
+  - OVERVIEW.md
+  - QUERY_PATTERNS.md
+  - SCREENSHOT_BASELINE.md
+  - STORAGE.md
+  - src/gapless_crypto_clickhouse/validation/csv_validator.py
+  - src/gapless_crypto_clickhouse/validation/storage.py
+
+docs/validation/E2E_TESTING_GUIDE.md:
+  - ../architecture/decisions/0013-autonomous-validation-framework.md
+  - ./OVERVIEW.md
+  - ./SCREENSHOT_BASELINE.md
+  - CLAUDE.md
+  - conftest.py
+  - scripts/run_validation.py
+  - test_ch_ui_dashboard.py
+  - test_clickhouse_play.py
+  - tests/e2e/test_ch_ui_dashboard.py
+  - tests/e2e/test_clickhouse_play.py
+
+docs/validation/OVERVIEW.md:
+  - ../architecture/decisions/0023-arrow-migration.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/csv_validator.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/models.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py
+  - ARCHITECTURE.md
+  - E2E_TESTING_GUIDE.md
+  - benchmark_arrow_scale_analysis.py
+
+docs/validation/QUERY_PATTERNS.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py
+
+docs/validation/SCREENSHOT_BASELINE.md:
+  - ../architecture/decisions/0013-autonomous-validation-framework.md
+  - ./E2E_TESTING_GUIDE.md
+  - CLAUDE.md
+  - scripts/run_validation.py
+  - tests/e2e/conftest.py
+
+docs/validation/STORAGE.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/models.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py
+  - /Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py
+
+examples/README.md:
+  - ../README.md
+  - ../docs/
+  - advanced_api_examples.py
+  - basic_data_collection.py
+  - binance_spot_BTCUSDT-1h_20240101-20240131_v2.5.0.metadata.json
+  - binance_spot_ETHUSDT-4h_20240101-20240131_v2.5.0.metadata.json
+  - complete_workflow.py
+  - examples/advanced_api_examples.py
+  - examples/basic_data_collection.py
+  - examples/complete_workflow.py
+  - examples/gap_filling_example.py
+  - examples/simple_api_examples.py
+  - gap_filling_example.py
+  - simple_api_examples.py
+
+skills/clickhouse-cloud-connection/SKILL.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/references/connection-test.py
+  - references/connection-test.py
+  - test_connection.py
+
+skills/clickhouse-cloud-credentials/SKILL.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/references/doppler-schema.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/references/onepassword-schema.md
+  - references/doppler-schema.md
+  - references/onepassword-schema.md
+
+skills/clickhouse-cloud-credentials/references/doppler-schema.md:
+  - your_script.py
+
+skills/clickhouse-cloud-service-setup/SKILL.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-service-setup/references/api-endpoints.md
+  - references/api-endpoints.md
+
+skills/gapless-crypto-clickhouse-onboarding/SKILL.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/python-api.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-service-setup/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/doppler-setup.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/env-setup.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/troubleshooting.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/scripts/test_connection_cloud.py
+  - references/doppler-setup.md
+  - references/env-setup.md
+  - references/troubleshooting.md
+  - scripts/test_connection_cloud.py
+  - skills/gapless-crypto-clickhouse-onboarding/scripts/test_connection_cloud.py
+
+skills/gapless-crypto-clickhouse-onboarding/references/doppler-setup.md:
+  - .doppler.yaml
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md#step-5-run-first-query-5-minutes
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/env-setup.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/troubleshooting.md
+  - SKILL.md
+  - env-setup.md
+  - script.py
+  - skills/gapless-crypto-clickhouse-onboarding/scripts/test_connection_cloud.py
+  - troubleshooting.md
+  - your_script.py
+
+skills/gapless-crypto-clickhouse-onboarding/references/env-setup.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md#step-5-run-first-query-5-minutes
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/doppler-setup.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/troubleshooting.md
+  - SKILL.md
+  - doppler-setup.md
+  - skills/gapless-crypto-clickhouse-onboarding/scripts/test_connection_cloud.py
+  - troubleshooting.md
+  - your_script.py
+
+skills/gapless-crypto-clickhouse-onboarding/references/troubleshooting.md:
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/doppler-setup.md
+  - /Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/env-setup.md
+  - SKILL.md
+  - doppler-setup.md
+  - env-setup.md

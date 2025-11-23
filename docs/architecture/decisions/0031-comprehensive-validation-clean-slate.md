@@ -30,6 +30,7 @@ After completing ADR-0029 (package name alignment) and ADR-0030 (documentation c
 Chosen option: **Hybrid approach with immediate fixes**
 
 Execute comprehensive validation covering:
+
 1. Code compilation and imports
 2. Test suite execution
 3. Documentation accuracy (versions, counts, API surface)
@@ -52,18 +53,21 @@ Then immediately fix all CRITICAL and HIGH priority issues found.
 ## Validation Strategy
 
 ### Phase 1: Automated Foundation (10 min)
+
 - Environment health check
 - Static analysis (ruff, mypy)
 - Package import validation
 - Validation scripts (validate_examples.py, verify_cross_references.py)
 
 ### Phase 2: Test Suite (15 min)
+
 - Unit tests (fast, isolated)
 - Integration tests (requires ClickHouse)
 - Full suite with coverage
 - Example script compilation
 
 ### Phase 3: Ground Truth Verification (20 min)
+
 - Version consistency across all files
 - Timeframe count (documentation vs implementation)
 - Symbol count (documentation vs implementation)
@@ -71,8 +75,10 @@ Then immediately fix all CRITICAL and HIGH priority issues found.
 - API surface discovery
 
 ### Phase 4: Fixes (15 min)
+
 Apply fixes for:
-- **CRITICAL #1**: Version mismatch (__init__.py 1.0.0 → 8.0.0)
+
+- **CRITICAL #1**: Version mismatch (**init**.py 1.0.0 → 8.0.0)
 - **CRITICAL #2**: Timeframe constants (add 3d, 1w, 1mo OR update docs to 13)
 - **CRITICAL #3**: Mypy config (gapless_crypto_data → gapless_crypto_clickhouse)
 - **HIGH #4**: Symbol count (400+ → 713 in docs)

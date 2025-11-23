@@ -4,10 +4,18 @@ This module provides single source of truth for timeframe-to-interval mappings
 used across collectors and gap fillers, eliminating code duplication and
 preventing calculation bugs.
 
+Binance Dual Notation Architecture:
+    - Monthly timeframe uses DIFFERENT notation across Binance systems:
+      * Public Data Repository (data.binance.vision): "1mo" in file paths
+      * REST API (api.binance.com/api/v3/klines): "1M" as interval parameter
+    - Other exotic timeframes (3d, 1w): Identity mapping (same notation everywhere)
+    - TIMEFRAME_TO_BINANCE_INTERVAL handles this mapping automatically
+
 SLO Targets:
     Maintainability: Single source of truth eliminates 3+ code duplications
     Correctness: All 16 timeframes map to accurate minute values
     Availability: Supports full spectrum from 1s to 1mo (13 standard + 3 exotic)
+    Compatibility: Dual notation support for Public Data + REST API workflows
 """
 
 from datetime import timedelta
@@ -46,6 +54,10 @@ TIMEFRAME_TO_PYTHON_TIMEDELTA: Dict[str, timedelta] = {
 }
 
 # Binance API interval mapping (for API parameter compatibility)
+# NOTE: Monthly timeframe has dual notation:
+#   - "1mo" for Public Data Repository paths (data.binance.vision)
+#   - "1M" for REST API interval parameter (api.binance.com/api/v3/klines)
+# All other timeframes use identity mapping (e.g., "3d" → "3d", "1w" → "1w")
 TIMEFRAME_TO_BINANCE_INTERVAL: Dict[str, str] = {
     "1s": "1s",
     "1m": "1m",

@@ -10,6 +10,7 @@
 Validate from clean slate that gapless-crypto-clickhouse repository is working correctly across all dimensions, then fix all CRITICAL and HIGH priority issues found.
 
 **Success Criteria**:
+
 - All code compiles and imports successfully
 - Test suite passes (unit tests minimum)
 - Documentation claims match implementation (versions, counts, API surface)
@@ -23,15 +24,12 @@ Validate from clean slate that gapless-crypto-clickhouse repository is working c
 6-agent parallel audit (2025-01-22) identified critical discrepancies:
 
 **CRITICAL Issues**:
+
 1. Version mismatch: `__init__.py` shows 1.0.0 but `pyproject.toml` shows 8.0.0
 2. Timeframe constants incomplete: Docs claim 16, implementation has 13 (missing 3d, 1w, 1mo)
 3. Mypy config broken: References `gapless_crypto_data` instead of `gapless_crypto_clickhouse`
 
-**HIGH Issues**:
-4. Symbol count stale: Docs say "400+" but actual is 713
-5. CLI commands in API-only package documentation
-6. Non-existent API methods documented
-7. Stale version references (v3.x, v4.x in v8.0.0 codebase)
+**HIGH Issues**: 4. Symbol count stale: Docs say "400+" but actual is 713 5. CLI commands in API-only package documentation 6. Non-existent API methods documented 7. Stale version references (v3.x, v4.x in v8.0.0 codebase)
 
 ### Context
 
@@ -53,6 +51,7 @@ Validate from clean slate that gapless-crypto-clickhouse repository is working c
 ### Phase 1: Automated Foundation Validation (10 min)
 
 **1.1 Environment Health**
+
 ```bash
 python --version  # Verify 3.12+
 uv --version
@@ -60,6 +59,7 @@ uv sync --dev
 ```
 
 **1.2 Static Analysis**
+
 ```bash
 uv run ruff format --check .
 uv run ruff check .
@@ -67,18 +67,21 @@ uv run mypy src/  # Expected to fail due to wrong package name
 ```
 
 **1.3 Package Import**
+
 ```bash
 # Test import and discover version mismatch
 uv run python -c "import gapless_crypto_clickhouse as gcd; print(f'Version: {gcd.__version__}')"
 ```
 
 **1.4 Validation Scripts**
+
 ```bash
 uv run python validate_examples.py
 uv run python verify_cross_references.py
 ```
 
 **Expected Outcomes**:
+
 - ✅ Ruff passes
 - ❌ Mypy fails (CRITICAL #3)
 - ⚠️ Version shows 1.0.0 (CRITICAL #1)
@@ -88,27 +91,32 @@ uv run python verify_cross_references.py
 ### Phase 2: Test Suite Execution (15 min)
 
 **2.1 Unit Tests**
+
 ```bash
 uv run pytest -m unit -v --tb=short
 ```
 
 **2.2 Integration Tests** (if ClickHouse available)
+
 ```bash
 docker-compose ps  # Check services
 uv run pytest -m integration -v --tb=short
 ```
 
 **2.3 Full Suite with Coverage**
+
 ```bash
 uv run pytest --cov=src/gapless_crypto_clickhouse --cov-report=term --cov-report=html -v
 ```
 
 **2.4 Example Compilation**
+
 ```bash
 for file in examples/*.py; do python -m py_compile "$file"; done
 ```
 
 **Expected Outcomes**:
+
 - ✅ Unit tests pass
 - ⚠️ Integration tests may skip (service dependency)
 - ⚠️ Some tests may fail (Python 3.14 pandas compatibility)
@@ -117,6 +125,7 @@ for file in examples/*.py; do python -m py_compile "$file"; done
 ### Phase 3: Ground Truth Verification (20 min)
 
 **3.1 Version Audit**
+
 ```bash
 grep '^version = ' pyproject.toml
 grep '"version"' package.json
@@ -124,9 +133,10 @@ grep '^__version__ = ' src/gapless_crypto_clickhouse/__init__.py
 uv run python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__version__)"
 ```
 
-**Expected**: pyproject.toml/package.json show 8.0.0, __init__.py shows 1.0.0 ❌
+**Expected**: pyproject.toml/package.json show 8.0.0, **init**.py shows 1.0.0 ❌
 
 **3.2 Timeframe Count Audit**
+
 ```bash
 uv run python -c "
 from gapless_crypto_clickhouse import get_supported_timeframes
@@ -144,6 +154,7 @@ for exotic in ['3d', '1w', '1mo']:
 **Expected**: API may return 16, but constants only have 13 ❌
 
 **3.3 Symbol Count Audit**
+
 ```bash
 uv run python -c "
 from gapless_crypto_clickhouse import get_supported_symbols
@@ -157,6 +168,7 @@ grep -n "400\|713" CLAUDE.md README.md
 **Expected**: Implementation has 713, some docs say "400+" ⚠️
 
 **3.4 Package Name Audit**
+
 ```bash
 grep -A 1 "module = " pyproject.toml | grep "gapless_crypto_data"
 ```
@@ -164,6 +176,7 @@ grep -A 1 "module = " pyproject.toml | grep "gapless_crypto_data"
 **Expected**: 3 mypy overrides with wrong name ❌
 
 **3.5 API Surface Discovery**
+
 ```bash
 uv run python -c "
 import gapless_crypto_clickhouse as gcd
@@ -180,6 +193,7 @@ print('API surface saved')
 ### Phase 4: Fix Critical Issues (15 min)
 
 **Fix #1: Version Mismatch**
+
 ```python
 # Edit src/gapless_crypto_clickhouse/__init__.py line 84
 __version__ = "8.0.0"  # Was: "1.0.0"
@@ -188,6 +202,7 @@ __version__ = "8.0.0"  # Was: "1.0.0"
 **Fix #2: Timeframe Constants**
 
 Decision point: Check if collector actually implements 16 timeframes
+
 - If yes: Add 3d, 1w, 1mo to timeframe_constants.py
 - If no: Revert docs back to 13 timeframes
 
@@ -202,18 +217,21 @@ TIMEFRAME_TO_MINUTES = {
 ```
 
 **Fix #3: Mypy Config**
+
 ```bash
 # Edit pyproject.toml lines 119, 124, 128
 sed -i '' 's/gapless_crypto_data\./gapless_crypto_clickhouse./g' pyproject.toml
 ```
 
 **Fix #4: Symbol Count**
+
 ```bash
 # Update CLAUDE.md: 400+ → 713
 sed -i '' 's/400+/713/g' CLAUDE.md
 ```
 
 **Validation After Fixes**:
+
 ```bash
 # Verify version
 uv run python -c "import gapless_crypto_clickhouse; assert gapless_crypto_clickhouse.__version__ == '8.0.0'"
@@ -233,6 +251,7 @@ uv run pytest -m unit -v
 **5.1 Generate Validation Report**
 
 Create `VALIDATION_REPORT.md` with:
+
 - Executive summary
 - Critical issues found and fixed
 - Test results
@@ -240,6 +259,7 @@ Create `VALIDATION_REPORT.md` with:
 - Evidence artifacts
 
 **5.2 Commit with Conventional Commits**
+
 ```bash
 git add -A
 git commit -m "fix(validation): resolve critical version and config issues
@@ -264,6 +284,7 @@ Closes: [issues if any]
 **5.3 Release**
 
 Use semantic-release skill (conventional commits → version bump → changelog → GitHub release):
+
 ```bash
 # Push to trigger release workflow
 git push origin main
@@ -279,6 +300,7 @@ git push origin main
 **Implementation Check: Timeframes**
 
 Checked `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py:281-298`:
+
 ```python
 available_timeframes = [
     "1s", "1m", "3m", "5m", "15m", "30m",
@@ -320,20 +342,24 @@ available_timeframes = [
 ## SLOs
 
 **Availability**:
+
 - All imports succeed without errors
 - All documented API methods exist
 
 **Correctness**:
+
 - Version numbers match across all files
 - Timeframe/symbol counts match implementation
 - Type checking works (mypy passes)
 
 **Observability**:
+
 - Validation report documents all findings
 - Test coverage report available (htmlcov/)
 - API surface documented (api_surface.json)
 
 **Maintainability**:
+
 - Validation scripts automated (CI-ready)
 - Ground truth established for future changes
 - Evidence artifacts preserved
@@ -347,13 +373,15 @@ available_timeframes = [
 **2025-01-22 [PHASE 2 SKIPPED]**: Test suite skipped (Python 3.14 pandas compatibility issue - separate from validation).
 
 **2025-01-22 [PHASE 3 COMPLETE]**: Ground truth verification complete. All 4 issues confirmed:
-- Version: __init__.py (1.0.0) vs pyproject.toml (8.0.0)
+
+- Version: **init**.py (1.0.0) vs pyproject.toml (8.0.0)
 - Timeframes: Constants (13) vs Implementation (16) - missing 3d, 1w, 1mo
 - Mypy: 3 module overrides with wrong package name
 - Symbols: Docs (400+) vs Implementation (713)
 
 **2025-01-22 [PHASE 4 COMPLETE]**: All fixes applied and validated:
-- ✅ __init__.py version: 1.0.0 → 8.0.0
+
+- ✅ **init**.py version: 1.0.0 → 8.0.0
 - ✅ Added exotic timeframes: 3d, 1w, 1mo to constants
 - ✅ Fixed mypy config: gapless_crypto_data → gapless_crypto_clickhouse
 - ✅ Updated CLAUDE.md: 400+ → 713
