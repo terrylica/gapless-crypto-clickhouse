@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.4...v9.0.0) (2025-11-23)
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** Requires pandas >=2.2.0 (was >=2.0.0,<2.2.0)
+
+FIXES:
+- Update pandas constraint: >=2.0.0,<2.2.0 → >=2.2.0,<3.0.0
+- Enable Python 3.14 compatibility (C API fixes in pandas 2.2+)
+- Unblock full test suite execution (pytest now works on Python 3.14)
+- Fix stale version test expecting 1.0.0 instead of 8.0.0
+- Fix stale package name test expecting gapless-crypto-data
+
+VALIDATION:
+- pandas 2.3.3 installed successfully ✅
+- NumPy constraint maintained: 1.26.4 (<2.0.0 for Alpha Forge) ✅
+- test_timeframe_constants.py: 14/14 passed ✅
+- Selected unit tests: 54/54 passed ✅
+- All ADR-0032 changes validated (dual notation, 16 timeframes) ✅
+- No deprecation warnings ✅
+- No regressions detected ✅
+
+CONTEXT:
+- Python 3.14 changed _PyLong_AsByteArray signature (5→6 params)
+- pandas 2.1.4 fails to compile on Python 3.14 (ADR-0031 blocker)
+- pandas 2.2+ includes C API compatibility fixes
+- NumPy 1.x constraint maintained (Alpha Forge/TA-Lib compatibility)
+- Enables full pytest execution (was blocked since ADR-0031)
+
+Implements: ADR-0033
+Related: ADR-0031 (identified pandas compilation issue), ADR-0032 (recommended upgrade)
+
+### build
+
+* **deps:** upgrade pandas to 2.2+ for Python 3.14 compatibility ([be87a94](https://github.com/terrylica/gapless-crypto-clickhouse/commit/be87a94fedd2f7f6e32df3a9398a2bce560fec3a))
+
 ## [8.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.3...v8.0.4) (2025-11-23)
 
 ### Documentation
