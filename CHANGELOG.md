@@ -2,6 +2,95 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v10.0.0...v11.0.0) (2025-11-23)
+
+### ⚠ BREAKING CHANGES
+
+* Removed unit tests and linting from GitHub Actions (local-first development)
+
+This commit implements ADR-0035 (CI/CD Production Validation Policy), which updates
+the workspace-wide policy to allow production infrastructure validation in CI/CD
+while preserving local-first development for code quality checks.
+
+Changes:
+
+1. **Delete .github/workflows/ci.yml** (BREAKING CHANGE)
+   - Removed: test-fast job (pytest, ruff check, ruff format)
+   - Removed: test-e2e job (Docker integration tests, Playwright)
+   - Removed: benchmark job (performance tests)
+   - Rationale: Local-first development (5-30s feedback vs 2-5min CI/CD)
+
+2. **Create .github/workflows/production-validation.yml**
+   - Scheduled cron: Every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
+   - Job 1: ClickHouse Cloud validation (schema + write/read round-trip)
+   - Job 2: Binance CDN availability (HTTP HEAD request)
+   - Job 3: Simplified E2E validation (3-layer checks)
+   - Uses Doppler credentials via GitHub Actions secrets
+
+3. **Create scripts/validate_clickhouse_cloud.py** (PEP 723)
+   - Schema validation (ORDER BY symbol-first from ADR-0034)
+   - Write/read round-trip (100 BTCUSDT 1h bars)
+   - Deduplication correctness (ReplacingMergeTree + FINAL)
+   - Cleanup test data after validation
+
+4. **Create scripts/validate_binance_cdn.py** (PEP 723)
+   - HTTP HEAD request to CloudFront CDN
+   - 5s timeout
+   - Detects outages affecting data collection (22x performance advantage)
+
+5. **Update CLAUDE.md** (project documentation)
+   - Add "CI/CD Production Validation" section
+   - Document local-first development workflow
+   - Document production validation workflow
+   - Document manual validation commands
+
+6. **Update ~/.claude/CLAUDE.md** (global workspace policy)
+   - Add "Production Validation Exception" section
+   - Preserve local-first development philosophy
+   - Allow production infrastructure validation in CI/CD
+   - Document rationale and example implementation
+
+Policy Update Summary:
+
+**Local-First Development** (Preserved):
+- ❌ NO unit testing in GitHub Actions
+- ❌ NO linting/formatting in CI/CD
+- ✅ Developers run tests locally before commit (5-30s feedback)
+
+**Production Validation Exception** (NEW):
+- ✅ ClickHouse Cloud schema validation in CI/CD
+- ✅ External service health checks (Binance CDN)
+- ✅ Scheduled monitoring (every 6 hours, independent of code changes)
+- ✅ Write/read round-trip correctness (production deduplication)
+
+**Rationale**:
+- Production environments require credentials (Doppler) unavailable locally
+- Scheduled monitoring detects infrastructure degradation independent of code changes
+- Aligns with ADR-0027 philosophy (local development, CI/CD for production only)
+
+**Migration for Developers**:
+
+Before commit (local-only):
+```bash
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest -v --cov=src
+```
+
+Before push (integration tests against Homebrew ClickHouse):
+```bash
+uv run pytest -m integration
+```
+
+**References**:
+- ADR-0035: CI/CD Production Validation Policy
+- ADR-0027: Local-Only PyPI Publishing (workspace policy foundation)
+- ADR-0034: Schema Optimization (ORDER BY validation requirement)
+
+### Features
+
+* implement CI/CD production validation policy ([6b7a5bf](https://github.com/terrylica/gapless-crypto-clickhouse/commit/6b7a5bf145d53b08b0baf7dd88709c2edc125106))
+
 ## [10.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v9.0.0...v10.0.0) (2025-11-23)
 
 ### ⚠ BREAKING CHANGES
