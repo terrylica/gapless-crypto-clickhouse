@@ -922,7 +922,7 @@ gapless-crypto-clickhouse/
 
 ## 🔍 Supported Timeframes
 
-All 13 Binance timeframes supported for complete market coverage:
+All 16 Binance timeframes supported for complete market coverage (13 standard + 3 exotic):
 
 | Timeframe  | Code  | Description              | Use Case                     |
 | ---------- | ----- | ------------------------ | ---------------------------- |
@@ -939,6 +939,9 @@ All 13 Binance timeframes supported for complete market coverage:
 | 8 hours    | `8h`  | Third-day cycles         | Risk management              |
 | 12 hours   | `12h` | Half-day patterns        | Overnight positions          |
 | 1 day      | `1d`  | Daily analysis           | Long-term trends             |
+| 3 days     | `3d`  | Multi-day patterns       | Weekly trend detection       |
+| 1 week     | `1w`  | Weekly analysis          | Swing trading, market cycles |
+| 1 month    | `1mo` | Monthly patterns         | Long-term strategy, macro    |
 
 ## ⚠️ Requirements
 
