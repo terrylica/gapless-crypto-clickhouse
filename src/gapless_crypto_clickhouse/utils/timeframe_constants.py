@@ -30,6 +30,9 @@ TIMEFRAME_TO_MINUTES: Dict[str, float] = {
     "8h": 480,
     "12h": 720,
     "1d": 1440,  # 24 hours = 1440 minutes
+    "3d": 4320,  # 3 days = 72 hours = 4320 minutes
+    "1w": 10080,  # 7 days = 168 hours = 10080 minutes
+    "1mo": 43200,  # 30 days = 720 hours = 43200 minutes (approximate)
 }
 
 # Pandas Timedelta mapping (derived from minutes)
@@ -57,6 +60,9 @@ TIMEFRAME_TO_BINANCE_INTERVAL: Dict[str, str] = {
     "8h": "8h",
     "12h": "12h",
     "1d": "1d",
+    "3d": "3d",
+    "1w": "1w",
+    "1mo": "1M",  # Binance API uses "1M" for monthly interval
 }
 
 # Validation: All timeframes must be present in all mappings
@@ -74,6 +80,9 @@ _EXPECTED_TIMEFRAMES = {
     "8h",
     "12h",
     "1d",
+    "3d",
+    "1w",
+    "1mo",
 }
 
 assert set(TIMEFRAME_TO_MINUTES.keys()) == _EXPECTED_TIMEFRAMES, (

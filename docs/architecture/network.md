@@ -9,6 +9,7 @@
 **Provider**: AWS S3 + CloudFront CDN
 
 **Infrastructure**:
+
 - 400+ edge locations globally
 - 99.99% SLA
 - Automatic failover and routing
@@ -20,12 +21,14 @@
 The package uses two different HTTP clients optimized for different use cases:
 
 **Monthly/Daily Files** (Primary Data Collection):
+
 - **Client**: `urllib` (Python standard library)
 - **Performance**: 2x faster for single large files
 - **Use Case**: CloudFront CDN downloads of monthly/daily ZIP archives
 - **Rationale**: Simple HTTP requests, no connection pooling overhead
 
 **Concurrent Downloads** (Gap Filling):
+
 - **Client**: `httpx` with connection pooling
 - **Use Case**: Multiple small requests to Binance REST API
 - **Configuration**:
@@ -36,10 +39,12 @@ The package uses two different HTTP clients optimized for different use cases:
 ## Connection Pooling
 
 **When Used**:
+
 - Concurrent API requests (gap filling via Binance REST API)
 - Multiple small requests benefit from connection reuse
 
 **When NOT Used**:
+
 - CloudFront CDN downloads
 - Each request routed to different edge server
 - Connection pooling provides no benefit
@@ -51,6 +56,7 @@ The package uses two different HTTP clients optimized for different use cases:
 **CloudFront Behavior**: Automatic failover handled at CDN level
 
 **Production Results**:
+
 - 0% failure rate in production usage
 - CDN automatically routes around failed edge servers
 - No application-level retry logic required
@@ -58,6 +64,7 @@ The package uses two different HTTP clients optimized for different use cases:
 ## Optimization Opportunities
 
 **ETag-Based Caching** (Future Enhancement):
+
 - CloudFront supports ETag headers
 - Bandwidth reduction for repeat downloads
 - Status: Not implemented (v1.0.0)

@@ -116,16 +116,16 @@ ignore_missing_imports = false
 
 # Per-module configuration for gradual adoption
 [[tool.mypy.overrides]]
-module = "gapless_crypto_data.__init__"
+module = "gapless_crypto_clickhouse.__init__"
 disallow_untyped_defs = true
 
 # Enforce strict mode on SDK entry points (v3.2.0)
 [[tool.mypy.overrides]]
-module = "gapless_crypto_data.api"
+module = "gapless_crypto_clickhouse.api"
 disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
-module = "gapless_crypto_data.__probe__"
+module = "gapless_crypto_clickhouse.__probe__"
 disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]

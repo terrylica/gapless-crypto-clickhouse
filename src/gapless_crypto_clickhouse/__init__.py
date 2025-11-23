@@ -81,7 +81,7 @@ Supported Symbols (713 perpetual symbols - Spot + Futures Aligned):
     Major pairs: BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, XRPUSDT, and 708 more.
 """
 
-__version__ = "1.0.0"
+__version__ = "8.0.0"
 __author__ = "Eon Labs"
 __email__ = "terry@eonlabs.com"
 

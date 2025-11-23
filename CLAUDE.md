@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection tool providing authentic Binance data with zero-gap guarantee. 22x faster than API-only approaches via Binance Public Data Repository (CloudFront CDN).
 
-**Core Capability**: Collect complete historical OHLCV data with microstructure metrics (11-column format) for 16 timeframes (13 standard: 1s-1d + 3 exotic: 3d, 1w, 1mo) across 400+ trading pairs.
+**Core Capability**: Collect complete historical OHLCV data with microstructure metrics (11-column format) for 16 timeframes (13 standard: 1s-1d + 3 exotic: 3d, 1w, 1mo) across 713 trading pairs.
 
 ## Quick Navigation
 
@@ -150,5 +150,5 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 - Core data collection (CDN + REST API dual source)
 - ClickHouse database integration (ReplacingMergeTree with deduplication)
 - Idempotent ingestion with deterministic versioning
-- USDT-margined futures support (400+ symbols)
+- USDT-margined futures support (713 symbols)
 - High-performance bulk loading (1.1M rows/sec validated)

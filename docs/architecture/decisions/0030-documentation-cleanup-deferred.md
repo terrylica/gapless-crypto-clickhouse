@@ -9,6 +9,7 @@ Accepted - Implementation Deferred
 Comprehensive documentation audit (2025-11-22) revealed **15 instances** of outdated package name references in markdown files that were missed during ADR-0029 implementation:
 
 **Files Affected**:
+
 - `CONTRIBUTING.md` (4 instances): `gapless-crypto-data` → `gapless-crypto-clickhouse`
 - `docs/README.md` (2 instances): Title and package description
 - `docs/CLICKHOUSE_MIGRATION.md` (1 instance): Package name in header
@@ -19,6 +20,7 @@ Comprehensive documentation audit (2025-11-22) revealed **15 instances** of outd
 **Root Cause**: ADR-0029 focused on Python source code cleanup. Markdown documentation files were not systematically updated.
 
 **Current State**:
+
 - ✅ Python code: 100% aligned with `gapless-crypto-clickhouse` identity
 - ⚠️ Markdown docs: ~85% aligned (15 instances requiring fixes)
 - ✅ Critical user docs: README.md, CLAUDE.md, CHANGELOG.md all correct
@@ -30,6 +32,7 @@ Comprehensive documentation audit (2025-11-22) revealed **15 instances** of outd
 ### Rationale
 
 **Why Defer**:
+
 1. **Just shipped v8.0.0**: Package released 2025-11-22 with ADR-0029 breaking changes
 2. **Code is correct**: All Python source properly references `gapless-crypto-clickhouse`
 3. **Critical docs correct**: README.md (root), CLAUDE.md, CHANGELOG.md all accurate
@@ -37,11 +40,13 @@ Comprehensive documentation audit (2025-11-22) revealed **15 instances** of outd
 5. **Avoid rush fixes**: Post-release fixes often introduce new errors
 
 **Why Not Defer**:
+
 - User-facing docs like CONTRIBUTING.md have wrong package name
 - New contributors following CONTRIBUTING.md will clone wrong repository
 - Developer tooling docs (AGENTS.md) reference wrong module paths
 
 **Compromise**:
+
 - Fix **critical user-facing** issues immediately (addressed in separate commits)
 - Defer **comprehensive documentation sweep** to this ADR's implementation
 
@@ -50,9 +55,10 @@ Comprehensive documentation audit (2025-11-22) revealed **15 instances** of outd
 ### Phase 1: Immediate Fixes (Not Deferred)
 
 Handled separately from this ADR:
+
 - ✅ Remove CLI documentation from DATA_COLLECTION.md (package never had CLI)
 - ✅ Update timeframe count 13→16 across docs
-- ✅ Fix probe.py hardcoded version (import __version__)
+- ✅ Fix probe.py hardcoded version (import **version**)
 - ✅ Create missing documentation files (CORE_COMPONENTS.md, network.md, GAP_FILLING.md)
 
 ### Phase 2: Comprehensive Documentation Sweep (This ADR - Deferred)
@@ -60,6 +66,7 @@ Handled separately from this ADR:
 **Target Sprint**: Next planning cycle (est. 2025-12-01)
 
 **Scope**:
+
 1. **Package Name Cleanup** (15 instances):
    - CONTRIBUTING.md: Replace git clone URL, package references
    - docs/README.md: Update title and intro
@@ -80,6 +87,7 @@ Handled separately from this ADR:
    - Add missing examples where identified
 
 **Acceptance Criteria**:
+
 - Zero grep matches for `gapless-crypto-data` in markdown (except migration notes)
 - All internal links validated
 - All code examples tested
@@ -103,11 +111,13 @@ Handled separately from this ADR:
 ### Mitigation
 
 **Immediate fixes** (not deferred):
+
 1. Add banner to CONTRIBUTING.md: "⚠️ Documentation update in progress. Use `gapless-crypto-clickhouse` package name."
 2. Ensure README.md (most visible) is 100% accurate (already done)
 3. Fix DATA_COLLECTION.md CLI references (removes most confusing docs)
 
 **Tracking**:
+
 - Create GitHub issue linking to ADR-0030
 - Add to next sprint planning
 - Set reminder for 2025-12-01 review
@@ -129,5 +139,6 @@ Handled separately from this ADR:
 This is a **process ADR** documenting a conscious decision to defer work, not reject it. The documentation cleanup is valuable and will be completed, but not rushed immediately after a major release.
 
 **Immediate vs Deferred Criteria**:
+
 - **Immediate**: Incorrect information causing user errors (CLI docs, timeframes)
 - **Deferred**: Package name inconsistencies where code is correct and README is accurate

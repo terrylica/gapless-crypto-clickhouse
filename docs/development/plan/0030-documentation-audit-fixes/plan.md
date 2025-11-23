@@ -11,18 +11,20 @@ Fix critical documentation issues discovered in comprehensive audit while deferr
 ## Background
 
 Multi-agent documentation audit (6 parallel agents, DCTL methodology) across 129 files revealed:
+
 - **Docstrings**: 9.5/10 (2 minor issues)
 - **Technical accuracy**: 7/10 (3 inconsistencies)
 - **Package identity in code**: 9.5/10 (1 config issue - mypy)
 - **Package identity in docs**: 7.5/10 (15 instances - DEFERRED to ADR-0030 Phase 2)
 
 **User Decisions** (from clarification loop):
+
 1. Timeframe count: Update to 16 everywhere
 2. Package names: Create ADR-0030, defer to next sprint
 3. CLI docs: Remove entirely (package never had CLI)
 4. Broken links: Extract and reorganize content
 5. Symbol count: Keep '400+' as approximate
-6. Hardcoded versions: probe.py import __version__, models.py keep independent + document
+6. Hardcoded versions: probe.py import **version**, models.py keep independent + document
 
 ## Plan
 
@@ -31,7 +33,7 @@ Multi-agent documentation audit (6 parallel agents, DCTL methodology) across 129
 **Scope**: Fix incorrect information causing user errors
 
 1. **Update Timeframe Count** (13→16)
-   - Files: CLAUDE.md, README.md, __init__.py, DATA_FORMAT.md
+   - Files: CLAUDE.md, README.md, **init**.py, DATA_FORMAT.md
    - Change: "13 timeframes" → "16 timeframes (13 standard: 1s-1d + 3 exotic: 3d, 1w, 1mo)"
    - Rationale: Implementation has 16, docs claim 13 (discovered by Technical Accuracy agent)
 
@@ -49,7 +51,7 @@ Multi-agent documentation audit (6 parallel agents, DCTL methodology) across 129
 4. **Remove CLI Documentation**
    - File: docs/guides/DATA_COLLECTION.md
    - Remove: Lines 63-132 (entire CLI usage section)
-   - Rationale: Package never had CLI (confirmed in README.md:139, __probe__.py fixed in ADR-0029)
+   - Rationale: Package never had CLI (confirmed in README.md:139, **probe**.py fixed in ADR-0029)
 
 5. **Create Missing Documentation Files**
    - CORE_COMPONENTS.md: Extract from docs/architecture/OVERVIEW.md
@@ -74,6 +76,7 @@ Multi-agent documentation audit (6 parallel agents, DCTL methodology) across 129
 ### Files Changed (Phase 1 Only)
 
 **Documentation** (7 files):
+
 - CLAUDE.md (timeframe count)
 - README.md (timeframe count)
 - docs/architecture/DATA_FORMAT.md (timeframe count)
@@ -83,7 +86,8 @@ Multi-agent documentation audit (6 parallel agents, DCTL methodology) across 129
 - docs/guides/GAP_FILLING.md (new file - stub)
 
 **Source Code** (2 files):
-- src/gapless_crypto_clickhouse/__init__.py (timeframe count)
+
+- src/gapless_crypto_clickhouse/**init**.py (timeframe count)
 - src/gapless_crypto_clickhouse/probe.py (fix hardcoded version)
 - src/gapless_crypto_clickhouse/validation/models.py (add documentation)
 
@@ -101,12 +105,14 @@ Multi-agent documentation audit (6 parallel agents, DCTL methodology) across 129
 ### Decision Rationale
 
 **Fix Now** (Phase 1):
+
 - Incorrect technical claims (timeframes)
 - Version drift (probe.py)
 - Non-existent CLI documentation
 - Broken navigation links
 
 **Defer** (Phase 2 - ADR-0030):
+
 - Package name inconsistencies where code is correct
 - Comprehensive validation suite
 - Quality improvements (timestamps, TOC, formatting)
@@ -128,9 +134,9 @@ Multi-agent documentation audit (6 parallel agents, DCTL methodology) across 129
 
 - [ ] **Task 1**: Update CLAUDE.md timeframe count (line 9)
 - [ ] **Task 2**: Update README.md timeframe count (line 41)
-- [ ] **Task 3**: Update __init__.py timeframe count (line 16)
+- [ ] **Task 3**: Update **init**.py timeframe count (line 16)
 - [ ] **Task 4**: Update DATA_FORMAT.md timeframe count (lines 57-72)
-- [ ] **Task 5**: Fix probe.py hardcoded version (import __version__)
+- [ ] **Task 5**: Fix probe.py hardcoded version (import **version**)
 - [ ] **Task 6**: Document models.py validator_version independence
 - [ ] **Task 7**: Remove DATA_COLLECTION.md CLI section (lines 63-132)
 - [ ] **Task 8**: Create CORE_COMPONENTS.md (extract from OVERVIEW.md)
@@ -163,7 +169,7 @@ Multi-agent documentation audit (6 parallel agents, DCTL methodology) across 129
 ## Success Criteria
 
 - [ ] Timeframe count accurate everywhere (16, not 13)
-- [ ] probe.py reports correct package version (__version__)
+- [ ] probe.py reports correct package version (**version**)
 - [ ] models.py validator_version clearly documented as independent
 - [ ] DATA_COLLECTION.md has zero CLI references
 - [ ] All internal doc links valid (no 404s)
