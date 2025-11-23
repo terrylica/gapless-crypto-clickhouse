@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v9.0.0...v10.0.0) (2025-11-23)
+
+### ⚠ BREAKING CHANGES
+
+* Schema ORDER BY changed from timestamp-first to symbol-first
+
+This change requires table recreation and data reingestion for existing deployments.
+
+Context:
+- Current schema optimized for cross-symbol queries (rare, 5% of workload)
+- New schema optimized for symbol-specific queries (80% of trading workload)
+- Performance improvement: 10-100x faster for "get all BTCUSDT data" queries
+
+Changes:
+- ORDER BY: (timestamp, symbol, ...) → (symbol, timeframe, toStartOfHour(timestamp), timestamp)
+- Added partition-aware FINAL optimization (reduces overhead from 10-30% to 2-5%)
+- Created ADR-0034: Schema Optimization for Prop Trading Production Readiness
+- Updated CLICKHOUSE_SCHEMA_AUDIT_REPORT.md (production readiness: 68% → 95%)
+- Updated CLAUDE.md with schema deployment procedures
+- Added scripts/deploy-clickhouse-schema.py for automated deployment
+
+Migration:
+1. Backup existing data (if any)
+2. DROP TABLE ohlcv;
+3. Redeploy schema: scripts/deploy-clickhouse-schema.py
+4. Reingest data from source
+
+References:
+- ADR-0034: docs/architecture/decisions/0034-schema-optimization-prop-trading.md
+- Implementation Plan: docs/development/plan/0034-schema-optimization/plan.md
+- Industry case study: Longbridge Technology (symbol-first indexing)
+- ClickHouse docs: https://clickhouse.com/docs/en/optimize/sparse-primary-indexes
+
+Reviewed-by: ClickHouse Cloud v25.8.1.8702 (deployed and validated)
+
+### Features
+
+* optimize schema ORDER BY for prop trading (symbol-first) ([8f5a5fd](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8f5a5fdb46552ad911382a28e16601f58903f550))
+
 ## [9.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.4...v9.0.0) (2025-11-23)
 
 ### ⚠ BREAKING CHANGES
