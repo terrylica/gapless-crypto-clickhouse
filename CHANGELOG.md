@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.1...v8.0.2) (2025-11-23)
+
+### Bug Fixes
+
+* **validation:** resolve critical version and config issues from clean-slate audit ([8499599](https://github.com/terrylica/gapless-crypto-clickhouse/commit/849959961a39e43ecc02cdf99e2415ae1badc878)), closes [#1](https://github.com/terrylica/gapless-crypto-clickhouse/issues/1) [#2](https://github.com/terrylica/gapless-crypto-clickhouse/issues/2) [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3) [#4](https://github.com/terrylica/gapless-crypto-clickhouse/issues/4)
+
 ## [8.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.0...v8.0.1) (2025-11-22)
 
 ### Bug Fixes
