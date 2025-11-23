@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.3...v8.0.4) (2025-11-23)
+
+### Documentation
+
+* **readme:** update timeframe count from 13 to 16 and add exotic timeframes ([9c4505e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/9c4505e514b0cfcc95542a33d446285bf389dd3e))
+
 ## [8.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.2...v8.0.3) (2025-11-23)
 
 ### Documentation
