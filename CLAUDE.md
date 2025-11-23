@@ -91,6 +91,58 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 **Key principle**: Credentials proxied through Doppler/1Password, never hardcoded. Prescriptive workflows for repeatable cloud infrastructure setup.
 
+### ClickHouse Schema Architecture
+
+**Schema Version**: v2 (ADR-0034 optimized for prop trading, deployed 2025-01-22)
+
+**Deployment Commands**:
+
+```bash
+# Deploy schema to ClickHouse Cloud
+doppler run --project aws-credentials --config prd -- python scripts/deploy-clickhouse-schema.py
+
+# Dry-run mode (preview SQL without executing)
+doppler run --project aws-credentials --config prd -- python scripts/deploy-clickhouse-schema.py --dry-run
+```
+
+**ORDER BY Design (Symbol-First Indexing)**:
+
+```sql
+ORDER BY (symbol, timeframe, toStartOfHour(timestamp), timestamp)
+```
+
+**Rationale** (ADR-0034):
+- **Symbol-first**: Trading queries filter by symbol first (e.g., "BTCUSDT") - 80% of query patterns
+- **Timeframe-second**: Usually query one timeframe at a time (e.g., "1h")
+- **Hour-bucketed timestamp**: Groups data by hour for efficient range scans
+- **Full timestamp**: Deterministic ordering within each hour
+- **Performance Impact**: 10-100x faster vs timestamp-first ORDER BY for symbol-specific queries
+
+**FINAL Optimization (Client Configuration)**:
+
+The `do_not_merge_across_partitions_select_final` setting reduces FINAL query overhead from 10-30% to 2-5%. Configure in client connections:
+
+```python
+# Example client configuration
+settings = {
+    "do_not_merge_across_partitions_select_final": 1,
+}
+
+client = clickhouse_connect.get_client(
+    host=os.getenv("CLICKHOUSE_HOST"),
+    port=int(os.getenv("CLICKHOUSE_PORT", "8443")),
+    username=os.getenv("CLICKHOUSE_USER", "default"),
+    password=os.getenv("CLICKHOUSE_PASSWORD"),
+    secure=True,
+    settings=settings,  # Apply optimization
+)
+
+# Query with FINAL (deduplicated results)
+result = client.query("SELECT * FROM ohlcv FINAL WHERE symbol = 'BTCUSDT'")
+```
+
+**Reference**: [ADR-0034](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0034-schema-optimization-prop-trading.md) - Schema optimization for prop trading production readiness
+
 ### Company Employee Onboarding
 
 **Claude Code CLI Optimized** - Step-by-step workflow for 3-10 company employees using ClickHouse Cloud
