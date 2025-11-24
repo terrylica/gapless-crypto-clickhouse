@@ -260,6 +260,19 @@ Implement non-blocking, observability-first release validation flow that verifie
 
 ## Progress Log
 
+### 2025-11-24 23:45:00 UTC
+
+- **Status**: Earthly Integration Complete (100%) ✅
+- **Action**: Refactored GitHub Actions workflow to use Earthly as canonical pipeline
+- **Completed**:
+  - ✅ Updated GitHub Actions workflow to call Earthly targets instead of Python scripts
+  - ✅ Earthly RUN --secret integration with Doppler (7 secrets: GITHUB_TOKEN, CLICKHOUSE_*, PUSHOVER_*)
+  - ✅ Earthfile updated with proper secret export for environment variables
+  - ✅ Build validation passed (v11.0.9)
+  - ✅ Non-blocking workflow verified (continue-on-error at pipeline level)
+- **Architecture**: Earthly now serves as canonical pipeline, GitHub Actions orchestrates Doppler→Earthly→ClickHouse flow
+- **Next**: Commit changes, test workflow on next semantic-release trigger
+
 ### 2025-11-24 23:36:00 UTC
 
 - **Status**: Deployment Verified (100%) ✅

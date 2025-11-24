@@ -38,6 +38,7 @@ github-release-check:
     ARG GITHUB_REPOSITORY="terrylica/gapless-crypto-clickhouse"
 
     RUN --secret GITHUB_TOKEN \
+        export GITHUB_TOKEN && \
         python validate_github_release.py \
             --version "$RELEASE_VERSION" \
             --repository "$GITHUB_REPOSITORY" \
@@ -69,6 +70,10 @@ production-health-check:
         --secret CLICKHOUSE_PORT \
         --secret CLICKHOUSE_USER \
         --secret CLICKHOUSE_PASSWORD \
+        export CLICKHOUSE_HOST && \
+        export CLICKHOUSE_PORT && \
+        export CLICKHOUSE_USER && \
+        export CLICKHOUSE_PASSWORD && \
         python validate_production_health.py \
             --release-version "$RELEASE_VERSION" \
             --output production-health-result.json \
@@ -87,6 +92,10 @@ write-to-clickhouse:
         --secret CLICKHOUSE_PORT \
         --secret CLICKHOUSE_USER \
         --secret CLICKHOUSE_PASSWORD \
+        export CLICKHOUSE_HOST && \
+        export CLICKHOUSE_PORT && \
+        export CLICKHOUSE_USER && \
+        export CLICKHOUSE_PASSWORD && \
         python write_validation_results.py \
             --results-dir ./results/ \
         || (echo "ClickHouse write failed (non-fatal)" && exit 0)
@@ -102,6 +111,8 @@ send-pushover-alert:
 
     RUN --secret PUSHOVER_APP_TOKEN \
         --secret PUSHOVER_USER_KEY \
+        export PUSHOVER_APP_TOKEN && \
+        export PUSHOVER_USER_KEY && \
         python send_pushover_notification.py \
             --results-dir ./results/ \
             --release-version "$RELEASE_VERSION" \
