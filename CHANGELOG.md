@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.9](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.8...v11.0.9) (2025-11-24)
+
+### Bug Fixes
+
+* **ci:** add --system flag for UV pip install in CI ([2f6a3c3](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2f6a3c3458b2216ec425f5315a6ce9c1c61d2caf))
+
 ## [11.0.8](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.7...v11.0.8) (2025-11-24)
 
 ### Bug Fixes
