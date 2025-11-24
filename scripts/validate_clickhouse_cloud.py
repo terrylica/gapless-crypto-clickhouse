@@ -315,7 +315,10 @@ def main() -> int:
             username=username,
             password=password,
             secure=True,
-            settings={"do_not_merge_across_partitions_select_final": 1},
+            settings={
+                "do_not_merge_across_partitions_select_final": 1,
+                "async_insert": 0,  # Disable async inserts for validation (immediate visibility)
+            },
         )
         log_with_timestamp("✅ Connected to ClickHouse Cloud")
     except Exception as e:

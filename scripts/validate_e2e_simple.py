@@ -68,6 +68,9 @@ def main() -> int:
             username=username,
             password=password,
             secure=True,
+            settings={
+                "async_insert": 0,  # Disable async inserts for validation (immediate visibility)
+            },
         )
 
         result = client.command("SELECT 1")
