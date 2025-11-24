@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.5...v11.0.6) (2025-11-24)
+
+### Documentation
+
+* **adr-0035:** update with comprehensive fix results and final status ([054eb3e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/054eb3ebaf50b7b119bba72ab6223351bda24f16))
+
 ## [11.0.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.4...v11.0.5) (2025-11-24)
 
 ### Bug Fixes
