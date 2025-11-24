@@ -79,50 +79,30 @@ def main() -> int:
         log("Layer 2: Data Flow Validation")
         log("=" * 80)
 
-        # Insert single test row
-        test_data = [
-            [datetime.now()],  # timestamp
-            ["E2E_TEST"],  # symbol
-            ["1h"],  # timeframe
-            ["futures-um"],  # instrument_type
-            [100.0],  # open
-            [101.0],  # high
-            [99.0],  # low
-            [100.5],  # close
-            [1000.0],  # volume
-            [datetime.now()],  # close_time
-            [100000.0],  # quote_asset_volume
-            [100],  # number_of_trades
-            [500.0],  # taker_buy_base_asset_volume
-            [50000.0],  # taker_buy_quote_asset_volume
-            [0.0001],  # funding_rate
-            ["e2e_test"],  # data_source
-            [99999],  # _version
-            [1],  # _sign
-        ]
+        # Insert single test row (dictionary format for clickhouse-connect)
+        test_timestamp = datetime.now()
+        test_data = {
+            "timestamp": [test_timestamp],
+            "symbol": ["E2E_TEST"],
+            "timeframe": ["1h"],
+            "instrument_type": ["futures-um"],
+            "open": [100.0],
+            "high": [101.0],
+            "low": [99.0],
+            "close": [100.5],
+            "volume": [1000.0],
+            "close_time": [test_timestamp],
+            "quote_asset_volume": [100000.0],
+            "number_of_trades": [100],
+            "taker_buy_base_asset_volume": [500.0],
+            "taker_buy_quote_asset_volume": [50000.0],
+            "funding_rate": [0.0001],
+            "data_source": ["e2e_test"],
+            "_version": [99999],
+            "_sign": [1],
+        }
 
-        column_names = [
-            "timestamp",
-            "symbol",
-            "timeframe",
-            "instrument_type",
-            "open",
-            "high",
-            "low",
-            "close",
-            "volume",
-            "close_time",
-            "quote_asset_volume",
-            "number_of_trades",
-            "taker_buy_base_asset_volume",
-            "taker_buy_quote_asset_volume",
-            "funding_rate",
-            "data_source",
-            "_version",
-            "_sign",
-        ]
-
-        client.insert("ohlcv", test_data, column_names=column_names)
+        client.insert("ohlcv", test_data)
         log("✅ Test data inserted successfully")
         log("✅ Layer 2 passed: Data flow validated")
         log("")

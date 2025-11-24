@@ -27,7 +27,6 @@ Exit Codes:
 
 import sys
 from datetime import datetime, timezone
-from pathlib import Path
 
 import httpx
 
@@ -38,13 +37,6 @@ def log(message: str) -> None:
     print(f"[{timestamp}] {message}")
 
 
-def create_log_directory() -> Path:
-    """Create logs directory if it doesn't exist."""
-    log_dir = Path("logs")
-    log_dir.mkdir(exist_ok=True)
-    return log_dir
-
-
 def validate_binance_cdn() -> int:
     """Validate Binance CDN availability."""
     log("")
@@ -53,9 +45,6 @@ def validate_binance_cdn() -> int:
     log("ADR-0035: CI/CD Production Validation Policy")
     log("=" * 80)
     log("")
-
-    # Create logs directory
-    create_log_directory()
 
     # Binance Public Data Repository (CloudFront CDN) endpoints
     # Test with a known endpoint (daily klines for BTCUSDT)

@@ -33,7 +33,6 @@ import hashlib
 import os
 import sys
 from datetime import datetime, timezone
-from pathlib import Path
 
 import clickhouse_connect
 import pandas as pd
@@ -45,11 +44,6 @@ def log(message: str) -> None:
     print(f"[{timestamp}] {message}")
 
 
-def create_log_directory() -> Path:
-    """Create logs directory if it doesn't exist."""
-    log_dir = Path("logs")
-    log_dir.mkdir(exist_ok=True)
-    return log_dir
 
 
 def validate_schema(client: clickhouse_connect.driver.client.Client) -> bool:
@@ -79,13 +73,22 @@ def validate_schema(client: clickhouse_connect.driver.client.Client) -> bool:
         return False
 
     # Verify table engine (ReplacingMergeTree or SharedReplacingMergeTree for Cloud)
-    if "ReplacingMergeTree(_version)" in create_table_sql:
-        log("✅ Table engine verified: ReplacingMergeTree(_version)")
-    elif "SharedReplacingMergeTree(_version)" in create_table_sql:
-        log("✅ Table engine verified: SharedReplacingMergeTree(_version) [ClickHouse Cloud]")
+    # Note: ClickHouse Cloud uses SharedReplacingMergeTree with shard/replica parameters
+    # Example: SharedReplacingMergeTree('/clickhouse/tables/{uuid}/{shard}', '{replica}', _version)
+    has_replacing_engine = (
+        'ReplacingMergeTree' in create_table_sql or
+        'SharedReplacingMergeTree' in create_table_sql
+    )
+    has_version_param = '_version)' in create_table_sql  # Must end with _version)
+
+    if has_replacing_engine and has_version_param:
+        if 'SharedReplacingMergeTree' in create_table_sql:
+            log("✅ Table engine verified: SharedReplacingMergeTree(..., _version) [ClickHouse Cloud]")
+        else:
+            log("✅ Table engine verified: ReplacingMergeTree(_version)")
     else:
         log("❌ FAILED: Table engine mismatch")
-        log(f"   Expected: ReplacingMergeTree(_version) or SharedReplacingMergeTree(_version)")
+        log(f"   Expected: ReplacingMergeTree or SharedReplacingMergeTree with _version parameter")
         log(f"   Actual: {create_table_sql}")
         return False
 
@@ -287,9 +290,6 @@ def main() -> int:
     log("ADR-0035: CI/CD Production Validation Policy")
     log("=" * 80)
     log("")
-
-    # Create logs directory
-    create_log_directory()
 
     # Get ClickHouse Cloud connection parameters from environment
     host = os.getenv("CLICKHOUSE_HOST")

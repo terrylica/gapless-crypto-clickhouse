@@ -46,14 +46,6 @@ jobs:
           echo "=========================================="
           doppler run --project aws-credentials --config prd -- uv run scripts/validate_clickhouse_cloud.py
 
-      - name: Upload validation logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: clickhouse-validation-logs
-          path: logs/*.log
-          retention-days: 30
-
   binance-cdn-availability:
     name: Binance CDN Availability
     runs-on: ubuntu-latest
@@ -79,14 +71,6 @@ jobs:
           echo "Binance CDN Availability Check"
           echo "=========================================="
           uv run scripts/validate_binance_cdn.py
-
-      - name: Upload logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: binance-cdn-logs
-          path: logs/*.log
-          retention-days: 30
 
   simplified-e2e-validation:
     name: Simplified E2E Validation
@@ -118,11 +102,3 @@ jobs:
           echo "Simplified E2E Validation (3 Layers)"
           echo "=========================================="
           doppler run --project aws-credentials --config prd -- uv run scripts/validate_e2e_simple.py
-
-      - name: Upload logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: e2e-validation-logs
-          path: logs/*.log
-          retention-days: 30
