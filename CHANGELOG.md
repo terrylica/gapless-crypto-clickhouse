@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.3...v11.0.4) (2025-11-24)
+
+### Bug Fixes
+
+* **validation:** use pandas DataFrame insert_df() method ([f71e71b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/f71e71b682c4b81c196767363431ab2af41e0d9d))
+
 ## [11.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.2...v11.0.3) (2025-11-24)
 
 ### Bug Fixes
