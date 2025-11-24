@@ -110,122 +110,14 @@ jobs:
       - name: Install Doppler CLI
         uses: dopplerhq/cli-action@v3
 
-      - name: Layer 1 - Environment Validation
+      - name: Run Simplified E2E Validation
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
         run: |
           echo "=========================================="
-          echo "Layer 1: Environment Validation"
+          echo "Simplified E2E Validation (3 Layers)"
           echo "=========================================="
-          echo "Testing ClickHouse Cloud connection..."
-          doppler run --project aws-credentials --config prd -- python -c "
-          import os
-          import clickhouse_connect
-
-          client = clickhouse_connect.get_client(
-              host=os.getenv('CLICKHOUSE_HOST'),
-              port=int(os.getenv('CLICKHOUSE_PORT', '8443')),
-              username=os.getenv('CLICKHOUSE_USER', 'default'),
-              password=os.getenv('CLICKHOUSE_PASSWORD'),
-              secure=True
-          )
-
-          result = client.command('SELECT 1')
-          print(f'✅ ClickHouse Cloud connection successful: {result}')
-
-          # Verify schema exists
-          tables = client.command('SHOW TABLES')
-          print(f'✅ Tables found: {tables}')
-          assert 'ohlcv' in tables, 'ohlcv table not found'
-          print('✅ Layer 1 passed: Environment validated')
-          "
-
-      - name: Layer 2 - Data Flow Validation
-        env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
-        run: |
-          echo "=========================================="
-          echo "Layer 2: Data Flow Validation"
-          echo "=========================================="
-          echo "Testing write capability..."
-          doppler run --project aws-credentials --config prd -- python -c "
-          import os
-          import clickhouse_connect
-          from datetime import datetime
-
-          client = clickhouse_connect.get_client(
-              host=os.getenv('CLICKHOUSE_HOST'),
-              port=int(os.getenv('CLICKHOUSE_PORT', '8443')),
-              username=os.getenv('CLICKHOUSE_USER', 'default'),
-              password=os.getenv('CLICKHOUSE_PASSWORD'),
-              secure=True
-          )
-
-          # Insert single test row
-          test_data = {
-              'timestamp': [datetime.now()],
-              'symbol': ['TEST_VALIDATION'],
-              'timeframe': ['1h'],
-              'instrument_type': ['futures-um'],
-              'open': [100.0],
-              'high': [101.0],
-              'low': [99.0],
-              'close': [100.5],
-              'volume': [1000.0],
-              'close_time': [datetime.now()],
-              'quote_asset_volume': [100000.0],
-              'number_of_trades': [100],
-              'taker_buy_base_asset_volume': [500.0],
-              'taker_buy_quote_asset_volume': [50000.0],
-              'funding_rate': [0.0001],
-              'data_source': ['validation_test'],
-              '_version': [12345],
-              '_sign': [1]
-          }
-
-          client.insert('ohlcv', list(test_data.values()), column_names=list(test_data.keys()))
-          print('✅ Test data inserted successfully')
-          print('✅ Layer 2 passed: Data flow validated')
-          "
-
-      - name: Layer 3 - Query Validation
-        env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
-        run: |
-          echo "=========================================="
-          echo "Layer 3: Query Validation"
-          echo "=========================================="
-          echo "Testing read capability with FINAL..."
-          doppler run --project aws-credentials --config prd -- python -c "
-          import os
-          import clickhouse_connect
-
-          client = clickhouse_connect.get_client(
-              host=os.getenv('CLICKHOUSE_HOST'),
-              port=int(os.getenv('CLICKHOUSE_PORT', '8443')),
-              username=os.getenv('CLICKHOUSE_USER', 'default'),
-              password=os.getenv('CLICKHOUSE_PASSWORD'),
-              secure=True,
-              settings={'do_not_merge_across_partitions_select_final': 1}
-          )
-
-          # Query test data
-          result = client.query(
-              'SELECT * FROM ohlcv FINAL WHERE symbol = \\'TEST_VALIDATION\\' LIMIT 10'
-          )
-
-          row_count = result.row_count
-          print(f'✅ Query executed successfully, rows: {row_count}')
-
-          # Cleanup test data
-          client.command('DELETE FROM ohlcv WHERE symbol = \\'TEST_VALIDATION\\'')
-          print('✅ Test data cleaned up')
-          print('✅ Layer 3 passed: Query validated')
-          print('')
-          print('========================================')
-          print('✅ All 3 layers passed: E2E validation successful')
-          print('========================================')
-          "
+          doppler run --project aws-credentials --config prd -- uv run scripts/validate_e2e_simple.py
 
       - name: Upload logs on failure
         if: failure()

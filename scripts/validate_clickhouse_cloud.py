@@ -78,11 +78,15 @@ def validate_schema(client: clickhouse_connect.driver.client.Client) -> bool:
         log(f"   Actual: {create_table_sql}")
         return False
 
-    # Verify table engine (ReplacingMergeTree)
+    # Verify table engine (ReplacingMergeTree or SharedReplacingMergeTree for Cloud)
     if "ReplacingMergeTree(_version)" in create_table_sql:
         log("✅ Table engine verified: ReplacingMergeTree(_version)")
+    elif "SharedReplacingMergeTree(_version)" in create_table_sql:
+        log("✅ Table engine verified: SharedReplacingMergeTree(_version) [ClickHouse Cloud]")
     else:
         log("❌ FAILED: Table engine mismatch")
+        log(f"   Expected: ReplacingMergeTree(_version) or SharedReplacingMergeTree(_version)")
+        log(f"   Actual: {create_table_sql}")
         return False
 
     # Verify partition key
