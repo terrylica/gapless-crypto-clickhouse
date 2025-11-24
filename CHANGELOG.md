@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.1...v11.0.2) (2025-11-24)
+
+### Bug Fixes
+
+* **validation:** comprehensive production validation fixes ([b1917a6](https://github.com/terrylica/gapless-crypto-clickhouse/commit/b1917a63133a91a3ca3be1baaf6428cbe8198b51))
+
 ## [11.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.0...v11.0.1) (2025-11-24)
 
 ### Bug Fixes
