@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.6...v11.0.7) (2025-11-24)
+
+### Documentation
+
+* **adr-0036:** create CI/CD DRY refactoring decision + plan ([0a23747](https://github.com/terrylica/gapless-crypto-clickhouse/commit/0a237475a57ee4e63c2f4fc53664b78286c14e38))
+
 ## [11.0.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.5...v11.0.6) (2025-11-24)
 
 ### Documentation
