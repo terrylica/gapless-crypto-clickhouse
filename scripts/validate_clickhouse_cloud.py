@@ -33,7 +33,7 @@ import hashlib
 import os
 import sys
 import traceback
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import clickhouse_connect
 import pandas as pd
@@ -127,15 +127,16 @@ def validate_write_read_roundtrip(
     log("STEP 2: Write/Read Round-Trip Validation")
     log("=" * 80)
 
-    # Generate test data (100 BTCUSDT 1h bars)
+    # Generate test data (100 BTCUSDT 1h bars with unique timestamps)
     test_symbol = "VALIDATION_TEST_BTCUSDT"
     test_timeframe = "1h"
     num_rows = 100
 
     log(f"Generating {num_rows} test rows ({test_symbol} {test_timeframe})...")
 
+    # Generate 100 unique hourly timestamps (avoid duplicates from i % 24)
     base_timestamp = datetime(2024, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
-    timestamps = [base_timestamp.replace(hour=i % 24) for i in range(num_rows)]
+    timestamps = [base_timestamp + timedelta(hours=i) for i in range(num_rows)]
 
     df = pd.DataFrame(
         {
