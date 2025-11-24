@@ -2,14 +2,14 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "clickhouse-connect>=0.8.11",
-#     "pandas>=2.2.0",
+#     "gapless-crypto-clickhouse",
 # ]
 # ///
 """
 Simplified E2E Validation Script
 
 ADR-0035: CI/CD Production Validation Policy
+ADR-0036: CI/CD Workflow DRY Refactoring (uses e2e_core module)
 
 3-layer validation:
 1. Environment: ClickHouse Cloud connection + schema exists
@@ -24,25 +24,27 @@ Exit Codes:
 import os
 import sys
 import traceback
-from datetime import datetime, timezone
+from datetime import datetime
 
-import clickhouse_connect
 import pandas as pd
 
-
-def log(message: str) -> None:
-    """Print timestamped log message."""
-    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-    print(f"[{timestamp}] {message}")
+from gapless_crypto_clickhouse.validation import (
+    cleanup_test_data,
+    create_clickhouse_client,
+    insert_test_data,
+    log_with_timestamp,
+    query_with_final,
+    validate_table_exists,
+)
 
 
 def main() -> int:
     """Main E2E validation function."""
-    log("")
-    log("=" * 80)
-    log("Simplified E2E Validation")
-    log("=" * 80)
-    log("")
+    log_with_timestamp("")
+    log_with_timestamp("=" * 80)
+    log_with_timestamp("Simplified E2E Validation")
+    log_with_timestamp("=" * 80)
+    log_with_timestamp("")
 
     # Get connection parameters
     host = os.getenv("CLICKHOUSE_HOST")
@@ -51,16 +53,16 @@ def main() -> int:
     password = os.getenv("CLICKHOUSE_PASSWORD")
 
     if not host or not password:
-        log("❌ FAILED: Missing required environment variables")
+        log_with_timestamp("❌ FAILED: Missing required environment variables")
         return 1
 
     try:
         # Layer 1: Environment Validation
-        log("=" * 80)
-        log("Layer 1: Environment Validation")
-        log("=" * 80)
+        log_with_timestamp("=" * 80)
+        log_with_timestamp("Layer 1: Environment Validation")
+        log_with_timestamp("=" * 80)
 
-        client = clickhouse_connect.get_client(
+        client = create_clickhouse_client(
             host=host,
             port=port,
             username=username,
@@ -69,18 +71,18 @@ def main() -> int:
         )
 
         result = client.command("SELECT 1")
-        log(f"✅ ClickHouse Cloud connection successful: {result}")
+        log_with_timestamp(f"✅ ClickHouse Cloud connection successful: {result}")
 
         tables = client.command("SHOW TABLES")
-        log(f"✅ Tables found: {tables}")
-        assert "ohlcv" in tables, "ohlcv table not found"
-        log("✅ Layer 1 passed: Environment validated")
-        log("")
+        log_with_timestamp(f"✅ Tables found: {tables}")
+        assert validate_table_exists(client, "ohlcv"), "ohlcv table not found"
+        log_with_timestamp("✅ Layer 1 passed: Environment validated")
+        log_with_timestamp("")
 
         # Layer 2: Data Flow Validation
-        log("=" * 80)
-        log("Layer 2: Data Flow Validation")
-        log("=" * 80)
+        log_with_timestamp("=" * 80)
+        log_with_timestamp("Layer 2: Data Flow Validation")
+        log_with_timestamp("=" * 80)
 
         # Insert single test row using pandas DataFrame
         test_timestamp = datetime.now()
@@ -105,36 +107,36 @@ def main() -> int:
             "_sign": [1],
         })
 
-        client.insert_df("ohlcv", test_df)
-        log("✅ Test data inserted successfully")
-        log("✅ Layer 2 passed: Data flow validated")
-        log("")
+        insert_test_data(client, "ohlcv", test_df)
+        log_with_timestamp("✅ Test data inserted successfully")
+        log_with_timestamp("✅ Layer 2 passed: Data flow validated")
+        log_with_timestamp("")
 
         # Layer 3: Query Validation
-        log("=" * 80)
-        log("Layer 3: Query Validation")
-        log("=" * 80)
+        log_with_timestamp("=" * 80)
+        log_with_timestamp("Layer 3: Query Validation")
+        log_with_timestamp("=" * 80)
 
-        result = client.query("SELECT * FROM ohlcv FINAL WHERE symbol = 'E2E_TEST' LIMIT 10")
-        row_count = result.row_count
-        log(f"✅ Query executed successfully, rows: {row_count}")
+        result = query_with_final(client, "ohlcv", "E2E_TEST")
+        row_count = result.result_rows[0][0]
+        log_with_timestamp(f"✅ Query executed successfully, rows: {row_count}")
 
         # Cleanup
-        client.command("DELETE FROM ohlcv WHERE symbol = 'E2E_TEST'")
-        log("✅ Test data cleaned up")
-        log("✅ Layer 3 passed: Query validated")
-        log("")
+        cleanup_test_data(client, "ohlcv", "E2E_TEST")
+        log_with_timestamp("✅ Test data cleaned up")
+        log_with_timestamp("✅ Layer 3 passed: Query validated")
+        log_with_timestamp("")
 
-        log("=" * 80)
-        log("✅ All 3 layers passed: E2E validation successful")
-        log("=" * 80)
+        log_with_timestamp("=" * 80)
+        log_with_timestamp("✅ All 3 layers passed: E2E validation successful")
+        log_with_timestamp("=" * 80)
         return 0
 
     except Exception as e:
-        log(f"❌ FAILED: E2E validation error")
-        log(f"   Exception type: {type(e).__name__}")
-        log(f"   Exception message: {str(e)}")
-        log(f"   Traceback: {traceback.format_exc()}")
+        log_with_timestamp(f"❌ FAILED: E2E validation error")
+        log_with_timestamp(f"   Exception type: {type(e).__name__}")
+        log_with_timestamp(f"   Exception message: {str(e)}")
+        log_with_timestamp(f"   Traceback: {traceback.format_exc()}")
         return 1
 
 

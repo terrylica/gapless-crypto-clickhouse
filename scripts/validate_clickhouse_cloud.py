@@ -2,9 +2,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "clickhouse-connect>=0.8.11",
-#     "pandas>=2.2.0",
-#     "pyarrow>=18.1.0",
+#     "gapless-crypto-clickhouse",
 # ]
 # ///
 """
@@ -38,27 +36,29 @@ from datetime import datetime, timedelta, timezone
 import clickhouse_connect
 import pandas as pd
 
-
-def log(message: str) -> None:
-    """Print timestamped log message."""
-    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-    print(f"[{timestamp}] {message}")
+from gapless_crypto_clickhouse.validation import (
+    cleanup_test_data as delete_test_data,
+    create_clickhouse_client,
+    insert_test_data,
+    log_with_timestamp,
+    query_with_final,
+    validate_table_exists,
+)
 
 
 
 
 def validate_schema(client: clickhouse_connect.driver.client.Client) -> bool:
     """Validate ClickHouse Cloud schema matches expected configuration."""
-    log("=" * 80)
-    log("STEP 1: Schema Validation")
-    log("=" * 80)
+    log_with_timestamp("=" * 80)
+    log_with_timestamp("STEP 1: Schema Validation")
+    log_with_timestamp("=" * 80)
 
     # Check table exists
-    tables = client.command("SHOW TABLES")
-    if "ohlcv" not in tables:
-        log("❌ FAILED: ohlcv table not found")
+    if not validate_table_exists(client, "ohlcv"):
+        log_with_timestamp("❌ FAILED: ohlcv table not found")
         return False
-    log("✅ Table 'ohlcv' exists")
+    log_with_timestamp("✅ Table 'ohlcv' exists")
 
     # Get CREATE TABLE statement
     create_table_sql = client.command("SHOW CREATE TABLE ohlcv")
@@ -66,11 +66,11 @@ def validate_schema(client: clickhouse_connect.driver.client.Client) -> bool:
     # Verify ORDER BY (ADR-0034: symbol-first)
     expected_order_by = "(symbol, timeframe, toStartOfHour(timestamp), timestamp)"
     if expected_order_by in create_table_sql:
-        log(f"✅ ORDER BY verified: {expected_order_by}")
+        log_with_timestamp(f"✅ ORDER BY verified: {expected_order_by}")
     else:
-        log(f"❌ FAILED: ORDER BY mismatch")
-        log(f"   Expected: {expected_order_by}")
-        log(f"   Actual: {create_table_sql}")
+        log_with_timestamp(f"❌ FAILED: ORDER BY mismatch")
+        log_with_timestamp(f"   Expected: {expected_order_by}")
+        log_with_timestamp(f"   Actual: {create_table_sql}")
         return False
 
     # Verify table engine (ReplacingMergeTree or SharedReplacingMergeTree for Cloud)
@@ -84,23 +84,23 @@ def validate_schema(client: clickhouse_connect.driver.client.Client) -> bool:
 
     if has_replacing_engine and has_version_param:
         if 'SharedReplacingMergeTree' in create_table_sql:
-            log("✅ Table engine verified: SharedReplacingMergeTree(..., _version) [ClickHouse Cloud]")
+            log_with_timestamp("✅ Table engine verified: SharedReplacingMergeTree(..., _version) [ClickHouse Cloud]")
         else:
-            log("✅ Table engine verified: ReplacingMergeTree(_version)")
+            log_with_timestamp("✅ Table engine verified: ReplacingMergeTree(_version)")
     else:
-        log("❌ FAILED: Table engine mismatch")
-        log(f"   Expected: ReplacingMergeTree or SharedReplacingMergeTree with _version parameter")
-        log(f"   Actual: {create_table_sql}")
+        log_with_timestamp("❌ FAILED: Table engine mismatch")
+        log_with_timestamp(f"   Expected: ReplacingMergeTree or SharedReplacingMergeTree with _version parameter")
+        log_with_timestamp(f"   Actual: {create_table_sql}")
         return False
 
     # Verify partition key
     if "PARTITION BY toYYYYMMDD(timestamp)" in create_table_sql:
-        log("✅ Partition key verified: toYYYYMMDD(timestamp)")
+        log_with_timestamp("✅ Partition key verified: toYYYYMMDD(timestamp)")
     else:
-        log("❌ FAILED: Partition key mismatch")
+        log_with_timestamp("❌ FAILED: Partition key mismatch")
         return False
 
-    log("✅ Schema validation passed")
+    log_with_timestamp("✅ Schema validation passed")
     return True
 
 
@@ -122,17 +122,17 @@ def validate_write_read_roundtrip(
     client: clickhouse_connect.driver.client.Client,
 ) -> bool:
     """Validate write/read round-trip with deduplication."""
-    log("")
-    log("=" * 80)
-    log("STEP 2: Write/Read Round-Trip Validation")
-    log("=" * 80)
+    log_with_timestamp("")
+    log_with_timestamp("=" * 80)
+    log_with_timestamp("STEP 2: Write/Read Round-Trip Validation")
+    log_with_timestamp("=" * 80)
 
     # Generate test data (100 BTCUSDT 1h bars with unique timestamps)
     test_symbol = "VALIDATION_TEST_BTCUSDT"
     test_timeframe = "1h"
     num_rows = 100
 
-    log(f"Generating {num_rows} test rows ({test_symbol} {test_timeframe})...")
+    log_with_timestamp(f"Generating {num_rows} test rows ({test_symbol} {test_timeframe})...")
 
     # Generate 100 unique hourly timestamps (avoid duplicates from i % 24)
     base_timestamp = datetime(2024, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
@@ -165,138 +165,130 @@ def validate_write_read_roundtrip(
     df["_version"] = df.apply(calculate_version_hash, axis=1)
     df["_sign"] = 1
 
-    log(f"✅ Generated {len(df)} test rows")
-    log(f"   Timestamp range: {df['timestamp'].min()} to {df['timestamp'].max()}")
-    log(f"   Version hashes: {df['_version'].nunique()} unique")
+    log_with_timestamp(f"✅ Generated {len(df)} test rows")
+    log_with_timestamp(f"   Timestamp range: {df['timestamp'].min()} to {df['timestamp'].max()}")
+    log_with_timestamp(f"   Version hashes: {df['_version'].nunique()} unique")
 
     # Write test data
-    log("Writing test data to ClickHouse Cloud...")
+    log_with_timestamp("Writing test data to ClickHouse Cloud...")
     try:
-        # clickhouse-connect supports pandas DataFrames natively
-        client.insert_df("ohlcv", df)
-        log(f"✅ Inserted {len(df)} rows")
+        insert_test_data(client, "ohlcv", df)
+        log_with_timestamp(f"✅ Inserted {len(df)} rows")
     except Exception as e:
-        log(f"❌ FAILED: Insert failed")
-        log(f"   Exception type: {type(e).__name__}")
-        log(f"   Exception message: {str(e)}")
-        log(f"   Traceback: {traceback.format_exc()}")
+        log_with_timestamp(f"❌ FAILED: Insert failed")
+        log_with_timestamp(f"   Exception type: {type(e).__name__}")
+        log_with_timestamp(f"   Exception message: {str(e)}")
+        log_with_timestamp(f"   Traceback: {traceback.format_exc()}")
         return False
 
     # Read test data WITHOUT FINAL (may include duplicates)
-    log("Reading test data WITHOUT FINAL...")
+    log_with_timestamp("Reading test data WITHOUT FINAL...")
     try:
         result_no_final = client.query(
             f"SELECT COUNT(*) as count FROM ohlcv WHERE symbol = '{test_symbol}'"
         )
         count_no_final = result_no_final.result_rows[0][0]
-        log(f"✅ Row count WITHOUT FINAL: {count_no_final}")
+        log_with_timestamp(f"✅ Row count WITHOUT FINAL: {count_no_final}")
     except Exception as e:
-        log(f"❌ FAILED: Query without FINAL failed: {e}")
+        log_with_timestamp(f"❌ FAILED: Query without FINAL failed: {e}")
         return False
 
     # Read test data WITH FINAL (deduplicated)
-    log("Reading test data WITH FINAL (deduplicated)...")
+    log_with_timestamp("Reading test data WITH FINAL (deduplicated)...")
     try:
-        result_with_final = client.query(
-            f"SELECT COUNT(*) as count FROM ohlcv FINAL WHERE symbol = '{test_symbol}'"
-        )
+        result_with_final = query_with_final(client, "ohlcv", test_symbol)
         count_with_final = result_with_final.result_rows[0][0]
-        log(f"✅ Row count WITH FINAL: {count_with_final}")
+        log_with_timestamp(f"✅ Row count WITH FINAL: {count_with_final}")
     except Exception as e:
-        log(f"❌ FAILED: Query with FINAL failed: {e}")
+        log_with_timestamp(f"❌ FAILED: Query with FINAL failed: {e}")
         return False
 
     # Verify deduplication correctness
     if count_with_final == num_rows:
-        log(
+        log_with_timestamp(
             f"✅ Deduplication verified: {count_with_final} rows (expected {num_rows})"
         )
     else:
-        log(f"❌ FAILED: Deduplication mismatch")
-        log(f"   Expected: {num_rows} rows")
-        log(f"   Actual: {count_with_final} rows")
+        log_with_timestamp(f"❌ FAILED: Deduplication mismatch")
+        log_with_timestamp(f"   Expected: {num_rows} rows")
+        log_with_timestamp(f"   Actual: {count_with_final} rows")
         return False
 
     # Insert duplicates to test deduplication
-    log("Inserting duplicate rows to test deduplication...")
+    log_with_timestamp("Inserting duplicate rows to test deduplication...")
     try:
-        # clickhouse-connect supports pandas DataFrames natively
-        client.insert_df("ohlcv", df)
-        log(f"✅ Inserted {len(df)} duplicate rows")
+        insert_test_data(client, "ohlcv", df)
+        log_with_timestamp(f"✅ Inserted {len(df)} duplicate rows")
     except Exception as e:
-        log(f"❌ FAILED: Duplicate insert failed: {e}")
+        log_with_timestamp(f"❌ FAILED: Duplicate insert failed: {e}")
         return False
 
     # Read again with FINAL (should still be 100 rows after merge)
-    log("Verifying deduplication after duplicate insert...")
+    log_with_timestamp("Verifying deduplication after duplicate insert...")
     try:
-        result_after_dup = client.query(
-            f"SELECT COUNT(*) as count FROM ohlcv FINAL WHERE symbol = '{test_symbol}'"
-        )
+        result_after_dup = query_with_final(client, "ohlcv", test_symbol)
         count_after_dup = result_after_dup.result_rows[0][0]
-        log(f"✅ Row count after duplicate insert (WITH FINAL): {count_after_dup}")
+        log_with_timestamp(f"✅ Row count after duplicate insert (WITH FINAL): {count_after_dup}")
     except Exception as e:
-        log(f"❌ FAILED: Query after duplicate insert failed: {e}")
+        log_with_timestamp(f"❌ FAILED: Query after duplicate insert failed: {e}")
         return False
 
     if count_after_dup == num_rows:
-        log(
+        log_with_timestamp(
             f"✅ Deduplication after re-insert verified: {count_after_dup} rows (expected {num_rows})"
         )
     else:
-        log(f"❌ FAILED: Deduplication after re-insert mismatch")
-        log(f"   Expected: {num_rows} rows")
-        log(f"   Actual: {count_after_dup} rows")
+        log_with_timestamp(f"❌ FAILED: Deduplication after re-insert mismatch")
+        log_with_timestamp(f"   Expected: {num_rows} rows")
+        log_with_timestamp(f"   Actual: {count_after_dup} rows")
         return False
 
-    log("✅ Write/read round-trip validation passed")
+    log_with_timestamp("✅ Write/read round-trip validation passed")
     return True
 
 
 def cleanup_test_data(client: clickhouse_connect.driver.client.Client) -> bool:
     """Cleanup test data from validation."""
-    log("")
-    log("=" * 80)
-    log("STEP 3: Cleanup Test Data")
-    log("=" * 80)
+    log_with_timestamp("")
+    log_with_timestamp("=" * 80)
+    log_with_timestamp("STEP 3: Cleanup Test Data")
+    log_with_timestamp("=" * 80)
 
     test_symbol = "VALIDATION_TEST_BTCUSDT"
 
-    log(f"Deleting test data (symbol: {test_symbol})...")
+    log_with_timestamp(f"Deleting test data (symbol: {test_symbol})...")
     try:
-        client.command(f"DELETE FROM ohlcv WHERE symbol = '{test_symbol}'")
-        log("✅ Test data deleted")
+        delete_test_data(client, "ohlcv", test_symbol)
+        log_with_timestamp("✅ Test data deleted")
     except Exception as e:
-        log(f"⚠️  WARNING: Cleanup failed (non-fatal): {e}")
+        log_with_timestamp(f"⚠️  WARNING: Cleanup failed (non-fatal): {e}")
         return True  # Non-fatal error
 
     # Verify cleanup
     try:
-        result = client.query(
-            f"SELECT COUNT(*) as count FROM ohlcv FINAL WHERE symbol = '{test_symbol}'"
-        )
+        result = query_with_final(client, "ohlcv", test_symbol)
         remaining_rows = result.result_rows[0][0]
         if remaining_rows == 0:
-            log("✅ Cleanup verified: 0 rows remaining")
+            log_with_timestamp("✅ Cleanup verified: 0 rows remaining")
         else:
-            log(
+            log_with_timestamp(
                 f"⚠️  WARNING: {remaining_rows} rows still present (may require OPTIMIZE TABLE)"
             )
     except Exception as e:
-        log(f"⚠️  WARNING: Cleanup verification failed: {e}")
+        log_with_timestamp(f"⚠️  WARNING: Cleanup verification failed: {e}")
 
-    log("✅ Cleanup completed")
+    log_with_timestamp("✅ Cleanup completed")
     return True
 
 
 def main() -> int:
     """Main validation function."""
-    log("")
-    log("=" * 80)
-    log("ClickHouse Cloud Production Validation")
-    log("ADR-0035: CI/CD Production Validation Policy")
-    log("=" * 80)
-    log("")
+    log_with_timestamp("")
+    log_with_timestamp("=" * 80)
+    log_with_timestamp("ClickHouse Cloud Production Validation")
+    log_with_timestamp("ADR-0035: CI/CD Production Validation Policy")
+    log_with_timestamp("=" * 80)
+    log_with_timestamp("")
 
     # Get ClickHouse Cloud connection parameters from environment
     host = os.getenv("CLICKHOUSE_HOST")
@@ -305,19 +297,19 @@ def main() -> int:
     password = os.getenv("CLICKHOUSE_PASSWORD")
 
     if not host or not password:
-        log("❌ FAILED: Missing required environment variables")
-        log("   Required: CLICKHOUSE_HOST, CLICKHOUSE_PASSWORD")
-        log("   Optional: CLICKHOUSE_PORT (default: 8443), CLICKHOUSE_USER (default: default)")
+        log_with_timestamp("❌ FAILED: Missing required environment variables")
+        log_with_timestamp("   Required: CLICKHOUSE_HOST, CLICKHOUSE_PASSWORD")
+        log_with_timestamp("   Optional: CLICKHOUSE_PORT (default: 8443), CLICKHOUSE_USER (default: default)")
         return 1
 
-    log(f"Connecting to ClickHouse Cloud...")
-    log(f"  Host: {host}")
-    log(f"  Port: {port}")
-    log(f"  User: {username}")
+    log_with_timestamp(f"Connecting to ClickHouse Cloud...")
+    log_with_timestamp(f"  Host: {host}")
+    log_with_timestamp(f"  Port: {port}")
+    log_with_timestamp(f"  User: {username}")
 
     # Connect to ClickHouse Cloud
     try:
-        client = clickhouse_connect.get_client(
+        client = create_clickhouse_client(
             host=host,
             port=port,
             username=username,
@@ -325,18 +317,18 @@ def main() -> int:
             secure=True,
             settings={"do_not_merge_across_partitions_select_final": 1},
         )
-        log("✅ Connected to ClickHouse Cloud")
+        log_with_timestamp("✅ Connected to ClickHouse Cloud")
     except Exception as e:
-        log(f"❌ FAILED: Connection failed: {e}")
+        log_with_timestamp(f"❌ FAILED: Connection failed: {e}")
         return 1
 
     # Get ClickHouse version
     try:
         version = client.command("SELECT version()")
-        log(f"  Version: {version}")
-        log("")
+        log_with_timestamp(f"  Version: {version}")
+        log_with_timestamp("")
     except Exception as e:
-        log(f"⚠️  WARNING: Could not retrieve version: {e}")
+        log_with_timestamp(f"⚠️  WARNING: Could not retrieve version: {e}")
 
     # Run validations
     validation_results = []
@@ -350,7 +342,7 @@ def main() -> int:
         roundtrip_valid = validate_write_read_roundtrip(client)
         validation_results.append(("Write/Read Round-Trip", roundtrip_valid))
     else:
-        log("⚠️  SKIPPING: Write/read round-trip (schema validation failed)")
+        log_with_timestamp("⚠️  SKIPPING: Write/read round-trip (schema validation failed)")
         validation_results.append(("Write/Read Round-Trip", False))
         roundtrip_valid = False
 
@@ -359,30 +351,30 @@ def main() -> int:
         cleanup_success = cleanup_test_data(client)
         validation_results.append(("Cleanup", cleanup_success))
     else:
-        log("⚠️  SKIPPING: Cleanup (write/read validation failed)")
+        log_with_timestamp("⚠️  SKIPPING: Cleanup (write/read validation failed)")
 
     # Summary
-    log("")
-    log("=" * 80)
-    log("VALIDATION SUMMARY")
-    log("=" * 80)
+    log_with_timestamp("")
+    log_with_timestamp("=" * 80)
+    log_with_timestamp("VALIDATION SUMMARY")
+    log_with_timestamp("=" * 80)
 
     all_passed = all(result for _, result in validation_results)
 
     for validation_name, result in validation_results:
         status = "✅ PASSED" if result else "❌ FAILED"
-        log(f"{status}: {validation_name}")
+        log_with_timestamp(f"{status}: {validation_name}")
 
-    log("")
+    log_with_timestamp("")
     if all_passed:
-        log("=" * 80)
-        log("✅ ALL VALIDATIONS PASSED")
-        log("=" * 80)
+        log_with_timestamp("=" * 80)
+        log_with_timestamp("✅ ALL VALIDATIONS PASSED")
+        log_with_timestamp("=" * 80)
         return 0
     else:
-        log("=" * 80)
-        log("❌ VALIDATION FAILED")
-        log("=" * 80)
+        log_with_timestamp("=" * 80)
+        log_with_timestamp("❌ VALIDATION FAILED")
+        log_with_timestamp("=" * 80)
         return 1
 
 
