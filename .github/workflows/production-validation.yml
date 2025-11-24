@@ -24,18 +24,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
+      - name: Setup Python + UV
+        uses: ./.github/actions/setup-python-uv
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Doppler CLI
-        uses: dopplerhq/cli-action@v3
+      - name: Setup Doppler CLI
+        uses: ./.github/actions/setup-doppler
 
       - name: Run ClickHouse Cloud validation
         env:
@@ -55,15 +48,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      - name: Setup Python + UV
+        uses: ./.github/actions/setup-python-uv
 
       - name: Check Binance CDN availability
         run: |
@@ -81,18 +67,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
+      - name: Setup Python + UV
+        uses: ./.github/actions/setup-python-uv
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Doppler CLI
-        uses: dopplerhq/cli-action@v3
+      - name: Setup Doppler CLI
+        uses: ./.github/actions/setup-doppler
 
       - name: Run Simplified E2E Validation
         env:

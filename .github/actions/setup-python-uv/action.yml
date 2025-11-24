@@ -1,0 +1,19 @@
+name: Setup Python + UV
+description: Install Python 3.12 and UV with dependency caching
+branding:
+  icon: package
+  color: blue
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install UV
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+        cache-dependency-glob: "uv.lock"

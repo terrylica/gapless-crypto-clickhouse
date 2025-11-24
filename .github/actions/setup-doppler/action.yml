@@ -1,0 +1,11 @@
+name: Setup Doppler CLI
+description: Install Doppler CLI for secrets management
+branding:
+  icon: lock
+  color: purple
+
+runs:
+  using: composite
+  steps:
+    - name: Install Doppler CLI
+      uses: dopplerhq/cli-action@v3
