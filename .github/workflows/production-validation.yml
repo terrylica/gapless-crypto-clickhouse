@@ -31,7 +31,7 @@ jobs:
         uses: ./.github/actions/setup-doppler
 
       - name: Install package from local source
-        run: uv pip install -e .
+        run: uv pip install --system -e .
 
       - name: Run ClickHouse Cloud validation
         env:
@@ -77,7 +77,7 @@ jobs:
         uses: ./.github/actions/setup-doppler
 
       - name: Install package from local source
-        run: uv pip install -e .
+        run: uv pip install --system -e .
 
       - name: Run Simplified E2E Validation
         env:
