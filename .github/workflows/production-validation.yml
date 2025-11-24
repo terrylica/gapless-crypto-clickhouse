@@ -30,6 +30,9 @@ jobs:
       - name: Setup Doppler CLI
         uses: ./.github/actions/setup-doppler
 
+      - name: Install package from local source
+        run: uv pip install -e .
+
       - name: Run ClickHouse Cloud validation
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
@@ -37,7 +40,7 @@ jobs:
           echo "=========================================="
           echo "ClickHouse Cloud Validation"
           echo "=========================================="
-          doppler run --project aws-credentials --config prd -- uv run scripts/validate_clickhouse_cloud.py
+          doppler run --project aws-credentials --config prd -- python scripts/validate_clickhouse_cloud.py
 
   binance-cdn-availability:
     name: Binance CDN Availability
@@ -73,6 +76,9 @@ jobs:
       - name: Setup Doppler CLI
         uses: ./.github/actions/setup-doppler
 
+      - name: Install package from local source
+        run: uv pip install -e .
+
       - name: Run Simplified E2E Validation
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
@@ -80,4 +86,4 @@ jobs:
           echo "=========================================="
           echo "Simplified E2E Validation (3 Layers)"
           echo "=========================================="
-          doppler run --project aws-credentials --config prd -- uv run scripts/validate_e2e_simple.py
+          doppler run --project aws-credentials --config prd -- python scripts/validate_e2e_simple.py
