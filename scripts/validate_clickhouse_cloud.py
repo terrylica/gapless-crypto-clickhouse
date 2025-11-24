@@ -171,7 +171,8 @@ def validate_write_read_roundtrip(
     # Write test data
     log("Writing test data to ClickHouse Cloud...")
     try:
-        client.insert("ohlcv", df.to_dict("list"))
+        # clickhouse-connect supports pandas DataFrames natively
+        client.insert_df("ohlcv", df)
         log(f"✅ Inserted {len(df)} rows")
     except Exception as e:
         log(f"❌ FAILED: Insert failed")
@@ -218,7 +219,8 @@ def validate_write_read_roundtrip(
     # Insert duplicates to test deduplication
     log("Inserting duplicate rows to test deduplication...")
     try:
-        client.insert("ohlcv", df.to_dict("list"))
+        # clickhouse-connect supports pandas DataFrames natively
+        client.insert_df("ohlcv", df)
         log(f"✅ Inserted {len(df)} duplicate rows")
     except Exception as e:
         log(f"❌ FAILED: Duplicate insert failed: {e}")

@@ -3,6 +3,7 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #     "clickhouse-connect>=0.8.11",
+#     "pandas>=2.2.0",
 # ]
 # ///
 """
@@ -26,6 +27,7 @@ import traceback
 from datetime import datetime, timezone
 
 import clickhouse_connect
+import pandas as pd
 
 
 def log(message: str) -> None:
@@ -80,9 +82,9 @@ def main() -> int:
         log("Layer 2: Data Flow Validation")
         log("=" * 80)
 
-        # Insert single test row (dictionary format for clickhouse-connect)
+        # Insert single test row using pandas DataFrame
         test_timestamp = datetime.now()
-        test_data = {
+        test_df = pd.DataFrame({
             "timestamp": [test_timestamp],
             "symbol": ["E2E_TEST"],
             "timeframe": ["1h"],
@@ -101,9 +103,9 @@ def main() -> int:
             "data_source": ["e2e_test"],
             "_version": [99999],
             "_sign": [1],
-        }
+        })
 
-        client.insert("ohlcv", test_data)
+        client.insert_df("ohlcv", test_df)
         log("✅ Test data inserted successfully")
         log("✅ Layer 2 passed: Data flow validated")
         log("")
