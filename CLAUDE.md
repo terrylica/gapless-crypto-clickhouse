@@ -238,6 +238,73 @@ uv run scripts/validate_binance_cdn.py
 
 **Reference**: [ADR-0036](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0036-cicd-dry-refactoring.md) - CI/CD workflow DRY refactoring
 
+### Release Validation Observability
+
+**Non-Blocking Post-Release Validation** (ADR-0037): Automated verification flow triggered after semantic-release completion
+
+**Validation Workflow** (`.github/workflows/release-validation.yml`):
+
+- **Trigger**: Runs automatically after `release.yml` workflow completion (workflow_run event)
+- **Behavior**: Non-blocking (`continue-on-error: true` at job + step level) - never fails releases
+- **Scope**: 3-layer validation
+  1. GitHub Release existence (exponential backoff retry: 5s → 10s → 20s)
+  2. PyPI package version match (queries PyPI JSON API)
+  3. Production environment health (ClickHouse Cloud connectivity + table verification)
+
+**Storage Architecture**:
+
+- **Database**: ClickHouse Cloud `monitoring` database
+- **Table**: `validation_results` (SharedMergeTree with replication)
+- **Schema**: event_time, validation_type, release_version, git_commit, status, error_message, duration_ms, validation_context, environment
+- **ORDER BY**: (release_version, validation_type, event_time)
+- **PARTITION BY**: toStartOfDay(event_date)
+- **Retention**: Indefinite (all validation history preserved)
+
+**Credentials** (via Doppler):
+
+- **ClickHouse Cloud**: `aws-credentials/prd` (CLICKHOUSE_HOST, CLICKHOUSE_PASSWORD)
+- **Pushover Alerts**: `notifications/prd` (PUSHOVER_APP_TOKEN, PUSHOVER_USER_KEY)
+
+**Query Validation History**:
+
+```bash
+# Connect to ClickHouse Cloud
+doppler run --project aws-credentials --config prd -- clickhouse-client
+
+# Recent validation results
+SELECT
+    release_version,
+    validation_type,
+    status,
+    error_message,
+    duration_ms,
+    event_time
+FROM monitoring.validation_results
+ORDER BY event_time DESC
+LIMIT 10
+
+# Validation summary by release
+SELECT
+    release_version,
+    countIf(status = 'passed') AS passed,
+    countIf(status = 'failed') AS failed,
+    max(event_time) AS last_validation
+FROM monitoring.validation_results
+GROUP BY release_version
+ORDER BY last_validation DESC
+```
+
+**Alerts**: Pushover notification sent with release version, validation status (✅/❌ per check), and GitHub Release link
+
+**Rationale**:
+
+- **Observability**: Centralized validation history accessible to entire team via ClickHouse Cloud
+- **Non-blocking**: Validation failures never prevent releases (continue-on-error guarantees)
+- **Early detection**: Identifies GitHub Release failures, PyPI version mismatches, production health issues within minutes
+- **MTTR reduction**: Automated alerts eliminate manual verification, accelerate incident response
+
+**Reference**: [ADR-0037](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0037-release-validation-observability.md) - Release validation observability flow
+
 ### Company Employee Onboarding
 
 **Claude Code CLI Optimized** - Step-by-step workflow for 3-10 company employees using ClickHouse Cloud

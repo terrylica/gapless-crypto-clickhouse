@@ -1,0 +1,167 @@
+name: Release Validation
+
+# ADR-0037: Release Validation Observability Flow
+# Triggered after semantic-release completion to validate:
+# 1. GitHub Release existence
+# 2. PyPI package version match
+# 3. Production environment health
+
+on:
+  workflow_run:
+    workflows: ["Semantic Release"]
+    types: [completed]
+  workflow_dispatch:
+    # Allow manual triggering for testing
+    inputs:
+      release_version:
+        description: 'Release version to validate (e.g., v9.0.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  release-validation:
+    name: Validate Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true  # Non-blocking: never fail the release
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Earthly
+        uses: earthly/actions-setup@v1
+        with:
+          version: latest
+
+      - name: Setup Doppler CLI
+        uses: ./.github/actions/setup-doppler
+
+      - name: Detect release version
+        id: release_info
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RELEASE_VERSION="${{ github.event.inputs.release_version }}"
+          else
+            RELEASE_VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          fi
+
+          GITHUB_RELEASE_URL="https://github.com/${{ github.repository }}/releases/tag/${RELEASE_VERSION}"
+
+          echo "release_version=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
+          echo "release_url=${GITHUB_RELEASE_URL}" >> $GITHUB_OUTPUT
+          echo "git_commit=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+
+          echo "Release Version: ${RELEASE_VERSION}"
+          echo "Release URL: ${GITHUB_RELEASE_URL}"
+          echo "Git Commit: ${GITHUB_SHA}"
+
+      - name: Create artifacts directory
+        run: mkdir -p artifacts
+
+      - name: Run GitHub Release validation
+        continue-on-error: true
+        run: |
+          echo "=========================================="
+          echo "Validating GitHub Release"
+          echo "=========================================="
+
+          python scripts/validate_github_release.py \
+            --version "${{ steps.release_info.outputs.release_version }}" \
+            --repository "${{ github.repository }}" \
+            --output artifacts/github-release-result.json \
+          || echo "GitHub Release validation failed (non-fatal)"
+
+      - name: Run PyPI version validation
+        continue-on-error: true
+        run: |
+          echo "=========================================="
+          echo "Validating PyPI Package Version"
+          echo "=========================================="
+
+          python scripts/validate_pypi_version.py \
+            --expected-version "${{ steps.release_info.outputs.release_version }}" \
+            --package "gapless-crypto-clickhouse" \
+            --output artifacts/pypi-version-result.json \
+          || echo "PyPI version validation failed (non-fatal)"
+
+      - name: Run production health validation
+        continue-on-error: true
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+        run: |
+          echo "=========================================="
+          echo "Validating Production Environment Health"
+          echo "=========================================="
+
+          doppler run --project aws-credentials --config prd -- \
+          python scripts/validate_production_health.py \
+            --release-version "${{ steps.release_info.outputs.release_version }}" \
+            --output artifacts/production-health-result.json \
+          || echo "Production health validation failed (non-fatal)"
+
+      - name: Write validation results to ClickHouse
+        continue-on-error: true
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+        run: |
+          echo "=========================================="
+          echo "Writing Validation Results to ClickHouse"
+          echo "=========================================="
+
+          doppler run --project aws-credentials --config prd -- \
+          python scripts/write_validation_results.py \
+            --results-dir artifacts/ \
+          || echo "ClickHouse write failed (non-fatal)"
+
+      - name: Send Pushover notification
+        continue-on-error: true
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+        run: |
+          echo "=========================================="
+          echo "Sending Pushover Notification"
+          echo "=========================================="
+
+          doppler run --project notifications --config prd -- \
+          python scripts/send_pushover_notification.py \
+            --results-dir artifacts/ \
+            --release-version "${{ steps.release_info.outputs.release_version }}" \
+            --release-url "${{ steps.release_info.outputs.release_url }}" \
+          || echo "Pushover notification failed (non-fatal)"
+
+      - name: Upload validation artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-validation-results
+          path: artifacts/*.json
+          retention-days: 90
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Release Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Release**: ${{ steps.release_info.outputs.release_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**URL**: ${{ steps.release_info.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Validation Results" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f artifacts/github-release-result.json ]; then
+            STATUS=$(jq -r '.status' artifacts/github-release-result.json)
+            echo "- **GitHub Release**: ${STATUS}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -f artifacts/pypi-version-result.json ]; then
+            STATUS=$(jq -r '.status' artifacts/pypi-version-result.json)
+            echo "- **PyPI Version**: ${STATUS}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -f artifacts/production-health-result.json ]; then
+            STATUS=$(jq -r '.status' artifacts/production-health-result.json)
+            echo "- **Production Health**: ${STATUS}" >> $GITHUB_STEP_SUMMARY
+          fi
