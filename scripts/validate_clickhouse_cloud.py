@@ -32,6 +32,7 @@ Exit Codes:
 import hashlib
 import os
 import sys
+import traceback
 from datetime import datetime, timezone
 
 import clickhouse_connect
@@ -173,7 +174,10 @@ def validate_write_read_roundtrip(
         client.insert("ohlcv", df.to_dict("list"))
         log(f"✅ Inserted {len(df)} rows")
     except Exception as e:
-        log(f"❌ FAILED: Insert failed: {e}")
+        log(f"❌ FAILED: Insert failed")
+        log(f"   Exception type: {type(e).__name__}")
+        log(f"   Exception message: {str(e)}")
+        log(f"   Traceback: {traceback.format_exc()}")
         return False
 
     # Read test data WITHOUT FINAL (may include duplicates)

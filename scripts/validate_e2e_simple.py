@@ -22,6 +22,7 @@ Exit Codes:
 
 import os
 import sys
+import traceback
 from datetime import datetime, timezone
 
 import clickhouse_connect
@@ -128,7 +129,10 @@ def main() -> int:
         return 0
 
     except Exception as e:
-        log(f"❌ FAILED: {e}")
+        log(f"❌ FAILED: E2E validation error")
+        log(f"   Exception type: {type(e).__name__}")
+        log(f"   Exception message: {str(e)}")
+        log(f"   Traceback: {traceback.format_exc()}")
         return 1
 
 
