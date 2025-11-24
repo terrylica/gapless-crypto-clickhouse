@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.0...v11.0.1) (2025-11-24)
+
+### Bug Fixes
+
+* **validation:** support ClickHouse Cloud SharedReplacingMergeTree and fix E2E validation ([d6a7d2f](https://github.com/terrylica/gapless-crypto-clickhouse/commit/d6a7d2f05af950a0b57d88dca714f87f3dea46a7))
+
 ## [11.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v10.0.0...v11.0.0) (2025-11-23)
 
 ### ⚠ BREAKING CHANGES
