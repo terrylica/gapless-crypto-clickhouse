@@ -64,7 +64,7 @@ Current gap: No automated validation runs post-release. Manual verification requ
 
 - Validation metadata small (<1KB/release, ~50 releases/year = 50KB/year)
 
-### Production Results (v12.0.1 - v12.0.9)
+### Production Results (v12.0.1 - v12.0.11)
 
 **Timeline**:
 
@@ -77,6 +77,8 @@ Current gap: No automated validation runs post-release. Manual verification requ
 | v12.0.5 | 2025-01-25 03:17 UTC | ✅ Success | Secret passing fixed, 3/3 ClickHouse inserts                 |
 | v12.0.6 | 2025-01-25 03:24 UTC | ⚠️ Blocked | Artifact export fix implemented, GitHub API rate limit       |
 | v12.0.9 | 2025-01-25 08:17 UTC | ⏳ Pending | Issue #5 fix (Doppler multi-project → direct GitHub secrets) |
+| v12.0.10 | 2025-01-25 08:20 UTC | ⚠️ Partial | Secret dependency issue (Earthly COPY inheritance) |
+| v12.0.11 | 2025-01-25 08:23 UTC | ✅ Success | Issue #5 + #6 FIXED - Pushover notification sent! |
 
 **v12.0.1 Empirical Evidence**:
 
@@ -261,7 +263,7 @@ earthly --strict \
 
 ---
 
-#### Issue #5: Doppler Token Permissions (MEDIUM - FIXED in v12.0.9)
+#### Issue #5: Doppler Token Permissions (MEDIUM - FIXED and VALIDATED in v12.0.11)
 
 **Symptom**: Pushover notification failed with "This token does not have access to requested project 'notifications'".
 
@@ -340,14 +342,14 @@ earthly --strict \
 ### Correctness
 
 - [x] ClickHouse `monitoring.validation_results` table stores all validation runs (v12.0.1: 3/3, v12.0.5: 3/3)
-- [ ] Pushover alerts received on mobile for both success and failure (Issue #5 FIXED in v12.0.9, pending validation)
+- [x] Pushover alerts received on mobile for both success and failure (v12.0.11: ✅ Pushover notification sent successfully)
 - [x] Non-blocking verified: release succeeds even when validation fails (v12.0.2, v12.0.4, v12.0.6 released despite validation issues)
 
 ### Observability
 
 - [x] Query validation history: `SELECT * FROM monitoring.validation_results WHERE release_version IN ('v12.0.1', 'v12.0.5')` (verified with production data)
 - [x] GitHub Actions artifacts uploaded (validation JSON reports) (v12.0.8: Artifact ID 4670097842, 3 files, 1200 bytes)
-- [ ] Pushover alert includes release URL + validation status (Issue #5 FIXED in v12.0.9, pending validation)
+- [x] Pushover alert includes release URL + validation status (v12.0.11: validated in GitHub Actions logs)
 
 ### Maintainability
 
