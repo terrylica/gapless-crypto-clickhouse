@@ -186,7 +186,12 @@ earthly --strict \
 
 **Impact**: Medium severity - doesn't block validation functionality, just prevents artifact download from GitHub Actions UI.
 
-**Status**: Fix implemented in v12.0.6, awaiting validation (v12.0.6 blocked by GitHub API rate limit).
+**Status**: ✅ FIXED and VALIDATED in v12.0.8
+
+**Validation Evidence** (v12.0.8):
+- Workflow logs: "Local Output Summary 🎁" (no longer "(disabled)")
+- 3 files uploaded: `github-release-result.json`, `pypi-version-result.json`, `production-health-result.json`
+- Artifact ID: 4670097842 (1200 bytes, downloadable for 90 days)
 
 **References**:
 - [Earthly Issue #4297](https://github.com/earthly/earthly/issues/4297)
@@ -303,7 +308,7 @@ earthly --strict \
 ### Observability
 
 - [x] Query validation history: `SELECT * FROM monitoring.validation_results WHERE release_version IN ('v12.0.1', 'v12.0.5')` (verified with production data)
-- [ ] GitHub Actions artifacts uploaded (validation JSON reports) (fix implemented v12.0.6, awaiting validation)
+- [x] GitHub Actions artifacts uploaded (validation JSON reports) (v12.0.8: Artifact ID 4670097842, 3 files, 1200 bytes)
 - [ ] Pushover alert includes release URL + validation status (blocked by Doppler token permissions - Issue #5)
 
 ### Maintainability
