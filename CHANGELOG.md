@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.8](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.7...v12.0.8) (2025-11-25)
+
+### Documentation
+
+* **adr-0037:** add continuation session findings (v12.0.3-v12.0.6) ([4b9ac62](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4b9ac62a1b67968f477c8d9d4ae79f7cbe1c3cf7)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
+
 ## [12.0.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.6...v12.0.7) (2025-11-25)
 
 ### Documentation
