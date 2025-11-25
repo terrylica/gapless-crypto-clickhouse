@@ -202,6 +202,7 @@ Post-ADR-0035 implementation, CI/CD infrastructure accumulated duplication:
 3. **Script Duplication**: 90-120 lines of shared ClickHouse validation logic
 
 **Investigation Evidence**:
+
 - 3-agent parallel analysis (2025-01-24) identified redundancy across workflows and scripts
 - `e2e-validation.yml` scheduled trigger disabled (commented out), suggesting abandonment
 - Workflow violates ADR-0035 policy (runs ruff/mypy static analysis)
@@ -232,17 +233,20 @@ Post-ADR-0035 implementation, CI/CD infrastructure accumulated duplication:
 **Multi-Agent Investigation** (2025-01-24):
 
 **Agent 1: E2E Workflow Analysis**
+
 - Found: `e2e-validation.yml` has 100% failure rate (5 consecutive runs failed)
 - Found: Workflow redundant with `simplified-e2e-validation` job
 - Found: Violates ADR-0035 (runs `scripts/run_validation.py --e2e-only` which includes ruff/mypy)
 - Recommendation: DELETE
 
 **Agent 2: Workflow Inventory**
+
 - Found: Exactly 3 workflows (Release, Production Validation, E2E Validation)
 - Found: All workflows aligned with ADR-0035 except `e2e-validation.yml`
 - Found: `production-validation.yml` already provides E2E validation via simplified approach
 
 **Agent 3: DRY Analysis**
+
 - Found: 56 lines of workflow duplication (Python + UV setup × 4, Doppler setup × 2)
 - Found: 90-120 lines of script duplication (ClickHouse client creation, insert/query/cleanup)
 - Recommendation: Composite actions + shared module

@@ -85,6 +85,7 @@ doppler run --project aws-credentials --config prd -- uv run python scripts/depl
 ```
 
 **Expected Output**:
+
 ```
 ✅ Dropped old table
 ================================================================================
@@ -206,11 +207,13 @@ WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
 **Implemented**: 2025-01-22
 
 **Before**:
+
 - `ORDER BY (timestamp, symbol, timeframe, instrument_type)`
 - Optimized for cross-symbol queries (5% of workload)
 - Symbol-specific queries: 10-100x slower (full table scan)
 
 **After**:
+
 - `ORDER BY (symbol, timeframe, toStartOfHour(timestamp), timestamp)`
 - Optimized for symbol-specific queries (80% of workload)
 - Performance: 10-100x faster for primary use case
@@ -220,7 +223,7 @@ WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
 
 **4.2 Update CLAUDE.md Deployment Procedures**
 
-```markdown
+````markdown
 ## ClickHouse Schema Deployment
 
 **Latest Schema Version**: v2 (ADR-0034, symbol-first ORDER BY)
@@ -234,17 +237,20 @@ doppler run --project aws-credentials --config prd -- uv run python scripts/depl
 # Verify deployment
 doppler run --project aws-credentials --config prd -- uv run python scripts/verify-schema.py
 ```
+````
 
 ### Schema Design Rationale
 
 **ORDER BY Key**: `(symbol, timeframe, toStartOfHour(timestamp), timestamp)`
+
 - **Symbol-first**: 80% of queries filter by symbol ("BTCUSDT")
 - **Timeframe-second**: Usually query one timeframe ("1h")
 - **Hour-bucketed**: Groups by hour for efficient range scans
 - **Full timestamp**: Deterministic ordering within hour
 
 **Performance Impact**: 10-100x faster for symbol-specific queries
-```
+
+````
 
 **4.3 Update This Plan**
 
@@ -266,7 +272,7 @@ git add scripts/deploy-clickhouse-schema.py
 git add CLICKHOUSE_SCHEMA_AUDIT_REPORT.md
 git add CLAUDE.md
 git status
-```
+````
 
 **5.2 Commit with Breaking Change**
 
@@ -354,15 +360,18 @@ User Request Flow:
 ```
 
 **Data Sources** (Failover Control Protocol from data-source-manager):
+
 1. **Cache**: Arrow files (highest priority)
 2. **Vision API**: Binance Public Data (daily bulk downloads for historical data)
 3. **REST API**: Binance REST endpoint (fallback + second-level gap fills)
 
 **Write Patterns**:
+
 - Large batches: 100K+ rows (daily Vision files)
 - Small writes: 1-1000 rows (REST API gap fills, boundary gaps)
 
 **Query Patterns** (prop trading focus):
+
 - 80%: Symbol-specific ("get all BTCUSDT data")
 - 15%: Time-range within symbol/timeframe
 - 5%: Cross-symbol analysis
@@ -382,6 +391,7 @@ From official docs (https://clickhouse.com/docs/en/optimize/sparse-primary-index
 > "The primary key should match the most frequent query patterns. If most queries filter by `user_id`, the primary key should start with `user_id`."
 
 Applied to our case:
+
 - Most queries filter by `symbol` ("BTCUSDT") → Primary key should start with `symbol`
 - Current schema violates this principle (starts with `timestamp`)
 
@@ -389,21 +399,23 @@ Applied to our case:
 
 **Why Symbol-First ORDER BY?**
 
-| Query Pattern | Timestamp-First (Current) | Symbol-First (Proposed) | Frequency |
-|--------------|---------------------------|-------------------------|-----------|
-| Symbol-specific: "BTCUSDT 1h Jan 2024" | ❌ Full table scan (1000-5000ms) | ✅ Index lookup (10-50ms) | 80% |
-| Time-range: "All symbols at 12:00" | ✅ Index lookup (10-50ms) | ❌ Partial scan (100-200ms) | 5% |
-| Cross-timeframe: "BTCUSDT all TFs" | ⚠️ Partial index (100-500ms) | ✅ Excellent (10-50ms) | 15% |
+| Query Pattern                          | Timestamp-First (Current)        | Symbol-First (Proposed)     | Frequency |
+| -------------------------------------- | -------------------------------- | --------------------------- | --------- |
+| Symbol-specific: "BTCUSDT 1h Jan 2024" | ❌ Full table scan (1000-5000ms) | ✅ Index lookup (10-50ms)   | 80%       |
+| Time-range: "All symbols at 12:00"     | ✅ Index lookup (10-50ms)        | ❌ Partial scan (100-200ms) | 5%        |
+| Cross-timeframe: "BTCUSDT all TFs"     | ⚠️ Partial index (100-500ms)     | ✅ Excellent (10-50ms)      | 15%       |
 
 **Conclusion**: Symbol-first optimizes for 95% of queries, acceptable trade-off for 5% cross-symbol queries.
 
 **Why `toStartOfHour()` in ORDER BY?**
 
 Balances two needs:
+
 1. **Symbol + timeframe locality**: Group all "BTCUSDT 1h" data together
 2. **Time-range scans**: Within a symbol/timeframe, queries often filter by date range
 
 The `toStartOfHour()` function creates hourly buckets:
+
 - Queries for "Jan 1-31" scan 31 buckets instead of 744 individual rows
 - Maintains chronological ordering within each hour
 - Improves compression (similar timestamps grouped together)
@@ -411,17 +423,20 @@ The `toStartOfHour()` function creates hourly buckets:
 ### Constraints
 
 **Must Preserve**:
-- ✅ Zero-gap guarantee (via _version deterministic versioning)
+
+- ✅ Zero-gap guarantee (via \_version deterministic versioning)
 - ✅ 18-column structure (no schema changes, only ordering)
 - ✅ Compression CODECs (DoubleDelta, Gorilla, Delta, ZSTD)
 - ✅ Partitioning strategy (daily partitions via toYYYYMMDD)
 - ✅ Engine (SharedReplacingMergeTree)
 
 **Can Change**:
+
 - ORDER BY key (from timestamp-first to symbol-first) ← **This ADR**
 - SETTINGS (add partition-aware FINAL optimization) ← **This ADR**
 
 **Cannot Change** (future work, ADR-0035+):
+
 - Skip indexes (requires separate ALTER TABLE)
 - Async insert settings (application config, not schema)
 - Metadata layer (new table, not schema change)
@@ -481,23 +496,27 @@ The `toStartOfHour()` function creates hourly buckets:
 ## SLOs
 
 **Availability**:
+
 - Schema deployment succeeds without errors
 - ClickHouse Cloud accessible throughout migration
 - Zero downtime (table recreation acceptable for empty table)
 
 **Correctness**:
+
 - ORDER BY key verified: symbol-first
 - FINAL optimization setting verified
 - 18/18 columns unchanged
-- Zero-gap guarantee preserved (via _version)
+- Zero-gap guarantee preserved (via \_version)
 
 **Observability**:
+
 - Deployment script logs all validation steps
 - Performance benchmarks documented
 - EXPLAIN plans show index usage
 - Progress tracked in this plan document
 
 **Maintainability**:
+
 - Schema file self-documented (comments explain ORDER BY rationale)
 - Deployment script validates correctness automatically
 - Documentation updated (AUDIT_REPORT, CLAUDE.md)

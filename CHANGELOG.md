@@ -12,61 +12,61 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### Bug Fixes
 
-* **ci:** add --system flag for UV pip install in CI ([2f6a3c3](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2f6a3c3458b2216ec425f5315a6ce9c1c61d2caf))
+- **ci:** add --system flag for UV pip install in CI ([2f6a3c3](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2f6a3c3458b2216ec425f5315a6ce9c1c61d2caf))
 
 ## [11.0.8](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.7...v11.0.8) (2025-11-24)
 
 ### Bug Fixes
 
-* **ci:** install local package before running validation scripts ([1c33799](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1c337997c7681a2bf7c7b70316d6515cf84b0a8a))
+- **ci:** install local package before running validation scripts ([1c33799](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1c337997c7681a2bf7c7b70316d6515cf84b0a8a))
 
 ## [11.0.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.6...v11.0.7) (2025-11-24)
 
 ### Documentation
 
-* **adr-0036:** create CI/CD DRY refactoring decision + plan ([0a23747](https://github.com/terrylica/gapless-crypto-clickhouse/commit/0a237475a57ee4e63c2f4fc53664b78286c14e38))
+- **adr-0036:** create CI/CD DRY refactoring decision + plan ([0a23747](https://github.com/terrylica/gapless-crypto-clickhouse/commit/0a237475a57ee4e63c2f4fc53664b78286c14e38))
 
 ## [11.0.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.5...v11.0.6) (2025-11-24)
 
 ### Documentation
 
-* **adr-0035:** update with comprehensive fix results and final status ([054eb3e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/054eb3ebaf50b7b119bba72ab6223351bda24f16))
+- **adr-0035:** update with comprehensive fix results and final status ([054eb3e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/054eb3ebaf50b7b119bba72ab6223351bda24f16))
 
 ## [11.0.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.4...v11.0.5) (2025-11-24)
 
 ### Bug Fixes
 
-* **validation:** generate unique timestamps for deduplication test ([a005c85](https://github.com/terrylica/gapless-crypto-clickhouse/commit/a005c8568ae77609897127b3df52bdf3942c13a4))
+- **validation:** generate unique timestamps for deduplication test ([a005c85](https://github.com/terrylica/gapless-crypto-clickhouse/commit/a005c8568ae77609897127b3df52bdf3942c13a4))
 
 ## [11.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.3...v11.0.4) (2025-11-24)
 
 ### Bug Fixes
 
-* **validation:** use pandas DataFrame insert_df() method ([f71e71b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/f71e71b682c4b81c196767363431ab2af41e0d9d))
+- **validation:** use pandas DataFrame insert_df() method ([f71e71b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/f71e71b682c4b81c196767363431ab2af41e0d9d))
 
 ## [11.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.2...v11.0.3) (2025-11-24)
 
 ### Bug Fixes
 
-* **validation:** add detailed error logging with traceback ([1e21830](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1e218302c06dbca529067beae85a622158814e64))
+- **validation:** add detailed error logging with traceback ([1e21830](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1e218302c06dbca529067beae85a622158814e64))
 
 ## [11.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.1...v11.0.2) (2025-11-24)
 
 ### Bug Fixes
 
-* **validation:** comprehensive production validation fixes ([b1917a6](https://github.com/terrylica/gapless-crypto-clickhouse/commit/b1917a63133a91a3ca3be1baaf6428cbe8198b51))
+- **validation:** comprehensive production validation fixes ([b1917a6](https://github.com/terrylica/gapless-crypto-clickhouse/commit/b1917a63133a91a3ca3be1baaf6428cbe8198b51))
 
 ## [11.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.0...v11.0.1) (2025-11-24)
 
 ### Bug Fixes
 
-* **validation:** support ClickHouse Cloud SharedReplacingMergeTree and fix E2E validation ([d6a7d2f](https://github.com/terrylica/gapless-crypto-clickhouse/commit/d6a7d2f05af950a0b57d88dca714f87f3dea46a7))
+- **validation:** support ClickHouse Cloud SharedReplacingMergeTree and fix E2E validation ([d6a7d2f](https://github.com/terrylica/gapless-crypto-clickhouse/commit/d6a7d2f05af950a0b57d88dca714f87f3dea46a7))
 
 ## [11.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v10.0.0...v11.0.0) (2025-11-23)
 
 ### ⚠ BREAKING CHANGES
 
-* Removed unit tests and linting from GitHub Actions (local-first development)
+- Removed unit tests and linting from GitHub Actions (local-first development)
 
 This commit implements ADR-0035 (CI/CD Production Validation Policy), which updates
 the workspace-wide policy to allow production infrastructure validation in CI/CD
@@ -113,17 +113,20 @@ Changes:
 Policy Update Summary:
 
 **Local-First Development** (Preserved):
+
 - ❌ NO unit testing in GitHub Actions
 - ❌ NO linting/formatting in CI/CD
 - ✅ Developers run tests locally before commit (5-30s feedback)
 
 **Production Validation Exception** (NEW):
+
 - ✅ ClickHouse Cloud schema validation in CI/CD
 - ✅ External service health checks (Binance CDN)
 - ✅ Scheduled monitoring (every 6 hours, independent of code changes)
 - ✅ Write/read round-trip correctness (production deduplication)
 
 **Rationale**:
+
 - Production environments require credentials (Doppler) unavailable locally
 - Scheduled monitoring detects infrastructure degradation independent of code changes
 - Aligns with ADR-0027 philosophy (local development, CI/CD for production only)
@@ -131,6 +134,7 @@ Policy Update Summary:
 **Migration for Developers**:
 
 Before commit (local-only):
+
 ```bash
 uv run ruff check .
 uv run ruff format --check .
@@ -138,33 +142,37 @@ uv run pytest -v --cov=src
 ```
 
 Before push (integration tests against Homebrew ClickHouse):
+
 ```bash
 uv run pytest -m integration
 ```
 
 **References**:
+
 - ADR-0035: CI/CD Production Validation Policy
 - ADR-0027: Local-Only PyPI Publishing (workspace policy foundation)
 - ADR-0034: Schema Optimization (ORDER BY validation requirement)
 
 ### Features
 
-* implement CI/CD production validation policy ([6b7a5bf](https://github.com/terrylica/gapless-crypto-clickhouse/commit/6b7a5bf145d53b08b0baf7dd88709c2edc125106))
+- implement CI/CD production validation policy ([6b7a5bf](https://github.com/terrylica/gapless-crypto-clickhouse/commit/6b7a5bf145d53b08b0baf7dd88709c2edc125106))
 
 ## [10.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v9.0.0...v10.0.0) (2025-11-23)
 
 ### ⚠ BREAKING CHANGES
 
-* Schema ORDER BY changed from timestamp-first to symbol-first
+- Schema ORDER BY changed from timestamp-first to symbol-first
 
 This change requires table recreation and data reingestion for existing deployments.
 
 Context:
+
 - Current schema optimized for cross-symbol queries (rare, 5% of workload)
 - New schema optimized for symbol-specific queries (80% of trading workload)
 - Performance improvement: 10-100x faster for "get all BTCUSDT data" queries
 
 Changes:
+
 - ORDER BY: (timestamp, symbol, ...) → (symbol, timeframe, toStartOfHour(timestamp), timestamp)
 - Added partition-aware FINAL optimization (reduces overhead from 10-30% to 2-5%)
 - Created ADR-0034: Schema Optimization for Prop Trading Production Readiness
@@ -173,12 +181,14 @@ Changes:
 - Added scripts/deploy-clickhouse-schema.py for automated deployment
 
 Migration:
+
 1. Backup existing data (if any)
 2. DROP TABLE ohlcv;
 3. Redeploy schema: scripts/deploy-clickhouse-schema.py
 4. Reingest data from source
 
 References:
+
 - ADR-0034: docs/architecture/decisions/0034-schema-optimization-prop-trading.md
 - Implementation Plan: docs/development/plan/0034-schema-optimization/plan.md
 - Industry case study: Longbridge Technology (symbol-first indexing)
@@ -188,15 +198,16 @@ Reviewed-by: ClickHouse Cloud v25.8.1.8702 (deployed and validated)
 
 ### Features
 
-* optimize schema ORDER BY for prop trading (symbol-first) ([8f5a5fd](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8f5a5fdb46552ad911382a28e16601f58903f550))
+- optimize schema ORDER BY for prop trading (symbol-first) ([8f5a5fd](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8f5a5fdb46552ad911382a28e16601f58903f550))
 
 ## [9.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.4...v9.0.0) (2025-11-23)
 
 ### ⚠ BREAKING CHANGES
 
-* **deps:** Requires pandas >=2.2.0 (was >=2.0.0,<2.2.0)
+- **deps:** Requires pandas >=2.2.0 (was >=2.0.0,<2.2.0)
 
 FIXES:
+
 - Update pandas constraint: >=2.0.0,<2.2.0 → >=2.2.0,<3.0.0
 - Enable Python 3.14 compatibility (C API fixes in pandas 2.2+)
 - Unblock full test suite execution (pytest now works on Python 3.14)
@@ -204,6 +215,7 @@ FIXES:
 - Fix stale package name test expecting gapless-crypto-data
 
 VALIDATION:
+
 - pandas 2.3.3 installed successfully ✅
 - NumPy constraint maintained: 1.26.4 (<2.0.0 for Alpha Forge) ✅
 - test_timeframe_constants.py: 14/14 passed ✅
@@ -213,7 +225,8 @@ VALIDATION:
 - No regressions detected ✅
 
 CONTEXT:
-- Python 3.14 changed _PyLong_AsByteArray signature (5→6 params)
+
+- Python 3.14 changed \_PyLong_AsByteArray signature (5→6 params)
 - pandas 2.1.4 fails to compile on Python 3.14 (ADR-0031 blocker)
 - pandas 2.2+ includes C API compatibility fixes
 - NumPy 1.x constraint maintained (Alpha Forge/TA-Lib compatibility)
@@ -224,13 +237,13 @@ Related: ADR-0031 (identified pandas compilation issue), ADR-0032 (recommended u
 
 ### build
 
-* **deps:** upgrade pandas to 2.2+ for Python 3.14 compatibility ([be87a94](https://github.com/terrylica/gapless-crypto-clickhouse/commit/be87a94fedd2f7f6e32df3a9398a2bce560fec3a))
+- **deps:** upgrade pandas to 2.2+ for Python 3.14 compatibility ([be87a94](https://github.com/terrylica/gapless-crypto-clickhouse/commit/be87a94fedd2f7f6e32df3a9398a2bce560fec3a))
 
 ## [8.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.3...v8.0.4) (2025-11-23)
 
 ### Documentation
 
-* **readme:** update timeframe count from 13 to 16 and add exotic timeframes ([9c4505e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/9c4505e514b0cfcc95542a33d446285bf389dd3e))
+- **readme:** update timeframe count from 13 to 16 and add exotic timeframes ([9c4505e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/9c4505e514b0cfcc95542a33d446285bf389dd3e))
 
 ## [8.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v8.0.2...v8.0.3) (2025-11-23)
 

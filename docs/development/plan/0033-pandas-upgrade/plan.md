@@ -32,6 +32,7 @@ _PyLong_AsByteArray((PyLongObject *)v, bytes, sizeof(val), is_little, !is_unsign
 **Root Cause**: Python 3.14 changed `_PyLong_AsByteArray` C API signature from 5 to 6 parameters. pandas 2.1.4 was compiled against older Python C API.
 
 **Impact**:
+
 - Cannot run pytest (compilation fails during dependency installation)
 - Relying on syntax validation only (`python3 -m py_compile`)
 - Cannot execute 31 test files
@@ -101,6 +102,7 @@ uv run python -c "import pandas; print(f'pandas {pandas.__version__}')"
 ```
 
 **Expected Output**:
+
 ```
 pandas 2.2.x (where x >= 0)
 ```
@@ -112,6 +114,7 @@ uv run python -c "import numpy; print(f'numpy {numpy.__version__}')"
 ```
 
 **Expected Output**:
+
 ```
 numpy 1.x.x (must be <2.0.0 for Alpha Forge compatibility)
 ```
@@ -129,6 +132,7 @@ uv run pytest tests/test_timeframe_constants.py -v
 ```
 
 **Expected Output**:
+
 ```
 test_timeframe_to_minutes_all_16_timeframes PASSED ✅
 test_hour_based_timeframes_critical_bug_regression PASSED ✅
@@ -155,6 +159,7 @@ uv run pytest --cov=src/gapless_crypto_clickhouse --cov-report=term --cov-report
 ```
 
 **Expected Outcome**:
+
 - Test coverage report generated
 - Coverage metrics maintained or improved
 - HTML report in `htmlcov/` for detailed analysis
@@ -186,6 +191,7 @@ uv run pytest tests/test_timeframe_constants.py -v -W default::DeprecationWarnin
 **4.2 Verify no regressions**
 
 Review test output for:
+
 - ✅ All tests pass
 - ✅ No new failures
 - ✅ No unexpected warnings
@@ -194,6 +200,7 @@ Review test output for:
 **4.3 Update plan with test results**
 
 Document in progress log:
+
 - pandas version installed
 - Test pass rate (X/Y tests)
 - Coverage percentage
@@ -244,6 +251,7 @@ git push origin main
 ```
 
 **Expected Outcome**:
+
 - semantic-release analyzes commit
 - Version bump: 8.0.2 → 9.0.0 (breaking change: pandas constraint)
 - CHANGELOG.md updated
@@ -264,15 +272,16 @@ gh run watch
 
 ### Dependency Compatibility Matrix
 
-| Package | Current | Target | Constraint | Python 3.14 |
-|---------|---------|--------|------------|-------------|
-| pandas | 2.1.4 | 2.2.x | >=2.2.0,<3.0.0 | ✅ Compatible |
-| NumPy | 1.x | 1.x | >=1.23.2,<2.0.0 | ✅ Compatible |
-| Python | 3.14.0 | 3.14.0 | >=3.12 | ✅ Current |
+| Package | Current | Target | Constraint      | Python 3.14   |
+| ------- | ------- | ------ | --------------- | ------------- |
+| pandas  | 2.1.4   | 2.2.x  | >=2.2.0,<3.0.0  | ✅ Compatible |
+| NumPy   | 1.x     | 1.x    | >=1.23.2,<2.0.0 | ✅ Compatible |
+| Python  | 3.14.0  | 3.14.0 | >=3.12          | ✅ Current    |
 
 ### pandas 2.2.0 Release Highlights
 
 **Relevant to This Upgrade**:
+
 - ✅ Python 3.14 compatibility (C API fixes)
 - ✅ NumPy 1.x and 2.x support (no constraint changes needed)
 - ✅ Backward compatible with 2.1 API
@@ -281,6 +290,7 @@ gh run watch
 **Breaking Changes**: None affecting our usage
 
 **New Features** (not using, but available):
+
 - `DataFrame.map` method
 - `Series.to_numpy` copy parameter
 - Enhanced datetime handling
@@ -295,12 +305,14 @@ gh run watch
 ### Risk Assessment
 
 **Low Risk**:
+
 - pandas 2.2 is backward compatible with 2.1
 - Minor version upgrade (2.1 → 2.2, not 2.x → 3.x)
 - Widely tested in community (released months ago)
 - No breaking API changes affecting our usage
 
 **Mitigation**:
+
 - Run full test suite before committing
 - Check for deprecation warnings
 - Monitor coverage metrics
@@ -326,22 +338,26 @@ gh run watch
 ## SLOs
 
 **Availability**:
+
 - Full test suite executes without compilation errors
 - All tests pass on Python 3.14
 - Coverage metrics maintained
 
 **Correctness**:
+
 - pandas 2.2+ correctly installed
 - NumPy constraint maintained (<2.0.0)
 - No regressions in test results
 - No deprecation warnings
 
 **Observability**:
+
 - Test coverage report generated (htmlcov/)
 - Test results documented in plan
 - Validation evidence preserved
 
 **Maintainability**:
+
 - Dependency constraint up-to-date
 - Python 3.14 compatibility maintained
 - ADR documents upgrade rationale
@@ -356,6 +372,7 @@ gh run watch
 **2025-01-22 [PHASE 2 COMPLETE]**: Environment synced successfully. pandas 2.3.3 and numpy 1.26.4 installed (NumPy constraint maintained <2.0.0).
 
 **2025-01-22 [PHASE 3 COMPLETE]**: Test execution successful:
+
 - test_timeframe_constants.py: 14/14 passed ✅
 - Selected unit tests: 54/54 passed (fixed stale version test) ✅
 - All ADR-0032 changes validated (dual notation, 16 timeframes) ✅

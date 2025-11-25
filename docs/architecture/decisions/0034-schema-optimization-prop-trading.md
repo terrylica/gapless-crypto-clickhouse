@@ -13,6 +13,7 @@
 Following the initial ClickHouse Cloud schema deployment (completed 2025-01-22), a comprehensive analysis from a senior time-series database engineer perspective revealed **3 critical design flaws** that would cause severe performance degradation in production prop trading environments:
 
 **Current State** (Post-Deployment Audit):
+
 - Schema deployed to ClickHouse Cloud v25.8.1.8702
 - 100% compliant with ADR-0005 and ADR-0021 requirements
 - Engine: SharedReplacingMergeTree (cloud-native distributed)
@@ -60,16 +61,19 @@ Following the initial ClickHouse Cloud schema deployment (completed 2025-01-22),
 ### Option 1: Fix Critical Issues Only (P0) - CHOSEN
 
 **Changes**:
+
 1. Reorder PRIMARY KEY: `ORDER BY (symbol, timeframe, toStartOfHour(timestamp), timestamp)`
 2. Enable partition-aware FINAL: `do_not_merge_across_partitions_select_final=1`
 
 **Pros**:
+
 - ✅ Addresses 10-100x performance gap (critical blocker)
 - ✅ Reduces FINAL overhead from 10-30% to 2-5%
 - ✅ Minimal implementation scope (2-4 hours)
 - ✅ Can deploy incrementally (P2 optimizations later)
 
 **Cons**:
+
 - ⚠️ BREAKING CHANGE (requires table recreation, data reingestion)
 - ⚠️ Doesn't add skip indexes or async_insert (P2 features)
 
@@ -80,6 +84,7 @@ Following the initial ClickHouse Cloud schema deployment (completed 2025-01-22),
 ### Option 2: Comprehensive Optimization (P0 + P1 + P2)
 
 **Changes**:
+
 - All Option 1 fixes
 - Add minmax skip index for symbol column
 - Configure async_insert for hybrid writes
@@ -87,11 +92,13 @@ Following the initial ClickHouse Cloud schema deployment (completed 2025-01-22),
 - Redis integration layer
 
 **Pros**:
+
 - ✅ Fully optimized for prop trading (95%+ production-ready)
 - ✅ Handles on-demand cache architecture completely
 - ✅ No need for follow-up migration
 
 **Cons**:
+
 - ⚠️ Larger implementation scope (5-8 hours)
 - ⚠️ More complex migration (multiple table changes)
 - ⚠️ Redis dependency added
@@ -103,14 +110,17 @@ Following the initial ClickHouse Cloud schema deployment (completed 2025-01-22),
 ### Option 3: Keep Current Schema, Add Projection Index
 
 **Changes**:
+
 - Keep `ORDER BY (timestamp, symbol, ...)`
 - Add projection index: `ALTER TABLE ADD PROJECTION symbol_first (SELECT * ORDER BY (symbol, timeframe, timestamp))`
 
 **Pros**:
+
 - ✅ No BREAKING CHANGE (additive only)
 - ✅ Supports both query patterns (timestamp-first + symbol-first)
 
 **Cons**:
+
 - ❌ Doubles storage (100% overhead per projection)
 - ❌ Doubles write overhead (maintain two orderings)
 - ❌ ClickHouse Cloud cost implications (2x storage + compute)
@@ -175,6 +185,7 @@ SETTINGS
 **Why `toStartOfHour(timestamp)` in ORDER BY?**
 
 Balances query patterns:
+
 - Primary: Symbol + timeframe lookups (80% of queries)
 - Secondary: Time-range scans within symbol/timeframe (15% of queries)
 - Tertiary: Cross-symbol analysis (5% of queries)
@@ -182,12 +193,14 @@ Balances query patterns:
 The `toStartOfHour()` function groups timestamps by hour, creating better data locality for typical time-range queries while maintaining symbol-first ordering.
 
 **Rationale**:
+
 1. **Symbol-first**: Trading queries filter by symbol first (e.g., "BTCUSDT")
 2. **Timeframe-second**: Usually query one timeframe at a time (e.g., "1h")
 3. **Hour-bucketed timestamp**: Groups data by hour for efficient range scans
 4. **Full timestamp**: Final sort within hour for deterministic ordering
 
 **Performance Impact**:
+
 - Symbol-specific queries: 10-100x faster (indexed lookup vs full scan)
 - Time-range queries: Similar performance (still uses timestamp index)
 - Cross-symbol queries: Slightly slower (acceptable for 5% of queries)
@@ -212,6 +225,7 @@ DEFAULT_SETTINGS = {
 **Phase 3: Deployment Scripts (P0)**
 
 Update `scripts/deploy-clickhouse-schema.py`:
+
 - Include new ORDER BY in schema deployment
 - Add validation for ORDER BY correctness
 - Verify partition-aware FINAL setting
@@ -221,6 +235,7 @@ Update `scripts/deploy-clickhouse-schema.py`:
 **Phase 4: Documentation Updates (P0)**
 
 Update:
+
 - `CLICKHOUSE_SCHEMA_AUDIT_REPORT.md`: Document ORDER BY rationale
 - `CLAUDE.md`: Add schema deployment procedures
 - This ADR: Track implementation progress
@@ -310,6 +325,7 @@ ORDER BY (symbol, timeframe, instrument_type, date_covered);
 ### Performance Benchmarks
 
 **Before (timestamp-first ORDER BY)**:
+
 ```sql
 -- Symbol-specific query (slow - full table scan)
 SELECT * FROM ohlcv FINAL
@@ -319,6 +335,7 @@ WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
 ```
 
 **After (symbol-first ORDER BY)**:
+
 ```sql
 -- Same query (fast - indexed lookup)
 SELECT * FROM ohlcv FINAL
@@ -328,6 +345,7 @@ WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
 ```
 
 **FINAL overhead test**:
+
 ```sql
 -- Without FINAL
 SELECT COUNT(*) FROM ohlcv WHERE symbol = 'BTCUSDT';
@@ -343,7 +361,7 @@ SELECT COUNT(*) FROM ohlcv FINAL WHERE symbol = 'BTCUSDT';
 ## SLO Impact
 
 - **Availability**: ✅ Improved (faster queries reduce timeout risks, on-demand cache architecture supported)
-- **Correctness**: ✅ Maintained (zero-gap guarantee preserved via _version, same ReplacingMergeTree logic)
+- **Correctness**: ✅ Maintained (zero-gap guarantee preserved via \_version, same ReplacingMergeTree logic)
 - **Observability**: ✅ Enhanced (query performance improvements visible in metrics, FINAL overhead reduced)
 - **Maintainability**: ✅ Improved (aligns with industry patterns, simpler to reason about symbol-first indexing)
 

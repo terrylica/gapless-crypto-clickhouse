@@ -374,7 +374,7 @@ None currently.
 1. **ClickHouse Cloud Engine Format** (Agent 1):
    - Issue: Validation expected exact `SharedReplacingMergeTree(_version)`
    - Actual: Cloud uses `SharedReplacingMergeTree('/clickhouse/tables/{uuid}/{shard}', '{replica}', _version)`
-   - Fix: Flexible validation checking engine type contains 'ReplacingMergeTree' AND ends with '_version)'
+   - Fix: Flexible validation checking engine type contains 'ReplacingMergeTree' AND ends with '\_version)'
 
 2. **Insert Data Format** (Agent 2):
    - Issue: `client.insert()` with dict caused `KeyError: 0`

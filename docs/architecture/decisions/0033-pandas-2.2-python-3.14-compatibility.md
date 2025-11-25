@@ -13,12 +13,14 @@
 During ADR-0031 comprehensive validation, we discovered that pandas 2.1.4 fails to compile on Python 3.14 due to C API changes (`_PyLong_AsByteArray` signature changed from 5 to 6 parameters). This blocks full pytest execution and forces us to rely on syntax validation only.
 
 **Current State**:
+
 - Python version: 3.14.0 (latest)
 - Pandas version: 2.1.4 (incompatible)
 - Test execution: Blocked by pandas compilation failure
 - Validation method: Syntax validation via `python3 -m py_compile` (workaround)
 
 **Impact**:
+
 - Cannot run full test suite (31 test files)
 - Cannot validate test coverage
 - Cannot execute integration tests

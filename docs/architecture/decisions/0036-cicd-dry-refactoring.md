@@ -14,6 +14,7 @@ Following ADR-0035 implementation, the CI/CD infrastructure has accumulated sign
 3. **Validation Script Duplication**: 90-120 lines of shared logic across `validate_e2e_simple.py`, `validate_clickhouse_cloud.py`, `run_validation.py`
 
 **Investigation Evidence** (2025-01-24):
+
 - 3-agent parallel analysis identified redundancy across workflows and scripts
 - `e2e-validation.yml` has 100% failure rate since 2025-11-20
 - Scheduled trigger disabled (commented out), suggesting intentional abandonment
@@ -34,11 +35,13 @@ Following ADR-0035 implementation, the CI/CD infrastructure has accumulated sign
 ### Option 1: Status Quo (Keep All Duplication)
 
 **Pros**:
+
 - No changes required
 - Each workflow/script fully self-contained
 - PEP 723 inline dependencies preserved
 
 **Cons**:
+
 - 56 lines of workflow duplication (28% of total)
 - 90-120 lines of script duplication
 - Bug fixes require 3x replication
@@ -51,10 +54,12 @@ Following ADR-0035 implementation, the CI/CD infrastructure has accumulated sign
 ### Option 2: Reusable Workflows + Script Templates
 
 **Pros**:
+
 - Maximum DRY compliance
 - Single source of truth
 
 **Cons**:
+
 - High complexity (reusable workflow limitations)
 - Template generation adds build step
 - Harder debugging (indirection)
@@ -67,12 +72,14 @@ Following ADR-0035 implementation, the CI/CD infrastructure has accumulated sign
 ### Option 3: Composite Actions + Shared Module (CHOSEN)
 
 **Approach**:
+
 1. **Delete** `e2e-validation.yml` (broken, redundant)
 2. **Create composite actions** for setup steps (`.github/actions/setup-python-uv/`, `.github/actions/setup-doppler/`)
 3. **Extract shared validation logic** to `src/gapless_crypto_clickhouse/validation/e2e_core.py`
 4. **Refactor scripts** to import e2e_core functions
 
 **Pros**:
+
 - Incremental refactoring (low risk)
 - Immediate duplication reduction (56 workflow lines, 90-120 script lines)
 - Preserves workflow independence (separate jobs, triggers, schedules)
@@ -80,6 +87,7 @@ Following ADR-0035 implementation, the CI/CD infrastructure has accumulated sign
 - Composite actions are GitHub-native (no custom tooling)
 
 **Cons**:
+
 - Scripts lose PEP 723 full self-containment (acceptable trade-off)
 - Composite actions add one level of indirection
 
@@ -94,46 +102,55 @@ Following ADR-0035 implementation, the CI/CD infrastructure has accumulated sign
 ### Implementation Strategy
 
 **Phase 1: Delete Redundant Workflow**
+
 - Remove `.github/workflows/e2e-validation.yml`
 - Rationale: 100% failure rate, violates ADR-0035, redundant with `simplified-e2e-validation` job
 
 **Phase 2: Composite Actions (Workflow DRY)**
+
 - Create `.github/actions/setup-python-uv/action.yml` (eliminates 52 lines)
 - Create `.github/actions/setup-doppler/action.yml` (eliminates 4 lines)
 - Update `production-validation.yml` (3 jobs)
 - Update `release.yml`
 
 **Phase 3: Shared Validation Module (Script DRY)**
+
 - Create `src/gapless_crypto_clickhouse/validation/e2e_core.py`
 - Functions: `create_clickhouse_client()`, `validate_table_exists()`, `insert_test_data()`, `query_with_final()`, `cleanup_test_data()`, `log_with_timestamp()`
 - Refactor `validate_e2e_simple.py` and `validate_clickhouse_cloud.py`
 
 **Phase 4: Documentation**
+
 - Update CLAUDE.md (2-workflow architecture)
 - Remove e2e-validation.yml references
 
 ### Target Architecture
 
 **Workflows** (2 total):
+
 1. **Release** (`release.yml`): Semantic versioning, changelog, GitHub releases
 2. **Production Validation** (`production-validation.yml`): Scheduled infrastructure monitoring (3 jobs: ClickHouse Cloud, Binance CDN, Simplified E2E)
 
 **Composite Actions** (2 total):
+
 1. `.github/actions/setup-python-uv/`: Python 3.12 + UV with caching
 2. `.github/actions/setup-doppler/`: Doppler CLI installation
 
 **Validation Module** (1 new):
+
 - `src/gapless_crypto_clickhouse/validation/e2e_core.py`: Reusable validation primitives
 
 ### Impact Metrics
 
 **Before**:
+
 - Workflows: 3 (1 broken)
 - Workflow duplication: 56 lines (28%)
 - Script duplication: 90-120 lines
 - Total lines: ~200 workflow + ~500-520 script = 700-720 lines
 
 **After**:
+
 - Workflows: 2 (both working)
 - Workflow duplication: 0 lines (0%)
 - Script duplication: 0 lines (0%)
