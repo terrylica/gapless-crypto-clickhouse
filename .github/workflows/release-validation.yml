@@ -65,29 +65,33 @@ jobs:
       - name: Create artifacts directory
         run: mkdir -p artifacts
 
-      - name: Run Earthly validation pipeline
+      - name: Fetch Doppler secrets
+        id: doppler_secrets
         continue-on-error: true
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+        run: |
+          echo "clickhouse_host=$(doppler secrets get CLICKHOUSE_HOST --project aws-credentials --config prd --plain)" >> $GITHUB_OUTPUT
+          echo "clickhouse_port=$(doppler secrets get CLICKHOUSE_PORT --project aws-credentials --config prd --plain)" >> $GITHUB_OUTPUT
+          echo "clickhouse_user=$(doppler secrets get CLICKHOUSE_USER --project aws-credentials --config prd --plain)" >> $GITHUB_OUTPUT
+          echo "clickhouse_password=$(doppler secrets get CLICKHOUSE_PASSWORD --project aws-credentials --config prd --plain)" >> $GITHUB_OUTPUT
+          echo "pushover_app_token=$(doppler secrets get PUSHOVER_APP_TOKEN --project notifications --config prd --plain)" >> $GITHUB_OUTPUT
+          echo "pushover_user_key=$(doppler secrets get PUSHOVER_USER_KEY --project notifications --config prd --plain)" >> $GITHUB_OUTPUT
+
+      - name: Run Earthly validation pipeline
+        continue-on-error: true
+        env:
           EARTHLY_CI: true
         run: |
           echo "=========================================="
           echo "Running Earthly Release Validation Pipeline"
           echo "=========================================="
 
-          # Export secrets from Doppler to environment variables
-          export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
-          export CLICKHOUSE_HOST=$(doppler secrets get CLICKHOUSE_HOST --project aws-credentials --config prd --plain)
-          export CLICKHOUSE_PORT=$(doppler secrets get CLICKHOUSE_PORT --project aws-credentials --config prd --plain)
-          export CLICKHOUSE_USER=$(doppler secrets get CLICKHOUSE_USER --project aws-credentials --config prd --plain)
-          export CLICKHOUSE_PASSWORD=$(doppler secrets get CLICKHOUSE_PASSWORD --project aws-credentials --config prd --plain)
-          export PUSHOVER_APP_TOKEN=$(doppler secrets get PUSHOVER_APP_TOKEN --project notifications --config prd --plain)
-          export PUSHOVER_USER_KEY=$(doppler secrets get PUSHOVER_USER_KEY --project notifications --config prd --plain)
-
           # Run validation targets directly to export artifacts (AS LOCAL only works when target is explicitly built)
+          # Use GitHub Actions template syntax for secrets to avoid bash variable substitution issues
           echo "Running individual validation targets to export artifacts..."
           earthly \
-            --secret GITHUB_TOKEN="$GITHUB_TOKEN" \
+            --secret GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
             +github-release-check \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
@@ -101,10 +105,10 @@ jobs:
           || echo "PyPI version check failed (non-fatal)"
 
           earthly \
-            --secret CLICKHOUSE_HOST="$CLICKHOUSE_HOST" \
-            --secret CLICKHOUSE_PORT="$CLICKHOUSE_PORT" \
-            --secret CLICKHOUSE_USER="$CLICKHOUSE_USER" \
-            --secret CLICKHOUSE_PASSWORD="$CLICKHOUSE_PASSWORD" \
+            --secret CLICKHOUSE_HOST="${{ steps.doppler_secrets.outputs.clickhouse_host }}" \
+            --secret CLICKHOUSE_PORT="${{ steps.doppler_secrets.outputs.clickhouse_port }}" \
+            --secret CLICKHOUSE_USER="${{ steps.doppler_secrets.outputs.clickhouse_user }}" \
+            --secret CLICKHOUSE_PASSWORD="${{ steps.doppler_secrets.outputs.clickhouse_password }}" \
             +production-health-check \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
@@ -113,20 +117,20 @@ jobs:
           # Run downstream pipeline (write to ClickHouse, send Pushover)
           echo "Running downstream validation pipeline..."
           earthly \
-            --secret CLICKHOUSE_HOST="$CLICKHOUSE_HOST" \
-            --secret CLICKHOUSE_PORT="$CLICKHOUSE_PORT" \
-            --secret CLICKHOUSE_USER="$CLICKHOUSE_USER" \
-            --secret CLICKHOUSE_PASSWORD="$CLICKHOUSE_PASSWORD" \
-            --secret PUSHOVER_APP_TOKEN="$PUSHOVER_APP_TOKEN" \
-            --secret PUSHOVER_USER_KEY="$PUSHOVER_USER_KEY" \
+            --secret CLICKHOUSE_HOST="${{ steps.doppler_secrets.outputs.clickhouse_host }}" \
+            --secret CLICKHOUSE_PORT="${{ steps.doppler_secrets.outputs.clickhouse_port }}" \
+            --secret CLICKHOUSE_USER="${{ steps.doppler_secrets.outputs.clickhouse_user }}" \
+            --secret CLICKHOUSE_PASSWORD="${{ steps.doppler_secrets.outputs.clickhouse_password }}" \
+            --secret PUSHOVER_APP_TOKEN="${{ steps.doppler_secrets.outputs.pushover_app_token }}" \
+            --secret PUSHOVER_USER_KEY="${{ steps.doppler_secrets.outputs.pushover_user_key }}" \
             +write-to-clickhouse \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
           || echo "ClickHouse write failed (non-fatal)"
 
           earthly \
-            --secret PUSHOVER_APP_TOKEN="$PUSHOVER_APP_TOKEN" \
-            --secret PUSHOVER_USER_KEY="$PUSHOVER_USER_KEY" \
+            --secret PUSHOVER_APP_TOKEN="${{ steps.doppler_secrets.outputs.pushover_app_token }}" \
+            --secret PUSHOVER_USER_KEY="${{ steps.doppler_secrets.outputs.pushover_user_key }}" \
             +send-pushover-alert \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GITHUB_RELEASE_URL="${{ steps.release_info.outputs.release_url }}" \
