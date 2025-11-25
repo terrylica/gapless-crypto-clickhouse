@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [14.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v13.0.2...v14.0.0) (2025-11-25)
+
+### ⚠ BREAKING CHANGES
+
+* **gap-filling:** none (additive feature, backward compatible)
+
+### Features
+
+* **gap-filling:** implement query_ohlcv() gap filling with tenacity retry (ADR-0040) ([ec7171d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/ec7171d15c2864ffe3d4090eac1de057bb1490a5))
+
 ## [13.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v13.0.1...v13.0.2) (2025-11-25)
 
 ### Documentation
