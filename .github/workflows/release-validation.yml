@@ -84,21 +84,53 @@ jobs:
           export PUSHOVER_APP_TOKEN=$(doppler secrets get PUSHOVER_APP_TOKEN --project notifications --config prd --plain)
           export PUSHOVER_USER_KEY=$(doppler secrets get PUSHOVER_USER_KEY --project notifications --config prd --plain)
 
-          # Run Earthly pipeline with secrets
+          # Run validation targets directly to export artifacts (AS LOCAL only works when target is explicitly built)
+          echo "Running individual validation targets to export artifacts..."
           earthly \
             --secret GITHUB_TOKEN="$GITHUB_TOKEN" \
+            +github-release-check \
+            --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
+            --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
+            --GITHUB_REPOSITORY="${{ github.repository }}" \
+          || echo "GitHub release check failed (non-fatal)"
+
+          earthly \
+            +pypi-version-check \
+            --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
+            --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
+          || echo "PyPI version check failed (non-fatal)"
+
+          earthly \
+            --secret CLICKHOUSE_HOST="$CLICKHOUSE_HOST" \
+            --secret CLICKHOUSE_PORT="$CLICKHOUSE_PORT" \
+            --secret CLICKHOUSE_USER="$CLICKHOUSE_USER" \
+            --secret CLICKHOUSE_PASSWORD="$CLICKHOUSE_PASSWORD" \
+            +production-health-check \
+            --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
+            --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
+          || echo "Production health check failed (non-fatal)"
+
+          # Run downstream pipeline (write to ClickHouse, send Pushover)
+          echo "Running downstream validation pipeline..."
+          earthly \
             --secret CLICKHOUSE_HOST="$CLICKHOUSE_HOST" \
             --secret CLICKHOUSE_PORT="$CLICKHOUSE_PORT" \
             --secret CLICKHOUSE_USER="$CLICKHOUSE_USER" \
             --secret CLICKHOUSE_PASSWORD="$CLICKHOUSE_PASSWORD" \
             --secret PUSHOVER_APP_TOKEN="$PUSHOVER_APP_TOKEN" \
             --secret PUSHOVER_USER_KEY="$PUSHOVER_USER_KEY" \
-            +release-validation-pipeline \
+            +write-to-clickhouse \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
-            --GITHUB_REPOSITORY="${{ github.repository }}" \
+          || echo "ClickHouse write failed (non-fatal)"
+
+          earthly \
+            --secret PUSHOVER_APP_TOKEN="$PUSHOVER_APP_TOKEN" \
+            --secret PUSHOVER_USER_KEY="$PUSHOVER_USER_KEY" \
+            +send-pushover-alert \
+            --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GITHUB_RELEASE_URL="${{ steps.release_info.outputs.release_url }}" \
-          || echo "Earthly validation pipeline failed (non-fatal)"
+          || echo "Pushover notification failed (non-fatal)"
 
       - name: Upload validation artifacts
         uses: actions/upload-artifact@v4

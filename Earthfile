@@ -47,7 +47,7 @@ github-release-check:
             --output github-release-result.json \
         || (echo "GitHub Release validation failed" && exit 0)
 
-    SAVE ARTIFACT github-release-result.json
+    SAVE ARTIFACT github-release-result.json AS LOCAL ./artifacts/
 
 # Validate PyPI version matches release tag
 pypi-version-check:
@@ -63,7 +63,7 @@ pypi-version-check:
             --output pypi-version-result.json \
         || (echo "PyPI version validation failed" && exit 0)
 
-    SAVE ARTIFACT pypi-version-result.json
+    SAVE ARTIFACT pypi-version-result.json AS LOCAL ./artifacts/
 
 # Validate production environment health
 production-health-check:
@@ -85,7 +85,7 @@ production-health-check:
             --output production-health-result.json \
         || (echo "Production health validation failed" && exit 0)
 
-    SAVE ARTIFACT production-health-result.json
+    SAVE ARTIFACT production-health-result.json AS LOCAL ./artifacts/
 
 # Write validation results to ClickHouse
 write-to-clickhouse:
@@ -126,17 +126,14 @@ send-pushover-alert:
         || (echo "Pushover notification failed (non-fatal)" && exit 0)
 
 # Main pipeline - orchestrates all validation targets
+# NOTE: This target is deprecated. GitHub Actions now calls individual targets directly.
+# AS LOCAL artifacts only export when target is explicitly built, not via BUILD/COPY.
 release-validation-pipeline:
     FROM +validation-base
 
-    # Collect artifacts from each validation target (implicit BUILD via COPY dependency)
-    COPY +github-release-check/github-release-result.json ./artifacts/
-    COPY +pypi-version-check/pypi-version-result.json ./artifacts/
-    COPY +production-health-check/production-health-result.json ./artifacts/
-
-    # Run downstream targets that depend on artifacts
+    # Run all validation targets
+    BUILD +github-release-check
+    BUILD +pypi-version-check
+    BUILD +production-health-check
     BUILD +write-to-clickhouse
     BUILD +send-pushover-alert
-
-    # Export all artifacts to host filesystem
-    SAVE ARTIFACT ./artifacts/*.json AS LOCAL ./artifacts/
