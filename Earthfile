@@ -47,7 +47,7 @@ github-release-check:
             --output github-release-result.json \
         || (echo "GitHub Release validation failed" && exit 0)
 
-    SAVE ARTIFACT github-release-result.json AS LOCAL ./artifacts/
+    SAVE ARTIFACT github-release-result.json
 
 # Validate PyPI version matches release tag
 pypi-version-check:
@@ -63,7 +63,7 @@ pypi-version-check:
             --output pypi-version-result.json \
         || (echo "PyPI version validation failed" && exit 0)
 
-    SAVE ARTIFACT pypi-version-result.json AS LOCAL ./artifacts/
+    SAVE ARTIFACT pypi-version-result.json
 
 # Validate production environment health
 production-health-check:
@@ -85,7 +85,7 @@ production-health-check:
             --output production-health-result.json \
         || (echo "Production health validation failed" && exit 0)
 
-    SAVE ARTIFACT production-health-result.json AS LOCAL ./artifacts/
+    SAVE ARTIFACT production-health-result.json
 
 # Write validation results to ClickHouse
 write-to-clickhouse:
@@ -129,17 +129,14 @@ send-pushover-alert:
 release-validation-pipeline:
     FROM +validation-base
 
-    # Run all validation targets
-    BUILD +github-release-check
-    BUILD +pypi-version-check
-    BUILD +production-health-check
-    BUILD +write-to-clickhouse
-    BUILD +send-pushover-alert
-
-    # Collect artifacts from each validation target
+    # Collect artifacts from each validation target (implicit BUILD via COPY dependency)
     COPY +github-release-check/github-release-result.json ./artifacts/
     COPY +pypi-version-check/pypi-version-result.json ./artifacts/
     COPY +production-health-check/production-health-result.json ./artifacts/
+
+    # Run downstream targets that depend on artifacts
+    BUILD +write-to-clickhouse
+    BUILD +send-pushover-alert
 
     # Export all artifacts to host filesystem
     SAVE ARTIFACT ./artifacts/*.json AS LOCAL ./artifacts/
