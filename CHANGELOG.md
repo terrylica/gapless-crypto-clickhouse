@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.2...v12.0.3) (2025-11-25)
+
+### Bug Fixes
+
+* **validation:** fix Earthly artifact export to host filesystem ([d6f1c2a](https://github.com/terrylica/gapless-crypto-clickhouse/commit/d6f1c2a2304bc269580e5d24cb9aae1a54f4c774)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3) [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
+
 ## [12.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.1...v12.0.2) (2025-11-25)
 
 ### Documentation
