@@ -82,8 +82,19 @@ def main() -> int:
     log_with_timestamp("=" * 80)
 
     try:
-        client.command("CREATE DATABASE IF NOT EXISTS monitoring")
-        log_with_timestamp("✅ Database 'monitoring' created (or already exists)")
+        # ClickHouse Cloud requires simple CREATE DATABASE syntax (no IF NOT EXISTS, no ENGINE)
+        # Try to create database; if it exists, catch the specific error
+        try:
+            client.command("CREATE DATABASE monitoring")
+            log_with_timestamp("✅ Database 'monitoring' created")
+        except Exception as e:
+            error_msg = str(e)
+            # Database already exists (code 81 or 82)
+            if "already exists" in error_msg.lower() or "code: 81" in error_msg or "code: 82" in error_msg:
+                log_with_timestamp("✅ Database 'monitoring' already exists")
+            else:
+                # Unexpected error - reraise
+                raise
     except Exception as e:
         log_with_timestamp(f"❌ FAILED: Database creation failed: {e}")
         return 1
