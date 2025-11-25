@@ -417,19 +417,139 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 
 ---
 
+### Third Production Run (v12.0.5)
+
+**Date**: 2025-11-25 03:17 UTC
+
+**Context**: Continuation session focused on fixing Earthly artifact export (Issue #3)
+
+**Results**: 1 critical fix validated (secret passing), 1 new issue identified (Earthly CI mode)
+
+**Secret Passing**: ✅ FIXED
+
+**Problem**: v12.0.4 failed with "unable to lookup secret 'GITHUB_TOKEN': not found"
+
+**Root Cause**: Bash variable substitution failing when multiple `earthly` commands execute sequentially
+
+**Fix Applied**:
+1. Created new "Fetch Doppler secrets" step that stores secrets in GitHub Actions step outputs
+2. Changed all secret passing from bash variables to GitHub Actions template syntax
+3. Examples:
+   - BEFORE: `export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"` then `--secret GITHUB_TOKEN="$GITHUB_TOKEN"`
+   - AFTER: `--secret GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"` (direct template syntax)
+
+**Validation**: All validation targets executed successfully, no "secret not found" errors
+
+**ClickHouse Inserts**: ✅ SUCCESSFUL
+
+- Before (v12.0.4): Validation never ran (secret error)
+- After (v12.0.5): 3/3 successful inserts
+
+**Validation Results**:
+
+- ✅ GitHub Release: PASSED (176ms)
+- ✅ Production Health: PASSED (36,813ms / 36.8 seconds)
+- ❌ PyPI Version: FAILED (expected - v12.0.5 not yet published to PyPI)
+
+**Artifact Export**: ❌ STILL BROKEN
+
+**Symptom**: "No files were found with the provided path: artifacts/*.json"
+
+**Root Cause Identified**: `EARTHLY_CI=true` environment variable sets Earthly to `--ci` mode, which is equivalent to `--no-output --strict`. This **disables** `SAVE ARTIFACT AS LOCAL` export to host filesystem.
+
+**Evidence**: Workflow logs show "Local Output Summary 🎁 (disabled)" for all Earthly builds.
+
+**Solution Designed**: Remove `EARTHLY_CI=true` and add `--strict` flag explicitly to all earthly commands. This maintains CI-appropriate strict mode while enabling artifact export.
+
+**References**:
+- [Earthly Issue #4297](https://github.com/earthly/earthly/issues/4297)
+- [Stack Overflow - Earthly + GitLab CI](https://stackoverflow.com/questions/78048916/how-to-save-an-artifact-locally-using-earthly-and-gitlab-ci-cd)
+
+---
+
+### Fourth Production Run (v12.0.6)
+
+**Date**: 2025-11-25 03:24 UTC
+
+**Context**: Testing Earthly artifact export fix (--strict flag)
+
+**Results**: Cannot validate fix - infrastructure issue
+
+**Artifact Export Fix**: ✅ IMPLEMENTED (UNTESTED)
+
+**Changes Applied**:
+1. Removed `EARTHLY_CI: true` environment variable from workflow
+2. Added `--strict` flag to all 5 earthly commands:
+   - `github-release-check`
+   - `pypi-version-check`
+   - `production-health-check`
+   - `write-to-clickhouse`
+   - `send-pushover-alert`
+
+**Expected Outcome**: Earthly should export artifacts to `./artifacts/` directory, GitHub Actions upload should succeed
+
+**Actual Outcome**: ❌ GITHUB API RATE LIMIT
+
+**Error**: `API rate limit exceeded for 172.215.209.67` during Earthly setup step
+
+**Impact**: Earthly was never installed, validation targets never executed, artifact export fix could not be tested
+
+**ClickHouse Data**: No validation records for v12.0.6 (validation didn't run)
+
+**Status**: Fix implementation complete, awaiting next release to validate
+
+---
+
+### Continuation Session Summary (v12.0.3 - v12.0.6)
+
+**Versions Released**: 4 versions (v12.0.3, v12.0.4, v12.0.5, v12.0.6)
+
+**Issues Fixed**: 2 critical issues
+
+1. ✅ **Issue #4.1: Earthly Secret Passing** (v12.0.5)
+   - Changed from bash variable substitution to GitHub Actions template syntax
+   - All secrets now passed reliably to Earthly commands
+   - Validation targets execute successfully
+
+2. ✅ **Issue #3: Earthly Artifact Export** (v12.0.6)
+   - Root cause identified: `EARTHLY_CI=true` disables artifact export
+   - Fix implemented: Use `--strict` flag instead
+   - **Status**: UNTESTED (blocked by GitHub API rate limit)
+
+**Issues Remaining**: 2 medium-severity issues
+
+1. ❌ **Issue #3: Earthly Artifact Export** - Fix implemented but untested
+2. ❌ **Issue #5: Doppler Token Permissions** - Manual fix required
+
+**Core Observability**: ✅ FULLY WORKING
+
+- v12.0.5 validation data successfully stored in ClickHouse
+- GitHub Release, Production Health, and PyPI Version checks all executed
+- Non-blocking design confirmed (releases succeed despite validation failures)
+
+**Key Insights**:
+
+1. **GitHub Actions Template Syntax Superior to Bash Variables**: Direct template syntax (`${{ }}`) resolves before bash execution, avoiding scope/quoting issues
+2. **EARTHLY_CI Environment Variable Pitfall**: Setting `EARTHLY_CI=true` silently disables all artifact export, no warnings in logs
+3. **GitHub API Rate Limiting**: Infrastructure issue beyond control, affects Earthly setup action
+4. **Non-Blocking Design Success**: 4 releases completed successfully despite validation issues (v12.0.2, v12.0.4, v12.0.6 validation failed, releases still succeeded)
+
+---
+
 ## Next Steps
 
 ### Immediate (Priority 1)
 
-1. **Investigate Earthly artifact export** (Issue #3)
-   - Research Earthly BUILD vs RUN semantics
-   - Consider alternative artifact collection patterns
-   - Test locally before pushing to production
+1. **Validate Earthly artifact export fix** (Issue #3 - v12.0.7+)
+   - Fix implemented: `--strict` flag instead of `EARTHLY_CI=true`
+   - Awaiting next release to test (blocked by GitHub API rate limit in v12.0.6)
+   - Expected: artifacts/*.json files exported to GitHub Actions runner
+   - Success criteria: "Upload validation artifacts" step succeeds
 
-2. **Update ADR-0037** with production findings
-   - Add "Production Validation" section
-   - Document all 5 issues and their resolutions
-   - Update decision outcome with empirical results
+2. **Update ADR-0037** with continuation session findings
+   - Add v12.0.3 - v12.0.6 production findings
+   - Document secret passing fix and Earthly CI mode discovery
+   - Update lessons learned with GitHub Actions template syntax insights
 
 ### Short-term (Priority 2)
 
