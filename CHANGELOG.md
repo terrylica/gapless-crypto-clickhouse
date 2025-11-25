@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.12](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.11...v12.0.12) (2025-11-25)
+
+### Documentation
+
+* **adr-0037:** mark Issue [#5](https://github.com/terrylica/gapless-crypto-clickhouse/issues/5) as FIXED and VALIDATED in v12.0.11 ([3723180](https://github.com/terrylica/gapless-crypto-clickhouse/commit/3723180a350e9bc301b606143512c56a1563d03d)), closes [#6](https://github.com/terrylica/gapless-crypto-clickhouse/issues/6)
+
 ## [12.0.11](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.10...v12.0.11) (2025-11-25)
 
 ### Bug Fixes
