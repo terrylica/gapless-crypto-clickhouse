@@ -46,6 +46,7 @@ dependencies = [
     "pandas>=2.2.0,<3.0.0",  # Python 3.14 compatibility (pandas 2.2+ required for C API fixes)
     "pydantic>=2.0.0",  # Data validation and OpenAPI schema generation for validation reports
     "pyarrow>=14.0.0",  # Apache Arrow for zero-copy DataFrame creation (ADR-0023: 4x less memory)
+    "tenacity>=8.0.0",  # Retry logic for REST API gap filling (ADR-0040)
 ]
 
 [project.urls]

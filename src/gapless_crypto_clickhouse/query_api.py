@@ -26,6 +26,7 @@ Usage:
     df = query_ohlcv("BTCUSDT", "1h", "2024-01-01", "2024-01-31", instrument_type="futures-um")
 """
 
+import hashlib
 import logging
 from datetime import datetime
 from typing import List, Optional, Union
@@ -37,6 +38,7 @@ from .clickhouse import ClickHouseConnection
 from .clickhouse.config import ClickHouseConfig
 from .clickhouse_query import OHLCVQuery
 from .collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
+from .gap_filling.rest_client import fetch_gap_data
 
 logger = logging.getLogger(__name__)
 
@@ -195,7 +197,7 @@ def query_ohlcv(
 
             logger.info(f"{sym}: Retrieved {len(df)} rows from ClickHouse (Arrow-optimized)")
 
-            # Step 4: Fill gaps if enabled
+            # Step 4: Fill gaps if enabled (ADR-0040)
             if fill_gaps and len(df) > 0:
                 gaps = query.detect_gaps(
                     symbol=sym,
@@ -207,12 +209,22 @@ def query_ohlcv(
 
                 if len(gaps) > 0:
                     logger.info(f"{sym}: Detected {len(gaps)} gaps, filling via REST API")
-                    # TODO: Implement gap filling via REST API
-                    # This requires integrating the gap filler from gapless-crypto-data
-                    logger.warning(
-                        f"{sym}: Gap filling not yet implemented in v6.0.0 "
-                        f"(detected {len(gaps)} gaps)"
-                    )
+
+                    # Fill gaps using Binance REST API
+                    filled_rows = _fill_gaps_from_api(conn, gaps, sym, timeframe, instrument_type)
+
+                    if filled_rows > 0:
+                        logger.info(f"{sym}: Filled {filled_rows} rows from REST API")
+
+                        # Re-query to include filled data
+                        df = query.get_range(
+                            symbol=sym,
+                            timeframe=timeframe,
+                            start=start_date,
+                            end=end_date,
+                            instrument_type=instrument_type,
+                        )
+                        logger.info(f"{sym}: Retrieved {len(df)} rows after gap filling")
 
             dataframes.append(df)
 
@@ -372,3 +384,179 @@ def _auto_ingest_date_range(
 
     logger.info(f"Auto-ingestion complete: {total_rows} total rows for {symbol}")
     return total_rows
+
+
+def _fill_gaps_from_api(
+    connection: ClickHouseConnection,
+    gaps: pd.DataFrame,
+    symbol: str,
+    timeframe: str,
+    instrument_type: InstrumentType,
+) -> int:
+    """
+    Fill detected gaps using Binance REST API (ADR-0040).
+
+    Fetches authentic data from Binance REST API for each detected gap,
+    converts to ClickHouse-compatible DataFrame with _version hash,
+    and inserts to ClickHouse for deduplication via ReplacingMergeTree.
+
+    Args:
+        connection: Active ClickHouse connection
+        gaps: DataFrame with detected gaps (from detect_gaps())
+        symbol: Trading pair symbol
+        timeframe: Timeframe string
+        instrument_type: "spot" or "futures-um"
+
+    Returns:
+        Total number of rows inserted
+
+    Raises:
+        Exception: If API fetch or insertion fails
+    """
+    total_rows = 0
+
+    for _, gap in gaps.iterrows():
+        gap_start = pd.to_datetime(gap["gap_start"])
+        gap_end = pd.to_datetime(gap["gap_end"])
+
+        logger.info(f"Filling gap: {gap_start} to {gap_end}")
+
+        # Fetch data from REST API with retry logic
+        api_data = fetch_gap_data(
+            symbol=symbol,
+            timeframe=timeframe,
+            start_time=gap_start.to_pydatetime(),
+            end_time=gap_end.to_pydatetime(),
+            instrument_type=instrument_type,
+        )
+
+        if not api_data:
+            logger.warning(f"No data returned from API for gap {gap_start} to {gap_end}")
+            continue
+
+        # Convert to ClickHouse-compatible DataFrame
+        df = _convert_api_data_to_dataframe(api_data, symbol, timeframe, instrument_type)
+
+        # Insert to ClickHouse
+        rows = connection.insert_dataframe(df, table="ohlcv")
+        total_rows += rows
+        logger.info(f"Inserted {rows} rows for gap {gap_start} to {gap_end}")
+
+    return total_rows
+
+
+def _convert_api_data_to_dataframe(
+    api_data: List[dict],
+    symbol: str,
+    timeframe: str,
+    instrument_type: InstrumentType,
+) -> pd.DataFrame:
+    """
+    Convert REST API response to ClickHouse-ready DataFrame with _version hash.
+
+    Matches the exact column order and format used by ClickHouseBulkLoader
+    to ensure consistent _version hashes for ReplacingMergeTree deduplication.
+
+    Args:
+        api_data: List of candle dictionaries from REST API
+        symbol: Trading pair symbol
+        timeframe: Timeframe string
+        instrument_type: "spot" or "futures-um"
+
+    Returns:
+        DataFrame ready for ClickHouse insertion
+
+    Raises:
+        ValueError: If api_data is empty or malformed
+    """
+    if not api_data:
+        raise ValueError("api_data cannot be empty")
+
+    # Create DataFrame from API data
+    df = pd.DataFrame(api_data)
+
+    # Add metadata columns
+    df["symbol"] = symbol
+    df["timeframe"] = timeframe
+    df["instrument_type"] = instrument_type
+    df["data_source"] = "rest_api"  # Distinguish from CloudFront data
+
+    # Add funding_rate (NULL for gap filling)
+    df["funding_rate"] = None
+
+    # Compute deterministic _version hash (matches ClickHouseBulkLoader)
+    df["_version"] = df.apply(
+        lambda row: _compute_version_hash(row, symbol, timeframe, instrument_type),
+        axis=1,
+    )
+
+    # Add _sign column (1 for active rows)
+    df["_sign"] = 1
+
+    # Convert number_of_trades to int64 (schema requirement)
+    df["number_of_trades"] = df["number_of_trades"].astype("int64")
+
+    # Ensure timestamps are timezone-aware UTC
+    df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+    df["close_time"] = pd.to_datetime(df["close_time"], utc=True)
+
+    # Reorder columns to match ClickHouse schema
+    column_order = [
+        "timestamp",
+        "symbol",
+        "timeframe",
+        "instrument_type",
+        "data_source",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume",
+        "close_time",
+        "quote_asset_volume",
+        "number_of_trades",
+        "taker_buy_base_asset_volume",
+        "taker_buy_quote_asset_volume",
+        "funding_rate",
+        "_version",
+        "_sign",
+    ]
+
+    return df[column_order]
+
+
+def _compute_version_hash(
+    row: pd.Series,
+    symbol: str,
+    timeframe: str,
+    instrument_type: str,
+) -> int:
+    """
+    Compute deterministic _version hash for ReplacingMergeTree deduplication.
+
+    Uses same algorithm as ClickHouseBulkLoader._compute_version_hash()
+    to ensure identical data → identical _version → proper deduplication.
+
+    Args:
+        row: pandas Series with OHLCV data
+        symbol: Trading pair symbol
+        timeframe: Timeframe string
+        instrument_type: Instrument type
+
+    Returns:
+        UInt64 hash value (0 to 2^64-1)
+    """
+    # Create deterministic string from row content
+    version_input = (
+        f"{row['timestamp']}"
+        f"{row['open']}{row['high']}{row['low']}{row['close']}{row['volume']}"
+        f"{symbol}{timeframe}{instrument_type}"
+    )
+
+    # Use SHA256 for cryptographic hash (deterministic, collision-resistant)
+    hash_bytes = hashlib.sha256(version_input.encode("utf-8")).digest()
+
+    # Convert first 8 bytes to UInt64
+    version = int.from_bytes(hash_bytes[:8], byteorder="big", signed=False)
+
+    return version
