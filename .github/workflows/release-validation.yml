@@ -92,6 +92,7 @@ jobs:
             --secret PUSHOVER_USER_KEY="$PUSHOVER_USER_KEY" \
             +release-validation-pipeline \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
+            --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
             --GITHUB_REPOSITORY="${{ github.repository }}" \
             --GITHUB_RELEASE_URL="${{ steps.release_info.outputs.release_url }}" \
           || echo "Earthly validation pipeline failed (non-fatal)"

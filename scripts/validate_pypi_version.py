@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 import requests
 
 
-def validate_pypi_version(package_name: str, expected_version: str) -> dict:
+def validate_pypi_version(package_name: str, expected_version: str, git_commit: str = "") -> dict:
     """Validate PyPI package version matches expected release version.
 
     Returns structured validation result for ClickHouse storage.
@@ -21,6 +21,7 @@ def validate_pypi_version(package_name: str, expected_version: str) -> dict:
     result = {
         "validation_type": "pypi_version",
         "release_version": expected_version,
+        "git_commit": git_commit,
         "status": "failed",
         "error_message": "",
         "duration_ms": 0,
@@ -79,12 +80,13 @@ def main():
     parser = argparse.ArgumentParser(description="Validate PyPI Package Version")
     parser.add_argument("--expected-version", required=True, help="Expected version (e.g., v9.0.0 or 9.0.0)")
     parser.add_argument("--package", required=True, help="Package name on PyPI")
+    parser.add_argument("--git-commit", default="", help="Git commit SHA (optional)")
     parser.add_argument("--output", required=True, help="Output JSON file path")
     args = parser.parse_args()
 
     print(f"[PyPI Version Validation] Checking {args.package} for version {args.expected_version}...")
 
-    result = validate_pypi_version(args.package, args.expected_version)
+    result = validate_pypi_version(args.package, args.expected_version, args.git_commit)
 
     # Write JSON result
     with open(args.output, "w") as f:

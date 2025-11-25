@@ -13,7 +13,7 @@ import time
 from datetime import datetime, timezone
 
 
-def validate_github_release(version: str, repository: str, max_retries: int = 3) -> dict:
+def validate_github_release(version: str, repository: str, git_commit: str = "", max_retries: int = 3) -> dict:
     """Validate GitHub release exists and is published.
 
     Returns structured validation result for ClickHouse storage.
@@ -21,6 +21,7 @@ def validate_github_release(version: str, repository: str, max_retries: int = 3)
     result = {
         "validation_type": "github_release",
         "release_version": version,
+        "git_commit": git_commit,
         "status": "failed",
         "error_message": "",
         "duration_ms": 0,
@@ -90,12 +91,13 @@ def main():
     parser = argparse.ArgumentParser(description="Validate GitHub Release")
     parser.add_argument("--version", required=True, help="Release version (e.g., v9.0.0)")
     parser.add_argument("--repository", required=True, help="Repository (e.g., terrylica/repo)")
+    parser.add_argument("--git-commit", default="", help="Git commit SHA (optional)")
     parser.add_argument("--output", required=True, help="Output JSON file path")
     args = parser.parse_args()
 
     print(f"[GitHub Release Validation] Checking {args.version} in {args.repository}...")
 
-    result = validate_github_release(args.version, args.repository)
+    result = validate_github_release(args.version, args.repository, args.git_commit)
 
     # Write JSON result
     with open(args.output, "w") as f:

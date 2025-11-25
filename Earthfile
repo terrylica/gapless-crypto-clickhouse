@@ -35,6 +35,7 @@ validation-base:
 github-release-check:
     FROM +validation-base
     ARG RELEASE_VERSION
+    ARG GIT_COMMIT=""
     ARG GITHUB_REPOSITORY="terrylica/gapless-crypto-clickhouse"
 
     RUN --secret GITHUB_TOKEN \
@@ -42,6 +43,7 @@ github-release-check:
         python validate_github_release.py \
             --version "$RELEASE_VERSION" \
             --repository "$GITHUB_REPOSITORY" \
+            --git-commit "$GIT_COMMIT" \
             --output github-release-result.json \
         || (echo "GitHub Release validation failed" && exit 0)
 
@@ -51,11 +53,13 @@ github-release-check:
 pypi-version-check:
     FROM +validation-base
     ARG RELEASE_VERSION
+    ARG GIT_COMMIT=""
     ARG PACKAGE_NAME="gapless-crypto-clickhouse"
 
     RUN python validate_pypi_version.py \
             --expected-version "$RELEASE_VERSION" \
             --package "$PACKAGE_NAME" \
+            --git-commit "$GIT_COMMIT" \
             --output pypi-version-result.json \
         || (echo "PyPI version validation failed" && exit 0)
 
@@ -65,6 +69,7 @@ pypi-version-check:
 production-health-check:
     FROM +validation-base
     ARG RELEASE_VERSION
+    ARG GIT_COMMIT=""
 
     RUN --secret CLICKHOUSE_HOST \
         --secret CLICKHOUSE_PORT \
@@ -76,6 +81,7 @@ production-health-check:
         export CLICKHOUSE_PASSWORD && \
         python validate_production_health.py \
             --release-version "$RELEASE_VERSION" \
+            --git-commit "$GIT_COMMIT" \
             --output production-health-result.json \
         || (echo "Production health validation failed" && exit 0)
 

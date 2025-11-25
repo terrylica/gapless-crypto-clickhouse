@@ -13,6 +13,9 @@ from pathlib import Path
 
 import clickhouse_connect
 
+# Valid status values for monitoring.validation_results schema (Enum8)
+VALID_STATUSES = {"passed", "failed", "warning"}
+
 
 def write_validation_results(results_dir: str) -> dict:
     """Write validation results to ClickHouse monitoring.validation_results table.
@@ -62,13 +65,21 @@ def write_validation_results(results_dir: str) -> dict:
                 with open(json_file) as f:
                     data = json.load(f)
 
+                # Validate status enum
+                status = data.get("status", "failed")
+                if status not in VALID_STATUSES:
+                    raise ValueError(
+                        f"Invalid status '{status}' in {json_file.name}. "
+                        f"Must be one of {VALID_STATUSES}"
+                    )
+
                 # Prepare row for insertion
                 row = {
                     "event_time": datetime.now(timezone.utc),
                     "validation_type": data.get("validation_type", "unknown"),
                     "release_version": data.get("release_version", ""),
                     "git_commit": data.get("git_commit", ""),
-                    "status": data.get("status", "failed"),
+                    "status": status,
                     "error_message": data.get("error_message", ""),
                     "duration_ms": data.get("duration_ms", 0),
                     "validation_context": data.get("validation_context", {}),

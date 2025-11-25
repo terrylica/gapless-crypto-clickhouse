@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 import clickhouse_connect
 
 
-def validate_production_health(release_version: str) -> dict:
+def validate_production_health(release_version: str, git_commit: str = "") -> dict:
     """Validate production ClickHouse Cloud environment health.
 
     Returns structured validation result for ClickHouse storage.
@@ -22,6 +22,7 @@ def validate_production_health(release_version: str) -> dict:
     result = {
         "validation_type": "production_health",
         "release_version": release_version,
+        "git_commit": git_commit,
         "status": "failed",
         "error_message": "",
         "duration_ms": 0,
@@ -91,12 +92,13 @@ def validate_production_health(release_version: str) -> dict:
 def main():
     parser = argparse.ArgumentParser(description="Validate Production Environment Health")
     parser.add_argument("--release-version", required=True, help="Release version (e.g., v9.0.0)")
+    parser.add_argument("--git-commit", default="", help="Git commit SHA (optional)")
     parser.add_argument("--output", required=True, help="Output JSON file path")
     args = parser.parse_args()
 
     print(f"[Production Health Validation] Checking ClickHouse Cloud for release {args.release_version}...")
 
-    result = validate_production_health(args.release_version)
+    result = validate_production_health(args.release_version, args.git_commit)
 
     # Write JSON result
     with open(args.output, "w") as f:
