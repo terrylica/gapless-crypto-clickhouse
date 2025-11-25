@@ -1,6 +1,6 @@
 {
   "name": "gapless-crypto-clickhouse",
-  "version": "12.0.3",
+  "version": "12.0.4",
   "private": true,
   "description": "ClickHouse-based cryptocurrency data collection with zero-gap guarantee",
   "repository": {
