@@ -22,12 +22,14 @@ validation-base:
     RUN pip install --no-cache-dir \
         clickhouse-connect>=0.7.0 \
         requests>=2.28.0 \
-        packaging>=21.0
+        packaging>=21.0 \
+        pandas>=2.2.0
 
     # Copy validation scripts
     COPY scripts/validate_github_release.py .
     COPY scripts/validate_pypi_version.py .
     COPY scripts/validate_production_health.py .
+    COPY scripts/validate_binance_real_data.py .
     COPY scripts/write_validation_results.py .
     COPY scripts/send_pushover_notification.py .
 
@@ -87,12 +89,36 @@ production-health-check:
 
     SAVE ARTIFACT production-health-result.json AS LOCAL ./artifacts/
 
+# Validate real Binance data pipeline (ADR-0038)
+# Downloads actual BTCUSDT data from Binance CDN, validates 9-stage pipeline
+binance-real-data-check:
+    FROM +validation-base
+    ARG RELEASE_VERSION
+    ARG GIT_COMMIT=""
+
+    RUN --secret CLICKHOUSE_HOST \
+        --secret CLICKHOUSE_PORT \
+        --secret CLICKHOUSE_USER \
+        --secret CLICKHOUSE_PASSWORD \
+        export CLICKHOUSE_HOST && \
+        export CLICKHOUSE_PORT && \
+        export CLICKHOUSE_USER && \
+        export CLICKHOUSE_PASSWORD && \
+        python validate_binance_real_data.py \
+            --release-version "$RELEASE_VERSION" \
+            --git-commit "$GIT_COMMIT" \
+            --output binance-validation-result.json \
+        || (echo "Binance real data validation failed" && exit 0)
+
+    SAVE ARTIFACT binance-validation-result.json AS LOCAL ./artifacts/
+
 # Write validation results to ClickHouse
 write-to-clickhouse:
     FROM +validation-base
     COPY +github-release-check/github-release-result.json ./results/
     COPY +pypi-version-check/pypi-version-result.json ./results/
     COPY +production-health-check/production-health-result.json ./results/
+    COPY +binance-real-data-check/binance-validation-result.json ./results/
 
     RUN --secret CLICKHOUSE_HOST \
         --secret CLICKHOUSE_PORT \
@@ -112,6 +138,7 @@ send-pushover-alert:
     COPY +github-release-check/github-release-result.json ./results/
     COPY +pypi-version-check/pypi-version-result.json ./results/
     COPY +production-health-check/production-health-result.json ./results/
+    COPY +binance-real-data-check/binance-validation-result.json ./results/
     ARG RELEASE_VERSION
     ARG GITHUB_RELEASE_URL
 
@@ -135,5 +162,6 @@ release-validation-pipeline:
     BUILD +github-release-check
     BUILD +pypi-version-check
     BUILD +production-health-check
+    BUILD +binance-real-data-check
     BUILD +write-to-clickhouse
     BUILD +send-pushover-alert

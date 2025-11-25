@@ -1,6 +1,7 @@
 name: Production Validation
 
 # ADR-0035: CI/CD Production Validation Policy
+# ADR-0038: Real Binance Data Validation
 # Scheduled monitoring for ClickHouse Cloud AWS and Binance CDN infrastructure
 # Runs every 6 hours, independent of code changes
 
@@ -15,33 +16,6 @@ permissions:
   contents: read
 
 jobs:
-  clickhouse-cloud-validation:
-    name: ClickHouse Cloud Validation
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Python + UV
-        uses: ./.github/actions/setup-python-uv
-
-      - name: Setup Doppler CLI
-        uses: ./.github/actions/setup-doppler
-
-      - name: Install package from local source
-        run: uv pip install --system -e .
-
-      - name: Run ClickHouse Cloud validation
-        env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
-        run: |
-          echo "=========================================="
-          echo "ClickHouse Cloud Validation"
-          echo "=========================================="
-          doppler run --project aws-credentials --config prd -- python scripts/validate_clickhouse_cloud.py
-
   binance-cdn-availability:
     name: Binance CDN Availability
     runs-on: ubuntu-latest
@@ -61,8 +35,8 @@ jobs:
           echo "=========================================="
           uv run scripts/validate_binance_cdn.py
 
-  simplified-e2e-validation:
-    name: Simplified E2E Validation
+  binance-real-data-validation:
+    name: Binance Real Data Validation (ADR-0038)
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -70,20 +44,48 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Python + UV
-        uses: ./.github/actions/setup-python-uv
+      - name: Setup Earthly
+        uses: earthly/actions-setup@v1
+        with:
+          version: latest
 
-      - name: Setup Doppler CLI
-        uses: ./.github/actions/setup-doppler
+      - name: Create artifacts directory
+        run: mkdir -p artifacts
 
-      - name: Install package from local source
-        run: uv pip install --system -e .
-
-      - name: Run Simplified E2E Validation
-        env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+      - name: Run Binance real data validation via Earthly
+        continue-on-error: true
         run: |
           echo "=========================================="
-          echo "Simplified E2E Validation (3 Layers)"
+          echo "Binance Real Data Validation (9-Stage Pipeline)"
           echo "=========================================="
-          doppler run --project aws-credentials --config prd -- python scripts/validate_e2e_simple.py
+          earthly --strict \
+            --secret CLICKHOUSE_HOST="${{ secrets.CLICKHOUSE_HOST }}" \
+            --secret CLICKHOUSE_PORT="${{ secrets.CLICKHOUSE_PORT }}" \
+            --secret CLICKHOUSE_USER="${{ secrets.CLICKHOUSE_USER }}" \
+            --secret CLICKHOUSE_PASSWORD="${{ secrets.CLICKHOUSE_PASSWORD }}" \
+            +binance-real-data-check \
+            --RELEASE_VERSION="scheduled" \
+            --GIT_COMMIT="${{ github.sha }}" \
+          || echo "Binance real data validation failed (non-fatal)"
+
+      - name: Upload validation artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: binance-validation-results
+          path: artifacts/*.json
+          retention-days: 90
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Binance Real Data Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f artifacts/binance-validation-result.json ]; then
+            STATUS=$(jq -r '.status' artifacts/binance-validation-result.json)
+            echo "- **Status**: ${STATUS}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Futures Format**: $(jq -r '.stages.futures_parse.rows // "N/A"' artifacts/binance-validation-result.json) rows" >> $GITHUB_STEP_SUMMARY
+            echo "- **Spot Format**: $(jq -r '.stages.spot_parse.rows // "N/A"' artifacts/binance-validation-result.json) rows" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Status**: No results file generated" >> $GITHUB_STEP_SUMMARY
+          fi

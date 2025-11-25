@@ -68,17 +68,17 @@ Current gap: No automated validation runs post-release. Manual verification requ
 
 **Timeline**:
 
-| Version | Date                 | Status     | Key Result                                                   |
-| ------- | -------------------- | ---------- | ------------------------------------------------------------ |
-| v12.0.1 | 2025-01-25 01:13 UTC | ✅ Success | Core observability working, 3/3 ClickHouse inserts           |
-| v12.0.2 | 2025-01-25 02:15 UTC | ⚠️ Partial | GitHub API rate limit blocked Earthly setup                  |
-| v12.0.3 | 2025-01-25 02:45 UTC | ❌ Failed  | Earthly artifact export fix (COPY/BUILD pattern) didn't work |
-| v12.0.4 | 2025-01-25 03:00 UTC | ❌ Failed  | Direct target calls failed (secret passing issue)            |
-| v12.0.5 | 2025-01-25 03:17 UTC | ✅ Success | Secret passing fixed, 3/3 ClickHouse inserts                 |
-| v12.0.6 | 2025-01-25 03:24 UTC | ⚠️ Blocked | Artifact export fix implemented, GitHub API rate limit       |
-| v12.0.9 | 2025-01-25 08:17 UTC | ⏳ Pending | Issue #5 fix (Doppler multi-project → direct GitHub secrets) |
-| v12.0.10 | 2025-01-25 08:20 UTC | ⚠️ Partial | Secret dependency issue (Earthly COPY inheritance) |
-| v12.0.11 | 2025-01-25 08:23 UTC | ✅ Success | Issue #5 + #6 FIXED - Pushover notification sent! |
+| Version  | Date                 | Status     | Key Result                                                   |
+| -------- | -------------------- | ---------- | ------------------------------------------------------------ |
+| v12.0.1  | 2025-01-25 01:13 UTC | ✅ Success | Core observability working, 3/3 ClickHouse inserts           |
+| v12.0.2  | 2025-01-25 02:15 UTC | ⚠️ Partial | GitHub API rate limit blocked Earthly setup                  |
+| v12.0.3  | 2025-01-25 02:45 UTC | ❌ Failed  | Earthly artifact export fix (COPY/BUILD pattern) didn't work |
+| v12.0.4  | 2025-01-25 03:00 UTC | ❌ Failed  | Direct target calls failed (secret passing issue)            |
+| v12.0.5  | 2025-01-25 03:17 UTC | ✅ Success | Secret passing fixed, 3/3 ClickHouse inserts                 |
+| v12.0.6  | 2025-01-25 03:24 UTC | ⚠️ Blocked | Artifact export fix implemented, GitHub API rate limit       |
+| v12.0.9  | 2025-01-25 08:17 UTC | ⏳ Pending | Issue #5 fix (Doppler multi-project → direct GitHub secrets) |
+| v12.0.10 | 2025-01-25 08:20 UTC | ⚠️ Partial | Secret dependency issue (Earthly COPY inheritance)           |
+| v12.0.11 | 2025-01-25 08:23 UTC | ✅ Success | Issue #5 + #6 FIXED - Pushover notification sent!            |
 
 **v12.0.1 Empirical Evidence**:
 
@@ -278,6 +278,7 @@ earthly --strict \
 **Fix Applied** (v12.0.9):
 
 1. Synced secrets directly from Doppler to GitHub using CLI:
+
    ```bash
    # ClickHouse secrets from aws-credentials/prd
    gh secret set CLICKHOUSE_HOST -R terrylica/gapless-crypto-clickhouse \
@@ -291,6 +292,7 @@ earthly --strict \
    ```
 
 2. Modified workflow to use direct `${{ secrets.* }}` references instead of runtime Doppler fetching:
+
    ```yaml
    # BEFORE (runtime Doppler fetch - FAILED):
    --secret CLICKHOUSE_HOST="${{ steps.doppler_secrets.outputs.clickhouse_host }}"

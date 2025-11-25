@@ -432,6 +432,7 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 **Root Cause**: Bash variable substitution failing when multiple `earthly` commands execute sequentially
 
 **Fix Applied**:
+
 1. Created new "Fetch Doppler secrets" step that stores secrets in GitHub Actions step outputs
 2. Changed all secret passing from bash variables to GitHub Actions template syntax
 3. Examples:
@@ -453,7 +454,7 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 
 **Artifact Export**: ❌ STILL BROKEN
 
-**Symptom**: "No files were found with the provided path: artifacts/*.json"
+**Symptom**: "No files were found with the provided path: artifacts/\*.json"
 
 **Root Cause Identified**: `EARTHLY_CI=true` environment variable sets Earthly to `--ci` mode, which is equivalent to `--no-output --strict`. This **disables** `SAVE ARTIFACT AS LOCAL` export to host filesystem.
 
@@ -462,6 +463,7 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 **Solution Designed**: Remove `EARTHLY_CI=true` and add `--strict` flag explicitly to all earthly commands. This maintains CI-appropriate strict mode while enabling artifact export.
 
 **References**:
+
 - [Earthly Issue #4297](https://github.com/earthly/earthly/issues/4297)
 - [Stack Overflow - Earthly + GitLab CI](https://stackoverflow.com/questions/78048916/how-to-save-an-artifact-locally-using-earthly-and-gitlab-ci-cd)
 
@@ -478,6 +480,7 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 **Artifact Export Fix**: ✅ IMPLEMENTED (UNTESTED)
 
 **Changes Applied**:
+
 1. Removed `EARTHLY_CI: true` environment variable from workflow
 2. Added `--strict` flag to all 5 earthly commands:
    - `github-release-check`
@@ -543,7 +546,7 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 1. **Validate Earthly artifact export fix** (Issue #3 - v12.0.7+)
    - Fix implemented: `--strict` flag instead of `EARTHLY_CI=true`
    - Awaiting next release to test (blocked by GitHub API rate limit in v12.0.6)
-   - Expected: artifacts/*.json files exported to GitHub Actions runner
+   - Expected: artifacts/\*.json files exported to GitHub Actions runner
    - Success criteria: "Upload validation artifacts" step succeeds
 
 2. **Update ADR-0037** with continuation session findings

@@ -1,10 +1,12 @@
 name: Release Validation
 
 # ADR-0037: Release Validation Observability Flow
+# ADR-0038: Real Binance Data Validation
 # Triggered after semantic-release completion to validate:
 # 1. GitHub Release existence
 # 2. PyPI package version match
 # 3. Production environment health
+# 4. Real Binance data pipeline (9-stage)
 
 on:
   workflow_run:
@@ -97,6 +99,17 @@ jobs:
             --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
           || echo "Production health check failed (non-fatal)"
 
+          # ADR-0038: Real Binance data validation (9-stage pipeline)
+          earthly --strict \
+            --secret CLICKHOUSE_HOST="${{ secrets.CLICKHOUSE_HOST }}" \
+            --secret CLICKHOUSE_PORT="${{ secrets.CLICKHOUSE_PORT }}" \
+            --secret CLICKHOUSE_USER="${{ secrets.CLICKHOUSE_USER }}" \
+            --secret CLICKHOUSE_PASSWORD="${{ secrets.CLICKHOUSE_PASSWORD }}" \
+            +binance-real-data-check \
+            --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
+            --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
+          || echo "Binance real data validation failed (non-fatal)"
+
           # Run downstream pipeline (write to ClickHouse, send Pushover)
           # +write-to-clickhouse COPYs from dependent targets, so needs all their secrets
           echo "Running downstream validation pipeline..."
@@ -159,4 +172,9 @@ jobs:
           if [ -f artifacts/production-health-result.json ]; then
             STATUS=$(jq -r '.status' artifacts/production-health-result.json)
             echo "- **Production Health**: ${STATUS}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -f artifacts/binance-validation-result.json ]; then
+            STATUS=$(jq -r '.status' artifacts/binance-validation-result.json)
+            echo "- **Binance Real Data**: ${STATUS}" >> $GITHUB_STEP_SUMMARY
           fi
