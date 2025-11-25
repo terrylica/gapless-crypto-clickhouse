@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v13.0.0...v13.0.1) (2025-11-25)
+
+### Documentation
+
+* **plan-0038:** mark all tasks complete - v13.0.0 published to PyPI ([2397d95](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2397d9573d40a706e4964faf087aa769aa96de43))
+
 ## [13.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.12...v13.0.0) (2025-11-25)
 
 ### ⚠ BREAKING CHANGES
