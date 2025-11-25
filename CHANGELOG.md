@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.4...v12.0.5) (2025-11-25)
+
+### Bug Fixes
+
+* **validation:** use GitHub Actions template syntax for Earthly secrets ([94d3017](https://github.com/terrylica/gapless-crypto-clickhouse/commit/94d30178c271a3385cf66fd4bfbd0c067fa2bd81)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
+
 ## [12.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.3...v12.0.4) (2025-11-25)
 
 ### Bug Fixes
