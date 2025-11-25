@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.12...v13.0.0) (2025-11-25)
+
+### ⚠ BREAKING CHANGES
+
+* **validation:** Remove legacy synthetic validation scripts
+
+9-stage validation pipeline:
+1. CDN Download (futures + spot)
+2. ZIP Extract
+3. CSV Parse + Format Detection
+4. DataFrame Validation (OHLC, volume constraints)
+5. _version Hash Computation
+6. ClickHouse Insert
+7. Query FINAL
+8. Deduplication Test
+9. Schema Compliance
+
+Key changes:
+- Delete validate_clickhouse_cloud.py (synthetic VALIDATION_TEST_BTCUSDT)
+- Delete validate_e2e_simple.py (synthetic E2E_TEST)
+- Create validate_binance_real_data.py (real BTCUSDT data)
+- Add Earthly +binance-real-data-check target
+- Update production-validation.yml and release-validation.yml
+
+Technical notes:
+- Futures: 2024-01-01, Spot: 2024-01-02 (different dates avoid ORDER BY collision)
+- ORDER BY (symbol,timeframe,toStartOfHour,timestamp) excludes instrument_type
+- Both formats have 12 columns (includes 'ignore' column)
+- All 9 stages passed in 1404ms locally
+
+### Features
+
+* **validation:** replace synthetic data with real Binance CDN validation (ADR-0038) ([a9b5d3c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/a9b5d3c07eee00f892e3004203d65b39f328d767))
+
 ## [12.0.12](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.11...v12.0.12) (2025-11-25)
 
 ### Documentation
