@@ -80,6 +80,7 @@ Current gap: No automated validation runs post-release. Manual verification requ
 6. **Pushover Alerts**: ⚠️ Doppler token permissions need manual fix (non-blocking)
 
 **Key Validation Records** (production data):
+
 ```sql
 SELECT validation_type, status, duration_ms, validation_context
 FROM monitoring.validation_results
@@ -107,6 +108,7 @@ Production deployment revealed 5 issues. 3 critical issues were fixed immediatel
 **Root Cause**: GitHub Actions `checkout@v4` defaults to `fetch-tags: false`.
 
 **Fix**: Added to `.github/workflows/release-validation.yml`:
+
 ```yaml
 - name: Checkout code
   uses: actions/checkout@v4
@@ -126,6 +128,7 @@ Production deployment revealed 5 issues. 3 critical issues were fixed immediatel
 **Root Cause**: Used dict format instead of list format, missing required columns (event_date, symbol, timeframe).
 
 **Fix**: Changed `scripts/write_validation_results.py` to use list format with explicit column_names parameter:
+
 ```python
 column_names = [
     "event_time", "event_date", "validation_type",
@@ -143,7 +146,7 @@ client.insert("monitoring.validation_results", [row], column_names=column_names)
 
 #### Issue #3: Earthly Artifact Export (MEDIUM - UNFIXED)
 
-**Symptom**: GitHub Actions warning "No files were found with the provided path: artifacts/*.json".
+**Symptom**: GitHub Actions warning "No files were found with the provided path: artifacts/\*.json".
 
 **Root Cause**: Earthly `BUILD` command doesn't automatically copy artifacts from child targets.
 
@@ -160,6 +163,7 @@ client.insert("monitoring.validation_results", [row], column_names=column_names)
 **Root Cause**: ClickHouse Cloud doesn't support `IF NOT EXISTS` or `ENGINE` clauses in `CREATE DATABASE` statements.
 
 **Fix**: Changed `scripts/deploy-monitoring-schema.py`:
+
 ```python
 # Simple CREATE DATABASE syntax (ClickHouse Cloud compatible)
 try:
@@ -190,16 +194,19 @@ except Exception as e:
 ### Lessons Learned
 
 **What Worked Well**:
+
 1. Multi-agent DCTL validation discovered 3 issues before first production run
 2. Non-blocking design prevented release failures
 3. Test-driven fixes (created test data to verify ClickHouse insert before production)
 
 **What Didn't Work**:
+
 1. Earthly artifact export pattern (COPY + SAVE ARTIFACT in pipeline target)
 2. Initial ClickHouse insert format (dict instead of list)
 3. Assumed GitHub Actions checkout fetches tags by default
 
 **Key Insights**:
+
 1. ClickHouse Cloud requires simpler SQL syntax (no IF NOT EXISTS, no ENGINE for CREATE DATABASE)
 2. Explicit column names critical for ClickHouse insert robustness
 3. Always specify fetch-depth and fetch-tags explicitly when working with git tags

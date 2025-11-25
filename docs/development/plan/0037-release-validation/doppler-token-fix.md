@@ -13,6 +13,7 @@
 The GitHub Actions `DOPPLER_TOKEN` secret only has access to the `aws-credentials` project, but the release-validation workflow also needs access to the `notifications` project to fetch Pushover credentials.
 
 **Error**:
+
 ```
 Unable to fetch secrets
 Doppler Error: This token does not have access to requested project 'notifications'
@@ -22,6 +23,7 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 ```
 
 **Impact**:
+
 - ✅ Release validation still runs successfully
 - ✅ Validation results still stored in ClickHouse
 - ❌ Pushover mobile alerts not sent
@@ -32,11 +34,13 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 ## Root Cause
 
 The current `DOPPLER_TOKEN` was scoped to only the `aws-credentials` project when it was created. Doppler tokens can be scoped to:
+
 1. Specific projects (current configuration)
 2. All projects (recommended for this use case)
 3. Multiple specific projects
 
 The release-validation workflow needs access to **two projects**:
+
 - `aws-credentials` (for ClickHouse Cloud credentials)
 - `notifications` (for Pushover credentials)
 
@@ -54,6 +58,7 @@ The release-validation workflow needs access to **two projects**:
 ### Step 2: Configure Token Scope
 
 **Token Configuration**:
+
 - **Name**: `GitHub Actions - Release Validation` (descriptive name)
 - **Access**: Select **All Projects** (recommended)
   - Alternative: Select specific projects (`aws-credentials` + `notifications`)
@@ -93,6 +98,7 @@ The release-validation workflow needs access to **two projects**:
 7. Check workflow logs for Pushover notification success
 
 **Expected Output**:
+
 ```
 ✅ Pushover notification sent successfully
 ```
@@ -150,6 +156,7 @@ If you prefer not to use a single Doppler token with access to multiple projects
 ## Timeline
 
 **Expected Duration**: 10-15 minutes
+
 - 5 minutes: Create new Doppler token
 - 2 minutes: Update GitHub secret
 - 5 minutes: Test and verify

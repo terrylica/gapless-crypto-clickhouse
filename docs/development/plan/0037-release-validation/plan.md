@@ -1,6 +1,7 @@
 # Release Validation Observability Flow - Implementation Plan
 
 **Metadata:**
+
 - adr-id: 0037
 - Status: In Progress
 - Created: 2025-01-22
@@ -51,6 +52,7 @@ Implement automated post-release validation workflow that validates GitHub Relea
 ### Background
 
 **Problem**: No automated validation of releases after semantic-release deployment. Manual verification required to confirm:
+
 - GitHub Release was created successfully
 - PyPI package version matches release tag
 - Production environment is healthy and accessible
@@ -60,6 +62,7 @@ Implement automated post-release validation workflow that validates GitHub Relea
 ### Previous Work
 
 This plan is a continuation from the previous session where ADR-0037 was implemented. The previous session completed:
+
 - ✅ ADR-0037 written in MADR format
 - ✅ ClickHouse monitoring schema created
 - ✅ 5 validation scripts implemented
@@ -73,6 +76,7 @@ This plan is a continuation from the previous session where ADR-0037 was impleme
 **Focus**: Production deployment and validation of ADR-0037 implementation.
 
 **Approach**:
+
 1. Deploy ClickHouse schema to production
 2. Trigger semantic-release to create new version
 3. Monitor release-validation workflow execution
@@ -120,6 +124,7 @@ This plan is a continuation from the previous session where ADR-0037 was impleme
 #### Issue #1: Tag Detection Returning v0.0.0 (CRITICAL - FIXED)
 
 **Error**:
+
 ```
 Release Version: v0.0.0
 Release URL: https://github.com/terrylica/gapless-crypto-clickhouse/releases/tag/v0.0.0
@@ -128,12 +133,13 @@ Release URL: https://github.com/terrylica/gapless-crypto-clickhouse/releases/tag
 **Root Cause**: GitHub Actions `checkout@v4` defaults to `fetch-tags: false`. The `git describe --tags --abbrev=0` command returned fallback value.
 
 **Fix**: Added to `.github/workflows/release-validation.yml`:
+
 ```yaml
 - name: Checkout code
   uses: actions/checkout@v4
   with:
-    fetch-depth: 0  # Fetch all history for tags
-    fetch-tags: true  # Explicitly fetch tags
+    fetch-depth: 0 # Fetch all history for tags
+    fetch-tags: true # Explicitly fetch tags
 ```
 
 **Validation**: Second production run showed correct version (v12.0.1)
@@ -143,6 +149,7 @@ Release URL: https://github.com/terrylica/gapless-crypto-clickhouse/releases/tag
 #### Issue #2: ClickHouse Insert Schema Mismatch (CRITICAL - FIXED)
 
 **Error**:
+
 ```
 Failed inserts: 3
   - Failed to insert github-release-result.json: Insert data column count does not match column names
@@ -151,11 +158,13 @@ Failed inserts: 3
 ```
 
 **Root Cause Analysis**:
+
 1. Using dict format for insert instead of list format
 2. Missing required columns: event_date, symbol, timeframe
 3. Schema has 13 columns (excluding auto-generated validation_id), but only 9 were provided
 
 **ClickHouse Schema**:
+
 ```sql
 CREATE TABLE monitoring.validation_results (
     event_time DateTime,
@@ -208,6 +217,7 @@ client.insert("monitoring.validation_results", [row], column_names=column_names)
 ```
 
 **Test Validation**:
+
 ```bash
 # Created test file /tmp/validation-test/test-result.json
 doppler run --project aws-credentials --config prd -- \
@@ -217,6 +227,7 @@ doppler run --project aws-credentials --config prd -- \
 ```
 
 **Production Validation**: Second production run showed:
+
 ```
 Total files: 3
 Successful inserts: 3
@@ -229,6 +240,7 @@ Failed inserts: 0
 #### Issue #3: Earthly Artifact Export (MEDIUM - UNFIXED)
 
 **Error**:
+
 ```
 ##[warning]No files were found with the provided path: artifacts/*.json.
 No artifacts will be uploaded.
@@ -237,6 +249,7 @@ No artifacts will be uploaded.
 **Root Cause**: The `BUILD` command in Earthly doesn't automatically copy artifacts from child targets to parent target.
 
 **Attempted Fix** (did NOT work):
+
 ```earthly
 release-validation-pipeline:
     FROM +validation-base
@@ -268,6 +281,7 @@ release-validation-pipeline:
 #### Issue #4: ClickHouse Cloud Database Creation (CRITICAL - FIXED)
 
 **Error**:
+
 ```
 Code: 344. DB::Exception: Only queries like `CREATE DATABASE <database>` are supported for creating database.
 Current query is CREATE DATABASE IF NOT EXISTS monitoring ENGINE = Ordinary. (SUPPORT_IS_DISABLED)
@@ -295,6 +309,7 @@ except Exception as e:
 ```
 
 **Validation**:
+
 ```bash
 doppler run --project aws-credentials --config prd -- \
   python3 scripts/deploy-monitoring-schema.py
@@ -310,6 +325,7 @@ doppler run --project aws-credentials --config prd -- \
 #### Issue #5: Doppler Token Permissions (MEDIUM - MANUAL FIX REQUIRED)
 
 **Error**:
+
 ```
 Unable to fetch secrets
 Doppler Error: This token does not have access to requested project 'notifications'
@@ -335,19 +351,23 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 **Results**: 3 critical fixes validated, 2 issues remain open
 
 **Tag Detection**: ✅ FIXED
+
 - Before: v0.0.0
 - After: v12.0.1 (correct)
 
 **ClickHouse Inserts**: ✅ FIXED
+
 - Before: 0/3 successful
 - After: 3/3 successful
 
 **Validation Results**:
+
 - ✅ GitHub Release: PASSED (v12.0.1 release exists)
 - ✅ Production Health: PASSED (ClickHouse Cloud healthy)
 - ❌ PyPI Version: FAILED (expected - v12.0.1 not yet published to PyPI)
 
 **Remaining Issues**:
+
 - ❌ Earthly artifact export (Issue #3)
 - ❌ Doppler token permissions (Issue #5)
 
@@ -360,6 +380,7 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 **Results**: 3 records correctly stored
 
 **Sample Record** (GitHub Release Validation):
+
 ```json
 {
   "event_time": "2025-11-25 01:14:05",
@@ -385,6 +406,7 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 ```
 
 **Verification**: ✅ All fields correctly populated
+
 - ✅ git_commit field present
 - ✅ validation_context contains rich metadata
 - ✅ status enum values working (passed/failed)
