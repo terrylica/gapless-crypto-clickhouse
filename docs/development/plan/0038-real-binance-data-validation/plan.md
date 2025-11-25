@@ -141,9 +141,9 @@ binance-real-data-check:
 | 5 | Update `production-validation.yml` | ✅ Done | Replace synthetic jobs |
 | 6 | Update `release-validation.yml` | ✅ Done | Add binance validation |
 | 7 | Run local validation | ✅ Done | All 9 stages passed (1404ms) |
-| 8 | Commit and push | ⏳ Pending | `feat(validation):` |
-| 9 | Semantic release | ⏳ Pending | Creates v12.1.0 |
-| 10 | PyPI publish | ⏳ Pending | `pypi-doppler` skill |
+| 8 | Commit and push | ✅ Done | `feat(validation): replace synthetic data with real Binance CDN validation (ADR-0038)` |
+| 9 | Semantic release | ✅ Done | Created v13.0.0 (BREAKING CHANGE triggered major bump) |
+| 10 | PyPI publish | ✅ Done | Published to https://pypi.org/project/gapless-crypto-clickhouse/13.0.0/ |
 
 ---
 
