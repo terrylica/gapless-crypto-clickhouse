@@ -64,7 +64,7 @@ Investigation of failed workflow #19679775010 revealed:
 | 6 | Delete deprecated Earthfile target | ✅ Done | Earthfile |
 | 7 | Update CLAUDE.md | ✅ Done | Fix stale references |
 | 8 | Update ADR-0038 and ADR-0035 | ✅ Done | Mark status |
-| 9 | Commit and push | ⏳ Pending | refactor commit |
+| 9 | Commit and push | ✅ Done | refactor commit (75c9613) |
 
 ---
 
