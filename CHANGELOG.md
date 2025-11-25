@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.10...v12.0.0) (2025-11-25)
+
+### ⚠ BREAKING CHANGES
+
+* **validation:** Release validation workflow now requires git_commit field in all validation results
+
+Multi-agent DCTL validation (6 parallel agents) discovered 3 critical bugs:
+
+1. Workflow name mismatch (Agent 2):
+   - Problem: release.yml named "Release" but release-validation.yml triggers on "Semantic Release"
+   - Impact: Auto-trigger NEVER worked - validation would never run after releases
+   - Fix: Changed workflow name to "Semantic Release"
+
+2. Missing requests dependency (Agent 4):
+   - Problem: validate_pypi_version.py and send_pushover_notification.py import requests
+   - Impact: Scripts crash with ModuleNotFoundError before CLI parsing
+   - Fix: Added requests>=2.31.0 to pyproject.toml dependencies
+
+3. Missing git_commit field (Agent 6):
+   - Problem: All 3 validation scripts omitted git_commit from JSON output
+   - Impact: ClickHouse records have empty git_commit, can't link failures to commits
+   - Fix: Added git_commit parameter to all scripts, Earthfile ARG declarations, GitHub Actions
+
+Additional fixes:
+- Added status enum validation in write_validation_results.py
+- Prevents runtime ClickHouse INSERT failures from invalid status values
+
+Files modified:
+- .github/workflows/release.yml (workflow name)
+- .github/workflows/release-validation.yml (pass git commit SHA)
+- pyproject.toml (requests dependency)
+- scripts/validate_github_release.py (git_commit support)
+- scripts/validate_pypi_version.py (git_commit support)
+- scripts/validate_production_health.py (git_commit support)
+- scripts/write_validation_results.py (status enum validation)
+- Earthfile (GIT_COMMIT ARG to 3 targets)
+
+Validation: uv build successful (v11.0.9)
+
+ADR-0037
+
+### Features
+
+* **observability:** implement release validation observability flow (ADR-0037) ([70a627d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/70a627d5a42bf6a97fa224d18876d97fe9df049b))
+
+### Bug Fixes
+
+* **observability:** ClickHouse Cloud database creation compatibility ([bdf27be](https://github.com/terrylica/gapless-crypto-clickhouse/commit/bdf27bef756e40c39e8ce3e6c685fdd1a4001f2b))
+* **validation:** fix 3 critical issues from multi-agent validation ([37b51c4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/37b51c4add332676d3d540ead2ba2087f388fca5))
+
+### Documentation
+
+* **adr-0037:** update plan with deployment verification status ([8ccdbe0](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8ccdbe0ced5eed769fdc9ef70a3740d9e6cb18bc))
+
 ## [11.0.10](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.9...v11.0.10) (2025-11-24)
 
 ### Bug Fixes
