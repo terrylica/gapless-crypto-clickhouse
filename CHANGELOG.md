@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.11](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.10...v12.0.11) (2025-11-25)
+
+### Bug Fixes
+
+* **validation:** pass all dependent secrets to Earthly downstream targets ([857a4a2](https://github.com/terrylica/gapless-crypto-clickhouse/commit/857a4a2501c8b905189e9b8d98c7b2f114e4aa98)), closes [#9](https://github.com/terrylica/gapless-crypto-clickhouse/issues/9)
+
 ## [12.0.10](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.9...v12.0.10) (2025-11-25)
 
 ### Bug Fixes
