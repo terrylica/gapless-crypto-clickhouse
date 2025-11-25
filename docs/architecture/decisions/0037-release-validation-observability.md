@@ -64,18 +64,19 @@ Current gap: No automated validation runs post-release. Manual verification requ
 
 - Validation metadata small (<1KB/release, ~50 releases/year = 50KB/year)
 
-### Production Results (v12.0.1 - v12.0.6)
+### Production Results (v12.0.1 - v12.0.9)
 
 **Timeline**:
 
-| Version | Date | Status | Key Result |
-|---------|------|--------|------------|
-| v12.0.1 | 2025-01-25 01:13 UTC | ✅ Success | Core observability working, 3/3 ClickHouse inserts |
-| v12.0.2 | 2025-01-25 02:15 UTC | ⚠️ Partial | GitHub API rate limit blocked Earthly setup |
-| v12.0.3 | 2025-01-25 02:45 UTC | ❌ Failed | Earthly artifact export fix (COPY/BUILD pattern) didn't work |
-| v12.0.4 | 2025-01-25 03:00 UTC | ❌ Failed | Direct target calls failed (secret passing issue) |
-| v12.0.5 | 2025-01-25 03:17 UTC | ✅ Success | Secret passing fixed, 3/3 ClickHouse inserts |
-| v12.0.6 | 2025-01-25 03:24 UTC | ⚠️ Blocked | Artifact export fix implemented, GitHub API rate limit |
+| Version | Date                 | Status     | Key Result                                                   |
+| ------- | -------------------- | ---------- | ------------------------------------------------------------ |
+| v12.0.1 | 2025-01-25 01:13 UTC | ✅ Success | Core observability working, 3/3 ClickHouse inserts           |
+| v12.0.2 | 2025-01-25 02:15 UTC | ⚠️ Partial | GitHub API rate limit blocked Earthly setup                  |
+| v12.0.3 | 2025-01-25 02:45 UTC | ❌ Failed  | Earthly artifact export fix (COPY/BUILD pattern) didn't work |
+| v12.0.4 | 2025-01-25 03:00 UTC | ❌ Failed  | Direct target calls failed (secret passing issue)            |
+| v12.0.5 | 2025-01-25 03:17 UTC | ✅ Success | Secret passing fixed, 3/3 ClickHouse inserts                 |
+| v12.0.6 | 2025-01-25 03:24 UTC | ⚠️ Blocked | Artifact export fix implemented, GitHub API rate limit       |
+| v12.0.9 | 2025-01-25 08:17 UTC | ⏳ Pending | Issue #5 fix (Doppler multi-project → direct GitHub secrets) |
 
 **v12.0.1 Empirical Evidence**:
 
@@ -189,11 +190,13 @@ earthly --strict \
 **Status**: ✅ FIXED and VALIDATED in v12.0.8
 
 **Validation Evidence** (v12.0.8):
+
 - Workflow logs: "Local Output Summary 🎁" (no longer "(disabled)")
 - 3 files uploaded: `github-release-result.json`, `pypi-version-result.json`, `production-health-result.json`
 - Artifact ID: 4670097842 (1200 bytes, downloadable for 90 days)
 
 **References**:
+
 - [Earthly Issue #4297](https://github.com/earthly/earthly/issues/4297)
 - [Stack Overflow - Earthly + GitLab CI](https://stackoverflow.com/questions/78048916/how-to-save-an-artifact-locally-using-earthly-and-gitlab-ci-cd)
 
@@ -233,7 +236,7 @@ except Exception as e:
 ```yaml
 # BEFORE (v12.0.4 - FAILED):
 export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
-earthly --secret GITHUB_TOKEN="$GITHUB_TOKEN" +github-release-check  # $GITHUB_TOKEN was empty
+earthly --secret GITHUB_TOKEN="$GITHUB_TOKEN" +github-release-check # $GITHUB_TOKEN was empty
 ```
 
 When multiple `earthly` commands execute sequentially, bash variables don't reliably pass to `--secret` flags due to environment scope or quoting issues.
@@ -258,15 +261,47 @@ earthly --strict \
 
 ---
 
-#### Issue #5: Doppler Token Permissions (MEDIUM - UNFIXED)
+#### Issue #5: Doppler Token Permissions (MEDIUM - FIXED in v12.0.9)
 
 **Symptom**: Pushover notification failed with "This token does not have access to requested project 'notifications'".
 
-**Root Cause**: GitHub Actions `DOPPLER_TOKEN` secret only has access to `aws-credentials` project.
+**Root Cause**: GitHub Actions `DOPPLER_TOKEN` secret only has access to `aws-credentials` project, but workflow needs secrets from both `aws-credentials` (ClickHouse) and `notifications` (Pushover) projects.
 
-**Impact**: Medium severity - prevents Pushover mobile alerts, but validation still runs and stores results.
+**Analysis**:
 
-**Status**: Requires manual update of GitHub secrets. Documented for future fix.
+1. Doppler Service Tokens are project/config-scoped (cannot access multiple projects)
+2. Doppler Service Accounts (multi-project access) require Team/Enterprise plan
+3. Doppler GitHub App auto-sync requires Dashboard configuration
+
+**Fix Applied** (v12.0.9):
+
+1. Synced secrets directly from Doppler to GitHub using CLI:
+   ```bash
+   # ClickHouse secrets from aws-credentials/prd
+   gh secret set CLICKHOUSE_HOST -R terrylica/gapless-crypto-clickhouse \
+     --body "$(doppler secrets get CLICKHOUSE_HOST --project aws-credentials --config prd --plain)"
+   # ... repeat for CLICKHOUSE_PORT, CLICKHOUSE_USER, CLICKHOUSE_PASSWORD
+
+   # Pushover secrets from notifications/prd
+   gh secret set PUSHOVER_APP_TOKEN -R terrylica/gapless-crypto-clickhouse \
+     --body "$(doppler secrets get PUSHOVER_APP_TOKEN --project notifications --config prd --plain)"
+   # ... repeat for PUSHOVER_USER_KEY
+   ```
+
+2. Modified workflow to use direct `${{ secrets.* }}` references instead of runtime Doppler fetching:
+   ```yaml
+   # BEFORE (runtime Doppler fetch - FAILED):
+   --secret CLICKHOUSE_HOST="${{ steps.doppler_secrets.outputs.clickhouse_host }}"
+
+   # AFTER (direct GitHub secrets - WORKS):
+   --secret CLICKHOUSE_HOST="${{ secrets.CLICKHOUSE_HOST }}"
+   ```
+
+3. Removed "Fetch Doppler secrets" step and "Setup Doppler CLI" action entirely
+
+**Impact**: Workflow no longer depends on runtime `DOPPLER_TOKEN` authentication. Secrets are pre-synced to GitHub repository secrets.
+
+**Maintenance**: When Doppler secrets rotate, re-run the sync commands above or configure Doppler GitHub App for automatic sync.
 
 ---
 
@@ -286,6 +321,7 @@ earthly --strict \
 3. Assumed GitHub Actions checkout fetches tags by default
 4. Bash variable substitution for passing secrets to Earthly commands
 5. EARTHLY_CI=true environment variable silently disabled artifact export
+6. Single `DOPPLER_TOKEN` for multi-project secrets (Free plan limitation)
 
 **Key Insights**:
 
@@ -296,20 +332,21 @@ earthly --strict \
 5. **GitHub Actions template syntax (`${{ }}`) superior to bash variables** - resolves before bash execution, avoiding scope/quoting issues
 6. **EARTHLY_CI environment variable pitfall** - Setting `EARTHLY_CI=true` silently disables all artifact export with no warnings in logs. Use `--strict` flag explicitly instead.
 7. **GitHub API rate limiting** - Infrastructure issue beyond control, affects Earthly setup action. Non-blocking design mitigates impact.
+8. **Doppler multi-project secret access** - Free plan Service Tokens are project-scoped. Solution: sync secrets to GitHub using CLI (`doppler secrets get` + `gh secret set`), reference via `${{ secrets.* }}`.
 
 ## Validation
 
 ### Correctness
 
 - [x] ClickHouse `monitoring.validation_results` table stores all validation runs (v12.0.1: 3/3, v12.0.5: 3/3)
-- [ ] Pushover alerts received on mobile for both success and failure (blocked by Doppler token permissions - Issue #5)
+- [ ] Pushover alerts received on mobile for both success and failure (Issue #5 FIXED in v12.0.9, pending validation)
 - [x] Non-blocking verified: release succeeds even when validation fails (v12.0.2, v12.0.4, v12.0.6 released despite validation issues)
 
 ### Observability
 
 - [x] Query validation history: `SELECT * FROM monitoring.validation_results WHERE release_version IN ('v12.0.1', 'v12.0.5')` (verified with production data)
 - [x] GitHub Actions artifacts uploaded (validation JSON reports) (v12.0.8: Artifact ID 4670097842, 3 files, 1200 bytes)
-- [ ] Pushover alert includes release URL + validation status (blocked by Doppler token permissions - Issue #5)
+- [ ] Pushover alert includes release URL + validation status (Issue #5 FIXED in v12.0.9, pending validation)
 
 ### Maintainability
 

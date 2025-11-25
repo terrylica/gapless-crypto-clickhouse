@@ -40,9 +40,6 @@ jobs:
         with:
           version: latest
 
-      - name: Setup Doppler CLI
-        uses: ./.github/actions/setup-doppler
-
       - name: Detect release version
         id: release_info
         run: |
@@ -64,19 +61,6 @@ jobs:
 
       - name: Create artifacts directory
         run: mkdir -p artifacts
-
-      - name: Fetch Doppler secrets
-        id: doppler_secrets
-        continue-on-error: true
-        env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
-        run: |
-          echo "clickhouse_host=$(doppler secrets get CLICKHOUSE_HOST --project aws-credentials --config prd --plain)" >> $GITHUB_OUTPUT
-          echo "clickhouse_port=$(doppler secrets get CLICKHOUSE_PORT --project aws-credentials --config prd --plain)" >> $GITHUB_OUTPUT
-          echo "clickhouse_user=$(doppler secrets get CLICKHOUSE_USER --project aws-credentials --config prd --plain)" >> $GITHUB_OUTPUT
-          echo "clickhouse_password=$(doppler secrets get CLICKHOUSE_PASSWORD --project aws-credentials --config prd --plain)" >> $GITHUB_OUTPUT
-          echo "pushover_app_token=$(doppler secrets get PUSHOVER_APP_TOKEN --project notifications --config prd --plain)" >> $GITHUB_OUTPUT
-          echo "pushover_user_key=$(doppler secrets get PUSHOVER_USER_KEY --project notifications --config prd --plain)" >> $GITHUB_OUTPUT
 
       - name: Run Earthly validation pipeline
         continue-on-error: true
@@ -104,10 +88,10 @@ jobs:
           || echo "PyPI version check failed (non-fatal)"
 
           earthly --strict \
-            --secret CLICKHOUSE_HOST="${{ steps.doppler_secrets.outputs.clickhouse_host }}" \
-            --secret CLICKHOUSE_PORT="${{ steps.doppler_secrets.outputs.clickhouse_port }}" \
-            --secret CLICKHOUSE_USER="${{ steps.doppler_secrets.outputs.clickhouse_user }}" \
-            --secret CLICKHOUSE_PASSWORD="${{ steps.doppler_secrets.outputs.clickhouse_password }}" \
+            --secret CLICKHOUSE_HOST="${{ secrets.CLICKHOUSE_HOST }}" \
+            --secret CLICKHOUSE_PORT="${{ secrets.CLICKHOUSE_PORT }}" \
+            --secret CLICKHOUSE_USER="${{ secrets.CLICKHOUSE_USER }}" \
+            --secret CLICKHOUSE_PASSWORD="${{ secrets.CLICKHOUSE_PASSWORD }}" \
             +production-health-check \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
@@ -116,20 +100,20 @@ jobs:
           # Run downstream pipeline (write to ClickHouse, send Pushover)
           echo "Running downstream validation pipeline..."
           earthly --strict \
-            --secret CLICKHOUSE_HOST="${{ steps.doppler_secrets.outputs.clickhouse_host }}" \
-            --secret CLICKHOUSE_PORT="${{ steps.doppler_secrets.outputs.clickhouse_port }}" \
-            --secret CLICKHOUSE_USER="${{ steps.doppler_secrets.outputs.clickhouse_user }}" \
-            --secret CLICKHOUSE_PASSWORD="${{ steps.doppler_secrets.outputs.clickhouse_password }}" \
-            --secret PUSHOVER_APP_TOKEN="${{ steps.doppler_secrets.outputs.pushover_app_token }}" \
-            --secret PUSHOVER_USER_KEY="${{ steps.doppler_secrets.outputs.pushover_user_key }}" \
+            --secret CLICKHOUSE_HOST="${{ secrets.CLICKHOUSE_HOST }}" \
+            --secret CLICKHOUSE_PORT="${{ secrets.CLICKHOUSE_PORT }}" \
+            --secret CLICKHOUSE_USER="${{ secrets.CLICKHOUSE_USER }}" \
+            --secret CLICKHOUSE_PASSWORD="${{ secrets.CLICKHOUSE_PASSWORD }}" \
+            --secret PUSHOVER_APP_TOKEN="${{ secrets.PUSHOVER_APP_TOKEN }}" \
+            --secret PUSHOVER_USER_KEY="${{ secrets.PUSHOVER_USER_KEY }}" \
             +write-to-clickhouse \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
           || echo "ClickHouse write failed (non-fatal)"
 
           earthly --strict \
-            --secret PUSHOVER_APP_TOKEN="${{ steps.doppler_secrets.outputs.pushover_app_token }}" \
-            --secret PUSHOVER_USER_KEY="${{ steps.doppler_secrets.outputs.pushover_user_key }}" \
+            --secret PUSHOVER_APP_TOKEN="${{ secrets.PUSHOVER_APP_TOKEN }}" \
+            --secret PUSHOVER_USER_KEY="${{ secrets.PUSHOVER_USER_KEY }}" \
             +send-pushover-alert \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GITHUB_RELEASE_URL="${{ steps.release_info.outputs.release_url }}" \
