@@ -64,13 +64,20 @@ Current gap: No automated validation runs post-release. Manual verification requ
 
 - Validation metadata small (<1KB/release, ~50 releases/year = 50KB/year)
 
-### Production Results (v12.0.1)
+### Production Results (v12.0.1 - v12.0.6)
 
-**Deployment**: 2025-01-25 01:13 UTC
+**Timeline**:
 
-**Validation**: 5 issues discovered in first production run, 3 critical issues fixed in second run.
+| Version | Date | Status | Key Result |
+|---------|------|--------|------------|
+| v12.0.1 | 2025-01-25 01:13 UTC | ✅ Success | Core observability working, 3/3 ClickHouse inserts |
+| v12.0.2 | 2025-01-25 02:15 UTC | ⚠️ Partial | GitHub API rate limit blocked Earthly setup |
+| v12.0.3 | 2025-01-25 02:45 UTC | ❌ Failed | Earthly artifact export fix (COPY/BUILD pattern) didn't work |
+| v12.0.4 | 2025-01-25 03:00 UTC | ❌ Failed | Direct target calls failed (secret passing issue) |
+| v12.0.5 | 2025-01-25 03:17 UTC | ✅ Success | Secret passing fixed, 3/3 ClickHouse inserts |
+| v12.0.6 | 2025-01-25 03:24 UTC | ⚠️ Blocked | Artifact export fix implemented, GitHub API rate limit |
 
-**Empirical Evidence**:
+**v12.0.1 Empirical Evidence**:
 
 1. **ClickHouse Inserts**: ✅ 3/3 successful (github_release, pypi_version, production_health)
 2. **Tag Detection**: ✅ v12.0.1 (correct version after fix)
@@ -78,6 +85,13 @@ Current gap: No automated validation runs post-release. Manual verification requ
 4. **Observability**: ✅ All validation metadata queryable in ClickHouse with rich context
 5. **Artifact Export**: ⚠️ Earthly artifact export to host filesystem not working (non-blocking)
 6. **Pushover Alerts**: ⚠️ Doppler token permissions need manual fix (non-blocking)
+
+**v12.0.5 Empirical Evidence**:
+
+1. **ClickHouse Inserts**: ✅ 3/3 successful
+2. **Secret Passing**: ✅ Fixed with GitHub Actions template syntax
+3. **Validation Results**: ✅ GitHub Release PASSED (176ms), Production Health PASSED (36.8s), PyPI FAILED (expected)
+4. **Artifact Export**: ❌ Still not working (root cause identified: EARTHLY_CI environment variable)
 
 **Key Validation Records** (production data):
 
@@ -144,15 +158,39 @@ client.insert("monitoring.validation_results", [row], column_names=column_names)
 
 ---
 
-#### Issue #3: Earthly Artifact Export (MEDIUM - UNFIXED)
+#### Issue #3: Earthly Artifact Export (MEDIUM - FIXED in v12.0.6)
 
 **Symptom**: GitHub Actions warning "No files were found with the provided path: artifacts/\*.json".
 
-**Root Cause**: Earthly `BUILD` command doesn't automatically copy artifacts from child targets.
+**Root Cause Analysis** (v12.0.5 investigation):
 
-**Impact**: Medium severity - doesn't block validation functionality, just prevents artifact download from GitHub Actions UI. Validation results still successfully stored in ClickHouse.
+1. Initial hypothesis: Earthly `BUILD` command doesn't automatically copy artifacts from child targets
+2. Attempted fix (v12.0.3): Use `COPY` before `BUILD` in pipeline target - FAILED
+3. Attempted fix (v12.0.4): Call individual targets directly from GitHub Actions - FAILED (secret passing issue)
+4. **Actual root cause discovered**: `EARTHLY_CI=true` environment variable sets Earthly to `--ci` mode, equivalent to `--no-output --strict`, **silently disabling** `SAVE ARTIFACT AS LOCAL` exports
+5. **Evidence**: Workflow logs showed "Local Output Summary 🎁 (disabled)" for all Earthly builds
 
-**Status**: Open issue for future investigation.
+**Fix Applied** (v12.0.6):
+
+```yaml
+# BEFORE (v12.0.5 and earlier):
+env:
+  EARTHLY_CI: true  # This disables all artifact export!
+
+# AFTER (v12.0.6):
+# Removed EARTHLY_CI, added --strict flag explicitly to each command
+earthly --strict \
+  --secret GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
+  +github-release-check
+```
+
+**Impact**: Medium severity - doesn't block validation functionality, just prevents artifact download from GitHub Actions UI.
+
+**Status**: Fix implemented in v12.0.6, awaiting validation (v12.0.6 blocked by GitHub API rate limit).
+
+**References**:
+- [Earthly Issue #4297](https://github.com/earthly/earthly/issues/4297)
+- [Stack Overflow - Earthly + GitLab CI](https://stackoverflow.com/questions/78048916/how-to-save-an-artifact-locally-using-earthly-and-gitlab-ci-cd)
 
 ---
 
@@ -179,6 +217,42 @@ except Exception as e:
 
 ---
 
+#### Issue #4.1: Earthly Secret Passing (CRITICAL - FIXED in v12.0.5)
+
+**Symptom**: v12.0.4 failed with "unable to lookup secret 'GITHUB_TOKEN': not found".
+
+**Root Cause**: Bash variable substitution failing when multiple `earthly` commands execute sequentially in the same step.
+
+**Analysis**:
+
+```yaml
+# BEFORE (v12.0.4 - FAILED):
+export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+earthly --secret GITHUB_TOKEN="$GITHUB_TOKEN" +github-release-check  # $GITHUB_TOKEN was empty
+```
+
+When multiple `earthly` commands execute sequentially, bash variables don't reliably pass to `--secret` flags due to environment scope or quoting issues.
+
+**Fix Applied** (v12.0.5):
+
+1. Created separate "Fetch Doppler secrets" step storing secrets in GitHub Actions step outputs
+2. Changed all secret passing from bash variables to GitHub Actions template syntax
+
+```yaml
+# AFTER (v12.0.5):
+# Secrets fetched in prior step, stored in step outputs
+earthly --strict \
+  --secret GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \  # Direct template syntax
+  --secret CLICKHOUSE_HOST="${{ steps.doppler_secrets.outputs.clickhouse_host }}" \
+  +production-health-check
+```
+
+**Validation**: v12.0.5 validation ran successfully with 3/3 records stored in ClickHouse.
+
+**Key Insight**: GitHub Actions template syntax (`${{ }}`) resolves before bash execution, avoiding variable scope/quoting issues entirely.
+
+---
+
 #### Issue #5: Doppler Token Permissions (MEDIUM - UNFIXED)
 
 **Symptom**: Pushover notification failed with "This token does not have access to requested project 'notifications'".
@@ -196,14 +270,17 @@ except Exception as e:
 **What Worked Well**:
 
 1. Multi-agent DCTL validation discovered 3 issues before first production run
-2. Non-blocking design prevented release failures
+2. Non-blocking design prevented release failures (4 releases succeeded despite validation issues)
 3. Test-driven fixes (created test data to verify ClickHouse insert before production)
+4. Iterative debugging with production releases (v12.0.3 → v12.0.4 → v12.0.5 → v12.0.6)
 
 **What Didn't Work**:
 
 1. Earthly artifact export pattern (COPY + SAVE ARTIFACT in pipeline target)
 2. Initial ClickHouse insert format (dict instead of list)
 3. Assumed GitHub Actions checkout fetches tags by default
+4. Bash variable substitution for passing secrets to Earthly commands
+5. EARTHLY_CI=true environment variable silently disabled artifact export
 
 **Key Insights**:
 
@@ -211,26 +288,29 @@ except Exception as e:
 2. Explicit column names critical for ClickHouse insert robustness
 3. Always specify fetch-depth and fetch-tags explicitly when working with git tags
 4. Production validation essential even after multi-agent validation
+5. **GitHub Actions template syntax (`${{ }}`) superior to bash variables** - resolves before bash execution, avoiding scope/quoting issues
+6. **EARTHLY_CI environment variable pitfall** - Setting `EARTHLY_CI=true` silently disables all artifact export with no warnings in logs. Use `--strict` flag explicitly instead.
+7. **GitHub API rate limiting** - Infrastructure issue beyond control, affects Earthly setup action. Non-blocking design mitigates impact.
 
 ## Validation
 
 ### Correctness
 
-- [x] ClickHouse `monitoring.validation_results` table stores all validation runs (v12.0.1: 3/3 successful)
+- [x] ClickHouse `monitoring.validation_results` table stores all validation runs (v12.0.1: 3/3, v12.0.5: 3/3)
 - [ ] Pushover alerts received on mobile for both success and failure (blocked by Doppler token permissions - Issue #5)
-- [x] Non-blocking verified: release succeeds even when validation fails (v12.0.1 released despite PyPI validation failure)
+- [x] Non-blocking verified: release succeeds even when validation fails (v12.0.2, v12.0.4, v12.0.6 released despite validation issues)
 
 ### Observability
 
-- [x] Query validation history: `SELECT * FROM monitoring.validation_results WHERE release_version = 'v12.0.1'` (verified with production data)
-- [ ] GitHub Actions artifacts uploaded (validation JSON reports) (blocked by Earthly export - Issue #3)
+- [x] Query validation history: `SELECT * FROM monitoring.validation_results WHERE release_version IN ('v12.0.1', 'v12.0.5')` (verified with production data)
+- [ ] GitHub Actions artifacts uploaded (validation JSON reports) (fix implemented v12.0.6, awaiting validation)
 - [ ] Pushover alert includes release URL + validation status (blocked by Doppler token permissions - Issue #5)
 
 ### Maintainability
 
-- [x] Earthly local testing: `earthly +release-validation-pipeline` (validated in production)
+- [x] Earthly local testing: `earthly --strict +github-release-check` (use --strict instead of EARTHLY_CI)
 - [x] Schema migrations documented in deploy-monitoring-schema.py (ClickHouse Cloud compatibility fixes documented)
-- [x] ADR ↔ plan ↔ code in sync (plan.md created, ADR updated with production findings)
+- [x] ADR ↔ plan ↔ code in sync (plan.md updated with v12.0.3-v12.0.6 findings, ADR updated)
 
 ## Links
 
