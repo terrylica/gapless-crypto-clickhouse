@@ -80,8 +80,6 @@ jobs:
 
       - name: Run Earthly validation pipeline
         continue-on-error: true
-        env:
-          EARTHLY_CI: true
         run: |
           echo "=========================================="
           echo "Running Earthly Release Validation Pipeline"
@@ -89,8 +87,9 @@ jobs:
 
           # Run validation targets directly to export artifacts (AS LOCAL only works when target is explicitly built)
           # Use GitHub Actions template syntax for secrets to avoid bash variable substitution issues
+          # Use --strict instead of EARTHLY_CI=true to enable artifact export while maintaining CI safety
           echo "Running individual validation targets to export artifacts..."
-          earthly \
+          earthly --strict \
             --secret GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
             +github-release-check \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
@@ -98,13 +97,13 @@ jobs:
             --GITHUB_REPOSITORY="${{ github.repository }}" \
           || echo "GitHub release check failed (non-fatal)"
 
-          earthly \
+          earthly --strict \
             +pypi-version-check \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
           || echo "PyPI version check failed (non-fatal)"
 
-          earthly \
+          earthly --strict \
             --secret CLICKHOUSE_HOST="${{ steps.doppler_secrets.outputs.clickhouse_host }}" \
             --secret CLICKHOUSE_PORT="${{ steps.doppler_secrets.outputs.clickhouse_port }}" \
             --secret CLICKHOUSE_USER="${{ steps.doppler_secrets.outputs.clickhouse_user }}" \
@@ -116,7 +115,7 @@ jobs:
 
           # Run downstream pipeline (write to ClickHouse, send Pushover)
           echo "Running downstream validation pipeline..."
-          earthly \
+          earthly --strict \
             --secret CLICKHOUSE_HOST="${{ steps.doppler_secrets.outputs.clickhouse_host }}" \
             --secret CLICKHOUSE_PORT="${{ steps.doppler_secrets.outputs.clickhouse_port }}" \
             --secret CLICKHOUSE_USER="${{ steps.doppler_secrets.outputs.clickhouse_user }}" \
@@ -128,7 +127,7 @@ jobs:
             --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
           || echo "ClickHouse write failed (non-fatal)"
 
-          earthly \
+          earthly --strict \
             --secret PUSHOVER_APP_TOKEN="${{ steps.doppler_secrets.outputs.pushover_app_token }}" \
             --secret PUSHOVER_USER_KEY="${{ steps.doppler_secrets.outputs.pushover_user_key }}" \
             +send-pushover-alert \
