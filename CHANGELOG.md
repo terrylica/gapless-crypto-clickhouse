@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### ⚠ BREAKING CHANGES
 
-* **validation:** Release validation workflow now requires git_commit field in all validation results
+- **validation:** Release validation workflow now requires git_commit field in all validation results
 
 Multi-agent DCTL validation (6 parallel agents) discovered 3 critical bugs:
 
@@ -32,10 +32,12 @@ Multi-agent DCTL validation (6 parallel agents) discovered 3 critical bugs:
    - Fix: Added git_commit parameter to all scripts, Earthfile ARG declarations, GitHub Actions
 
 Additional fixes:
+
 - Added status enum validation in write_validation_results.py
 - Prevents runtime ClickHouse INSERT failures from invalid status values
 
 Files modified:
+
 - .github/workflows/release.yml (workflow name)
 - .github/workflows/release-validation.yml (pass git commit SHA)
 - pyproject.toml (requests dependency)
@@ -51,16 +53,16 @@ ADR-0037
 
 ### Features
 
-* **observability:** implement release validation observability flow (ADR-0037) ([70a627d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/70a627d5a42bf6a97fa224d18876d97fe9df049b))
+- **observability:** implement release validation observability flow (ADR-0037) ([70a627d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/70a627d5a42bf6a97fa224d18876d97fe9df049b))
 
 ### Bug Fixes
 
-* **observability:** ClickHouse Cloud database creation compatibility ([bdf27be](https://github.com/terrylica/gapless-crypto-clickhouse/commit/bdf27bef756e40c39e8ce3e6c685fdd1a4001f2b))
-* **validation:** fix 3 critical issues from multi-agent validation ([37b51c4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/37b51c4add332676d3d540ead2ba2087f388fca5))
+- **observability:** ClickHouse Cloud database creation compatibility ([bdf27be](https://github.com/terrylica/gapless-crypto-clickhouse/commit/bdf27bef756e40c39e8ce3e6c685fdd1a4001f2b))
+- **validation:** fix 3 critical issues from multi-agent validation ([37b51c4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/37b51c4add332676d3d540ead2ba2087f388fca5))
 
 ### Documentation
 
-* **adr-0037:** update plan with deployment verification status ([8ccdbe0](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8ccdbe0ced5eed769fdc9ef70a3740d9e6cb18bc))
+- **adr-0037:** update plan with deployment verification status ([8ccdbe0](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8ccdbe0ced5eed769fdc9ef70a3740d9e6cb18bc))
 
 ## [11.0.10](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.9...v11.0.10) (2025-11-24)
 
