@@ -98,25 +98,34 @@ jobs:
           || echo "Production health check failed (non-fatal)"
 
           # Run downstream pipeline (write to ClickHouse, send Pushover)
+          # +write-to-clickhouse COPYs from dependent targets, so needs all their secrets
           echo "Running downstream validation pipeline..."
           earthly --strict \
+            --secret GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
+            --secret CLICKHOUSE_HOST="${{ secrets.CLICKHOUSE_HOST }}" \
+            --secret CLICKHOUSE_PORT="${{ secrets.CLICKHOUSE_PORT }}" \
+            --secret CLICKHOUSE_USER="${{ secrets.CLICKHOUSE_USER }}" \
+            --secret CLICKHOUSE_PASSWORD="${{ secrets.CLICKHOUSE_PASSWORD }}" \
+            +write-to-clickhouse \
+            --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
+            --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
+            --GITHUB_REPOSITORY="${{ github.repository }}" \
+          || echo "ClickHouse write failed (non-fatal)"
+
+          # +send-pushover-alert COPYs from dependent targets, so needs all their secrets
+          earthly --strict \
+            --secret GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
             --secret CLICKHOUSE_HOST="${{ secrets.CLICKHOUSE_HOST }}" \
             --secret CLICKHOUSE_PORT="${{ secrets.CLICKHOUSE_PORT }}" \
             --secret CLICKHOUSE_USER="${{ secrets.CLICKHOUSE_USER }}" \
             --secret CLICKHOUSE_PASSWORD="${{ secrets.CLICKHOUSE_PASSWORD }}" \
             --secret PUSHOVER_APP_TOKEN="${{ secrets.PUSHOVER_APP_TOKEN }}" \
             --secret PUSHOVER_USER_KEY="${{ secrets.PUSHOVER_USER_KEY }}" \
-            +write-to-clickhouse \
-            --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
-            --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
-          || echo "ClickHouse write failed (non-fatal)"
-
-          earthly --strict \
-            --secret PUSHOVER_APP_TOKEN="${{ secrets.PUSHOVER_APP_TOKEN }}" \
-            --secret PUSHOVER_USER_KEY="${{ secrets.PUSHOVER_USER_KEY }}" \
             +send-pushover-alert \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
             --GITHUB_RELEASE_URL="${{ steps.release_info.outputs.release_url }}" \
+            --GIT_COMMIT="${{ steps.release_info.outputs.git_commit }}" \
+            --GITHUB_REPOSITORY="${{ github.repository }}" \
           || echo "Pushover notification failed (non-fatal)"
 
       - name: Upload validation artifacts

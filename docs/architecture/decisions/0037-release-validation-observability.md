@@ -333,6 +333,7 @@ earthly --strict \
 6. **EARTHLY_CI environment variable pitfall** - Setting `EARTHLY_CI=true` silently disables all artifact export with no warnings in logs. Use `--strict` flag explicitly instead.
 7. **GitHub API rate limiting** - Infrastructure issue beyond control, affects Earthly setup action. Non-blocking design mitigates impact.
 8. **Doppler multi-project secret access** - Free plan Service Tokens are project-scoped. Solution: sync secrets to GitHub using CLI (`doppler secrets get` + `gh secret set`), reference via `${{ secrets.* }}`.
+9. **Earthly secret dependency inheritance** - Targets that COPY from other targets inherit their secret requirements. `+send-pushover-alert` needs ClickHouse secrets because it COPYs from `+production-health-check`. Always pass all required secrets to targets with dependencies.
 
 ## Validation
 
