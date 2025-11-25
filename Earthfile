@@ -127,8 +127,19 @@ send-pushover-alert:
 
 # Main pipeline - orchestrates all validation targets
 release-validation-pipeline:
+    FROM +validation-base
+
+    # Run all validation targets
     BUILD +github-release-check
     BUILD +pypi-version-check
     BUILD +production-health-check
     BUILD +write-to-clickhouse
     BUILD +send-pushover-alert
+
+    # Collect artifacts from each validation target
+    COPY +github-release-check/github-release-result.json ./artifacts/
+    COPY +pypi-version-check/pypi-version-result.json ./artifacts/
+    COPY +production-health-check/production-health-result.json ./artifacts/
+
+    # Export all artifacts to host filesystem
+    SAVE ARTIFACT ./artifacts/*.json AS LOCAL ./artifacts/

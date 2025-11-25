@@ -59,6 +59,22 @@ def write_validation_results(results_dir: str) -> dict:
             summary["errors"].append(f"No validation result files found in {results_dir}")
             return summary
 
+        # Column names for explicit insert (excluding auto-generated validation_id)
+        column_names = [
+            "event_time",
+            "event_date",
+            "validation_type",
+            "release_version",
+            "git_commit",
+            "symbol",
+            "timeframe",
+            "status",
+            "error_message",
+            "duration_ms",
+            "validation_context",
+            "environment",
+        ]
+
         # Insert each validation result
         for json_file in json_files:
             try:
@@ -73,21 +89,25 @@ def write_validation_results(results_dir: str) -> dict:
                         f"Must be one of {VALID_STATUSES}"
                     )
 
-                # Prepare row for insertion
-                row = {
-                    "event_time": datetime.now(timezone.utc),
-                    "validation_type": data.get("validation_type", "unknown"),
-                    "release_version": data.get("release_version", ""),
-                    "git_commit": data.get("git_commit", ""),
-                    "status": status,
-                    "error_message": data.get("error_message", ""),
-                    "duration_ms": data.get("duration_ms", 0),
-                    "validation_context": data.get("validation_context", {}),
-                    "environment": "production",
-                }
+                # Prepare row for insertion (list format, matching column_names order)
+                event_time = datetime.now(timezone.utc)
+                row = [
+                    event_time,  # event_time
+                    event_time.date(),  # event_date
+                    data.get("validation_type", "unknown"),  # validation_type
+                    data.get("release_version", ""),  # release_version
+                    data.get("git_commit", ""),  # git_commit
+                    "",  # symbol (empty for release validations)
+                    "",  # timeframe (empty for release validations)
+                    status,  # status
+                    data.get("error_message", ""),  # error_message
+                    data.get("duration_ms", 0),  # duration_ms
+                    data.get("validation_context", {}),  # validation_context
+                    "production",  # environment
+                ]
 
-                # Insert row
-                client.insert("monitoring.validation_results", [row])
+                # Insert row with explicit column names
+                client.insert("monitoring.validation_results", [row], column_names=column_names)
                 summary["successful_inserts"] += 1
 
             except Exception as e:

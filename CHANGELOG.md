@@ -60,7 +60,7 @@ ADR-0037
 
 ### Bug Fixes
 
-* **validation:** disable async_insert for immediate data visibility ([8b64ce2](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8b64ce298ec66ec0a8a69bba363d857d9c868ab3))
+- **validation:** disable async_insert for immediate data visibility ([8b64ce2](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8b64ce298ec66ec0a8a69bba363d857d9c868ab3))
 
 ## [11.0.9](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.8...v11.0.9) (2025-11-24)
 

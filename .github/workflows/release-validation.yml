@@ -31,6 +31,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for tags
+          fetch-tags: true  # Explicitly fetch tags
 
       - name: Setup Earthly
         uses: earthly/actions-setup@v1
