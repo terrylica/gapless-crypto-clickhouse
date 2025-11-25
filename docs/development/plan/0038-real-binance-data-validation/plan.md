@@ -33,14 +33,15 @@ Replace synthetic data validation with real Binance Vision data validation. Cons
 
 ### Current State
 
-| Script | Data Type | Symbol | Issues |
-|--------|-----------|--------|--------|
-| `validate_clickhouse_cloud.py` | Synthetic | `VALIDATION_TEST_BTCUSDT` | Fake OHLCV, fake hashes |
-| `validate_e2e_simple.py` | Synthetic | `E2E_TEST` | 1 fake row, no format validation |
+| Script                         | Data Type | Symbol                    | Issues                           |
+| ------------------------------ | --------- | ------------------------- | -------------------------------- |
+| `validate_clickhouse_cloud.py` | Synthetic | `VALIDATION_TEST_BTCUSDT` | Fake OHLCV, fake hashes          |
+| `validate_e2e_simple.py`       | Synthetic | `E2E_TEST`                | 1 fake row, no format validation |
 
 ### Problem
 
 Synthetic validation cannot detect:
+
 - CDN format changes (header presence, column count)
 - Transformation bugs (CSV → DataFrame → ClickHouse)
 - Real-world deduplication edge cases
@@ -57,10 +58,10 @@ Download real Binance Vision data (BTCUSDT) and validate the complete pipeline.
 
 ### Test Data Sources
 
-| Format | Date | URL | Expected |
-|--------|------|-----|----------|
-| Futures | 2024-01-01 | `https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01-01.zip` | 24 rows, 12 cols, header |
-| Spot | 2024-01-02 | `https://data.binance.vision/data/spot/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01-02.zip` | 24 rows, 12 cols, no header |
+| Format  | Date       | URL                                                                                             | Expected                    |
+| ------- | ---------- | ----------------------------------------------------------------------------------------------- | --------------------------- |
+| Futures | 2024-01-01 | `https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01-01.zip` | 24 rows, 12 cols, header    |
+| Spot    | 2024-01-02 | `https://data.binance.vision/data/spot/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01-02.zip`       | 24 rows, 12 cols, no header |
 
 ### 9-Stage Validation Pipeline
 
@@ -132,32 +133,35 @@ binance-real-data-check:
 
 ## Task List
 
-| # | Task | Status | Notes |
-|---|------|--------|-------|
-| 1 | Create ADR-0038 and plan structure | ✅ Done | |
-| 2 | Create `validate_binance_real_data.py` | ✅ Done | 9-stage pipeline |
-| 3 | Delete legacy scripts | ✅ Done | `validate_clickhouse_cloud.py`, `validate_e2e_simple.py` |
-| 4 | Add Earthly target | ✅ Done | `+binance-real-data-check` |
-| 5 | Update `production-validation.yml` | ✅ Done | Replace synthetic jobs |
-| 6 | Update `release-validation.yml` | ✅ Done | Add binance validation |
-| 7 | Run local validation | ✅ Done | All 9 stages passed (1404ms) |
-| 8 | Commit and push | ✅ Done | `feat(validation): replace synthetic data with real Binance CDN validation (ADR-0038)` |
-| 9 | Semantic release | ✅ Done | Created v13.0.0 (BREAKING CHANGE triggered major bump) |
-| 10 | PyPI publish | ✅ Done | Published to https://pypi.org/project/gapless-crypto-clickhouse/13.0.0/ |
+| #   | Task                                   | Status  | Notes                                                                                  |
+| --- | -------------------------------------- | ------- | -------------------------------------------------------------------------------------- |
+| 1   | Create ADR-0038 and plan structure     | ✅ Done |                                                                                        |
+| 2   | Create `validate_binance_real_data.py` | ✅ Done | 9-stage pipeline                                                                       |
+| 3   | Delete legacy scripts                  | ✅ Done | `validate_clickhouse_cloud.py`, `validate_e2e_simple.py`                               |
+| 4   | Add Earthly target                     | ✅ Done | `+binance-real-data-check`                                                             |
+| 5   | Update `production-validation.yml`     | ✅ Done | Replace synthetic jobs                                                                 |
+| 6   | Update `release-validation.yml`        | ✅ Done | Add binance validation                                                                 |
+| 7   | Run local validation                   | ✅ Done | All 9 stages passed (1404ms)                                                           |
+| 8   | Commit and push                        | ✅ Done | `feat(validation): replace synthetic data with real Binance CDN validation (ADR-0038)` |
+| 9   | Semantic release                       | ✅ Done | Created v13.0.0 (BREAKING CHANGE triggered major bump)                                 |
+| 10  | PyPI publish                           | ✅ Done | Published to https://pypi.org/project/gapless-crypto-clickhouse/13.0.0/                |
 
 ---
 
 ## Files Changed
 
 ### Create
+
 - `scripts/validate_binance_real_data.py`
 
 ### Modify
+
 - `Earthfile` - Add `+binance-real-data-check`, update `validation-base`
 - `.github/workflows/production-validation.yml` - Replace synthetic jobs
 - `.github/workflows/release-validation.yml` - Add binance validation
 
 ### Delete
+
 - `scripts/validate_clickhouse_cloud.py`
 - `scripts/validate_e2e_simple.py`
 
@@ -165,36 +169,36 @@ binance-real-data-check:
 
 ## Success Criteria
 
-| Criterion | Metric | Actual |
-|-----------|--------|--------|
-| CDN Download | HTTP 200 for both futures and spot | ✅ Passed |
-| Format Detection | Futures: 12 cols, Spot: 12 cols | ✅ Passed |
-| OHLC Validation | All constraints pass | ✅ Passed |
-| Insert Success | 48 rows total (24 + 24) | ✅ Passed |
-| Query FINAL | 24 rows per date (different dates) | ✅ Passed |
-| Deduplication | Re-insert doesn't double count | ✅ Passed |
-| Schema Match | 18 columns, symbol-first ORDER BY | ✅ Passed |
+| Criterion        | Metric                             | Actual    |
+| ---------------- | ---------------------------------- | --------- |
+| CDN Download     | HTTP 200 for both futures and spot | ✅ Passed |
+| Format Detection | Futures: 12 cols, Spot: 12 cols    | ✅ Passed |
+| OHLC Validation  | All constraints pass               | ✅ Passed |
+| Insert Success   | 48 rows total (24 + 24)            | ✅ Passed |
+| Query FINAL      | 24 rows per date (different dates) | ✅ Passed |
+| Deduplication    | Re-insert doesn't double count     | ✅ Passed |
+| Schema Match     | 18 columns, symbol-first ORDER BY  | ✅ Passed |
 
 ---
 
 ## Risks and Mitigations
 
-| Risk | Mitigation |
-|------|------------|
-| CDN unavailable | Non-blocking (exit 0), Pushover alert |
-| Data already exists | Idempotent via ReplacingMergeTree |
-| Schema drift | Stage 9 validates ORDER BY |
+| Risk                | Mitigation                            |
+| ------------------- | ------------------------------------- |
+| CDN unavailable     | Non-blocking (exit 0), Pushover alert |
+| Data already exists | Idempotent via ReplacingMergeTree     |
+| Schema drift        | Stage 9 validates ORDER BY            |
 
 ---
 
 ## Timeline
 
-| Phase | Estimate |
-|-------|----------|
-| Script creation | 15 min |
-| Legacy deletion | 1 min |
-| Earthly integration | 5 min |
-| Workflow updates | 5 min |
-| Testing + commit | 5 min |
-| Release + publish | 5 min |
-| **Total** | **~35 min** |
+| Phase               | Estimate    |
+| ------------------- | ----------- |
+| Script creation     | 15 min      |
+| Legacy deletion     | 1 min       |
+| Earthly integration | 5 min       |
+| Workflow updates    | 5 min       |
+| Testing + commit    | 5 min       |
+| Release + publish   | 5 min       |
+| **Total**           | **~35 min** |

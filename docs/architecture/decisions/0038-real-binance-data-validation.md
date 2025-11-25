@@ -51,52 +51,71 @@ Existing validation scripts (`validate_clickhouse_cloud.py`, `validate_e2e_simpl
 | Spot | `data.binance.vision/data/spot/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01-01.zip` | 24 |
 
 **9-Stage Pipeline**:
+
 1. CDN Download (HTTP 200, ZIP > 0 bytes)
 2. ZIP Extract (single CSV per archive)
 3. CSV Parse + Format Detection (futures: 12-col header, spot: 11-col no header)
 4. DataFrame Validation (OHLC constraints, volume constraints)
-5. _version Hash Computation (SHA256 deterministic)
+5. \_version Hash Computation (SHA256 deterministic)
 6. ClickHouse Insert (48 total rows: 24 futures + 24 spot)
 7. Query FINAL (verify 24 rows per instrument_type)
 8. Deduplication Test (re-insert produces 24, not 48)
 9. Schema Compliance (18 columns, symbol-first ORDER BY)
 
 **Deleted Scripts**:
+
 - `scripts/validate_clickhouse_cloud.py` (synthetic `VALIDATION_TEST_BTCUSDT`)
 - `scripts/validate_e2e_simple.py` (synthetic `E2E_TEST`)
 
 ### Consequences
 
 **Good**:
+
 - Real data validates actual CDN format and transformation logic
 - Consolidated script reduces maintenance burden
 - Earthly integration enables reproducible CI/CD
 - Permanent data validates idempotent ingestion pattern
 
 **Bad**:
+
 - Network dependency (CDN must be reachable)
 - Real BTCUSDT data mixed with test data (distinguished by timestamp: 2024-01-01)
 
 **Neutral**:
+
 - 48 rows of historical data permanent in production ClickHouse (~2KB)
 
 ## Validation
 
 ### Correctness
-- [ ] 9-stage pipeline passes locally
-- [ ] Futures format (12-col header) correctly parsed
-- [ ] Spot format (11-col no header) correctly parsed
-- [ ] Deduplication verified (re-insert doesn't double count)
+
+- [x] 9-stage pipeline passes locally
+- [x] Futures format (12-col header) correctly parsed
+- [x] Spot format (11-col no header) correctly parsed
+- [x] Deduplication verified (re-insert doesn't double count)
 
 ### Observability
-- [ ] JSON artifact exported: `binance-validation-result.json`
-- [ ] Structured validation context (row counts, timestamps, hashes)
-- [ ] Earthly target integrates with release-validation workflow
+
+- [x] JSON artifact exported: `binance-validation-result.json`
+- [x] Structured validation context (row counts, timestamps, hashes)
+- [x] Earthly target integrates with release-validation workflow
 
 ### Maintainability
-- [ ] Legacy scripts deleted
-- [ ] Single validation script covers both formats
-- [ ] ADR ↔ plan ↔ code in sync
+
+- [x] Legacy scripts deleted
+- [x] Single validation script covers both formats
+- [x] ADR ↔ plan ↔ code in sync
+
+---
+
+## Implementation Status
+
+**Date**: 2025-11-25
+**Status**: ✅ **COMPLETE**
+
+- v13.0.0 released with real Binance data validation
+- Production validation workflow running successfully
+- ADR-0039 cleanup removed redundant components
 
 ## Links
 

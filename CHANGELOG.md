@@ -12,20 +12,22 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### ⚠ BREAKING CHANGES
 
-* **validation:** Remove legacy synthetic validation scripts
+- **validation:** Remove legacy synthetic validation scripts
 
 9-stage validation pipeline:
+
 1. CDN Download (futures + spot)
 2. ZIP Extract
 3. CSV Parse + Format Detection
 4. DataFrame Validation (OHLC, volume constraints)
-5. _version Hash Computation
+5. \_version Hash Computation
 6. ClickHouse Insert
 7. Query FINAL
 8. Deduplication Test
 9. Schema Compliance
 
 Key changes:
+
 - Delete validate_clickhouse_cloud.py (synthetic VALIDATION_TEST_BTCUSDT)
 - Delete validate_e2e_simple.py (synthetic E2E_TEST)
 - Create validate_binance_real_data.py (real BTCUSDT data)
@@ -33,6 +35,7 @@ Key changes:
 - Update production-validation.yml and release-validation.yml
 
 Technical notes:
+
 - Futures: 2024-01-01, Spot: 2024-01-02 (different dates avoid ORDER BY collision)
 - ORDER BY (symbol,timeframe,toStartOfHour,timestamp) excludes instrument_type
 - Both formats have 12 columns (includes 'ignore' column)
@@ -40,79 +43,79 @@ Technical notes:
 
 ### Features
 
-* **validation:** replace synthetic data with real Binance CDN validation (ADR-0038) ([a9b5d3c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/a9b5d3c07eee00f892e3004203d65b39f328d767))
+- **validation:** replace synthetic data with real Binance CDN validation (ADR-0038) ([a9b5d3c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/a9b5d3c07eee00f892e3004203d65b39f328d767))
 
 ## [12.0.12](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.11...v12.0.12) (2025-11-25)
 
 ### Documentation
 
-* **adr-0037:** mark Issue [#5](https://github.com/terrylica/gapless-crypto-clickhouse/issues/5) as FIXED and VALIDATED in v12.0.11 ([3723180](https://github.com/terrylica/gapless-crypto-clickhouse/commit/3723180a350e9bc301b606143512c56a1563d03d)), closes [#6](https://github.com/terrylica/gapless-crypto-clickhouse/issues/6)
+- **adr-0037:** mark Issue [#5](https://github.com/terrylica/gapless-crypto-clickhouse/issues/5) as FIXED and VALIDATED in v12.0.11 ([3723180](https://github.com/terrylica/gapless-crypto-clickhouse/commit/3723180a350e9bc301b606143512c56a1563d03d)), closes [#6](https://github.com/terrylica/gapless-crypto-clickhouse/issues/6)
 
 ## [12.0.11](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.10...v12.0.11) (2025-11-25)
 
 ### Bug Fixes
 
-* **validation:** pass all dependent secrets to Earthly downstream targets ([857a4a2](https://github.com/terrylica/gapless-crypto-clickhouse/commit/857a4a2501c8b905189e9b8d98c7b2f114e4aa98)), closes [#9](https://github.com/terrylica/gapless-crypto-clickhouse/issues/9)
+- **validation:** pass all dependent secrets to Earthly downstream targets ([857a4a2](https://github.com/terrylica/gapless-crypto-clickhouse/commit/857a4a2501c8b905189e9b8d98c7b2f114e4aa98)), closes [#9](https://github.com/terrylica/gapless-crypto-clickhouse/issues/9)
 
 ## [12.0.10](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.9...v12.0.10) (2025-11-25)
 
 ### Bug Fixes
 
-* **validation:** use direct GitHub secrets instead of Doppler runtime fetch ([4ffb4ce](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4ffb4ce7cfed4a9106e707dfc7f6cf48813a3b91)), closes [#5](https://github.com/terrylica/gapless-crypto-clickhouse/issues/5) [#5](https://github.com/terrylica/gapless-crypto-clickhouse/issues/5)
+- **validation:** use direct GitHub secrets instead of Doppler runtime fetch ([4ffb4ce](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4ffb4ce7cfed4a9106e707dfc7f6cf48813a3b91)), closes [#5](https://github.com/terrylica/gapless-crypto-clickhouse/issues/5) [#5](https://github.com/terrylica/gapless-crypto-clickhouse/issues/5)
 
 ## [12.0.9](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.8...v12.0.9) (2025-11-25)
 
 ### Documentation
 
-* **adr-0037:** mark Issue [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3) (Earthly artifact export) as VALIDATED ([359b2a4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/359b2a410f9bcf989b36b02b100cbb237dbbd279))
+- **adr-0037:** mark Issue [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3) (Earthly artifact export) as VALIDATED ([359b2a4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/359b2a410f9bcf989b36b02b100cbb237dbbd279))
 
 ## [12.0.8](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.7...v12.0.8) (2025-11-25)
 
 ### Documentation
 
-* **adr-0037:** add continuation session findings (v12.0.3-v12.0.6) ([4b9ac62](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4b9ac62a1b67968f477c8d9d4ae79f7cbe1c3cf7)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
+- **adr-0037:** add continuation session findings (v12.0.3-v12.0.6) ([4b9ac62](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4b9ac62a1b67968f477c8d9d4ae79f7cbe1c3cf7)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
 
 ## [12.0.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.6...v12.0.7) (2025-11-25)
 
 ### Documentation
 
-* **plan-0037:** document v12.0.5 and v12.0.6 production findings ([b65b8e4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/b65b8e4580a35e49f0ffc879cb11a4e6eb0d4fd1))
+- **plan-0037:** document v12.0.5 and v12.0.6 production findings ([b65b8e4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/b65b8e4580a35e49f0ffc879cb11a4e6eb0d4fd1))
 
 ## [12.0.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.5...v12.0.6) (2025-11-25)
 
 ### Bug Fixes
 
-* **validation:** enable Earthly artifact export by using --strict instead of EARTHLY_CI ([20c8b6c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/20c8b6cbe14afe7ca39057f5aa7d1499d6cd23ce)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
+- **validation:** enable Earthly artifact export by using --strict instead of EARTHLY_CI ([20c8b6c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/20c8b6cbe14afe7ca39057f5aa7d1499d6cd23ce)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
 
 ## [12.0.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.4...v12.0.5) (2025-11-25)
 
 ### Bug Fixes
 
-* **validation:** use GitHub Actions template syntax for Earthly secrets ([94d3017](https://github.com/terrylica/gapless-crypto-clickhouse/commit/94d30178c271a3385cf66fd4bfbd0c067fa2bd81)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
+- **validation:** use GitHub Actions template syntax for Earthly secrets ([94d3017](https://github.com/terrylica/gapless-crypto-clickhouse/commit/94d30178c271a3385cf66fd4bfbd0c067fa2bd81)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
 
 ## [12.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.3...v12.0.4) (2025-11-25)
 
 ### Bug Fixes
 
-* **validation:** call Earthly validation targets directly for artifact export ([d9d1073](https://github.com/terrylica/gapless-crypto-clickhouse/commit/d9d1073b75f1c75bb081ec86e9d7fea861e266c0)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
+- **validation:** call Earthly validation targets directly for artifact export ([d9d1073](https://github.com/terrylica/gapless-crypto-clickhouse/commit/d9d1073b75f1c75bb081ec86e9d7fea861e266c0)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
 
 ## [12.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.2...v12.0.3) (2025-11-25)
 
 ### Bug Fixes
 
-* **validation:** fix Earthly artifact export to host filesystem ([d6f1c2a](https://github.com/terrylica/gapless-crypto-clickhouse/commit/d6f1c2a2304bc269580e5d24cb9aae1a54f4c774)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3) [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
+- **validation:** fix Earthly artifact export to host filesystem ([d6f1c2a](https://github.com/terrylica/gapless-crypto-clickhouse/commit/d6f1c2a2304bc269580e5d24cb9aae1a54f4c774)), closes [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3) [#3](https://github.com/terrylica/gapless-crypto-clickhouse/issues/3)
 
 ## [12.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.1...v12.0.2) (2025-11-25)
 
 ### Documentation
 
-* **adr-0037:** document production validation findings and fixes ([0968382](https://github.com/terrylica/gapless-crypto-clickhouse/commit/09683827132ec8bc5e795445e4e10f078c83e74d))
+- **adr-0037:** document production validation findings and fixes ([0968382](https://github.com/terrylica/gapless-crypto-clickhouse/commit/09683827132ec8bc5e795445e4e10f078c83e74d))
 
 ## [12.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.0...v12.0.1) (2025-11-25)
 
 ### Bug Fixes
 
-* **validation:** fix 3 critical validation workflow issues ([d9bc0de](https://github.com/terrylica/gapless-crypto-clickhouse/commit/d9bc0de8a97eb1aef5013eed038c3a7091301588))
+- **validation:** fix 3 critical validation workflow issues ([d9bc0de](https://github.com/terrylica/gapless-crypto-clickhouse/commit/d9bc0de8a97eb1aef5013eed038c3a7091301588))
 
 ## [12.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v11.0.10...v12.0.0) (2025-11-25)
 

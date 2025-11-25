@@ -146,7 +146,7 @@ result = client.query("SELECT * FROM ohlcv FINAL WHERE symbol = 'BTCUSDT'")
 
 ### CI/CD Production Validation
 
-**Policy** (ADR-0035): Local-first development + production validation exception
+**Policy** (ADR-0035, updated by ADR-0038, ADR-0039): Local-first development + production validation exception
 
 **Local-First Development** (Developers run before commit):
 
@@ -167,47 +167,39 @@ uv run pytest -m integration
 **Workflow**: `.github/workflows/production-validation.yml`
 
 - **Trigger**: Cron `0 */6 * * *` (00:00, 06:00, 12:00, 18:00 UTC)
-- **Credentials**: Doppler token (GitHub Actions secret `DOPPLER_TOKEN`)
+- **Credentials**: Direct GitHub secrets (`CLICKHOUSE_HOST`, `CLICKHOUSE_PASSWORD`, etc.)
 
-**Validation Checks**:
+**Validation** (ADR-0038: Real Binance Data Validation):
 
-1. **ClickHouse Cloud Validation**:
-   - Schema validation (ORDER BY symbol-first from ADR-0034)
-   - Write/read round-trip (100 BTCUSDT 1h bars)
-   - Deduplication correctness (ReplacingMergeTree + FINAL)
-   - Cleanup test data after validation
-
-2. **Binance CDN Availability**:
-   - HTTP HEAD request to CloudFront CDN
-   - 5s timeout
-   - Detects outages within 6 hours (22x performance advantage)
-
-3. **Simplified E2E Validation** (3-layer):
-   - Layer 1: Environment (ClickHouse Cloud connection + schema exists)
-   - Layer 2: Data flow (write test data → verify ingestion)
-   - Layer 3: Query (read with FINAL → verify deduplication)
+Single-job Earthly-based 9-stage pipeline using real BTCUSDT data from Binance CDN:
+1. CDN Download (HTTP GET, validates CDN availability)
+2. ZIP Extract
+3. CSV Parse + Format Detection (futures 12-col header, spot 12-col no header)
+4. DataFrame Validation (OHLC, volume constraints)
+5. _version Hash Computation
+6. ClickHouse Insert
+7. Query FINAL
+8. Deduplication Test
+9. Schema Compliance (ORDER BY symbol-first from ADR-0034)
 
 **Manual Production Validation**:
 
 ```bash
-# Run ClickHouse Cloud validation locally
-doppler run --project aws-credentials --config prd -- uv run scripts/validate_clickhouse_cloud.py
-
-# Run Binance CDN availability check
-uv run scripts/validate_binance_cdn.py
+# Run real Binance data validation locally
+doppler run --project aws-credentials --config prd -- uv run scripts/validate_binance_real_data.py
 ```
 
 **Rationale**:
 
-- Production environments require Doppler credentials unavailable in local development
+- Uses real Binance CDN data (not synthetic) for production-realistic validation
+- Validates complete pipeline: CDN → CSV → DataFrame → ClickHouse → Query
 - Scheduled monitoring detects infrastructure degradation independent of code changes
-- Aligns with ADR-0027 philosophy (local development, CI/CD for production only)
 
-**Reference**: [ADR-0035](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0035-cicd-production-validation.md) - CI/CD production validation policy
+**Reference**: [ADR-0038](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0038-real-binance-data-validation.md) - Real Binance Data Validation
 
-**CI/CD Architecture** (ADR-0036): DRY-compliant 2-workflow system
+**CI/CD Architecture** (ADR-0036, updated by ADR-0039): 2-workflow system
 
-**Active Workflows** (Jan 2025):
+**Active Workflows**:
 
 1. **Release Workflow** (`.github/workflows/release.yml`):
    - Semantic versioning (analyze conventional commits)
@@ -216,27 +208,13 @@ uv run scripts/validate_binance_cdn.py
    - **NO** package building or PyPI publishing (handled locally per ADR-0027)
 
 2. **Production Validation Workflow** (`.github/workflows/production-validation.yml`):
-   - ClickHouse Cloud validation (schema, write/read, deduplication)
-   - Binance CDN availability monitoring
-   - Simplified E2E validation (3-layer)
+   - Real Binance data validation via Earthly (9-stage pipeline)
    - Scheduled every 6 hours (cron: `0 */6 * * *`)
 
-**DRY Optimizations**:
-
-- **Composite Actions**: Setup steps extracted to `.github/actions/` (56 lines eliminated)
+**Composite Actions**: Setup steps extracted to `.github/actions/`
   - `setup-python-uv`: Python 3.12 + UV installation with dependency caching
-  - `setup-doppler`: Doppler CLI installation for secret management
-- **Shared Validation Module**: `gapless_crypto_clickhouse.validation.e2e_core` (90-120 lines eliminated)
-  - `create_clickhouse_client()`: Standard client configuration
-  - `insert_test_data()`: Pandas DataFrame insertion
-  - `query_with_final()`: Deduplicated queries
-  - `cleanup_test_data()`: Test data cleanup
-  - `validate_table_exists()`: Table existence check
-  - `log_with_timestamp()`: UTC timestamped logging
 
-**Impact**: 146-176 lines eliminated (20-25% reduction), improved maintainability
-
-**Reference**: [ADR-0036](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0036-cicd-dry-refactoring.md) - CI/CD workflow DRY refactoring
+**Reference**: [ADR-0039](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0039-validation-redundancy-cleanup.md) - Validation Redundancy Cleanup
 
 ### Release Validation Observability
 

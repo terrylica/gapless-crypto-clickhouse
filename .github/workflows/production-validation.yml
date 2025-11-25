@@ -1,8 +1,8 @@
 name: Production Validation
 
-# ADR-0035: CI/CD Production Validation Policy
 # ADR-0038: Real Binance Data Validation
-# Scheduled monitoring for ClickHouse Cloud AWS and Binance CDN infrastructure
+# ADR-0039: Validation Redundancy Cleanup (removed binance-cdn-availability job)
+# Scheduled monitoring for ClickHouse Cloud AWS infrastructure
 # Runs every 6 hours, independent of code changes
 
 on:
@@ -16,25 +16,6 @@ permissions:
   contents: read
 
 jobs:
-  binance-cdn-availability:
-    name: Binance CDN Availability
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Python + UV
-        uses: ./.github/actions/setup-python-uv
-
-      - name: Check Binance CDN availability
-        run: |
-          echo "=========================================="
-          echo "Binance CDN Availability Check"
-          echo "=========================================="
-          uv run scripts/validate_binance_cdn.py
-
   binance-real-data-validation:
     name: Binance Real Data Validation (ADR-0038)
     runs-on: ubuntu-latest

@@ -152,16 +152,5 @@ send-pushover-alert:
             --release-url "$GITHUB_RELEASE_URL" \
         || (echo "Pushover notification failed (non-fatal)" && exit 0)
 
-# Main pipeline - orchestrates all validation targets
-# NOTE: This target is deprecated. GitHub Actions now calls individual targets directly.
-# AS LOCAL artifacts only export when target is explicitly built, not via BUILD/COPY.
-release-validation-pipeline:
-    FROM +validation-base
-
-    # Run all validation targets
-    BUILD +github-release-check
-    BUILD +pypi-version-check
-    BUILD +production-health-check
-    BUILD +binance-real-data-check
-    BUILD +write-to-clickhouse
-    BUILD +send-pushover-alert
+# NOTE: release-validation-pipeline target removed per ADR-0039
+# GitHub Actions calls individual targets directly for artifact export

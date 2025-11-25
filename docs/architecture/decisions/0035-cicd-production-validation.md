@@ -1,9 +1,11 @@
 # ADR-0035: CI/CD Production Validation Policy
 
-**Status**: Accepted
+**Status**: Superseded by ADR-0038
 **Date**: 2025-01-22
 **Deciders**: Engineering Team
-**Related**: ADR-0027 (Local-Only PyPI Publishing)
+**Related**: ADR-0027 (Local-Only PyPI Publishing), ADR-0038 (Real Binance Data Validation)
+
+> **Note (2025-11-25)**: This ADR's synthetic validation approach has been superseded by ADR-0038's real Binance data validation. The policy principles (local-first development + production validation exception) remain valid, but the implementation details (synthetic test data, separate validation scripts) are replaced by the 9-stage real data pipeline.
 
 ## Context and Problem Statement
 
