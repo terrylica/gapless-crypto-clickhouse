@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [12.0.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.6...v12.0.7) (2025-11-25)
+
+### Documentation
+
+* **plan-0037:** document v12.0.5 and v12.0.6 production findings ([b65b8e4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/b65b8e4580a35e49f0ffc879cb11a4e6eb0d4fd1))
+
 ## [12.0.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.5...v12.0.6) (2025-11-25)
 
 ### Bug Fixes
