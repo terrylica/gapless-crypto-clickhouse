@@ -178,7 +178,7 @@ The package supports two data collection methods:
 ### Data Flow
 
 ```
-Binance Public Data Repository → BinancePublicDataCollector → 11-Column Microstructure Format
+Binance Public Data Repository → BinancePublicDataCollector → Microstructure Format
                 ↓
 Gap Detection → UniversalGapFiller → Authentic API-First Validation
                 ↓
@@ -416,13 +416,13 @@ Toolchain for ClickHouse data exploration and monitoring:
 bash scripts/validate-clickhouse-tools.sh
 ```
 
-**Comprehensive guides**: See [`docs/development/`](docs/development/) for detailed usage guides, examples, and troubleshooting.
+**Comprehensive guides**: See [`docs/development/`](https://github.com/terrylica/gapless-crypto-clickhouse/tree/main/docs/development/) for detailed usage guides, examples, and troubleshooting.
 
 ### Migration Guide
 
 **Migrating from `gapless-crypto-data` (file-based) to `gapless-crypto-clickhouse` (database-first)**:
 
-See [`docs/CLICKHOUSE_MIGRATION.md`](docs/CLICKHOUSE_MIGRATION.md) for:
+See [`docs/CLICKHOUSE_MIGRATION.md`](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/docs/CLICKHOUSE_MIGRATION.md) for:
 
 - Architecture changes (file-based → ClickHouse)
 - Code migration examples (drop-in replacement)
@@ -829,9 +829,9 @@ uv run playwright --version
 
 **Documentation**:
 
-- [E2E Testing Guide](docs/validation/E2E_TESTING_GUIDE.md)
-- [Screenshot Baseline Management](docs/validation/SCREENSHOT_BASELINE.md)
-- [ADR-0013: Autonomous Validation Framework](docs/architecture/decisions/0013-autonomous-validation-framework.md)
+- [E2E Testing Guide](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/docs/validation/E2E_TESTING_GUIDE.md)
+- [Screenshot Baseline Management](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/docs/validation/SCREENSHOT_BASELINE.md)
+- [ADR-0013: Autonomous Validation Framework](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/docs/architecture/decisions/0013-autonomous-validation-framework.md)
 
 ### Project Structure for Development
 
@@ -1153,4 +1153,4 @@ def collect_multiple_timeframes(
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/LICENSE) file for details.
