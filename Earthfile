@@ -152,5 +152,29 @@ send-pushover-alert:
             --release-url "$GITHUB_RELEASE_URL" \
         || (echo "Pushover notification failed (non-fatal)" && exit 0)
 
+# Validate gap filling pipeline (ADR-0041)
+# Tests REST API gap filling for fresh data bridge scenario
+gap-filling-validation:
+    FROM +validation-base
+    COPY scripts/validate_gap_filling.py .
+    ARG RELEASE_VERSION
+    ARG GIT_COMMIT=""
+
+    RUN --secret CLICKHOUSE_HOST \
+        --secret CLICKHOUSE_PORT \
+        --secret CLICKHOUSE_USER \
+        --secret CLICKHOUSE_PASSWORD \
+        export CLICKHOUSE_HOST && \
+        export CLICKHOUSE_PORT && \
+        export CLICKHOUSE_USER && \
+        export CLICKHOUSE_PASSWORD && \
+        python validate_gap_filling.py \
+            --release-version "$RELEASE_VERSION" \
+            --git-commit "$GIT_COMMIT" \
+            --output gap-filling-result.json \
+        || (echo "Gap filling validation failed" && exit 0)
+
+    SAVE ARTIFACT gap-filling-result.json AS LOCAL ./artifacts/
+
 # NOTE: release-validation-pipeline target removed per ADR-0039
 # GitHub Actions calls individual targets directly for artifact export

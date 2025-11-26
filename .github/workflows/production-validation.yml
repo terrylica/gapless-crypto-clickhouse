@@ -70,3 +70,60 @@ jobs:
           else
             echo "- **Status**: No results file generated" >> $GITHUB_STEP_SUMMARY
           fi
+
+  gap-filling-validation:
+    name: Gap Filling Validation (ADR-0041)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Earthly
+        uses: earthly/actions-setup@v1
+        with:
+          version: latest
+
+      - name: Create artifacts directory
+        run: mkdir -p artifacts
+
+      - name: Run Gap Filling validation via Earthly
+        continue-on-error: true
+        run: |
+          echo "=========================================="
+          echo "Gap Filling Validation (7-Stage Pipeline)"
+          echo "=========================================="
+          earthly --strict \
+            --secret CLICKHOUSE_HOST="${{ secrets.CLICKHOUSE_HOST }}" \
+            --secret CLICKHOUSE_PORT="${{ secrets.CLICKHOUSE_PORT }}" \
+            --secret CLICKHOUSE_USER="${{ secrets.CLICKHOUSE_USER }}" \
+            --secret CLICKHOUSE_PASSWORD="${{ secrets.CLICKHOUSE_PASSWORD }}" \
+            +gap-filling-validation \
+            --RELEASE_VERSION="scheduled" \
+            --GIT_COMMIT="${{ github.sha }}" \
+          || echo "Gap filling validation failed (non-fatal)"
+
+      - name: Upload validation artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gap-filling-validation-results
+          path: artifacts/*.json
+          retention-days: 90
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Gap Filling Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f artifacts/gap-filling-result.json ]; then
+            STATUS=$(jq -r '.status' artifacts/gap-filling-result.json)
+            echo "- **Status**: ${STATUS}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Test Date**: $(jq -r '.stages.spot_fetch.date // "N/A"' artifacts/gap-filling-result.json)" >> $GITHUB_STEP_SUMMARY
+            echo "- **Spot Rows**: $(jq -r '.stages.spot_fetch.rows // "N/A"' artifacts/gap-filling-result.json)" >> $GITHUB_STEP_SUMMARY
+            echo "- **Futures Rows**: $(jq -r '.stages.futures_fetch.rows // "N/A"' artifacts/gap-filling-result.json)" >> $GITHUB_STEP_SUMMARY
+            echo "- **Deduplication**: $(jq -r '.stages.deduplication_test.rows_after_reinsert // "N/A"' artifacts/gap-filling-result.json) rows" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Status**: No results file generated" >> $GITHUB_STEP_SUMMARY
+          fi

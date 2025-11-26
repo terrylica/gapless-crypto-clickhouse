@@ -10,7 +10,7 @@ ADR-0040: query_ohlcv() gap filling implementation
 
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, List, Optional, Tuple
 
 import httpx
@@ -250,7 +250,7 @@ def fetch_gap_data(
             # [10] taker_buy_quote, [11] ignore
 
             open_time_ms = int(kline[0])
-            open_time = datetime.fromtimestamp(open_time_ms / 1000)
+            open_time = datetime.fromtimestamp(open_time_ms / 1000, tz=timezone.utc)
 
             # Only include candles within requested range
             if start_time <= open_time < end_time:
@@ -261,7 +261,7 @@ def fetch_gap_data(
                     "low": float(kline[3]),
                     "close": float(kline[4]),
                     "volume": float(kline[5]),
-                    "close_time": datetime.fromtimestamp(int(kline[6]) / 1000),
+                    "close_time": datetime.fromtimestamp(int(kline[6]) / 1000, tz=timezone.utc),
                     "quote_asset_volume": float(kline[7]),
                     "number_of_trades": int(kline[8]),
                     "taker_buy_base_asset_volume": float(kline[9]),
