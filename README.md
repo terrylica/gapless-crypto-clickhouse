@@ -678,7 +678,7 @@ This package includes probe hooks (`gapless_crypto_clickhouse.__probe__`) that e
 To have your AI coding agent analyze this package, use this prompt:
 
 ```
-Analyze gapless-crypto-data using: import gapless_crypto_clickhouse; probe = gapless_crypto_clickhouse.__probe__
+Analyze gapless-crypto-clickhouse using: import gapless_crypto_clickhouse; probe = gapless_crypto_clickhouse.__probe__
 
 Execute: probe.discover_api(), probe.get_capabilities(), probe.get_task_graph()
 
