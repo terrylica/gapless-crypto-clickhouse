@@ -38,7 +38,7 @@ classifiers = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "binance-futures-availability>=1.1.0",  # 713 validated USDT-margined futures symbols with daily S3 Vision probes (ADR-0021)
+    "binance-futures-availability>=1.4.0",  # 715 validated USDT-margined futures symbols with daily S3 Vision probes (ADR-0021)
     "clickhouse-connect>=0.7.0",  # ClickHouse HTTP client with Apache Arrow support (ADR-0023: 3x faster queries)
     "duckdb>=1.1.0",  # Single-file OLAP database for validation report persistence
     "httpx>=0.25.0",

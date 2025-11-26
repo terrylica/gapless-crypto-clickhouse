@@ -101,7 +101,7 @@ fetch_data(
 
 ## Data Coverage
 
-**Symbols**: 713 validated perpetual symbols (spot + futures aligned)
+**Symbols**: 715 validated perpetual symbols (spot + futures aligned)
 - Examples: BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, XRPUSDT
 - Source: binance-futures-availability package (95%+ SLA)
 
@@ -177,7 +177,7 @@ from gapless_crypto_clickhouse import probe
 caps = probe.get_capabilities()
 
 # Get supported symbols
-symbols = probe.get_supported_symbols()  # 713 symbols
+symbols = probe.get_supported_symbols()  # 715 symbols
 
 # Get supported timeframes
 timeframes = probe.get_supported_timeframes()  # 16 timeframes

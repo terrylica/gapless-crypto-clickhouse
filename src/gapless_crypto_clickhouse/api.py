@@ -37,12 +37,12 @@ InstrumentType = Literal["spot", "futures-um"]
 def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]:
     """Get list of supported trading pairs for the specified instrument type.
 
-    Returns 713 validated perpetual symbols for both spot and futures.
+    Returns 715 validated perpetual symbols for both spot and futures.
     Symbol list sourced from binance-futures-availability package
     (validated daily via S3 Vision probes, 95%+ SLA).
 
     Note: The instrument_type parameter is retained for API compatibility,
-    but both "spot" and "futures-um" return the same 713-symbol list.
+    but both "spot" and "futures-um" return the same 715-symbol list.
     Rationale: Binance markets are aligned - perpetual futures symbols
     correspond to spot pairs. See ADR-0022 for complete alignment rationale.
 
@@ -56,12 +56,12 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
         ValueError: If instrument_type is invalid
 
     Examples:
-        >>> # Get spot symbols (default) - returns 713 symbols
+        >>> # Get spot symbols (default) - returns 715 symbols
         >>> symbols = get_supported_symbols()
         >>> print(f"Found {len(symbols)} spot symbols")
         Found 713 spot symbols
 
-        >>> # Get futures symbols - returns same 713 symbols
+        >>> # Get futures symbols - returns same 715 symbols
         >>> futures = get_supported_symbols(instrument_type="futures-um")
         >>> print(f"Found {len(futures)} futures symbols")
         Found 713 futures symbols
@@ -79,7 +79,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
     # Validate parameter (fail fast on invalid types)
     _validate_instrument_type(instrument_type)
 
-    # Return same 713 symbols for both types (ADR-0022)
+    # Return same 715 symbols for both types (ADR-0022)
     return load_symbols("perpetual")
 
 
@@ -101,7 +101,7 @@ def get_supported_timeframes() -> List[str]:
 
 
 # DEPRECATED in v4.1.0: SupportedSymbol type alias removed (ADR-0022)
-# Reason: 713-symbol Literal exceeds practical type checker limits
+# Reason: 715-symbol Literal exceeds practical type checker limits
 # Migration: Use `str` for symbol parameters, validate via get_supported_symbols()
 #
 # Before (v4.0.0):
@@ -112,7 +112,7 @@ def get_supported_timeframes() -> List[str]:
 #       if symbol not in get_supported_symbols():
 #           raise ValueError(f"Unsupported symbol: {symbol}")
 #
-# Note: Spot and futures now both support 713 symbols (up from 20 spot symbols)
+# Note: Spot and futures now both support 715 symbols (up from 20 spot symbols)
 
 SupportedTimeframe = Literal[
     "1s", "1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d"
@@ -141,7 +141,7 @@ def _validate_instrument_type(instrument_type: str) -> None:
         raise ValueError(
             f"Invalid instrument_type '{instrument_type}'. "
             f"Must be one of: {', '.join(sorted(valid_types))}. "
-            f"Use 'futures-um' for USDT-margined perpetual futures (713 symbols). "
+            f"Use 'futures-um' for USDT-margined perpetual futures (715 symbols). "
             f"See get_supported_symbols(instrument_type='{instrument_type}') for available symbols."
         )
 
@@ -514,7 +514,7 @@ def fetch_data(
         output_dir: Directory to save CSV files (optional)
         index_type: DEPRECATED - Use pandas operations directly
         auto_fill_gaps: Automatically fill detected gaps with authentic Binance API data (default: True)
-        instrument_type: Instrument type - "spot" or "futures-um" (both support 713 symbols, default: "spot")
+        instrument_type: Instrument type - "spot" or "futures-um" (both support 715 symbols, default: "spot")
         interval: Legacy parameter name for timeframe (deprecated, use timeframe)
 
     Returns:
@@ -540,7 +540,7 @@ def fetch_data(
         # Simple spot data fetching (default)
         df = fetch_data("BTCUSDT", "1h", limit=1000)
 
-        # Fetch futures data (713 symbols available)
+        # Fetch futures data (715 symbols available)
         df = fetch_data("BTCUSDT", "1h", limit=1000, instrument_type="futures-um")
 
         # Standard pandas operations for analysis
@@ -648,7 +648,7 @@ def download(
     By default, automatically detects and fills gaps using authentic Binance API data
     to deliver on the package's core promise of zero gaps.
 
-    **NEW in v3.2.0**: USDT-margined perpetual futures support (713 symbols).
+    **NEW in v3.2.0**: USDT-margined perpetual futures support (715 symbols).
 
     Args:
         symbol: Trading pair symbol (e.g., "BTCUSDT")
@@ -660,7 +660,7 @@ def download(
         output_dir: Directory to save CSV files
         index_type: DEPRECATED - Use standard pandas operations instead
         auto_fill_gaps: Automatically fill detected gaps with authentic Binance API data (default: True)
-        instrument_type: Instrument type - "spot" or "futures-um" (both support 713 symbols, default: "spot")
+        instrument_type: Instrument type - "spot" or "futures-um" (both support 715 symbols, default: "spot")
         interval: Legacy parameter name for timeframe (deprecated)
 
     Returns:
@@ -754,7 +754,7 @@ def download_multiple(
     Executes concurrent downloads using ThreadPoolExecutor for network-bound
     operations. Returns dict mapping symbol → DataFrame.
 
-    **NEW in v3.2.0**: Supports USDT-margined perpetual futures (713 symbols).
+    **NEW in v3.2.0**: Supports USDT-margined perpetual futures (715 symbols).
 
     Args:
         symbols: List of trading pair symbols (e.g., ["BTCUSDT", "ETHUSDT"])
@@ -764,7 +764,7 @@ def download_multiple(
         limit: Maximum bars per symbol
         max_workers: Maximum concurrent downloads (default: 5)
         raise_on_partial_failure: Raise error if any symbol fails (default: False)
-        instrument_type: Instrument type - "spot" or "futures-um" (both support 713 symbols, default: "spot")
+        instrument_type: Instrument type - "spot" or "futures-um" (both support 715 symbols, default: "spot")
         **kwargs: Additional parameters passed to download()
 
     Returns:

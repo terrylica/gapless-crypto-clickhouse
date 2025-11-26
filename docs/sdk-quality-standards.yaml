@@ -7,26 +7,26 @@
 standards:
   type_safety:
     pep_561_compliance:
-      marker_file: src/gapless_crypto_data/py.typed
+      marker_file: src/gapless_crypto_clickhouse/py.typed
       build_inclusion: pyproject.toml [tool.hatch.build.targets.wheel.force-include]
       intent: Enable downstream type checkers (mypy/pyright/pytype)
       status: implemented
       version_introduced: 3.1.0
 
     strict_mode_modules:
-      - module: gapless_crypto_data.api
+      - module: gapless_crypto_clickhouse.api
         disallow_untyped_defs: true
         intent: Enforce type safety on primary SDK entry point
         status: pending
-      - module: gapless_crypto_data.__probe__
+      - module: gapless_crypto_clickhouse.__probe__
         disallow_untyped_defs: true
         intent: Enforce type safety on AI agent introspection hooks
         status: pending
 
   structured_exceptions:
     base_exception:
-      class: GaplessCryptoDataError
-      location: src/gapless_crypto_data/exceptions.py
+      class: GaplessCryptoClickhouseError
+      location: src/gapless_crypto_clickhouse/exceptions.py
       intent: AI-parseable error details via .details dict attribute
       status: pending
       version_planned: 3.2.0
@@ -46,7 +46,7 @@ standards:
       version_planned: 3.2.0
 
     probe_module:
-      location: src/gapless_crypto_data/__probe__.py
+      location: src/gapless_crypto_clickhouse/__probe__.py
       functions:
         - discover_api(): Return function signatures and docstrings
         - get_capabilities(): Return supported symbols/timeframes
@@ -86,7 +86,7 @@ coverage_priorities:
   tertiary_cli_wrapper:
     target_coverage: "9% acceptable"
     rationale: CLI is convenience wrapper, not primary SDK interface
-    primary_use_case: Programmatic API via "import gapless_crypto_data"
+    primary_use_case: Programmatic API via "import gapless_crypto_clickhouse"
 
 quality_metrics:
   version: 3.1.0

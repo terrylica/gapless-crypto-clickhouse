@@ -73,8 +73,8 @@ Package Relationship:
         See docs/development/CLI_MIGRATION_GUIDE.md for migration guide.
         Note: This package never had a CLI (Python API only).
 
-Supported Symbols (713 perpetual symbols - Spot + Futures Aligned):
-    Both spot and futures-um support 713 validated perpetual symbols
+Supported Symbols (715 perpetual symbols - Spot + Futures Aligned):
+    Both spot and futures-um support 715 validated perpetual symbols
     sourced from binance-futures-availability package (95%+ SLA, daily S3 Vision probes).
 
     See get_supported_symbols() for complete list.

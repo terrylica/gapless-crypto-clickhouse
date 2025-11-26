@@ -83,7 +83,7 @@ class BinancePublicDataCollector:
         4h: 2190 bars
 
     Note:
-        This collector supports 713 USDT perpetual symbols for both spot and futures-um markets.
+        This collector supports 715 USDT perpetual symbols for both spot and futures-um markets.
         Symbol validation is handled in the API layer via get_supported_symbols().
         See ADR-0022 for spot/futures alignment rationale.
     """
@@ -187,7 +187,7 @@ class BinancePublicDataCollector:
                 CSV provides universal compatibility, Parquet offers 5-10x compression.
                 Defaults to "csv".
             instrument_type (str, optional): Instrument type - "spot" or "futures-um".
-                Both types support 713 perpetual symbols. Defaults to "spot".
+                Both types support 715 perpetual symbols. Defaults to "spot".
 
         Raises:
             ValueError: If instrument_type is not "spot" or "futures-um"
@@ -312,7 +312,7 @@ class BinancePublicDataCollector:
 
         Note: Symbol validation is handled in the API layer via get_supported_symbols().
         See ADR-0022 for symbol alignment rationale (spot and futures both use
-        binance-futures-availability package for 713 validated symbols).
+        binance-futures-availability package for 715 validated symbols).
         """
         today = datetime.now().date()
         yesterday = today - timedelta(days=1)

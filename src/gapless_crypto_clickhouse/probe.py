@@ -139,7 +139,7 @@ def get_capabilities() -> Dict[str, Any]:
         },
         "symbols": {
             "count": len(get_supported_symbols()),
-            "description": "713 validated perpetual symbols (spot + futures aligned)",
+            "description": "715 validated perpetual symbols (spot + futures aligned)",
             "examples": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT"],
             "source": "binance-futures-availability package (95%+ SLA)",
         },

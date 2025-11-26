@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-- `src/gapless_crypto_data/` contains production code; keep new runtime logic under existing subpackages (`collectors`, `gap_filling`, `utils`, `validation`) and surface entry points via `api.py`.
+- `src/gapless_crypto_clickhouse/` contains production code; keep new runtime logic under existing subpackages (`collectors`, `gap_filling`, `utils`, `validation`) and surface entry points via `api.py`.
 - `tests/` mirrors the package with pytest suites and shared fixtures in `tests/fixtures/`; add datasets to `sample_data/` only if they support multiple cases.
 - `docs/` and `examples/` store contributor guidance; generated artifacts land in `dist/` and should be recreated via tooling, not edited.
 
@@ -29,7 +29,7 @@
 
 - Pytest is configured with `-ra -q --strict-markers`; declare any new marker in `tests/conftest.py`.
 - Extend fixtures instead of hard-coding data, and exercise both gap-filling flows and collector paths when adding features.
-- For release work, run `uv run pytest --cov=src/gapless_crypto_data` to watch coverage.
+- For release work, run `uv run pytest --cov=src/gapless_crypto_clickhouse` to watch coverage.
 
 ## Commit & Pull Request Guidelines
 

@@ -344,5 +344,5 @@ ORDER BY last_validation DESC
 - Core data collection (CDN + REST API dual source)
 - ClickHouse database integration (ReplacingMergeTree with deduplication)
 - Idempotent ingestion with deterministic versioning
-- USDT-margined futures support (713 symbols)
+- USDT-margined futures support (715 symbols)
 - High-performance bulk loading (1.1M rows/sec validated)
