@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [14.1.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.6...v14.1.7) (2025-11-26)
+
+### Documentation
+
+* **readme:** fifth audit - AOD/IOI principles, semantic abstractions ([60241c8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/60241c8f833c57f180acc5230dac43e6cf3bd4eb)), closes [#-database-integration](https://github.com/terrylica/gapless-crypto-clickhouse/issues/-database-integration) [#database-integration](https://github.com/terrylica/gapless-crypto-clickhouse/issues/database-integration)
+
 ## [14.1.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.5...v14.1.6) (2025-11-26)
 
 ### Documentation
