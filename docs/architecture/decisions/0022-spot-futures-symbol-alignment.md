@@ -34,7 +34,7 @@ This misalignment creates inconsistent user experience where futures traders hav
 
 **Architecture**:
 
-```python
+````python
 def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]:
     """Return 713 symbols for BOTH spot and futures.
 
@@ -161,7 +161,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
 
        # Return same 713 symbols for both types
        return load_symbols("perpetual")
-   ```
+````
 
 2. **Remove Legacy Code**:
    - Delete `BinancePublicDataCollector.known_symbols` hardcoded dict (28 lines)

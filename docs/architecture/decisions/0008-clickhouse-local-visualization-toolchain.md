@@ -78,7 +78,7 @@ Developers working with gapless-crypto-data v4.0.0 need idiomatic, production-re
 
 **File**: `docker-compose.yml` (add to existing services)
 
-```yaml
+````yaml
 services:
   ch-ui:
     image: ghcr.io/caioricciuti/ch-ui:latest
@@ -220,7 +220,7 @@ clickhouse-local --query "
   SELECT count()
   FROM s3('https://data.binance.vision/data.parquet')
 "
-```
+````
 
 **Features**:
 

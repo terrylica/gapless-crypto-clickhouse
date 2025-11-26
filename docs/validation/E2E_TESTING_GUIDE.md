@@ -33,7 +33,7 @@ This guide covers end-to-end (E2E) testing of ClickHouse web interfaces using Pl
 
 ### Running E2E Tests
 
-```bash
+````bash
 # Full validation suite (static + unit + integration + e2e)
 uv run scripts/run_validation.py
 
@@ -66,13 +66,15 @@ uv run playwright --version
 
 ### Directory Structure
 
-```
+````
+
 tests/e2e/
-├── conftest.py                     # Shared fixtures (browser config, screenshots)
-├── test_ch_ui_dashboard.py         # CH-UI validation tests
-├── test_clickhouse_play.py         # ClickHouse Play validation tests
-└── screenshots/                    # Reference baselines (git-tracked)
-```text
+├── conftest.py # Shared fixtures (browser config, screenshots)
+├── test_ch_ui_dashboard.py # CH-UI validation tests
+├── test_clickhouse_play.py # ClickHouse Play validation tests
+└── screenshots/ # Reference baselines (git-tracked)
+
+````text
 
 ### Test Categories
 
@@ -160,7 +162,7 @@ See `pyproject.toml` dev dependencies for exact versions.
    button = page.get_by_role("button", name="Execute")
    input = page.get_by_label("Query")
    heading = page.get_by_role("heading", name="Dashboard")
-   ```
+````
 
 2. **Fallback to CSS selectors**:
 
@@ -188,7 +190,7 @@ See `pyproject.toml` dev dependencies for exact versions.
 
 E2E test failures generate these artifacts:
 
-```
+````
 tmp/validation-artifacts/
 ├── screenshots/               # Screenshots for all tests
 │   ├── test-name-success.png
@@ -413,7 +415,7 @@ uv run playwright install chromium --with-deps
 lsof -i :8123
 
 # Kill conflicting process or use different ports
-```
+````
 
 ---
 

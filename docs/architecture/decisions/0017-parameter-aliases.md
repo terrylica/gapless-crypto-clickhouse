@@ -14,7 +14,7 @@ Current API uses `start` and `end` parameters for date ranges, but parameter nam
 
 **Current API**:
 
-```python
+````python
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 collector = BinancePublicDataCollector(start_date="2024-01-01", end_date="2024-06-30")
 ```bash
@@ -219,7 +219,7 @@ def test_mixed_parameters_raise_error():
     """Cannot use both start and start_date simultaneously."""
     with pytest.raises(ValueError, match="Cannot specify both"):
         gcd.download("BTCUSDT", "1h", start="2024-01-01", start_date="2024-01-02")
-```
+````
 
 ## Validation Criteria
 

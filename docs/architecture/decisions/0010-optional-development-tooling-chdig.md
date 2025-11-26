@@ -57,7 +57,7 @@ ADR-0008 (ClickHouse Local Visualization Toolchain) documented chdig as an optio
 
 ### Installation
 
-```bash
+````bash
 # Install via Homebrew
 brew install chdig
 
@@ -121,7 +121,7 @@ chdig --version
 
 ```bash
 bash scripts/validate-clickhouse-tools.sh | grep chdig
-```
+````
 
 **Expected**: `✅ PASS: chdig installed and operational`
 

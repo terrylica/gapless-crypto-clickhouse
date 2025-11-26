@@ -87,7 +87,7 @@ Schema audit revealed systematic staleness in docstrings and package references:
 
 **Automated Checks**:
 
-```bash
+````bash
 # No stray package name references (except migration docs)
 grep -r "gapless-crypto-data" src/ | grep -v "__init__.py" | grep -v "migration"
 
@@ -116,7 +116,7 @@ Update CHANGELOG.md with breaking change note:
 - **Cache Directory**: Moved from `~/.cache/gapless-crypto-data/` to `~/.cache/gapless-crypto-clickhouse/`
   - Users must clear old cache: `rm -rf ~/.cache/gapless-crypto-data/`
   - Or migrate manually: `mv ~/.cache/gapless-crypto-data/ ~/.cache/gapless-crypto-clickhouse/`
-```
+````
 
 ## Context
 

@@ -44,7 +44,7 @@ Non-containerized Python deployment using uv package manager for gapless-crypto-
 
 **Linux/macOS (Recommended)**:
 
-```bash
+````bash
 # Install uv using official installer
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
@@ -611,7 +611,7 @@ uv sync
 # Convert pyproject.toml (manual)
 # uv uses PEP 621 format, poetry uses custom format
 # Update [tool.poetry] to [project] section
-```
+````
 
 ## Resource Requirements
 

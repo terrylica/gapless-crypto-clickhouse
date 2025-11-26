@@ -188,7 +188,7 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
 
 **Before**:
 
-```python
+````python
 def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]:
     """Get list of supported symbols for given instrument type.
 
@@ -533,7 +533,7 @@ curl -s https://pypi.org/pypi/gapless-crypto-clickhouse/json | jq -r '.info.vers
    ```bash
    git revert HEAD
    git push origin main
-   ```
+````
 
 2. **Emergency Release**: v4.1.1 (patch)
    - Restore `known_symbols` hardcoded dict

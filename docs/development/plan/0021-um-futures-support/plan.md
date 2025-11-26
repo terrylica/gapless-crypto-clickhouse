@@ -89,7 +89,7 @@ Add `instrument_type` parameter across API with enum-driven URL/endpoint routing
 
 **Current Schema** (INCORRECT):
 
-```sql
+````sql
 timestamp DateTime64(3)  -- Millisecond precision
 ```text
 
@@ -914,16 +914,20 @@ raise DataCollectionError(
 
 **Spot CSV** (no header, 11 columns):
 
-```
+````
+
 1640995200000,46444.99,46445.00,46368.77,46393.00,45.33775,...
+
 ```text
 
 **Futures CSV** (with header, 12 columns):
 
 ```
+
 open_time,open,high,low,close,volume,close_time,quote_asset_volume,number_of_trades,taker_buy_base_asset_volume,taker_buy_quote_asset_volume,ignore
 1640995200000,46444.99,46445.00,46368.77,46393.00,45.33775,...,0
-```text
+
+````text
 
 **Normalization Logic**:
 
@@ -1149,8 +1153,10 @@ Location: `/tmp/um-futures-audit/`
 
 Implementation logs will be stored in:
 
-```
+````
+
 logs/0021-um-futures-support-YYYYMMDD_HHMMSS.log
+
 ```
 
 Format: nohup output from long-running tasks (if any)
@@ -1158,3 +1164,4 @@ Format: nohup output from long-running tasks (if any)
 ---
 
 **Plan 0021** | UM Futures Support | In Progress | 2025-11-19
+```

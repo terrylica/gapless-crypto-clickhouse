@@ -98,7 +98,7 @@ Current gap: No automated validation runs post-release. Manual verification requ
 
 **Key Validation Records** (production data):
 
-```sql
+````sql
 SELECT validation_type, status, duration_ms, validation_context
 FROM monitoring.validation_results
 WHERE release_version = 'v12.0.1'
@@ -255,7 +255,7 @@ earthly --strict \
   --secret GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \  # Direct template syntax
   --secret CLICKHOUSE_HOST="${{ steps.doppler_secrets.outputs.clickhouse_host }}" \
   +production-health-check
-```
+````
 
 **Validation**: v12.0.5 validation ran successfully with 3/3 records stored in ClickHouse.
 

@@ -134,7 +134,7 @@ Release URL: https://github.com/terrylica/gapless-crypto-clickhouse/releases/tag
 
 **Fix**: Added to `.github/workflows/release-validation.yml`:
 
-```yaml
+````yaml
 - name: Checkout code
   uses: actions/checkout@v4
   with:
@@ -150,12 +150,15 @@ Release URL: https://github.com/terrylica/gapless-crypto-clickhouse/releases/tag
 
 **Error**:
 
-```
+````
+
 Failed inserts: 3
-  - Failed to insert github-release-result.json: Insert data column count does not match column names
-  - Failed to insert production-health-result.json: Insert data column count does not match column names
-  - Failed to insert pypi-version-result.json: Insert data column count does not match column names
-```sql
+
+- Failed to insert github-release-result.json: Insert data column count does not match column names
+- Failed to insert production-health-result.json: Insert data column count does not match column names
+- Failed to insert pypi-version-result.json: Insert data column count does not match column names
+
+````sql
 
 **Root Cause Analysis**:
 
@@ -228,11 +231,13 @@ doppler run --project aws-credentials --config prd -- \
 
 **Production Validation**: Second production run showed:
 
-```
+````
+
 Total files: 3
 Successful inserts: 3
 Failed inserts: 0
 ✅ All validation results written to ClickHouse
+
 ```yaml
 
 ---
@@ -242,9 +247,11 @@ Failed inserts: 0
 **Error**:
 
 ```
-##[warning]No files were found with the provided path: artifacts/*.json.
+
+##[warning]No files were found with the provided path: artifacts/\*.json.
 No artifacts will be uploaded.
-```python
+
+````python
 
 **Root Cause**: The `BUILD` command in Earthly doesn't automatically copy artifacts from child targets to parent target.
 
@@ -282,10 +289,12 @@ release-validation-pipeline:
 
 **Error**:
 
-```
+````
+
 Code: 344. DB::Exception: Only queries like `CREATE DATABASE <database>` are supported for creating database.
 Current query is CREATE DATABASE IF NOT EXISTS monitoring ENGINE = Ordinary. (SUPPORT_IS_DISABLED)
-```text
+
+````text
 
 **Root Cause**: ClickHouse Cloud has stricter SQL requirements than self-hosted ClickHouse. It doesn't support `IF NOT EXISTS` or `ENGINE` clauses in `CREATE DATABASE` statements.
 
@@ -326,13 +335,17 @@ doppler run --project aws-credentials --config prd -- \
 
 **Error**:
 
-```
+````
+
 Unable to fetch secrets
 Doppler Error: This token does not have access to requested project 'notifications'
+
 ---
+
 ❌ Failed to send Pushover notification
 Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
-```bash
+
+````bash
 
 **Root Cause**: The `DOPPLER_TOKEN` secret in GitHub Actions only has access to `aws-credentials` project, not `notifications` project.
 
@@ -403,7 +416,7 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
   },
   "environment": "production"
 }
-```
+````
 
 **Verification**: ✅ All fields correctly populated
 

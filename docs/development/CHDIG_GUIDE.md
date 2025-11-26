@@ -15,7 +15,7 @@
 
 ### Homebrew (macOS)
 
-```bash
+````bash
 brew install chdig
 ```text
 
@@ -294,13 +294,15 @@ chdig --host prod-clickhouse --port 9000 --secure --user monitor --password $MON
 
 **Example**:
 
-```
+````
+
 ┌────────────────────────────────────────────┐
-│          Aggregation (50%)                 │  <- Optimize this
+│ Aggregation (50%) │ <- Optimize this
 ├───────────┬────────────────────────────────┤
-│  Filter   │        JOIN                    │
-│   (10%)   │        (40%)                   │
+│ Filter │ JOIN │
+│ (10%) │ (40%) │
 └───────────┴────────────────────────────────┘
+
 ```text
 
 **Interpretation**: JOIN consumes 40% of CPU, aggregation 50% → Optimize JOIN first, then aggregation
@@ -313,12 +315,14 @@ chdig --host prod-clickhouse --port 9000 --secure --user monitor --password $MON
 **Example**:
 
 ```
+
 ┌────────────────────────────────────────────┐
-│      HashTable (80%)                       │  <- High memory usage
+│ HashTable (80%) │ <- High memory usage
 ├────────────────────────────────────────────┤
-│      GROUP BY                              │
+│ GROUP BY │
 └────────────────────────────────────────────┘
-```sql
+
+````sql
 
 **Interpretation**: GROUP BY hash table consuming 80% memory → Consider using LIMIT or pre-aggregation
 
@@ -412,7 +416,7 @@ open http://localhost:5521
 
 # Execute query in CH-UI
 # Watch performance in chdig (recent queries, flamegraph)
-```
+````
 
 ## Best Practices
 

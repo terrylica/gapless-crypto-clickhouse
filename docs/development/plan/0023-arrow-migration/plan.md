@@ -54,7 +54,7 @@ Alpha Forge Misunderstanding:
 
 **Dependencies**:
 
-```toml
+````toml
 clickhouse-driver = ">=0.2.9"
 pandas = ">=2.0.0,<2.2.0"
 numpy = ">=1.23.2,<2.0.0"
@@ -182,7 +182,7 @@ with ClickHouseConnection() as conn:
        4. If fill_gaps: detect and fill gaps via REST API
        5. Return DataFrame (Arrow-optimized internally)
        """
-   ```
+````
 
 2. Create src/gapless_crypto_clickhouse/probe.py
    - Implement capability discovery for AI agents
@@ -200,7 +200,7 @@ with ClickHouseConnection() as conn:
 
 **Validation**:
 
-```bash
+````bash
 # Test auto-ingestion workflow
 .venv/bin/python -c "
 from gapless_crypto_clickhouse import query_ohlcv
@@ -246,7 +246,7 @@ print(probe.get_capabilities())
 
    ```bash
    .venv/bin/python benchmark_arrow_comparison.py > logs/0023-arrow-migration-$(date +%Y%m%d_%H%M%S).log 2>&1
-   ```
+````
 
 3. Analyze results
    - Accept if: ≥2x speedup (target: 3x)
@@ -255,7 +255,7 @@ print(probe.get_capabilities())
 
 **Validation**:
 
-```bash
+````bash
 # Expected output format:
 # Driver: clickhouse-driver | Rows: 721 | Time: 0.03s | Speed: 27,432 rows/s | Memory: 5.2 MB
 # Driver: clickhouse-connect+Arrow | Rows: 721 | Time: 0.01s | Speed: 82,000 rows/s | Memory: 1.3 MB
@@ -308,7 +308,7 @@ from gapless_crypto_clickhouse import query_ohlcv
 df = query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
 print(f'Success: {len(df)} rows')
 "
-```
+````
 
 **Acceptance Criteria**:
 

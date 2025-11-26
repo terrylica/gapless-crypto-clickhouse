@@ -38,40 +38,40 @@ Systematic rectification of ~1,140 documentation issues identified by 9-agent pa
 
 ### Agent Findings Summary
 
-| Agent | Focus | Critical Issues |
-|-------|-------|-----------------|
-| #1 | Broken links | 105 broken (26% failure rate) |
-| #2 | Outdated content | release-notes.md wrong package |
-| #3 | Code examples | 3 broken examples in python-api.md |
-| #4 | API alignment | Method name mismatch, missing sections |
-| #5 | Architecture | 7 critical OVERVIEW.md errors |
-| #6 | Terminology | 283 package name violations |
-| #7 | Formatting | 530+ code blocks without language tags |
-| #8 | Completeness | PASS - all ADRs/plans exist |
-| #9 | Cross-references | ADR-0037 duplicates (kept per user) |
+| Agent | Focus            | Critical Issues                        |
+| ----- | ---------------- | -------------------------------------- |
+| #1    | Broken links     | 105 broken (26% failure rate)          |
+| #2    | Outdated content | release-notes.md wrong package         |
+| #3    | Code examples    | 3 broken examples in python-api.md     |
+| #4    | API alignment    | Method name mismatch, missing sections |
+| #5    | Architecture     | 7 critical OVERVIEW.md errors          |
+| #6    | Terminology      | 283 package name violations            |
+| #7    | Formatting       | 530+ code blocks without language tags |
+| #8    | Completeness     | PASS - all ADRs/plans exist            |
+| #9    | Cross-references | ADR-0037 duplicates (kept per user)    |
 
 ### User Decisions
 
-| Decision | Choice |
-|----------|--------|
+| Decision            | Choice              |
+| ------------------- | ------------------- |
 | Package names (283) | Fix all except ADRs |
-| Code blocks (530+) | Fix all |
-| Architecture (7) | Fix all now |
-| ADR-0037 duplicates | Keep both |
+| Code blocks (530+)  | Fix all             |
+| Architecture (7)    | Fix all now         |
+| ADR-0037 duplicates | Keep both           |
 
 ---
 
 ## Task List
 
-| # | Task | Status | Notes |
-|---|------|--------|-------|
-| 1 | Create ADR-0042 | Done | MADR format |
-| 2 | Create plan-0042 | Done | This file |
-| 3 | Fix OVERVIEW.md (7 errors) | Done | Column count, ORDER BY, scope |
-| 4 | Fix examples/README.md | Done | Package name, removed CLI refs |
-| 5 | Add code block language tags | Done | 816 blocks in 88 files |
-| 6 | Run build validation | Done | Package imports OK |
-| 7 | Create commit | Done | `241b9f0` - 91 files, +1054/-854 |
+| #   | Task                         | Status | Notes                            |
+| --- | ---------------------------- | ------ | -------------------------------- |
+| 1   | Create ADR-0042              | Done   | MADR format                      |
+| 2   | Create plan-0042             | Done   | This file                        |
+| 3   | Fix OVERVIEW.md (7 errors)   | Done   | Column count, ORDER BY, scope    |
+| 4   | Fix examples/README.md       | Done   | Package name, removed CLI refs   |
+| 5   | Add code block language tags | Done   | 816 blocks in 88 files           |
+| 6   | Run build validation         | Done   | Package imports OK               |
+| 7   | Create commit                | Done   | `241b9f0` - 91 files, +1054/-854 |
 
 ---
 
@@ -81,14 +81,14 @@ Systematic rectification of ~1,140 documentation issues identified by 9-agent pa
 
 **File**: `docs/architecture/OVERVIEW.md`
 
-| Line | Current | Correct |
-|------|---------|---------|
-| ~124 | 17 columns | 18 columns (+funding_rate) |
-| ~131 | data_source="binance_public_data" | data_source="cloudfront" |
+| Line | Current                                    | Correct                                                           |
+| ---- | ------------------------------------------ | ----------------------------------------------------------------- |
+| ~124 | 17 columns                                 | 18 columns (+funding_rate)                                        |
+| ~131 | data_source="binance_public_data"          | data_source="cloudfront"                                          |
 | ~155 | PRIMARY KEY (symbol, timeframe, timestamp) | ORDER BY (symbol, timeframe, toStartOfHour(timestamp), timestamp) |
-| ~157 | ORDER BY timestamp DESC | Ascending (per ADR-0034) |
-| ~275 | Futures: Out of Scope | Production-ready (713 symbols) |
-| ~278 | Database: Out of Scope | Primary storage backend |
+| ~157 | ORDER BY timestamp DESC                    | Ascending (per ADR-0034)                                          |
+| ~275 | Futures: Out of Scope                      | Production-ready (713 symbols)                                    |
+| ~278 | Database: Out of Scope                     | Primary storage backend                                           |
 
 ### Phase 2: Code Example Fixes
 
@@ -107,13 +107,15 @@ atomic_ops.write_dataframe_atomic(df, include_headers=True)
 **Pattern**: `gapless-crypto-data` → `gapless-crypto-clickhouse`
 
 **Exclusions**:
+
 - `docs/architecture/decisions/*.md` (historical context)
 - `~/.cache/gapless-crypto-data/` paths (ADR-0012)
 
 ### Phase 4: Code Block Language Tags
 
 **Target files** (highest counts):
-1. deployment/*.md (128 blocks)
+
+1. deployment/\*.md (128 blocks)
 2. development/COMMANDS.md (24 blocks)
 3. development/CLI_MIGRATION_GUIDE.md (28 blocks)
 4. validation/QUERY_PATTERNS.md (24 blocks)
@@ -122,11 +124,11 @@ atomic_ops.write_dataframe_atomic(df, include_headers=True)
 
 ## Risk Assessment
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Incomplete find-replace | Medium | High | Grep validation post-fix |
-| Breaking working examples | Low | High | Test each example manually |
-| Large commit size | High | Low | Split into logical commits |
+| Risk                      | Likelihood | Impact | Mitigation                 |
+| ------------------------- | ---------- | ------ | -------------------------- |
+| Incomplete find-replace   | Medium     | High   | Grep validation post-fix   |
+| Breaking working examples | Low        | High   | Test each example manually |
+| Large commit size         | High       | Low    | Split into logical commits |
 
 ---
 

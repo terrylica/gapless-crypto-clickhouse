@@ -76,7 +76,7 @@ Current pandas usage analysis:
 
 **Dependency Specification**:
 
-```toml
+````toml
 # pyproject.toml
 dependencies = [
     "numpy>=1.23.2,<2.0.0",  # NEW: Explicit NumPy 1.x constraint
@@ -162,7 +162,7 @@ dependencies = [
 # After v3.1.0 release
 pip install gapless-crypto-clickhouse>=3.1.0
 # → Installs with NumPy 1.x (compatible with TA-Lib)
-```
+````
 
 **For future NumPy 2.x support**:
 

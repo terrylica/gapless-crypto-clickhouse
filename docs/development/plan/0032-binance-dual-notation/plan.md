@@ -23,7 +23,7 @@ Fix test bug that incorrectly expects identity mapping for all timeframes, and a
 
 During ADR-0031 comprehensive validation, we added exotic timeframes (3d, 1w, 1mo) to `timeframe_constants.py`. However, `test_timeframe_constants.py` has a bug on lines 110-115 that expects ALL timeframes to have identity mapping:
 
-```python
+````python
 # CURRENT (WRONG)
 for timeframe in TIMEFRAME_TO_MINUTES.keys():
     assert TIMEFRAME_TO_BINANCE_INTERVAL[timeframe] == timeframe  # ❌ Fails for "1mo"
@@ -317,7 +317,7 @@ TIMEFRAME_TO_BINANCE_INTERVAL: Dict[str, str] = {
     "1w": "1w",   # Identity (exotic)
     "1mo": "1M",  # ← DUAL NOTATION for REST API
 }
-```
+````
 
 ### Test Files Affected
 

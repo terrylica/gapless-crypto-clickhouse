@@ -8,14 +8,14 @@ Accepted (2025-11-25)
 
 9-agent parallel audit revealed ~1,140 documentation issues across 110 files:
 
-| Category | Issues | Severity |
-|----------|--------|----------|
-| Package name violations | 283 | CRITICAL |
-| Code blocks without language tags | 530+ | HIGH |
-| Architecture inaccuracies | 7 | CRITICAL |
-| Broken code examples | 3 | CRITICAL |
-| Broken links | 105 | HIGH |
-| API documentation gaps | 6 | MODERATE |
+| Category                          | Issues | Severity |
+| --------------------------------- | ------ | -------- |
+| Package name violations           | 283    | CRITICAL |
+| Code blocks without language tags | 530+   | HIGH     |
+| Architecture inaccuracies         | 7      | CRITICAL |
+| Broken code examples              | 3      | CRITICAL |
+| Broken links                      | 105    | HIGH     |
+| API documentation gaps            | 6      | MODERATE |
 
 Root cause: Fork from `gapless-crypto-data` (ADR-0011) performed code rename but incomplete documentation update.
 

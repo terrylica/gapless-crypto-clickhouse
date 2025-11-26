@@ -21,7 +21,7 @@
 
 ### Via Docker (Bundled)
 
-```bash
+````bash
 # Already available in ClickHouse container
 docker exec gapless-clickhouse clickhouse-local --version
 ```text
@@ -354,7 +354,7 @@ clickhouse-local --query "SELECT * FROM file('data.txt', CSV)"
        max(timestamp) as end
      FROM file('binance_download.csv', CSV)
    "
-   ```
+````
 
 2. **Format Conversion**
 
@@ -388,7 +388,7 @@ clickhouse-local --query "SELECT * FROM file('data.txt', CSV)"
 
 ### File Not Found
 
-```bash
+````bash
 # Use absolute paths
 clickhouse-local --query "SELECT * FROM file('/full/path/to/data.csv', CSV)"
 
@@ -417,7 +417,7 @@ clickhouse-local --max_memory_usage 10000000000 --query "SELECT * FROM file('lar
 
 # Use streaming (no memory limit)
 cat large.csv | clickhouse-local --input-format CSV --query "SELECT count() FROM table"
-```
+````
 
 ## Next Steps
 

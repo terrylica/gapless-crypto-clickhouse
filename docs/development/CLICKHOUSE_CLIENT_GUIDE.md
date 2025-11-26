@@ -12,7 +12,7 @@
 
 ### Via Docker (Recommended)
 
-```bash
+````bash
 # Interactive mode
 docker exec -it gapless-clickhouse clickhouse-client
 
@@ -436,7 +436,7 @@ ch --query "EXPLAIN AST SELECT ..." --format Pretty
 # Test in interactive mode (better error messages)
 ch
 > SELECT ...
-```
+````
 
 ## Best Practices
 

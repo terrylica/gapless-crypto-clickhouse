@@ -32,7 +32,7 @@ Transform the ClickHouse schema from "research-grade" (68% production-ready) to 
 
 **1.1 Backup Current State** (Safety First)
 
-```bash
+````bash
 # Verify current table structure
 doppler run --project aws-credentials --config prd -- uv run python -c "
 import clickhouse_connect, os
@@ -86,18 +86,20 @@ doppler run --project aws-credentials --config prd -- uv run python scripts/depl
 
 **Expected Output**:
 
-```
-✅ Dropped old table
-================================================================================
-ClickHouse Cloud Schema Deployment
-================================================================================
+````
+
+# ✅ Dropped old table
+
+# ClickHouse Cloud Schema Deployment
+
 ✅ Connected to ClickHouse Cloud
 ClickHouse version: 25.8.1.8702
 ✅ Schema deployed successfully!
 ✅ All critical columns validated successfully!
 ✅ Table engine: SharedReplacingMergeTree
 ✅ ORDER BY verified: (symbol, timeframe, toStartOfHour(timestamp), timestamp)
-```sql
+
+`````sql
 
 **1.4 Validate New ORDER BY**
 
@@ -237,7 +239,7 @@ doppler run --project aws-credentials --config prd -- uv run python scripts/depl
 # Verify deployment
 doppler run --project aws-credentials --config prd -- uv run python scripts/verify-schema.py
 ```text
-````
+`````
 
 ### Schema Design Rationale
 
@@ -276,7 +278,7 @@ git status
 
 **5.2 Commit with Breaking Change**
 
-```bash
+````bash
 git commit -m "$(cat <<'EOF'
 feat!: optimize schema ORDER BY for prop trading (symbol-first)
 
@@ -350,13 +352,16 @@ Following the initial ClickHouse Cloud schema deployment (completed earlier toda
 
 User clarified (via iterative Q&A) that the system is **NOT** a pre-populated data warehouse, but an **on-demand cache**:
 
-```
+````
+
 User Request Flow:
+
 1. User queries: "Give me BTCUSDT 1h data for 2024-01"
 2. Check ClickHouse: Does this data exist?
    ├─ YES → Return from cache (fast path)
    └─ NO → Download from Binance → Store in ClickHouse → Return
 3. Next query for same data: Served from cache (no download)
+
 ```
 
 **Data Sources** (Failover Control Protocol from data-source-manager):
@@ -535,3 +540,4 @@ The `toStartOfHour()` function creates hourly buckets:
 **Status**: ⏳ In Progress - Phase 1 (Schema Migration)
 
 **Next Step**: Update schema.sql with symbol-first ORDER BY
+```

@@ -19,7 +19,7 @@ Colima-optimized QuestDB deployment for macOS development environment.
 
 ### Install Colima and Docker CLI
 
-```bash
+````bash
 # Install Colima VM runtime
 brew install colima
 
@@ -48,13 +48,15 @@ colima status
 
 **Expected output**:
 
-```
+````
+
 INFO colima is running using QEMU
 arch: aarch64
 runtime: docker
 mountType: virtiofs
 socket: unix:///Users/username/.colima/default/docker.sock
-```bash
+
+````bash
 
 ### Verify Docker CLI
 
@@ -82,10 +84,12 @@ docker ps
 
 **Expected output**:
 
-```
-CONTAINER ID   IMAGE                    STATUS         PORTS
-abc123...      questdb/questdb:9.2.0    Up 10 seconds  0.0.0.0:9000->9000/tcp, ...
-```text
+````
+
+CONTAINER ID IMAGE STATUS PORTS
+abc123... questdb/questdb:9.2.0 Up 10 seconds 0.0.0.0:9000->9000/tcp, ...
+
+````text
 
 ### Verify QuestDB Health
 
@@ -127,17 +131,20 @@ psql -h localhost -p 8812 -U admin -d qdb \
 
 **Expected output**:
 
-```
+````
+
                    Table "ohlcv"
         Column              |  Type     | Nullable
+
 ----------------------------+-----------+----------
- timestamp                  | timestamp |
- symbol                     | symbol    |
- timeframe                  | symbol    |
- open                       | double    |
- ...
+timestamp | timestamp |
+symbol | symbol |
+timeframe | symbol |
+open | double |
+...
 Designated timestamp: timestamp
-```bash
+
+````bash
 
 ## Python Development Setup
 
@@ -386,7 +393,7 @@ docker-compose -f deployment/docker-compose.macos.yml up -d --force-recreate
 lsof -i :9000
 
 # Kill process or change port in docker-compose.macos.yml
-```
+````
 
 ## Resource Requirements
 

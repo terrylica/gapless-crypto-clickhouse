@@ -125,7 +125,7 @@ Query Interface (SQL/pandas)
 
 ### Basic Validation (No Persistence)
 
-```python
+````python
 from gapless_crypto_clickhouse.validation import CSVValidator
 
 validator = CSVValidator()
@@ -293,7 +293,7 @@ print(f"Status distribution: {stats['status_distribution']}")
 # Export for analysis
 df = storage.export_to_dataframe()
 correlation = df[["coverage_percentage", "total_errors"]].corr()
-```
+````
 
 ## Related Documentation
 

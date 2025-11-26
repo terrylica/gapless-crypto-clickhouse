@@ -43,7 +43,7 @@
 
 **Migration Path**:
 
-```python
+````python
 # v3.x (QuestDB - REMOVED)
 from gapless_crypto_clickhouse.questdb import QuestDBConnection
 from gapless_crypto_clickhouse.collectors.questdb_bulk_loader import QuestDBBulkLoader
@@ -482,7 +482,7 @@ import gapless_crypto_clickhouse as gcd
 # Test file-based API (should work on v3.3.0)
 df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-01-07")
 print(f"Rollback successful: {len(df)} bars downloaded")
-```
+````
 
 ### Step 4: Report Issue
 

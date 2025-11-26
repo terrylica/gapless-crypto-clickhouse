@@ -32,7 +32,7 @@ Native QuestDB and Python deployment for maximum performance. Recommended for pr
 
 ### System Preparation
 
-```bash
+````bash
 # Update system
 sudo apt update && sudo apt upgrade -y
 
@@ -559,7 +559,7 @@ acl.enabled=true
 # Access QuestDB Web Console
 # Navigate to Settings > Users
 # Add users with appropriate permissions
-```
+````
 
 ## Resource Requirements
 

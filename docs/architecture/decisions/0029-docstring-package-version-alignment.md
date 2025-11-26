@@ -168,7 +168,7 @@ Fix **probe**.py to document API-only interface:
 
 ### Automated Checks
 
-```bash
+````bash
 # Verify no gapless-crypto-data references (except intentional migration docs)
 grep -r "gapless-crypto-data" src/gapless_crypto_clickhouse/ | grep -v "__init__.py" | grep -v "CHANGELOG"
 
@@ -204,7 +204,7 @@ rm -rf ~/.cache/gapless-crypto-data/
 
 # Option 2: Migrate cache manually
 mv ~/.cache/gapless-crypto-data/ ~/.cache/gapless-crypto-clickhouse/
-```
+````
 
 This is acceptable because:
 

@@ -98,7 +98,7 @@ QuestDB provides official Docker images (`questdb/questdb`) built on Debian Book
 
 **Docker Compose Example**:
 
-```yaml
+````yaml
 volumes:
   - questdb_data:/var/lib/questdb
 ```python
@@ -464,7 +464,7 @@ docker run -d --name questdb \
 # Bare-metal or dedicated VM
 ./questdb.sh start -d /mnt/nvme/questdb
 # Maximum performance, zero Docker overhead
-```
+````
 
 ### Data Portability
 

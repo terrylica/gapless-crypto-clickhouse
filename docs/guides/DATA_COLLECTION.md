@@ -66,7 +66,7 @@ output_dir/
 
 ### Basic Collection
 
-```python
+````python
 from gapless_crypto_clickhouse import BinancePublicDataCollector
 
 collector = BinancePublicDataCollector()
@@ -225,7 +225,7 @@ report = validator.validate_csv_file("data/BTCUSDT-1h.csv", expected_timeframe="
 print(f"Validation: {report['validation_summary']}")
 print(f"Errors: {report['total_errors']}")
 print(f"Gaps: {report['datetime_validation']['gaps_found']}")
-```
+````
 
 ## Performance Characteristics
 

@@ -4,7 +4,7 @@ Cryptocurrency data collection with gap detection and filling capabilities. Prov
 
 ## Installation
 
-```bash
+````bash
 pip install gapless-crypto-data
 # or with uv
 uv add gapless-crypto-data
@@ -84,7 +84,7 @@ uv run gapless-crypto-data --symbol BTCUSDT,ETHUSDT --timeframes 1h,4h
 
 # Fill gaps in existing data
 uv run gapless-crypto-data --fill-gaps --directory ./data
-```
+````
 
 ## Key Features
 

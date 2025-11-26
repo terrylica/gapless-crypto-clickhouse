@@ -19,7 +19,7 @@ Add parameter aliases to support both `start`/`end` AND `start_date`/`end_date` 
 
 Current function-based API uses ambiguous parameter names:
 
-```python
+`````python
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 ```text
 
@@ -209,7 +209,7 @@ df = gcd.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30
 # Legacy form (still supported)
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 ```text
-````
+`````
 
 ````
 
@@ -278,7 +278,7 @@ def test_fetch_data_new_aliases():
 
 **Conflict Detection**:
 
-```python
+````python
 if start is not None and start_date is not None:
     raise ValueError(
         "Cannot specify both 'start' and 'start_date'. "
@@ -334,7 +334,7 @@ Examples:
 
 Raises:
     ValueError: If both 'start' and 'start_date' specified simultaneously
-```
+````
 
 ## Implementation Checklist
 

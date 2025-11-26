@@ -83,7 +83,7 @@ Overall: 93.1% validation success (469/504 checks passed)
 
 **Changes**:
 
-```python
+````python
 # Line 2 - Before
 """
 Gapless Crypto Data v2.15.3 - USDT spot market data collection...
@@ -235,7 +235,7 @@ grep -c "v4.0.0" src/gapless_crypto_clickhouse/__init__.py
 
 ```bash
 grep -q "Upgrading from v3.x" CHANGELOG.md && echo "PASS" || echo "FAIL"
-```
+````
 
 **Expected**: PASS (upgrade instructions present)
 

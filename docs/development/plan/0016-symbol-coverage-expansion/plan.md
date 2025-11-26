@@ -92,7 +92,7 @@ Add 14 new symbols (total: 20) with **mandatory dual coverage**:
 
 **Change**:
 
-```python
+````python
 # Before (6 symbols)
 self.known_symbols = {
     "BTCUSDT": "2017-08-17",
@@ -277,7 +277,7 @@ def test_futures_data_fetch_new_symbols():
         loader = ClickHouseBulkLoader(conn, instrument_type="futures")
         rows = loader.ingest_month("BNBUSDT", "1d", year=2024, month=1)
         assert rows > 0  # Should successfully ingest futures data
-```
+````
 
 ## Implementation Checklist
 

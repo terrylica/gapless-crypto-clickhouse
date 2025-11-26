@@ -155,7 +155,7 @@ service degradation independent of code changes.
 
 **Before commit** (local-first validation):
 
-```bash
+````bash
 uv run ruff check .
 uv run ruff format --check .
 uv run pytest -v --cov=src
@@ -171,7 +171,7 @@ uv run pytest -m integration
 
 ```bash
 doppler run --project aws-credentials --config prd -- uv run scripts/validate_clickhouse_cloud.py
-```
+````
 
 ## Consequences
 

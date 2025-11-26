@@ -37,7 +37,7 @@ v6.0.0 introduces Apache Arrow optimization for 2x faster queries at scale, unif
 
 **Before (v5.0.0)**:
 
-```python
+````python
 # Native TCP protocol (port 9000)
 CLICKHOUSE_PORT=9000  # Default
 ```text
@@ -407,7 +407,7 @@ export CLICKHOUSE_PORT=9000  # Native TCP
 
 # Restart ClickHouse if needed
 docker-compose restart clickhouse
-```
+````
 
 **Note**: v5.0.0 will be maintained for **3 months** (until 2025-02-20) for critical bug fixes only.
 

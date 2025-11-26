@@ -94,7 +94,7 @@ Nested data for detailed layer results:
 
 Optimized for common query patterns:
 
-```sql
+````sql
 -- Primary key
 PRIMARY KEY (validation_timestamp, file_path)
 
@@ -332,7 +332,7 @@ with duckdb.connect(str(db_path)) as conn:
     """).fetchdf()
 
     print(result)
-```
+````
 
 ## Related Documentation
 

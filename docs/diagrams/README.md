@@ -99,11 +99,12 @@ GitHub natively renders Mermaid diagrams from `.mmd` files when using code block
 ````markdown
 # Architecture Overview
 
-```mermaid
+````mermaid
 graph TD
     A[Start] --> B[Process]
     B --> C[End]
 ```text
+````
 ````
 
 ````
@@ -123,7 +124,7 @@ Copy the Mermaid syntax directly into your markdown document:
 ````markdown
 # Gap Filling Process
 
-```mermaid
+````mermaid
 flowchart TD
     Start([CSV file with gaps]) --> DetectFormat[Detect CSV format]
     DetectFormat --> ScanGaps[Scan for timestamp gaps]
@@ -131,6 +132,7 @@ flowchart TD
     FillGaps --> Validate[Validate merge]
     Validate --> Complete([Zero gaps achieved])
 ```text
+````
 ````
 
 ````
@@ -161,9 +163,10 @@ Install the "Markdown Preview Mermaid Support" extension to preview diagrams dir
 
 The `BinancePublicDataCollector` follows this flow:
 
-```mermaid
+````mermaid
 [Copy from 01-collection-pipeline.mmd]
 ```text
+````
 ````
 
 See `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py` for implementation.
@@ -243,7 +246,7 @@ Simply use triple backtick code blocks with `mermaid` language identifier.
 
 **MkDocs**: Install `mkdocs-mermaid2-plugin`
 
-```yaml
+````yaml
 # mkdocs.yml
 plugins:
   - mermaid2
@@ -254,7 +257,7 @@ plugins:
 ```python
 # conf.py
 extensions = ['sphinxcontrib.mermaid']
-```
+````
 
 **Docusaurus**: Native Mermaid support in v2.0+
 

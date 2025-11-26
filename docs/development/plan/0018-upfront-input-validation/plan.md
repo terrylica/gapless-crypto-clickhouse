@@ -19,7 +19,7 @@ Add upfront input validation with actionable error messages to catch invalid inp
 
 Current API performs minimal validation before executing operations:
 
-```python
+````python
 # Invalid symbol - fails during data collection (5+ seconds delay)
 df = gcd.download("BTCUSD", "1h")  # Network request → 404 → "No data found"
 
@@ -76,10 +76,12 @@ df = gcd.download("BTCUSD", "1h")
 
 **Error Message Pattern**:
 
-```
+````
+
 ValueError: Invalid <parameter> '<value>'. <Suggestion>
 Supported <parameters>: <list> (see <function>())
-```text
+
+````text
 
 ### Implementation Details
 
@@ -368,7 +370,7 @@ class TestFetchDataValidation:
         """fetch_data() validates date formats."""
         with pytest.raises(ValueError, match="Invalid start format"):
             gcd.fetch_data("BTCUSDT", "1h", start="2024/01/01")
-```
+````
 
 ## Implementation Checklist
 

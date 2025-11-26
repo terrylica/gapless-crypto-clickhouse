@@ -19,7 +19,7 @@ Complete guide to setting up a local development environment for gapless-crypto-
 
 **uv**: Fast Python package manager and project manager
 
-```bash
+````bash
 # Install uv (macOS/Linux)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
@@ -205,9 +205,11 @@ Main project configuration:
 
 Python version specification for `uv`:
 
-```
+````
+
 3.12
-```bash
+
+````bash
 
 **Effect**: `uv` automatically uses Python 3.12 for this project
 
@@ -334,7 +336,7 @@ uv sync --dev
 ```bash
 uv run pre-commit install
 uv run pre-commit run --all-files
-```
+````
 
 ## SLOs (Service Level Objectives)
 

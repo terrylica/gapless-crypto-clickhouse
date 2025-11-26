@@ -39,7 +39,7 @@ Alpha Forge Integration Team provided comprehensive feedback (7 parallel agents,
 
 All 29 source files compiled successfully with Python 3.11:
 
-```bash
+````bash
 $ uv venv --python 3.11 /tmp/test-py311-venv
 $ source /tmp/test-py311-venv/bin/activate
 $ python -m compileall src/gapless_crypto_clickhouse/ -q
@@ -156,7 +156,7 @@ Ref: Alpha Forge Integration Feedback (2025-11-19)"
 # semantic-release will create v2.3.0
 npm run release
 ./scripts/publish-to-pypi.sh
-```
+````
 
 ## Validation Criteria
 

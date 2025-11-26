@@ -19,7 +19,7 @@ All examples use `ValidationStorage` from `src/gapless_crypto_clickhouse/validat
 
 Query most recent validation reports:
 
-```python
+````python
 from gapless_crypto_clickhouse.validation import ValidationStorage
 
 storage = ValidationStorage()
@@ -380,7 +380,7 @@ print(f"Baseline avg errors: {baseline['total_errors'].mean():.2f}")
 
 if recent['total_errors'].mean() > baseline['total_errors'].mean():
     print("⚠️  Quality regression detected")
-```
+````
 
 ## SLOs (Service Level Objectives)
 

@@ -178,7 +178,7 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 
 **Validation**:
 
-```bash
+````bash
 # Check no old imports remain
 grep -r "from gapless_crypto_clickhouse" src/ tests/ examples/
 grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
@@ -297,9 +297,9 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
    ```bash
    grep -r "gapless-crypto-data" . --exclude-dir=.git --exclude-dir=.venv --exclude-dir=node_modules
    grep -r "gapless_crypto_clickhouse" . --exclude-dir=.git --exclude-dir=.venv
-   ```
+````
 
-   Expected: Only historical references in CHANGELOGs/ADRs
+Expected: Only historical references in CHANGELOGs/ADRs
 
 2. **Import validation**:
 
@@ -446,7 +446,7 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 
 **Validation**:
 
-```bash
+````bash
 pip install gapless-crypto-clickhouse
 python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__version__)"
 # Expected: 1.0.0
@@ -467,7 +467,7 @@ python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__v
    ## Related Packages
 
    For ClickHouse database workflows, see [gapless-crypto-clickhouse](https://pypi.org/project/gapless-crypto-clickhouse/) - optimized for persistent storage, multi-symbol queries, and production data pipelines.
-   ```
+````
 
 2. **Create GitHub Discussion** (in `gapless-crypto-clickhouse`):
    - Title: "gapless-crypto-clickhouse v1.0.0 Released"

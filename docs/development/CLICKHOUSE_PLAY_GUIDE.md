@@ -33,7 +33,7 @@ ClickHouse Play is a built-in web interface that ships with ClickHouse 20.11+ fo
 
 ### 1. Open Play UI
 
-```bash
+````bash
 open http://localhost:8123/play
 ```text
 
@@ -143,9 +143,11 @@ ORDER BY timestamp
 
 Play UI encodes queries in the URL for easy sharing:
 
-```
+````
+
 http://localhost:8123/play#<base64-encoded-query>
-```sql
+
+````sql
 
 **Example**:
 
@@ -198,7 +200,7 @@ open http://localhost:5521
 
 # OR clickhouse-client
 docker exec -it gapless-clickhouse clickhouse-client
-```
+````
 
 ## Comparison with Other Tools
 

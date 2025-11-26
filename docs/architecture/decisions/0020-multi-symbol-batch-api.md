@@ -12,7 +12,7 @@ Alpha Forge AI agents identified a HIGH PRIORITY improvement: Multi-symbol batch
 
 **Current State**: Users must loop over symbols sequentially
 
-```python
+````python
 # Current approach - slow for multiple symbols
 dataframes = {}
 for symbol in ["BTCUSDT", "ETHUSDT", "SOLUSDT"]:
@@ -289,7 +289,7 @@ results = gcd.download_multiple(
     start_date="2024-01-01"
 )
 # → Fast (20 symbols ≈ 1-2x sequential time with concurrency)
-```
+````
 
 ## References
 

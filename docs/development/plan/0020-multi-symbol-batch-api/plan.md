@@ -20,7 +20,7 @@ Add multi-symbol batch download API with concurrent execution to provide 10-20x 
 
 Current API requires sequential loops for multiple symbols:
 
-```python
+````python
 # Current approach - slow
 dataframes = {}
 for symbol in ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"]:
@@ -327,10 +327,12 @@ results = download_multiple(["INVALID1", "INVALID2", "INVALID3"])
 
 **Benchmark Expected**:
 
-```
+````
+
 Sequential (5 symbols): ~50 seconds
 Concurrent (5 symbols, max_workers=5): ~10-12 seconds
 Speedup: 4-5x
+
 ```
 
 ### Resource Management
@@ -467,3 +469,4 @@ Implementation logs stored in:
 ---
 
 **Plan 0020** | Multi-Symbol Batch API | In Progress | 2025-11-19
+```

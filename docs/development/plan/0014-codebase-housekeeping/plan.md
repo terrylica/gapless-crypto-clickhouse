@@ -53,7 +53,7 @@ Execute 4-phase housekeeping with conservative approach:
 
 **Changes**:
 
-```markdown
+`````markdown
 # Remove entire section (lines 125-154)
 
 ### CLI Removed in v4.0.0
@@ -70,7 +70,8 @@ Execute 4-phase housekeeping with conservative approach:
 # Add clarification note
 
 - **Note**: This package never included a CLI (unlike parent package `gapless-crypto-data`). It provides a Python API only.
-```text
+
+`````text
 
 **Validation**: Search README.md for "v4.0" → 0 results
 
@@ -208,8 +209,8 @@ version = "1.0.0"  # May need manual sync with git tags
 - pytest-playwright-asyncio requires session-scoped event loop configuration:
 -
 - ```ini
-
-  ```
+`````
+`````
 
 - # pytest.ini
 - asyncio_mode = auto
@@ -220,7 +221,8 @@ version = "1.0.0"  # May need manual sync with git tags
 
 -
 - All E2E tests must use `@pytest.mark.asyncio(loop_scope="session")` to ensure compatibility with Playwright's async fixtures.
-````
+
+`````
 
 **Validation**: All E2E test examples show loop_scope parameter
 
@@ -250,7 +252,7 @@ version = "1.0.0"  # May need manual sync with git tags
 docker-compose up -d
 uv run pytest tests/e2e/ -v
 ```text
-````
+`````
 
 See `.github/workflows/ci.yml` lines 131-132 for CI configuration.
 
@@ -348,7 +350,7 @@ tmp/full-validation/code-quality/pre-commit.txt
 
 **Execution**:
 
-```bash
+````bash
 rm tmp/clickhouse_*.py tmp/clickhouse_*_results.txt tmp/comprehensive_*.txt
 rm -rf tmp/full-validation/test-coverage/*.{json,txt}
 rm -rf tmp/full-validation/build-distribution/*.txt
@@ -509,7 +511,7 @@ test -d tmp/archive/2025-11-clickhouse-migration && echo "✅ Archive created"
 
 # 5. Verify archive contents
 test $(find tmp/archive/2025-11-clickhouse-migration -type f | wc -l) -eq 13 && echo "✅ Archive has 12 files + README"
-```
+````
 
 **Manual Review**:
 

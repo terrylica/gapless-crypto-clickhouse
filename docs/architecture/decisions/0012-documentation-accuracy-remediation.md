@@ -72,7 +72,7 @@ Comprehensive 5-agent documentation audit (2025-11-19) revealed **systematic acc
 
 **Scope**:
 
-```bash
+`````bash
 # Find-and-replace in documentation
 find docs/ examples/ -name "*.md" -o -name "*.py" | \
   xargs sed -i '' 's/gapless_crypto_clickhouse/gapless_crypto_clickhouse/g'
@@ -233,11 +233,11 @@ find docs/ -name "*.md" -exec \
   grep -Pzo '```python\n\K.*?(?=\n```)' {} \; | \
   python -m py_compile -
 # Expected: No SyntaxError
-````
+`````
 
 **Test Suite**:
 
-```bash
+````bash
 uv run pytest tests/ -v
 # Expected: All tests pass
 ```python
@@ -343,7 +343,8 @@ uv run pytest tests/ -v
 
 **Commit Message**:
 
-```
+````
+
 docs: fix systematic package name inconsistencies across all documentation
 
 BREAKING CHANGE: Documentation examples now use correct gapless_crypto_clickhouse imports.
@@ -353,6 +354,7 @@ Adds missing ClickHouse architecture documentation.
 Removes obsolete CLI migration guide references.
 
 Agent investigation findings: tmp/doc-audit/ (5 parallel agents)
+
 ```
 
 **Expected Release**: Patch version (v1.0.1) - documentation-only changes
@@ -371,3 +373,4 @@ Agent investigation findings: tmp/doc-audit/ (5 parallel agents)
 ## Approval Date
 
 2025-11-19 (implementing immediately)
+```

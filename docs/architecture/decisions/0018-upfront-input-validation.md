@@ -14,7 +14,7 @@ Current API performs minimal input validation before making expensive network/da
 
 **Current Behavior**:
 
-```python
+````python
 # Invalid symbol - fails during data collection
 df = gcd.download("INVALIDPAIR", "1h")  # Network request → 404 → unclear error
 
@@ -251,7 +251,7 @@ def test_invalid_date_format_raises_helpful_error():
     """Invalid date format raises ValueError with example."""
     with pytest.raises(ValueError, match="Expected format: YYYY-MM-DD"):
         gcd.download("BTCUSDT", "1h", start="2024/01/01")
-```
+````
 
 ## Validation Criteria
 

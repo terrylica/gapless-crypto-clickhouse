@@ -37,7 +37,7 @@ ADR-0008 validation (VALIDATION_REPORT.md) identified a port conflict preventing
 
 **Container State**:
 
-```bash
+````bash
 $ docker ps | grep -E "clickhouse|questdb|ch-ui"
 gapless-clickhouse   Up 7 hours   0.0.0.0:9001->9000/tcp, 0.0.0.0:8124->8123/tcp
 gapless-questdb      Up 33 hours  0.0.0.0:9000->9000/tcp
@@ -181,7 +181,7 @@ curl -sf http://localhost:5521 | grep -q "CH-UI"
 
 ```bash
 bash scripts/validate-clickhouse-tools.sh
-```
+````
 
 **Expected**: 6/6 critical tests passed (was 5/5 before, now includes CH-UI)
 

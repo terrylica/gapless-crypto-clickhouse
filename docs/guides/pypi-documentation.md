@@ -6,7 +6,7 @@ Cryptocurrency data collection with function-based API and 11-column microstruct
 
 ### Installation
 
-```bash
+````bash
 pip install gapless-crypto-data
 ```text
 
@@ -468,4 +468,4 @@ pip install gapless-crypto-data
 import gapless_crypto_clickhouse as gcd
 df = gcd.download("BTCUSDT", "1h", limit=1000)
 print(f"Fetched {len(df)} bars with {df.shape[1]} columns of microstructure data")
-```
+````

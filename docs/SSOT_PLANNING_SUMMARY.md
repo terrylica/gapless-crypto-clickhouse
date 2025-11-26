@@ -58,7 +58,7 @@ The following topics are currently mixed into CLAUDE.md (476 lines):
 
 ### Proposed Hub Structure (CLAUDE.md - 50-70 lines)
 
-```markdown
+````markdown
 # CLAUDE.md
 
 ## Project Overview
@@ -88,7 +88,8 @@ The following topics are currently mixed into CLAUDE.md (476 lines):
 
 - Essential commands
 - Link to docs/development/COMMANDS.md
-```bash
+
+````bash
 
 ### Proposed Spoke Categories
 
@@ -199,7 +200,8 @@ last_updated: "2025-10-20"
 canonical_source: true
 supersedes: []
 ---
-```
+````
+````
 
 **Properties**:
 

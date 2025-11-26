@@ -46,7 +46,7 @@ Chosen option: **Upgrade pandas to 2.2+**
 
 **Changes Required**:
 
-```toml
+````toml
 # pyproject.toml (line 45)
 # BEFORE
 "pandas>=2.0.0,<2.2.0",  # Upper bound for NumPy 1.x compatibility
@@ -111,17 +111,19 @@ uv run pytest --cov=src/gapless_crypto_clickhouse --cov-report=term -v
 
 **Python 3.14 + pandas 2.1.4 (FAILS)**:
 
-```
+````
+
 error: too few arguments to function call, expected 6, have 5
-_PyLong_AsByteArray((PyLongObject *)v, bytes, sizeof(val), is_little, !is_unsigned);
-```bash
+\_PyLong_AsByteArray((PyLongObject \*)v, bytes, sizeof(val), is_little, !is_unsigned);
+
+````bash
 
 **Python 3.14 + pandas 2.2+ (PASSES)**:
 
 ```bash
 uv run pytest tests/test_timeframe_constants.py -v
 → All tests pass ✅
-```
+````
 
 ## Links
 

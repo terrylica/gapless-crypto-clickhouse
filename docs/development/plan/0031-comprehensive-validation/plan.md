@@ -52,7 +52,7 @@ Validate from clean slate that gapless-crypto-clickhouse repository is working c
 
 **1.1 Environment Health**
 
-```bash
+````bash
 python --version  # Verify 3.12+
 uv --version
 uv sync --dev
@@ -307,7 +307,7 @@ available_timeframes = [
     "1h", "2h", "4h", "6h", "8h", "12h", "1d",
     "3d", "1w", "1mo"  # ← Exotic timeframes ARE implemented
 ]
-```
+````
 
 **Verdict**: Implementation HAS 16 timeframes. Constants file incomplete (missing 3).
 

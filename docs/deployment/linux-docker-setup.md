@@ -56,7 +56,7 @@ Otherwise, use native deployment (see `linux-native-setup.md`).
 
 ### Install Docker Engine
 
-```bash
+````bash
 # Remove old versions
 sudo apt remove docker docker-engine docker.io containerd runc
 
@@ -590,7 +590,7 @@ sudo systemctl enable gapless-crypto-collector
 # Verify
 sudo systemctl is-enabled gapless-crypto-collector
 # Expected: enabled
-```
+````
 
 ## Resource Requirements
 

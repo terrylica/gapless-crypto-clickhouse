@@ -27,7 +27,7 @@ Alpha Forge Integration Team (95% compatibility assessment, 2-3 hour estimated i
 
 Empirical testing confirms **zero technical blockers**:
 
-```bash
+````bash
 # All 29 source files compile successfully
 $ python3.11 -m compileall src/gapless_crypto_clickhouse/ -q
 ✅ No syntax errors
@@ -170,7 +170,7 @@ uv run scripts/run_validation.py --ci
 # Clean install test (after PyPI publish)
 pip install gapless-crypto-clickhouse==2.3.0
 python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__version__)"
-```
+````
 
 ## Implementation Checklist
 

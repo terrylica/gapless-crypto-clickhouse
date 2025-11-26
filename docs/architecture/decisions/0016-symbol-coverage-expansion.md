@@ -113,7 +113,7 @@ Current package supports only 6 symbols for data collection, limiting cross-sect
 
 **Current Code** (lines 280-287):
 
-```python
+````python
 self.known_symbols = {
     "BTCUSDT": "2017-08-17",
     "ETHUSDT": "2017-08-17",
@@ -253,7 +253,7 @@ def test_listing_date_validation():
         end_date="2024-01-01"
     )
     # Should issue warning about pre-listing date
-```
+````
 
 ## Validation Criteria
 

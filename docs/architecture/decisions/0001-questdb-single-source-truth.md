@@ -39,7 +39,7 @@ Replace file-based storage with **QuestDB time-series database** as the single s
 
 **Single unified table** (not 5,200 separate tables):
 
-```sql
+````sql
 CREATE TABLE ohlcv (
     timestamp TIMESTAMP,
     symbol SYMBOL capacity 512,
@@ -77,10 +77,12 @@ CREATE TABLE ohlcv (
 
 **Data Flow**:
 
-```
+````
+
 CloudFront ZIPs → Extract → Pandas → ILP → QuestDB (preserve 22x speedup)
 Binance WebSocket → Parse → ILP → QuestDB (new capability)
 Binance REST API → Parse → ILP → QuestDB (gap filling)
+
 ```
 
 ## Consequences
@@ -226,3 +228,4 @@ See `docs/development/plan/0001-questdb-refactor/plan.yaml` for detailed impleme
 - **Authors**: gapless-crypto-data team
 - **Status**: Accepted
 - **Related Plans**: docs/development/plan/0001-questdb-refactor/plan.yaml
+```

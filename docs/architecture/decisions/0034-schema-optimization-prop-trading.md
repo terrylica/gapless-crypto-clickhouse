@@ -140,7 +140,7 @@ Implement symbol-first ORDER BY and partition-aware FINAL optimization. Deploy P
 
 **Phase 1: Schema Migration (P0 - CRITICAL)**
 
-```sql
+````sql
 -- Drop existing table (safe - table is empty or nearly empty from today's deployment)
 DROP TABLE IF EXISTS ohlcv;
 
@@ -354,7 +354,7 @@ SELECT COUNT(*) FROM ohlcv WHERE symbol = 'BTCUSDT';
 -- With FINAL (should be <5% slower with new settings)
 SELECT COUNT(*) FROM ohlcv FINAL WHERE symbol = 'BTCUSDT';
 -- Expected: ~1.02-1.05X ms (2-5% overhead)
-```
+````
 
 ---
 

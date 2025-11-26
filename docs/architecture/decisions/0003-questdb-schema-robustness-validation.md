@@ -121,7 +121,7 @@ Based on lessons learned from Phase 1 spot validation:
 
 **Code change** (questdb_bulk_loader.py:105-123):
 
-```python
+````python
 SUPPORTED_TIMEFRAMES = [
     "1s", "1m", "3m", "5m", "15m", "30m",
     "1h", "2h", "4h", "6h", "8h", "12h", "1d",
@@ -496,17 +496,19 @@ SUPPORTED_TIMEFRAMES = [
 
 ### Data Flow
 
-```
+````
+
 CLI multi-symbol command
-  → BinancePublicDataCollector (5 symbols × 16 timeframes × 122 days)
-    → CloudFront CDN download (ZIP files)
-      → CSV extraction and validation
-        → Polars lazy frame processing (memory-efficient streaming)
-          → QuestDB ILP ingestion (psycopg wire protocol)
-            → ohlcv table (DEDUP on composite key)
-              → 6 validation agents (parallel queries)
-                → Comprehensive validation report
-```text
+→ BinancePublicDataCollector (5 symbols × 16 timeframes × 122 days)
+→ CloudFront CDN download (ZIP files)
+→ CSV extraction and validation
+→ Polars lazy frame processing (memory-efficient streaming)
+→ QuestDB ILP ingestion (psycopg wire protocol)
+→ ohlcv table (DEDUP on composite key)
+→ 6 validation agents (parallel queries)
+→ Comprehensive validation report
+
+````text
 
 ### Execution Plan
 
@@ -539,7 +541,7 @@ phases:
       - Schema extension design (if needed)
       - Implementation effort estimate
       - Risk assessment for futures support
-```
+````
 
 ## Consequences
 

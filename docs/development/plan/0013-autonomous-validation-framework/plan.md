@@ -111,7 +111,7 @@ Layer 5: Benchmarking (performance regression detection) [FUTURE]
 
 **Execution Flow**:
 
-```python
+````python
 #!/usr/bin/env python3
 # /// script
 # requires-python = ">=3.12"
@@ -139,13 +139,15 @@ Layer 5: Benchmarking (performance regression detection) [FUTURE]
 
 **Test Organization**:
 
-```
+````
+
 tests/e2e/
-├── conftest.py                 # Shared fixtures
-├── test_ch_ui_dashboard.py     # 24 tests for CH-UI
-├── test_clickhouse_play.py     # 24 tests for ClickHouse Play
-└── screenshots/                # Reference baselines (git-tracked)
-```bash
+├── conftest.py # Shared fixtures
+├── test_ch_ui_dashboard.py # 24 tests for CH-UI
+├── test_clickhouse_play.py # 24 tests for ClickHouse Play
+└── screenshots/ # Reference baselines (git-tracked)
+
+````bash
 
 **Test Coverage Matrix** (per interface):
 
@@ -184,7 +186,7 @@ jobs:
       - Wait for health checks (ClickHouse, CH-UI)
       - Run: uv run scripts/run_validation.py --e2e-only --ci
       - Upload artifacts on failure (screenshots, traces)
-```
+````
 
 **Optimizations**:
 

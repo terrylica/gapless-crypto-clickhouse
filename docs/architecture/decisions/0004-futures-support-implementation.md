@@ -55,7 +55,7 @@ ADR-0003 validated the QuestDB schema's production-readiness at 53.7M row scale 
 
 Add `instrument_type` SYMBOL column to existing `ohlcv` table:
 
-```sql
+````sql
 -- Migration: docs/migrations/0004-add-instrument-type-column.sql
 ALTER TABLE ohlcv ADD COLUMN instrument_type SYMBOL CAPACITY 2 CACHE;
 
@@ -151,7 +151,7 @@ def get_ohlcv(
 )
 def main(symbol, timeframe, start_date, end_date, instrument_type):
     loader = QuestDBBulkLoader(conn, instrument_type=instrument_type)
-```
+````
 
 ### Migration Strategy
 

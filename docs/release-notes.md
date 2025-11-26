@@ -48,7 +48,7 @@ We're excited to announce gapless-crypto-data v2.0.1, featuring automatic gap fi
 
 ### Using UV (Recommended)
 
-```bash
+````bash
 uv add gapless-crypto-data
 ```text
 
@@ -222,7 +222,7 @@ uv run gapless-crypto-data --symbol BTCUSDT --timeframes 1h
 # ⭐ Star the repo: https://github.com/terrylica/gapless-crypto-data
 # 🐛 Report issues: https://github.com/terrylica/gapless-crypto-clickhouse/issues
 # 💬 Discussions: https://github.com/terrylica/gapless-crypto-clickhouse/discussions
-```
+````
 
 ---
 

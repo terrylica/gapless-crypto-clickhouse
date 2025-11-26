@@ -46,7 +46,7 @@ query_ohlcv() workflow:
 
 The TODO block currently logs a warning but doesn't fill gaps:
 
-```python
+````python
 if len(gaps) > 0:
     logger.info(f"{sym}: Detected {len(gaps)} gaps, filling via REST API")
     # TODO: Implement gap filling via REST API
@@ -118,7 +118,7 @@ dependencies = [
     ...
     "tenacity>=8.0.0",  # Retry logic for REST API gap filling
 ]
-```
+````
 
 ---
 

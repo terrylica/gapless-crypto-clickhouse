@@ -32,7 +32,7 @@ Current documentation claims "USDT-margined futures support (400+ symbols)" but 
 
 **Architecture**:
 
-```python
+````python
 # API Layer
 def download(
     symbol: str,
@@ -237,7 +237,7 @@ class FuturesDataCollector(BinancePublicDataCollector):
    ALTER TABLE ohlcv
    ADD COLUMN IF NOT EXISTS funding_rate Nullable(Float64) CODEC(Gorilla, LZ4)
    AFTER taker_buy_quote_asset_volume;
-   ```
+````
 
 **Rationale**:
 
@@ -258,7 +258,7 @@ class FuturesDataCollector(BinancePublicDataCollector):
 
 **Schema**:
 
-```sql
+````sql
 -- Before (INCORRECT after Jan 1, 2025)
 timestamp DateTime64(3)  -- Millisecond precision
 
@@ -373,7 +373,7 @@ AFTER taker_buy_quote_asset_volume;
 
 -- Verify schema
 DESCRIBE TABLE ohlcv;
-```
+````
 
 **Column Characteristics**:
 

@@ -31,7 +31,7 @@ adr: "ADR-0027"
 
 ### Step 1: Development & Commit (Conventional Commits)
 
-```bash
+````bash
 # Make your changes
 git add .
 
@@ -89,31 +89,32 @@ git pull origin main
 
 **Expected output**:
 
-```
-🚀 Publishing to PyPI (Local Workflow)
-======================================
+````
+
+# 🚀 Publishing to PyPI (Local Workflow)
 
 🔐 Step 0: Verifying Doppler credentials...
-   ✅ Doppler token verified
+✅ Doppler token verified
 
 📥 Step 1: Pulling latest release commit...
-   Current version: v7.1.0
+Current version: v7.1.0
 
 🧹 Step 2: Cleaning old builds...
-   ✅ Cleaned
+✅ Cleaned
 
 📦 Step 3: Building package...
-   ✅ Built: dist/gapless_crypto_clickhouse-7.1.0-py3-none-any.whl
-   ✅ Built: dist/gapless_crypto_clickhouse-7.1.0.tar.gz
+✅ Built: dist/gapless_crypto_clickhouse-7.1.0-py3-none-any.whl
+✅ Built: dist/gapless_crypto_clickhouse-7.1.0.tar.gz
 
 📤 Step 4: Publishing to PyPI...
-   Using PYPI_TOKEN from Doppler
-   ✅ Published to PyPI
+Using PYPI_TOKEN from Doppler
+✅ Published to PyPI
 
 🔍 Step 5: Verifying on PyPI...
-   ✅ Verified: https://pypi.org/project/gapless-crypto-clickhouse/7.1.0/
+✅ Verified: https://pypi.org/project/gapless-crypto-clickhouse/7.1.0/
 
 ✅ Complete! Published v7.1.0 to PyPI in 28 seconds
+
 ```text
 
 **Done!** Package is now live on PyPI.
@@ -123,6 +124,7 @@ git pull origin main
 ### What GitHub Actions Does (Versioning Only)
 
 ```
+
 .github/workflows/release.yml
 ├─ Trigger: Push to main branch
 ├─ Condition: Conventional commits detected (feat:, fix:, etc.)
@@ -131,16 +133,17 @@ git pull origin main
 ├─ Step 2: Setup Node.js + UV
 ├─ Step 3: Install semantic-release + plugins
 ├─ Step 4: Run semantic-release
-│  ├─ @semantic-release/commit-analyzer → Determine version
-│  ├─ @semantic-release/release-notes-generator → Generate CHANGELOG
-│  ├─ @semantic-release/changelog → Write CHANGELOG.md
-│  ├─ @semantic-release/exec::prepareCmd → Update versions in files
-│  ├─ @semantic-release/npm → Update package.json (npmPublish: false)
-│  ├─ @semantic-release/github → Create GitHub release
-│  └─ @semantic-release/git → Commit + tag + push
+│ ├─ @semantic-release/commit-analyzer → Determine version
+│ ├─ @semantic-release/release-notes-generator → Generate CHANGELOG
+│ ├─ @semantic-release/changelog → Write CHANGELOG.md
+│ ├─ @semantic-release/exec::prepareCmd → Update versions in files
+│ ├─ @semantic-release/npm → Update package.json (npmPublish: false)
+│ ├─ @semantic-release/github → Create GitHub release
+│ └─ @semantic-release/git → Commit + tag + push
 │
 └─ Result: GitHub release created, NO PyPI publishing
-```text
+
+````text
 
 **Key Configuration** (`.releaserc.json`):
 
@@ -155,7 +158,8 @@ git pull origin main
 
 ### What Local Script Does (Publishing Only)
 
-```
+````
+
 scripts/publish-to-pypi.sh
 ├─ Guard 1: CI detection (blocks if CI=true)
 ├─ Guard 2: Repository verification (prevents fork abuse)
@@ -166,7 +170,8 @@ scripts/publish-to-pypi.sh
 ├─ Step 3: Build package (uv build)
 ├─ Step 4: Publish to PyPI (uv publish with Doppler token)
 └─ Step 5: Verify publication on PyPI
-```python
+
+````python
 
 **Credential Management**:
 
@@ -287,11 +292,14 @@ doppler secrets set PYPI_TOKEN='your-token' --project claude-config --config prd
 
 **Symptom**:
 
-```
+````
+
 ❌ ERROR: This script must ONLY be run on your LOCAL machine
 Detected CI environment variables:
+
 - CI: true
-```text
+
+````text
 
 **Root Cause**: Running in CI environment OR `CI` variable set locally
 
@@ -411,7 +419,7 @@ uv publish --repository testpypi --token "${PYPI_TOKEN}"
 
 # After testing, change back to:
 uv publish --token "${PYPI_TOKEN}"
-```
+````
 
 **Better**: Keep a separate `publish-to-testpypi.sh` script for testing.
 

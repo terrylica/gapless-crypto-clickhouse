@@ -68,7 +68,7 @@ Chosen option: **Status Quo with enhanced documentation and test fixes**
 
 ### Public Data Repository (data.binance.vision)
 
-```bash
+````bash
 # ✅ Accepts "1mo"
 curl -I "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1mo/..."
 HTTP/1.1 200 OK
@@ -145,7 +145,7 @@ def test_binance_monthly_dual_notation(self):
     This is intentional and empirically validated against live endpoints.
     """
     assert TIMEFRAME_TO_BINANCE_INTERVAL["1mo"] == "1M"
-```
+````
 
 ## Links
 

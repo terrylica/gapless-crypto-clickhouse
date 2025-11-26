@@ -73,7 +73,7 @@ Performance: 1,180 rows/sec (bulk insert), FINAL query overhead 10-30%
 
 **QuestDB Approach** (Immediate):
 
-```sql
+````sql
 CREATE TABLE ohlcv (
     ...
 ) TIMESTAMP(timestamp) PARTITION BY MONTH
@@ -403,7 +403,7 @@ SELECT * FROM ohlcv FINAL WHERE ...;
 
 -- Or force merge (async)
 OPTIMIZE TABLE ohlcv FINAL;
-```
+````
 
 ## References
 

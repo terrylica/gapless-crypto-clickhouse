@@ -53,7 +53,7 @@ Current main-clickhouse branch (v4.0.0) contains ClickHouse integration incompat
 
 ### Repository Creation
 
-```bash
+````bash
 # Create new GitHub repository
 gh repo create terrylica/gapless-crypto-clickhouse --public
 
@@ -163,7 +163,7 @@ uv run pytest tests/ -v
 
 ```bash
 pip install -i https://test.pypi.org/simple/ gapless-crypto-clickhouse
-```
+````
 
 ### Manual Checklist
 

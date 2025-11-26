@@ -15,7 +15,7 @@ Complete command reference for testing, code quality, building, and CI/CD workfl
 
 ### Full Test Suite
 
-```bash
+````bash
 # Run all tests
 uv run pytest
 
@@ -473,7 +473,7 @@ git commit -m "feat: add my feature"
 
 # 7. Push and create PR
 git push origin feature/my-feature
-```
+````
 
 ### Pre-commit Checklist
 

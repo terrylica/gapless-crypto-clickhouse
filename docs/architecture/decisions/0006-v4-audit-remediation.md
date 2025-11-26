@@ -83,7 +83,7 @@ Comprehensive pre-release audit of main-clickhouse branch (v4.0.0) identified 6 
 
 **Change**:
 
-```python
+````python
 # Before
 __version__ = "3.3.0"
 
@@ -231,7 +231,7 @@ uv run ruff check src/
 
 ```bash
 git commit (auto-triggers hooks)
-```
+````
 
 **Expected**: ruff, end-of-file-fixer, yaml-check, commitizen all pass
 

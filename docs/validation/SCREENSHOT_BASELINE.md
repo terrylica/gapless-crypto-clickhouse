@@ -52,7 +52,7 @@ tests/e2e/screenshots/          # Git-tracked baseline directory
 
 When E2E tests run without existing baselines, screenshots are automatically captured to `tests/e2e/screenshots/`.
 
-```bash
+````bash
 # Run E2E tests (generates baselines)
 uv run scripts/run_validation.py --e2e-only
 
@@ -66,16 +66,19 @@ git commit -m "feat(e2e): add initial screenshot baselines"
 
 ### Baseline Naming Convention
 
-```
+````
+
 {interface}-{scenario}.png
 
 Examples:
-- ch-ui-landing.png              # CH-UI landing page
-- ch-ui-simple-query.png          # CH-UI after query execution
-- ch-ui-error-invalid-query.png   # CH-UI error state
-- clickhouse-play-landing.png     # ClickHouse Play landing
+
+- ch-ui-landing.png # CH-UI landing page
+- ch-ui-simple-query.png # CH-UI after query execution
+- ch-ui-error-invalid-query.png # CH-UI error state
+- clickhouse-play-landing.png # ClickHouse Play landing
 - clickhouse-play-large-results.png # ClickHouse Play with large dataset
-```yaml
+
+````yaml
 
 ---
 
@@ -358,34 +361,36 @@ await expect(page).to_have_screenshot(
 
 ## Workflow Summary
 
-```
+````
+
 ┌────────────────────────────────────────────┐
-│ 1. Run E2E Tests                           │
-│    uv run scripts/run_validation.py --e2e  │
+│ 1. Run E2E Tests │
+│ uv run scripts/run_validation.py --e2e │
 └────────────┬───────────────────────────────┘
-             │
-             ▼
+│
+▼
 ┌────────────────────────────────────────────┐
-│ 2. Review Screenshots                      │
-│    Compare: tmp/validation-artifacts/      │
-│            vs tests/e2e/screenshots/       │
+│ 2. Review Screenshots │
+│ Compare: tmp/validation-artifacts/ │
+│ vs tests/e2e/screenshots/ │
 └────────────┬───────────────────────────────┘
-             │
-       ┌─────┴─────┐
-       │           │
-       ▼           ▼
-┌──────────┐  ┌──────────┐
-│ Match OK │  │ Mismatch │
-└──────────┘  └────┬─────┘
-                   │
-            ┌──────┴──────┐
-            │             │
-            ▼             ▼
-   ┌────────────────┐ ┌───────────────┐
-   │ Intentional?   │ │ Regression?   │
-   │ Yes → Update   │ │ No → Fix Code │
-   │ Baseline       │ └───────────────┘
-   └────────────────┘
+│
+┌─────┴─────┐
+│ │
+▼ ▼
+┌──────────┐ ┌──────────┐
+│ Match OK │ │ Mismatch │
+└──────────┘ └────┬─────┘
+│
+┌──────┴──────┐
+│ │
+▼ ▼
+┌────────────────┐ ┌───────────────┐
+│ Intentional? │ │ Regression? │
+│ Yes → Update │ │ No → Fix Code │
+│ Baseline │ └───────────────┘
+└────────────────┘
+
 ```
 
 ---
@@ -399,3 +404,4 @@ await expect(page).to_have_screenshot(
 ---
 
 **Questions?** See project CLAUDE.md or file an issue on GitHub.
+```

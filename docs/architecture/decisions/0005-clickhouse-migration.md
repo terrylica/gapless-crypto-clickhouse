@@ -63,7 +63,7 @@ After completing QuestDB schema validation (ADR-0003, 53.7M rows) and futures su
 
 **ClickHouse schema** (`src/gapless_crypto_clickhouse/clickhouse/schema.sql`):
 
-```sql
+````sql
 CREATE TABLE IF NOT EXISTS ohlcv (
     timestamp DateTime64(3),  -- Millisecond precision
     symbol LowCardinality(String),  -- QuestDB SYMBOL → ClickHouse LowCardinality
@@ -218,7 +218,7 @@ class OHLCVQuery:
 
         result = self.connection.execute(sql, params)
         return pd.DataFrame(result, columns=[...])
-```
+````
 
 ### Migration Strategy
 

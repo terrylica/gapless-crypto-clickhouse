@@ -24,7 +24,7 @@ Comprehensive guide to programmatic usage of gapless-crypto-data via Python API 
 
 ### Library Information
 
-```python
+````python
 import gapless_crypto_clickhouse as gcd
 
 # Get library info
@@ -425,7 +425,7 @@ if failed:
 ```bash
 uv run python examples/simple_api_examples.py
 uv run python examples/advanced_api_examples.py
-```
+````
 
 ## Related Documentation
 

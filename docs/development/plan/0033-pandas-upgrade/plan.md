@@ -62,7 +62,7 @@ _PyLong_AsByteArray((PyLongObject *)v, bytes, sizeof(val), is_little, !is_unsign
 
 Verify current pandas constraint:
 
-```bash
+````bash
 grep "pandas" pyproject.toml
 ```yaml
 
@@ -103,9 +103,11 @@ uv run python -c "import pandas; print(f'pandas {pandas.__version__}')"
 
 **Expected Output**:
 
-```
+````
+
 pandas 2.2.x (where x >= 0)
-```text
+
+````text
 
 **2.2 Verify NumPy constraint still met**
 
@@ -115,9 +117,11 @@ uv run python -c "import numpy; print(f'numpy {numpy.__version__}')"
 
 **Expected Output**:
 
-```
+````
+
 numpy 1.x.x (must be <2.0.0 for Alpha Forge compatibility)
-```text
+
+````text
 
 **Expected Outcome**: pandas 2.2+ installed without breaking NumPy constraint
 
@@ -133,7 +137,8 @@ uv run pytest tests/test_timeframe_constants.py -v
 
 **Expected Output**:
 
-```
+````
+
 test_timeframe_to_minutes_all_16_timeframes PASSED ✅
 test_hour_based_timeframes_critical_bug_regression PASSED ✅
 test_timedelta_mappings_consistency PASSED ✅
@@ -142,7 +147,8 @@ test_binance_interval_mapping_completeness PASSED ✅
 test_binance_monthly_dual_notation PASSED ✅ (ADR-0032 test)
 test_gap_detection_scenario_2h_timeframe PASSED ✅
 test_all_mappings_have_same_timeframes PASSED ✅
-```text
+
+````text
 
 **3.2 Run unit tests**
 
@@ -262,7 +268,7 @@ git push origin main
 ```bash
 # Wait for GitHub Actions to complete
 gh run watch
-```
+````
 
 **Expected Outcome**: Release workflow completes successfully
 
