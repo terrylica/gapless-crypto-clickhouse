@@ -743,7 +743,7 @@ Fixes: #N/A (internal audit, no GitHub issue)
 
 **Changelog Entry**:
 
-````markdown
+`````markdown
 ## [1.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v1.0.0...v1.0.1) (2025-11-19)
 
 ### Bug Fixes
@@ -857,8 +857,11 @@ jobs:
             exit 1
           fi
 ````
-````
+`````
+
+```
 
 ### Automated Code Extraction
 
 Create `scripts/extract_code_blocks.py` to automate example extraction from Markdown.
+```

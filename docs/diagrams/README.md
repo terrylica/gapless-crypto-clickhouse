@@ -96,7 +96,7 @@ Multi-layer validation strategy ensuring data quality. Includes:
 
 GitHub natively renders Mermaid diagrams from `.mmd` files when using code blocks:
 
-````markdown
+`````markdown
 # Architecture Overview
 
 ````mermaid
@@ -105,9 +105,11 @@ graph TD
     B --> C[End]
 ```text
 ````
-````
+`````
 
-````
+```
+
+```
 
 For local `.mmd` files, include them inline:
 
@@ -115,13 +117,13 @@ For local `.mmd` files, include them inline:
 # Data Collection Pipeline
 
 See the complete flow in [01-collection-pipeline.mmd](./docs/diagrams/01-collection-pipeline.mmd)
-````
+```
 
 ### Method 2: Inline Embedding
 
 Copy the Mermaid syntax directly into your markdown document:
 
-````markdown
+`````markdown
 # Gap Filling Process
 
 ````mermaid
@@ -133,9 +135,11 @@ flowchart TD
     Validate --> Complete([Zero gaps achieved])
 ```text
 ````
-````
+`````
 
-````
+```
+
+```
 
 ### Method 3: Mermaid Live Editor (For External Sharing)
 
@@ -146,7 +150,7 @@ flowchart TD
 
 ```markdown
 ![Collection Pipeline](./assets/collection-pipeline.png)
-````
+```
 
 ### Method 4: VS Code Preview
 
@@ -158,7 +162,7 @@ Install the "Markdown Preview Mermaid Support" extension to preview diagrams dir
 
 ### In API Documentation
 
-````markdown
+`````markdown
 ## Data Collection Flow
 
 The `BinancePublicDataCollector` follows this flow:
@@ -167,15 +171,17 @@ The `BinancePublicDataCollector` follows this flow:
 [Copy from 01-collection-pipeline.mmd]
 ```text
 ````
-````
+`````
+
+```
 
 See `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py` for implementation.
 
-````
+```
 
 ### In Architecture Decision Records (ADRs)
 
-```markdown
+````markdown
 ## Decision: ETag-Based Caching
 
 Context: Historical data is immutable, allowing aggressive caching.
@@ -183,11 +189,13 @@ Context: Historical data is immutable, allowing aggressive caching.
 Decision: Implement HTTP ETag conditional requests for 22x performance.
 
 Consequences:
+
 - Bandwidth savings: 0 bytes on cache hits vs 180MB downloads
 - Latency reduction: 380ms RTT vs 8-15s download time
 
 ```mermaid
 [Copy from 04-download-caching.mmd]
+```
 ````
 
 ````

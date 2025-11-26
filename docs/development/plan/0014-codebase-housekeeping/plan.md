@@ -53,7 +53,7 @@ Execute 4-phase housekeeping with conservative approach:
 
 **Changes**:
 
-`````markdown
+``````markdown
 # Remove entire section (lines 125-154)
 
 ### CLI Removed in v4.0.0
@@ -210,7 +210,9 @@ version = "1.0.0"  # May need manual sync with git tags
 -
 - ```ini
 `````
-`````
+``````
+
+````
 
 - # pytest.ini
 - asyncio_mode = auto
@@ -222,7 +224,7 @@ version = "1.0.0"  # May need manual sync with git tags
 -
 - All E2E tests must use `@pytest.mark.asyncio(loop_scope="session")` to ensure compatibility with Playwright's async fixtures.
 
-`````
+````
 
 **Validation**: All E2E test examples show loop_scope parameter
 
@@ -248,11 +250,12 @@ version = "1.0.0"  # May need manual sync with git tags
 
 **Local Testing** (full 12-test suite):
 
-```bash
+````bash
 docker-compose up -d
 uv run pytest tests/e2e/ -v
 ```text
-`````
+````
+````
 
 See `.github/workflows/ci.yml` lines 131-132 for CI configuration.
 
