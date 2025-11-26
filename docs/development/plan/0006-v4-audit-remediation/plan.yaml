@@ -49,7 +49,7 @@ x-implementation-plan:
             Fix critical version inconsistency blocking release.
             pyproject.toml declares 4.0.0, but __init__.py has 3.3.0.
           acceptance_criteria:
-            - "Runtime check: gcd.__version__ == '4.0.0'"
+            - "Runtime check: gcc.__version__ == '4.0.0'"
             - "Matches pyproject.toml version"
             - "Semantic release automation compatible"
           commit_message: "fix(version)!: update __version__ to 4.0.0 for release consistency"
@@ -57,8 +57,8 @@ x-implementation-plan:
             BREAKING CHANGE: __version__ attribute now correctly reflects 4.0.0
 
             Runtime version check will now return correct version:
-            - Before: gcd.__version__ == "3.3.0" (incorrect)
-            - After: gcd.__version__ == "4.0.0" (correct, matches pyproject.toml)
+            - Before: gcc.__version__ == "3.3.0" (incorrect)
+            - After: gcc.__version__ == "4.0.0" (correct, matches pyproject.toml)
 
             Refs: ADR-0006 Issue 1 (CRITICAL)
 
@@ -167,7 +167,7 @@ x-implementation-plan:
       deliverables:
         - name: "Version Verification"
           description: "Confirm runtime __version__ matches pyproject.toml"
-          validation_command: "uv run python -c \"import gapless_crypto_data as gcd; assert gcd.__version__ == '4.0.0'\""
+          validation_command: "uv run python -c \"import gapless_crypto_data as gcc; assert gcc.__version__ == '4.0.0'\""
           expected_output: "Exit code 0 (assertion passes)"
 
         - name: "Package Rebuild"
@@ -191,7 +191,7 @@ x-slos:
     metrics:
       - name: "Version Attribute Accuracy"
         target: "__version__ matches pyproject.toml (4.0.0)"
-        measurement: "Runtime assertion: gcd.__version__ == '4.0.0'"
+        measurement: "Runtime assertion: gcc.__version__ == '4.0.0'"
 
       - name: "Documentation Accuracy"
         target: "All references to CLI removal use past tense"

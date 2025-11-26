@@ -167,7 +167,7 @@ x-critical-violations:
       Existing pattern (src/gapless_crypto_data/collectors/binance_public_data_collector.py):
       - Class-based collector: BinancePublicDataCollector(symbol, start_date, end_date)
       - Returns pandas DataFrame with 11 columns
-      - Integrated into function API: gcd.fetch_data("BTCUSDT", "1h")
+      - Integrated into function API: gcc.fetch_data("BTCUSDT", "1h")
       - Uses httpx with ETag caching
       - Sequential download → process → merge → validate workflow
 
@@ -250,7 +250,7 @@ x-critical-violations:
 
       Existing system:
       - All collectors return pandas DataFrame with DatetimeIndex
-      - API functions return DataFrame: gcd.fetch_data() -> pd.DataFrame
+      - API functions return DataFrame: gcc.fetch_data() -> pd.DataFrame
       - Examples show df.head(), df.plot(), df.resample() patterns
       - 11-column DataFrame is core abstraction
 
