@@ -35,13 +35,13 @@ Remove redundant validation components discovered after ADR-0038 implementation.
 
 Investigation of failed workflow #19679775010 revealed:
 
-| Component | Issue | Impact |
-|-----------|-------|--------|
-| `binance-cdn-availability` job | Redundant with Stage 1 of real data validation | Extra job runs unnecessarily |
-| `validate_binance_cdn.py` | Unused after job removal | Dead code |
-| `e2e_core.py` | Never imported by any script | Dead code |
-| `release-validation-pipeline` target | Deprecated, never called | Confusion |
-| CLAUDE.md | References deleted scripts | Misleading docs |
+| Component                            | Issue                                          | Impact                       |
+| ------------------------------------ | ---------------------------------------------- | ---------------------------- |
+| `binance-cdn-availability` job       | Redundant with Stage 1 of real data validation | Extra job runs unnecessarily |
+| `validate_binance_cdn.py`            | Unused after job removal                       | Dead code                    |
+| `e2e_core.py`                        | Never imported by any script                   | Dead code                    |
+| `release-validation-pipeline` target | Deprecated, never called                       | Confusion                    |
+| CLAUDE.md                            | References deleted scripts                     | Misleading docs              |
 
 ### Root Cause of Failed Workflow
 
@@ -54,17 +54,17 @@ Investigation of failed workflow #19679775010 revealed:
 
 ## Task List
 
-| # | Task | Status | Notes |
-|---|------|--------|-------|
-| 1 | Verify v13.0.0 workflow works | ✅ Done | Manual trigger succeeded |
-| 2 | Create ADR-0039 and plan | ✅ Done | This document |
-| 3 | Remove `binance-cdn-availability` job | ✅ Done | production-validation.yml |
-| 4 | Delete `validate_binance_cdn.py` | ✅ Done | scripts/ |
-| 5 | Delete `e2e_core.py` | ✅ Done | src/.../validation/ |
-| 6 | Delete deprecated Earthfile target | ✅ Done | Earthfile |
-| 7 | Update CLAUDE.md | ✅ Done | Fix stale references |
-| 8 | Update ADR-0038 and ADR-0035 | ✅ Done | Mark status |
-| 9 | Commit and push | ✅ Done | refactor commit (75c9613) |
+| #   | Task                                  | Status  | Notes                     |
+| --- | ------------------------------------- | ------- | ------------------------- |
+| 1   | Verify v13.0.0 workflow works         | ✅ Done | Manual trigger succeeded  |
+| 2   | Create ADR-0039 and plan              | ✅ Done | This document             |
+| 3   | Remove `binance-cdn-availability` job | ✅ Done | production-validation.yml |
+| 4   | Delete `validate_binance_cdn.py`      | ✅ Done | scripts/                  |
+| 5   | Delete `e2e_core.py`                  | ✅ Done | src/.../validation/       |
+| 6   | Delete deprecated Earthfile target    | ✅ Done | Earthfile                 |
+| 7   | Update CLAUDE.md                      | ✅ Done | Fix stale references      |
+| 8   | Update ADR-0038 and ADR-0035          | ✅ Done | Mark status               |
+| 9   | Commit and push                       | ✅ Done | refactor commit (75c9613) |
 
 ---
 
@@ -87,10 +87,10 @@ Investigation of failed workflow #19679775010 revealed:
 
 ## Success Criteria
 
-| Criterion | Metric |
-|-----------|--------|
-| Single job workflow | `production-validation.yml` has 1 job |
-| No dead code | `validate_binance_cdn.py` and `e2e_core.py` deleted |
+| Criterion             | Metric                                               |
+| --------------------- | ---------------------------------------------------- |
+| Single job workflow   | `production-validation.yml` has 1 job                |
+| No dead code          | `validate_binance_cdn.py` and `e2e_core.py` deleted  |
 | No deprecated targets | `release-validation-pipeline` removed from Earthfile |
-| Documentation current | CLAUDE.md matches implementation |
-| Workflow passes | Next scheduled/triggered run succeeds |
+| Documentation current | CLAUDE.md matches implementation                     |
+| Workflow passes       | Next scheduled/triggered run succeeds                |

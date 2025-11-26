@@ -71,14 +71,14 @@ Battle-tested patterns from `/Users/terryli/eon/data-source-manager/utils/for_co
 
 ## Task List
 
-| # | Task | Status | Notes |
-|---|------|--------|-------|
-| 1 | Create ADR-0040 and plan | Done | This document |
-| 2 | Create rest_client.py with tenacity | Done | Port from data-source-manager |
-| 3 | Wire gap filling into query_ohlcv() | Done | Replace TODO stub |
-| 4 | Add tenacity dependency | Done | pyproject.toml |
-| 5 | Run build and validate | Done | Auto-fix errors (e2e_core import) |
-| 6 | Update ADR status | Done | Mark complete |
+| #   | Task                                | Status | Notes                             |
+| --- | ----------------------------------- | ------ | --------------------------------- |
+| 1   | Create ADR-0040 and plan            | Done   | This document                     |
+| 2   | Create rest_client.py with tenacity | Done   | Port from data-source-manager     |
+| 3   | Wire gap filling into query_ohlcv() | Done   | Replace TODO stub                 |
+| 4   | Add tenacity dependency             | Done   | pyproject.toml                    |
+| 5   | Run build and validate              | Done   | Auto-fix errors (e2e_core import) |
+| 6   | Update ADR status                   | Done   | Mark complete                     |
 
 ---
 
@@ -89,6 +89,7 @@ Battle-tested patterns from `/Users/terryli/eon/data-source-manager/utils/for_co
 **File**: `src/gapless_crypto_clickhouse/gap_filling/rest_client.py`
 
 Components:
+
 - `REST_CHUNK_SIZE = 1000` - Binance API limit
 - `API_MAX_RETRIES = 3` - tenacity attempts
 - `API_TIMEOUT = 30.0` - httpx timeout
@@ -101,9 +102,10 @@ Components:
 **File**: `src/gapless_crypto_clickhouse/query_api.py`
 
 Add helper function `_fill_gaps_from_api()`:
+
 1. Create UniversalGapFiller instance
 2. For each gap: fetch via REST API
-3. Convert to DataFrame with _version hash
+3. Convert to DataFrame with \_version hash
 4. Insert to ClickHouse
 5. Re-query to include filled data
 
@@ -122,12 +124,12 @@ dependencies = [
 
 ## Risk Assessment
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Rate limiting | Medium | Low | Built-in 1s delay, few gaps typically |
-| Schema mismatch | Low | High | Use same _version hash as bulk loader |
-| Network failures | Medium | Low | tenacity retry handles transient |
-| Duplicate rows | Low | Low | ReplacingMergeTree deduplication |
+| Risk             | Likelihood | Impact | Mitigation                             |
+| ---------------- | ---------- | ------ | -------------------------------------- |
+| Rate limiting    | Medium     | Low    | Built-in 1s delay, few gaps typically  |
+| Schema mismatch  | Low        | High   | Use same \_version hash as bulk loader |
+| Network failures | Medium     | Low    | tenacity retry handles transient       |
+| Duplicate rows   | Low        | Low    | ReplacingMergeTree deduplication       |
 
 ---
 

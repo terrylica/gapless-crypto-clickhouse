@@ -172,11 +172,12 @@ uv run pytest -m integration
 **Validation** (ADR-0038: Real Binance Data Validation):
 
 Single-job Earthly-based 9-stage pipeline using real BTCUSDT data from Binance CDN:
+
 1. CDN Download (HTTP GET, validates CDN availability)
 2. ZIP Extract
 3. CSV Parse + Format Detection (futures 12-col header, spot 12-col no header)
 4. DataFrame Validation (OHLC, volume constraints)
-5. _version Hash Computation
+5. \_version Hash Computation
 6. ClickHouse Insert
 7. Query FINAL
 8. Deduplication Test
@@ -212,7 +213,8 @@ doppler run --project aws-credentials --config prd -- uv run scripts/validate_bi
    - Scheduled every 6 hours (cron: `0 */6 * * *`)
 
 **Composite Actions**: Setup steps extracted to `.github/actions/`
-  - `setup-python-uv`: Python 3.12 + UV installation with dependency caching
+
+- `setup-python-uv`: Python 3.12 + UV installation with dependency caching
 
 **Reference**: [ADR-0039](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0039-validation-redundancy-cleanup.md) - Validation Redundancy Cleanup
 
