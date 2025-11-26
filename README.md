@@ -6,7 +6,7 @@
 [![Downloads](https://img.shields.io/pypi/dm/gapless-crypto-clickhouse.svg)](https://pypi.org/project/gapless-crypto-clickhouse/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![UV Managed](https://img.shields.io/badge/uv-managed-blue.svg)](https://github.com/astral-sh/uv)
-[![Tests](https://github.com/terrylica/gapless-crypto-clickhouse/workflows/CI/badge.svg)](https://github.com/terrylica/gapless-crypto-clickhouse/actions)
+[![Release](https://github.com/terrylica/gapless-crypto-clickhouse/actions/workflows/release.yml/badge.svg)](https://github.com/terrylica/gapless-crypto-clickhouse/actions/workflows/release.yml)
 [![AI Agent Ready](https://img.shields.io/badge/AI%20Agent-Ready-brightgreen.svg)](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/PROBE_USAGE_EXAMPLE.md)
 
 ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x faster via Binance public repository with persistent database storage, USDT-margined futures support, and production-ready ReplacingMergeTree schema.
@@ -192,12 +192,12 @@ AtomicCSVOperations → Final Gapless Dataset with Order Flow Metrics
 
 ## 🗄️ Database Integration
 
-ClickHouse is a **required component** for this package. The database-first architecture enables persistent storage, advanced query capabilities, and multi-symbol analysis.
+ClickHouse is the **recommended backend** for this package. While the package works without a database (file-based approach), ClickHouse enables persistent storage, advanced query capabilities, and multi-symbol analysis.
 
 **When to use**:
 
-- **File-based approach**: Simple workflows, single symbols, CSV output compatibility
-- **Database approach**: Multi-symbol analysis, time-series queries, aggregations, production pipelines (recommended)
+- **File-based approach**: Simple workflows, single symbols, CSV output, no database setup required
+- **Database approach** (recommended): Multi-symbol analysis, time-series queries, aggregations, production pipelines
 
 ### Quick Start with Docker Compose
 
@@ -690,7 +690,7 @@ Provide insights about cryptocurrency data collection capabilities and usage pat
 ### Prerequisites
 
 - **UV Package Manager** - [Install UV](https://docs.astral.sh/uv/getting-started/installation/)
-- **Python 3.9+** - UV will manage Python versions automatically
+- **Python 3.12+** - UV will manage Python versions automatically
 - **Git** - For repository cloning and version control
 - **Docker & Docker Compose** (Optional) - For ClickHouse database development
 
@@ -728,29 +728,7 @@ uv run pytest
 
 #### Step 3a: Database Setup (Optional - ClickHouse)
 
-If you want to develop with ClickHouse database features:
-
-```bash
-# Start ClickHouse container
-docker-compose up -d
-
-# Verify ClickHouse is running and healthy
-docker-compose ps
-docker-compose logs clickhouse | grep "Ready for connections"
-
-# Test ClickHouse connection
-docker exec gapless-clickhouse clickhouse-client --query "SELECT 1"
-
-# View ClickHouse schema
-docker exec gapless-clickhouse clickhouse-client --query "SHOW CREATE TABLE ohlcv"
-```
-
-**What gets initialized**:
-
-- ClickHouse 24.1-alpine container on ports 9000 (native) and 8123 (HTTP)
-- `ohlcv` table with ReplacingMergeTree engine (from `schema.sql`)
-- Persistent volume for data (`clickhouse-data`)
-- Health checks and automatic restart
+If you want to develop with ClickHouse database features, see [Quick Start with Docker Compose](#quick-start-with-docker-compose) for setup instructions.
 
 **Test database ingestion**:
 
@@ -813,19 +791,19 @@ uv run pre-commit run --all-files
 
 ### Development Commands Reference
 
-| Task                   | Command                                                                             |
-| ---------------------- | ----------------------------------------------------------------------------------- |
-| Install dependencies   | `uv sync --dev`                                                                     |
-| Setup pre-commit hooks | `uv run pre-commit install`                                                         |
-| Add new dependency     | `uv add package-name`                                                               |
-| Add dev dependency     | `uv add --dev package-name`                                                         |
+| Task                   | Command                                                                               |
+| ---------------------- | ------------------------------------------------------------------------------------- |
+| Install dependencies   | `uv sync --dev`                                                                       |
+| Setup pre-commit hooks | `uv run pre-commit install`                                                           |
+| Add new dependency     | `uv add package-name`                                                                 |
+| Add dev dependency     | `uv add --dev package-name`                                                           |
 | Run Python API         | `uv run python -c "import gapless_crypto_clickhouse as gcch; print(gcch.get_info())"` |
-| Run tests              | `uv run pytest`                                                                     |
-| Format code            | `uv run ruff format .`                                                              |
-| Lint code              | `uv run ruff check --fix .`                                                         |
-| Type check             | `uv run mypy src/`                                                                  |
-| Validate pre-commit    | `uv run pre-commit run --all-files`                                                 |
-| Build package          | `uv build`                                                                          |
+| Run tests              | `uv run pytest`                                                                       |
+| Format code            | `uv run ruff format .`                                                                |
+| Lint code              | `uv run ruff check --fix .`                                                           |
+| Type check             | `uv run mypy src/`                                                                    |
+| Validate pre-commit    | `uv run pre-commit run --all-files`                                                   |
+| Build package          | `uv build`                                                                            |
 
 ### E2E Validation Framework
 
@@ -897,29 +875,6 @@ uv build
 uv publish
 ```
 
-## 📁 Project Structure
-
-```
-gapless-crypto-clickhouse/
-├── src/
-│   └── gapless_crypto_clickhouse/
-│       ├── __init__.py              # Package exports
-│       ├── collectors/
-│       │   ├── __init__.py
-│       │   └── binance_public_data_collector.py
-│       ├── gap_filling/
-│       │   ├── __init__.py
-│       │   ├── universal_gap_filler.py
-│       │   └── safe_file_operations.py
-│       └── utils/
-│           └── __init__.py
-├── tests/                           # Test suite
-├── docs/                           # Documentation
-├── pyproject.toml                  # Project configuration
-├── README.md                       # This file
-└── LICENSE                         # MIT License
-```
-
 ## 🔍 Supported Timeframes
 
 All 16 Binance timeframes supported for complete market coverage (13 standard + 3 exotic):
@@ -945,9 +900,8 @@ All 16 Binance timeframes supported for complete market coverage (13 standard + 
 
 ## ⚠️ Requirements
 
-- Python 3.9+
+- Python 3.12+
 - pandas >= 2.0.0
-- requests >= 2.25.0
 - Stable internet connection for data downloads
 
 ## 🤝 Contributing
@@ -1161,19 +1115,6 @@ Each CSV file includes comprehensive metadata in `.metadata.json`:
     "corruption_detected": false
   }
 }
-```
-
-### Streaming Output (Memory-Efficient)
-
-For large datasets, Polars streaming provides constant memory usage:
-
-```python
-from gapless_crypto_clickhouse.streaming import StreamingDataProcessor
-
-processor = StreamingDataProcessor(chunk_size=10_000, memory_limit_mb=100)
-for chunk in processor.stream_csv_chunks("large_dataset.csv"):
-    # Process chunk with constant memory usage
-    print(f"Chunk shape: {chunk.shape}")
 ```
 
 ### File Naming Convention
