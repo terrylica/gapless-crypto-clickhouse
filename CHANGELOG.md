@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [15.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v15.0.0...v15.0.1) (2025-11-26)
+
+### Bug Fixes
+
+* **deps:** update BFA to 1.4.0 and fix package naming consistency ([2074305](https://github.com/terrylica/gapless-crypto-clickhouse/commit/20743054e41835674ec58a4e960593b9d44ce1c2))
+
 ## [15.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.8...v15.0.0) (2025-11-26)
 
 ### ⚠ BREAKING CHANGES
