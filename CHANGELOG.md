@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [14.1.8](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.7...v14.1.8) (2025-11-26)
+
+### Documentation
+
+* **readme:** sixth audit - PyPI landing page compliance ([378fd07](https://github.com/terrylica/gapless-crypto-clickhouse/commit/378fd078a7da23e9a8366c65dfe20e9c3683d836))
+
 ## [14.1.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.6...v14.1.7) (2025-11-26)
 
 ### Documentation
