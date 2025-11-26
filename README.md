@@ -19,7 +19,7 @@ ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x fas
 - **Advanced SQL queries** for time-series analysis, aggregations, and joins
 - **USDT-margined futures** support (perpetual contracts)
 - **Production data pipelines** with deterministic versioning and deduplication
-- **Python 3.12+** modern runtime environment
+- **Python 3.11+** modern runtime environment
 
 **Choose [`gapless-crypto-data`](https://github.com/terrylica/gapless-crypto-data)** (file-based) when you need:
 
@@ -93,9 +93,6 @@ df = gcch.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-06-3
 
 # Or with limit
 df = gcch.fetch_data("ETHUSDT", timeframe="4h", limit=1000)
-
-# Backward compatibility (legacy interval parameter)
-df = gcch.fetch_data("ETHUSDT", interval="4h", limit=1000)  # DeprecationWarning
 
 # Get available symbols and timeframes
 symbols = gcch.get_supported_symbols()
@@ -447,8 +444,8 @@ See [`docs/CLICKHOUSE_MIGRATION.md`](docs/CLICKHOUSE_MIGRATION.md) for:
 
 - Package name: `gapless-crypto-data` → `gapless-crypto-clickhouse`
 - Import paths: `gapless_crypto_data` → `gapless_crypto_clickhouse`
-- ClickHouse requirement: ClickHouse database required (Docker Compose provided)
-- Python version: 3.12+ (was 3.9-3.13)
+- ClickHouse requirement: Recommended for production workflows (Docker Compose provided)
+- Python version: 3.11+ (was 3.9-3.13)
 - API signatures: **Unchanged** (backwards compatible)
 
 **Rollback strategy**: Continue using `gapless-crypto-data` for file-based workflows. Both packages maintained independently.
@@ -465,7 +462,7 @@ See [`docs/CLICKHOUSE_MIGRATION.md`](docs/CLICKHOUSE_MIGRATION.md) for:
 
 **Scaling**:
 
-- Single-node: Validated at 53.7M rows (ADR-0003), headroom to ~200M rows
+- Single-node: Validated for typical production workloads, headroom to ~200M rows
 - Distributed: ClickHouse supports sharding and replication for larger datasets
 
 See ClickHouse documentation for production deployment best practices.
@@ -646,6 +643,7 @@ Combine file-based collection with database querying:
 ```python
 import gapless_crypto_clickhouse as gcch
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 
 # Step 1: Collect to CSV files (22x faster, portable format)
