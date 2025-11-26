@@ -25,7 +25,7 @@ supersedes: ["1.0.0"]
 
 ### CSVValidator
 
-**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/csv_validator.py`
+**Location**: `src/gapless_crypto_clickhouse/validation/csv_validator.py`
 
 **Purpose**: Multi-layer validation of OHLCV CSV files
 
@@ -59,7 +59,7 @@ supersedes: ["1.0.0"]
 
 ### ValidationReport (Pydantic Model)
 
-**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/models.py`
+**Location**: `src/gapless_crypto_clickhouse/validation/models.py`
 
 **Purpose**: Type-safe validation report with OpenAPI 3.1.1 schema
 
@@ -76,7 +76,7 @@ supersedes: ["1.0.0"]
 
 ### ValidationStorage
 
-**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py`
+**Location**: `src/gapless_crypto_clickhouse/validation/storage.py`
 
 **Purpose**: DuckDB persistent storage for validation reports
 
@@ -84,7 +84,7 @@ supersedes: ["1.0.0"]
 
 **Interface**: SQL query interface for flexible data exploration
 
-See [Storage Specification](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md) for complete schema details.
+See [Storage Specification](docs/validation/STORAGE.md) for complete schema details.
 
 ## Storage Backend
 
@@ -170,7 +170,7 @@ print(f"Total: {stats['total_validations']}")
 print(f"Avg errors: {stats['avg_errors']}")
 ```
 
-See [Query Patterns Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md) for complete examples.
+See [Query Patterns Guide](docs/validation/QUERY_PATTERNS.md) for complete examples.
 
 ## Design Principles
 
@@ -230,7 +230,7 @@ report = validator.validate_csv_file("data.csv", store_report=True)  # Persists 
 
 - **Single source of truth**: CSVValidator is canonical validator
 - **Type safety**: Pydantic models prevent data corruption
-- **Test coverage**: Validation tests in `/Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py`
+- **Test coverage**: Validation tests in `tests/test_validation_storage.py`
 
 ## Helper Functions
 
@@ -297,7 +297,7 @@ correlation = df[["coverage_percentage", "total_errors"]].corr()
 
 ## Related Documentation
 
-- **Storage Specification**: [STORAGE.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md)
-- **Query Patterns**: [QUERY_PATTERNS.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md)
-- **Architecture Overview**: [docs/architecture/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md)
-- **Test Suite**: [tests/test_validation_storage.py](/Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py)
+- **Storage Specification**: [STORAGE.md](docs/validation/STORAGE.md)
+- **Query Patterns**: [QUERY_PATTERNS.md](docs/validation/QUERY_PATTERNS.md)
+- **Architecture Overview**: [docs/architecture/OVERVIEW.md](docs/architecture/OVERVIEW.md)
+- **Test Suite**: [tests/test_validation_storage.py](tests/test_validation_storage.py)

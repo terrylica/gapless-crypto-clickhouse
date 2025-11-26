@@ -106,7 +106,7 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 9. Initialize skill using marketplace script:
 
    ```bash
-   /Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/init_skill.py gapless-crypto-clickhouse-onboarding --path ./skills/
+   ~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/init_skill.py gapless-crypto-clickhouse-onboarding --path ./skills/
    ```
 
 10. Write `SKILL.md` (Workflow Pattern):
@@ -141,7 +141,7 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 15. Validate skill with marketplace validator:
 
     ```bash
-    /Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py ./skills/gapless-crypto-clickhouse-onboarding/
+    ~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py ./skills/gapless-crypto-clickhouse-onboarding/
     ```
 
 16. Test `secure` parameter with local Docker:
@@ -230,8 +230,8 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 ### Related Work
 
 - **ADR-0025**: ClickHouse Cloud skills extraction (infrastructure workflows)
-- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](/Users/terryli/.claude/skills/skill-architecture/SKILL.md)
-- **Marketplace validator**: `/Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py`
+- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](~/.claude/skills/skill-architecture/SKILL.md)
+- **Marketplace validator**: `~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py`
 
 ### Constraints
 
@@ -293,7 +293,7 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 
 ## References
 
-- **ADR-0026**: [`docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md)
-- **Project Memory**: [`CLAUDE.md`](/Users/terryli/eon/gapless-crypto-clickhouse/CLAUDE.md)
-- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](/Users/terryli/.claude/skills/skill-architecture/SKILL.md)
+- **ADR-0026**: [`docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md`](docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md)
+- **Project Memory**: [`CLAUDE.md`](CLAUDE.md)
+- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](~/.claude/skills/skill-architecture/SKILL.md)
 - **Sub-Agent Reports**: tmp/data-pipeline-design/ (ephemeral)

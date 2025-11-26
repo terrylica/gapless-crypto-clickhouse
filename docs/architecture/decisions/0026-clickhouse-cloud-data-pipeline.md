@@ -6,7 +6,7 @@
 
 **ADR ID**: 0026
 
-**Related Plans**: [`docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md)
+**Related Plans**: [`docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md`](docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md)
 
 ## Context
 
@@ -144,7 +144,7 @@ Implement robust data pipeline for company-wide ClickHouse Cloud access via:
 
 ## Implementation
 
-See: [`docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md)
+See: [`docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md`](docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md)
 
 **ADR-Task Sync**: Plan contains (a) plan, (b) context, (c) task list maintained via TodoWrite tool
 
@@ -163,6 +163,6 @@ See: [`docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md`](/User
 
 - **ADR-0025**: ClickHouse Cloud skills extraction (infrastructure workflows)
 - **Sub-agent Reports**: Infrastructure, Package Architecture, User Experience, Security agents
-- **Skill Architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](/Users/terryli/.claude/skills/skill-architecture/SKILL.md)
-- **Marketplace Validator**: `/Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py`
-- **Project Memory**: [`CLAUDE.md`](/Users/terryli/eon/gapless-crypto-clickhouse/CLAUDE.md)
+- **Skill Architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](~/.claude/skills/skill-architecture/SKILL.md)
+- **Marketplace Validator**: `~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py`
+- **Project Memory**: [`CLAUDE.md`](CLAUDE.md)

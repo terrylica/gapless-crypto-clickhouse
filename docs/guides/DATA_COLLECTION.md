@@ -264,7 +264,7 @@ print(f"Gaps: {report['datetime_validation']['gaps_found']}")
 
 - **Configuration**: Flexible via constructor parameters
 - **Output formats**: CSV (default), Parquet (optional)
-- **Test coverage**: Collection tests in `/Users/terryli/eon/gapless-crypto-clickhouse/tests/test_binance_collector.py`
+- **Test coverage**: Collection tests in `tests/test_binance_collector.py`
 
 ## Troubleshooting
 
@@ -294,8 +294,8 @@ If file write errors:
 
 ## Related Documentation
 
-- **Architecture Overview**: [docs/architecture/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md)
-- **Data Format**: [docs/architecture/DATA_FORMAT.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/DATA_FORMAT.md)
-- **Python API Reference**: [python-api.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/python-api.md)
-- **Gap Filling**: [GAP_FILLING.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/GAP_FILLING.md) (planned)
-- **Validation**: [docs/validation/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md)
+- **Architecture Overview**: [docs/architecture/OVERVIEW.md](docs/architecture/OVERVIEW.md)
+- **Data Format**: [docs/architecture/DATA_FORMAT.md](docs/architecture/DATA_FORMAT.md)
+- **Python API Reference**: [python-api.md](docs/guides/python-api.md)
+- **Gap Filling**: [GAP_FILLING.md](docs/guides/GAP_FILLING.md) (planned)
+- **Validation**: [docs/validation/OVERVIEW.md](docs/validation/OVERVIEW.md)

@@ -6,7 +6,7 @@
 
 **ADR ID**: 0027
 
-**Related Plans**: [`docs/development/plan/0027-local-only-pypi-publishing/plan.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0027-local-only-pypi-publishing/plan.md)
+**Related Plans**: [`docs/development/plan/0027-local-only-pypi-publishing/plan.md`](docs/development/plan/0027-local-only-pypi-publishing/plan.md)
 
 ## Context
 
@@ -120,7 +120,7 @@ Enforce **local-only PyPI publishing** through configuration simplification and 
 
 ## Implementation
 
-See: [`docs/development/plan/0027-local-only-pypi-publishing/plan.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0027-local-only-pypi-publishing/plan.md)
+See: [`docs/development/plan/0027-local-only-pypi-publishing/plan.md`](docs/development/plan/0027-local-only-pypi-publishing/plan.md)
 
 **ADR-Task Sync**: Plan contains (a) plan, (b) context, (c) task list maintained via TodoWrite tool
 
@@ -143,6 +143,6 @@ See: [`docs/development/plan/0027-local-only-pypi-publishing/plan.md`](/Users/te
 
 - **ADR-0026**: ClickHouse Cloud data pipeline (hybrid workflow origin)
 - **Sub-Agent Reports**: 5 parallel agents (GitHub Actions, Security, semantic-release, pypi-doppler, Solution Design)
-- **semantic-release Skill**: [`~/.claude/skills/semantic-release/SKILL.md`](/Users/terryli/.claude/skills/semantic-release/SKILL.md)
+- **semantic-release Skill**: [`~/.claude/skills/semantic-release/SKILL.md`](~/.claude/skills/semantic-release/SKILL.md)
 - **pypi-doppler Skill**: Doppler-based local PyPI publishing (credential management)
 - **User Clarification**: "None of my workspace should be used CI/CD pipeline to publish ever again"

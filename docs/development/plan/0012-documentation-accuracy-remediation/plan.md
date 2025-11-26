@@ -328,7 +328,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 1. **Delete obsolete file**:
 
    ```bash
-   rm /Users/terryli/eon/gapless-crypto-clickhouse/examples/cli_usage_examples.sh
+   rm examples/cli_usage_examples.sh
    ```
 
 2. **Rewrite** `docs/development/CLI_MIGRATION_GUIDE.md`:
@@ -543,7 +543,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
    cd /tmp/doc-audit/validation
    uv venv --python 3.12
    source .venv/bin/activate
-   uv pip install /Users/terryli/eon/gapless-crypto-clickhouse
+   uv pip install .
 
    # Run each test
    for test in test_*.py; do
@@ -793,7 +793,7 @@ cd /tmp/doc-audit/validation/
 # Expected: 10/10 tests pass
 
 # Verify grep validation
-cd /Users/terryli/eon/gapless-crypto-clickhouse/
+cd 
 grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
   grep -v -E "(\.cache|decisions|CHANGELOG)" | \
   wc -l

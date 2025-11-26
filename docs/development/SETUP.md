@@ -199,7 +199,7 @@ Main project configuration:
 - Build system configuration (Hatchling)
 - Tool configurations (ruff, mypy, pytest)
 
-**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/pyproject.toml`
+**Location**: `pyproject.toml`
 
 ### `.python-version`
 
@@ -233,7 +233,7 @@ Dependency lock file (auto-generated):
 
 ### Sample Data
 
-**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/sample_data/`
+**Location**: `src/gapless_crypto_clickhouse/sample_data/`
 
 **Purpose**: Real data files for end-to-end tests
 
@@ -358,7 +358,7 @@ uv run pre-commit run --all-files
 
 ## Related Documentation
 
-- **Development Commands**: [COMMANDS.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/COMMANDS.md)
-- **CLI Migration Guide**: [CLI_MIGRATION_GUIDE.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md) (planned)
-- **Publishing Guide**: [PUBLISHING.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md) (planned)
-- **SDK Quality Standards**: [docs/sdk-quality-standards.yaml](/Users/terryli/eon/gapless-crypto-clickhouse/docs/sdk-quality-standards.yaml)
+- **Development Commands**: [COMMANDS.md](docs/development/COMMANDS.md)
+- **CLI Migration Guide**: [CLI_MIGRATION_GUIDE.md](docs/development/CLI_MIGRATION_GUIDE.md) (planned)
+- **Publishing Guide**: [PUBLISHING.md](docs/development/PUBLISHING.md) (planned)
+- **SDK Quality Standards**: [docs/sdk-quality-standards.yaml](docs/sdk-quality-standards.yaml)

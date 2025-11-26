@@ -28,7 +28,7 @@ The system consists of six primary components:
 - **Performance**: 22x faster than API calls (CloudFront CDN vs REST API)
 - **Operations**: Monthly/daily ZIP download, extraction, processing
 - **Output**: 11-column microstructure format CSV files
-- **Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py`
+- **Location**: `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py`
 
 ### UniversalGapFiller
 
@@ -36,37 +36,37 @@ The system consists of six primary components:
 - **Algorithm**: Timestamp sequence analysis with timeframe-aware gap detection
 - **Data source**: Binance REST API (authenticated or public endpoints)
 - **Guarantee**: Only authentic market data, never synthetic interpolation
-- **Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/gap_filling/universal_gap_filler.py`
+- **Location**: `src/gapless_crypto_clickhouse/gap_filling/universal_gap_filler.py`
 
 ### CSVValidator
 
 - **Purpose**: 5-layer validation engine for data quality assurance
 - **Persistence**: DuckDB-based storage for validation reports
 - **AI Integration**: SQL query interface for AI coding agents
-- **Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/csv_validator.py`
-- **Details**: See [Validation Overview](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md)
+- **Location**: `src/gapless_crypto_clickhouse/validation/csv_validator.py`
+- **Details**: See [Validation Overview](docs/validation/OVERVIEW.md)
 
 ### ValidationStorage
 
 - **Purpose**: DuckDB persistent storage for validation reports
 - **Schema**: 30+ columns with flattened metrics for SQL queries
 - **Storage**: `~/.cache/gapless-crypto-data/validation.duckdb` (XDG-compliant)
-- **Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py`
-- **Details**: See [Validation Storage Specification](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md)
+- **Location**: `src/gapless_crypto_clickhouse/validation/storage.py`
+- **Details**: See [Validation Storage Specification](docs/validation/STORAGE.md)
 
 ### AtomicCSVOperations
 
 - **Purpose**: Corruption-proof file operations with atomic guarantees
 - **Mechanism**: Temp file + validation + atomic rename
 - **Guarantee**: All-or-nothing writes (no partial file corruption)
-- **Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/gap_filling/safe_file_operations.py`
+- **Location**: `src/gapless_crypto_clickhouse/gap_filling/safe_file_operations.py`
 
 ### SafeCSVMerger
 
 - **Purpose**: Safe merging of multiple CSV files with validation
 - **Operations**: Gap data integration, duplicate removal, chronological sorting
 - **Validation**: Automatic data integrity checks
-- **Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/gap_filling/safe_file_operations.py`
+- **Location**: `src/gapless_crypto_clickhouse/gap_filling/safe_file_operations.py`
 
 ## ClickHouse Integration (Primary Storage Mode)
 
@@ -89,7 +89,7 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
   - `connect()`: Establish connection with environment-based configuration
   - `execute()`: Run queries with error handling and retry logic
   - `close()`: Clean connection shutdown
-- **Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/clickhouse/connection.py`
+- **Location**: `src/gapless_crypto_clickhouse/clickhouse/connection.py`
 
 #### ClickHouseConfig
 
@@ -101,7 +101,7 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
   - `CLICKHOUSE_USER`: Authentication username
   - `CLICKHOUSE_PASSWORD`: Authentication password
 - **Features**: Automatic `.env` file loading, validation, secure credential handling
-- **Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/clickhouse/config.py`
+- **Location**: `src/gapless_crypto_clickhouse/clickhouse/config.py`
 
 #### ClickHouseBulkLoader
 
@@ -113,13 +113,13 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
   - 16 timeframe support (1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1mo)
   - Column type validation and transformation
 - **Performance**: 1.1M rows/sec validated in production testing
-- **Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/collectors/clickhouse_bulk_loader.py`
+- **Location**: `src/gapless_crypto_clickhouse/collectors/clickhouse_bulk_loader.py`
 
 ### Database Schema
 
 **Engine**: ReplacingMergeTree (automatic deduplication on merge)
 
-**Schema Definition**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/clickhouse/schema.sql`
+**Schema Definition**: `src/gapless_crypto_clickhouse/clickhouse/schema.sql`
 
 **Columns** (17 total):
 
@@ -259,7 +259,7 @@ This format provides complete microstructure data for:
 - Order flow metrics (taker buy volumes)
 - Trade frequency analysis (number of trades)
 
-See [Data Format Specification](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/DATA_FORMAT.md) for detailed definitions.
+See [Data Format Specification](docs/architecture/DATA_FORMAT.md) for detailed definitions.
 
 ## System Boundaries
 
@@ -305,14 +305,14 @@ See [Data Format Specification](/Users/terryli/eon/gapless-crypto-clickhouse/doc
 
 ## Architecture References
 
-- **Canonical Status**: [CURRENT_ARCHITECTURE_STATUS.yaml](/Users/terryli/eon/gapless-crypto-clickhouse/docs/CURRENT_ARCHITECTURE_STATUS.yaml)
-- **Core Components**: [CORE_COMPONENTS.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/CORE_COMPONENTS.md)
-- **Network Architecture**: [network.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/network.md)
-- **Data Flow Diagrams**: [docs/diagrams/](/Users/terryli/eon/gapless-crypto-clickhouse/docs/diagrams/)
+- **Canonical Status**: [CURRENT_ARCHITECTURE_STATUS.yaml](docs/CURRENT_ARCHITECTURE_STATUS.yaml)
+- **Core Components**: [CORE_COMPONENTS.md](docs/architecture/CORE_COMPONENTS.md)
+- **Network Architecture**: [network.md](docs/architecture/network.md)
+- **Data Flow Diagrams**: [docs/diagrams/](docs/diagrams/)
 
 ## Related Documentation
 
-- **Data Collection Guide**: [docs/guides/DATA_COLLECTION.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/DATA_COLLECTION.md)
-- **Gap Filling Operations**: [docs/guides/GAP_FILLING.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/GAP_FILLING.md)
-- **Validation System**: [docs/validation/OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md)
-- **Python API Reference**: [docs/api/quick-start.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/api/quick-start.md)
+- **Data Collection Guide**: [docs/guides/DATA_COLLECTION.md](docs/guides/DATA_COLLECTION.md)
+- **Gap Filling Operations**: [docs/guides/GAP_FILLING.md](docs/guides/GAP_FILLING.md)
+- **Validation System**: [docs/validation/OVERVIEW.md](docs/validation/OVERVIEW.md)
+- **Python API Reference**: [docs/api/quick-start.md](docs/api/quick-start.md)

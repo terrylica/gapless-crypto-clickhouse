@@ -58,7 +58,7 @@ Current main-clickhouse branch (v4.0.0) contains ClickHouse integration incompat
 gh repo create terrylica/gapless-crypto-clickhouse --public
 
 # Clone and initialize
-cd /Users/terryli/eon/
+cd ../
 git clone git@github.com:terrylica/gapless-crypto-clickhouse.git
 cd gapless-crypto-clickhouse
 

@@ -11,7 +11,7 @@ supersedes: ["1.0.0"]
 
 Common query patterns for AI coding agents to analyze validation history and diagnose data quality issues.
 
-All examples use `ValidationStorage` from `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py`
+All examples use `ValidationStorage` from `src/gapless_crypto_clickhouse/validation/storage.py`
 
 ## Basic Query Patterns
 
@@ -410,6 +410,6 @@ if recent['total_errors'].mean() > baseline['total_errors'].mean():
 
 ## Related Documentation
 
-- **Validation Overview**: [OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md)
-- **Storage Specification**: [STORAGE.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md)
-- **Test Examples**: `/Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py`
+- **Validation Overview**: [OVERVIEW.md](docs/validation/OVERVIEW.md)
+- **Storage Specification**: [STORAGE.md](docs/validation/STORAGE.md)
+- **Test Examples**: `tests/test_validation_storage.py`

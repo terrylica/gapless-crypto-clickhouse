@@ -100,5 +100,5 @@ Leave data permanently (ADR-0038 pattern). Benefits:
 ## Links
 
 - [Plan 0041](../../development/plan/0041-gap-filling-validation/plan.md)
-- [ADR-0038](0038-binance-real-data-validation.md) - Real Binance data validation pattern
+- [ADR-0038](0038-real-binance-data-validation.md) - Real Binance data validation pattern
 - [ADR-0040](0040-query-ohlcv-gap-filling.md) - Gap filling implementation

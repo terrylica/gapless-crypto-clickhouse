@@ -11,7 +11,7 @@ supersedes: []
 
 DuckDB-based persistent storage for CSV validation reports with SQL query interface for AI coding agents.
 
-**Location**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/storage.py`
+**Location**: `src/gapless_crypto_clickhouse/validation/storage.py`
 
 ## Database Schema
 
@@ -336,7 +336,7 @@ with duckdb.connect(str(db_path)) as conn:
 
 ## Related Documentation
 
-- **Validation Overview**: [OVERVIEW.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md)
-- **Query Patterns**: [QUERY_PATTERNS.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md)
-- **ValidationReport Model**: `/Users/terryli/eon/gapless-crypto-clickhouse/src/gapless_crypto_clickhouse/validation/models.py`
-- **Test Suite**: `/Users/terryli/eon/gapless-crypto-clickhouse/tests/test_validation_storage.py`
+- **Validation Overview**: [OVERVIEW.md](docs/validation/OVERVIEW.md)
+- **Query Patterns**: [QUERY_PATTERNS.md](docs/validation/QUERY_PATTERNS.md)
+- **ValidationReport Model**: `src/gapless_crypto_clickhouse/validation/models.py`
+- **Test Suite**: `tests/test_validation_storage.py`

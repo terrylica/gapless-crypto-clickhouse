@@ -240,7 +240,7 @@ Local Machine (scripts/publish-to-pypi.sh)
 ### Related Work
 
 - **ADR-0026**: ClickHouse Cloud data pipeline (hybrid workflow origin)
-- **semantic-release Skill**: [`~/.claude/skills/semantic-release/SKILL.md`](/Users/terryli/.claude/skills/semantic-release/SKILL.md)
+- **semantic-release Skill**: [`~/.claude/skills/semantic-release/SKILL.md`](~/.claude/skills/semantic-release/SKILL.md)
 - **pypi-doppler Skill**: Local PyPI publishing with Doppler credential management
 
 ### Constraints
@@ -299,7 +299,7 @@ Local Machine (scripts/publish-to-pypi.sh)
 
 ## References
 
-- **ADR-0027**: [`docs/architecture/decisions/0027-local-only-pypi-publishing.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0027-local-only-pypi-publishing.md)
-- **Project Memory**: [`CLAUDE.md`](/Users/terryli/eon/gapless-crypto-clickhouse/CLAUDE.md)
-- **semantic-release Skill**: [`~/.claude/skills/semantic-release/SKILL.md`](/Users/terryli/.claude/skills/semantic-release/SKILL.md)
+- **ADR-0027**: [`docs/architecture/decisions/0027-local-only-pypi-publishing.md`](docs/architecture/decisions/0027-local-only-pypi-publishing.md)
+- **Project Memory**: [`CLAUDE.md`](CLAUDE.md)
+- **semantic-release Skill**: [`~/.claude/skills/semantic-release/SKILL.md`](~/.claude/skills/semantic-release/SKILL.md)
 - **Sub-Agent Reports**: Ephemeral (in-memory during planning)

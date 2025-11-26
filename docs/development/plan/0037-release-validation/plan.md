@@ -606,8 +606,8 @@ Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
 
 ## References
 
-- ADR-0037: `/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0037-release-validation-observability.md`
-- Earthfile: `/Users/terryli/eon/gapless-crypto-clickhouse/Earthfile`
-- GitHub Actions Workflow: `/Users/terryli/eon/gapless-crypto-clickhouse/.github/workflows/release-validation.yml`
-- ClickHouse Schema: `/Users/terryli/eon/gapless-crypto-clickhouse/scripts/deploy-monitoring-schema.py`
-- Validation Scripts: `/Users/terryli/eon/gapless-crypto-clickhouse/scripts/validate_*.py`
+- ADR-0037: `docs/architecture/decisions/0037-release-validation-observability.md`
+- Earthfile: `Earthfile`
+- GitHub Actions Workflow: `.github/workflows/release-validation.yml`
+- ClickHouse Schema: `scripts/deploy-monitoring-schema.py`
+- Validation Scripts: `scripts/validate_*.py`

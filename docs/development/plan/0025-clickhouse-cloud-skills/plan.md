@@ -194,9 +194,9 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 
 ### Related Work
 
-- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](/Users/terryli/.claude/skills/skill-architecture/SKILL.md)
-- **Marketplace validator**: `/Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py`
-- **semantic-release**: [`~/.claude/skills/semantic-release/SKILL.md`](/Users/terryli/.claude/skills/semantic-release/SKILL.md)
+- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](~/.claude/skills/skill-architecture/SKILL.md)
+- **Marketplace validator**: `~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py`
+- **semantic-release**: [`~/.claude/skills/semantic-release/SKILL.md`](~/.claude/skills/semantic-release/SKILL.md)
 
 ### Constraints
 
@@ -254,7 +254,7 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 
 ## References
 
-- **ADR-0025**: [`docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md)
+- **ADR-0025**: [`docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md`](docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md)
 - **Source**: `/tmp/clickhouse_setup_final_summary.md`
-- **Project Memory**: [`CLAUDE.md`](/Users/terryli/eon/gapless-crypto-clickhouse/CLAUDE.md)
-- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](/Users/terryli/.claude/skills/skill-architecture/SKILL.md)
+- **Project Memory**: [`CLAUDE.md`](CLAUDE.md)
+- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](~/.claude/skills/skill-architecture/SKILL.md)

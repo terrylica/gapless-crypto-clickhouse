@@ -12,30 +12,30 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 ### Architecture
 
-- [Architecture Overview](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md) - Core components, data flow, SLOs
-- [Data Format Specification](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/DATA_FORMAT.md) - 11-column microstructure format
+- [Architecture Overview](docs/architecture/OVERVIEW.md) - Core components, data flow, SLOs
+- [Data Format Specification](docs/architecture/DATA_FORMAT.md) - 11-column microstructure format
 
 ### Usage Guides
 
-- [Data Collection Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/DATA_COLLECTION.md) - CLI usage, dual data source strategy, troubleshooting
-- [Python API Reference](/Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/python-api.md) - Function-based and class-based APIs, complete examples
+- [Data Collection Guide](docs/guides/DATA_COLLECTION.md) - CLI usage, dual data source strategy, troubleshooting
+- [Python API Reference](docs/guides/python-api.md) - Function-based and class-based APIs, complete examples
 
 ### Validation System
 
-- [Validation Architecture](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/ARCHITECTURE.md) - Three-layer model (CSV/ClickHouse/Performance), v6.0.0 compatibility
-- [Validation Overview](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/OVERVIEW.md) - 5-layer validation pipeline, DuckDB persistence
-- [ValidationStorage Specification](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/STORAGE.md) - Database schema, API methods
-- [AI Agent Query Patterns](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/QUERY_PATTERNS.md) - Common patterns for validation analysis
-- [E2E Testing Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/E2E_TESTING_GUIDE.md) - Playwright E2E validation, screenshot evidence, debugging
-- [Screenshot Baseline Management](/Users/terryli/eon/gapless-crypto-clickhouse/docs/validation/SCREENSHOT_BASELINE.md) - Visual regression detection workflow
+- [Validation Architecture](docs/validation/ARCHITECTURE.md) - Three-layer model (CSV/ClickHouse/Performance), v6.0.0 compatibility
+- [Validation Overview](docs/validation/OVERVIEW.md) - 5-layer validation pipeline, DuckDB persistence
+- [ValidationStorage Specification](docs/validation/STORAGE.md) - Database schema, API methods
+- [AI Agent Query Patterns](docs/validation/QUERY_PATTERNS.md) - Common patterns for validation analysis
+- [E2E Testing Guide](docs/validation/E2E_TESTING_GUIDE.md) - Playwright E2E validation, screenshot evidence, debugging
+- [Screenshot Baseline Management](docs/validation/SCREENSHOT_BASELINE.md) - Visual regression detection workflow
 
 ### Development
 
-- [Development Setup](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/SETUP.md) - Environment setup, IDE configuration, troubleshooting
-- [Development Commands](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/COMMANDS.md) - Testing, code quality, build, CI/CD
-- [CLI Migration Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md) - Migrating from gapless-crypto-data to gapless-crypto-clickhouse
-- [Publishing Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md) - PyPI publishing workflow
-- [`semantic-release`](/Users/terryli/.claude/skills/semantic-release/SKILL.md) - Automated versioning with Node.js semantic-release v25+, PyPI publishing with Doppler
+- [Development Setup](docs/development/SETUP.md) - Environment setup, IDE configuration, troubleshooting
+- [Development Commands](docs/development/COMMANDS.md) - Testing, code quality, build, CI/CD
+- [CLI Migration Guide](docs/development/CLI_MIGRATION_GUIDE.md) - Migrating from gapless-crypto-data to gapless-crypto-clickhouse
+- [Publishing Guide](docs/development/PUBLISHING.md) - PyPI publishing workflow
+- [`semantic-release`](~/.claude/skills/semantic-release/SKILL.md) - Automated versioning with Node.js semantic-release v25+, PyPI publishing with Doppler
 
 ## PyPI Publishing Architecture
 
@@ -66,14 +66,14 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 - **Control**: Manual approval before production release
 - **Flexibility**: Centralized credential management via Doppler
 
-**Complete Workflow**: See [PUBLISHING.md](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/PUBLISHING.md) for step-by-step guide, troubleshooting, and safety mechanisms.
+**Complete Workflow**: See [PUBLISHING.md](docs/development/PUBLISHING.md) for step-by-step guide, troubleshooting, and safety mechanisms.
 
 ### Validated Workflows
 
 **Multi-Agent Methodologies** - Extracted from production use (ClickHouse migration):
 
-- [`multi-agent-e2e-validation`](/Users/terryli/.claude/skills/multi-agent-e2e-validation/SKILL.md) - Parallel E2E validation workflow for database refactors (3-layer model: environment → data flow → query interface). Discovered 5 critical bugs (100% failure rate) before release.
-- [`multi-agent-performance-profiling`](/Users/terryli/.claude/skills/multi-agent-performance-profiling/SKILL.md) - 5-agent parallel profiling workflow for bottleneck identification. Proved ClickHouse ingests at 1.1M rows/sec (11x faster than target), revealing download as true bottleneck (90% of time).
+- [`multi-agent-e2e-validation`](~/.claude/skills/multi-agent-e2e-validation/SKILL.md) - Parallel E2E validation workflow for database refactors (3-layer model: environment → data flow → query interface). Discovered 5 critical bugs (100% failure rate) before release.
+- [`multi-agent-performance-profiling`](~/.claude/skills/multi-agent-performance-profiling/SKILL.md) - 5-agent parallel profiling workflow for bottleneck identification. Proved ClickHouse ingests at 1.1M rows/sec (11x faster than target), revealing download as true bottleneck (90% of time).
 
 **When to use**: Database migrations, pipeline refactors, performance investigations, pre-release validation
 
@@ -83,9 +83,9 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 **Production Infrastructure** - Credentials stored in Doppler (`aws-credentials/prd`) + 1Password (Engineering vault)
 
-- [`clickhouse-cloud-service-setup`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-service-setup/SKILL.md) - Fetch service details from ClickHouse Cloud API (organization ID, service endpoints, configuration)
-- [`clickhouse-cloud-credentials`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/SKILL.md) - Store API keys and connection details in Doppler + 1Password
-- [`clickhouse-cloud-connection`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/SKILL.md) - Test and validate ClickHouse Cloud connectivity
+- [`clickhouse-cloud-service-setup`](skills/clickhouse-cloud-service-setup/SKILL.md) - Fetch service details from ClickHouse Cloud API (organization ID, service endpoints, configuration)
+- [`clickhouse-cloud-credentials`](skills/clickhouse-cloud-credentials/SKILL.md) - Store API keys and connection details in Doppler + 1Password
+- [`clickhouse-cloud-connection`](skills/clickhouse-cloud-connection/SKILL.md) - Test and validate ClickHouse Cloud connectivity
 
 **When to use**: Setting up new ClickHouse Cloud services, rotating credentials, validating cloud connections
 
@@ -142,7 +142,7 @@ client = clickhouse_connect.get_client(
 result = client.query("SELECT * FROM ohlcv FINAL WHERE symbol = 'BTCUSDT'")
 ```
 
-**Reference**: [ADR-0034](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0034-schema-optimization-prop-trading.md) - Schema optimization for prop trading production readiness
+**Reference**: [ADR-0034](docs/architecture/decisions/0034-schema-optimization-prop-trading.md) - Schema optimization for prop trading production readiness
 
 ### CI/CD Production Validation
 
@@ -196,7 +196,7 @@ doppler run --project aws-credentials --config prd -- uv run scripts/validate_bi
 - Validates complete pipeline: CDN → CSV → DataFrame → ClickHouse → Query
 - Scheduled monitoring detects infrastructure degradation independent of code changes
 
-**Reference**: [ADR-0038](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0038-real-binance-data-validation.md) - Real Binance Data Validation
+**Reference**: [ADR-0038](docs/architecture/decisions/0038-real-binance-data-validation.md) - Real Binance Data Validation
 
 **CI/CD Architecture** (ADR-0036, updated by ADR-0039): 2-workflow system
 
@@ -216,7 +216,7 @@ doppler run --project aws-credentials --config prd -- uv run scripts/validate_bi
 
 - `setup-python-uv`: Python 3.12 + UV installation with dependency caching
 
-**Reference**: [ADR-0039](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0039-validation-redundancy-cleanup.md) - Validation Redundancy Cleanup
+**Reference**: [ADR-0039](docs/architecture/decisions/0039-validation-redundancy-cleanup.md) - Validation Redundancy Cleanup
 
 ### Release Validation Observability
 
@@ -283,13 +283,13 @@ ORDER BY last_validation DESC
 - **Early detection**: Identifies GitHub Release failures, PyPI version mismatches, production health issues within minutes
 - **MTTR reduction**: Automated alerts eliminate manual verification, accelerate incident response
 
-**Reference**: [ADR-0037](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0037-release-validation-observability.md) - Release validation observability flow
+**Reference**: [ADR-0037](docs/architecture/decisions/0037-release-validation-observability.md) - Release validation observability flow
 
 ### Company Employee Onboarding
 
 **Claude Code CLI Optimized** - Step-by-step workflow for 3-10 company employees using ClickHouse Cloud
 
-- [`gapless-crypto-clickhouse-onboarding`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md) - Complete onboarding workflow (Doppler OR .env file, <15 minute setup, connection testing, troubleshooting guide)
+- [`gapless-crypto-clickhouse-onboarding`](skills/gapless-crypto-clickhouse-onboarding/SKILL.md) - Complete onboarding workflow (Doppler OR .env file, <15 minute setup, connection testing, troubleshooting guide)
 
 **When to use**: Company employee first-time setup, credential configuration, connection errors, mentions "onboarding" or "how do I connect to ClickHouse Cloud"
 
@@ -299,7 +299,7 @@ ORDER BY last_validation DESC
 
 **Primary Use Case**: Programmatic API consumption (`import gapless_crypto_clickhouse`) by downstream packages and AI coding agents
 
-**Specification**: [`docs/sdk-quality-standards.yaml`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/sdk-quality-standards.yaml) - Machine-readable standards
+**Specification**: [`docs/sdk-quality-standards.yaml`](docs/sdk-quality-standards.yaml) - Machine-readable standards
 
 **Key Abstractions**:
 

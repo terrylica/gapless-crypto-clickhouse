@@ -432,9 +432,9 @@ uv publish --token "${PYPI_TOKEN}"
 
 ## Related Documentation
 
-- **ADR-0027**: [`docs/architecture/decisions/0027-local-only-pypi-publishing.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/decisions/0027-local-only-pypi-publishing.md) - Architectural decision record
-- **Plan**: [`docs/development/plan/0027-local-only-pypi-publishing/plan.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0027-local-only-pypi-publishing/plan.md) - Implementation plan
-- **semantic-release Skill**: [`~/.claude/skills/semantic-release/SKILL.md`](/Users/terryli/.claude/skills/semantic-release/SKILL.md) - Local-first release workflow
+- **ADR-0027**: [`docs/architecture/decisions/0027-local-only-pypi-publishing.md`](docs/architecture/decisions/0027-local-only-pypi-publishing.md) - Architectural decision record
+- **Plan**: [`docs/development/plan/0027-local-only-pypi-publishing/plan.md`](docs/development/plan/0027-local-only-pypi-publishing/plan.md) - Implementation plan
+- **semantic-release Skill**: [`~/.claude/skills/semantic-release/SKILL.md`](~/.claude/skills/semantic-release/SKILL.md) - Local-first release workflow
 - **pypi-doppler Skill**: Doppler-based PyPI publishing (credential management)
 
 ---

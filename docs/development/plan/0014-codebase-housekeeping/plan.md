@@ -441,9 +441,9 @@ These artifacts document the ClickHouse fork creation, database-first architectu
 **Changes**:
 
 ```markdown
-- - [CLI Migration Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md) - v3.x to v4.0.0 migration (CLI removed)
+- - [CLI Migration Guide](docs/development/CLI_MIGRATION_GUIDE.md) - v3.x to v4.0.0 migration (CLI removed)
 
-* - [CLI Migration Guide](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/CLI_MIGRATION_GUIDE.md) - Migrating from gapless-crypto-data (different package)
+* - [CLI Migration Guide](docs/development/CLI_MIGRATION_GUIDE.md) - Migrating from gapless-crypto-data (different package)
 ```
 
 **Validation**: CLAUDE.md accurately describes CLI_MIGRATION_GUIDE.md purpose

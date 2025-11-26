@@ -61,7 +61,7 @@ if len(gaps) > 0:
 
 ### Reference Implementation
 
-Battle-tested patterns from `/Users/terryli/eon/data-source-manager/utils/for_core/rest_client_utils.py`:
+Battle-tested patterns from `../data-source-manager/utils/for_core/rest_client_utils.py`:
 
 - tenacity: 3 attempts with 1s/2s/3s backoff
 - HTTP 418/429: Rate limit detection with retry-after header

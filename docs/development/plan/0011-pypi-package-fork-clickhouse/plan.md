@@ -134,7 +134,7 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 
 **Steps**:
 
-1. Create directory: `/Users/terryli/eon/gapless-crypto-clickhouse/`
+1. Create directory: ``
 2. Copy all files from `main-clickhouse` branch
 3. Initialize git: `git init && git remote add origin git@github.com:terrylica/gapless-crypto-clickhouse.git`
 

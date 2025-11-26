@@ -6,7 +6,7 @@
 
 **ADR ID**: 0025
 
-**Related Plans**: [`docs/development/plan/0025-clickhouse-cloud-skills/plan.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0025-clickhouse-cloud-skills/plan.md)
+**Related Plans**: [`docs/development/plan/0025-clickhouse-cloud-skills/plan.md`](docs/development/plan/0025-clickhouse-cloud-skills/plan.md)
 
 ## Context
 
@@ -128,7 +128,7 @@ Create **3 project-local atomic skills** extracting validated workflows from pro
 
 ## Implementation
 
-See: [`docs/development/plan/0025-clickhouse-cloud-skills/plan.md`](/Users/terryli/eon/gapless-crypto-clickhouse/docs/development/plan/0025-clickhouse-cloud-skills/plan.md)
+See: [`docs/development/plan/0025-clickhouse-cloud-skills/plan.md`](docs/development/plan/0025-clickhouse-cloud-skills/plan.md)
 
 **ADR-Task Sync**: Plan contains (a) plan, (b) context, (c) task list maintained via TodoWrite tool
 
@@ -144,6 +144,6 @@ See: [`docs/development/plan/0025-clickhouse-cloud-skills/plan.md`](/Users/terry
 ## References
 
 - Source: `/tmp/clickhouse_setup_final_summary.md` (validated production setup)
-- Skill Architecture: [`~/.claude/skills/skill-architecture/SKILL.md`](/Users/terryli/.claude/skills/skill-architecture/SKILL.md)
-- Marketplace Validator: `/Users/terryli/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py`
-- Project Memory: [`CLAUDE.md`](/Users/terryli/eon/gapless-crypto-clickhouse/CLAUDE.md) (Link Farm pattern)
+- Skill Architecture: [`~/.claude/skills/skill-architecture/SKILL.md`](~/.claude/skills/skill-architecture/SKILL.md)
+- Marketplace Validator: `~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py`
+- Project Memory: [`CLAUDE.md`](CLAUDE.md) (Link Farm pattern)

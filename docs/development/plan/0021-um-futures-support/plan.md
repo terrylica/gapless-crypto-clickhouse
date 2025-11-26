@@ -1133,8 +1133,8 @@ Location: `/tmp/um-futures-audit/`
 
 - **Binance Vision API**: https://data.binance.vision
 - **Binance Futures API**: https://fapi.binance.com/fapi/v1/klines
-- **binance-futures-availability**: /Users/terryli/eon/binance-futures-availability
-- **data-source-manager (DSM)**: /Users/terryli/eon/data-source-manager (pattern reference)
+- **binance-futures-availability**: ../binance-futures-availability
+- **data-source-manager (DSM)**: ../data-source-manager (pattern reference)
 
 ### Related ADRs & Plans
 

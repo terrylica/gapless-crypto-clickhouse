@@ -125,7 +125,7 @@ Handled separately from this ADR:
 ## References
 
 - **ADR-0029**: Docstring and Package Version Alignment (2025-11-22)
-- **Audit Report**: `/Users/terryli/eon/gapless-crypto-clickhouse/CROSS_REFERENCE_REPORT.md`
+- **Audit Report**: `CROSS_REFERENCE_REPORT.md`
 - **Parent Issue**: Documentation consistency post-v8.0.0 release
 
 ## Timeline
