@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [14.1.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.0...v14.1.1) (2025-11-26)
+
+### Bug Fixes
+
+* **docs:** correct package name in AI agent prompt (README.md:681) ([60a5ca6](https://github.com/terrylica/gapless-crypto-clickhouse/commit/60a5ca6a9a14e10bc585075ec2ed907db5a091d0))
+
 ## [14.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.0.0...v14.1.0) (2025-11-26)
 
 ### Features
