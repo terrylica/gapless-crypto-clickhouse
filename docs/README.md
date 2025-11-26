@@ -44,7 +44,7 @@ For users leveraging ClickHouse database features:
 
 1. **[ClickHouse Migration Guide](CLICKHOUSE_MIGRATION.md)** - Migrating from v3.x file-based to v4.0.0 database integration
 2. **[ADR-0005: ClickHouse Migration Decision](architecture/decisions/0005-clickhouse-migration.md)** - Technical rationale and implementation details
-3. **[Docker Compose Setup](../docker-compose.yml)** - Production-ready ClickHouse container configuration
+3. **[ADR-0043: ClickHouse Cloud-Only Policy](architecture/decisions/0043-clickhouse-cloud-only-policy.md)** - Cloud-only architecture decision
 
 **Breaking Changes**: v4.0.0 introduces optional ClickHouse database support. File-based workflows remain supported for backward compatibility.
 
@@ -68,5 +68,4 @@ For contributors and developers:
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/terrylica/gapless-crypto-clickhouse/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/terrylica/gapless-crypto-clickhouse/discussions)
 - **Email**: terry@eonlabs.com

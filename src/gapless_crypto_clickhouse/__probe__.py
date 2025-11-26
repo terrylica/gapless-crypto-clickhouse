@@ -328,6 +328,15 @@ class ProbeAPI:
         except Exception:
             return False
 
+    def _get_version(self) -> str:
+        """Get package version."""
+        try:
+            from . import __version__
+
+            return __version__
+        except ImportError:
+            return "unknown"
+
 
 # Global probe instance for easy access
 _probe_instance = ProbeAPI()

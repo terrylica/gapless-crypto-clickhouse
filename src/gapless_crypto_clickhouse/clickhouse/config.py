@@ -1,8 +1,13 @@
 """
 ClickHouse configuration for gapless-crypto-clickhouse.
 
-Environment variable support for connection parameters.
-Follows same pattern as QuestDBConfig (ADR-0003).
+**ClickHouse Cloud** is the single source of truth for this package (ADR-0043).
+Configure credentials via Doppler (aws-credentials/prd) or environment variables.
+
+STRICT CLOUD-ONLY POLICY:
+- CLICKHOUSE_HOST environment variable is REQUIRED (no localhost fallback)
+- Default port is 8443 (ClickHouse Cloud HTTPS)
+- Default secure is True (TLS/SSL enabled)
 
 Error Handling: Raise and propagate (no fallback, no defaults for required params)
 """
@@ -11,77 +16,118 @@ import os
 from dataclasses import dataclass
 
 
+class ClickHouseCloudRequiredError(ValueError):
+    """Raised when ClickHouse Cloud credentials are not configured."""
+
+    pass
+
+
 @dataclass
 class ClickHouseConfig:
     """
-    ClickHouse connection configuration.
+    ClickHouse Cloud connection configuration.
+
+    **ClickHouse Cloud** is the single source of truth (ADR-0043).
+    CLICKHOUSE_HOST environment variable is REQUIRED - no localhost fallback.
 
     Attributes:
-        host: ClickHouse server hostname (default: localhost)
-        port: Native protocol port (default: 9000)
-        http_port: HTTP interface port (default: 8123)
+        host: ClickHouse Cloud hostname (REQUIRED, e.g., your-instance.clickhouse.cloud)
+        port: Native protocol port (default: 9440 for Cloud secure)
+        http_port: HTTPS interface port (default: 8443 for Cloud)
         database: Database name (default: default)
         user: Username (default: default)
-        password: Password (default: empty)
-        secure: Enable TLS/SSL for secure connections (default: False, required for ClickHouse Cloud)
+        password: Password (required for Cloud)
+        secure: Enable TLS/SSL (default: True for Cloud)
 
     Environment Variables:
-        CLICKHOUSE_HOST: Override host
-        CLICKHOUSE_PORT: Override native protocol port
-        CLICKHOUSE_HTTP_PORT: Override HTTP port
-        CLICKHOUSE_DATABASE: Override database name
-        CLICKHOUSE_USER: Override username
-        CLICKHOUSE_PASSWORD: Override password
-        CLICKHOUSE_SECURE: Enable TLS/SSL (set to 'true' for ClickHouse Cloud)
+        CLICKHOUSE_HOST: ClickHouse Cloud hostname (REQUIRED)
+        CLICKHOUSE_PORT: Native port (9440 for Cloud secure)
+        CLICKHOUSE_HTTP_PORT: HTTPS port (8443 for Cloud)
+        CLICKHOUSE_DATABASE: Database name
+        CLICKHOUSE_USER: Username
+        CLICKHOUSE_PASSWORD: Password (required for Cloud)
+        CLICKHOUSE_SECURE: Set to 'true' for ClickHouse Cloud (default: true)
 
     Example:
-        # Default configuration (localhost)
+        # ClickHouse Cloud via Doppler (recommended)
+        # doppler run --project aws-credentials --config prd -- python script.py
         config = ClickHouseConfig.from_env()
 
-        # Custom configuration
-        config = ClickHouseConfig(host="clickhouse.example.com", port=9000)
+        # ClickHouse Cloud via environment
+        # export CLICKHOUSE_HOST=your-instance.clickhouse.cloud
+        # export CLICKHOUSE_PASSWORD=your-password
+        config = ClickHouseConfig.from_env()
+
+    Raises:
+        ClickHouseCloudRequiredError: If CLICKHOUSE_HOST is not set
     """
 
-    host: str = "localhost"
-    port: int = 9000
-    http_port: int = 8123
+    host: str = ""  # REQUIRED - no default (Cloud-only policy)
+    port: int = 9440  # Cloud secure native port
+    http_port: int = 8443  # Cloud HTTPS port
     database: str = "default"
     user: str = "default"
     password: str = ""
-    secure: bool = False
+    secure: bool = True  # Cloud requires TLS/SSL
 
     @classmethod
     def from_env(cls) -> "ClickHouseConfig":
         """
         Create configuration from environment variables.
 
+        **STRICT CLOUD-ONLY POLICY**: CLICKHOUSE_HOST is REQUIRED.
+        No localhost fallback - ClickHouse Cloud is the single source of truth.
+
         Returns:
-            ClickHouseConfig with values from environment or defaults
+            ClickHouseConfig with values from environment
 
         Raises:
+            ClickHouseCloudRequiredError: If CLICKHOUSE_HOST is not set
             ValueError: If CLICKHOUSE_PORT is not a valid integer
 
         Example:
-            export CLICKHOUSE_HOST=clickhouse.example.com
-            export CLICKHOUSE_PORT=9000
+            # Via Doppler (recommended)
+            # doppler run --project aws-credentials --config prd -- python script.py
+            config = ClickHouseConfig.from_env()
+
+            # Via environment variables
+            # export CLICKHOUSE_HOST=your-instance.clickhouse.cloud
+            # export CLICKHOUSE_PASSWORD=your-password
             config = ClickHouseConfig.from_env()
         """
+        # STRICT CLOUD-ONLY: Require CLICKHOUSE_HOST (ADR-0043)
+        host = os.getenv("CLICKHOUSE_HOST")
+        if not host:
+            raise ClickHouseCloudRequiredError(
+                "CLICKHOUSE_HOST environment variable is REQUIRED.\n"
+                "ClickHouse Cloud is the single source of truth (ADR-0043).\n"
+                "\n"
+                "Configure via Doppler (recommended):\n"
+                "  doppler run --project aws-credentials --config prd -- python script.py\n"
+                "\n"
+                "Or via environment variables:\n"
+                "  export CLICKHOUSE_HOST=your-instance.clickhouse.cloud\n"
+                "  export CLICKHOUSE_PASSWORD=your-password"
+            )
+
         try:
-            port = int(os.getenv("CLICKHOUSE_PORT", "9000"))
-            http_port = int(os.getenv("CLICKHOUSE_HTTP_PORT", "8123"))
+            # Cloud defaults: 9440 (native secure), 8443 (HTTPS)
+            port = int(os.getenv("CLICKHOUSE_PORT", "9440"))
+            http_port = int(os.getenv("CLICKHOUSE_HTTP_PORT", "8443"))
         except ValueError as e:
             raise ValueError(
                 f"Invalid CLICKHOUSE_PORT or CLICKHOUSE_HTTP_PORT (must be integer): {e}"
             ) from e
 
         return cls(
-            host=os.getenv("CLICKHOUSE_HOST", "localhost"),
+            host=host,
             port=port,
             http_port=http_port,
             database=os.getenv("CLICKHOUSE_DATABASE", "default"),
             user=os.getenv("CLICKHOUSE_USER", "default"),
             password=os.getenv("CLICKHOUSE_PASSWORD", ""),
-            secure=os.getenv("CLICKHOUSE_SECURE", "false").lower() in ("true", "1", "yes"),
+            # Cloud-only default: secure=True
+            secure=os.getenv("CLICKHOUSE_SECURE", "true").lower() in ("true", "1", "yes"),
         )
 
     def validate(self) -> None:

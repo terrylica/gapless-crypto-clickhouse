@@ -25,8 +25,8 @@ def test_btcusdt_query_does_not_return_ethusdt_data():
         df = query_engine.get_range(
             symbol="BTCUSDT",
             timeframe="1h",
-            start_date="2024-01-01",
-            end_date="2024-01-07",
+            start="2024-01-01",
+            end="2024-01-07",
             instrument_type="spot",
         )
 
@@ -53,8 +53,8 @@ def test_multi_symbol_ingestion_isolation():
         df_eth_before = query_engine.get_range(
             symbol="ETHUSDT",
             timeframe="1h",
-            start_date="2024-01-01",
-            end_date="2024-01-07",
+            start="2024-01-01",
+            end="2024-01-07",
             instrument_type="spot",
         )
         eth_count_before = len(df_eth_before)
@@ -66,8 +66,8 @@ def test_multi_symbol_ingestion_isolation():
         df_eth_after = query_engine.get_range(
             symbol="ETHUSDT",
             timeframe="1h",
-            start_date="2024-01-01",
-            end_date="2024-01-07",
+            start="2024-01-01",
+            end="2024-01-07",
             instrument_type="spot",
         )
         eth_count_after = len(df_eth_after)
@@ -89,8 +89,8 @@ def test_spot_futures_isolation():
         df_spot = query_engine.get_range(
             symbol="BTCUSDT",
             timeframe="1h",
-            start_date="2024-01-01",
-            end_date="2024-01-07",
+            start="2024-01-01",
+            end="2024-01-07",
             instrument_type="spot",
         )
 
@@ -98,9 +98,9 @@ def test_spot_futures_isolation():
         df_futures = query_engine.get_range(
             symbol="BTCUSDT",
             timeframe="1h",
-            start_date="2024-01-01",
-            end_date="2024-01-07",
-            instrument_type="um",  # futures-um
+            start="2024-01-01",
+            end="2024-01-07",
+            instrument_type="futures",  # USDT-Margined Futures
         )
 
         # Verify instrument_type isolation
@@ -110,7 +110,7 @@ def test_spot_futures_isolation():
             )
 
         if len(df_futures) > 0:
-            assert (df_futures["instrument_type"] == "um").all(), (
+            assert (df_futures["instrument_type"] == "futures").all(), (
                 f"Futures query returned non-futures data: {df_futures['instrument_type'].unique()}"
             )
 
@@ -157,8 +157,8 @@ def test_timeframe_isolation():
         df_1h = query_engine.get_range(
             symbol="BTCUSDT",
             timeframe="1h",
-            start_date="2024-01-01",
-            end_date="2024-01-07",
+            start="2024-01-01",
+            end="2024-01-07",
             instrument_type="spot",
         )
 
@@ -166,8 +166,8 @@ def test_timeframe_isolation():
         df_4h = query_engine.get_range(
             symbol="BTCUSDT",
             timeframe="4h",
-            start_date="2024-01-01",
-            end_date="2024-01-07",
+            start="2024-01-01",
+            end="2024-01-07",
             instrument_type="spot",
         )
 

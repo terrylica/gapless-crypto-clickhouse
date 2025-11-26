@@ -15,26 +15,27 @@ from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
 @pytest.mark.integration
 @pytest.mark.slow
-def test_clickhouse_connection_uses_http_port_8123():
-    """Verify ClickHouseConnection uses HTTP port 8123 (not native TCP 9000).
+def test_clickhouse_connection_uses_https_cloud():
+    """Verify ClickHouseConnection uses HTTPS port 8443 for ClickHouse Cloud (ADR-0043).
 
-    ClickHouse native TCP protocol (port 9000) is not used. We rely on HTTP interface
-    for query execution, which is simpler and more widely supported.
+    ClickHouse Cloud uses HTTPS interface (port 8443) with TLS/SSL.
+    Native TCP protocol (port 9000) is not used for Cloud connections.
     """
     with ClickHouseConnection() as conn:
-        # Verify client uses HTTP interface
-        # clickhouse_connect client uses port 8123 by default for HTTP
-        interface = conn.client.server_host
-        port = conn.client.server_port
-
         # Verify connection is established
         assert conn.client is not None, "Client should be initialized"
 
-        # Verify port 8123 is used (HTTP interface)
-        assert port == 8123, f"Expected HTTP port 8123, got {port}"
+        # Verify config uses HTTPS port 8443 for Cloud (ADR-0043: Cloud-only policy)
+        port = conn.config.http_port
+        assert port == 8443, f"Expected Cloud HTTPS port 8443, got {port}"
 
-        # Verify host is correct
-        assert interface == "localhost", f"Expected localhost, got {interface}"
+        # Verify host is not localhost (Cloud-only)
+        host = conn.config.host
+        assert host != "localhost", f"Expected Cloud host, got localhost (violates ADR-0043)"
+        assert ".cloud" in host or ".clickhouse" in host, f"Expected Cloud host, got {host}"
+
+        # Verify secure connection is enabled
+        assert conn.config.secure is True, "TLS/SSL should be enabled for Cloud"
 
 
 @pytest.mark.integration

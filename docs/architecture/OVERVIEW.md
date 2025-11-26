@@ -44,7 +44,7 @@ The system consists of six primary components:
 - **Persistence**: DuckDB-based storage for validation reports
 - **AI Integration**: SQL query interface for AI coding agents
 - **Location**: `src/gapless_crypto_clickhouse/validation/csv_validator.py`
-- **Details**: See [Validation Overview](docs/validation/OVERVIEW.md)
+- **Details**: See [Validation Overview](../validation/OVERVIEW.md)
 
 ### ValidationStorage
 
@@ -52,7 +52,7 @@ The system consists of six primary components:
 - **Schema**: 30+ columns with flattened metrics for SQL queries
 - **Storage**: `~/.cache/gapless-crypto-data/validation.duckdb` (XDG-compliant)
 - **Location**: `src/gapless_crypto_clickhouse/validation/storage.py`
-- **Details**: See [Validation Storage Specification](docs/validation/STORAGE.md)
+- **Details**: See [Validation Storage Specification](../validation/STORAGE.md)
 
 ### AtomicCSVOperations
 
@@ -271,7 +271,7 @@ This format provides complete microstructure data for:
 - Order flow metrics (taker buy volumes)
 - Trade frequency analysis (number of trades)
 
-See [Data Format Specification](docs/architecture/DATA_FORMAT.md) for detailed definitions.
+See [Data Format Specification](DATA_FORMAT.md) for detailed definitions.
 
 ## System Boundaries
 
@@ -318,14 +318,14 @@ See [Data Format Specification](docs/architecture/DATA_FORMAT.md) for detailed d
 
 ## Architecture References
 
-- **Canonical Status**: [CURRENT_ARCHITECTURE_STATUS.yaml](docs/CURRENT_ARCHITECTURE_STATUS.yaml)
-- **Core Components**: [CORE_COMPONENTS.md](docs/architecture/CORE_COMPONENTS.md)
-- **Network Architecture**: [network.md](docs/architecture/network.md)
-- **Data Flow Diagrams**: [docs/diagrams/](docs/diagrams/)
+- **Canonical Status**: [CURRENT_ARCHITECTURE_STATUS.yaml](../CURRENT_ARCHITECTURE_STATUS.yaml)
+- **Core Components**: [CORE_COMPONENTS.md](CORE_COMPONENTS.md)
+- **Network Architecture**: [network.md](network.md)
+- **Data Flow Diagrams**: [diagrams/](../diagrams/)
 
 ## Related Documentation
 
-- **Data Collection Guide**: [docs/guides/DATA_COLLECTION.md](docs/guides/DATA_COLLECTION.md)
-- **Gap Filling Operations**: [docs/guides/GAP_FILLING.md](docs/guides/GAP_FILLING.md)
-- **Validation System**: [docs/validation/OVERVIEW.md](docs/validation/OVERVIEW.md)
-- **Python API Reference**: [docs/api/quick-start.md](docs/api/quick-start.md)
+- **Data Collection Guide**: [DATA_COLLECTION.md](../guides/DATA_COLLECTION.md)
+- **Gap Filling Operations**: [GAP_FILLING.md](../guides/GAP_FILLING.md)
+- **Validation System**: [OVERVIEW.md](../validation/OVERVIEW.md)
+- **Python API Reference**: [quick-start.md](../api/quick-start.md)

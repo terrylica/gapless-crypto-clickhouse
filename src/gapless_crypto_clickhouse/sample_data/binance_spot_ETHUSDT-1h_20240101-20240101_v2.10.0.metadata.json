@@ -1,7 +1,7 @@
 {
   "version": "v2.10.0",
   "generator": "BinancePublicDataCollector",
-  "generation_timestamp": "2025-11-26T01:36:06.963788+00:00Z",
+  "generation_timestamp": "2025-11-26T07:07:07.677361+00:00Z",
   "data_source": "Binance Public Data Repository",
   "data_source_url": "https://data.binance.vision/data/spot/monthly/klines",
   "market_type": "spot",
@@ -81,7 +81,7 @@
     "total_missing_bars": 0,
     "gap_filling_method": "authentic_binance_api",
     "data_completeness_score": 1.0,
-    "analysis_timestamp": "2025-11-26T01:36:06.963769+00:00Z",
+    "analysis_timestamp": "2025-11-26T07:07:07.677344+00:00Z",
     "analysis_parameters": {
       "timeframe": "1h",
       "expected_interval_minutes": 60,

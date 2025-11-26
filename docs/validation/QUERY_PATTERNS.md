@@ -410,6 +410,6 @@ if recent['total_errors'].mean() > baseline['total_errors'].mean():
 
 ## Related Documentation
 
-- **Validation Overview**: [OVERVIEW.md](docs/validation/OVERVIEW.md)
-- **Storage Specification**: [STORAGE.md](docs/validation/STORAGE.md)
+- **Validation Overview**: [OVERVIEW.md](OVERVIEW.md)
+- **Storage Specification**: [STORAGE.md](STORAGE.md)
 - **Test Examples**: `tests/test_validation_storage.py`

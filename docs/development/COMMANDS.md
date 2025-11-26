@@ -311,7 +311,7 @@ uv lock
    - Publishes to PyPI with Doppler credentials
    - CI detection guards prevent accidental CI execution
 
-**See**: [PUBLISHING.md](docs/development/PUBLISHING.md) for complete workflow.
+**See**: [PUBLISHING.md](PUBLISHING.md) for complete workflow.
 
 ---
 
@@ -331,7 +331,7 @@ uv build
 
 ### PyPI Publishing
 
-**Canonical Guide**: See [PUBLISHING.md](docs/development/PUBLISHING.md) for complete workflow.
+**Canonical Guide**: See [PUBLISHING.md](PUBLISHING.md) for complete workflow.
 
 **Quick Reference** (Local-Only Publishing):
 
@@ -350,7 +350,7 @@ git pull origin main
 - ✅ Repository verification prevents fork abuse
 - ✅ ~30 seconds locally vs 3-5 minutes in CI
 
-**Why Local-Only?** See [ADR-0027](docs/architecture/decisions/0027-local-only-pypi-publishing.md) for architectural decision.
+**Why Local-Only?** See [ADR-0027](../architecture/decisions/0027-local-only-pypi-publishing.md) for architectural decision.
 
 ## Performance Profiling
 
@@ -518,6 +518,6 @@ Before creating pull request:
 
 ## Related Documentation
 
-- **Development Setup**: [SETUP.md](docs/development/SETUP.md)
-- **SDK Quality Standards**: [docs/sdk-quality-standards.yaml](docs/sdk-quality-standards.yaml)
-- **Architecture Overview**: [docs/architecture/OVERVIEW.md](docs/architecture/OVERVIEW.md)
+- **Development Setup**: [SETUP.md](SETUP.md)
+- **SDK Quality Standards**: [sdk-quality-standards.yaml](../sdk-quality-standards.yaml)
+- **Architecture Overview**: [OVERVIEW.md](../architecture/OVERVIEW.md)

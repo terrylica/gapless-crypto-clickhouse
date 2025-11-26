@@ -50,9 +50,12 @@ class ExpectedSchema:
         }
     )
 
-    engine: str = "ReplacingMergeTree"
+    # ADR-0043: ClickHouse Cloud uses SharedReplacingMergeTree
+    engine: str = "SharedReplacingMergeTree"  # Cloud variant (local uses ReplacingMergeTree)
+    valid_engines: Tuple[str, ...] = ("ReplacingMergeTree", "SharedReplacingMergeTree")
     partition_key: str = "toYYYYMMDD(timestamp)"
-    sorting_key: Tuple[str, ...] = ("timestamp", "symbol", "timeframe", "instrument_type")
+    # ADR-0034: Symbol-first indexing for prop trading queries (10-100x faster)
+    sorting_key: str = "symbol, timeframe, toStartOfHour(timestamp), timestamp"
 
     # Expected compression codecs (optional validation)
     expected_codecs: Dict[str, str] = field(
@@ -205,7 +208,10 @@ class SchemaValidator:
         return errors
 
     def _validate_engine(self) -> List[str]:
-        """Validate table engine is ReplacingMergeTree with _version column."""
+        """Validate table engine is ReplacingMergeTree or SharedReplacingMergeTree with _version column.
+
+        ADR-0043: ClickHouse Cloud uses SharedReplacingMergeTree variant.
+        """
         query = """
             SELECT engine, engine_full
             FROM system.tables
@@ -219,10 +225,11 @@ class SchemaValidator:
         engine, engine_full = result[0]
         errors = []
 
-        if engine != self.expected.engine:
+        # ADR-0043: Accept both local and Cloud engine variants
+        if engine not in self.expected.valid_engines:
             errors.append(
-                f"Wrong engine: expected {self.expected.engine}, got {engine}. "
-                f"ReplacingMergeTree required for zero-gap guarantee."
+                f"Wrong engine: expected one of {self.expected.valid_engines}, got {engine}. "
+                f"ReplacingMergeTree (or SharedReplacingMergeTree for Cloud) required for zero-gap guarantee."
             )
 
         # Verify _version column is used for deduplication
@@ -258,7 +265,11 @@ class SchemaValidator:
         return []
 
     def _validate_sorting_key(self) -> List[str]:
-        """Validate sorting key (ORDER BY) for query optimization."""
+        """Validate sorting key (ORDER BY) for query optimization.
+
+        ADR-0034: Symbol-first indexing for prop trading queries.
+        ORDER BY (symbol, timeframe, toStartOfHour(timestamp), timestamp)
+        """
         query = """
             SELECT sorting_key
             FROM system.tables
@@ -270,13 +281,13 @@ class SchemaValidator:
             return ["Cannot retrieve sorting_key for ohlcv table"]
 
         actual_sorting_key = result[0][0]
-        expected_sorting_key = ", ".join(self.expected.sorting_key)
+        expected_sorting_key = self.expected.sorting_key
 
         if actual_sorting_key != expected_sorting_key:
             return [
                 f"Sorting key mismatch: "
                 f"expected ({expected_sorting_key}), got ({actual_sorting_key}). "
-                f"Correct sorting key required for query performance."
+                f"ADR-0034: Symbol-first indexing required for prop trading query performance."
             ]
 
         return []

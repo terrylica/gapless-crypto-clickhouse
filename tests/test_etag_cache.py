@@ -213,8 +213,8 @@ class TestETagCacheCompliance:
         """Test default cache uses XDG-compliant location."""
         cache = ETagCache()
 
-        # Should be in ~/.cache/gapless-crypto-data/
-        expected_parent = Path.home() / ".cache" / "gapless-crypto-data"
+        # Should be in ~/.cache/gapless-crypto-clickhouse/
+        expected_parent = Path.home() / ".cache" / "gapless-crypto-clickhouse"
         assert cache.cache_dir == expected_parent
         assert cache.cache_file == expected_parent / "etags.json"
 

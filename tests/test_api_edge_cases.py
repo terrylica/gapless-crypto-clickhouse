@@ -181,7 +181,9 @@ class TestGetInfo:
     def test_get_info_structure(self):
         """Test get_info returns expected structure."""
         info = gcch.get_info()
-        assert info["version"] == "8.0.0"  # Current package version (from __init__.py)
+        # Version should be a semantic version string (don't hardcode to avoid breaking on release)
+        assert isinstance(info["version"], str)
+        assert len(info["version"].split(".")) >= 2, "Version should be semver format"
         assert info["name"] == "gapless-crypto-clickhouse"  # ADR-0029: package name alignment
         assert "description" in info
         assert "supported_symbols" in info

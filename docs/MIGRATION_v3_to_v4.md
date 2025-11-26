@@ -532,8 +532,8 @@ A: Follow the rollback procedure (downgrade to v3.3.0) and report the issue on G
 
 - **[ClickHouse Migration Guide](CLICKHOUSE_MIGRATION.md)** - Technical deep-dive on ClickHouse implementation
 - **[ADR-0005: ClickHouse Migration](architecture/decisions/0005-clickhouse-migration.md)** - Decision rationale and architecture details
-- **[Docker Compose Reference](../docker-compose.yml)** - Production-ready ClickHouse configuration
-- **[GitHub Discussions](https://github.com/terrylica/gapless-crypto-clickhouse/discussions)** - Community support
+- **[ADR-0043: ClickHouse Cloud-Only Policy](architecture/decisions/0043-clickhouse-cloud-only-policy.md)** - Cloud-only architecture decision
+- **[GitHub Issues](https://github.com/terrylica/gapless-crypto-clickhouse/issues)** - Bug reports and feature requests
 - **[Release Notes](release-notes.md)** - Complete v4.0.0 changelog
 
 ## Support
@@ -541,7 +541,6 @@ A: Follow the rollback procedure (downgrade to v3.3.0) and report the issue on G
 **Need help with migration?**
 
 - **GitHub Issues**: https://github.com/terrylica/gapless-crypto-clickhouse/issues
-- **GitHub Discussions**: https://github.com/terrylica/gapless-crypto-clickhouse/discussions
 - **Email**: terry@eonlabs.com
 
 **Before posting**:

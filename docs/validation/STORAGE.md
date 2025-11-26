@@ -336,7 +336,7 @@ with duckdb.connect(str(db_path)) as conn:
 
 ## Related Documentation
 
-- **Validation Overview**: [OVERVIEW.md](docs/validation/OVERVIEW.md)
-- **Query Patterns**: [QUERY_PATTERNS.md](docs/validation/QUERY_PATTERNS.md)
+- **Validation Overview**: [OVERVIEW.md](OVERVIEW.md)
+- **Query Patterns**: [QUERY_PATTERNS.md](QUERY_PATTERNS.md)
 - **ValidationReport Model**: `src/gapless_crypto_clickhouse/validation/models.py`
 - **Test Suite**: `tests/test_validation_storage.py`

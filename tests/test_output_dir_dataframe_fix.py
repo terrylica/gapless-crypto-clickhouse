@@ -39,7 +39,6 @@ def test_output_dir_bug_fix():
         metadata_files = list(test_output_dir.glob("*.json"))
         assert len(metadata_files) == 1, f"Expected 1 metadata file, found {len(metadata_files)}"
 
-        print("✅ Output_dir bug fix confirmed!")
 
 
 def test_dataframe_return_functionality():
@@ -108,7 +107,6 @@ def test_dataframe_return_functionality():
         )
         assert stats["total_bars"] > 0, f"Expected positive bars, got {stats['total_bars']}"
 
-        print("✅ DataFrame return functionality confirmed!")
 
 
 def test_backwards_compatibility():
@@ -138,11 +136,3 @@ def test_backwards_compatibility():
         df_from_file = pd.read_csv(filepath, comment="#")
         assert len(df_from_file) == len(df), "DataFrame and file should have same length"
 
-        print("✅ Backwards compatibility confirmed!")
-
-
-if __name__ == "__main__":
-    test_output_dir_bug_fix()
-    test_dataframe_return_functionality()
-    test_backwards_compatibility()
-    print("🎉 All tests passed!")

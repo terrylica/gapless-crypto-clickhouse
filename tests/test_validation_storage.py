@@ -101,9 +101,9 @@ class TestValidationStorageEndToEnd:
         """Test that get_validation_db_path follows XDG Base Directory spec."""
         db_path = get_validation_db_path()
 
-        # Should be under ~/.cache/gapless-crypto-data/
+        # Should be under ~/.cache/gapless-crypto-clickhouse/
         assert ".cache" in str(db_path), "Path should use .cache directory"
-        assert "gapless-crypto-data" in str(db_path), "Path should include package name"
+        assert "gapless-crypto-clickhouse" in str(db_path), "Path should include package name"
         assert db_path.name == "validation.duckdb", (
             f"Expected validation.duckdb, got {db_path.name}"
         )

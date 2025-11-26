@@ -73,11 +73,12 @@ class ClickHouseConnection:
             Exception: If connection fails
 
         Example:
-            # Default configuration (localhost)
+            # From environment variables (Cloud credentials required)
+            # Requires CLICKHOUSE_HOST to be set (ADR-0043: Cloud-only policy)
             conn = ClickHouseConnection()
 
-            # Custom configuration
-            config = ClickHouseConfig(host="clickhouse.example.com")
+            # Explicit Cloud configuration
+            config = ClickHouseConfig(host="your-instance.clickhouse.cloud", password="...")
             conn = ClickHouseConnection(config)
         """
         self.config = config or ClickHouseConfig.from_env()

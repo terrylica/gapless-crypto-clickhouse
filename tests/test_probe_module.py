@@ -22,7 +22,7 @@ class TestProbeAPIDiscovery:
         assert "endpoints" in api_map
 
         # Verify metadata
-        assert api_map["metadata"]["package"] == "gapless-crypto-data"
+        assert api_map["metadata"]["package"] == "gapless-crypto-clickhouse"
         assert "version" in api_map["metadata"]
         assert api_map["metadata"]["probe_version"] == "1.0.0"
         assert api_map["metadata"]["type"] == "cryptocurrency-data-collection"
@@ -69,8 +69,9 @@ class TestProbeAPIDiscovery:
         api_map = __probe__.discover_api()
         cli = api_map["cli"]
 
-        assert cli["entry_point"] == "gapless-crypto-data"
-        assert cli["uv_usage"] == "uv run gapless-crypto-data"
+        # This package is a Python API library (no CLI entry point)
+        assert cli["entry_point"] is None
+        assert "uv_usage" in cli
         assert "common_patterns" in cli
         assert isinstance(cli["common_patterns"], list)
         assert len(cli["common_patterns"]) > 0

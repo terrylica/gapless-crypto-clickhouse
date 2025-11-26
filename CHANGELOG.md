@@ -12,37 +12,37 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### Documentation
 
-* **readme:** fifth audit - AOD/IOI principles, semantic abstractions ([60241c8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/60241c8f833c57f180acc5230dac43e6cf3bd4eb)), closes [#-database-integration](https://github.com/terrylica/gapless-crypto-clickhouse/issues/-database-integration) [#database-integration](https://github.com/terrylica/gapless-crypto-clickhouse/issues/database-integration)
+- **readme:** fifth audit - AOD/IOI principles, semantic abstractions ([60241c8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/60241c8f833c57f180acc5230dac43e6cf3bd4eb)), closes [#-database-integration](https://github.com/terrylica/gapless-crypto-clickhouse/issues/-database-integration) [#database-integration](https://github.com/terrylica/gapless-crypto-clickhouse/issues/database-integration)
 
 ## [14.1.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.5...v14.1.6) (2025-11-26)
 
 ### Documentation
 
-* **readme:** fourth audit - dynamic descriptions, no promo, intent over implementation ([329682e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/329682ecafba40c8db5172eb784c9af77584d39a))
+- **readme:** fourth audit - dynamic descriptions, no promo, intent over implementation ([329682e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/329682ecafba40c8db5172eb784c9af77584d39a))
 
 ## [14.1.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.4...v14.1.5) (2025-11-26)
 
 ### Documentation
 
-* **readme:** third audit pass - fix invalid claims and API signatures ([9b6f8aa](https://github.com/terrylica/gapless-crypto-clickhouse/commit/9b6f8aa87d3101497dce3e996ee7bade9fed41b2)), closes [#ai-agent-integration](https://github.com/terrylica/gapless-crypto-clickhouse/issues/ai-agent-integration)
+- **readme:** third audit pass - fix invalid claims and API signatures ([9b6f8aa](https://github.com/terrylica/gapless-crypto-clickhouse/commit/9b6f8aa87d3101497dce3e996ee7bade9fed41b2)), closes [#ai-agent-integration](https://github.com/terrylica/gapless-crypto-clickhouse/issues/ai-agent-integration)
 
 ## [14.1.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.3...v14.1.4) (2025-11-26)
 
 ### Documentation
 
-* **readme:** second audit pass - validity and accuracy fixes ([e8e78e9](https://github.com/terrylica/gapless-crypto-clickhouse/commit/e8e78e910c28f6711bdc67d8da8bbb0496f268d9))
+- **readme:** second audit pass - validity and accuracy fixes ([e8e78e9](https://github.com/terrylica/gapless-crypto-clickhouse/commit/e8e78e910c28f6711bdc67d8da8bbb0496f268d9))
 
 ## [14.1.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.2...v14.1.3) (2025-11-26)
 
 ### Bug Fixes
 
-* lower Python version requirement to 3.11+ ([4a023a6](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4a023a6b34e7131efc345c4f407e53a4b8ee2228))
+- lower Python version requirement to 3.11+ ([4a023a6](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4a023a6b34e7131efc345c4f407e53a4b8ee2228))
 
 ## [14.1.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.1...v14.1.2) (2025-11-26)
 
 ### Documentation
 
-* **readme:** audit and rectify README.md for validity and DRY ([98c9120](https://github.com/terrylica/gapless-crypto-clickhouse/commit/98c9120c22ff8c9962aed9d7fae74e8c398c37f5))
+- **readme:** audit and rectify README.md for validity and DRY ([98c9120](https://github.com/terrylica/gapless-crypto-clickhouse/commit/98c9120c22ff8c9962aed9d7fae74e8c398c37f5))
 
 ## [14.1.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.0...v14.1.1) (2025-11-26)
 

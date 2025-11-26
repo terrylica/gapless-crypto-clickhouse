@@ -173,8 +173,8 @@ def test_deduplication_across_ingestion_sessions():
         df_before = query_engine.get_range(
             symbol="BTCUSDT",
             timeframe="1h",
-            start_date="2024-01-01",
-            end_date="2024-01-31",
+            start="2024-01-01",
+            end="2024-01-31",
             instrument_type="spot",
         )
         count_before = len(df_before)
@@ -190,8 +190,8 @@ def test_deduplication_across_ingestion_sessions():
         df_after = query_engine.get_range(
             symbol="BTCUSDT",
             timeframe="1h",
-            start_date="2024-01-01",
-            end_date="2024-01-31",
+            start="2024-01-01",
+            end="2024-01-31",
             instrument_type="spot",
         )
         count_after = len(df_after)

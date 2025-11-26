@@ -39,11 +39,15 @@ class TestSimpleAPI:
         assert "ETHUSDT" in symbols
         assert "SOLUSDT" in symbols
 
-        # All symbols should be strings and end with common quote currencies
+        # All symbols should be strings
         for symbol in symbols:
             assert isinstance(symbol, str)
-            # Binance supports multiple quote currencies (USDT, USDC, BUSD, BNB, BTC, ETH)
-            assert any(symbol.endswith(quote) for quote in ["USDT", "USDC", "BUSD", "BNB", "BTC", "ETH"])
+            assert len(symbol) > 0
+
+        # Most symbols should end with common quote currencies (allow for special cases like SETTLED)
+        valid_quotes = ["USDT", "USDC", "BUSD", "BNB", "BTC", "ETH", "SETTLED"]
+        valid_count = sum(1 for s in symbols if any(s.endswith(q) for q in valid_quotes))
+        assert valid_count == len(symbols), f"Some symbols don't end with expected currencies"
 
     def test_get_supported_timeframes(self):
         """Test getting supported timeframe intervals"""
@@ -78,7 +82,7 @@ class TestSimpleAPI:
             assert field in info
 
         # Validate content
-        assert info["name"] == "gapless-crypto-data"
+        assert info["name"] == "gapless-crypto-clickhouse"
         assert info["version"] == gcch.__version__
         assert isinstance(info["supported_symbols"], list)
         assert isinstance(info["supported_timeframes"], list)

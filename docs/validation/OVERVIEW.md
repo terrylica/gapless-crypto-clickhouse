@@ -84,7 +84,7 @@ supersedes: ["1.0.0"]
 
 **Interface**: SQL query interface for flexible data exploration
 
-See [Storage Specification](docs/validation/STORAGE.md) for complete schema details.
+See [Storage Specification](STORAGE.md) for complete schema details.
 
 ## Storage Backend
 
@@ -170,7 +170,7 @@ print(f"Total: {stats['total_validations']}")
 print(f"Avg errors: {stats['avg_errors']}")
 ```bash
 
-See [Query Patterns Guide](docs/validation/QUERY_PATTERNS.md) for complete examples.
+See [Query Patterns Guide](QUERY_PATTERNS.md) for complete examples.
 
 ## Design Principles
 
@@ -297,7 +297,7 @@ correlation = df[["coverage_percentage", "total_errors"]].corr()
 
 ## Related Documentation
 
-- **Storage Specification**: [STORAGE.md](docs/validation/STORAGE.md)
-- **Query Patterns**: [QUERY_PATTERNS.md](docs/validation/QUERY_PATTERNS.md)
-- **Architecture Overview**: [docs/architecture/OVERVIEW.md](docs/architecture/OVERVIEW.md)
-- **Test Suite**: [tests/test_validation_storage.py](tests/test_validation_storage.py)
+- **Storage Specification**: [STORAGE.md](STORAGE.md)
+- **Query Patterns**: [QUERY_PATTERNS.md](QUERY_PATTERNS.md)
+- **Architecture Overview**: [OVERVIEW.md](../architecture/OVERVIEW.md)
+- **Test Suite**: [test_validation_storage.py](../../tests/test_validation_storage.py)

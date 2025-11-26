@@ -62,19 +62,16 @@ uv tool install gapless-crypto-clickhouse
 pip install gapless-crypto-clickhouse
 ```
 
-### Database Setup (ClickHouse)
+### Database Setup (ClickHouse Cloud)
 
-For persistent storage and advanced query capabilities, set up ClickHouse:
+This package uses **ClickHouse Cloud** as the single source of truth for persistent storage. Configure credentials via environment variables or Doppler:
 
 ```bash
-# Start ClickHouse using Docker Compose
-docker-compose up -d
-
-# Verify ClickHouse is running
-docker-compose ps
-
-# View logs
-docker-compose logs -f clickhouse
+# Required environment variables
+export CLICKHOUSE_HOST=your-instance.clickhouse.cloud
+export CLICKHOUSE_PORT=8443
+export CLICKHOUSE_USER=default
+export CLICKHOUSE_PASSWORD=your-password
 ```
 
 See [Database Integration](#database-integration) for complete setup guide and usage examples.
@@ -187,38 +184,29 @@ AtomicCSVOperations → Final Gapless Dataset with Order Flow Metrics
 
 ## Database Integration
 
-ClickHouse is the **recommended backend** for this package. While the package works without a database (file-based approach), ClickHouse enables persistent storage, advanced query capabilities, and multi-symbol analysis.
+**ClickHouse Cloud** is the single source of truth for this package. While the package works without a database (file-based approach), ClickHouse Cloud enables persistent storage, advanced query capabilities, and multi-symbol analysis.
 
 **When to use**:
 
 - **File-based approach**: Simple workflows, single symbols, CSV output, no database setup required
 - **Database approach** (recommended): Multi-symbol analysis, time-series queries, aggregations, production pipelines
 
-### Quick Start with Docker Compose
+### ClickHouse Cloud Setup
 
-The repository includes a production-ready `docker-compose.yml` for local development:
+Configure ClickHouse Cloud credentials via environment variables or Doppler:
 
 ```bash
-# Start ClickHouse (runs in background)
-docker-compose up -d
+# Environment variables (or use Doppler for secret management)
+export CLICKHOUSE_HOST=your-instance.clickhouse.cloud
+export CLICKHOUSE_PORT=8443
+export CLICKHOUSE_USER=default
+export CLICKHOUSE_PASSWORD=your-password
 
-# Verify container is healthy
-docker-compose ps
-
-# View initialization logs
-docker-compose logs clickhouse
-
-# Access ClickHouse client (optional)
-docker exec -it gapless-clickhouse clickhouse-client
+# Deploy schema (creates ohlcv table with ReplacingMergeTree)
+doppler run --project aws-credentials --config prd -- python scripts/deploy-clickhouse-schema.py
 ```
 
-**What happens on first start**:
-
-1. Downloads ClickHouse alpine image
-2. Creates `ohlcv` table with ReplacingMergeTree engine (from `schema.sql`)
-3. Configures compression and health checks
-
-**Schema auto-initialization**: The `schema.sql` file is automatically executed via Docker's `initdb.d` mechanism.
+**Schema deployment**: The `scripts/deploy-clickhouse-schema.py` script creates the `ohlcv` table with optimized ORDER BY for prop trading queries (ADR-0034).
 
 ### Unified Query API
 
@@ -366,57 +354,17 @@ with ClickHouseConnection() as conn:
 
 ### Configuration
 
-**Environment Variables** (`.env` file or system environment):
+**Environment Variables** (Doppler recommended, or `.env` file):
 
 ```bash
-CLICKHOUSE_HOST=localhost        # ClickHouse server hostname
-CLICKHOUSE_PORT=9000             # Native protocol port (default: 9000)
-CLICKHOUSE_HTTP_PORT=8123        # HTTP interface port (default: 8123)
-CLICKHOUSE_USER=default          # Username (default: 'default')
-CLICKHOUSE_PASSWORD=             # Password (empty for local dev)
-CLICKHOUSE_DB=default            # Database name (default: 'default')
+CLICKHOUSE_HOST=your-instance.clickhouse.cloud  # ClickHouse Cloud hostname
+CLICKHOUSE_PORT=8443                            # HTTPS port (ClickHouse Cloud)
+CLICKHOUSE_USER=default                         # Username
+CLICKHOUSE_PASSWORD=your-password               # Password (required for Cloud)
+CLICKHOUSE_DB=default                           # Database name
 ```
 
-**Docker Compose defaults**: The included `docker-compose.yml` uses these defaults, no `.env` file required for local development.
-
-### Local Visualization Tools
-
-Toolchain for ClickHouse data exploration and monitoring:
-
-**Web Interfaces**:
-
-- **CH-UI** (modern TypeScript UI): http://localhost:5521
-  ```bash
-  docker-compose up -d ch-ui
-  ```
-- **ClickHouse Play** (built-in): http://localhost:8123/play
-
-**CLI Tools**:
-
-- **clickhouse-client** (official CLI):
-  ```bash
-  docker exec -it gapless-clickhouse clickhouse-client
-  ```
-- **clickhouse-local** (file analysis without server):
-  ```bash
-  clickhouse-local --query "SELECT * FROM file('data.csv', CSV)"
-  ```
-
-**Performance Monitoring**:
-
-- **chdig** (TUI with flamegraph visualization):
-  ```bash
-  brew install chdig
-  chdig --host localhost --port 9000
-  ```
-
-**Validation**: Run automated validation suite:
-
-```bash
-bash scripts/validate-clickhouse-tools.sh
-```
-
-**Comprehensive guides**: See [`docs/development/`](https://github.com/terrylica/gapless-crypto-clickhouse/tree/main/docs/development/) for detailed usage guides, examples, and troubleshooting.
+**Doppler integration**: Credentials stored in `aws-credentials/prd` project. Use `doppler run` to inject secrets automatically.
 
 ### Migration Guide
 
@@ -424,9 +372,9 @@ bash scripts/validate-clickhouse-tools.sh
 
 See [`docs/CLICKHOUSE_MIGRATION.md`](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/docs/CLICKHOUSE_MIGRATION.md) for:
 
-- Architecture changes (file-based → ClickHouse)
+- Architecture changes (file-based → ClickHouse Cloud)
 - Code migration examples (drop-in replacement)
-- Deployment guide (Docker Compose, production)
+- Deployment guide (ClickHouse Cloud)
 - Performance characteristics (ingestion, query, deduplication)
 - Troubleshooting common issues
 
@@ -434,7 +382,7 @@ See [`docs/CLICKHOUSE_MIGRATION.md`](https://github.com/terrylica/gapless-crypto
 
 - Package name: `gapless-crypto-data` → `gapless-crypto-clickhouse`
 - Import paths: `gapless_crypto_data` → `gapless_crypto_clickhouse`
-- ClickHouse requirement: Recommended for production workflows (Docker Compose provided)
+- ClickHouse Cloud: Single source of truth (credentials via Doppler)
 - Python version: 3.11+ (was 3.9-3.13)
 - API signatures: **Unchanged** (backwards compatible)
 
@@ -442,17 +390,14 @@ See [`docs/CLICKHOUSE_MIGRATION.md`](https://github.com/terrylica/gapless-crypto
 
 ### Production Deployment
 
-**Recommended setup**:
+**ClickHouse Cloud** (recommended):
 
-1. **Persistent storage**: Mount volumes for data durability
-2. **Authentication**: Set `CLICKHOUSE_PASSWORD` for non-localhost deployments
-3. **TLS**: Enable TLS for remote connections
-4. **Monitoring**: ClickHouse exports Prometheus metrics on port 9363
-5. **Backups**: Use ClickHouse Backup tool or volume snapshots
+1. **Credentials**: Store in Doppler (`aws-credentials/prd`) - never in source code
+2. **TLS**: Enabled by default on port 8443
+3. **Monitoring**: ClickHouse Cloud provides built-in observability
+4. **Backups**: Automated by ClickHouse Cloud
 
-**Scaling**: ClickHouse supports single-node deployments for typical workloads, with sharding and replication available for larger datasets.
-
-See ClickHouse documentation for production deployment best practices.
+**Scaling**: ClickHouse Cloud handles scaling automatically. See ClickHouse Cloud documentation for advanced configuration.
 
 ## Advanced Usage
 
@@ -677,7 +622,7 @@ Provide insights about cryptocurrency data collection capabilities and usage pat
 - **UV Package Manager** - [Install UV](https://docs.astral.sh/uv/getting-started/installation/)
 - **Python 3.11+** - UV will manage Python versions automatically
 - **Git** - For repository cloning and version control
-- **Docker & Docker Compose** (Optional) - For ClickHouse database development
+- **Doppler CLI** (Optional) - For ClickHouse Cloud credential management
 
 ### Development Installation Workflow
 
@@ -711,11 +656,21 @@ uv sync --dev
 uv run pytest
 ```
 
-#### Step 3a: Database Setup (Optional - ClickHouse)
+#### Step 3a: Database Setup (Optional - ClickHouse Cloud)
 
-If you want to develop with ClickHouse database features, see [Quick Start with Docker Compose](#quick-start-with-docker-compose) for setup instructions.
+If you want to develop with ClickHouse database features, configure credentials via Doppler or environment variables:
 
-**Test database ingestion**:
+```bash
+# Option 1: Doppler (recommended)
+doppler setup  # Select aws-credentials/prd
+
+# Option 2: Environment variables
+export CLICKHOUSE_HOST=your-instance.clickhouse.cloud
+export CLICKHOUSE_PORT=8443
+export CLICKHOUSE_PASSWORD=your-password
+```
+
+**Test database connection**:
 
 ```python
 # Create a test script: test_clickhouse.py
@@ -731,18 +686,8 @@ with ClickHouseConnection() as conn:
     rows = loader.ingest_month("BTCUSDT", "1d", year=2024, month=1)
     print(f"Test ingestion: {rows} rows")
 
-# Run test
-# uv run python test_clickhouse.py
-```
-
-**Teardown**:
-
-```bash
-# Stop ClickHouse (keeps data)
-docker-compose down
-
-# Stop and delete all data (fresh start)
-docker-compose down -v
+# Run test with Doppler
+# doppler run -- uv run python test_clickhouse.py
 ```
 
 #### Step 4: Set Up Pre-Commit Hooks (Mandatory)
@@ -790,48 +735,21 @@ uv run pre-commit run --all-files
 | Validate pre-commit    | `uv run pre-commit run --all-files`                                                   |
 | Build package          | `uv build`                                                                            |
 
-### E2E Validation Framework
+### Production Validation
 
-Automated validation of ClickHouse web interfaces with Playwright and screenshot evidence.
+Automated validation of ClickHouse Cloud connectivity and data integrity runs via GitHub Actions (every 6 hours).
 
-**Validate Web Interfaces**:
-
-```bash
-# Full validation (static + unit + integration + e2e)
-uv run scripts/run_validation.py
-
-# E2E tests only
-uv run scripts/run_validation.py --e2e-only
-
-# CI mode (headless, no interactive prompts)
-uv run scripts/run_validation.py --ci
-```
-
-**First-Time Setup**:
+**Manual validation**:
 
 ```bash
-# Install Playwright browsers (one-time)
-uv run playwright install chromium --with-deps
+# Validate ClickHouse Cloud connection
+doppler run --project aws-credentials --config prd -- uv run scripts/validate_clickhouse_cloud.py
 
-# Verify installation
-uv run playwright --version
+# Validate Binance CDN availability
+uv run scripts/validate_binance_cdn.py
 ```
 
-**Test Targets**:
-
-- **CH-UI Dashboard**: localhost:5521
-- **ClickHouse Play**: localhost:8123/play
-
-**Features**:
-
-- Screenshot capture for visual regression detection
-- CI/CD optimized with browser caching
-
-**Documentation**:
-
-- [E2E Testing Guide](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/docs/validation/E2E_TESTING_GUIDE.md)
-- [Screenshot Baseline Management](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/docs/validation/SCREENSHOT_BASELINE.md)
-- [ADR-0013: Autonomous Validation Framework](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/docs/architecture/decisions/0013-autonomous-validation-framework.md)
+**CI/CD validation**: See `.github/workflows/production-validation.yml` for scheduled production health checks.
 
 ### Project Structure for Development
 

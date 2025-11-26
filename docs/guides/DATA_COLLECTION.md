@@ -294,8 +294,8 @@ If file write errors:
 
 ## Related Documentation
 
-- **Architecture Overview**: [docs/architecture/OVERVIEW.md](docs/architecture/OVERVIEW.md)
-- **Data Format**: [docs/architecture/DATA_FORMAT.md](docs/architecture/DATA_FORMAT.md)
-- **Python API Reference**: [python-api.md](docs/guides/python-api.md)
-- **Gap Filling**: [GAP_FILLING.md](docs/guides/GAP_FILLING.md) (planned)
-- **Validation**: [docs/validation/OVERVIEW.md](docs/validation/OVERVIEW.md)
+- **Architecture Overview**: [OVERVIEW.md](../architecture/OVERVIEW.md)
+- **Data Format**: [DATA_FORMAT.md](../architecture/DATA_FORMAT.md)
+- **Python API Reference**: [python-api.md](python-api.md)
+- **Gap Filling**: [GAP_FILLING.md](GAP_FILLING.md) (planned)
+- **Validation**: [OVERVIEW.md](../validation/OVERVIEW.md)
