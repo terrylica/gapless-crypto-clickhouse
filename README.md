@@ -38,8 +38,8 @@ Both packages share the same performance optimization via Binance public reposit
 - ClickHouse ReplacingMergeTree for deterministic deduplication
 - USDT-margined futures support (perpetual contracts via `instrument_type` column)
 - Zero gaps guarantee through monthly-to-daily fallback
-- All 16 Binance timeframes (1s through 1mo)
-- 11-column microstructure format with order flow metrics
+- All Binance-supported timeframes (1s through 1mo)
+- Microstructure format with order flow metrics (see [Data Structure](#data-structure))
 - Multi-symbol SQL queries, joins, and aggregations
 - Compressed storage (DoubleDelta timestamps, Gorilla OHLCV)
 - AI agent integration via probe hooks
@@ -77,7 +77,7 @@ docker-compose ps
 docker-compose logs -f clickhouse
 ```
 
-See [Database Integration](#-database-integration) for complete setup guide and usage examples.
+See [Database Integration](#database-integration) for complete setup guide and usage examples.
 
 ### Python API (Recommended)
 
@@ -135,7 +135,7 @@ gaps = gap_filler.detect_all_gaps("BTCUSDT_1h_data.csv", "1h")
 
 ## Data Structure
 
-All functions return pandas DataFrames with complete microstructure data:
+All functions return pandas DataFrames with complete microstructure data. The schema includes OHLCV price data plus order flow metrics for professional analysis:
 
 ```python
 import gapless_crypto_clickhouse as gcch
@@ -143,7 +143,7 @@ import gapless_crypto_clickhouse as gcch
 # Fetch data
 df = gcch.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-06-30")
 
-# DataFrame columns (11-column microstructure format)
+# DataFrame columns (microstructure format)
 print(df.columns.tolist())
 # ['date', 'open', 'high', 'low', 'close', 'volume',
 #  'close_time', 'quote_asset_volume', 'number_of_trades',
@@ -170,7 +170,7 @@ The package supports two data collection methods:
 
 ### Core Components
 
-- **BinancePublicDataCollector**: Data collection with full 11-column microstructure format
+- **BinancePublicDataCollector**: Data collection with microstructure format
 - **UniversalGapFiller**: Intelligent gap detection and filling with authentic API-first validation
 - **AtomicCSVOperations**: Corruption-proof file operations with atomic writes
 - **SafeCSVMerger**: Safe merging of data files with integrity validation
@@ -234,7 +234,7 @@ df = query_ohlcv(
     "2024-01-01",
     "2024-01-31"
 )
-print(f"Retrieved {len(df)} rows")  # 744 rows (31 days * 24 hours)
+print(f"Retrieved {len(df)} rows")
 
 # Multi-symbol query
 df = query_ohlcv(
@@ -347,7 +347,7 @@ with ClickHouseConnection() as conn:
 #### Futures Support (ADR-0004)
 
 ```python
-# Ingest futures data (same 11-column format as spot)
+# Ingest futures data (same format as spot)
 with ClickHouseConnection() as conn:
     loader = ClickHouseBulkLoader(conn, instrument_type="futures")
     rows = loader.ingest_month("BTCUSDT", "1h", 2024, 1)
@@ -381,7 +381,7 @@ CLICKHOUSE_DB=default            # Database name (default: 'default')
 
 ### Local Visualization Tools
 
-Comprehensive toolchain for ClickHouse data exploration and monitoring (100% open source):
+Toolchain for ClickHouse data exploration and monitoring:
 
 **Web Interfaces**:
 
@@ -860,7 +860,7 @@ uv publish
 
 ## Supported Timeframes
 
-All 16 Binance timeframes supported for complete market coverage (13 standard + 3 exotic):
+All Binance-supported timeframes for complete market coverage (standard + exotic):
 
 | Timeframe  | Code  | Description              | Use Case                     |
 | ---------- | ----- | ------------------------ | ---------------------------- |
@@ -922,7 +922,7 @@ collector = BinancePublicDataCollector(
 
 **`collect_timeframe_data(trading_timeframe) -> Dict[str, Any]`**
 
-Collect complete historical data for a single timeframe with full 11-column microstructure format.
+Collect complete historical data for a single timeframe with microstructure format.
 
 ```python
 result = collector.collect_timeframe_data("1h")
@@ -948,7 +948,7 @@ for timeframe, result in results.items():
 
 ### UniversalGapFiller
 
-Gap detection and filling for various timeframes with 11-column microstructure format using Binance API data.
+Gap detection and filling for various timeframes using Binance API data.
 
 #### Key Methods
 
@@ -1031,7 +1031,7 @@ success = merger.merge_gap_data_safe(
 
 ### DataFrame Structure (Python API)
 
-Returns pandas DataFrame with 11-column microstructure format:
+Returns pandas DataFrame with microstructure format (see [Data Structure](#data-structure)):
 
 | Column                         | Type           | Description            | Example               |
 | ------------------------------ | -------------- | ---------------------- | --------------------- |
@@ -1078,7 +1078,7 @@ Each CSV file includes comprehensive metadata in `.metadata.json`:
   "symbol": "BTCUSDT",
   "timeframe": "1h",
   "enhanced_microstructure_format": {
-    "total_columns": 11,
+    "total_columns": "<schema_column_count>",
     "analysis_capabilities": [
       "order_flow_analysis",
       "liquidity_metrics",
@@ -1154,4 +1154,3 @@ def collect_multiple_timeframes(
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
