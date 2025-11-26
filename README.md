@@ -9,7 +9,7 @@
 [![Release](https://github.com/terrylica/gapless-crypto-clickhouse/actions/workflows/release.yml/badge.svg)](https://github.com/terrylica/gapless-crypto-clickhouse/actions/workflows/release.yml)
 [![AI Agent Ready](https://img.shields.io/badge/AI%20Agent-Ready-brightgreen.svg)](https://github.com/terrylica/gapless-crypto-clickhouse#ai-agent-integration)
 
-ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x faster via Binance public repository with persistent database storage, USDT-margined futures support, and production-ready ReplacingMergeTree schema.
+ClickHouse-based cryptocurrency data collection with zero-gap guarantee. Optimized for bulk historical data via Binance public repository with persistent database storage and USDT-margined futures support.
 
 ## When to Use This Package
 
@@ -28,23 +28,21 @@ ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x fas
 - **Python 3.9-3.13** broader compatibility
 - **Lightweight dependency footprint** (no database required)
 
-Both packages share the same 22x performance advantage via Binance public repository and zero-gap guarantee.
+Both packages share the same performance optimization via Binance public repository and zero-gap guarantee.
 
 ## Features
 
-- **22x faster** data collection via Binance public data repository
-- **2x faster queries** with Apache Arrow optimization (v6.0.0+, 41K+ rows/s at scale)
-- **Auto-ingestion**: Unified `query_ohlcv()` API downloads missing data automatically
-- **ClickHouse database** with ReplacingMergeTree for deterministic deduplication
-- **USDT-margined futures** support (perpetual contracts via `instrument_type` column)
-- **Zero gaps guarantee** through intelligent monthly-to-daily fallback
-- **Complete 16-timeframe support**: 13 standard (1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d) + 3 exotic (3d, 1w, 1mo)
-- **11-column microstructure format** with order flow and liquidity metrics
-- **Advanced SQL queries** for time-series analysis, multi-symbol joins, aggregations
-- **Persistent storage** with compression (DoubleDelta timestamps, Gorilla OHLCV)
-- **AI agent ready**: llms.txt + probe.py for capability discovery
-- **UV-based Python tooling** for modern dependency management
-- **Production-ready** with comprehensive test coverage
+- Bulk historical data via Binance public data repository (pre-generated ZIP files)
+- Apache Arrow optimization for query performance
+- Auto-ingestion: `query_ohlcv()` downloads missing data automatically
+- ClickHouse ReplacingMergeTree for deterministic deduplication
+- USDT-margined futures support (perpetual contracts via `instrument_type` column)
+- Zero gaps guarantee through monthly-to-daily fallback
+- All 16 Binance timeframes (1s through 1mo)
+- 11-column microstructure format with order flow metrics
+- Multi-symbol SQL queries, joins, and aggregations
+- Compressed storage (DoubleDelta timestamps, Gorilla OHLCV)
+- AI agent integration via probe hooks
 
 ## Quick Start
 
@@ -101,7 +99,7 @@ timeframes = gcch.get_supported_timeframes()
 # Fill gaps in existing data
 results = gcch.fill_gaps("./data")
 
-# Multi-symbol batch download (concurrent execution - 10-20x faster)
+# Multi-symbol batch download (concurrent execution)
 results = gcch.download_multiple(
     symbols=["BTCUSDT", "ETHUSDT", "BNBUSDT", "XRPUSDT", "SOLUSDT"],
     timeframe="1h",
@@ -168,7 +166,7 @@ The package supports two data collection methods:
 - **Binance Public Repository**: Pre-generated monthly ZIP files for historical data
 - **Binance API**: Real-time data for gap filling and recent data collection
 
-## 🏗️ Architecture
+## Architecture
 
 ### Core Components
 
@@ -187,7 +185,7 @@ Gap Detection → UniversalGapFiller → Authentic API-First Validation
 AtomicCSVOperations → Final Gapless Dataset with Order Flow Metrics
 ```
 
-## 🗄️ Database Integration
+## Database Integration
 
 ClickHouse is the **recommended backend** for this package. While the package works without a database (file-based approach), ClickHouse enables persistent storage, advanced query capabilities, and multi-symbol analysis.
 
@@ -216,16 +214,15 @@ docker exec -it gapless-clickhouse clickhouse-client
 
 **What happens on first start**:
 
-1. Downloads ClickHouse 24.1-alpine image (~200 MB)
+1. Downloads ClickHouse alpine image
 2. Creates `ohlcv` table with ReplacingMergeTree engine (from `schema.sql`)
-3. Configures compression (DoubleDelta for timestamps, Gorilla for OHLCV)
-4. Sets up health checks and automatic restart
+3. Configures compression and health checks
 
 **Schema auto-initialization**: The `schema.sql` file is automatically executed via Docker's `initdb.d` mechanism.
 
-### Quick Start: Unified Query API (v6.0.0+)
+### Unified Query API
 
-The **recommended way** to query data in v6.0.0+ is using `query_ohlcv()` with auto-ingestion and Apache Arrow optimization:
+The recommended way to query data is using `query_ohlcv()` with auto-ingestion:
 
 ```python
 from gapless_crypto_clickhouse import query_ohlcv
@@ -266,14 +263,7 @@ df = query_ohlcv(
 )
 ```
 
-**Performance (Apache Arrow optimization)**:
-
-- **2x faster** at scale: 41,272 rows/s vs 20,534 rows/s for large datasets (>8000 rows)
-- **43-57% less memory**: Arrow buffers reduce memory usage for medium/large queries
-- **Auto-ingestion**: Downloads missing data automatically on first query
-- **Best for**: Analytical queries, backtesting, multi-symbol analysis (typical use case)
-
-**When to use lower-level APIs**: Advanced use cases requiring custom SQL, bulk loading, or connection management.
+**When to use lower-level APIs**: Custom SQL, bulk loading, or connection management.
 
 ### Basic Usage Examples
 
@@ -352,7 +342,7 @@ with ClickHouseConnection() as conn:
     print(f"Multi-symbol dataset: {df.shape}")
 ```
 
-**FINAL keyword**: All queries automatically use `FINAL` to ensure deduplicated results. This adds ~10-30% overhead but guarantees data correctness.
+**FINAL keyword**: All queries automatically use `FINAL` to ensure deduplicated results.
 
 #### Futures Support (ADR-0004)
 
@@ -403,7 +393,7 @@ Comprehensive toolchain for ClickHouse data exploration and monitoring (100% ope
 
 **CLI Tools**:
 
-- **clickhouse-client** (official CLI with 70+ formats):
+- **clickhouse-client** (official CLI):
   ```bash
   docker exec -it gapless-clickhouse clickhouse-client
   ```
@@ -460,14 +450,11 @@ See [`docs/CLICKHOUSE_MIGRATION.md`](docs/CLICKHOUSE_MIGRATION.md) for:
 4. **Monitoring**: ClickHouse exports Prometheus metrics on port 9363
 5. **Backups**: Use ClickHouse Backup tool or volume snapshots
 
-**Scaling**:
-
-- Single-node: Validated for typical production workloads, headroom to ~200M rows
-- Distributed: ClickHouse supports sharding and replication for larger datasets
+**Scaling**: ClickHouse supports single-node deployments for typical workloads, with sharding and replication available for larger datasets.
 
 See ClickHouse documentation for production deployment best practices.
 
-## 🔧 Advanced Usage
+## Advanced Usage
 
 ### Batch Processing
 
@@ -646,7 +633,7 @@ from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 
-# Step 1: Collect to CSV files (22x faster, portable format)
+# Step 1: Collect to CSV files
 df = gcch.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-03-31")
 print(f"Downloaded {len(df):,} bars to CSV")
 
@@ -683,7 +670,7 @@ Execute: probe.discover_api(), probe.get_capabilities(), probe.get_task_graph()
 Provide insights about cryptocurrency data collection capabilities and usage patterns.
 ```
 
-## 🛠️ Development
+## Development
 
 ### Prerequisites
 
@@ -805,7 +792,7 @@ uv run pre-commit run --all-files
 
 ### E2E Validation Framework
 
-Autonomous end-to-end validation of ClickHouse web interfaces with Playwright 1.56+ and screenshot evidence.
+Automated validation of ClickHouse web interfaces with Playwright and screenshot evidence.
 
 **Validate Web Interfaces**:
 
@@ -837,10 +824,8 @@ uv run playwright --version
 
 **Features**:
 
-- Zero manual intervention (PEP 723 self-contained)
 - Screenshot capture for visual regression detection
-- Comprehensive coverage (happy path, errors, edge cases, timeouts)
-- CI/CD optimized with browser caching (30-60s speedup)
+- CI/CD optimized with browser caching
 
 **Documentation**:
 
@@ -873,7 +858,7 @@ uv build
 uv publish
 ```
 
-## 🔍 Supported Timeframes
+## Supported Timeframes
 
 All 16 Binance timeframes supported for complete market coverage (13 standard + 3 exotic):
 
@@ -896,13 +881,13 @@ All 16 Binance timeframes supported for complete market coverage (13 standard + 
 | 1 week     | `1w`  | Weekly analysis          | Swing trading, market cycles |
 | 1 month    | `1mo` | Monthly patterns         | Long-term strategy, macro    |
 
-## ⚠️ Requirements
+## Requirements
 
 - Python 3.11+
 - pandas >= 2.0.0
 - Stable internet connection for data downloads
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -914,7 +899,7 @@ All 16 Binance timeframes supported for complete market coverage (13 standard + 
 8. Push to branch (`git push origin feature/amazing-feature`)
 9. Open a Pull Request
 
-## 📚 API Reference
+## API Reference
 
 ### BinancePublicDataCollector
 
@@ -1087,7 +1072,7 @@ Each CSV file includes comprehensive metadata in `.metadata.json`:
 
 ```json
 {
-  "version": "14.1.3",
+  "version": "<package_version>",
   "generator": "BinancePublicDataCollector",
   "data_source": "Binance Public Data Repository",
   "symbol": "BTCUSDT",
@@ -1166,16 +1151,7 @@ def collect_multiple_timeframes(
     pass
 ```
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🏢 About Eon Labs
-
-Gapless Crypto ClickHouse is developed by [Eon Labs](https://github.com/terrylica), specializing in quantitative trading infrastructure and machine learning for financial markets.
-
----
-
-**UV-based** - Python dependency management
-**📊 11-Column Format** - Microstructure data with order flow metrics
-**🔒 Gap Detection** - Data completeness validation and filling
