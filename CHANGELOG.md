@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [14.1.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.5...v14.1.6) (2025-11-26)
+
+### Documentation
+
+* **readme:** fourth audit - dynamic descriptions, no promo, intent over implementation ([329682e](https://github.com/terrylica/gapless-crypto-clickhouse/commit/329682ecafba40c8db5172eb784c9af77584d39a))
+
 ## [14.1.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.4...v14.1.5) (2025-11-26)
 
 ### Documentation
