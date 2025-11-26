@@ -16,7 +16,7 @@ Alpha Forge AI agents identified a HIGH PRIORITY improvement: Multi-symbol batch
 # Current approach - slow for multiple symbols
 dataframes = {}
 for symbol in ["BTCUSDT", "ETHUSDT", "SOLUSDT"]:
-    dataframes[symbol] = gcd.download(symbol, "1h", start_date="2024-01-01")
+    dataframes[symbol] = gcc.download(symbol, "1h", start_date="2024-01-01")
 # → Sequential execution, no concurrency
 ```python
 
@@ -197,7 +197,7 @@ def download_multiple(
         ValueError: If all symbols fail, or if raise_on_partial_failure=True and any fail
 
     Example:
-        >>> results = gcd.download_multiple(
+        >>> results = gcc.download_multiple(
         ...     symbols=["BTCUSDT", "ETHUSDT", "SOLUSDT"],
         ...     timeframe="1h",
         ...     start_date="2024-01-01",
@@ -279,11 +279,11 @@ __all__ = [..., "download_multiple"]
 # Before (sequential)
 results = {}
 for symbol in symbols:
-    results[symbol] = gcd.download(symbol, "1h", start_date="2024-01-01")
+    results[symbol] = gcc.download(symbol, "1h", start_date="2024-01-01")
 # → Slow (20 symbols = 20x sequential time)
 
 # After (concurrent)
-results = gcd.download_multiple(
+results = gcc.download_multiple(
     symbols=symbols,
     timeframe="1h",
     start_date="2024-01-01"

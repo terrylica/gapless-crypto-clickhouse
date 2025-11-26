@@ -37,7 +37,7 @@ Overall: 93.1% validation success (469/504 checks passed)
 **Impact**:
 
 - PyPI package description will show "v2.15.3" (incorrect)
-- Runtime `gcd.__version__` returns "4.0.0" (correct) but help text contradicts
+- Runtime `gcc.__version__` returns "4.0.0" (correct) but help text contradicts
 - 1 test fails unnecessarily (version assertion)
 - Users upgrading from v3.x lack guidance on CLI removal
 
@@ -109,9 +109,9 @@ CLI Removed in v4.0.0:
 **Validation**:
 
 ```python
-import gapless_crypto_clickhouse as gcd
-assert gcd.__version__ == "4.0.0"
-assert "v4.0.0" in gcd.__doc__
+import gapless_crypto_clickhouse as gcc
+assert gcc.__version__ == "4.0.0"
+assert "v4.0.0" in gcc.__doc__
 ```text
 
 ### Fix 2: Test Assertion Update (MEDIUM)
@@ -209,7 +209,7 @@ test -f CHANGELOG.md && echo "PASS" || echo "FAIL"
 **Version Verification**:
 
 ```bash
-uv run python -c "import gapless_crypto_clickhouse as gcd; assert gcd.__version__ == '4.0.0'; assert 'v4.0.0' in gcd.__doc__"
+uv run python -c "import gapless_crypto_clickhouse as gcc; assert gcc.__version__ == '4.0.0'; assert 'v4.0.0' in gcc.__doc__"
 ```text
 
 **Expected**: Exit code 0 (both assertions pass)

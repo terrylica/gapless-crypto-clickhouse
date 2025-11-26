@@ -14,7 +14,7 @@
 
 - **NEW**: Optional ClickHouse database support for persistent storage and advanced queries
 - **BREAKING**: QuestDB support removed (was development-only, never released)
-- **UNCHANGED**: File-based API (`gcd.download()`, `gcd.fetch_data()`) remains fully supported
+- **UNCHANGED**: File-based API (`gcc.download()`, `gcc.fetch_data()`) remains fully supported
 - **UNCHANGED**: 11-column microstructure format, 13 timeframe support, zero-gap guarantee
 
 **Version Strategy**:
@@ -89,13 +89,13 @@ uv pip install --upgrade gapless-crypto-data
 **Verify upgrade**:
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 # Check version
-print(gcd.__version__)  # Should print "4.0.0"
+print(gcc.__version__)  # Should print "4.0.0"
 
 # Existing code works unchanged
-df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-01-31")
+df = gcc.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-01-31")
 print(f"Downloaded {len(df)} bars")  # Zero code changes
 ```text
 
@@ -394,8 +394,8 @@ services:
 
 | Feature             | v3.x File-Based      | v3.x QuestDB (Dev)        | v4.0.0 File-Based | v4.0.0 ClickHouse            |
 | ------------------- | -------------------- | ------------------------- | ----------------- | ---------------------------- |
-| **Data Collection** | ✅ `gcd.download()`  | ✅ Same API               | ✅ **Unchanged**  | ✅ New API                   |
-| **Gap Filling**     | ✅ `gcd.fill_gaps()` | ✅ Same API               | ✅ **Unchanged**  | ✅ New API                   |
+| **Data Collection** | ✅ `gcc.download()`  | ✅ Same API               | ✅ **Unchanged**  | ✅ New API                   |
+| **Gap Filling**     | ✅ `gcc.fill_gaps()` | ✅ Same API               | ✅ **Unchanged**  | ✅ New API                   |
 | **Query Interface** | ❌ N/A               | ✅ `OHLCVQuery` (QuestDB) | ❌ N/A            | ✅ `OHLCVQuery` (ClickHouse) |
 | **Bulk Ingestion**  | ❌ N/A               | ✅ `QuestDBBulkLoader`    | ❌ N/A            | ✅ `ClickHouseBulkLoader`    |
 | **Futures Support** | ❌ Not supported     | ❌ Not supported          | ❌ Not supported  | ✅ `instrument_type` param   |
@@ -420,13 +420,13 @@ After upgrading to v4.0.0:
 
 ```bash
 # Verify installation
-python -c "import gapless_crypto_clickhouse as gcd; print(gcd.__version__)"
+python -c "import gapless_crypto_clickhouse as gcc; print(gcc.__version__)"
 # Expected output: 4.0.0
 
 # Test file-based API (should work unchanged)
 python -c "
-import gapless_crypto_clickhouse as gcd
-df = gcd.download('BTCUSDT', timeframe='1d', start='2024-01-01', end='2024-01-07')
+import gapless_crypto_clickhouse as gcc
+df = gcc.download('BTCUSDT', timeframe='1d', start='2024-01-01', end='2024-01-07')
 print(f'Downloaded {len(df)} bars')
 "
 # Expected output: Downloaded 7 bars
@@ -460,7 +460,7 @@ If you encounter issues with v4.0.0:
 pip install gapless-crypto-data==3.3.0
 
 # Verify downgrade
-python -c "import gapless_crypto_clickhouse as gcd; print(gcd.__version__)"
+python -c "import gapless_crypto_clickhouse as gcc; print(gcc.__version__)"
 # Expected output: 3.3.0
 ```text
 
@@ -477,10 +477,10 @@ sudo systemctl start questdb
 ### Step 3: Verify Rollback
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 # Test file-based API (should work on v3.3.0)
-df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-01-07")
+df = gcc.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-01-07")
 print(f"Rollback successful: {len(df)} bars downloaded")
 ````
 
@@ -510,7 +510,7 @@ A: No. v3.3.0 is the last v3.x release. Security fixes may be backported if crit
 
 **Q: Can I use both file-based and ClickHouse simultaneously?**
 
-A: Yes. You can collect data to CSV files using `gcd.download()`, then ingest into ClickHouse using `ClickHouseBulkLoader.ingest_from_dataframe()`. This hybrid approach is recommended for flexibility.
+A: Yes. You can collect data to CSV files using `gcc.download()`, then ingest into ClickHouse using `ClickHouseBulkLoader.ingest_from_dataframe()`. This hybrid approach is recommended for flexibility.
 
 **Q: What happens to my existing CSV files when upgrading?**
 

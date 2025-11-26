@@ -86,26 +86,26 @@ See [Database Integration](#-database-integration) for complete setup guide and 
 #### Function-based API
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 # Fetch recent data with date range (CCXT-compatible timeframe parameter)
-df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-06-30")
+df = gcc.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-06-30")
 
 # Or with limit
-df = gcd.fetch_data("ETHUSDT", timeframe="4h", limit=1000)
+df = gcc.fetch_data("ETHUSDT", timeframe="4h", limit=1000)
 
 # Backward compatibility (legacy interval parameter)
-df = gcd.fetch_data("ETHUSDT", interval="4h", limit=1000)  # DeprecationWarning
+df = gcc.fetch_data("ETHUSDT", interval="4h", limit=1000)  # DeprecationWarning
 
 # Get available symbols and timeframes
-symbols = gcd.get_supported_symbols()
-timeframes = gcd.get_supported_timeframes()
+symbols = gcc.get_supported_symbols()
+timeframes = gcc.get_supported_timeframes()
 
 # Fill gaps in existing data
-results = gcd.fill_gaps("./data")
+results = gcc.fill_gaps("./data")
 
 # Multi-symbol batch download (concurrent execution - 10-20x faster)
-results = gcd.download_multiple(
+results = gcc.download_multiple(
     symbols=["BTCUSDT", "ETHUSDT", "BNBUSDT", "XRPUSDT", "SOLUSDT"],
     timeframe="1h",
     start_date="2024-01-01",
@@ -143,10 +143,10 @@ gaps = gap_filler.detect_all_gaps(csv_file, "1h")
 All functions return pandas DataFrames with complete microstructure data:
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 # Fetch data
-df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-06-30")
+df = gcc.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-06-30")
 
 # DataFrame columns (11-column microstructure format)
 print(df.columns.tolist())
@@ -477,7 +477,7 @@ See ClickHouse documentation for production deployment best practices.
 #### Simple API (Recommended)
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 # Process multiple symbols with simple loops
 symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "ADAUSDT"]
@@ -485,7 +485,7 @@ timeframes = ["1h", "4h"]
 
 for symbol in symbols:
     for timeframe in timeframes:
-        df = gcd.fetch_data(symbol, timeframe, start="2023-01-01", end="2023-12-31")
+        df = gcc.fetch_data(symbol, timeframe, start="2023-01-01", end="2023-12-31")
         print(f"{symbol} {timeframe}: {len(df)} bars collected")
 ```
 
@@ -515,16 +515,16 @@ for symbol in symbols:
 #### Simple API (Recommended)
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 # Quick gap filling for entire directory
-results = gcd.fill_gaps("./data")
+results = gcc.fill_gaps("./data")
 print(f"Processed {results['files_processed']} files")
 print(f"Filled {results['gaps_filled']}/{results['gaps_detected']} gaps")
 print(f"Success rate: {results['success_rate']:.1f}%")
 
 # Gap filling for specific symbols only
-results = gcd.fill_gaps("./data", symbols=["BTCUSDT", "ETHUSDT"])
+results = gcc.fill_gaps("./data", symbols=["BTCUSDT", "ETHUSDT"])
 ```
 
 #### Advanced API (Detailed Control)
@@ -644,12 +644,12 @@ with ClickHouseConnection() as conn:
 Combine file-based collection with database querying:
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 
 # Step 1: Collect to CSV files (22x faster, portable format)
-df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-03-31")
+df = gcc.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-03-31")
 print(f"Downloaded {len(df):,} bars to CSV")
 
 # Step 2: Ingest CSV to ClickHouse for analysis
@@ -819,7 +819,7 @@ uv run pre-commit run --all-files
 | Setup pre-commit hooks | `uv run pre-commit install`                                                         |
 | Add new dependency     | `uv add package-name`                                                               |
 | Add dev dependency     | `uv add --dev package-name`                                                         |
-| Run Python API         | `uv run python -c "import gapless_crypto_clickhouse as gcd; print(gcd.get_info())"` |
+| Run Python API         | `uv run python -c "import gapless_crypto_clickhouse as gcc; print(gcc.get_info())"` |
 | Run tests              | `uv run pytest`                                                                     |
 | Format code            | `uv run ruff format .`                                                              |
 | Lint code              | `uv run ruff check --fix .`                                                         |

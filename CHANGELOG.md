@@ -12,34 +12,34 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### Features
 
-* **validation:** implement ADR-0041 gap filling validation ([77d3b6b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/77d3b6b202fc33ec846f6dd93737e77f3309aa61))
+- **validation:** implement ADR-0041 gap filling validation ([77d3b6b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/77d3b6b202fc33ec846f6dd93737e77f3309aa61))
 
 ### Documentation
 
-* fix broken links and convert absolute paths to relative ([2702648](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2702648f1f58188b9c6f224366aa2d9ea89b8821))
-* rectify documentation across 91 files (ADR-0042) ([2de66d8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2de66d8900c34c111d9959cedf9e4b45a84f47f9))
+- fix broken links and convert absolute paths to relative ([2702648](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2702648f1f58188b9c6f224366aa2d9ea89b8821))
+- rectify documentation across 91 files (ADR-0042) ([2de66d8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2de66d8900c34c111d9959cedf9e4b45a84f47f9))
 
 ## [14.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v13.0.2...v14.0.0) (2025-11-25)
 
 ### ⚠ BREAKING CHANGES
 
-* **gap-filling:** none (additive feature, backward compatible)
+- **gap-filling:** none (additive feature, backward compatible)
 
 ### Features
 
-* **gap-filling:** implement query_ohlcv() gap filling with tenacity retry (ADR-0040) ([ec7171d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/ec7171d15c2864ffe3d4090eac1de057bb1490a5))
+- **gap-filling:** implement query_ohlcv() gap filling with tenacity retry (ADR-0040) ([ec7171d](https://github.com/terrylica/gapless-crypto-clickhouse/commit/ec7171d15c2864ffe3d4090eac1de057bb1490a5))
 
 ## [13.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v13.0.1...v13.0.2) (2025-11-25)
 
 ### Documentation
 
-* **plan-0039:** mark all tasks complete ([38b95ef](https://github.com/terrylica/gapless-crypto-clickhouse/commit/38b95efb92f841f40780b308c1fbacf3f7f0f5a4))
+- **plan-0039:** mark all tasks complete ([38b95ef](https://github.com/terrylica/gapless-crypto-clickhouse/commit/38b95efb92f841f40780b308c1fbacf3f7f0f5a4))
 
 ## [13.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v13.0.0...v13.0.1) (2025-11-25)
 
 ### Documentation
 
-* **plan-0038:** mark all tasks complete - v13.0.0 published to PyPI ([2397d95](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2397d9573d40a706e4964faf087aa769aa96de43))
+- **plan-0038:** mark all tasks complete - v13.0.0 published to PyPI ([2397d95](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2397d9573d40a706e4964faf087aa769aa96de43))
 
 ## [13.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v12.0.12...v13.0.0) (2025-11-25)
 

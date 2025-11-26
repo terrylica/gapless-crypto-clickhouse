@@ -236,7 +236,7 @@ version = "1.0.0"  # May need manual sync with git tags
 
 **Changes**:
 
-````markdown
+`````markdown
 # After line 288, add new section
 
 ### CI Test Execution
@@ -255,11 +255,13 @@ docker-compose up -d
 uv run pytest tests/e2e/ -v
 ```text
 ````
-````
+`````
+
+```
 
 See `.github/workflows/ci.yml` lines 131-132 for CI configuration.
 
-````
+```
 
 **Validation**: E2E guide explains CI vs local testing distinction
 
@@ -270,11 +272,14 @@ See `.github/workflows/ci.yml` lines 131-132 for CI configuration.
 **File**: `docs/development/COMMANDS.md`
 
 **Changes**:
-```markdown
+
+````markdown
 # Add after line 60 (after integration test section)
+
 ## E2E Testing
 
 ### Run E2E Tests
+
 ```bash
 # Full E2E suite (requires Docker services)
 docker-compose up -d
@@ -291,6 +296,7 @@ uv run pytest tests/e2e/test_clickhouse_play.py -v
 
 # With screenshots and tracing
 uv run pytest tests/e2e/ -v --screenshot=only-on-failure --tracing=retain-on-failure
+```
 ````
 
 **Markers**: `@pytest.mark.e2e` - End-to-end tests requiring Playwright and running services

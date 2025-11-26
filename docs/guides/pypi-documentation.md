@@ -13,20 +13,20 @@ pip install gapless-crypto-data
 ### Simple API (Recommended for Most Users)
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 # Download recent data
-df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 
 # Fetch with limit
-df = gcd.fetch_data("ETHUSDT", "4h", limit=1000)
+df = gcc.fetch_data("ETHUSDT", "4h", limit=1000)
 
 # Get available options
-symbols = gcd.get_supported_symbols()
-timeframes = gcd.get_supported_timeframes()
+symbols = gcc.get_supported_symbols()
+timeframes = gcc.get_supported_timeframes()
 
 # Fill gaps in existing data
-results = gcd.fill_gaps("./data")
+results = gcc.fill_gaps("./data")
 ```bash
 
 ## Core Features
@@ -61,13 +61,13 @@ Fetch cryptocurrency data with simple function-based API.
 
 ```python
 # Recent 1000 hourly bars
-df = gcd.fetch_data("BTCUSDT", "1h", limit=1000)
+df = gcc.fetch_data("BTCUSDT", "1h", limit=1000)
 
 # Specific date range
-df = gcd.fetch_data("ETHUSDT", "4h", start="2024-01-01", end="2024-06-30")
+df = gcc.fetch_data("ETHUSDT", "4h", start="2024-01-01", end="2024-06-30")
 
 # Save to custom directory
-df = gcd.fetch_data("SOLUSDT", "1h", limit=500, output_dir="./crypto_data")
+df = gcc.fetch_data("SOLUSDT", "1h", limit=500, output_dir="./crypto_data")
 ```text
 
 ### `download(symbol, interval="1h", start=None, end=None, output_dir=None)`
@@ -90,10 +90,10 @@ Download cryptocurrency data (alias for fetch_data with familiar API patterns).
 
 ```python
 # Simple download with date range
-df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 
 # Recent data
-df = gcd.download("ETHUSDT", "4h")
+df = gcc.download("ETHUSDT", "4h")
 ```text
 
 ### `get_supported_symbols()`
@@ -107,7 +107,7 @@ Get list of supported USDT spot trading pairs.
 **Examples:**
 
 ```python
-symbols = gcd.get_supported_symbols()
+symbols = gcc.get_supported_symbols()
 print(f"Found {len(symbols)} supported symbols")
 print(f"Bitcoin supported: {'BTCUSDT' in symbols}")
 ```text
@@ -123,7 +123,7 @@ Get list of supported timeframe intervals.
 **Examples:**
 
 ```python
-timeframes = gcd.get_supported_timeframes()
+timeframes = gcc.get_supported_timeframes()
 print(f"Available timeframes: {timeframes}")
 print(f"1-hour supported: {'1h' in timeframes}")
 ```bash
@@ -145,11 +145,11 @@ Fill gaps in existing CSV data files.
 
 ```python
 # Fill all gaps in directory
-results = gcd.fill_gaps("./data")
+results = gcc.fill_gaps("./data")
 print(f"Success rate: {results['success_rate']:.1f}%")
 
 # Fill gaps for specific symbols
-results = gcd.fill_gaps("./data", symbols=["BTCUSDT", "ETHUSDT"])
+results = gcc.fill_gaps("./data", symbols=["BTCUSDT", "ETHUSDT"])
 ```text
 
 ### `get_info()`
@@ -163,7 +163,7 @@ Get library information and capabilities.
 **Examples:**
 
 ```python
-info = gcd.get_info()
+info = gcc.get_info()
 print(f"Version: {info['version']}")
 print(f"Supported symbols: {len(info['supported_symbols'])}")
 ```text
@@ -191,7 +191,7 @@ All functions return pandas DataFrames with complete microstructure data:
 ### Microstructure Analysis
 
 ```python
-df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 
 # Professional microstructure analysis
 buy_pressure = df['taker_buy_base_asset_volume'].sum() / df['volume'].sum()
@@ -284,7 +284,7 @@ All functions implement robust error handling:
 
 ```python
 try:
-    df = gcd.fetch_data("BTCUSDT", "1h", limit=1000)
+    df = gcc.fetch_data("BTCUSDT", "1h", limit=1000)
     if df.empty:
         print("No data returned - check symbol and timeframe")
     else:
@@ -311,13 +311,13 @@ except Exception as e:
 
 ```python
 # Recent data (always available)
-df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 
 # Historical backtesting
-df = gcd.download("ETHUSDT", "4h", start="2020-01-01", end="2023-12-31")
+df = gcc.download("ETHUSDT", "4h", start="2020-01-01", end="2023-12-31")
 
 # Full history (symbol-dependent)
-df = gcd.download("SOLUSDT", "1d", start="2020-08-11")  # From listing
+df = gcc.download("SOLUSDT", "1d", start="2020-08-11")  # From listing
 ```text
 
 ## Integration Examples
@@ -325,13 +325,13 @@ df = gcd.download("SOLUSDT", "1d", start="2020-08-11")  # From listing
 ### Backtesting Framework Integration
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 import pandas as pd
 
 def prepare_backtest_data(symbol, timeframe, start, end):
     """Prepare high-quality data for backtesting"""
     # Fetch data
-    df = gcd.download(symbol, timeframe, start=start, end=end)
+    df = gcc.download(symbol, timeframe, start=start, end=end)
 
     # Verify completeness
     if df.empty:
@@ -354,7 +354,7 @@ btc_data = prepare_backtest_data("BTCUSDT", "1h", "2023-01-01", "2023-12-31")
 ### Portfolio Analysis
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 def analyze_portfolio(symbols, timeframe="1h", period_days=30):
     """Analyze portfolio of cryptocurrencies"""
@@ -364,7 +364,7 @@ def analyze_portfolio(symbols, timeframe="1h", period_days=30):
     start_date = (pd.Timestamp.now() - pd.Timedelta(days=period_days)).strftime('%Y-%m-%d')
 
     for symbol in symbols:
-        df = gcd.fetch_data(symbol, timeframe, start=start_date, end=end_date)
+        df = gcc.fetch_data(symbol, timeframe, start=start_date, end=end_date)
 
         if not df.empty:
             # Calculate metrics
@@ -392,12 +392,12 @@ print(results.round(2))
 
 ```python
 # Check if symbol is supported
-symbols = gcd.get_supported_symbols()
+symbols = gcc.get_supported_symbols()
 if "YOURSYMBOL" not in symbols:
     print(f"Symbol not supported. Available: {symbols}")
 
 # Check date range
-df = gcd.fetch_data("BTCUSDT", "1h", start="2020-01-01")  # Use earlier start date
+df = gcc.fetch_data("BTCUSDT", "1h", start="2020-01-01")  # Use earlier start date
 ```text
 
 **Network timeouts:**
@@ -417,7 +417,7 @@ def fetch_large_dataset(symbol, timeframe, start, end, chunk_months=3):
     while current < end_date:
         chunk_end = min(current + pd.DateOffset(months=chunk_months), end_date)
 
-        chunk_df = gcd.fetch_data(
+        chunk_df = gcc.fetch_data(
             symbol, timeframe,
             start=current.strftime('%Y-%m-%d'),
             end=chunk_end.strftime('%Y-%m-%d')
@@ -435,7 +435,7 @@ def fetch_large_dataset(symbol, timeframe, start, end, chunk_months=3):
 
 ```python
 # Check gap filling results
-results = gcd.fill_gaps("./data")
+results = gcc.fill_gaps("./data")
 
 if results['success_rate'] < 100:
     print(f"Some gaps remain: {results['gaps_detected'] - results['gaps_filled']}")
@@ -465,7 +465,7 @@ MIT License - see repository for full details.
 
 ```python
 pip install gapless-crypto-data
-import gapless_crypto_clickhouse as gcd
-df = gcd.download("BTCUSDT", "1h", limit=1000)
+import gapless_crypto_clickhouse as gcc
+df = gcc.download("BTCUSDT", "1h", limit=1000)
 print(f"Fetched {len(df)} bars with {df.shape[1]} columns of microstructure data")
 ````

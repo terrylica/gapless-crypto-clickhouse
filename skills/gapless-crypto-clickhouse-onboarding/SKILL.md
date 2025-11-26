@@ -132,10 +132,10 @@ python skills/gapless-crypto-clickhouse-onboarding/scripts/test_connection_cloud
 **Simple query example** (Option A - Doppler):
 ```bash
 doppler run --project aws-credentials --config prd -- python -c "
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 # Query OHLCV data (auto-ingests if not present)
-df = gcd.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
+df = gcc.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
 
 print(f'✅ Query successful: {len(df)} rows')
 print(df.head())
@@ -148,10 +148,10 @@ python -c "
 from dotenv import load_dotenv
 load_dotenv('.env')  # Load credentials from .env
 
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 # Query OHLCV data
-df = gcd.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
+df = gcc.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
 
 print(f'✅ Query successful: {len(df)} rows')
 print(df.head())

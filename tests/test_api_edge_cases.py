@@ -10,7 +10,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 from gapless_crypto_clickhouse.api import (
     _validate_index_type_parameter,
     _validate_timeframe_parameters,
@@ -82,7 +82,7 @@ class TestDownloadFunction:
         with tempfile.TemporaryDirectory() as tmpdir:
             # This will fail network call but we can test parameter handling
             try:
-                df = gcd.download(
+                df = gcc.download(
                     "BTCUSDT",
                     start="2024-01-01",
                     end="2024-01-02",
@@ -102,23 +102,23 @@ class TestSaveParquet:
         """Test save_parquet with empty DataFrame raises ValueError."""
         df = pd.DataFrame()
         with pytest.raises(ValueError, match="Cannot save empty DataFrame"):
-            gcd.save_parquet(df, "test.parquet")
+            gcc.save_parquet(df, "test.parquet")
 
     def test_save_parquet_none_dataframe(self):
         """Test save_parquet with None raises ValueError."""
         with pytest.raises(ValueError, match="Cannot save empty DataFrame"):
-            gcd.save_parquet(None, "test.parquet")
+            gcc.save_parquet(None, "test.parquet")
 
     def test_save_parquet_valid_dataframe(self):
         """Test save_parquet with valid DataFrame."""
         df = pd.DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]})
         with tempfile.NamedTemporaryFile(suffix=".parquet", delete=False) as tmp:
             try:
-                gcd.save_parquet(df, tmp.name)
+                gcc.save_parquet(df, tmp.name)
                 # Verify file was created
                 assert Path(tmp.name).exists()
                 # Verify we can load it back
-                loaded = gcd.load_parquet(tmp.name)
+                loaded = gcc.load_parquet(tmp.name)
                 assert len(loaded) == 3
                 assert list(loaded.columns) == ["a", "b"]
             finally:
@@ -131,7 +131,7 @@ class TestFillGaps:
     def test_fill_gaps_empty_directory(self):
         """Test fill_gaps with directory containing no CSV files."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            results = gcd.fill_gaps(tmpdir)
+            results = gcc.fill_gaps(tmpdir)
             assert results["files_processed"] == 0
             assert results["gaps_detected"] == 0
             assert results["gaps_filled"] == 0
@@ -160,7 +160,7 @@ class TestFillGaps:
             df.to_csv(csv_file, index=False)
 
             # Test with symbol filter
-            results = gcd.fill_gaps(tmpdir, symbols=["BTCUSDT"])
+            results = gcc.fill_gaps(tmpdir, symbols=["BTCUSDT"])
             assert results["files_processed"] == 1
 
 
@@ -170,7 +170,7 @@ class TestGetSupportedIntervals:
     def test_get_supported_intervals_deprecation(self):
         """Test that get_supported_intervals raises deprecation warning."""
         with pytest.warns(DeprecationWarning, match="get_supported_intervals.*deprecated"):
-            intervals = gcd.get_supported_intervals()
+            intervals = gcc.get_supported_intervals()
             assert isinstance(intervals, list)
             assert len(intervals) > 0
 
@@ -180,7 +180,7 @@ class TestGetInfo:
 
     def test_get_info_structure(self):
         """Test get_info returns expected structure."""
-        info = gcd.get_info()
+        info = gcc.get_info()
         assert info["version"] == "8.0.0"  # Current package version (from __init__.py)
         assert info["name"] == "gapless-crypto-clickhouse"  # ADR-0029: package name alignment
         assert "description" in info

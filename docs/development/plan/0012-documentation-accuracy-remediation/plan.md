@@ -359,7 +359,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 
      ```python
      # Before (WRONG for this package)
-     import gapless_crypto_clickhouse as gcd
+     import gapless_crypto_clickhouse as gcc
 
      # After (CORRECT)
      import gapless_crypto_clickhouse as gcc

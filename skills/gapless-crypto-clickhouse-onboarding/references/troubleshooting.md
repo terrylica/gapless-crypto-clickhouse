@@ -210,10 +210,10 @@ Code: 81, Database gapless_crypto doesn't exist
 
 1. **For `query_ohlcv()` API** (auto-creates schema):
    ```python
-   import gapless_crypto_clickhouse as gcd
+   import gapless_crypto_clickhouse as gcc
 
    # First query auto-creates database + table
-   df = gcd.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
+   df = gcc.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
    # This will create gapless_crypto.klines automatically
    ```
 

@@ -15,20 +15,20 @@ uv add gapless-crypto-data
 ### Basic Usage
 
 ```python
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 
 # Fetch recent data with date range
-df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 
 # Or with limit
-df = gcd.fetch_data("ETHUSDT", "4h", limit=1000)
+df = gcc.fetch_data("ETHUSDT", "4h", limit=1000)
 
 # Get available symbols and timeframes
-symbols = gcd.get_supported_symbols()
-timeframes = gcd.get_supported_timeframes()
+symbols = gcc.get_supported_symbols()
+timeframes = gcc.get_supported_timeframes()
 
 # Library information
-info = gcd.get_info()
+info = gcc.get_info()
 print(f"Version: {info['version']}")
 ```text
 
@@ -51,7 +51,7 @@ avg_trade_size = df['volume'].sum() / df['number_of_trades'].sum()
 
 ```python
 # Fill gaps in existing CSV files
-results = gcd.fill_gaps("./data")
+results = gcc.fill_gaps("./data")
 print(f"Filled {results['gaps_filled']}/{results['gaps_detected']} gaps")
 ```text
 

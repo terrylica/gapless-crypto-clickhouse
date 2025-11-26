@@ -94,14 +94,14 @@ __version__ = "4.0.0"
 **Rationale**: Runtime version attribute must match pyproject.toml version for:
 
 - Semantic release automation compatibility
-- User version checks via `gcd.__version__`
+- User version checks via `gcc.__version__`
 - PyPI package metadata consistency
 
 **Validation**:
 
 ```python
-import gapless_crypto_clickhouse as gcd
-assert gcd.__version__ == "4.0.0"
+import gapless_crypto_clickhouse as gcc
+assert gcc.__version__ == "4.0.0"
 ```text
 
 ### Fix 2: CLI Deprecation Notice (MEDIUM)
@@ -206,7 +206,7 @@ After upgrading to v4.0.0, the following tests are expected to fail due to CLI r
 **Version Verification**:
 
 ```bash
-uv run python -c "import gapless_crypto_clickhouse as gcd; assert gcd.__version__ == '4.0.0'"
+uv run python -c "import gapless_crypto_clickhouse as gcc; assert gcc.__version__ == '4.0.0'"
 ```text
 
 **Expected**: Exit code 0 (assertion passes)

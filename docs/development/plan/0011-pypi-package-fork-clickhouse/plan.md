@@ -90,7 +90,7 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 
 **Breaking Change**: All import paths change
 
-- Before: `import gapless_crypto_clickhouse as gcd`
+- Before: `import gapless_crypto_clickhouse as gcc`
 - After: `import gapless_crypto_clickhouse as gcc`
 
 ### Version Strategy

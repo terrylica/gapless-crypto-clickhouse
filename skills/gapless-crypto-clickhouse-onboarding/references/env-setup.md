@@ -173,8 +173,8 @@ print("Host:", os.getenv("CLICKHOUSE_HOST"))
 print("Secure:", os.getenv("CLICKHOUSE_SECURE"))
 
 # Use package normally
-import gapless_crypto_clickhouse as gcd
-df = gcd.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
+import gapless_crypto_clickhouse as gcc
+df = gcc.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
 print(df.head())
 ```
 
@@ -267,7 +267,7 @@ python skills/gapless-crypto-clickhouse-onboarding/scripts/test_connection_cloud
 from dotenv import load_dotenv
 load_dotenv('.env')
 
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConfig
 
 # Check config
@@ -276,7 +276,7 @@ print("Config:", config)
 # Expected: host='*.aws.clickhouse.cloud', port=8443, secure=True
 
 # Test query
-df = gcd.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-02')
+df = gcc.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-02')
 print(f"✅ Query successful: {len(df)} rows")
 ```
 
@@ -345,7 +345,7 @@ ClickHouseConfig(host='localhost', port=9000, secure=False)
 from dotenv import load_dotenv
 load_dotenv('.env')  # MUST be before gapless_crypto_clickhouse import
 
-import gapless_crypto_clickhouse as gcd
+import gapless_crypto_clickhouse as gcc
 ```
 
 ### Issue 3: Trailing whitespace in password

@@ -73,8 +73,8 @@ class UniversalGapFiller:
     Examples:
         For simple gap filling, consider using the function-based API:
 
-        >>> import gapless_crypto_clickhouse as gcd
-        >>> results = gcd.fill_gaps("./data")
+        >>> import gapless_crypto_clickhouse as gcc
+        >>> results = gcc.fill_gaps("./data")
         >>> print(f"Filled {results['gaps_filled']}/{results['gaps_detected']} gaps")
 
         Advanced usage with this class for detailed control:

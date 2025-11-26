@@ -339,7 +339,7 @@ wheels = [
 
 [[package]]
 name = "gapless-crypto-clickhouse"
-version = "13.0.2"
+version = "14.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "binance-futures-availability" },

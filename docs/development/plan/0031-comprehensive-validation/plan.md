@@ -70,7 +70,7 @@ uv run mypy src/  # Expected to fail due to wrong package name
 
 ```bash
 # Test import and discover version mismatch
-uv run python -c "import gapless_crypto_clickhouse as gcd; print(f'Version: {gcd.__version__}')"
+uv run python -c "import gapless_crypto_clickhouse as gcc; print(f'Version: {gcc.__version__}')"
 ```text
 
 **1.4 Validation Scripts**
@@ -179,8 +179,8 @@ grep -A 1 "module = " pyproject.toml | grep "gapless_crypto_data"
 
 ```bash
 uv run python -c "
-import gapless_crypto_clickhouse as gcd
-api = gcd.__probe__.discover_api()
+import gapless_crypto_clickhouse as gcc
+api = gcc.__probe__.discover_api()
 import json
 with open('api_surface.json', 'w') as f:
     json.dump(api, f, indent=2)

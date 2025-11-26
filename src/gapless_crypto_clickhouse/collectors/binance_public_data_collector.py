@@ -57,8 +57,8 @@ class BinancePublicDataCollector:
     Examples:
         For simple data collection, consider using the function-based API:
 
-        >>> import gapless_crypto_clickhouse as gcd
-        >>> df = gcd.fetch_data("BTCUSDT", "1h", start="2024-01-01", end="2024-12-31")
+        >>> import gapless_crypto_clickhouse as gcc
+        >>> df = gcc.fetch_data("BTCUSDT", "1h", start="2024-01-01", end="2024-12-31")
 
         Advanced usage with this class for complex workflows:
 
