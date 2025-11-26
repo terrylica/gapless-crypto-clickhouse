@@ -51,6 +51,19 @@ tmp/
 temp/
 scratch/
 
+# Generated audit and validation reports (root-level)
+*_REPORT.md
+*_AUDIT*.md
+EXTRACTED_REFERENCES.txt
+
+# Development utility scripts (root-level one-off tools)
+benchmark_*.py
+comprehensive_cross_reference_*.py
+extract_references.py
+validate_examples.py
+validate_references.py
+verify_cross_references.py
+
 # Backup files
 *.bak
 *.backup
