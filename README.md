@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![UV Managed](https://img.shields.io/badge/uv-managed-blue.svg)](https://github.com/astral-sh/uv)
 [![Release](https://github.com/terrylica/gapless-crypto-clickhouse/actions/workflows/release.yml/badge.svg)](https://github.com/terrylica/gapless-crypto-clickhouse/actions/workflows/release.yml)
-[![AI Agent Ready](https://img.shields.io/badge/AI%20Agent-Ready-brightgreen.svg)](https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/PROBE_USAGE_EXAMPLE.md)
+[![AI Agent Ready](https://img.shields.io/badge/AI%20Agent-Ready-brightgreen.svg)](https://github.com/terrylica/gapless-crypto-clickhouse#ai-agent-integration)
 
 ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x faster via Binance public repository with persistent database storage, USDT-margined futures support, and production-ready ReplacingMergeTree schema.
 
@@ -39,7 +39,7 @@ Both packages share the same 22x performance advantage via Binance public reposi
 - **USDT-margined futures** support (perpetual contracts via `instrument_type` column)
 - **Zero gaps guarantee** through intelligent monthly-to-daily fallback
 - **Complete 16-timeframe support**: 13 standard (1s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d) + 3 exotic (3d, 1w, 1mo)
-- **11-column microstructure format** (spot) and 12-column format (futures with funding rate)
+- **11-column microstructure format** with order flow and liquidity metrics
 - **Advanced SQL queries** for time-series analysis, multi-symbol joins, aggregations
 - **Persistent storage** with compression (DoubleDelta timestamps, Gorilla OHLCV)
 - **AI agent ready**: llms.txt + probe.py for capability discovery
@@ -130,7 +130,7 @@ df = result["dataframe"]
 
 # Manual gap filling
 gap_filler = UniversalGapFiller()
-gaps = gap_filler.detect_all_gaps(csv_file, "1h")
+gaps = gap_filler.detect_all_gaps("BTCUSDT_1h_data.csv", "1h")
 ```
 
 > **Note**: This package never included a CLI interface (unlike parent package `gapless-crypto-data`). It provides a Python API only for programmatic access. See examples above for usage patterns.
@@ -357,7 +357,7 @@ with ClickHouseConnection() as conn:
 #### Futures Support (ADR-0004)
 
 ```python
-# Ingest futures data (12-column format with funding rate)
+# Ingest futures data (same 11-column format as spot)
 with ClickHouseConnection() as conn:
     loader = ClickHouseBulkLoader(conn, instrument_type="futures")
     rows = loader.ingest_month("BTCUSDT", "1h", 2024, 1)
@@ -967,34 +967,33 @@ Gap detection and filling for various timeframes with 11-column microstructure f
 
 #### Key Methods
 
-**`detect_all_gaps(csv_file) -> List[Dict]`**
+**`detect_all_gaps(csv_path, timeframe) -> List[Dict]`**
 
 Automatically detect timestamp gaps in CSV files.
 
 ```python
 gap_filler = UniversalGapFiller()
-gaps = gap_filler.detect_all_gaps("BTCUSDT_1h_data.csv")
+gaps = gap_filler.detect_all_gaps("BTCUSDT_1h_data.csv", "1h")
 print(f"Found {len(gaps)} gaps to fill")
 ```
 
-**`fill_gap(csv_file, gap_info) -> bool`**
+**`fill_gap(gap_info, csv_path, timeframe) -> bool`**
 
 Fill a specific gap with authentic Binance API data.
 
 ```python
 # Fill first detected gap
-success = gap_filler.fill_gap("BTCUSDT_1h_data.csv", gaps[0])
+success = gap_filler.fill_gap(gaps[0], "BTCUSDT_1h_data.csv", "1h")
 print(f"Gap filled successfully: {success}")
 ```
 
-**`process_file(directory) -> Dict[str, Dict]`**
+**`process_file(csv_path, timeframe) -> Dict`**
 
-Batch process all CSV files in a directory for gap detection and filling.
+Process a single CSV file for gap detection and filling.
 
 ```python
-results = gap_filler.process_file("./crypto_data/")
-for filename, result in results.items():
-    print(f"{filename}: {result['gaps_filled']} gaps filled")
+result = gap_filler.process_file("BTCUSDT_1h_data.csv", "1h")
+print(f"Filled {result['gaps_filled']}/{result['gaps_detected']} gaps")
 ```
 
 ### AtomicCSVOperations
@@ -1068,8 +1067,8 @@ Returns pandas DataFrame with 11-column microstructure format:
 CSV files include header comments with metadata followed by data:
 
 ```csv
-# Binance Spot Market Data v2.5.0
-# Generated: 2025-09-18T23:09:25.391126+00:00Z
+# Binance Spot Market Data
+# Generated: 2025-01-15T12:00:00.000000+00:00Z
 # Source: Binance Public Data Repository
 # Market: SPOT | Symbol: BTCUSDT | Timeframe: 1h
 # Coverage: 48 bars
@@ -1088,7 +1087,7 @@ Each CSV file includes comprehensive metadata in `.metadata.json`:
 
 ```json
 {
-  "version": "v2.5.0",
+  "version": "14.1.3",
   "generator": "BinancePublicDataCollector",
   "data_source": "Binance Public Data Repository",
   "symbol": "BTCUSDT",
@@ -1126,9 +1125,9 @@ binance_spot_{SYMBOL}-{TIMEFRAME}_{START_DATE}-{END_DATE}_v{VERSION}.metadata.js
 
 Examples:
 
-- `binance_spot_BTCUSDT-1h_20240101-20240102_v2.5.0.csv`
-- `binance_spot_ETHUSDT-4h_20240101-20240201_v2.5.0.csv`
-- `binance_spot_SOLUSDT-1d_20240101-20241231_v2.5.0.csv`
+- `binance_spot_BTCUSDT-1h_20240101-20240102.csv`
+- `binance_spot_ETHUSDT-4h_20240101-20240201.csv`
+- `binance_spot_SOLUSDT-1d_20240101-20241231.csv`
 
 ### Error Handling
 
