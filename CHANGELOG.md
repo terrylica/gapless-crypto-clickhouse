@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [14.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.0.0...v14.1.0) (2025-11-26)
+
+### Features
+
+* **validation:** implement ADR-0041 gap filling validation ([77d3b6b](https://github.com/terrylica/gapless-crypto-clickhouse/commit/77d3b6b202fc33ec846f6dd93737e77f3309aa61))
+
+### Documentation
+
+* fix broken links and convert absolute paths to relative ([2702648](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2702648f1f58188b9c6f224366aa2d9ea89b8821))
+* rectify documentation across 91 files (ADR-0042) ([2de66d8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2de66d8900c34c111d9959cedf9e4b45a84f47f9))
+
 ## [14.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v13.0.2...v14.0.0) (2025-11-25)
 
 ### ⚠ BREAKING CHANGES
