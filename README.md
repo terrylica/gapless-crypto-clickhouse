@@ -690,7 +690,7 @@ Provide insights about cryptocurrency data collection capabilities and usage pat
 ### Prerequisites
 
 - **UV Package Manager** - [Install UV](https://docs.astral.sh/uv/getting-started/installation/)
-- **Python 3.12+** - UV will manage Python versions automatically
+- **Python 3.11+** - UV will manage Python versions automatically
 - **Git** - For repository cloning and version control
 - **Docker & Docker Compose** (Optional) - For ClickHouse database development
 
@@ -900,7 +900,7 @@ All 16 Binance timeframes supported for complete market coverage (13 standard + 
 
 ## ⚠️ Requirements
 
-- Python 3.12+
+- Python 3.11+
 - pandas >= 2.0.0
 - Stable internet connection for data downloads
 
