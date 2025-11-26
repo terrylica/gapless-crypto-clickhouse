@@ -15,7 +15,7 @@ Current API uses `start` and `end` parameters for date ranges, but parameter nam
 **Current API**:
 
 ````python
-df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+df = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 collector = BinancePublicDataCollector(start_date="2024-01-01", end_date="2024-06-30")
 ```bash
 
@@ -195,8 +195,8 @@ def download(...):
 
     Examples:
         # Both forms are equivalent:
-        df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
-        df = gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
+        df = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+        df = gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
     """
 ```text
 
@@ -207,18 +207,18 @@ def download(...):
 ```python
 def test_start_end_legacy_parameters():
     """Legacy start/end parameters still work."""
-    df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
+    df = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
     assert len(df) > 0
 
 def test_start_date_end_date_aliases():
     """New start_date/end_date aliases work."""
-    df = gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
+    df = gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
     assert len(df) > 0
 
 def test_mixed_parameters_raise_error():
     """Cannot use both start and start_date simultaneously."""
     with pytest.raises(ValueError, match="Cannot specify both"):
-        gcc.download("BTCUSDT", "1h", start="2024-01-01", start_date="2024-01-02")
+        gcch.download("BTCUSDT", "1h", start="2024-01-01", start_date="2024-01-02")
 ````
 
 ## Validation Criteria

@@ -27,10 +27,10 @@ Data Source:
 
 Usage:
     # Function-based API
-    import gapless_crypto_clickhouse as gcc
+    import gapless_crypto_clickhouse as gcch
 
     # Fetch recent data as standard pandas DataFrame
-    df = gcc.fetch_data("BTCUSDT", timeframe="1h", limit=1000)
+    df = gcch.fetch_data("BTCUSDT", timeframe="1h", limit=1000)
 
     # Standard pandas operations for analysis
     returns = df['close'].pct_change()                     # Returns calculation
@@ -44,17 +44,17 @@ Usage:
     })
 
     # Backward compatibility (legacy interval parameter)
-    df = gcc.fetch_data("BTCUSDT", interval="1h", limit=1000)  # DeprecationWarning
+    df = gcch.fetch_data("BTCUSDT", interval="1h", limit=1000)  # DeprecationWarning
 
     # Download with date range
-    df = gcc.download("ETHUSDT", timeframe="4h", start="2024-01-01", end="2024-06-30")
+    df = gcch.download("ETHUSDT", timeframe="4h", start="2024-01-01", end="2024-06-30")
 
     # Get available symbols and timeframes
-    symbols = gcc.get_supported_symbols()
-    timeframes = gcc.get_supported_timeframes()
+    symbols = gcch.get_supported_symbols()
+    timeframes = gcch.get_supported_timeframes()
 
     # Fill gaps in existing data
-    results = gcc.fill_gaps("./data")
+    results = gcch.fill_gaps("./data")
 
     # Class-based API (for complex workflows)
     from gapless_crypto_clickhouse import BinancePublicDataCollector, UniversalGapFiller

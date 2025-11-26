@@ -283,9 +283,9 @@ class ProbeAPI:
         """
         return {
             "entry_point": None,
-            "uv_usage": "import gapless_crypto_clickhouse as gcc",
+            "uv_usage": "import gapless_crypto_clickhouse as gcch",
             "common_patterns": [
-                "import gapless_crypto_clickhouse as gcc; df = gcc.download('BTCUSDT', '1h')",
+                "import gapless_crypto_clickhouse as gcch; df = gcch.download('BTCUSDT', '1h')",
                 "from gapless_crypto_clickhouse import query_ohlcv; df = query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')",
                 "from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection; conn = ClickHouseConnection()",
             ],

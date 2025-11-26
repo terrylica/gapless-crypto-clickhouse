@@ -15,7 +15,7 @@ Comprehensive guide to programmatic usage of gapless-crypto-data via Python API 
 
 **Two Usage Patterns**:
 
-1. **Function-Based API**: Simple, intuitive functions for common tasks (`gcc.fetch_data()`, `gcc.download()`, `gcc.fill_gaps()`)
+1. **Function-Based API**: Simple, intuitive functions for common tasks (`gcch.fetch_data()`, `gcch.download()`, `gcch.fill_gaps()`)
 2. **Class-Based API**: Advanced workflows with fine-grained control (`BinancePublicDataCollector`, `UniversalGapFiller`, `CSVValidator`)
 
 **Examples**: Complete working examples in `examples/`
@@ -25,22 +25,22 @@ Comprehensive guide to programmatic usage of gapless-crypto-data via Python API 
 ### Library Information
 
 ````python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 # Get library info
-info = gcc.get_info()
+info = gcch.get_info()
 print(f"{info['name']} v{info['version']}")
 
 # Available symbols and timeframes
-symbols = gcc.get_supported_symbols()      # ['BTCUSDT', 'ETHUSDT', ...]
-timeframes = gcc.get_supported_timeframes() # ['1s', '1m', '3m', '5m', ...]
+symbols = gcch.get_supported_symbols()      # ['BTCUSDT', 'ETHUSDT', ...]
+timeframes = gcch.get_supported_timeframes() # ['1s', '1m', '3m', '5m', ...]
 ```text
 
 ### Fetch Recent Data
 
 ```python
 # Fetch recent bars with limit
-df = gcc.fetch_data("BTCUSDT", "1h", limit=100)
+df = gcch.fetch_data("BTCUSDT", "1h", limit=100)
 
 print(f"Fetched {len(df)} bars")
 print(f"Date range: {df['date'].min()} to {df['date'].max()}")
@@ -51,7 +51,7 @@ print(f"Price range: ${df['low'].min():.2f} - ${df['high'].max():.2f}")
 
 ```python
 # Download specific date range
-df = gcc.download(
+df = gcch.download(
     "ETHUSDT",
     "4h",
     start="2024-01-01",
@@ -69,7 +69,7 @@ print(f"Taker buy ratio: {buy_ratio:.1%}")
 
 ```python
 # Fill gaps in directory
-results = gcc.fill_gaps("./data")
+results = gcch.fill_gaps("./data")
 
 print(f"Files processed: {results['files_processed']}")
 print(f"Gaps detected: {results['gaps_detected']}")
@@ -311,7 +311,7 @@ See [Data Format Specification](docs/architecture/DATA_FORMAT.md) for details.
 
 ```python
 # Fetch data
-df = gcc.fetch_data("BTCUSDT", "1h", limit=100)
+df = gcch.fetch_data("BTCUSDT", "1h", limit=100)
 
 # Price statistics
 print(f"Price range: ${df['low'].min():.2f} - ${df['high'].max():.2f}")

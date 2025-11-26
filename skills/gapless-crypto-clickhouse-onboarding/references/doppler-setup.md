@@ -102,8 +102,8 @@ doppler run --project aws-credentials --config prd -- python skills/gapless-cryp
 
 # Example: Query OHLCV data
 doppler run --project aws-credentials --config prd -- python -c "
-import gapless_crypto_clickhouse as gcc
-df = gcc.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
+import gapless_crypto_clickhouse as gcch
+df = gcch.query_ohlcv('BTCUSDT', '1h', '2024-01-01', '2024-01-31')
 print(df.head())
 "
 ```

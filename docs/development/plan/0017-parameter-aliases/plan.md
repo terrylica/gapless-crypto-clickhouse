@@ -20,7 +20,7 @@ Add parameter aliases to support both `start`/`end` AND `start_date`/`end_date` 
 Current function-based API uses ambiguous parameter names:
 
 `````python
-df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+df = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 ```text
 
 **Issues**:
@@ -35,10 +35,10 @@ Add parameter aliases so both forms work:
 
 ```python
 # Legacy form (still works)
-df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+df = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 
 # New explicit form (recommended)
-df = gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
+df = gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
 ```text
 
 ## Goals
@@ -166,10 +166,10 @@ def download(
 
     Examples:
         # Legacy form (still supported)
-        df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+        df = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 
         # Explicit form (recommended)
-        df = gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
+        df = gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
     """
     # Parameter normalization
     if start is not None and start_date is not None:
@@ -201,13 +201,13 @@ def download(
 ## Function-based API
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 # Explicit parameter names (recommended)
-df = gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
+df = gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
 
 # Legacy form (still supported)
-df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+df = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 ```text
 `````
 
@@ -220,27 +220,27 @@ df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 **Test Cases**:
 ```python
 import pytest
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 
 def test_legacy_start_end_parameters():
     """Legacy start/end parameters continue working."""
-    df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
+    df = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
     assert len(df) > 0
     assert "date" in df.columns
 
 
 def test_new_start_date_end_date_aliases():
     """New start_date/end_date aliases work correctly."""
-    df = gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
+    df = gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
     assert len(df) > 0
     assert "date" in df.columns
 
 
 def test_both_forms_produce_same_results():
     """Legacy and new forms produce identical results."""
-    df1 = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
-    df2 = gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
+    df1 = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
+    df2 = gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
 
     assert len(df1) == len(df2)
     assert df1.equals(df2)
@@ -249,24 +249,24 @@ def test_both_forms_produce_same_results():
 def test_conflict_start_and_start_date_raises_error():
     """Specifying both start and start_date raises ValueError."""
     with pytest.raises(ValueError, match="Cannot specify both 'start' and 'start_date'"):
-        gcc.download("BTCUSDT", "1h", start="2024-01-01", start_date="2024-01-02")
+        gcch.download("BTCUSDT", "1h", start="2024-01-01", start_date="2024-01-02")
 
 
 def test_conflict_end_and_end_date_raises_error():
     """Specifying both end and end_date raises ValueError."""
     with pytest.raises(ValueError, match="Cannot specify both 'end' and 'end_date'"):
-        gcc.download("BTCUSDT", "1h", end="2024-06-30", end_date="2024-07-01")
+        gcch.download("BTCUSDT", "1h", end="2024-06-30", end_date="2024-07-01")
 
 
 def test_fetch_data_legacy_parameters():
     """fetch_data() also supports legacy parameters."""
-    df = gcc.fetch_data("ETHUSDT", "4h", start="2024-01-01", end="2024-01-02")
+    df = gcch.fetch_data("ETHUSDT", "4h", start="2024-01-01", end="2024-01-02")
     assert len(df) > 0
 
 
 def test_fetch_data_new_aliases():
     """fetch_data() supports new parameter aliases."""
-    df = gcc.fetch_data("ETHUSDT", "4h", start_date="2024-01-01", end_date="2024-01-02")
+    df = gcch.fetch_data("ETHUSDT", "4h", start_date="2024-01-01", end_date="2024-01-02")
     assert len(df) > 0
 ````
 
@@ -329,8 +329,8 @@ Parameters:
 
 Examples:
     # Both forms are equivalent and fully supported:
-    df = gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
-    df = gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
+    df = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
+    df = gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
 
 Raises:
     ValueError: If both 'start' and 'start_date' specified simultaneously

@@ -8,17 +8,17 @@ Simple and intuitive data collection returning standard pandas DataFrames.
 Exception-only failure principles - all errors raise exceptions.
 
 Examples:
-    import gapless_crypto_clickhouse as gcc
+    import gapless_crypto_clickhouse as gcch
 
     # Simple data fetching
-    df = gcc.fetch_data("BTCUSDT", "1h", limit=1000)
+    df = gcch.fetch_data("BTCUSDT", "1h", limit=1000)
 
     # Get available symbols and timeframes
-    symbols = gcc.get_supported_symbols()
-    intervals = gcc.get_supported_timeframes()
+    symbols = gcch.get_supported_symbols()
+    intervals = gcch.get_supported_timeframes()
 
     # Download with date range
-    df = gcc.download("ETHUSDT", "4h", start="2024-01-01", end="2024-06-30")
+    df = gcch.download("ETHUSDT", "4h", start="2024-01-01", end="2024-06-30")
 """
 
 from datetime import datetime, timedelta

@@ -116,9 +116,9 @@ collector.collect_timeframe_data("1h")
 Get list of supported symbols:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
-symbols = gcc.get_supported_symbols()
+symbols = gcch.get_supported_symbols()
 print(symbols)
 ```text
 
@@ -134,7 +134,7 @@ print(symbols)
 Get list of supported timeframes:
 
 ```python
-timeframes = gcc.get_supported_timeframes()
+timeframes = gcch.get_supported_timeframes()
 print(timeframes)
 ```bash
 

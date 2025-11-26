@@ -263,8 +263,8 @@ def test_listing_dates_accurate():
 ```python
 def test_spot_data_fetch_new_symbols():
     """Verify spot data fetching works for new symbols."""
-    import gapless_crypto_clickhouse as gcc
-    df = gcc.fetch_data("BNBUSDT", "1d", start="2024-01-01", end="2024-01-02")
+    import gapless_crypto_clickhouse as gcch
+    df = gcch.fetch_data("BNBUSDT", "1d", start="2024-01-01", end="2024-01-02")
     assert len(df) > 0
     assert "open" in df.columns
 

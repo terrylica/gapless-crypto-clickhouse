@@ -21,13 +21,13 @@ Current API performs minimal validation before executing operations:
 
 ````python
 # Invalid symbol - fails during data collection (5+ seconds delay)
-df = gcc.download("BTCUSD", "1h")  # Network request → 404 → "No data found"
+df = gcch.download("BTCUSD", "1h")  # Network request → 404 → "No data found"
 
 # Invalid timeframe - fails during collection
-df = gcc.download("BTCUSDT", "3h")  # Network request → empty data
+df = gcch.download("BTCUSDT", "3h")  # Network request → empty data
 
 # Invalid date format - fails during parsing
-df = gcc.download("BTCUSDT", "1h", start="2024-13-01")  # datetime error
+df = gcch.download("BTCUSDT", "1h", start="2024-13-01")  # datetime error
 ```text
 
 **Issues**:
@@ -42,7 +42,7 @@ Add upfront validation with helpful error messages:
 
 ```python
 # After implementation
-df = gcc.download("BTCUSD", "1h")
+df = gcch.download("BTCUSD", "1h")
 # → ValueError: Invalid symbol 'BTCUSD'. Did you mean 'BTCUSDT'?
 #    Supported symbols: BTCUSDT, ETHUSDT, BNBUSDT, ... (see get_supported_symbols())
 ```text
@@ -273,7 +273,7 @@ def download(...):
 
 ```python
 import pytest
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 
 class TestSymbolValidation:
@@ -282,23 +282,23 @@ class TestSymbolValidation:
     def test_invalid_symbol_raises_error(self):
         """Invalid symbol raises ValueError."""
         with pytest.raises(ValueError, match="Invalid symbol"):
-            gcc.download("INVALIDPAIR", "1h")
+            gcch.download("INVALIDPAIR", "1h")
 
     def test_invalid_symbol_suggests_correction(self):
         """Invalid symbol with close match suggests correction."""
         with pytest.raises(ValueError, match="Did you mean 'BTCUSDT'"):
-            gcc.download("BTCUSD", "1h")
+            gcch.download("BTCUSD", "1h")
 
     def test_invalid_symbol_shows_supported_list(self):
         """Invalid symbol shows list of supported symbols."""
         with pytest.raises(ValueError, match="Supported symbols.*get_supported_symbols"):
-            gcc.download("XYZ", "1h")
+            gcch.download("XYZ", "1h")
 
     def test_valid_symbol_passes(self):
         """Valid symbol passes validation (may fail later for other reasons)."""
         # Should not raise ValueError for symbol validation
         try:
-            gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
+            gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
         except ValueError as e:
             if "Invalid symbol" in str(e):
                 pytest.fail("Valid symbol should not raise symbol validation error")
@@ -310,17 +310,17 @@ class TestTimeframeValidation:
     def test_invalid_timeframe_raises_error(self):
         """Invalid timeframe raises ValueError."""
         with pytest.raises(ValueError, match="Invalid timeframe"):
-            gcc.download("BTCUSDT", "3h")  # 3h not supported
+            gcch.download("BTCUSDT", "3h")  # 3h not supported
 
     def test_invalid_timeframe_shows_supported_list(self):
         """Invalid timeframe shows all supported timeframes."""
         with pytest.raises(ValueError, match="Supported timeframes:.*1s.*1m.*1d"):
-            gcc.download("BTCUSDT", "7d")
+            gcch.download("BTCUSDT", "7d")
 
     def test_valid_timeframe_passes(self):
         """Valid timeframe passes validation."""
         try:
-            gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
+            gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
         except ValueError as e:
             if "Invalid timeframe" in str(e):
                 pytest.fail("Valid timeframe should not raise timeframe validation error")
@@ -332,22 +332,22 @@ class TestDateFormatValidation:
     def test_invalid_date_format_raises_error(self):
         """Invalid date format raises ValueError."""
         with pytest.raises(ValueError, match="Invalid start format"):
-            gcc.download("BTCUSDT", "1h", start="2024/01/01")
+            gcch.download("BTCUSDT", "1h", start="2024/01/01")
 
     def test_invalid_date_format_shows_example(self):
         """Invalid date format shows expected format."""
         with pytest.raises(ValueError, match="Expected format: YYYY-MM-DD"):
-            gcc.download("BTCUSDT", "1h", start="01-01-2024")
+            gcch.download("BTCUSDT", "1h", start="01-01-2024")
 
     def test_invalid_date_value_raises_error(self):
         """Invalid date value raises ValueError."""
         with pytest.raises(ValueError, match="Invalid start date"):
-            gcc.download("BTCUSDT", "1h", start="2024-13-01")  # Month 13
+            gcch.download("BTCUSDT", "1h", start="2024-13-01")  # Month 13
 
     def test_valid_date_format_passes(self):
         """Valid date format passes validation."""
         try:
-            gcc.download("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
+            gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
         except ValueError as e:
             if "Invalid start format" in str(e) or "Invalid end format" in str(e):
                 pytest.fail("Valid date format should not raise date validation error")
@@ -359,17 +359,17 @@ class TestFetchDataValidation:
     def test_fetch_data_validates_symbol(self):
         """fetch_data() validates symbol."""
         with pytest.raises(ValueError, match="Invalid symbol"):
-            gcc.fetch_data("INVALID", "1h")
+            gcch.fetch_data("INVALID", "1h")
 
     def test_fetch_data_validates_timeframe(self):
         """fetch_data() validates timeframe."""
         with pytest.raises(ValueError, match="Invalid timeframe"):
-            gcc.fetch_data("BTCUSDT", "3h")
+            gcch.fetch_data("BTCUSDT", "3h")
 
     def test_fetch_data_validates_dates(self):
         """fetch_data() validates date formats."""
         with pytest.raises(ValueError, match="Invalid start format"):
-            gcc.fetch_data("BTCUSDT", "1h", start="2024/01/01")
+            gcch.fetch_data("BTCUSDT", "1h", start="2024/01/01")
 ````
 
 ## Implementation Checklist

@@ -24,7 +24,7 @@ Current API requires sequential loops for multiple symbols:
 # Current approach - slow
 dataframes = {}
 for symbol in ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"]:
-    dataframes[symbol] = gcc.download(symbol, "1h", start_date="2024-01-01")
+    dataframes[symbol] = gcch.download(symbol, "1h", start_date="2024-01-01")
 # → 5x sequential time (no concurrency)
 ```bash
 
@@ -38,7 +38,7 @@ Add `download_multiple()` function with concurrent execution:
 
 ```python
 # New approach - fast
-results = gcc.download_multiple(
+results = gcch.download_multiple(
     symbols=["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"],
     timeframe="1h",
     start_date="2024-01-01"
@@ -103,7 +103,7 @@ def download_multiple(
                    and any symbol fails
 
     Example:
-        >>> results = gcc.download_multiple(
+        >>> results = gcch.download_multiple(
         ...     symbols=["BTCUSDT", "ETHUSDT", "SOLUSDT"],
         ...     timeframe="1h",
         ...     start_date="2024-01-01",
@@ -115,7 +115,7 @@ def download_multiple(
         (4344, 11)
 
         # With error handling
-        >>> results = gcc.download_multiple(
+        >>> results = gcch.download_multiple(
         ...     symbols=["BTCUSDT", "INVALID"],
         ...     timeframe="1h",
         ...     start_date="2024-01-01"

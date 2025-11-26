@@ -6,7 +6,7 @@ Demonstrates the function-based API for common use cases.
 Familiar patterns for intuitive cryptocurrency data collection.
 """
 
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 
 def example_basic_usage():
@@ -15,14 +15,14 @@ def example_basic_usage():
     print("=" * 50)
 
     # Get library information
-    info = gcc.get_info()
+    info = gcch.get_info()
     print(f"Library: {info['name']} v{info['version']}")
     print(f"Description: {info['description']}")
     print()
 
     # Get available symbols and timeframes
-    symbols = gcc.get_supported_symbols()
-    timeframes = gcc.get_supported_timeframes()
+    symbols = gcch.get_supported_symbols()
+    timeframes = gcch.get_supported_timeframes()
 
     print(f"Supported symbols ({len(symbols)}): {symbols}")
     print(f"Available timeframes ({len(timeframes)}): {timeframes}")
@@ -36,7 +36,7 @@ def example_fetch_recent_data():
 
     # Fetch recent 100 hourly bars for Bitcoin
     print("Fetching recent 100 hourly BTCUSDT bars...")
-    df = gcc.fetch_data("BTCUSDT", "1h", limit=100)
+    df = gcch.fetch_data("BTCUSDT", "1h", limit=100)
 
     if not df.empty:
         print(f"✅ Fetched {len(df)} bars")
@@ -56,7 +56,7 @@ def example_download_date_range():
 
     # Download ETHUSDT 4-hour data for specific period
     print("Downloading ETHUSDT 4h data (2024-01-01 to 2024-02-01)...")
-    df = gcc.download("ETHUSDT", "4h", start="2024-01-01", end="2024-02-01")
+    df = gcch.download("ETHUSDT", "4h", start="2024-01-01", end="2024-02-01")
 
     if not df.empty:
         print(f"✅ Downloaded {len(df)} bars")
@@ -84,7 +84,7 @@ def example_multiple_symbols():
 
     for symbol in symbols:
         print(f"Fetching {symbol} daily data...")
-        df = gcc.fetch_data(symbol, "1d", limit=30)  # Last 30 days
+        df = gcch.fetch_data(symbol, "1d", limit=30)  # Last 30 days
 
         if not df.empty:
             price_change = (
@@ -110,7 +110,7 @@ def example_gap_filling():
 
     if os.path.exists(data_dir):
         print(f"Checking for gaps in {data_dir}...")
-        results = gcc.fill_gaps(data_dir)
+        results = gcch.fill_gaps(data_dir)
 
         print("Gap filling results:")
         print(f"  Files processed: {results['files_processed']}")

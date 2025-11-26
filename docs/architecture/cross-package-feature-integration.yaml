@@ -39,7 +39,7 @@ x-architecture:
       - "Collect OHLCV data from Binance"
       - "Validate 11-column microstructure format"
       - "Persist to CSV/Parquet with DatetimeIndex"
-      - "Provide DataFrame API: gcc.fetch_data('BTCUSDT', '1m')"
+      - "Provide DataFrame API: gcch.fetch_data('BTCUSDT', '1m')"
 
     gapless_mempool_data:
       - "Collect mempool snapshots from mempool.space"
@@ -60,10 +60,10 @@ x-package-interfaces:
     installation: "pip install gapless-crypto-data"
 
     basic_usage: |
-      import gapless_crypto_data as gcc
+      import gapless_crypto_data as gcch
 
       # Fetch 1-minute BTCUSDT OHLCV data
-      df_ohlcv = gcc.fetch_data(
+      df_ohlcv = gcch.fetch_data(
           symbol="BTCUSDT",
           timeframe="1m",
           start="2024-01-01",
@@ -286,12 +286,12 @@ x-example-workflows:
   workflow_1_basic_feature_collection:
     description: "Collect and align OHLCV + mempool for 1 month"
     code: |
-      import gapless_crypto_data as gcc
+      import gapless_crypto_data as gcch
       import gapless_mempool_data as gmd
       import pandas as pd
 
       # Step 1: Collect OHLCV data (1-minute bars)
-      df_ohlcv = gcc.fetch_data(
+      df_ohlcv = gcch.fetch_data(
           symbol="BTCUSDT",
           timeframe="1m",
           start="2024-01-01",
@@ -329,12 +329,12 @@ x-example-workflows:
   workflow_2_engineered_features:
     description: "Generate 50+ features for ML model"
     code: |
-      import gapless_crypto_data as gcc
+      import gapless_crypto_data as gcch
       import gapless_mempool_data as gmd
       import numpy as np
 
       # Collect data
-      df_ohlcv = gcc.fetch_data("BTCUSDT", "1m", "2024-01-01", "2024-01-31")
+      df_ohlcv = gcch.fetch_data("BTCUSDT", "1m", "2024-01-01", "2024-01-31")
       df_mempool = gmd.fetch_snapshots("2024-01-01", "2024-01-31")
       df_mempool_aligned = df_mempool.reindex(df_ohlcv.index, method='ffill')
       df = df_ohlcv.join(df_mempool_aligned, rsuffix='_mempool')
@@ -391,7 +391,7 @@ x-example-workflows:
   workflow_3_ml_pipeline:
     description: "Train/test split with proper temporal ordering"
     code: |
-      import gapless_crypto_data as gcc
+      import gapless_crypto_data as gcch
       import gapless_mempool_data as gmd
       from sklearn.ensemble import RandomForestRegressor
       from sklearn.preprocessing import StandardScaler
@@ -518,10 +518,10 @@ x-performance:
       description: "Load only required date ranges"
       code: |
         # Good: Load specific month
-        df = gcc.fetch_data("BTCUSDT", "1m", "2024-01-01", "2024-01-31")
+        df = gcch.fetch_data("BTCUSDT", "1m", "2024-01-01", "2024-01-31")
 
         # Bad: Load entire history
-        df = gcc.fetch_data("BTCUSDT", "1m", "2017-01-01", "2024-12-31")
+        df = gcch.fetch_data("BTCUSDT", "1m", "2017-01-01", "2024-12-31")
 
     chunked_processing:
       description: "Process large date ranges in chunks"
@@ -538,7 +538,7 @@ x-performance:
                 chunk_end = min(current + timedelta(days=chunk_days), end_dt)
 
                 # Fetch chunk
-                df_ohlcv = gcc.fetch_data(
+                df_ohlcv = gcch.fetch_data(
                     "BTCUSDT", "1m",
                     current.isoformat(), chunk_end.isoformat()
                 )

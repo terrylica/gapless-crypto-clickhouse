@@ -352,8 +352,8 @@ x-enhancement-metadata:
 
 x-migration-guidance:
   from_legacy:
-    old_pattern: 'gcc.fetch_data("BTCUSDT", interval="1h")'
-    new_pattern: 'gcc.fetch_data("BTCUSDT", timeframe="1h")'
+    old_pattern: 'gcch.fetch_data("BTCUSDT", interval="1h")'
+    new_pattern: 'gcch.fetch_data("BTCUSDT", timeframe="1h")'
     compatibility_period: "5 years"
 
   function_mapping:

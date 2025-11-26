@@ -359,10 +359,10 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 
      ```python
      # Before (WRONG for this package)
-     import gapless_crypto_clickhouse as gcc
+     import gapless_crypto_clickhouse as gcch
 
      # After (CORRECT)
-     import gapless_crypto_clickhouse as gcc
+     import gapless_crypto_clickhouse as gcch
      ```
 
    - **Remove v3.x → v4.0.0 timeline** (lines 408-414)

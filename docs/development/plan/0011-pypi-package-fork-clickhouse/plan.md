@@ -90,8 +90,8 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 
 **Breaking Change**: All import paths change
 
-- Before: `import gapless_crypto_clickhouse as gcc`
-- After: `import gapless_crypto_clickhouse as gcc`
+- Before: `import gapless_crypto_clickhouse as gcch`
+- After: `import gapless_crypto_clickhouse as gcch`
 
 ### Version Strategy
 
@@ -223,7 +223,7 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 1. **README.md** (50+ changes):
    - Title: `# Gapless Crypto ClickHouse`
    - Installation: `pip install gapless-crypto-clickhouse`
-   - Imports: `import gapless_crypto_clickhouse as gcc`
+   - Imports: `import gapless_crypto_clickhouse as gcch`
    - Add positioning section: "When to use this package"
    - Cross-reference: Link to `gapless-crypto-data` for file-based workflows
 
@@ -642,11 +642,11 @@ python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__v
 # From clean environment
 pip install gapless-crypto-clickhouse
 python -c "
-import gapless_crypto_clickhouse as gcc
-print(f'Version: {gcc.__version__}')
-print(f'Package: {gcc.__name__}')
-assert gcc.__version__ == '1.0.0'
-assert 'gapless_crypto_clickhouse' in gcc.__name__
+import gapless_crypto_clickhouse as gcch
+print(f'Version: {gcch.__version__}')
+print(f'Package: {gcch.__name__}')
+assert gcch.__version__ == '1.0.0'
+assert 'gapless_crypto_clickhouse' in gcch.__name__
 "
 ```
 

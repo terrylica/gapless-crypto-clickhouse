@@ -151,13 +151,13 @@ numpy==1.26.4 (latest 1.x version)
   ```python
   import numpy as np
   import pandas as pd
-  import gapless_crypto_clickhouse as gcc
+  import gapless_crypto_clickhouse as gcch
 
   print(f"NumPy: {np.__version__}")  # Should be 1.x
   print(f"pandas: {pd.__version__}")  # Should be 2.0.x or 2.1.x
 
   # Test basic operation
-  df = gcc.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
+  df = gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
   print(f"Downloaded {len(df)} rows")  # Should succeed
 ````
 

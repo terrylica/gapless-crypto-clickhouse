@@ -572,11 +572,11 @@ curl -s https://pypi.org/pypi/gapless-crypto-clickhouse/json | jq -r '.info.vers
 **Command**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 # Verify 713 symbols for both types
-spot_symbols = gcc.get_supported_symbols("spot")
-futures_symbols = gcc.get_supported_symbols("futures-um")
+spot_symbols = gcch.get_supported_symbols("spot")
+futures_symbols = gcch.get_supported_symbols("futures-um")
 
 assert len(spot_symbols) == 713, f"Expected 713 spot symbols, got {len(spot_symbols)}"
 assert len(futures_symbols) == 713, f"Expected 713 futures symbols, got {len(futures_symbols)}"

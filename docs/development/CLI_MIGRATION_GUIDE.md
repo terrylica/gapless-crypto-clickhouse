@@ -75,7 +75,7 @@ docker run -d -p 9000:9000 -p 8123:8123 clickhouse/clickhouse-server
 **Before**:
 
 ```python
-import gapless_crypto_data as gcc
+import gapless_crypto_data as gcch
 from gapless_crypto_data import BinancePublicDataCollector, UniversalGapFiller
 from gapless_crypto_data.validation import CSVValidator, ValidationStorage
 ```text
@@ -83,7 +83,7 @@ from gapless_crypto_data.validation import CSVValidator, ValidationStorage
 **After**:
 
 ```python
-import gapless_crypto_clickhouse as gcc  # Note: Different alias convention
+import gapless_crypto_clickhouse as gcch  # Note: Different alias convention
 from gapless_crypto_clickhouse import BinancePublicDataCollector, UniversalGapFiller
 from gapless_crypto_clickhouse.validation import CSVValidator, ValidationStorage
 ```yaml
@@ -115,10 +115,10 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1h
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 # Fetch data directly as pandas DataFrame
-df = gcc.fetch_data("BTCUSDT", timeframe="1h")
+df = gcch.fetch_data("BTCUSDT", timeframe="1h")
 print(f"Collected {len(df)} bars")
 ```text
 
@@ -133,11 +133,11 @@ gapless-crypto-data --symbol ETHUSDT --timeframes 1h,4h,1d
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 timeframes = ["1h", "4h", "1d"]
 for tf in timeframes:
-    df = gcc.fetch_data("ETHUSDT", timeframe=tf)
+    df = gcch.fetch_data("ETHUSDT", timeframe=tf)
     print(f"{tf}: {len(df)} bars")
 ```text
 
@@ -153,9 +153,9 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1h \
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
-df = gcc.download(
+df = gcch.download(
     "BTCUSDT",
     timeframe="1h",
     start="2023-01-01",
@@ -175,13 +175,13 @@ gapless-crypto-data --symbol BTCUSDT,ETHUSDT,SOLUSDT --timeframes 1h
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
 results = {}
 
 for symbol in symbols:
-    df = gcc.fetch_data(symbol, timeframe="1h")
+    df = gcch.fetch_data(symbol, timeframe="1h")
     results[symbol] = df
     print(f"{symbol}: {len(df)} bars")
 ```yaml
@@ -202,11 +202,11 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1h \
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 from pathlib import Path
 
 # Fetch data and save manually
-df = gcc.fetch_data("BTCUSDT", timeframe="1h")
+df = gcch.fetch_data("BTCUSDT", timeframe="1h")
 
 # Save to custom location
 output_dir = Path("./crypto_data")
@@ -214,7 +214,7 @@ output_dir.mkdir(exist_ok=True)
 df.to_csv(output_dir / "BTCUSDT_1h.csv", index=False)
 
 # Or use save_parquet for better performance
-gcc.save_parquet(df, output_dir / "BTCUSDT_1h.parquet")
+gcch.save_parquet(df, output_dir / "BTCUSDT_1h.parquet")
 ```text
 
 ### Pattern 2: Gap Filling
@@ -228,10 +228,10 @@ gapless-crypto-data --fill-gaps --directory ./data
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 # Fill gaps in all CSV files in directory
-results = gcc.fill_gaps("./data")
+results = gcch.fill_gaps("./data")
 
 print(f"Processed {results['files_processed']} files")
 print(f"Filled {results['gaps_filled']}/{results['gaps_detected']} gaps")
@@ -250,7 +250,7 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1s,1m,3m \
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 # Collect ultra-high frequency data for a single day
 timeframes = ["1s", "1m", "3m"]
@@ -258,7 +258,7 @@ start_date = "2024-01-01"
 end_date = "2024-01-01"
 
 for tf in timeframes:
-    df = gcc.download(
+    df = gcch.download(
         "BTCUSDT",
         timeframe=tf,
         start=start_date,
@@ -283,7 +283,7 @@ gapless-crypto-data --symbol BTCUSDT,ETHUSDT,SOLUSDT --timeframes 1h,4h,1d
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 from datetime import datetime
 
 symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
@@ -299,7 +299,7 @@ for symbol in symbols:
         current += 1
         print(f"[{current}/{total}] Collecting {symbol} {tf}...")
 
-        df = gcc.fetch_data(symbol, timeframe=tf, limit=1000)
+        df = gcch.fetch_data(symbol, timeframe=tf, limit=1000)
         results[symbol][tf] = {
             'bars': len(df),
             'first_date': df['date'].min(),
@@ -327,12 +327,12 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1h --output-dir ./data
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 import pandas as pd
 import numpy as np
 
 # Fetch data directly
-df = gcc.fetch_data("BTCUSDT", timeframe="1h", limit=1000)
+df = gcch.fetch_data("BTCUSDT", timeframe="1h", limit=1000)
 
 # Immediate analysis without file I/O
 df['returns'] = df['close'].pct_change()
@@ -360,7 +360,7 @@ gapless-crypto-data --symbol BTCUSDT --timeframes 1h
 **Python API (Recommended)**:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 from gapless_crypto_clickhouse import NetworkError, DataCollectionError
 import time
 
@@ -368,7 +368,7 @@ def fetch_with_retry(symbol, timeframe, max_retries=3):
     """Fetch data with retry logic"""
     for attempt in range(max_retries):
         try:
-            df = gcc.fetch_data(symbol, timeframe=timeframe)
+            df = gcch.fetch_data(symbol, timeframe=timeframe)
             print(f"✅ Successfully fetched {symbol} {timeframe}")
             return df
         except NetworkError as e:
@@ -397,10 +397,10 @@ if df is not None:
 No need to save and load files:
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 # Immediate access to pandas DataFrame
-df = gcc.fetch_data("BTCUSDT", timeframe="1h")
+df = gcch.fetch_data("BTCUSDT", timeframe="1h")
 
 # Use directly with pandas operations
 recent_high = df.tail(100)['high'].max()
@@ -410,12 +410,12 @@ recent_low = df.tail(100)['low'].min()
 ### 2. Integration with Data Science Stack
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Fetch data
-df = gcc.fetch_data("BTCUSDT", timeframe="1h", limit=720)  # 30 days
+df = gcch.fetch_data("BTCUSDT", timeframe="1h", limit=720)  # 30 days
 
 # Immediate visualization
 df.set_index('date')['close'].plot(figsize=(12, 6))
@@ -429,14 +429,14 @@ print(df[['open', 'high', 'low', 'close', 'volume']].describe())
 ### 3. Programmatic Control
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 from datetime import datetime, timedelta
 
 # Dynamic date ranges
 end_date = datetime.now().date()
 start_date = end_date - timedelta(days=30)
 
-df = gcc.download(
+df = gcch.download(
     "BTCUSDT",
     timeframe="1h",
     start=str(start_date),
@@ -451,13 +451,13 @@ if len(df) < 720:
 ### 4. Testing and Automation
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 import unittest
 
 class TestDataCollection(unittest.TestCase):
     def test_btc_collection(self):
         """Test BTC data collection"""
-        df = gcc.fetch_data("BTCUSDT", timeframe="1h", limit=100)
+        df = gcch.fetch_data("BTCUSDT", timeframe="1h", limit=100)
 
         self.assertEqual(len(df), 100)
         self.assertIn('close', df.columns)
@@ -465,7 +465,7 @@ class TestDataCollection(unittest.TestCase):
 
     def test_gap_detection(self):
         """Test gap detection"""
-        results = gcc.fill_gaps("./test_data")
+        results = gcch.fill_gaps("./test_data")
         self.assertIn('gaps_detected', results)
 
 if __name__ == '__main__':

@@ -51,7 +51,7 @@ x-implementation-plan:
           acceptance_criteria:
             - "Docstring header: 'Gapless Crypto Data v4.0.0'"
             - "CLI notice: 'CLI Removed in v4.0.0' (past tense)"
-            - "Runtime check: 'v4.0.0' in gcc.__doc__"
+            - "Runtime check: 'v4.0.0' in gcch.__doc__"
           commit_message: "fix(docs): update module docstring to v4.0.0"
           commit_body: |
             Fix critical version mismatch in module docstring affecting user-facing docs.
@@ -125,7 +125,7 @@ x-implementation-plan:
       deliverables:
         - name: "Version Verification"
           description: "Confirm runtime __version__ and docstring both show 4.0.0"
-          validation_command: "uv run python -c \"import gapless_crypto_data as gcc; assert gcc.__version__ == '4.0.0'; assert 'v4.0.0' in gcc.__doc__\""
+          validation_command: "uv run python -c \"import gapless_crypto_data as gcch; assert gcch.__version__ == '4.0.0'; assert 'v4.0.0' in gcch.__doc__\""
           expected_output: "Exit code 0 (both assertions pass)"
 
         - name: "Targeted Test Execution"
@@ -154,7 +154,7 @@ x-slos:
     metrics:
       - name: "Module Docstring Accuracy"
         target: "Docstring version matches __version__ attribute (4.0.0)"
-        measurement: "Runtime assertion: 'v4.0.0' in gcc.__doc__"
+        measurement: "Runtime assertion: 'v4.0.0' in gcch.__doc__"
 
       - name: "Test Assertion Accuracy"
         target: "Test expects correct version (4.0.0)"

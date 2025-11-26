@@ -6,16 +6,16 @@ ClickHouse-based cryptocurrency data collection with zero gaps guarantee.
 ## Quick Start
 
 ```python
-import gapless_crypto_clickhouse as gcc
+import gapless_crypto_clickhouse as gcch
 
 # Fetch recent OHLCV data
-df = gcc.fetch_data("BTCUSDT", timeframe="1h", limit=1000)
+df = gcch.fetch_data("BTCUSDT", timeframe="1h", limit=1000)
 
 # Download historical range
-df = gcc.download("ETHUSDT", timeframe="4h", start="2024-01-01", end="2024-06-30")
+df = gcch.download("ETHUSDT", timeframe="4h", start="2024-01-01", end="2024-06-30")
 
 # Multi-symbol batch download (concurrent - 10-20x faster)
-results = gcc.download_multiple(
+results = gcch.download_multiple(
     symbols=["BTCUSDT", "ETHUSDT", "BNBUSDT"],
     timeframe="1h",
     start_date="2024-01-01",
@@ -23,7 +23,7 @@ results = gcc.download_multiple(
 )  # Returns: dict[str, pd.DataFrame]
 
 # Fill gaps in existing datasets
-results = gcc.fill_gaps("./data")
+results = gcch.fill_gaps("./data")
 ```
 
 ## Core Capabilities
@@ -73,7 +73,7 @@ from gapless_crypto_clickhouse import (
 )
 
 try:
-    df = gcc.fetch_data("INVALIDSYMBOL", timeframe="1h")
+    df = gcch.fetch_data("INVALIDSYMBOL", timeframe="1h")
 except ValidationError as e:
     print(e.details)  # Machine-parseable error context
 ```

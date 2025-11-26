@@ -16,13 +16,13 @@ Current API performs minimal input validation before making expensive network/da
 
 ````python
 # Invalid symbol - fails during data collection
-df = gcc.download("INVALIDPAIR", "1h")  # Network request → 404 → unclear error
+df = gcch.download("INVALIDPAIR", "1h")  # Network request → 404 → unclear error
 
 # Invalid timeframe - fails during collection
-df = gcc.download("BTCUSDT", "3h")  # Network request → empty data → confusing
+df = gcch.download("BTCUSDT", "3h")  # Network request → empty data → confusing
 
 # Invalid date format - fails during collection
-df = gcc.download("BTCUSDT", "1h", start="2024-13-01")  # Proceeds → fails later
+df = gcch.download("BTCUSDT", "1h", start="2024-13-01")  # Proceeds → fails later
 ```bash
 
 **Issues**:
@@ -66,10 +66,10 @@ df = gcc.download("BTCUSDT", "1h", start="2024-13-01")  # Proceeds → fails lat
 
 ```python
 # Before (unclear error after network delay)
-df = gcc.download("BTCUSD", "1h")  # → "No data found" (after 5s network delay)
+df = gcch.download("BTCUSD", "1h")  # → "No data found" (after 5s network delay)
 
 # After (immediate validation with actionable feedback)
-df = gcc.download("BTCUSD", "1h")
+df = gcch.download("BTCUSD", "1h")
 # → ValueError: Invalid symbol 'BTCUSD'. Did you mean 'BTCUSDT'?
 #    Supported symbols: BTCUSDT, ETHUSDT, BNBUSDT, ... (see get_supported_symbols())
 ```text
@@ -240,17 +240,17 @@ def download(...):
 def test_invalid_symbol_raises_helpful_error():
     """Invalid symbol raises ValueError with suggestions."""
     with pytest.raises(ValueError, match="Did you mean 'BTCUSDT'"):
-        gcc.download("BTCUSD", "1h")
+        gcch.download("BTCUSD", "1h")
 
 def test_invalid_timeframe_raises_helpful_error():
     """Invalid timeframe raises ValueError with supported list."""
     with pytest.raises(ValueError, match="Supported timeframes"):
-        gcc.download("BTCUSDT", "3h")  # 3h not supported
+        gcch.download("BTCUSDT", "3h")  # 3h not supported
 
 def test_invalid_date_format_raises_helpful_error():
     """Invalid date format raises ValueError with example."""
     with pytest.raises(ValueError, match="Expected format: YYYY-MM-DD"):
-        gcc.download("BTCUSDT", "1h", start="2024/01/01")
+        gcch.download("BTCUSDT", "1h", start="2024/01/01")
 ````
 
 ## Validation Criteria
