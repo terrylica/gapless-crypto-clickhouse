@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [14.1.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.4...v14.1.5) (2025-11-26)
+
+### Documentation
+
+* **readme:** third audit pass - fix invalid claims and API signatures ([9b6f8aa](https://github.com/terrylica/gapless-crypto-clickhouse/commit/9b6f8aa87d3101497dce3e996ee7bade9fed41b2)), closes [#ai-agent-integration](https://github.com/terrylica/gapless-crypto-clickhouse/issues/ai-agent-integration)
+
 ## [14.1.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.3...v14.1.4) (2025-11-26)
 
 ### Documentation
