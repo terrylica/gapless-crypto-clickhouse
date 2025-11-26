@@ -79,7 +79,7 @@ find docs/ examples/ -name "*.md" -o -name "*.py" | \
 
 find docs/ -name "*.md" | \
   xargs sed -i '' 's|/gapless-crypto-clickhouse/|/gapless-crypto-clickhouse/|g'
-```
+```text
 
 **Files Affected** (15 high-priority):
 
@@ -102,7 +102,7 @@ grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
   grep -v ".cache/gapless-crypto-data" | \
   grep -v "docs/decisions" | \
   grep -v "CHANGELOG"
-```
+```text
 
 ### Phase 2: Architecture Documentation Updates
 
@@ -127,7 +127,7 @@ grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
 - Engine: ReplacingMergeTree with deterministic versioning
 - Deduplication: `(_version, _sign)` for idempotent ingestion
 - Schema: `clickhouse/schema.sql` (17 columns)
-```
+```python
 
 **2.3 Update Network Architecture** in `CLAUDE.md`:
 
@@ -169,7 +169,7 @@ grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
 | `open`     | `open`          | Float64       | Direct mapping             |
 
 ...
-```
+```text
 
 **4.2 Resolve Timeframe Discrepancy**:
 
@@ -182,7 +182,7 @@ TIMEFRAME_TO_MINUTES: Dict[str, float] = {
     "1w": 10080,  # 7 days
     "1mo": 43200, # 30 days (approximation)
 }
-```
+```text
 
 **Option B**: Document that bulk loader supports 16 timeframes (not 13)
 
@@ -203,7 +203,7 @@ cd /tmp/doc-audit/
 for test in test_*.py; do
   uv run "$test" || echo "FAILED: $test"
 done
-```
+```bash
 
 **Validation Metrics**:
 
@@ -223,7 +223,7 @@ grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
   grep -v -E "(\.cache|decisions|CHANGELOG)" | \
   wc -l
 # Expected: 0
-```
+```python
 
 **Import Validation**:
 
@@ -240,7 +240,7 @@ find docs/ -name "*.md" -exec \
 ```bash
 uv run pytest tests/ -v
 # Expected: All tests pass
-```
+```python
 
 ### Manual Checklist
 
@@ -337,7 +337,7 @@ uv run pytest tests/ -v
   run: |
     find docs/ -name "*.md" | xargs extract_code_blocks | \
       xargs -I {} uv run {}
-```
+```text
 
 ### Semantic Release
 

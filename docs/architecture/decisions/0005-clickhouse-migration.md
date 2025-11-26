@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS ohlcv (
 ORDER BY (timestamp, symbol, timeframe, instrument_type)
 PARTITION BY toYYYYMMDD(timestamp)
 SETTINGS index_granularity = 8192;
-```
+```sql
 
 **Type mappings** (QuestDB → ClickHouse):
 
@@ -134,7 +134,7 @@ def _prepare_clickhouse_row(row: Dict) -> Dict:
     row['_version'] = hash(version_input) & 0xFFFFFFFFFFFFFFFF  # UInt64
     row['_sign'] = 1  # Positive sign (active row)
     return row
-```
+```text
 
 **Why this preserves zero-gap guarantee**:
 
@@ -165,7 +165,7 @@ class ClickHouseConnection:
     def insert_dataframe(self, df: pd.DataFrame, table: str):
         """Bulk insert DataFrame to ClickHouse."""
         self.client.insert_dataframe(f"INSERT INTO {table} VALUES", df)
-```
+```text
 
 **2. Ingestion Rewrite** (`src/gapless_crypto_clickhouse/collectors/clickhouse_bulk_loader.py`):
 
@@ -185,7 +185,7 @@ class ClickHouseBulkLoader:
         # Bulk insert
         self.connection.insert_dataframe(df, table='ohlcv')
         return len(df)
-```
+```text
 
 **3. Query API Update** (`src/gapless_crypto_clickhouse/query.py`):
 

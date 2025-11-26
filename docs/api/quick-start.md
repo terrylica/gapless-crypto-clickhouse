@@ -8,7 +8,7 @@ Cryptocurrency data collection with gap detection and filling capabilities. Prov
 pip install gapless-crypto-data
 # or with uv
 uv add gapless-crypto-data
-```
+```text
 
 ## Simple API (Recommended)
 
@@ -30,7 +30,7 @@ timeframes = gcd.get_supported_timeframes()
 # Library information
 info = gcd.get_info()
 print(f"Version: {info['version']}")
-```
+```text
 
 ### Data Structure
 
@@ -45,7 +45,7 @@ df.columns
 # Professional analysis
 buy_pressure = df['taker_buy_base_asset_volume'].sum() / df['volume'].sum()
 avg_trade_size = df['volume'].sum() / df['number_of_trades'].sum()
-```
+```text
 
 ### Gap Filling
 
@@ -53,7 +53,7 @@ avg_trade_size = df['volume'].sum() / df['number_of_trades'].sum()
 # Fill gaps in existing CSV files
 results = gcd.fill_gaps("./data")
 print(f"Filled {results['gaps_filled']}/{results['gaps_detected']} gaps")
-```
+```text
 
 ## Advanced API (Power Users)
 
@@ -71,7 +71,7 @@ collector = BinancePublicDataCollector(
 result = collector.collect_timeframe_data("1h")
 df = result["dataframe"]
 filepath = result["filepath"]
-```
+```text
 
 ## CLI Usage
 

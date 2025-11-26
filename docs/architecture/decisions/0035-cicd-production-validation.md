@@ -99,7 +99,7 @@ The workspace-wide policy prohibits unit testing and linting in GitHub Actions (
 
 **Updated Workspace Policy**:
 
-```
+```bash
 Local-First Development (Preserved):
 - ❌ NO unit testing in GitHub Actions
 - ❌ NO linting/formatting in CI/CD
@@ -159,13 +159,13 @@ service degradation independent of code changes.
 uv run ruff check .
 uv run ruff format --check .
 uv run pytest -v --cov=src
-```
+```text
 
 **Before push** (integration tests against Homebrew ClickHouse):
 
 ```bash
 uv run pytest -m integration
-```
+```text
 
 **Manual production validation** (if needed):
 

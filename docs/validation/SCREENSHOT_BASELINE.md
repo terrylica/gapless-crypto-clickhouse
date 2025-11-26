@@ -34,7 +34,7 @@ Screenshot baselines provide visual regression detection for ClickHouse web inte
 
 ### Baseline Storage
 
-```
+```text
 tests/e2e/screenshots/          # Git-tracked baseline directory
 ├── ch-ui-landing.png           # CH-UI landing page baseline
 ├── ch-ui-simple-query.png      # CH-UI query execution baseline
@@ -62,7 +62,7 @@ uv run scripts/run_validation.py --e2e-only
 # Commit baselines to git
 git add tests/e2e/screenshots/
 git commit -m "feat(e2e): add initial screenshot baselines"
-```
+```text
 
 ### Baseline Naming Convention
 
@@ -75,7 +75,7 @@ Examples:
 - ch-ui-error-invalid-query.png   # CH-UI error state
 - clickhouse-play-landing.png     # ClickHouse Play landing
 - clickhouse-play-large-results.png # ClickHouse Play with large dataset
-```
+```yaml
 
 ---
 
@@ -105,7 +105,7 @@ uv run scripts/run_validation.py --e2e-only
 
 # Review screenshots in tmp/validation-artifacts/screenshots/
 # Compare against baselines in tests/e2e/screenshots/
-```
+```text
 
 #### Step 2: Visual Review
 
@@ -115,7 +115,7 @@ Open both screenshots side-by-side:
 # Example: Compare CH-UI landing page
 open tmp/validation-artifacts/screenshots/ch-ui-landing.png
 open tests/e2e/screenshots/ch-ui-landing.png
-```
+```text
 
 **Review Checklist**:
 
@@ -137,7 +137,7 @@ cp tmp/validation-artifacts/screenshots/ch-ui-landing.png \
 # Commit with clear message
 git add tests/e2e/screenshots/ch-ui-landing.png
 git commit -m "chore(e2e): update CH-UI landing baseline after redesign"
-```
+```text
 
 ### Bulk Baseline Updates
 
@@ -153,7 +153,7 @@ cp tmp/validation-artifacts/screenshots/*.png tests/e2e/screenshots/
 # Commit with context
 git add tests/e2e/screenshots/
 git commit -m "chore(e2e): update all baselines after ClickHouse UI v2.0 upgrade"
-```
+```yaml
 
 ---
 
@@ -188,7 +188,7 @@ await expect(page).to_have_screenshot(
     "ch-ui-landing.png",
     max_diff_pixels=100,  # Allow 100 pixels difference
 )
-```
+```yaml
 
 ---
 
@@ -207,7 +207,7 @@ def browser_context_args(browser_context_args):
         "viewport": {"width": 1920, "height": 1080},  # Standard desktop
         "device_scale_factor": 1,  # No retina scaling
     }
-```
+```text
 
 ### Screenshot Options
 
@@ -218,7 +218,7 @@ await page.screenshot(path="full-page.png", full_page=True)
 # Element screenshot (for focused comparisons)
 element = page.locator(".result-table")
 await element.screenshot(path="element.png")
-```
+```text
 
 ### Handling Dynamic Content
 
@@ -234,7 +234,7 @@ await page.add_style_tag(content=".timestamp { visibility: hidden; }")
 
 # Option 2: Use fixed date in query
 await page.fill("input", "SELECT '2025-01-01' AS test_date")
-```
+```text
 
 #### Loading States
 
@@ -251,7 +251,7 @@ await page.locator(".result-table").wait_for(state="visible")
 
 # Then capture screenshot
 await page.screenshot(path="stable.png")
-```
+```yaml
 
 ---
 
@@ -274,7 +274,7 @@ await page.screenshot(path="stable.png")
 # 1. Trigger workflow manually
 # 2. Download artifacts after run
 # 3. Review and commit to repository
-```
+```bash
 
 ### Handling CI Failures
 
@@ -327,7 +327,7 @@ When visual regressions detected in CI:
 # Regenerate baselines in CI
 # Download CI artifacts
 # Replace local baselines
-```
+```text
 
 ### Screenshot Diff Too Sensitive
 
@@ -342,7 +342,7 @@ await expect(page).to_have_screenshot(
     max_diff_pixels=100,  # Tolerate 100 pixels difference
     threshold=0.2,  # 0-1 color difference threshold
 )
-```
+```bash
 
 ### Baseline File Too Large
 

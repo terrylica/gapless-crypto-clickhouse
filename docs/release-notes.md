@@ -50,13 +50,13 @@ We're excited to announce gapless-crypto-data v2.0.1, featuring automatic gap fi
 
 ```bash
 uv add gapless-crypto-data
-```
+```text
 
 ### Using pip
 
 ```bash
 pip install gapless-crypto-data
-```
+```text
 
 ## 🚀 Quick Start
 
@@ -68,7 +68,7 @@ uv run gapless-crypto-data --symbol BTCUSDT --timeframes 1h --start 2024-01-01 -
 
 # Fill gaps in existing data
 uv run gapless-crypto-data --fill-gaps --directory ./data
-```
+```bash
 
 ### Python API
 
@@ -85,7 +85,7 @@ for file_path in results.values():
     gaps = gap_filler.detect_all_gaps(file_path, "1h")
     for gap in gaps:
         gap_filler.fill_gap(gap, file_path, "1h")
-```
+```python
 
 ## 🔧 Core Features
 
@@ -128,7 +128,7 @@ Perfect for testing the package:
 
 ```bash
 uv run gapless-crypto-data --symbol BTCUSDT --timeframes 1h --start 2024-01-01 --end 2024-01-02
-```
+```text
 
 ### Production Collection (Hours to minutes)
 
@@ -136,7 +136,7 @@ Large-scale data collection:
 
 ```bash
 uv run gapless-crypto-data --symbol SOLUSDT --timeframes 1m,5m,1h,4h --start 2023-01-01 --end 2023-12-31
-```
+```text
 
 ### Batch Processing
 
@@ -146,7 +146,7 @@ Multiple symbols:
 for symbol in BTCUSDT ETHUSDT SOLUSDT; do
   uv run gapless-crypto-data --symbol $symbol --timeframes 1h,4h
 done
-```
+```python
 
 ## 🧪 Quality Assurance
 

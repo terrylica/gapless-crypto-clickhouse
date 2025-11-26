@@ -719,7 +719,7 @@ Systematic remediation of documentation accuracy failures discovered by 5-agent 
 
 ### Commit Message
 
-```
+```yaml
 docs: fix systematic package name inconsistencies across all documentation
 
 BREAKING CHANGE: Documentation examples now use correct gapless_crypto_clickhouse imports.
@@ -753,7 +753,7 @@ Fixes: #N/A (internal audit, no GitHub issue)
 ### BREAKING CHANGES
 
 - **docs**: Documentation examples now use correct gapless_crypto_clickhouse imports.
-```
+```yaml
 
 ---
 
@@ -793,12 +793,12 @@ cd /tmp/doc-audit/validation/
 # Expected: 10/10 tests pass
 
 # Verify grep validation
-cd 
+cd
 grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
   grep -v -E "(\.cache|decisions|CHANGELOG)" | \
   wc -l
 # Expected: 0
-```
+```yaml
 
 ---
 

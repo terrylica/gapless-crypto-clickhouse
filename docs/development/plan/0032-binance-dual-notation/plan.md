@@ -27,7 +27,7 @@ During ADR-0031 comprehensive validation, we added exotic timeframes (3d, 1w, 1m
 # CURRENT (WRONG)
 for timeframe in TIMEFRAME_TO_MINUTES.keys():
     assert TIMEFRAME_TO_BINANCE_INTERVAL[timeframe] == timeframe  # ❌ Fails for "1mo"
-```
+```text
 
 This test will fail because `"1mo"` maps to `"1M"` for Binance REST API compatibility.
 
@@ -83,7 +83,7 @@ for timeframe in TIMEFRAME_TO_MINUTES.keys():
         f"Binance interval for {timeframe} should be '{expected}', "
         f"got '{TIMEFRAME_TO_BINANCE_INTERVAL[timeframe]}'"
     )
-```
+```text
 
 **Expected Outcome**: Test now handles dual notation correctly
 
@@ -116,7 +116,7 @@ def test_binance_monthly_dual_notation(self):
     # Verify other exotic timeframes use identity mapping
     assert TIMEFRAME_TO_BINANCE_INTERVAL["3d"] == "3d"
     assert TIMEFRAME_TO_BINANCE_INTERVAL["1w"] == "1w"
-```
+```text
 
 **Expected Outcome**: Explicit test validates dual notation architecture
 
@@ -155,7 +155,7 @@ expected_timeframes = {
     "1w",
     "1mo",
 }
-```
+```text
 
 **Expected Outcome**: All test references match 16-timeframe implementation
 
@@ -186,7 +186,7 @@ SLO Targets:
     Availability: Supports full spectrum from 1s to 1mo (13 standard + 3 exotic)
     Compatibility: Dual notation support for Public Data + REST API workflows
 """
-```
+```text
 
 **4.2 Add inline documentation for TIMEFRAME_TO_BINANCE_INTERVAL**
 
@@ -202,7 +202,7 @@ SLO Targets:
 TIMEFRAME_TO_BINANCE_INTERVAL: Dict[str, str] = {
     # ... mappings ...
 }
-```
+```bash
 
 **Expected Outcome**: Clear documentation prevents future confusion
 
@@ -219,7 +219,7 @@ uv run pytest tests/test_timeframe_constants.py -v
 # test_binance_interval_mapping_completeness PASSED (now handles 1mo exception)
 # test_binance_monthly_dual_notation PASSED (new test)
 # test_all_mappings_have_same_timeframes PASSED (now expects 16)
-```
+```text
 
 **5.2 Commit with conventional commits**
 
@@ -244,7 +244,7 @@ VALIDATION:
 Implements: ADR-0032
 Closes: [test bug from ADR-0031 validation]
 "
-```
+```text
 
 **5.3 Push and trigger semantic-release**
 
@@ -257,7 +257,7 @@ git push origin main
 # - Bump version 8.0.1 → 8.0.2
 # - Update CHANGELOG.md
 # - Create GitHub release
-```
+```text
 
 **Expected Outcome**: Clean release with all tests passing
 
@@ -282,7 +282,7 @@ curl -I "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3d/BTC
 # Weekly timeframe
 curl -I "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1w/BTCUSDT-1w-2024-01.zip"
 → HTTP/1.1 200 OK ✅
-```
+```text
 
 **REST API (api.binance.com)**:
 
@@ -301,7 +301,7 @@ curl "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=3d&limit=1"
 # Weekly interval
 curl "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1w&limit=1"
 → HTTP 200 + data ✅
-```
+```text
 
 **Conclusion**: Only `1mo` has dual notation. Other exotic timeframes (3d, 1w) use identity mapping.
 

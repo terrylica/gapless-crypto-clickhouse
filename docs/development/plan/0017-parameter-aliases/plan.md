@@ -21,7 +21,7 @@ Current function-based API uses ambiguous parameter names:
 
 ```python
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
-```
+```text
 
 **Issues**:
 
@@ -39,7 +39,7 @@ df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 
 # New explicit form (recommended)
 df = gcd.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
-```
+```text
 
 ## Goals
 
@@ -95,7 +95,7 @@ def download(
 
     # Continue with existing logic using actual_start and actual_end
     ...
-```
+```text
 
 ### Files to Modify
 
@@ -130,7 +130,7 @@ def fetch_data(
     **kwargs
 ) -> pd.DataFrame:
     ...
-```
+```text
 
 **Updated Signatures**:
 
@@ -182,7 +182,7 @@ def download(
 
     # Continue with existing logic
     ...
-```
+```text
 
 #### 2. Update Documentation
 
@@ -208,7 +208,7 @@ df = gcd.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30
 
 # Legacy form (still supported)
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
-```
+```text
 ````
 
 ````
@@ -284,7 +284,7 @@ if start is not None and start_date is not None:
         "Cannot specify both 'start' and 'start_date'. "
         "Use either 'start' OR 'start_date', not both."
     )
-```
+```bash
 
 **Why ValueError**:
 
@@ -308,7 +308,7 @@ start: Optional[str] = None
 end: Optional[str] = None
 start_date: Optional[str] = None
 end_date: Optional[str] = None
-```
+```text
 
 **Type Checkers**:
 

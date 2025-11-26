@@ -56,7 +56,7 @@ class BinancePublicDataCollector:
             if instrument_type == "spot"
             else f"{self.FUTURES_BASE_URL}/monthly/klines"
         )
-```
+```text
 
 **Pros**:
 
@@ -88,7 +88,7 @@ class MarketType(Enum):
         if self.name == "SPOT": return "spot"
         if self.name == "FUTURES_USDT": return "futures/um"
         if self.name == "FUTURES_COIN": return "futures/cm"
-```
+```text
 
 **Rationale for Not Using Enum in v3.2.0**:
 
@@ -112,7 +112,7 @@ class SpotDataCollector(BinancePublicDataCollector):
 class FuturesDataCollector(BinancePublicDataCollector):
     BASE_URL = "https://data.binance.vision/data/futures/um"
     API_URL = "https://fapi.binance.com/fapi/v1/klines"
-```
+```python
 
 **Pros**:
 
@@ -264,7 +264,7 @@ timestamp DateTime64(3)  -- Millisecond precision
 
 -- After (CORRECT for both spot and futures)
 timestamp DateTime64(6)  -- Microsecond precision
-```
+```text
 
 **Conversion Logic**:
 
@@ -285,7 +285,7 @@ def normalize_timestamp(timestamp_ms: int, source_precision: str) -> int:
         return timestamp_ms * 1000  # Convert ms → μs
     else:
         raise ValueError(f"Unknown precision: {source_precision}")
-```
+```text
 
 **Format Detection**:
 
@@ -305,7 +305,7 @@ def detect_timestamp_precision(csv_path: Path) -> str:
         return "microseconds"
     else:  # 13 digits
         return "milliseconds"
-```
+```text
 
 ### URL Patterns
 
@@ -334,7 +334,7 @@ columns_futures = [
 
 # After normalization: 11 columns (same as spot)
 df = pd.read_csv(csv_path, usecols=range(11))  # Drop last column
-```
+```text
 
 ### Symbol Source
 
@@ -351,7 +351,7 @@ def get_supported_symbols(instrument_type: str = "spot") -> List[str]:
     else:
         collector = BinancePublicDataCollector()
         return list(collector.known_symbols.keys())  # 20 symbols
-```
+```text
 
 **Quality Metrics**:
 

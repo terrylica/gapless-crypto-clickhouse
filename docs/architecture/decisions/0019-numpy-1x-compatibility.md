@@ -83,7 +83,7 @@ dependencies = [
     "pandas>=2.0.0,<2.2.0",   # NEW: Upper bound for NumPy 1.x compatibility
     # ... other dependencies unchanged
 ]
-```
+```bash
 
 **Why these versions**:
 

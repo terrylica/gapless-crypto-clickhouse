@@ -76,7 +76,7 @@ HTTP/1.1 200 OK
 # ❌ Rejects "1M"
 curl -I "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1M/..."
 HTTP/1.1 404 Not Found
-```
+```text
 
 ### REST API (api.binance.com)
 
@@ -88,7 +88,7 @@ curl "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1M&limit=1"
 # ❌ Rejects "1mo"
 curl "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1mo&limit=1"
 {"code":-1120,"msg":"Invalid interval."}
-```
+```text
 
 ### Other Exotic Timeframes (Identity Mapping)
 
@@ -100,7 +100,7 @@ curl "https://api.binance.com/api/v3/klines?interval=3d" → HTTP 200 + Data ✅
 # 1w - Both systems accept "1w"
 curl -I "https://data.binance.vision/.../1w/..." → HTTP 200 ✅
 curl "https://api.binance.com/api/v3/klines?interval=1w" → HTTP 200 + Data ✅
-```
+```text
 
 **Conclusion**: Only `1mo` has dual notation. All other exotic timeframes use consistent notation.
 
@@ -116,7 +116,7 @@ TIMEFRAME_TO_BINANCE_INTERVAL: Dict[str, str] = {
     "1w": "1w",   # Identity mapping
     "1mo": "1M",  # Dual notation for REST API compatibility
 }
-```
+```text
 
 ### Test Fixes Required
 
@@ -130,7 +130,7 @@ for timeframe in TIMEFRAME_TO_MINUTES.keys():
 for timeframe in TIMEFRAME_TO_MINUTES.keys():
     expected = "1M" if timeframe == "1mo" else timeframe
     assert TIMEFRAME_TO_BINANCE_INTERVAL[timeframe] == expected
-```
+```text
 
 ### New Test (Dual Notation Validation)
 

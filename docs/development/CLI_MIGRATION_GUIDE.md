@@ -57,7 +57,7 @@ supersedes: []
 
 ```bash
 pip install gapless-crypto-data
-```
+```text
 
 **After (gapless-crypto-clickhouse)**:
 
@@ -66,7 +66,7 @@ pip install gapless-crypto-clickhouse
 
 # Also requires ClickHouse (via Docker or native installation)
 docker run -d -p 9000:9000 -p 8123:8123 clickhouse/clickhouse-server
-```
+```python
 
 ## Import Changes
 
@@ -78,7 +78,7 @@ docker run -d -p 9000:9000 -p 8123:8123 clickhouse/clickhouse-server
 import gapless_crypto_data as gcd
 from gapless_crypto_data import BinancePublicDataCollector, UniversalGapFiller
 from gapless_crypto_data.validation import CSVValidator, ValidationStorage
-```
+```text
 
 **After**:
 
@@ -86,7 +86,7 @@ from gapless_crypto_data.validation import CSVValidator, ValidationStorage
 import gapless_crypto_clickhouse as gcc  # Note: Different alias convention
 from gapless_crypto_clickhouse import BinancePublicDataCollector, UniversalGapFiller
 from gapless_crypto_clickhouse.validation import CSVValidator, ValidationStorage
-```
+```yaml
 
 ---
 
@@ -110,7 +110,7 @@ The ClickHouse integration offers several advantages:
 
 ```bash
 gapless-crypto-data --symbol BTCUSDT --timeframes 1h
-```
+```bash
 
 **Python API (Recommended)**:
 
@@ -120,7 +120,7 @@ import gapless_crypto_clickhouse as gcd
 # Fetch data directly as pandas DataFrame
 df = gcd.fetch_data("BTCUSDT", timeframe="1h")
 print(f"Collected {len(df)} bars")
-```
+```text
 
 ### Multiple Timeframes
 
@@ -128,7 +128,7 @@ print(f"Collected {len(df)} bars")
 
 ```bash
 gapless-crypto-data --symbol ETHUSDT --timeframes 1h,4h,1d
-```
+```bash
 
 **Python API (Recommended)**:
 
@@ -139,7 +139,7 @@ timeframes = ["1h", "4h", "1d"]
 for tf in timeframes:
     df = gcd.fetch_data("ETHUSDT", timeframe=tf)
     print(f"{tf}: {len(df)} bars")
-```
+```text
 
 ### Date Range Collection
 
@@ -148,7 +148,7 @@ for tf in timeframes:
 ```bash
 gapless-crypto-data --symbol BTCUSDT --timeframes 1h \
   --start 2023-01-01 --end 2023-12-31
-```
+```bash
 
 **Python API (Recommended)**:
 
@@ -162,7 +162,7 @@ df = gcd.download(
     end="2023-12-31"
 )
 print(f"Collected {len(df)} bars from 2023")
-```
+```text
 
 ### Multiple Symbols
 
@@ -170,7 +170,7 @@ print(f"Collected {len(df)} bars from 2023")
 
 ```bash
 gapless-crypto-data --symbol BTCUSDT,ETHUSDT,SOLUSDT --timeframes 1h
-```
+```bash
 
 **Python API (Recommended)**:
 
@@ -184,7 +184,7 @@ for symbol in symbols:
     df = gcd.fetch_data(symbol, timeframe="1h")
     results[symbol] = df
     print(f"{symbol}: {len(df)} bars")
-```
+```yaml
 
 ---
 
@@ -197,7 +197,7 @@ for symbol in symbols:
 ```bash
 gapless-crypto-data --symbol BTCUSDT --timeframes 1h \
   --output-dir ./crypto_data
-```
+```bash
 
 **Python API (Recommended)**:
 
@@ -215,7 +215,7 @@ df.to_csv(output_dir / "BTCUSDT_1h.csv", index=False)
 
 # Or use save_parquet for better performance
 gcd.save_parquet(df, output_dir / "BTCUSDT_1h.parquet")
-```
+```text
 
 ### Pattern 2: Gap Filling
 
@@ -223,7 +223,7 @@ gcd.save_parquet(df, output_dir / "BTCUSDT_1h.parquet")
 
 ```bash
 gapless-crypto-data --fill-gaps --directory ./data
-```
+```bash
 
 **Python API (Recommended)**:
 
@@ -236,7 +236,7 @@ results = gcd.fill_gaps("./data")
 print(f"Processed {results['files_processed']} files")
 print(f"Filled {results['gaps_filled']}/{results['gaps_detected']} gaps")
 print(f"Success rate: {results['success_rate']:.1%}")
-```
+```bash
 
 ### Pattern 3: Ultra-High Frequency Data
 
@@ -245,7 +245,7 @@ print(f"Success rate: {results['success_rate']:.1%}")
 ```bash
 gapless-crypto-data --symbol BTCUSDT --timeframes 1s,1m,3m \
   --start 2024-01-01 --end 2024-01-01
-```
+```bash
 
 **Python API (Recommended)**:
 
@@ -265,7 +265,7 @@ for tf in timeframes:
         end=end_date
     )
     print(f"{tf}: {len(df):,} bars ({df.memory_usage(deep=True).sum() / 1024**2:.1f} MB)")
-```
+```yaml
 
 ---
 
@@ -278,7 +278,7 @@ for tf in timeframes:
 ```bash
 # Limited progress information
 gapless-crypto-data --symbol BTCUSDT,ETHUSDT,SOLUSDT --timeframes 1h,4h,1d
-```
+```bash
 
 **Python API (Recommended)**:
 
@@ -312,7 +312,7 @@ print("\n📊 Collection Summary:")
 for symbol, tfs in results.items():
     total_bars = sum(data['bars'] for data in tfs.values())
     print(f"{symbol}: {total_bars:,} total bars across {len(tfs)} timeframes")
-```
+```text
 
 ### Data Analysis Integration
 
@@ -322,7 +322,7 @@ for symbol, tfs in results.items():
 # CLI requires saving to file then loading in Python
 gapless-crypto-data --symbol BTCUSDT --timeframes 1h --output-dir ./data
 # Then in Python: df = pd.read_csv("./data/BTCUSDT_1h.csv")
-```
+```bash
 
 **Python API (Recommended)**:
 
@@ -346,7 +346,7 @@ df['avg_trade_size'] = df['volume'] / df['number_of_trades']
 print(f"Average daily volatility: {df['volatility'].mean():.2%}")
 print(f"Taker buy pressure: {df['taker_buy_ratio'].mean():.2%}")
 print(f"Average trade size: {df['avg_trade_size'].mean():.4f} BTC")
-```
+```text
 
 ### Error Handling and Retry Logic
 
@@ -355,7 +355,7 @@ print(f"Average trade size: {df['avg_trade_size'].mean():.4f} BTC")
 ```bash
 # Limited error handling
 gapless-crypto-data --symbol BTCUSDT --timeframes 1h
-```
+```bash
 
 **Python API (Recommended)**:
 
@@ -386,7 +386,7 @@ def fetch_with_retry(symbol, timeframe, max_retries=3):
 df = fetch_with_retry("BTCUSDT", "1h")
 if df is not None:
     print(f"Collected {len(df)} bars")
-```
+```yaml
 
 ---
 
@@ -405,7 +405,7 @@ df = gcd.fetch_data("BTCUSDT", timeframe="1h")
 # Use directly with pandas operations
 recent_high = df.tail(100)['high'].max()
 recent_low = df.tail(100)['low'].min()
-```
+```text
 
 ### 2. Integration with Data Science Stack
 
@@ -424,7 +424,7 @@ plt.show()
 
 # Statistical analysis
 print(df[['open', 'high', 'low', 'close', 'volume']].describe())
-```
+```text
 
 ### 3. Programmatic Control
 
@@ -446,7 +446,7 @@ df = gcd.download(
 # Conditional logic
 if len(df) < 720:
     print(f"⚠️  Warning: Only {len(df)} bars collected (expected 720)")
-```
+```text
 
 ### 4. Testing and Automation
 

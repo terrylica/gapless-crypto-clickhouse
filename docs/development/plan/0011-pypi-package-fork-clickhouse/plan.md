@@ -183,7 +183,7 @@ Publishing both as `gapless-crypto-data` creates package identity collision on P
 grep -r "from gapless_crypto_clickhouse" src/ tests/ examples/
 grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 # Expected: No matches
-```
+```python
 
 ---
 
@@ -450,7 +450,7 @@ grep -r "import gapless_crypto_clickhouse" src/ tests/ examples/
 pip install gapless-crypto-clickhouse
 python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__version__)"
 # Expected: 1.0.0
-```
+```python
 
 ---
 

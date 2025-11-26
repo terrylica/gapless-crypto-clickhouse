@@ -23,7 +23,7 @@ df = gcd.download("BTCUSDT", "3h")  # Network request → empty data → confusi
 
 # Invalid date format - fails during collection
 df = gcd.download("BTCUSDT", "1h", start="2024-13-01")  # Proceeds → fails later
-```
+```bash
 
 **Issues**:
 
@@ -72,7 +72,7 @@ df = gcd.download("BTCUSD", "1h")  # → "No data found" (after 5s network delay
 df = gcd.download("BTCUSD", "1h")
 # → ValueError: Invalid symbol 'BTCUSD'. Did you mean 'BTCUSDT'?
 #    Supported symbols: BTCUSDT, ETHUSDT, BNBUSDT, ... (see get_supported_symbols())
-```
+```text
 
 **Implementation Strategy**:
 
@@ -85,7 +85,7 @@ def download(...):
 
     # Continue with existing logic
     ...
-```
+```text
 
 ### Validation Functions
 
@@ -118,7 +118,7 @@ def _validate_symbol(symbol: str) -> None:
                 f"Supported symbols: {', '.join(supported[:10])}, ... "
                 f"(see get_supported_symbols() for full list)"
             )
-```
+```text
 
 **Timeframe Validation**:
 
@@ -139,7 +139,7 @@ def _validate_timeframe_value(timeframe: str) -> None:
             f"Supported timeframes: {', '.join(supported)} "
             f"(see get_supported_timeframes())"
         )
-```
+```text
 
 **Date Format Validation**:
 
@@ -174,7 +174,7 @@ def _validate_date_format(date_str: Optional[str], param_name: str) -> None:
         raise ValueError(
             f"Invalid {param_name} date '{date_str}': {str(e)}"
         )
-```
+```bash
 
 ## Consequences
 
@@ -230,7 +230,7 @@ def download(...):
 
     # Continue with existing logic
     ...
-```
+```text
 
 ### Phase 3: Test Coverage
 

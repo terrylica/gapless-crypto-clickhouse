@@ -49,7 +49,7 @@ sudo apt install -y \
 # Verify Java installation
 java -version
 # Expected: openjdk version "17.0.x"
-```
+```text
 
 ### Install QuestDB
 
@@ -76,7 +76,7 @@ sudo chown -R questdb:questdb /var/log/questdb
 
 # Verify installation
 /opt/questdb/bin/java -jar /opt/questdb/questdb.jar --version
-```
+```bash
 
 ### Install Python and uv
 
@@ -89,7 +89,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Verify installation
 uv --version
-```
+```text
 
 ### Deploy gapless-crypto-data
 
@@ -108,7 +108,7 @@ sudo -u gapless uv sync --frozen --no-dev
 
 # Verify installation
 sudo -u gapless uv run python -c "import gapless_crypto_clickhouse; print('OK')"
-```
+```text
 
 ## Configuration
 
@@ -127,7 +127,7 @@ sudo systemctl daemon-reload
 
 # Enable QuestDB service
 sudo systemctl enable questdb
-```
+```text
 
 **Memory configuration** (edit in `questdb.service`):
 
@@ -151,7 +151,7 @@ sudo -u gapless cp /opt/gapless-crypto-clickhouse/.env.example \
 
 # Edit configuration
 sudo -u gapless nano /opt/gapless-crypto-clickhouse/.env
-```
+```text
 
 **Environment configuration** (`.env`):
 
@@ -174,7 +174,7 @@ GAP_FILL_ENABLED=true
 # Logging
 LOG_LEVEL=INFO
 LOG_FORMAT=json
-```
+```text
 
 ```bash
 # Reload systemd
@@ -182,7 +182,7 @@ sudo systemctl daemon-reload
 
 # Enable collector service
 sudo systemctl enable gapless-crypto-collector
-```
+```text
 
 ## Database Initialization
 
@@ -197,7 +197,7 @@ sudo systemctl status questdb
 
 # View logs
 sudo journalctl -u questdb -f
-```
+```text
 
 Wait for log message: `Server is ready to accept connections`
 
@@ -211,7 +211,7 @@ psql -h localhost -p 8812 -U admin -d qdb \
 # Verify table creation
 psql -h localhost -p 8812 -U admin -d qdb \
   -c "\d ohlcv"
-```
+```text
 
 ### Test QuestDB
 
@@ -226,7 +226,7 @@ psql -h localhost -p 8812 -U admin -d qdb -c "SELECT 1;"
 telnet localhost 9009
 # Type: test,symbol=BTCUSDT value=1.0
 # Ctrl+] then type 'quit'
-```
+```text
 
 ## Start Data Collection
 
@@ -239,7 +239,7 @@ sudo systemctl status gapless-crypto-collector
 
 # View logs
 sudo journalctl -u gapless-crypto-collector -f
-```
+```text
 
 ### Verify Data Ingestion
 
@@ -255,7 +255,7 @@ psql -h localhost -p 8812 -U admin -d qdb \
 # Check data sources
 psql -h localhost -p 8812 -U admin -d qdb \
   -c "SELECT data_source, COUNT(*) FROM ohlcv GROUP BY data_source;"
-```
+```text
 
 ## Monitoring
 
@@ -271,7 +271,7 @@ sudo systemctl status gapless-crypto-collector
 # Check if services are running
 systemctl is-active questdb
 systemctl is-active gapless-crypto-collector
-```
+```text
 
 ### View Logs
 
@@ -288,7 +288,7 @@ sudo journalctl -u gapless-crypto-collector -p err --since today
 
 # Logs from last hour
 sudo journalctl -u questdb --since "1 hour ago"
-```
+```text
 
 ### Resource Monitoring
 
@@ -304,7 +304,7 @@ df -h /var/lib/questdb
 
 # QuestDB process details
 ps aux | grep questdb
-```
+```text
 
 ### Prometheus Metrics
 
@@ -319,7 +319,7 @@ curl http://localhost:9003/metrics
 # - questdb_disk_size_bytes
 # - questdb_writer_rows_total
 # - questdb_query_duration_seconds
-```
+```text
 
 **Prometheus scrape configuration** (`prometheus.yml`):
 
@@ -328,7 +328,7 @@ scrape_configs:
   - job_name: "questdb"
     static_configs:
       - targets: ["localhost:9003"]
-```
+```text
 
 ## Maintenance
 
@@ -343,7 +343,7 @@ sudo systemctl restart gapless-crypto-collector
 
 # Restart both
 sudo systemctl restart questdb gapless-crypto-collector
-```
+```text
 
 ### Update gapless-crypto-data
 
@@ -360,7 +360,7 @@ sudo -u gapless uv sync --frozen --no-dev
 
 # Restart collector
 sudo systemctl start gapless-crypto-collector
-```
+```text
 
 ### Backup QuestDB Data
 
@@ -377,7 +377,7 @@ sudo systemctl start questdb
 
 # Verify backup
 ls -lh /backup/
-```
+```text
 
 ### Restore QuestDB Data
 
@@ -395,7 +395,7 @@ sudo chown -R questdb:questdb /var/lib/questdb
 
 # Restart QuestDB
 sudo systemctl start questdb
-```
+```text
 
 ## Performance Tuning
 
@@ -411,7 +411,7 @@ sudo mount -o noatime,nodiratime /dev/sdb1 /var/lib/questdb
 # Add to /etc/fstab for persistence
 echo "/dev/sdb1 /var/lib/questdb xfs noatime,nodiratime 0 2" | \
   sudo tee -a /etc/fstab
-```
+```text
 
 ### Kernel Tuning
 
@@ -430,13 +430,13 @@ net.core.netdev_max_backlog = 5000
 vm.swappiness = 10
 vm.dirty_ratio = 15
 vm.dirty_background_ratio = 5
-```
+```text
 
 Apply settings:
 
 ```bash
 sudo sysctl -p
-```
+```text
 
 ### CPU Affinity (Optional)
 
@@ -452,7 +452,7 @@ sudo nano /etc/systemd/system/questdb.service
 # Reload and restart
 sudo systemctl daemon-reload
 sudo systemctl restart questdb
-```
+```bash
 
 ## Troubleshooting
 
@@ -462,7 +462,7 @@ sudo systemctl restart questdb
 
 ```bash
 sudo journalctl -u questdb -n 100
-```
+```bash
 
 **Common issues**:
 
@@ -476,7 +476,7 @@ sudo journalctl -u questdb -n 100
 
 ```bash
 sudo journalctl -u gapless-crypto-collector -n 100
-```
+```bash
 
 **Common issues**:
 
@@ -495,7 +495,7 @@ iostat -x 1
 # Check if WAL is enabled
 psql -h localhost -p 8812 -U admin -d qdb \
   -c "SHOW cairo.wal.enabled.default;"
-```
+```bash
 
 **Solutions**:
 
@@ -513,7 +513,7 @@ curl http://localhost:9003/metrics | grep heap
 
 # System memory
 free -h
-```
+```text
 
 **Solutions**:
 
@@ -538,7 +538,7 @@ sudo ufw allow from 192.168.1.0/24 to any port 8812
 
 # Enable firewall
 sudo ufw enable
-```
+```text
 
 ### Access Control
 
@@ -551,7 +551,7 @@ pg.security.enabled=true
 
 # User database
 acl.enabled=true
-```
+```text
 
 **Create users**:
 

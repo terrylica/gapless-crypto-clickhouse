@@ -121,14 +121,14 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
 
 **Schema Definition**: `src/gapless_crypto_clickhouse/clickhouse/schema.sql`
 
-**Columns** (17 total):
+**Columns** (18 total):
 
 **Metadata** (5 columns):
 
-- `symbol` (String): Trading pair (e.g., "BTCUSDT")
-- `timeframe` (String): Candle interval (e.g., "1m", "1h")
-- `instrument_type` (String): Market type ("spot" or "um" for USDT-margined futures)
-- `data_source` (String): Source identifier ("binance_public_data")
+- `symbol` (LowCardinality(String)): Trading pair (e.g., "BTCUSDT")
+- `timeframe` (LowCardinality(String)): Candle interval (e.g., "1m", "1h")
+- `instrument_type` (LowCardinality(String)): Market type ("spot" or "futures-um")
+- `data_source` (LowCardinality(String)): Source identifier ("cloudfront")
 - `timestamp` (DateTime64(6)): Candle open time in UTC with microsecond precision
 
 **OHLCV** (5 columns):
@@ -147,20 +147,32 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
 - `taker_buy_base_asset_volume` (Float64): Taker buy base volume
 - `taker_buy_quote_asset_volume` (Float64): Taker buy quote volume
 
+**Futures** (1 column):
+
+- `funding_rate` (Nullable(Float64)): Funding rate for perpetual futures (NULL for spot)
+
 **Deduplication** (2 columns):
 
 - `_version` (UInt64): Deterministic version for ReplacingMergeTree (SHA-256 hash of row data)
 - `_sign` (Int8): Row operation indicator (1=insert, -1=delete for manual cleanup)
 
-**Primary Key**: `(symbol, timeframe, timestamp)` - Optimized for time-series queries
+**ORDER BY** (ADR-0034 symbol-first optimization):
 
-**Ordering**: `timestamp DESC` - Most recent data first
+```sql
+ORDER BY (symbol, timeframe, toStartOfHour(timestamp), timestamp)
+```
 
-**Indexes**: Automatic primary key index for efficient symbol+timeframe+time queries
+- **Symbol-first**: Optimizes for "get all BTCUSDT data" (80% of trading queries)
+- **Timeframe-second**: Usually query one timeframe at a time (e.g., "1h")
+- **Hour-bucketed timestamp**: Groups by hour for efficient range scans
+- **Full timestamp**: Deterministic ordering within each hour
+- **Performance**: 10-100x faster vs timestamp-first ORDER BY
+
+**Indexes**: ClickHouse uses ORDER BY as primary key (automatic indexing)
 
 ### Data Ingestion Flow (ClickHouse Mode)
 
-```
+```text
 Binance Public Repository (monthly/daily ZIPs)
            ↓
    BinancePublicDataCollector
@@ -266,16 +278,17 @@ See [Data Format Specification](docs/architecture/DATA_FORMAT.md) for detailed d
 **In Scope**:
 
 - Binance Spot market data collection
-- Historical data (1-second to 1-day timeframes)
+- Binance USDT-margined futures (713 perpetual symbols)
+- Historical data (16 timeframes: 1s to 1mo, including exotic 3d, 1w, 1mo)
 - Zero-gap guarantee for continuous datasets
+- ClickHouse persistent storage with deduplication
 - Data validation and quality assurance
 
 **Out of Scope**:
 
-- Futures/derivatives market data
 - Real-time streaming (use Binance WebSocket API)
 - Data analysis or trading strategies
-- Database storage (output is CSV/Parquet files)
+- Coin-margined futures (USDT-margined only)
 
 ## SLOs (Service Level Objectives)
 

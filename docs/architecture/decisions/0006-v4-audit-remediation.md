@@ -40,7 +40,7 @@ Comprehensive pre-release audit of main-clickhouse branch (v4.0.0) identified 6 
 
 **Audit Results** (10 dimensions):
 
-```
+```bash
 ✅ Code Quality & Correctness: PASS
 ⚠️ Documentation Completeness: PARTIAL (3 issues)
 ✅ Breaking Changes Documentation: PASS
@@ -89,7 +89,7 @@ __version__ = "3.3.0"
 
 # After
 __version__ = "4.0.0"
-```
+```text
 
 **Rationale**: Runtime version attribute must match pyproject.toml version for:
 
@@ -102,7 +102,7 @@ __version__ = "4.0.0"
 ```python
 import gapless_crypto_clickhouse as gcd
 assert gcd.__version__ == "4.0.0"
-```
+```text
 
 ### Fix 2: CLI Deprecation Notice (MEDIUM)
 
@@ -122,7 +122,7 @@ assert gcd.__version__ == "4.0.0"
 ### CLI Removed in v4.0.0
 
 > **Breaking Change**: The CLI interface was removed in v4.0.0.
-```
+```text
 
 **Rationale**: CLI already removed (pyproject.toml:53 removed `[project.scripts]`), but README used future tense implying it still exists.
 
@@ -140,7 +140,7 @@ assert gcd.__version__ == "4.0.0"
 # After
 
 **Version**: v4.0.0 (ClickHouse database with optional file-based workflows)
-```
+```text
 
 **Rationale**: AI agents using CLAUDE.md need correct version context for accurate assistance.
 
@@ -177,7 +177,7 @@ After upgrading to v4.0.0, the following tests are expected to fail due to CLI r
 - For users: These failures are expected and can be ignored
 
 **Workaround**: Run tests with: `pytest tests/ --ignore=tests/test_cli.py --ignore=tests/test_cli_integration.py`
-```
+```bash
 
 **Rationale**: Prevents user confusion when CI/CD pipelines show expected CLI test failures.
 
@@ -195,7 +195,7 @@ After upgrading to v4.0.0, the following tests are expected to fail due to CLI r
 # After
 
 **Multi-Agent Methodologies** - Extracted from production use (ClickHouse v4.0.0 migration):
-```
+```text
 
 **Rationale**: Corrects database reference to match current v4.0.0 architecture (ClickHouse, not QuestDB).
 
@@ -207,7 +207,7 @@ After upgrading to v4.0.0, the following tests are expected to fail due to CLI r
 
 ```bash
 uv run python -c "import gapless_crypto_clickhouse as gcd; assert gcd.__version__ == '4.0.0'"
-```
+```text
 
 **Expected**: Exit code 0 (assertion passes)
 
@@ -215,7 +215,7 @@ uv run python -c "import gapless_crypto_clickhouse as gcd; assert gcd.__version_
 
 ```bash
 uv build
-```
+```text
 
 **Expected**: Successfully built dist/gapless_crypto_clickhouse-4.0.0.tar.gz and .whl
 
@@ -223,7 +223,7 @@ uv build
 
 ```bash
 uv run ruff check src/
-```
+```text
 
 **Expected**: All checks passed (zero warnings)
 

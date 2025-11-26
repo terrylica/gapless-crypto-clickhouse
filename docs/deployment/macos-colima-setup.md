@@ -28,7 +28,7 @@ brew install docker
 
 # Install Docker Compose
 brew install docker-compose
-```
+```text
 
 ### Start Colima with VirtioFS
 
@@ -44,7 +44,7 @@ colima start \
 
 # Verify Colima is running
 colima status
-```
+```text
 
 **Expected output**:
 
@@ -54,7 +54,7 @@ arch: aarch64
 runtime: docker
 mountType: virtiofs
 socket: unix:///Users/username/.colima/default/docker.sock
-```
+```bash
 
 ### Verify Docker CLI
 
@@ -63,7 +63,7 @@ socket: unix:///Users/username/.colima/default/docker.sock
 docker ps
 
 # Expected: Empty list (no containers running yet)
-```
+```text
 
 ## Deploy QuestDB
 
@@ -78,14 +78,14 @@ docker-compose -f deployment/docker-compose.macos.yml up -d
 
 # Verify container is running
 docker ps
-```
+```text
 
 **Expected output**:
 
 ```
 CONTAINER ID   IMAGE                    STATUS         PORTS
 abc123...      questdb/questdb:9.2.0    Up 10 seconds  0.0.0.0:9000->9000/tcp, ...
-```
+```text
 
 ### Verify QuestDB Health
 
@@ -101,7 +101,7 @@ curl http://localhost:9000/
 
 # Test PostgreSQL endpoint
 psql -h localhost -p 8812 -U admin -d qdb -c "SELECT 1;"
-```
+```text
 
 ### Access Web Console
 
@@ -111,7 +111,7 @@ Open browser to http://localhost:9000
 
 ```sql
 SELECT * FROM ohlcv LIMIT 10;
-```
+```text
 
 ## Initialize Database Schema
 
@@ -123,7 +123,7 @@ psql -h localhost -p 8812 -U admin -d qdb \
 # Verify table creation
 psql -h localhost -p 8812 -U admin -d qdb \
   -c "\d ohlcv"
-```
+```text
 
 **Expected output**:
 
@@ -137,7 +137,7 @@ psql -h localhost -p 8812 -U admin -d qdb \
  open                       | double    |
  ...
 Designated timestamp: timestamp
-```
+```bash
 
 ## Python Development Setup
 
@@ -149,7 +149,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Verify installation
 uv --version
-```
+```text
 
 ### Install Project Dependencies
 
@@ -162,7 +162,7 @@ uv sync
 
 # Verify installation
 uv run python -c "import gapless_crypto_clickhouse; print('OK')"
-```
+```text
 
 ### Configure Environment
 
@@ -172,7 +172,7 @@ cp .env.example .env
 
 # Edit configuration
 nano .env
-```
+```text
 
 **Required settings** (`.env`):
 
@@ -190,7 +190,7 @@ BINANCE_SYMBOLS=BTCUSDT,ETHUSDT
 BINANCE_TIMEFRAMES=1m,5m,1h
 COLLECTION_MODE=bulk
 CLOUDFRONT_ENABLED=true
-```
+```text
 
 ## Test Data Collection
 
@@ -205,7 +205,7 @@ uv run python -m gapless_crypto_clickhouse.collectors.binance_public_data_collec
 # Verify data ingestion
 psql -h localhost -p 8812 -U admin -d qdb \
   -c "SELECT COUNT(*) FROM ohlcv WHERE symbol = 'BTCUSDT' AND timeframe = '1m';"
-```
+```text
 
 ## Performance Verification
 
@@ -227,7 +227,7 @@ docker exec gapless-questdb fio \
   --filename=/var/lib/questdb/testfile
 
 # Expected IOPS: ~2,786 (VirtioFS)
-```
+```text
 
 ### Monitor Resource Usage
 
@@ -239,7 +239,7 @@ docker stats gapless-questdb
 # CPU: 10-30%
 # MEM: 2-4GB
 # NET I/O: varies by workload
-```
+```text
 
 ## Management
 
@@ -254,7 +254,7 @@ docker-compose -f deployment/docker-compose.macos.yml start
 
 # Restart QuestDB
 docker-compose -f deployment/docker-compose.macos.yml restart
-```
+```text
 
 ### View Logs
 
@@ -264,7 +264,7 @@ docker-compose -f deployment/docker-compose.macos.yml logs -f questdb
 
 # View last 100 lines
 docker-compose -f deployment/docker-compose.macos.yml logs --tail 100 questdb
-```
+```text
 
 ### Backup Data
 
@@ -277,7 +277,7 @@ docker run --rm \
 
 # Verify backup
 ls -lh backups/
-```
+```text
 
 ### Clean Up
 
@@ -290,7 +290,7 @@ docker-compose -f deployment/docker-compose.macos.yml down -v
 
 # Stop Colima
 colima stop
-```
+```bash
 
 ## Troubleshooting
 
@@ -306,7 +306,7 @@ colima delete
 
 # Restart with explicit architecture
 colima start --arch aarch64 --vm-type=qemu --mount-type virtiofs
-```
+```text
 
 ### Slow I/O Performance
 
@@ -320,14 +320,14 @@ colima status | grep mountType
 
 # Should show: mountType: virtiofs
 # If shows: mountType: sshfs or gRPC-FUSE, recreate VM
-```
+```text
 
 **Solution**:
 
 ```bash
 colima delete
 colima start --mount-type virtiofs
-```
+```bash
 
 ### Docker CLI Cannot Connect
 
@@ -346,7 +346,7 @@ export DOCKER_HOST=unix://$HOME/.colima/default/docker.sock
 
 # Reload shell
 source ~/.zshrc
-```
+```bash
 
 ### QuestDB Container Fails Health Check
 
@@ -362,7 +362,7 @@ docker logs gapless-questdb
 # - Port binding errors
 # - Java OutOfMemoryError
 # - Disk space issues
-```
+```text
 
 **Solution**:
 
@@ -373,7 +373,7 @@ docker logs gapless-questdb
 
 # Recreate container
 docker-compose -f deployment/docker-compose.macos.yml up -d --force-recreate
-```
+```text
 
 ### Port Already in Use
 

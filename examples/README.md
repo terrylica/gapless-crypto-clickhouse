@@ -1,6 +1,6 @@
-# Gapless Crypto Data Examples
+# Gapless Crypto ClickHouse Examples
 
-This directory contains comprehensive examples demonstrating how to use the gapless-crypto-data package for ultra-fast cryptocurrency data collection and gap filling.
+This directory contains comprehensive examples demonstrating how to use the gapless-crypto-clickhouse package for ultra-fast cryptocurrency data collection with ClickHouse storage.
 
 ## 🚀 Quick Start
 
@@ -10,10 +10,10 @@ Make sure you have the package installed:
 
 ```bash
 # Using UV (recommended)
-uv add gapless-crypto-data
+uv add gapless-crypto-clickhouse
 
 # Or using pip
-pip install gapless-crypto-data
+pip install gapless-crypto-clickhouse
 ```
 
 ## 📁 Example Files
@@ -109,41 +109,25 @@ uv run python examples/complete_workflow.py
 Perfect for testing and understanding the package:
 
 ```bash
-# 1. Simple API demo (NEW - start here!)
+# 1. Simple API demo (start here!)
 uv run python examples/simple_api_examples.py
 
-# 2. Advanced API demo (NEW - for complex workflows)
+# 2. Advanced API demo (for complex workflows)
 uv run python examples/advanced_api_examples.py
 
 # 3. Basic collection
 uv run python examples/basic_data_collection.py
-
-# 4. CLI quick test
-uv run gapless-crypto-data --symbol BTCUSDT --timeframes 1h --start 2024-01-01 --end 2024-01-02
 ```
+
+> **Note**: This package provides a Python API only (no CLI). See the examples for usage patterns.
 
 ### Production Workflow
 
-For real-world data collection:
+For real-world data collection with ClickHouse:
 
 ```bash
-# 1. Large-scale collection with automatic gap filling
-uv run gapless-crypto-data --symbol SOLUSDT --timeframes 1m,5m,1h,4h --start 2023-01-01 --end 2023-12-31
-
-# 2. Complete workflow demo
+# Complete workflow demo with ClickHouse storage
 uv run python examples/complete_workflow.py
-```
-
-### Batch Processing
-
-For multiple symbols:
-
-```bash
-# Collect data for multiple assets with automatic gap filling
-symbols=(BTCUSDT ETHUSDT SOLUSDT ADAUSDT)
-for symbol in "${symbols[@]}"; do
-  uv run gapless-crypto-data --symbol $symbol --timeframes 1h,4h --start 2024-01-01 --end 2024-01-31
-done
 ```
 
 ## 📊 Expected Output
@@ -193,7 +177,7 @@ All examples can be customized by modifying:
 
 - [Main README](../README.md) - Package overview and installation
 - [API Documentation](../docs/) - Detailed API reference
-- [GitHub Issues](https://github.com/terrylica/gapless-crypto-data/issues) - Report problems or request features
+- [GitHub Issues](https://github.com/terrylica/gapless-crypto-clickhouse/issues) - Report problems or request features
 
 ## 🤝 Contributing
 

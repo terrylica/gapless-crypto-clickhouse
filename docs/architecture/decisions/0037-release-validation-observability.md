@@ -108,7 +108,7 @@ ORDER BY event_time DESC;
 -- github_release   | passed | 226ms  | {"tag_name": "v12.0.1", "published_at": "2025-11-25T01:13:21Z"}
 -- production_health | passed | 1110ms | {"host": "ebmf8f35lu...clickhouse.cloud", "ohlcv_row_count": "0"}
 -- pypi_version      | failed | 23ms   | {"expected_version": "12.0.1", "actual_version": "8.0.0"}
-```
+```text
 
 **Decision Confirmed**: ClickHouse monitoring database successfully provides team-accessible validation history with queryable metrics. Non-blocking design verified (releases succeed despite validation failures).
 
@@ -132,7 +132,7 @@ Production deployment revealed 5 issues. 3 critical issues were fixed immediatel
   with:
     fetch-depth: 0
     fetch-tags: true
-```
+```sql
 
 **Validation**: Second run correctly detected `v12.0.1`.
 
@@ -155,7 +155,7 @@ column_names = [
 ]
 row = [event_time, event_time.date(), data.get("validation_type"), ...]
 client.insert("monitoring.validation_results", [row], column_names=column_names)
-```
+```sql
 
 **Validation**: Test insert successful, second production run showed 3/3 successful inserts.
 
@@ -185,7 +185,7 @@ env:
 earthly --strict \
   --secret GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
   +github-release-check
-```
+```python
 
 **Impact**: Medium severity - doesn't block validation functionality, just prevents artifact download from GitHub Actions UI.
 
@@ -221,7 +221,7 @@ except Exception as e:
         log_with_timestamp("✅ Database 'monitoring' already exists")
     else:
         raise
-```
+```bash
 
 **Validation**: Successful deployment to ClickHouse Cloud production.
 
@@ -239,7 +239,7 @@ except Exception as e:
 # BEFORE (v12.0.4 - FAILED):
 export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
 earthly --secret GITHUB_TOKEN="$GITHUB_TOKEN" +github-release-check # $GITHUB_TOKEN was empty
-```
+```python
 
 When multiple `earthly` commands execute sequentially, bash variables don't reliably pass to `--secret` flags due to environment scope or quoting issues.
 

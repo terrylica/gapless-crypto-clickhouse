@@ -53,14 +53,14 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Verify installation
 uv --version
-```
+```text
 
 **Alternative (Homebrew on macOS)**:
 
 ```bash
 brew install uv
 uv --version
-```
+```text
 
 **Alternative (pip)**:
 
@@ -68,7 +68,7 @@ uv --version
 # Not recommended, but works
 pip install uv
 uv --version
-```
+```bash
 
 ### Install Python 3.12+
 
@@ -81,7 +81,7 @@ sudo apt install python3.12 python3.12-venv
 
 # Verify
 python3.12 --version
-```
+```text
 
 **macOS**:
 
@@ -91,7 +91,7 @@ brew install python@3.12
 
 # Verify
 python3.12 --version
-```
+```text
 
 ## Development Workflow
 
@@ -107,7 +107,7 @@ uv sync
 
 # Verify installation
 uv run python -c "import gapless_crypto_clickhouse; print('OK')"
-```
+```bash
 
 ### Running Commands
 
@@ -122,7 +122,7 @@ uv run python scripts/example.py
 
 # Run Python REPL
 uv run python
-```
+```text
 
 **Execute without installation (uvx)**:
 
@@ -132,7 +132,7 @@ uvx pytest
 
 # Run script with inline dependencies (PEP 723)
 uvx --from requests python fetch_data.py
-```
+```text
 
 ### Development Dependencies
 
@@ -145,7 +145,7 @@ uv sync --no-dev
 
 # Install with frozen lockfile (CI/CD)
 uv sync --frozen --no-dev
-```
+```text
 
 ### Update Dependencies
 
@@ -162,7 +162,7 @@ uv lock
 # Commit updated lockfile
 git add uv.lock
 git commit -m "chore: update dependencies"
-```
+```bash
 
 ## Production Deployment
 
@@ -208,7 +208,7 @@ sudo cp deployment/systemd/gapless-crypto-collector.service \
 sudo systemctl daemon-reload
 sudo systemctl enable gapless-crypto-collector
 sudo systemctl start gapless-crypto-collector
-```
+```text
 
 **Zero-downtime updates**:
 
@@ -225,7 +225,7 @@ sudo systemctl restart gapless-crypto-collector
 
 # 4. Verify
 sudo systemctl status gapless-crypto-collector
-```
+```text
 
 ### systemd Integration
 
@@ -263,7 +263,7 @@ SyslogIdentifier=gapless-crypto-collector
 
 [Install]
 WantedBy=multi-user.target
-```
+```text
 
 **Commands**:
 
@@ -284,7 +284,7 @@ sudo systemctl status gapless-crypto-collector
 
 # View logs
 sudo journalctl -u gapless-crypto-collector -f
-```
+```bash
 
 ## CI/CD Integration
 
@@ -319,7 +319,7 @@ jobs:
       # Run linting
       - name: Run linting
         run: uv run ruff check .
-```
+```bash
 
 **Performance comparison** (typical Python project):
 
@@ -338,7 +338,7 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
-```
+```text
 
 **Setup**:
 
@@ -351,7 +351,7 @@ uv run pre-commit install
 
 # Run manually
 uv run pre-commit run --all-files
-```
+```bash
 
 ## Dependency Management
 
@@ -373,7 +373,7 @@ uv lock  # Updates uv.lock
 
 # CI/CD uses frozen lockfile
 uv sync --frozen --no-dev  # No dependency resolution
-```
+```bash
 
 **Benefits**:
 
@@ -395,7 +395,7 @@ uv add --optional ml numpy pandas
 
 # Remove dependency
 uv remove pandas
-```
+```text
 
 ### Upgrading Dependencies
 
@@ -408,7 +408,7 @@ uv add questdb@latest
 
 # Check outdated packages
 uv pip list --outdated
-```
+```text
 
 ## Environment Configuration
 
@@ -433,7 +433,7 @@ GAP_FILL_ENABLED=true
 # Logging
 LOG_LEVEL=INFO
 LOG_FORMAT=json
-```
+```text
 
 **Security**:
 
@@ -443,7 +443,7 @@ chmod 600 .env
 
 # Never commit .env to git
 echo ".env" >> .gitignore
-```
+```text
 
 ## Performance Tuning
 
@@ -455,14 +455,14 @@ echo ".env" >> .gitignore
 # Default cache: ~/.cache/uv/
 # Configure:
 export UV_CACHE_DIR=/path/to/cache
-```
+```text
 
 **Parallel downloads**:
 
 ```bash
 # uv automatically uses parallel downloads (10x faster than pip)
 # No configuration needed
-```
+```text
 
 ### Virtual Environment
 
@@ -472,7 +472,7 @@ export UV_CACHE_DIR=/path/to/cache
 # Default: .venv in project root
 # Configure:
 export UV_VENV=/path/to/venv
-```
+```bash
 
 **Python version**:
 
@@ -482,7 +482,7 @@ uv venv --python 3.12
 
 # Use system Python
 uv venv --python python3.12
-```
+```bash
 
 ## Troubleshooting
 
@@ -496,7 +496,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Verify
 which uv
-```
+```text
 
 **Permanent fix**:
 
@@ -504,7 +504,7 @@ which uv
 # Add to ~/.bashrc or ~/.zshrc
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
-```
+```text
 
 ### Dependency Resolution Fails
 
@@ -519,7 +519,7 @@ python3.12 --version
 
 # Check lockfile
 cat uv.lock
-```
+```text
 
 **Solutions**:
 
@@ -533,7 +533,7 @@ uv lock
 
 # Use specific Python version
 uv sync --python 3.12
-```
+```python
 
 ### Import Errors
 
@@ -550,7 +550,7 @@ uv run python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickho
 
 # Check virtual environment
 uv venv --show
-```
+```text
 
 ### Slow Dependency Install
 
@@ -562,7 +562,7 @@ curl -I https://pypi.org
 
 # Check cache
 ls -lh ~/.cache/uv
-```
+```text
 
 **Solutions**:
 
@@ -575,7 +575,7 @@ UV_HTTP_TIMEOUT=60 uv sync
 
 # Use different index
 UV_INDEX_URL=https://pypi.org/simple uv sync
-```
+```python
 
 ## Migration from pip/poetry
 
@@ -587,7 +587,7 @@ pip install -r requirements.txt
 
 # New workflow (uv)
 uv sync
-```
+```python
 
 **Benefits**:
 
@@ -603,7 +603,7 @@ poetry install
 
 # New workflow (uv)
 uv sync
-```
+```text
 
 **Migration**:
 

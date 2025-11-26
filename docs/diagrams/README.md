@@ -103,7 +103,7 @@ GitHub natively renders Mermaid diagrams from `.mmd` files when using code block
 graph TD
     A[Start] --> B[Process]
     B --> C[End]
-```
+```text
 ````
 
 ````
@@ -130,7 +130,7 @@ flowchart TD
     ScanGaps --> FillGaps[Fill with Binance API]
     FillGaps --> Validate[Validate merge]
     Validate --> Complete([Zero gaps achieved])
-```
+```text
 ````
 
 ````
@@ -163,7 +163,7 @@ The `BinancePublicDataCollector` follows this flow:
 
 ```mermaid
 [Copy from 01-collection-pipeline.mmd]
-```
+```text
 ````
 
 See `src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py` for implementation.
@@ -247,7 +247,7 @@ Simply use triple backtick code blocks with `mermaid` language identifier.
 # mkdocs.yml
 plugins:
   - mermaid2
-```
+```text
 
 **Sphinx**: Install `sphinxcontrib-mermaid`
 

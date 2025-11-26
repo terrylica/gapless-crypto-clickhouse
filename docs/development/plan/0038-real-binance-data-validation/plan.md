@@ -65,7 +65,7 @@ Download real Binance Vision data (BTCUSDT) and validate the complete pipeline.
 
 ### 9-Stage Validation Pipeline
 
-```
+```sql
 ┌─────────────────────────────────────────────────────────────┐
 │ Stage 1: CDN Download                                       │
 │ ├── Futures: HTTP 200, ZIP > 0 bytes                       │

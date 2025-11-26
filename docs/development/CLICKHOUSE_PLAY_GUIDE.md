@@ -35,13 +35,13 @@ ClickHouse Play is a built-in web interface that ships with ClickHouse 20.11+ fo
 
 ```bash
 open http://localhost:8123/play
-```
+```text
 
 ### 2. Run Your First Query
 
 ```sql
 SELECT 1
-```
+```text
 
 ### 3. Query the Database
 
@@ -54,7 +54,7 @@ SHOW TABLES FROM default
 
 -- Explore schema
 DESCRIBE TABLE default.ohlcv
-```
+```text
 
 ## Example Queries
 
@@ -93,7 +93,7 @@ SELECT
 FROM default.ohlcv FINAL
 GROUP BY symbol, timeframe
 ORDER BY symbol, timeframe
-```
+```text
 
 ### Gap Detection
 
@@ -120,7 +120,7 @@ FROM lagged
 WHERE prev_timestamp != toDateTime(0)
   AND dateDiff('hour', prev_timestamp, timestamp) > 1
 ORDER BY timestamp
-```
+```bash
 
 ## Best Practices
 
@@ -145,7 +145,7 @@ Play UI encodes queries in the URL for easy sharing:
 
 ```
 http://localhost:8123/play#<base64-encoded-query>
-```
+```sql
 
 **Example**:
 
@@ -170,7 +170,7 @@ docker-compose up -d clickhouse
 
 # Test HTTP interface
 curl http://localhost:8123/ping
-```
+```text
 
 ### "Database default doesn't exist"
 
@@ -184,7 +184,7 @@ docker exec gapless-clickhouse clickhouse-client --query "SHOW TABLES FROM defau
 
 # If empty, schema may not have loaded
 docker-compose down && docker-compose up -d
-```
+```text
 
 ### "Results too large"
 

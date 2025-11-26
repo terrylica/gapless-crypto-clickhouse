@@ -28,7 +28,7 @@ df = gcd.download("BTCUSDT", "3h")  # Network request → empty data
 
 # Invalid date format - fails during parsing
 df = gcd.download("BTCUSDT", "1h", start="2024-13-01")  # datetime error
-```
+```text
 
 **Issues**:
 
@@ -45,7 +45,7 @@ Add upfront validation with helpful error messages:
 df = gcd.download("BTCUSD", "1h")
 # → ValueError: Invalid symbol 'BTCUSD'. Did you mean 'BTCUSDT'?
 #    Supported symbols: BTCUSDT, ETHUSDT, BNBUSDT, ... (see get_supported_symbols())
-```
+```text
 
 ## Goals
 
@@ -79,7 +79,7 @@ df = gcd.download("BTCUSD", "1h")
 ```
 ValueError: Invalid <parameter> '<value>'. <Suggestion>
 Supported <parameters>: <list> (see <function>())
-```
+```text
 
 ### Implementation Details
 
@@ -119,7 +119,7 @@ def _validate_symbol(symbol: str) -> None:
                 f"Supported symbols: {', '.join(supported[:10])}, ... "
                 f"(see get_supported_symbols() for full list of {len(supported)} symbols)"
             )
-```
+```bash
 
 **Why This Design**:
 
@@ -154,7 +154,7 @@ def _validate_timeframe_value(timeframe: str) -> None:
             f"Supported timeframes: {', '.join(supported)} "
             f"(see get_supported_timeframes() for details)"
         )
-```
+```text
 
 **Why This Design**:
 
@@ -199,7 +199,7 @@ def _validate_date_format(date_str: Optional[str], param_name: str) -> None:
         raise ValueError(
             f"Invalid {param_name} date '{date_str}': {str(e)}"
         ) from e
-```
+```text
 
 **Why This Design**:
 
@@ -232,7 +232,7 @@ def fetch_data(...):
 
     # Continue with existing logic
     ...
-```
+```text
 
 **Update `download()` function**:
 
@@ -259,7 +259,7 @@ def download(...):
         end=end,
         ...
     )
-```
+```bash
 
 **Note**: Since `download()` calls `fetch_data()`, validation in `fetch_data()` covers both entry points.
 

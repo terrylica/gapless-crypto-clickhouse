@@ -64,7 +64,7 @@ UPDATE ohlcv SET instrument_type = 'spot';
 
 -- Update DEDUP key to prevent spot/futures collisions
 ALTER TABLE ohlcv DEDUP ENABLE UPSERT KEYS(timestamp, symbol, timeframe, instrument_type);
-```
+```text
 
 **Rationale**:
 
@@ -88,7 +88,7 @@ class QuestDBBulkLoader:
             self.SPOT_BASE_URL if instrument_type == "spot"
             else self.FUTURES_BASE_URL
         )
-```
+```text
 
 **2. CSV Parser Extension** (`src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py:_parse_csv()`):
 
@@ -108,7 +108,7 @@ def _parse_csv(self, csv_path: Path, symbol: str, timeframe: str) -> pd.DataFram
 
     df["instrument_type"] = self.instrument_type
     return df
-```
+```text
 
 **3. ILP Ingestion Update** (`src/gapless_crypto_clickhouse/collectors/questdb_bulk_loader.py:_ingest_dataframe()`):
 
@@ -119,7 +119,7 @@ sender.dataframe(
     symbols=["symbol", "timeframe", "data_source", "instrument_type"],  # Added instrument_type
     at="timestamp",
 )
-```
+```text
 
 **4. Query API Extension** (`src/gapless_crypto_clickhouse/query.py`):
 
@@ -138,7 +138,7 @@ def get_ohlcv(
         AND timestamp >= ? AND timestamp <= ?
     """
     params = (symbol, timeframe, instrument_type, start_ts, end_ts)
-```
+```text
 
 **5. CLI Flag Addition** (`src/gapless_crypto_clickhouse/cli.py`):
 

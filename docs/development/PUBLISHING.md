@@ -44,7 +44,7 @@ git commit -m "feat!: breaking change" # MAJOR bump (1.0.0 → 2.0.0)
 
 # Push to main
 git push origin main
-```
+```bash
 
 **Conventional Commit Types**:
 
@@ -85,7 +85,7 @@ git pull origin main
 
 # Publish to PyPI (uses pypi-doppler skill)
 ./scripts/publish-to-pypi.sh
-```
+```text
 
 **Expected output**:
 
@@ -114,7 +114,7 @@ git pull origin main
    ✅ Verified: https://pypi.org/project/gapless-crypto-clickhouse/7.1.0/
 
 ✅ Complete! Published v7.1.0 to PyPI in 28 seconds
-```
+```text
 
 **Done!** Package is now live on PyPI.
 
@@ -140,7 +140,7 @@ git pull origin main
 │  └─ @semantic-release/git → Commit + tag + push
 │
 └─ Result: GitHub release created, NO PyPI publishing
-```
+```text
 
 **Key Configuration** (`.releaserc.json`):
 
@@ -151,7 +151,7 @@ git pull origin main
     "prepareCmd": "update versions only (no uv build)"
   }
 }
-```
+```text
 
 ### What Local Script Does (Publishing Only)
 
@@ -166,7 +166,7 @@ scripts/publish-to-pypi.sh
 ├─ Step 3: Build package (uv build)
 ├─ Step 4: Publish to PyPI (uv publish with Doppler token)
 └─ Step 5: Verify publication on PyPI
-```
+```python
 
 **Credential Management**:
 
@@ -206,7 +206,7 @@ CI=true ./scripts/publish-to-pypi.sh
 # Expected output:
 # ❌ ERROR: This script must ONLY be run on your LOCAL machine
 # ...workspace-wide policy explanation...
-```
+```bash
 
 ### Layer 3: Repository Verification
 
@@ -249,7 +249,7 @@ doppler secrets get PYPI_TOKEN --project claude-config --config prd --plain
 
 # If missing, set it
 doppler secrets set PYPI_TOKEN='pypi-AgEIcHlwaS5vcmc...' --project claude-config --config prd
-```
+```bash
 
 ## Troubleshooting
 
@@ -268,7 +268,7 @@ doppler secrets --project claude-config --config prd | grep PYPI_TOKEN
 # Create token with scope: "Entire account" or specific project
 # Store in Doppler
 doppler secrets set PYPI_TOKEN='your-token' --project claude-config --config prd
-```
+```python
 
 ### Issue: "403 Forbidden from PyPI"
 
@@ -291,7 +291,7 @@ doppler secrets set PYPI_TOKEN='your-token' --project claude-config --config prd
 ❌ ERROR: This script must ONLY be run on your LOCAL machine
 Detected CI environment variables:
 - CI: true
-```
+```text
 
 **Root Cause**: Running in CI environment OR `CI` variable set locally
 
@@ -307,7 +307,7 @@ unset GITHUB_ACTIONS
 
 # Retry publish
 ./scripts/publish-to-pypi.sh
-```
+```python
 
 **Expected behavior**: This is INTENTIONAL - script should ONLY run locally.
 
@@ -328,7 +328,7 @@ grep '^version = ' pyproject.toml
 
 # Retry publish
 ./scripts/publish-to-pypi.sh
-```
+```text
 
 ### Issue: "GitHub Actions workflow failed"
 
@@ -350,7 +350,7 @@ gh run list --workflow=release.yml --limit 3
 gh run view <run-id> --log
 
 # If no version bump needed, that's expected (not an error)
-```
+```python
 
 ## Migration from OIDC Trusted Publishing
 
@@ -399,7 +399,7 @@ ls -lh dist/
 
 # If looks good, publish
 ./scripts/publish-to-pypi.sh
-```
+```text
 
 ### Q: How do I test on TestPyPI first?
 

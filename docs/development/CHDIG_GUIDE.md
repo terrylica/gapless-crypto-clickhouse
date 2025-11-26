@@ -17,26 +17,26 @@
 
 ```bash
 brew install chdig
-```
+```text
 
 ### Scoop (Windows)
 
 ```bash
 scoop bucket add extras
 scoop install extras/chdig
-```
+```text
 
 ### AUR (Arch Linux)
 
 ```bash
 yay -S chdig-latest-bin
-```
+```text
 
 ### Cargo (All Platforms)
 
 ```bash
 cargo install chdig
-```
+```text
 
 ### Verify Installation
 
@@ -46,7 +46,7 @@ which chdig
 
 chdig --version
 # Output: chdig 25.11.1 (or later)
-```
+```text
 
 ## Quick Start
 
@@ -61,14 +61,14 @@ chdig --host localhost --port 9000 --user default --password ''
 
 # Monitor cluster
 chdig --cluster my_cluster
-```
+```text
 
 ### Connection via Docker
 
 ```bash
 # Monitor Docker ClickHouse
 chdig --host localhost --port 9000
-```
+```text
 
 ## Features
 
@@ -167,7 +167,7 @@ chdig --host localhost --database production
 
 # SSL/TLS
 chdig --host secure-ch.example.com --secure
-```
+```text
 
 ### Monitoring Options
 
@@ -180,7 +180,7 @@ chdig --refresh-interval 2.0
 
 # Historical analysis (rotated system logs)
 chdig --history --from '2024-01-01' --to '2024-01-31'
-```
+```text
 
 ### Cluster Mode
 
@@ -193,7 +193,7 @@ chdig --cluster production_cluster --shard 1
 
 # Specific replica
 chdig --cluster production_cluster --shard 1 --replica 2
-```
+```text
 
 ## Use Cases
 
@@ -212,7 +212,7 @@ python -m gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader
 # - Press 'r' for recent queries
 # - Watch INSERT performance (rows/sec, memory usage)
 # - Press 'f' for flamegraph if slow
-```
+```text
 
 #### Optimize Queries
 
@@ -234,7 +234,7 @@ docker exec gapless-clickhouse clickhouse-client --query "
 # - Press 'q' for slow queries
 # - Check execution time, memory usage
 # - Press 'f' for flamegraph to identify bottlenecks
-```
+```bash
 
 ### Debugging
 
@@ -265,7 +265,7 @@ chdig --host prod-clickhouse --port 9000 --secure --user monitor --password $MON
 
 # Detach: Ctrl+b, then d
 # Reattach: tmux attach -t clickhouse-monitor
-```
+```text
 
 ## Keyboard Shortcuts
 
@@ -301,7 +301,7 @@ chdig --host prod-clickhouse --port 9000 --secure --user monitor --password $MON
 │  Filter   │        JOIN                    │
 │   (10%)   │        (40%)                   │
 └───────────┴────────────────────────────────┘
-```
+```text
 
 **Interpretation**: JOIN consumes 40% of CPU, aggregation 50% → Optimize JOIN first, then aggregation
 
@@ -318,7 +318,7 @@ chdig --host prod-clickhouse --port 9000 --secure --user monitor --password $MON
 ├────────────────────────────────────────────┤
 │      GROUP BY                              │
 └────────────────────────────────────────────┘
-```
+```sql
 
 **Interpretation**: GROUP BY hash table consuming 80% memory → Consider using LIMIT or pre-aggregation
 
@@ -336,7 +336,7 @@ docker exec gapless-clickhouse clickhouse-client --query "SELECT 1"
 # Verify port (native protocol, not HTTP)
 chdig --host localhost --port 9000  # ✅ Correct
 chdig --host localhost --port 8123  # ❌ Wrong (HTTP port)
-```
+```text
 
 ### No Data Displayed
 
@@ -350,7 +350,7 @@ docker exec gapless-clickhouse clickhouse-client --query "SELECT version()"
 
 # Upgrade if needed (edit docker-compose.yml)
 image: clickhouse/clickhouse-server:24.1-alpine  # ✅ Supported
-```
+```text
 
 ### Flamegraph Empty
 
@@ -399,7 +399,7 @@ docker exec -it gapless-clickhouse clickhouse-client
 # - Recent queries view ('r')
 # - Slow queries if needed ('q')
 # - Flamegraph for optimization ('f')
-```
+```text
 
 ### chdig + CH-UI Workflow
 

@@ -129,7 +129,7 @@ self.known_symbols = {
     "MANAUSDT": "2020-12-14",  # #42 market cap
     "APEUSDT": "2022-03-17",   # #48 market cap
 }
-```
+```text
 
 #### 2. Update Type Hints
 
@@ -161,7 +161,7 @@ SupportedSymbol = Literal[
     "MATICUSDT", "LTCUSDT", "UNIUSDT", "ATOMUSDT", "FTMUSDT",
     "NEARUSDT", "ALGOUSDT", "SANDUSDT", "MANAUSDT", "APEUSDT",
 ]
-```
+```bash
 
 #### 3. Update Documentation
 
@@ -199,7 +199,7 @@ for symbol in BNBUSDT XRPUSDT DOGEUSDT AVAXUSDT MATICUSDT LTCUSDT UNIUSDT ATOMUS
     echo "  ❌ Spot data MISSING - blocker!"
   fi
 done
-```
+```text
 
 **Futures Market Validation**:
 
@@ -214,7 +214,7 @@ for symbol in BNBUSDT XRPUSDT DOGEUSDT AVAXUSDT MATICUSDT LTCUSDT UNIUSDT ATOMUS
     echo "  ❌ Futures data MISSING - blocker!"
   fi
 done
-```
+```bash
 
 **Expected Result**: All 14 symbols must show ✅ for BOTH spot and futures.
 
@@ -256,7 +256,7 @@ def test_listing_dates_accurate():
         )
         assert len(w) > 0
         assert "before" in str(w[0].message).lower()
-```
+```text
 
 2. **Integration Tests** (spot + futures):
 

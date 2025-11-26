@@ -78,7 +78,7 @@ ADR-0038 `scripts/validate_binance_real_data.py`:
 
 ## Architecture Diagram
 
-```
+```sql
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                    ADR-0041 Gap Filling Validation                          │
 │                      Three-Layer Validation Model                           │

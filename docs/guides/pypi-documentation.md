@@ -8,7 +8,7 @@ Cryptocurrency data collection with function-based API and 11-column microstruct
 
 ```bash
 pip install gapless-crypto-data
-```
+```text
 
 ### Simple API (Recommended for Most Users)
 
@@ -27,7 +27,7 @@ timeframes = gcd.get_supported_timeframes()
 
 # Fill gaps in existing data
 results = gcd.fill_gaps("./data")
-```
+```bash
 
 ## Core Features
 
@@ -68,7 +68,7 @@ df = gcd.fetch_data("ETHUSDT", "4h", start="2024-01-01", end="2024-06-30")
 
 # Save to custom directory
 df = gcd.fetch_data("SOLUSDT", "1h", limit=500, output_dir="./crypto_data")
-```
+```text
 
 ### `download(symbol, interval="1h", start=None, end=None, output_dir=None)`
 
@@ -94,7 +94,7 @@ df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 
 # Recent data
 df = gcd.download("ETHUSDT", "4h")
-```
+```text
 
 ### `get_supported_symbols()`
 
@@ -110,7 +110,7 @@ Get list of supported USDT spot trading pairs.
 symbols = gcd.get_supported_symbols()
 print(f"Found {len(symbols)} supported symbols")
 print(f"Bitcoin supported: {'BTCUSDT' in symbols}")
-```
+```text
 
 ### `get_supported_timeframes()`
 
@@ -126,7 +126,7 @@ Get list of supported timeframe intervals.
 timeframes = gcd.get_supported_timeframes()
 print(f"Available timeframes: {timeframes}")
 print(f"1-hour supported: {'1h' in timeframes}")
-```
+```bash
 
 ### `fill_gaps(directory, symbols=None)`
 
@@ -150,7 +150,7 @@ print(f"Success rate: {results['success_rate']:.1f}%")
 
 # Fill gaps for specific symbols
 results = gcd.fill_gaps("./data", symbols=["BTCUSDT", "ETHUSDT"])
-```
+```text
 
 ### `get_info()`
 
@@ -166,7 +166,7 @@ Get library information and capabilities.
 info = gcd.get_info()
 print(f"Version: {info['version']}")
 print(f"Supported symbols: {len(info['supported_symbols'])}")
-```
+```text
 
 ## Data Structure
 
@@ -201,7 +201,7 @@ market_impact = df['quote_asset_volume'].std() / df['quote_asset_volume'].mean()
 print(f"Taker buy pressure: {buy_pressure:.1%}")
 print(f"Average trade size: {avg_trade_size:.4f} BTC")
 print(f"Market impact volatility: {market_impact:.3f}")
-```
+```text
 
 ## Advanced Class-Based API
 
@@ -226,7 +226,7 @@ stats = result["stats"]
 # Manual gap filling
 gap_filler = UniversalGapFiller()
 gaps = gap_filler.detect_all_gaps(filepath, "1h")
-```
+```bash
 
 ## Supported Assets & Timeframes
 
@@ -262,7 +262,7 @@ gapless-crypto-data --fill-gaps --directory ./data
 
 # Help
 gapless-crypto-data --help
-```
+```bash
 
 ## Performance Benchmarks
 
@@ -296,7 +296,7 @@ except ConnectionError as e:
     print(f"Network error: {e}")
 except Exception as e:
     print(f"Unexpected error: {e}")
-```
+```python
 
 ## Data Availability
 
@@ -318,7 +318,7 @@ df = gcd.download("ETHUSDT", "4h", start="2020-01-01", end="2023-12-31")
 
 # Full history (symbol-dependent)
 df = gcd.download("SOLUSDT", "1d", start="2020-08-11")  # From listing
-```
+```text
 
 ## Integration Examples
 
@@ -349,7 +349,7 @@ def prepare_backtest_data(symbol, timeframe, start, end):
 
 # Use in backtesting
 btc_data = prepare_backtest_data("BTCUSDT", "1h", "2023-01-01", "2023-12-31")
-```
+```text
 
 ### Portfolio Analysis
 
@@ -382,7 +382,7 @@ def analyze_portfolio(symbols, timeframe="1h", period_days=30):
 # Analyze major cryptocurrencies
 results = analyze_portfolio(["BTCUSDT", "ETHUSDT", "SOLUSDT", "ADAUSDT"])
 print(results.round(2))
-```
+```text
 
 ## Troubleshooting
 
@@ -398,7 +398,7 @@ if "YOURSYMBOL" not in symbols:
 
 # Check date range
 df = gcd.fetch_data("BTCUSDT", "1h", start="2020-01-01")  # Use earlier start date
-```
+```text
 
 **Network timeouts:**
 
@@ -429,7 +429,7 @@ def fetch_large_dataset(symbol, timeframe, start, end, chunk_months=3):
         current = chunk_end
 
     return pd.concat(chunks, ignore_index=True) if chunks else pd.DataFrame()
-```
+```text
 
 **Gap filling issues:**
 
@@ -440,7 +440,7 @@ results = gcd.fill_gaps("./data")
 if results['success_rate'] < 100:
     print(f"Some gaps remain: {results['gaps_detected'] - results['gaps_filled']}")
     print("Check internet connectivity and Binance API availability")
-```
+```text
 
 ## Requirements
 

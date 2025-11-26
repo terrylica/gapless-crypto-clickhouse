@@ -70,7 +70,7 @@ Execute 4-phase housekeeping with conservative approach:
 # Add clarification note
 
 - **Note**: This package never included a CLI (unlike parent package `gapless-crypto-data`). It provides a Python API only.
-```
+```text
 
 **Validation**: Search README.md for "v4.0" → 0 results
 
@@ -102,7 +102,7 @@ Execute 4-phase housekeeping with conservative approach:
 # Add emphasis
 
 - ClickHouse is a **required component** for this package. The database-first architecture enables advanced query capabilities and persistent storage.
-```
+```bash
 
 **Validation**: README.md no longer claims ClickHouse is optional
 
@@ -125,7 +125,7 @@ version = "1.0.0"  # May need manual sync with git tags
 # Line 53 - Remove v4.0.0 fiction
 - # [project.scripts] section removed in v4.0.0
 + # No CLI - machine interface only (use Python API for programmatic access)
-```
+```bash
 
 **Validation**:
 
@@ -166,13 +166,13 @@ version = "1.0.0"  # May need manual sync with git tags
 - Auto-installs: playwright, pytest, pytest-playwright, pytest-cov
 
 * Auto-installs: playwright, pytest, pytest-playwright-asyncio, pytest-asyncio>=0.26.0, pytest-cov
-```
+```text
 
 ```python
 # scripts/run_validation.py line 6
 - "pytest-playwright>=0.6.0",
 + "pytest-playwright-asyncio>=0.7.1",
-```
+```bash
 
 **Validation**: `grep -r "pytest-playwright[^-]" docs/ scripts/` → 0 results
 
@@ -249,7 +249,7 @@ version = "1.0.0"  # May need manual sync with git tags
 ```bash
 docker-compose up -d
 uv run pytest tests/e2e/ -v
-```
+```text
 ````
 
 See `.github/workflows/ci.yml` lines 131-132 for CI configuration.
@@ -354,7 +354,7 @@ rm -rf tmp/full-validation/test-coverage/*.{json,txt}
 rm -rf tmp/full-validation/build-distribution/*.txt
 rm -rf tmp/full-validation/git-history/*.txt
 rm -rf tmp/full-validation/code-quality/*.txt
-```
+```text
 
 **Validation**: 25 files deleted, ~366KB freed
 
@@ -366,7 +366,7 @@ rm -rf tmp/full-validation/code-quality/*.txt
 
 ```bash
 mkdir -p tmp/archive/2025-11-clickhouse-migration
-```
+```text
 
 **MOVE to Archive**:
 
@@ -389,7 +389,7 @@ mv tmp/full-validation/git-history/GIT_HISTORY_VALIDATION_REPORT.md tmp/archive/
 # Research reports (IDE integrations, PyPI packaging)
 mv tmp/clickhouse-local-viz-research/ide-integrations/IDE_INTEGRATIONS_REPORT.md tmp/archive/2025-11-clickhouse-migration/ide-integrations-research.md
 mv tmp/pypi-package-split/agent1-publishing/INVESTIGATION_REPORT.md tmp/archive/2025-11-clickhouse-migration/pypi-packaging-investigation.md
-```
+```text
 
 **CREATE Archive README**:
 
@@ -426,7 +426,7 @@ Historical documentation from v1.0.0 → v2.1.2 transition period.
 ## Context
 
 These artifacts document the ClickHouse fork creation, database-first architecture adoption, and E2E validation framework implementation. Preserved for historical reference and future troubleshooting.
-```
+```text
 
 **Validation**: Archive contains 12 files with README context
 
@@ -444,7 +444,7 @@ These artifacts document the ClickHouse fork creation, database-first architectu
 - - [CLI Migration Guide](docs/development/CLI_MIGRATION_GUIDE.md) - v3.x to v4.0.0 migration (CLI removed)
 
 * - [CLI Migration Guide](docs/development/CLI_MIGRATION_GUIDE.md) - Migrating from gapless-crypto-data (different package)
-```
+```text
 
 **Validation**: CLAUDE.md accurately describes CLI_MIGRATION_GUIDE.md purpose
 
@@ -459,7 +459,7 @@ These artifacts document the ClickHouse fork creation, database-first architectu
 ```yaml
 - image: clickhouse/clickhouse-server:24.1-alpine
 + image: clickhouse/clickhouse-server:24.11-alpine
-```
+```text
 
 **Rationale**: 24.11 released 2024-11, provides 10 months of improvements over 24.1
 
@@ -477,7 +477,7 @@ These artifacts document the ClickHouse fork creation, database-first architectu
 - Auto-installs: playwright, pytest, pytest-playwright, pytest-cov
 
 * Auto-installs: playwright, pytest, pytest-playwright-asyncio, pytest-asyncio>=0.26.0, pytest-cov
-```
+```text
 
 **Validation**: ADR-0013 lists all E2E dependencies
 

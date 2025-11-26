@@ -35,7 +35,7 @@ Implement gap filling in `query_ohlcv()` function using Binance REST API with te
 
 Investigation revealed split implementation:
 
-```
+```text
 query_ohlcv() workflow:
   1. Check ClickHouse   ✅
   2. Auto-ingest        ✅
@@ -51,7 +51,7 @@ if len(gaps) > 0:
     logger.info(f"{sym}: Detected {len(gaps)} gaps, filling via REST API")
     # TODO: Implement gap filling via REST API
     logger.warning(f"{sym}: Gap filling not yet implemented in v6.0.0")
-```
+```sql
 
 ### User Decisions
 

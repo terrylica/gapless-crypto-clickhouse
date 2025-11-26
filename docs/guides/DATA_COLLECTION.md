@@ -41,7 +41,7 @@ Guide to collecting complete historical cryptocurrency market data from Binance 
 
 ## Output Directory Structure
 
-```
+```text
 output_dir/
 ├── {SYMBOL}_{TIMEFRAME}_{START_DATE}_to_{END_DATE}.csv
 ├── {SYMBOL}_{TIMEFRAME}_{START_DATE}_to_{END_DATE}.csv.metadata.json
@@ -76,7 +76,7 @@ collector.collect_data(
     start_date="2023-01-01",
     end_date="2023-12-31"
 )
-```
+```text
 
 ### Multi-Symbol Collection
 
@@ -87,7 +87,7 @@ symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
 for symbol in symbols:
     collector = BinancePublicDataCollector(symbol=symbol)
     collector.collect_multiple_timeframes(["1h", "4h"])
-```
+```text
 
 ### Custom Output Directory
 
@@ -99,7 +99,7 @@ collector = BinancePublicDataCollector(
     output_dir="/path/to/output"
 )
 collector.collect_timeframe_data("1h")
-```
+```text
 
 ### Parquet Output Format
 
@@ -109,7 +109,7 @@ collector = BinancePublicDataCollector(
     output_format="parquet"  # 5-10x compression
 )
 collector.collect_timeframe_data("1h")
-```
+```text
 
 ## Supported Symbols
 
@@ -120,7 +120,7 @@ import gapless_crypto_clickhouse as gcd
 
 symbols = gcd.get_supported_symbols()
 print(symbols)
-```
+```text
 
 **Common Symbols**:
 
@@ -136,7 +136,7 @@ Get list of supported timeframes:
 ```python
 timeframes = gcd.get_supported_timeframes()
 print(timeframes)
-```
+```bash
 
 **Available Timeframes**:
 
@@ -161,7 +161,7 @@ collector = BinancePublicDataCollector(
     end_date="2024-01-31",
     output_dir="./data"
 )
-```
+```text
 
 ### Step 2: Collect Timeframe Data
 
@@ -170,14 +170,14 @@ Single timeframe:
 ```python
 result = collector.collect_timeframe_data("1h")
 print(f"Collected {result['dataframe'].shape[0]} bars")
-```
+```text
 
 Multiple timeframes:
 
 ```python
 timeframes = ["1h", "4h", "1d"]
 results = collector.collect_multiple_timeframes(timeframes)
-```
+```text
 
 ### Step 3: Verify Output Files
 
@@ -189,7 +189,7 @@ print(f"Generated {len(output_files)} CSV files")
 
 for file in output_files:
     print(f"  {file.name}")
-```
+```text
 
 ## Data Integrity
 
@@ -210,7 +210,7 @@ collector = BinancePublicDataCollector(
     symbol="BTCUSDT",
     auto_fill_gaps=True  # Default: False
 )
-```
+```text
 
 ### Manual Validation
 

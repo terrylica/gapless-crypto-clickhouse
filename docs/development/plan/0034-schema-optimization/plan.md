@@ -49,7 +49,7 @@ print(result.result_rows[0][0])
 
 # If data exists, create backup
 # CREATE TABLE ohlcv_backup AS SELECT * FROM ohlcv FINAL;
-```
+```text
 
 **Expected**: Row count = 0 (table created today, likely empty)
 
@@ -64,7 +64,7 @@ print(result.result_rows[0][0])
 #
 # Add SETTINGS:
 #   do_not_merge_across_partitions_select_final = 1
-```
+```text
 
 **1.3 Deploy Updated Schema**
 
@@ -82,7 +82,7 @@ print('✅ Dropped old table')
 
 # Deploy new schema
 doppler run --project aws-credentials --config prd -- uv run python scripts/deploy-clickhouse-schema.py
-```
+```text
 
 **Expected Output**:
 
@@ -97,7 +97,7 @@ ClickHouse version: 25.8.1.8702
 ✅ All critical columns validated successfully!
 ✅ Table engine: SharedReplacingMergeTree
 ✅ ORDER BY verified: (symbol, timeframe, toStartOfHour(timestamp), timestamp)
-```
+```sql
 
 **1.4 Validate New ORDER BY**
 
@@ -120,7 +120,7 @@ if 'do_not_merge_across_partitions_select_final = 1' in create_sql:
 else:
     print('⚠️  WARNING: FINAL optimization setting not found')
 "
-```
+```sql
 
 **Expected Outcome**: ✅ Both checks pass
 
@@ -150,13 +150,13 @@ if "do_not_merge_across_partitions_select_final = 1" not in create_sql:
     print("⚠️  WARNING: FINAL optimization setting not found")
 else:
     print("✅ FINAL optimization enabled")
-```
+```text
 
 **2.2 Test Updated Script**
 
 ```bash
 doppler run --project aws-credentials --config prd -- uv run python scripts/deploy-clickhouse-schema.py --dry-run
-```
+```sql
 
 **Expected**: Dry-run shows updated ORDER BY in SQL
 
@@ -173,7 +173,7 @@ doppler run --project aws-credentials --config prd -- uv run python scripts/depl
 # Ingest sample data (1 month, 10 symbols, 1h timeframe)
 # Run benchmark queries before/after (if we had old schema)
 # Since we're deploying fresh, document expected performance
-```
+```text
 
 **3.2 Benchmark Queries**
 
@@ -187,7 +187,7 @@ WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
 
 # Expected: Uses primary key index, fast lookup
 # Target: <50ms for 744 rows (1 month hourly data)
-```
+```text
 
 **Expected Outcome**: Query plan shows index usage, sub-50ms latency
 
@@ -219,7 +219,7 @@ WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
 - Performance: 10-100x faster for primary use case
 
 **Rationale**: Prop trading firms primarily query by symbol ("get all BTCUSDT data"), not by time ("what happened at 12:00 across all symbols").
-```
+```text
 
 **4.2 Update CLAUDE.md Deployment Procedures**
 
@@ -236,7 +236,7 @@ doppler run --project aws-credentials --config prd -- uv run python scripts/depl
 
 # Verify deployment
 doppler run --project aws-credentials --config prd -- uv run python scripts/verify-schema.py
-```
+```text
 ````
 
 ### Schema Design Rationale
@@ -314,7 +314,7 @@ Related: ADR-0005 (ClickHouse Migration), ADR-0021 (Futures + Timestamp Precisio
 Research: https://clickhouse.com/docs/en/optimize/sparse-primary-indexes
 EOF
 )"
-```
+```text
 
 **Expected**: Semantic-release will detect `BREAKING CHANGE` → version bump 8.0.4 → 9.0.0
 
@@ -325,7 +325,7 @@ git push origin main
 
 # Monitor GitHub Actions
 gh run watch
-```
+```sql
 
 **Expected Outcome**: v9.0.0 release created with changelog entry
 

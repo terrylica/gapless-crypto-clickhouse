@@ -17,7 +17,7 @@ Current API uses `start` and `end` parameters for date ranges, but parameter nam
 ```python
 df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
 collector = BinancePublicDataCollector(start_date="2024-01-01", end_date="2024-06-30")
-```
+```bash
 
 **Inconsistency**: Function-based API uses `start`/`end`, class-based API uses `start_date`/`end_date`
 
@@ -88,7 +88,7 @@ def download(
     # Use whichever was provided
     actual_start = start_date if start_date is not None else start
     actual_end = end_date if end_date is not None else end
-```
+```bash
 
 **Class-based API**:
 
@@ -146,7 +146,7 @@ def download(
     end_date: Optional[str] = None,    # Alias for end
     ...
 )
-```
+```text
 
 ### Phase 2: Add Parameter Normalization
 
@@ -163,7 +163,7 @@ if start is not None and start_date is not None:
 # Normalization
 actual_start = start_date if start_date is not None else start
 actual_end = end_date if end_date is not None else end
-```
+```text
 
 **Error Handling**:
 
@@ -198,7 +198,7 @@ def download(...):
         df = gcd.download("BTCUSDT", "1h", start="2024-01-01", end="2024-06-30")
         df = gcd.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-06-30")
     """
-```
+```text
 
 ### Phase 4: Test Coverage
 

@@ -125,7 +125,7 @@ This plan is a continuation from the previous session where ADR-0037 was impleme
 
 **Error**:
 
-```
+```text
 Release Version: v0.0.0
 Release URL: https://github.com/terrylica/gapless-crypto-clickhouse/releases/tag/v0.0.0
 ```
@@ -140,7 +140,7 @@ Release URL: https://github.com/terrylica/gapless-crypto-clickhouse/releases/tag
   with:
     fetch-depth: 0 # Fetch all history for tags
     fetch-tags: true # Explicitly fetch tags
-```
+```sql
 
 **Validation**: Second production run showed correct version (v12.0.1)
 
@@ -155,7 +155,7 @@ Failed inserts: 3
   - Failed to insert github-release-result.json: Insert data column count does not match column names
   - Failed to insert production-health-result.json: Insert data column count does not match column names
   - Failed to insert pypi-version-result.json: Insert data column count does not match column names
-```
+```sql
 
 **Root Cause Analysis**:
 
@@ -182,7 +182,7 @@ CREATE TABLE monitoring.validation_results (
     environment LowCardinality(String) DEFAULT 'production'
 ) ENGINE = SharedMergeTree('/clickhouse/tables/{uuid}/{shard}', '{replica}')
 ORDER BY (event_date, validation_type, release_version, event_time);
-```
+```text
 
 **Fix**: Changed `scripts/write_validation_results.py` to use list format with explicit column names:
 
@@ -214,7 +214,7 @@ row = [
 
 # Insert with explicit column names
 client.insert("monitoring.validation_results", [row], column_names=column_names)
-```
+```text
 
 **Test Validation**:
 
@@ -224,7 +224,7 @@ doppler run --project aws-credentials --config prd -- \
   python3 scripts/write_validation_results.py --results-dir /tmp/validation-test/
 
 # Result: ✅ All validation results written to ClickHouse (1/1 inserts successful)
-```
+```text
 
 **Production Validation**: Second production run showed:
 
@@ -233,7 +233,7 @@ Total files: 3
 Successful inserts: 3
 Failed inserts: 0
 ✅ All validation results written to ClickHouse
-```
+```yaml
 
 ---
 
@@ -244,7 +244,7 @@ Failed inserts: 0
 ```
 ##[warning]No files were found with the provided path: artifacts/*.json.
 No artifacts will be uploaded.
-```
+```python
 
 **Root Cause**: The `BUILD` command in Earthly doesn't automatically copy artifacts from child targets to parent target.
 
@@ -268,7 +268,7 @@ release-validation-pipeline:
 
     # Export all artifacts to host filesystem
     SAVE ARTIFACT ./artifacts/*.json AS LOCAL ./artifacts/
-```
+```python
 
 **Status**: UNFIXED - Remains an open issue. Validation results are successfully stored in ClickHouse, but not uploaded as GitHub Actions artifacts.
 
@@ -285,7 +285,7 @@ release-validation-pipeline:
 ```
 Code: 344. DB::Exception: Only queries like `CREATE DATABASE <database>` are supported for creating database.
 Current query is CREATE DATABASE IF NOT EXISTS monitoring ENGINE = Ordinary. (SUPPORT_IS_DISABLED)
-```
+```text
 
 **Root Cause**: ClickHouse Cloud has stricter SQL requirements than self-hosted ClickHouse. It doesn't support `IF NOT EXISTS` or `ENGINE` clauses in `CREATE DATABASE` statements.
 
@@ -306,7 +306,7 @@ except Exception as e:
         log_with_timestamp("✅ Database 'monitoring' already exists")
     else:
         raise
-```
+```text
 
 **Validation**:
 
@@ -318,7 +318,7 @@ doppler run --project aws-credentials --config prd -- \
 # ✅ Database 'monitoring' already exists
 # ✅ Table 'validation_results' created (or already exists)
 # ✅ DEPLOYMENT SUCCESSFUL
-```
+```yaml
 
 ---
 
@@ -332,7 +332,7 @@ Doppler Error: This token does not have access to requested project 'notificatio
 ---
 ❌ Failed to send Pushover notification
 Error: PUSHOVER_APP_TOKEN or PUSHOVER_USER_KEY not set
-```
+```bash
 
 **Root Cause**: The `DOPPLER_TOKEN` secret in GitHub Actions only has access to `aws-credentials` project, not `notifications` project.
 

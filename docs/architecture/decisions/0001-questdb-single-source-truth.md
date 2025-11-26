@@ -56,7 +56,7 @@ CREATE TABLE ohlcv (
     taker_buy_quote_asset_volume DOUBLE,
     data_source SYMBOL capacity 8
 ) timestamp(timestamp) PARTITION BY DAY WAL;
-```
+```bash
 
 **Deployment Options**:
 

@@ -56,7 +56,7 @@ Validate from clean slate that gapless-crypto-clickhouse repository is working c
 python --version  # Verify 3.12+
 uv --version
 uv sync --dev
-```
+```text
 
 **1.2 Static Analysis**
 
@@ -64,21 +64,21 @@ uv sync --dev
 uv run ruff format --check .
 uv run ruff check .
 uv run mypy src/  # Expected to fail due to wrong package name
-```
+```text
 
 **1.3 Package Import**
 
 ```bash
 # Test import and discover version mismatch
 uv run python -c "import gapless_crypto_clickhouse as gcd; print(f'Version: {gcd.__version__}')"
-```
+```text
 
 **1.4 Validation Scripts**
 
 ```bash
 uv run python validate_examples.py
 uv run python verify_cross_references.py
-```
+```bash
 
 **Expected Outcomes**:
 
@@ -94,26 +94,26 @@ uv run python verify_cross_references.py
 
 ```bash
 uv run pytest -m unit -v --tb=short
-```
+```text
 
 **2.2 Integration Tests** (if ClickHouse available)
 
 ```bash
 docker-compose ps  # Check services
 uv run pytest -m integration -v --tb=short
-```
+```text
 
 **2.3 Full Suite with Coverage**
 
 ```bash
 uv run pytest --cov=src/gapless_crypto_clickhouse --cov-report=term --cov-report=html -v
-```
+```text
 
 **2.4 Example Compilation**
 
 ```bash
 for file in examples/*.py; do python -m py_compile "$file"; done
-```
+```bash
 
 **Expected Outcomes**:
 
@@ -131,7 +131,7 @@ grep '^version = ' pyproject.toml
 grep '"version"' package.json
 grep '^__version__ = ' src/gapless_crypto_clickhouse/__init__.py
 uv run python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__version__)"
-```
+```text
 
 **Expected**: pyproject.toml/package.json show 8.0.0, **init**.py shows 1.0.0 ❌
 
@@ -149,7 +149,7 @@ print(f'Exotic timeframes:')
 for exotic in ['3d', '1w', '1mo']:
     print(f'  {exotic}: {exotic in TIMEFRAME_TO_MINUTES}')
 "
-```
+```text
 
 **Expected**: API may return 16, but constants only have 13 ❌
 
@@ -163,7 +163,7 @@ print(f'Actual count: {len(symbols)}')
 "
 
 grep -n "400\|713" CLAUDE.md README.md
-```
+```text
 
 **Expected**: Implementation has 713, some docs say "400+" ⚠️
 
@@ -171,7 +171,7 @@ grep -n "400\|713" CLAUDE.md README.md
 
 ```bash
 grep -A 1 "module = " pyproject.toml | grep "gapless_crypto_data"
-```
+```text
 
 **Expected**: 3 mypy overrides with wrong name ❌
 
@@ -186,7 +186,7 @@ with open('api_surface.json', 'w') as f:
     json.dump(api, f, indent=2)
 print('API surface saved')
 "
-```
+```text
 
 **Use for**: Validating documented methods exist
 
@@ -197,7 +197,7 @@ print('API surface saved')
 ```python
 # Edit src/gapless_crypto_clickhouse/__init__.py line 84
 __version__ = "8.0.0"  # Was: "1.0.0"
-```
+```text
 
 **Fix #2: Timeframe Constants**
 
@@ -214,21 +214,21 @@ TIMEFRAME_TO_MINUTES = {
     "1w": 10080,   # 7 days * 24 * 60
     "1mo": 43200,  # 30 days * 24 * 60 (approximate)
 }
-```
+```text
 
 **Fix #3: Mypy Config**
 
 ```bash
 # Edit pyproject.toml lines 119, 124, 128
 sed -i '' 's/gapless_crypto_data\./gapless_crypto_clickhouse./g' pyproject.toml
-```
+```text
 
 **Fix #4: Symbol Count**
 
 ```bash
 # Update CLAUDE.md: 400+ → 713
 sed -i '' 's/400+/713/g' CLAUDE.md
-```
+```text
 
 **Validation After Fixes**:
 
@@ -244,7 +244,7 @@ uv run python -c "from gapless_crypto_clickhouse.utils.timeframe_constants impor
 
 # Run tests
 uv run pytest -m unit -v
-```
+```text
 
 ### Phase 5: Documentation & Release (10 min)
 
@@ -279,7 +279,7 @@ VALIDATION:
 Implements: ADR-0031
 Closes: [issues if any]
 "
-```
+```text
 
 **5.3 Release**
 
@@ -291,7 +291,7 @@ git push origin main
 
 # Release should be patch (8.0.1) unless breaking changes
 # Wait for GitHub Actions to complete
-```
+```text
 
 ## Context
 

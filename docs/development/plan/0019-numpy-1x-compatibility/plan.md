@@ -20,7 +20,7 @@ Add explicit NumPy 1.x constraints to enable Alpha Forge integration by resolvin
 
 Alpha Forge AI agents probe identified CRITICAL BLOCKER:
 
-```
+```text
 Alpha Forge requires: numpy>=1.24.0,<2.0.0 (TA-Lib constraint)
 GCC currently has: numpy 2.2.6 (via pandas 2.3.2)
 Result: Cannot install both in same environment
@@ -43,7 +43,7 @@ dependencies = [
     "numpy>=1.23.2,<2.0.0",  # Explicit NumPy 1.x lock
     "pandas>=2.0.0,<2.2.0",   # Upper bound for NumPy 1.x compatibility
 ]
-```
+```text
 
 ## Goals
 
@@ -79,7 +79,7 @@ dependencies = [
     "pyarrow>=16.0.0",
     "python-dotenv>=1.0.0",
 ]
-```
+```bash
 
 **Why these versions**:
 
@@ -100,7 +100,7 @@ After `uv lock --upgrade`:
 ```
 pandas==2.0.3 or 2.1.4 (latest NumPy 1.x-only version)
 numpy==1.26.4 (latest 1.x version)
-```
+```python
 
 ### Compatibility Validation
 

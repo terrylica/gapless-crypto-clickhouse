@@ -129,7 +129,7 @@ SUPPORTED_TIMEFRAMES = [
     "1w",  # Weekly (exotic timeframe)
     "1M",  # Monthly (exotic timeframe)
 ]
-```
+```sql
 
 ### Schema Extensibility Validation ✅
 
@@ -506,7 +506,7 @@ CLI multi-symbol command
             → ohlcv table (DEDUP on composite key)
               → 6 validation agents (parallel queries)
                 → Comprehensive validation report
-```
+```text
 
 ### Execution Plan
 

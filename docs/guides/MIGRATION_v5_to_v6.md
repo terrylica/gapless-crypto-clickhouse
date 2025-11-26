@@ -40,14 +40,14 @@ v6.0.0 introduces Apache Arrow optimization for 2x faster queries at scale, unif
 ```python
 # Native TCP protocol (port 9000)
 CLICKHOUSE_PORT=9000  # Default
-```
+```text
 
 **After (v6.0.0)**:
 
 ```python
 # HTTP protocol (port 8123)
 CLICKHOUSE_HTTP_PORT=8123  # Default
-```
+```text
 
 **Migration**:
 
@@ -58,7 +58,7 @@ CLICKHOUSE_HTTP_PORT=8123  # Default
 
 # Or use environment variable
 export CLICKHOUSE_HTTP_PORT=8123
-```
+```bash
 
 **If using Docker Compose**, update port mapping:
 
@@ -69,7 +69,7 @@ services:
     ports:
       - "8123:8123" # HTTP port (NEW)
       # - "9000:9000"  # Native TCP (OLD, remove if not needed)
-```
+```text
 
 ### 2. Driver Change: clickhouse-driver → clickhouse-connect
 
@@ -82,7 +82,7 @@ try:
     # ... query code
 except ClickHouseError as e:
     print(f"ClickHouse error: {e}")
-```
+```text
 
 **After (v6.0.0)**:
 
@@ -92,7 +92,7 @@ try:
     # ... query code
 except Exception as e:
     print(f"ClickHouse error: {e}")
-```
+```python
 
 **Migration**:
 
@@ -115,7 +115,7 @@ with ClickHouseConnection() as conn:
 
     # Client access
     result = conn.client.execute("SELECT 1")
-```
+```text
 
 **After (v6.0.0)**:
 
@@ -129,7 +129,7 @@ with ClickHouseConnection() as conn:
 
     # Client access unchanged (abstracted)
     result = conn.execute("SELECT 1")  # Use wrapper method
-```
+```text
 
 **Migration**:
 
@@ -175,7 +175,7 @@ df = query_ohlcv(
     "2024-01-31",
     instrument_type="futures-um"
 )
-```
+```python
 
 **Benefits**:
 
@@ -208,7 +208,7 @@ from gapless_crypto_clickhouse import query_ohlcv
 
 # All steps in one call
 df = query_ohlcv("BTCUSDT", "1h", "2024-01-01", "2024-01-31")
-```
+```text
 
 ### 2. Apache Arrow Optimization
 
@@ -243,7 +243,7 @@ timeframes = probe.get_supported_timeframes()  # 16 timeframes
 # Get performance info
 perf = probe.get_performance_info()
 print(f"Query speedup: {perf['arrow']['query_speedup']}")  # "2x faster"
-```
+```text
 
 **Machine-readable documentation**:
 
@@ -252,7 +252,7 @@ print(f"Query speedup: {perf['arrow']['query_speedup']}")  # "2x faster"
 import requests
 response = requests.get("https://raw.githubusercontent.com/terrylica/gapless-crypto-clickhouse/main/src/gapless_crypto_clickhouse/llms.txt")
 print(response.text)
-```
+```python
 
 ---
 
@@ -316,7 +316,7 @@ with ClickHouseConnection() as conn:
 
     result = conn.execute("SELECT 1 as test")
     print(f"✅ Connection working: {result[0][0] == 1}")
-```
+```text
 
 ### 2. Query Test
 
@@ -326,7 +326,7 @@ from gapless_crypto_clickhouse import query_ohlcv
 # Test auto-ingestion workflow
 df = query_ohlcv("BTCUSDT", "1h", "2024-01-01", "2024-01-31")
 print(f"✅ Query working: {len(df)} rows retrieved")
-```
+```text
 
 ### 3. Performance Test
 
@@ -344,7 +344,7 @@ duration = time.time() - start
 speed = len(df) / duration
 
 print(f"✅ Performance: {speed:,.0f} rows/s (expect >35K for ~8700 rows)")
-```
+```yaml
 
 ---
 
@@ -365,7 +365,7 @@ netstat -an | grep 8123
 
 # Update environment variable
 export CLICKHOUSE_HTTP_PORT=8123
-```
+```python
 
 ### Issue: ImportError for ClickHouseError
 

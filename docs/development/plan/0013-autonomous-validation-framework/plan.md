@@ -61,7 +61,7 @@ Current validation gaps for ClickHouse integration (v1.0.0):
 
 ### Architecture: 5-Layer Validation Model
 
-```
+```bash
 Layer 1: Static Analysis (ruff, mypy, yamllint)
            ↓
 Layer 2: Unit Tests (71 existing pytest tests)
@@ -131,7 +131,7 @@ Layer 5: Benchmarking (performance regression detection) [FUTURE]
 4. Collect artifacts (screenshots, traces, HTML reports)
 5. Generate summary report
 6. Exit with appropriate code
-```
+```text
 
 **Observability**: Detailed progress logging, artifact paths printed, failure diagnostics.
 
@@ -145,7 +145,7 @@ tests/e2e/
 ├── test_ch_ui_dashboard.py     # 24 tests for CH-UI
 ├── test_clickhouse_play.py     # 24 tests for ClickHouse Play
 └── screenshots/                # Reference baselines (git-tracked)
-```
+```bash
 
 **Test Coverage Matrix** (per interface):
 

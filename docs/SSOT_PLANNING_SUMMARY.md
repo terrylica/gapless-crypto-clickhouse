@@ -88,7 +88,7 @@ The following topics are currently mixed into CLAUDE.md (476 lines):
 
 - Essential commands
 - Link to docs/development/COMMANDS.md
-```
+```bash
 
 ### Proposed Spoke Categories
 
@@ -180,7 +180,7 @@ The following topics are currently mixed into CLAUDE.md (476 lines):
 
 ```markdown
 <!-- Version: v1.0.0 (2025-10-20) -->
-```
+```text
 
 **Increment Rules**:
 

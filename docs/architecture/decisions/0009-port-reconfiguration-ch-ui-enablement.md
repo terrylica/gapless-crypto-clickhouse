@@ -41,7 +41,7 @@ ADR-0008 validation (VALIDATION_REPORT.md) identified a port conflict preventing
 $ docker ps | grep -E "clickhouse|questdb|ch-ui"
 gapless-clickhouse   Up 7 hours   0.0.0.0:9001->9000/tcp, 0.0.0.0:8124->8123/tcp
 gapless-questdb      Up 33 hours  0.0.0.0:9000->9000/tcp
-```
+```bash
 
 **Data Persistence**: All data in ClickHouse (QuestDB data not migrated, not needed for v4.0.0)
 
@@ -90,7 +90,7 @@ docker stop gapless-questdb
 
 # Verify port 9000 freed
 docker ps | grep 9000  # Should return nothing
-```
+```bash
 
 **Rationale**: QuestDB data not needed in v4.0.0 (ClickHouse-only). Container preserved for potential rollback.
 
@@ -109,7 +109,7 @@ docker compose up -d clickhouse
 # Verify standard ports active
 docker ps | grep gapless-clickhouse
 # Expected: 0.0.0.0:9000->9000/tcp, 0.0.0.0:8123->8123/tcp
-```
+```bash
 
 **Rationale**: docker-compose.yml already configured for standard ports. Volumes persist (/var/lib/clickhouse), zero data loss.
 
@@ -127,7 +127,7 @@ docker ps | grep gapless-ch-ui
 
 # Test accessibility
 curl -s http://localhost:5521 | grep -q "CH-UI"
-```
+```bash
 
 **Rationale**: CH-UI is a frontend SPA running in the browser. Browsers cannot resolve Docker internal hostnames, requiring `http://localhost:8123` (exposed via port mapping) for connectivity.
 
@@ -147,7 +147,7 @@ bash scripts/validate-clickhouse-tools.sh
 # [7/7] ✅ PASS - clickhouse-local functional
 #
 # Tests passed: 6/6 (all tools operational)
-```
+```bash
 
 **Validation Criteria**:
 
@@ -165,7 +165,7 @@ bash scripts/validate-clickhouse-tools.sh
 ```bash
 docker port gapless-clickhouse 9000 | grep -q "0.0.0.0:9000"
 docker port gapless-clickhouse 8123 | grep -q "0.0.0.0:8123"
-```
+```text
 
 **Expected**: Both commands succeed (standard ports active)
 
@@ -173,7 +173,7 @@ docker port gapless-clickhouse 8123 | grep -q "0.0.0.0:8123"
 
 ```bash
 curl -sf http://localhost:5521 | grep -q "CH-UI"
-```
+```text
 
 **Expected**: Exit code 0 (CH-UI responsive)
 

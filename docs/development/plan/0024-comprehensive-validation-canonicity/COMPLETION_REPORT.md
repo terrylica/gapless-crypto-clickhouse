@@ -76,7 +76,7 @@ Successfully implemented and validated ADR-0024 comprehensive validation system 
 
 ### Fast Tests (Unit + Linting)
 
-```
+```bash
 ✅ Ruff linting: PASSED
 ✅ Ruff formatting: PASSED
 ✅ Unit tests: 354 PASSED

@@ -122,7 +122,7 @@ Gapless Crypto Data produces CSV files in 11-column microstructure format, provi
 date,open,high,low,close,volume,close_time,quote_asset_volume,number_of_trades,taker_buy_base_asset_volume,taker_buy_quote_asset_volume
 2024-01-01T00:00:00,42150.50,42200.00,42100.00,42175.25,125.50,2024-01-01T00:59:59,5295312.50,1250,62.75,2647656.25
 2024-01-01T01:00:00,42175.25,42250.00,42150.00,42220.00,138.25,2024-01-01T01:59:59,5835412.50,1320,70.50,2975706.25
-```
+```bash
 
 ### Data Integrity Constraints
 
@@ -180,7 +180,7 @@ if report["total_errors"] > 0:
     print(f"Validation failed: {report['validation_summary']}")
 else:
     print("Format validation passed")
-```
+```text
 
 See [Validation Overview](docs/validation/OVERVIEW.md) for complete validation specifications.
 
@@ -205,7 +205,7 @@ CSV files include metadata headers (comment lines starting with `#`):
 # End: 2024-01-31
 # Generated: 2024-02-01T12:00:00Z
 #
-```
+```text
 
 These headers are ignored during CSV parsing (via `comment="#"` parameter).
 

@@ -23,7 +23,7 @@ Upgrade pandas from 2.1.4 to 2.2+ to enable Python 3.14 compatibility and unbloc
 
 During ADR-0031 comprehensive validation, pytest execution failed with pandas 2.1.4 on Python 3.14:
 
-```
+```yaml
 error: too few arguments to function call, expected 6, have 5
 _PyLong_AsByteArray((PyLongObject *)v, bytes, sizeof(val), is_little, !is_unsigned);
                                                               ^
@@ -64,7 +64,7 @@ Verify current pandas constraint:
 
 ```bash
 grep "pandas" pyproject.toml
-```
+```yaml
 
 Expected: `"pandas>=2.0.0,<2.2.0"  # Upper bound for NumPy 1.x compatibility`
 
@@ -77,13 +77,13 @@ Expected: `"pandas>=2.0.0,<2.2.0"  # Upper bound for NumPy 1.x compatibility`
 
 # AFTER
 "pandas>=2.2.0,<3.0.0",  # Python 3.14 compatibility (pandas 2.2+ required for C API fixes)
-```
+```text
 
 **1.3 Update comment to reflect rationale**
 
 ```toml
 "pandas>=2.2.0,<3.0.0",  # Python 3.14 compatibility (pandas 2.2+ required for C API fixes)
-```
+```text
 
 **Expected Outcome**: Dependency constraint updated, ready for sync
 
@@ -99,25 +99,25 @@ uv sync --upgrade-package pandas
 
 # Verify installed version
 uv run python -c "import pandas; print(f'pandas {pandas.__version__}')"
-```
+```text
 
 **Expected Output**:
 
 ```
 pandas 2.2.x (where x >= 0)
-```
+```text
 
 **2.2 Verify NumPy constraint still met**
 
 ```bash
 uv run python -c "import numpy; print(f'numpy {numpy.__version__}')"
-```
+```text
 
 **Expected Output**:
 
 ```
 numpy 1.x.x (must be <2.0.0 for Alpha Forge compatibility)
-```
+```text
 
 **Expected Outcome**: pandas 2.2+ installed without breaking NumPy constraint
 
@@ -129,7 +129,7 @@ numpy 1.x.x (must be <2.0.0 for Alpha Forge compatibility)
 
 ```bash
 uv run pytest tests/test_timeframe_constants.py -v
-```
+```text
 
 **Expected Output**:
 
@@ -142,13 +142,13 @@ test_binance_interval_mapping_completeness PASSED ✅
 test_binance_monthly_dual_notation PASSED ✅ (ADR-0032 test)
 test_gap_detection_scenario_2h_timeframe PASSED ✅
 test_all_mappings_have_same_timeframes PASSED ✅
-```
+```text
 
 **3.2 Run unit tests**
 
 ```bash
 uv run pytest -m unit -v --tb=short
-```
+```text
 
 **Expected Outcome**: All unit tests pass (fast, no external dependencies)
 
@@ -156,7 +156,7 @@ uv run pytest -m unit -v --tb=short
 
 ```bash
 uv run pytest --cov=src/gapless_crypto_clickhouse --cov-report=term --cov-report=html -v
-```
+```text
 
 **Expected Outcome**:
 
@@ -172,7 +172,7 @@ docker ps | grep clickhouse
 
 # If available, run integration tests
 uv run pytest -m integration -v --tb=short
-```
+```text
 
 **Expected Outcome**: Integration tests pass if ClickHouse available, otherwise skip
 
@@ -184,7 +184,7 @@ uv run pytest -m integration -v --tb=short
 
 ```bash
 uv run pytest tests/test_timeframe_constants.py -v -W default::DeprecationWarning
-```
+```text
 
 **Expected Outcome**: No pandas-related deprecation warnings
 
@@ -242,13 +242,13 @@ Implements: ADR-0033
 Related: ADR-0031 (identified pandas compilation issue), ADR-0032 (recommended upgrade)
 EOF
 )"
-```
+```text
 
 **5.2 Push and trigger semantic-release**
 
 ```bash
 git push origin main
-```
+```text
 
 **Expected Outcome**:
 

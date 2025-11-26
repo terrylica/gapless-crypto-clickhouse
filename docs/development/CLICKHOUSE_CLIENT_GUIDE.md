@@ -22,7 +22,7 @@ docker exec -it gapless-clickhouse clickhouse-client --query "SELECT count() FRO
 # Output to file
 docker exec -it gapless-clickhouse clickhouse-client \
   --query "SELECT * FROM ohlcv FINAL LIMIT 1000 FORMAT CSV" > data.csv
-```
+```text
 
 ### Shell Aliases (Recommended)
 
@@ -39,7 +39,7 @@ alias chq='docker exec -it gapless-clickhouse clickhouse-client --query'
 alias ch-csv='docker exec -it gapless-clickhouse clickhouse-client --format CSV --query'
 alias ch-json='docker exec -it gapless-clickhouse clickhouse-client --format JSONEachRow --query'
 alias ch-parquet='docker exec -it gapless-clickhouse clickhouse-client --format Parquet --query'
-```
+```text
 
 ## Features
 
@@ -81,7 +81,7 @@ chq "SELECT * FROM ohlcv FINAL LIMIT 1000 FORMAT CSV" > data.csv
 
 # Import from CSV
 ch-csv "INSERT INTO ohlcv FORMAT CSV" < data.csv
-```
+```text
 
 #### JSON
 
@@ -94,7 +94,7 @@ chq "SELECT * FROM ohlcv FINAL LIMIT 100 FORMAT JSONCompact" > data.json
 
 # JSON (full metadata)
 chq "SELECT * FROM ohlcv FINAL LIMIT 100 FORMAT JSON" > data.json
-```
+```text
 
 #### Parquet
 
@@ -104,14 +104,14 @@ chq "SELECT * FROM ohlcv FINAL FORMAT Parquet" > data.parquet
 
 # Import from Parquet
 chq "INSERT INTO ohlcv FORMAT Parquet" < data.parquet
-```
+```text
 
 #### Markdown
 
 ```bash
 # Pretty tables for documentation
 chq "SELECT symbol, count() as bars FROM ohlcv FINAL GROUP BY symbol FORMAT Markdown"
-```
+```text
 
 #### Arrow / ORC
 
@@ -121,7 +121,7 @@ chq "SELECT * FROM ohlcv FINAL FORMAT Arrow" > data.arrow
 
 # Apache ORC (Hadoop ecosystem)
 chq "SELECT * FROM ohlcv FINAL FORMAT ORC" > data.orc
-```
+```text
 
 ### Specialized Formats
 
@@ -143,7 +143,7 @@ ch --query "SELECT * FROM ohlcv FINAL LIMIT 10 FORMAT Values"
 
 # Null (no output, count rows only)
 ch --query "SELECT * FROM ohlcv FINAL FORMAT Null"
-```
+```text
 
 ## Query Parameters (SQL Injection Prevention)
 
@@ -165,7 +165,7 @@ chq \
    WHERE symbol IN {symbols:Array(String)}
      AND volume >= {min_volume:Float64}
    GROUP BY symbol"
-```
+```text
 
 ### Parameter Types
 
@@ -195,7 +195,7 @@ ch
 # GROUP BY symbol
 # ORDER BY total_volume DESC
 # LIMIT 10
-```
+```text
 
 ### Anthropic Integration
 
@@ -206,7 +206,7 @@ export ANTHROPIC_API_KEY="sk-ant-..."
 # Same ?? syntax
 ch
 > ?? find gaps in BTCUSDT 1h data for last 30 days
-```
+```bash
 
 ## Keyboard Shortcuts
 
@@ -228,7 +228,7 @@ export EDITOR=vim   # Vim
 export EDITOR=nano  # Nano
 
 # In client, press Alt+Shift+E to edit query in editor
-```
+```text
 
 ## Configuration
 
@@ -253,7 +253,7 @@ max_result_rows: 10000
 multiquery: true
 progress: true
 highlight: true
-```
+```text
 
 ### Connection Strings
 
@@ -274,7 +274,7 @@ connections:
 # Use named connections
 ch --connection dev
 ch --connection prod
-```
+```text
 
 ## Advanced Usage
 
@@ -287,7 +287,7 @@ ch --multiquery --query "
   SELECT 'Query 2', count(DISTINCT symbol) FROM ohlcv;
   SELECT 'Query 3', max(timestamp) FROM ohlcv;
 "
-```
+```text
 
 ### Progress Tracking
 
@@ -297,7 +297,7 @@ ch --query "SELECT * FROM ohlcv FINAL" --progress
 
 # Output example:
 # Progress: 1.50 million rows, 150.00 MB (500.00 thousand rows/s., 50.00 MB/s.)
-```
+```text
 
 ### External Tables (Join with Files)
 
@@ -308,7 +308,7 @@ ch --query "
   FROM ohlcv o
   JOIN external_symbols e ON o.symbol = e.symbol
 " --external --file=symbols.csv --name=external_symbols --structure='symbol String, name String' --format=CSV
-```
+```text
 
 ### Streaming Large Results
 
@@ -320,7 +320,7 @@ ch --query "SELECT * FROM ohlcv FINAL FORMAT JSONEachRow" | gzip > data.jsonl.gz
 ch --query "SELECT * FROM ohlcv FINAL FORMAT JSONEachRow" | while read line; do
   echo "$line" | jq '.close'
 done
-```
+```text
 
 ## Common Workflows
 
@@ -339,7 +339,7 @@ chq "SELECT * FROM ohlcv FINAL
 
 # Compressed export
 chq "SELECT * FROM ohlcv FINAL FORMAT JSONEachRow" | gzip > ohlcv.jsonl.gz
-```
+```text
 
 ### Data Import
 
@@ -352,7 +352,7 @@ chq "INSERT INTO ohlcv FORMAT JSONEachRow" < data.jsonl
 
 # Parquet import
 chq "INSERT INTO ohlcv FORMAT Parquet" < data.parquet
-```
+```text
 
 ### Schema Management
 
@@ -373,7 +373,7 @@ chq "SELECT
        formatReadableQuantity(total_rows) as rows
      FROM system.tables
      WHERE database = 'default'"
-```
+```text
 
 ### Performance Analysis
 
@@ -386,7 +386,7 @@ ch --query "EXPLAIN PLAN indexes = 1 SELECT * FROM ohlcv WHERE symbol = 'BTCUSDT
 
 # EXPLAIN AST
 ch --query "EXPLAIN AST SELECT * FROM ohlcv FINAL" --format Pretty
-```
+```text
 
 ## Troubleshooting
 
@@ -403,7 +403,7 @@ docker-compose up -d clickhouse
 
 # Test native protocol
 nc -zv localhost 9000
-```
+```text
 
 **Problem**: `Authentication failed`
 
@@ -413,7 +413,7 @@ ch --user default --password ''
 
 # Check environment
 docker exec gapless-clickhouse clickhouse-client --query "SELECT currentUser()"
-```
+```text
 
 ### Query Issues
 
@@ -425,7 +425,7 @@ ch --max_memory_usage 10000000000 --query "SELECT * FROM ohlcv"
 
 # Or use streaming
 ch --query "SELECT * FROM ohlcv FORMAT JSONEachRow" | head -n 1000
-```
+```text
 
 **Problem**: `Syntax error`
 

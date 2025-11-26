@@ -89,7 +89,7 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 # Verify installation
 docker --version
 docker compose version
-```
+```text
 
 ### Configure Docker
 
@@ -106,7 +106,7 @@ sudo systemctl start docker
 
 # Verify Docker is running
 docker ps
-```
+```bash
 
 ### Install Python and uv
 
@@ -119,7 +119,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Verify
 uv --version
-```
+```text
 
 ## Deployment
 
@@ -138,7 +138,7 @@ sudo -u gapless git clone https://github.com/terrylica/gapless-crypto-data.git \
 # Install dependencies
 cd /opt/gapless-crypto-data
 sudo -u gapless uv sync --frozen --no-dev
-```
+```bash
 
 ### Create Docker Compose Configuration
 
@@ -149,7 +149,7 @@ sudo -u gapless cp deployment/docker-compose.macos.yml \
 
 # Edit for Linux optimizations
 sudo -u gapless nano deployment/docker-compose.linux.yml
-```
+```text
 
 **Optimized `docker-compose.linux.yml`**:
 
@@ -220,7 +220,7 @@ networks:
   default:
     name: gapless-network
     driver: bridge
-```
+```text
 
 ### Start QuestDB Container
 
@@ -235,7 +235,7 @@ docker ps
 
 # Check logs
 docker compose -f deployment/docker-compose.linux.yml logs -f questdb
-```
+```text
 
 Wait for: `Server is ready to accept connections`
 
@@ -251,7 +251,7 @@ psql -h localhost -p 8812 -U admin -d qdb \
 # Verify table creation
 psql -h localhost -p 8812 -U admin -d qdb \
   -c "\d ohlcv"
-```
+```text
 
 ### Test QuestDB
 
@@ -264,7 +264,7 @@ psql -h localhost -p 8812 -U admin -d qdb -c "SELECT 1;"
 
 # Web Console
 # Open browser to http://localhost:9000
-```
+```bash
 
 ## Configure Python Collector
 
@@ -278,7 +278,7 @@ sudo cp /opt/gapless-crypto-clickhouse/deployment/systemd/gapless-crypto-collect
 # Note: QuestDB is in Docker, not systemd
 # Edit service to remove Requires=questdb.service dependency
 sudo nano /etc/systemd/system/gapless-crypto-collector.service
-```
+```text
 
 **Modified service** (remove `Requires=questdb.service`):
 
@@ -291,7 +291,7 @@ Requires=docker.service
 
 [Service]
 # ... rest of configuration unchanged
-```
+```text
 
 ### Configure Environment
 
@@ -302,7 +302,7 @@ sudo -u gapless cp /opt/gapless-crypto-clickhouse/.env.example \
 
 # Edit configuration
 sudo -u gapless nano /opt/gapless-crypto-clickhouse/.env
-```
+```text
 
 **Environment configuration**:
 
@@ -325,7 +325,7 @@ GAP_FILL_ENABLED=true
 # Logging
 LOG_LEVEL=INFO
 LOG_FORMAT=json
-```
+```text
 
 ### Start Collector
 
@@ -344,7 +344,7 @@ sudo systemctl status gapless-crypto-collector
 
 # View logs
 sudo journalctl -u gapless-crypto-collector -f
-```
+```text
 
 ## Monitoring
 
@@ -359,7 +359,7 @@ docker stats gapless-questdb
 
 # Container logs
 docker logs -f gapless-questdb
-```
+```text
 
 ### Service Status
 
@@ -369,7 +369,7 @@ sudo systemctl status gapless-crypto-collector
 
 # Collector logs
 sudo journalctl -u gapless-crypto-collector -f
-```
+```text
 
 ### Data Verification
 
@@ -385,7 +385,7 @@ psql -h localhost -p 8812 -U admin -d qdb \
 # Data sources
 psql -h localhost -p 8812 -U admin -d qdb \
   -c "SELECT data_source, COUNT(*) FROM ohlcv GROUP BY data_source;"
-```
+```text
 
 ### Prometheus Metrics
 
@@ -397,7 +397,7 @@ curl http://localhost:9003/metrics
 # - questdb_memory_heap_used_bytes
 # - questdb_disk_size_bytes
 # - questdb_writer_rows_total
-```
+```text
 
 ## Maintenance
 
@@ -417,7 +417,7 @@ nano deployment/docker-compose.linux.yml
 
 # Start new container
 docker compose -f deployment/docker-compose.linux.yml up -d
-```
+```text
 
 ### Update gapless-crypto-data
 
@@ -434,7 +434,7 @@ sudo -u gapless uv sync --frozen --no-dev
 
 # Restart collector
 sudo systemctl start gapless-crypto-collector
-```
+```text
 
 ### Backup QuestDB Data
 
@@ -450,7 +450,7 @@ docker run --rm \
 
 # Verify backup
 ls -lh /backup/
-```
+```text
 
 ### Restore QuestDB Data
 
@@ -472,7 +472,7 @@ docker run --rm \
 
 # Start QuestDB
 docker compose -f deployment/docker-compose.linux.yml up -d
-```
+```bash
 
 ## Troubleshooting
 
@@ -482,7 +482,7 @@ docker compose -f deployment/docker-compose.linux.yml up -d
 
 ```bash
 docker logs gapless-questdb
-```
+```text
 
 **Common issues**:
 
@@ -500,7 +500,7 @@ telnet localhost 9009
 
 # Check Docker network
 docker network inspect gapless-network
-```
+```bash
 
 **Solution**:
 
@@ -521,7 +521,7 @@ iostat -x 1
 
 # Check volume driver
 docker volume inspect gapless-crypto-data_questdb_data
-```
+```bash
 
 **Solutions**:
 
@@ -558,7 +558,7 @@ cap_drop:
   - ALL
 cap_add:
   - NET_BIND_SERVICE
-```
+```text
 
 ### Firewall
 
@@ -575,7 +575,7 @@ sudo ufw allow from 192.168.1.0/24 to any port 8812
 
 # Enable firewall
 sudo ufw enable
-```
+```text
 
 ## Auto-Start on Boot
 

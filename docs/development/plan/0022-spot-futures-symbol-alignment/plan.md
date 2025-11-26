@@ -123,7 +123,7 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
 
 ### Current State (v4.0.0)
 
-```
+```bash
 ┌─────────────────────────────────────────────────────────────┐
 │ API Layer (api.py)                                          │
 │                                                             │
@@ -148,7 +148,7 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
 
 ### Target State (v4.1.0)
 
-```
+```bash
 ┌─────────────────────────────────────────────────────────────┐
 │ API Layer (api.py)                                          │
 │                                                             │
@@ -205,7 +205,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
     else:
         collector = BinancePublicDataCollector()
         return list(collector.known_symbols.keys())
-```
+```text
 
 **After**:
 
@@ -245,7 +245,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
 
     # Return same 713 symbols for both types (ADR-0022)
     return load_symbols("perpetual")
-```
+```python
 
 **Changes**:
 
@@ -268,7 +268,7 @@ SupportedSymbol = Literal[
     "SOLUSDT", "MATICUSDT", "XLMUSDT", "ETCUSDT", "ATOMUSDT",
     "VETUSDT", "FILUSDT", "TRXUSDT", "AVAXUSDT", "AAVEUSDT"
 ]
-```
+```text
 
 **After**:
 
@@ -284,7 +284,7 @@ SupportedSymbol = Literal[
 #   def my_function(symbol: str) -> None:
 #       if symbol not in get_supported_symbols():
 #           raise ValueError(f"Unsupported symbol: {symbol}")
-```
+```text
 
 **Changes**:
 
@@ -304,7 +304,7 @@ known_symbols = {
     "ETHUSDT": "Ethereum",
     # ... 18 more symbols (28 lines total)
 }
-```
+```text
 
 **After**:
 
@@ -333,7 +333,7 @@ Features:
 - 16 timeframes (1s to 1mo)
 - Zero-gap guarantee via dual data source strategy
 """
-```
+```text
 
 **After**:
 
@@ -346,7 +346,7 @@ Features:
 - Zero-gap guarantee via dual data source strategy
 - ReplacingMergeTree schema with deterministic versioning
 """
-```
+```python
 
 #### Task 2.2: Update Function Docstrings (9 Locations)
 
@@ -371,7 +371,7 @@ Features:
 
 # After
 """Download OHLCV data for one of 713 supported perpetual symbols"""
-```
+```text
 
 ### Phase 3: Validation and Release
 
@@ -381,7 +381,7 @@ Features:
 
 ```bash
 uv run pytest tests/ -v --cov=src/gapless_crypto_clickhouse --cov-report=term-missing
-```
+```text
 
 **Expected**: All 27+ tests pass
 
@@ -397,7 +397,7 @@ uv run pytest tests/ -v --cov=src/gapless_crypto_clickhouse --cov-report=term-mi
 
 ```bash
 uv run mypy src/gapless_crypto_clickhouse
-```
+```text
 
 **Expected**: No type errors (SupportedSymbol deprecation might trigger warnings)
 
@@ -417,7 +417,7 @@ git commit -m "feat: align spot and futures to 713 symbols each
 
 Refs: ADR-0022
 BREAKING CHANGE: None - fully backward compatible (additive only)"
-```
+```python
 
 **Semantic Version**: v4.1.0 (minor bump, feature enhancement)
 
@@ -440,7 +440,7 @@ UV_PUBLISH_TOKEN=$(doppler secrets get PYPI_TOKEN --project claude-config --conf
 # Verify publication
 curl -s https://pypi.org/pypi/gapless-crypto-clickhouse/json | jq -r '.info.version'
 # Expected: "4.1.0"
-```
+```yaml
 
 ---
 

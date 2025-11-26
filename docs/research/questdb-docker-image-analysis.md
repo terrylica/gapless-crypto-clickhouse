@@ -101,7 +101,7 @@ QuestDB provides official Docker images (`questdb/questdb`) built on Debian Book
 ```yaml
 volumes:
   - questdb_data:/var/lib/questdb
-```
+```python
 
 ### Environment Variables
 
@@ -254,7 +254,7 @@ services:
 
 volumes:
   questdb_data:
-```
+```text
 
 ### JVM Tuning Parameters
 
@@ -267,7 +267,7 @@ volumes:
 -Xmx4g              # Maximum heap size
 -XX:+UseG1GC        # G1 Garbage Collector
 -XX:MaxGCPauseMillis=200  # Target max GC pause (adjust for latency requirements)
-```
+```text
 
 **Off-Heap Configuration** (controlled by QuestDB settings, not JVM):
 
@@ -288,7 +288,7 @@ docker run -p 9000:9000 -p 9009:9009 -p 8812:8812 \
   -v questdb_data:/var/lib/questdb \
   -e JAVA_OPTS="-Xmx1g" \
   questdb/questdb:9.2.0
-```
+```bash
 
 **Resource Allocation**:
 
@@ -307,7 +307,7 @@ docker run -d --name questdb \
   -v /mnt/nvme/questdb:/var/lib/questdb \
   -e JAVA_OPTS="-Xms4g -Xmx4g -XX:+UseG1GC" \
   questdb/questdb:9.2.0
-```
+```text
 
 **Option 2: Native Binary (Recommended)**:
 
@@ -316,7 +316,7 @@ docker run -d --name questdb \
 tar -xzf questdb-9.2.0-no-jre-bin.tar.gz
 export JAVA_HOME=/path/to/graalvm-jdk-17
 ./questdb.sh start -d /mnt/nvme/questdb
-```
+```python
 
 **Resource Allocation**:
 
@@ -423,7 +423,7 @@ CREATE TABLE ohlcv (
   trades LONG,
   -- ... additional columns
 ) TIMESTAMP(timestamp) PARTITION BY DAY;
-```
+```bash
 
 **Storage Estimate**:
 
@@ -445,7 +445,7 @@ CREATE TABLE ohlcv (
 colima start --cpu 4 --memory 8
 docker-compose up -d questdb
 # Test data collection, schema design, validation logic
-```
+```text
 
 **Phase 2: Linux Staging (Docker)**
 
@@ -456,7 +456,7 @@ docker run -d --name questdb \
   -v /mnt/nvme/questdb:/var/lib/questdb \
   questdb/questdb:9.2.0
 # Performance testing with production-like data
-```
+```text
 
 **Phase 3: Linux Production (Native Binary)**
 

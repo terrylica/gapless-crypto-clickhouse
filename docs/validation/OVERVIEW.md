@@ -103,7 +103,7 @@ See [Storage Specification](docs/validation/STORAGE.md) for complete schema deta
 
 ## Data Flow
 
-```
+```text
 CSV File
    ↓
 CSVValidator.validate_csv_file()
@@ -136,7 +136,7 @@ if report["total_errors"] == 0:
 else:
     print(f"Errors: {report['total_errors']}")
     print(f"Summary: {report['validation_summary']}")
-```
+```text
 
 ### Validation with Persistence
 
@@ -149,7 +149,7 @@ report = validator.validate_csv_file(
     expected_timeframe="1h",
     store_report=True  # Persist to DuckDB
 )
-```
+```text
 
 ### Query Validation History
 
@@ -168,7 +168,7 @@ failed = storage.query_by_status("FAILED")
 stats = storage.get_summary_stats()
 print(f"Total: {stats['total_validations']}")
 print(f"Avg errors: {stats['avg_errors']}")
-```
+```bash
 
 See [Query Patterns Guide](docs/validation/QUERY_PATTERNS.md) for complete examples.
 
@@ -206,7 +206,7 @@ report = validator.validate_csv_file("data.csv")  # Returns dict, no DB storage
 
 # New feature (opt-in)
 report = validator.validate_csv_file("data.csv", store_report=True)  # Persists to DuckDB
-```
+```python
 
 **Default**: `store_report=False` (no persistence)
 
@@ -243,7 +243,7 @@ symbol, timeframe = extract_symbol_timeframe_from_path(
     "binance_spot_BTCUSDT-1h_20240101-20240102_v2.10.0.csv"
 )
 # Returns: ('BTCUSDT', '1h')
-```
+```text
 
 **Supported Patterns**:
 
@@ -258,7 +258,7 @@ from gapless_crypto_clickhouse.validation import get_validation_db_path
 
 db_path = get_validation_db_path()
 # Returns: Path('~/.cache/gapless-crypto-data/validation.duckdb')
-```
+```bash
 
 **XDG-Compliant**: Uses `$HOME/.cache/` directory
 

@@ -63,7 +63,7 @@ brew install chdig
 
 # Verify installation
 chdig --version
-```
+```text
 
 **Expected Output**: Version string (e.g., `chdig 0.x.x`)
 
@@ -72,7 +72,7 @@ chdig --version
 ```bash
 # Run validation script
 bash scripts/validate-clickhouse-tools.sh
-```
+```text
 
 **Expected Change**:
 
@@ -88,7 +88,7 @@ chdig --host localhost --port 9000
 
 # View slow queries, system metrics, flamegraphs
 # Navigate TUI with keyboard shortcuts
-```
+```text
 
 **Use Cases**:
 
@@ -105,7 +105,7 @@ chdig --host localhost --port 9000
 
 ```bash
 command -v chdig && echo "✅ Installed"
-```
+```text
 
 **Expected**: Exit code 0
 
@@ -113,7 +113,7 @@ command -v chdig && echo "✅ Installed"
 
 ```bash
 chdig --version
-```
+```text
 
 **Expected**: Version output
 

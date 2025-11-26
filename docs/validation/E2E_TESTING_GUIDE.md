@@ -45,7 +45,7 @@ uv run scripts/run_validation.py --ci
 
 # Direct pytest execution (requires manual browser install)
 uv run pytest tests/e2e/ -v --screenshot=only-on-failure
-```
+```text
 
 ### First-Time Setup
 
@@ -58,7 +58,7 @@ uv run playwright install chromium --with-deps
 
 # Verify installation
 uv run playwright --version
-```
+```yaml
 
 ---
 
@@ -72,7 +72,7 @@ tests/e2e/
 ├── test_ch_ui_dashboard.py         # CH-UI validation tests
 ├── test_clickhouse_play.py         # ClickHouse Play validation tests
 └── screenshots/                    # Reference baselines (git-tracked)
-```
+```text
 
 ### Test Categories
 
@@ -126,7 +126,7 @@ async def test_example(page: Page, screenshot_dir: Path):
 
     # Assertions (optional - screenshot is primary evidence)
     assert await input_field.is_enabled()
-```
+```text
 
 ### pytest-asyncio Configuration
 
@@ -136,7 +136,7 @@ pytest-playwright-asyncio requires session-scoped event loop configuration in `p
 # pytest.ini
 asyncio_mode = auto
 asyncio_default_fixture_loop_scope = session
-```
+```python
 
 **Why session scope?**
 
@@ -196,14 +196,14 @@ tmp/validation-artifacts/
 ├── e2e-report.html            # HTML test report
 └── traces/                    # Playwright traces (if enabled)
     └── test-name-trace.zip
-```
+```text
 
 ### Viewing Traces
 
 ```bash
 # View trace file for detailed debugging
 playwright show-trace tmp/validation-artifacts/traces/test-name-trace.zip
-```
+```text
 
 Trace viewer shows:
 
@@ -237,7 +237,7 @@ await page.locator("button").wait_for(state="visible", timeout=10000)
 # Check if element exists
 if await page.locator("button").is_visible():
     await page.locator("button").click()
-```
+```bash
 
 #### Flaky Tests (Intermittent Failures)
 
@@ -265,7 +265,7 @@ def browser_context_args(browser_context_args):
         **browser_context_args,
         "reduced_motion": "reduce",  # Disable animations
     }
-```
+```yaml
 
 ---
 
@@ -285,7 +285,7 @@ await element.screenshot(path="element.png")
 
 # Screenshot on failure (automatic via conftest.py)
 # No manual capture needed - pytest-playwright-asyncio handles it
-```
+```yaml
 
 ---
 
@@ -308,7 +308,7 @@ test-e2e:
     - Wait for ClickHouse health
     - Run E2E tests
     - Upload artifacts on failure
-```
+```text
 
 **Browser Caching**: Playwright browsers (~150MB) cached for 30-60s speedup.
 
@@ -328,7 +328,7 @@ test-e2e:
 ```bash
 docker-compose up -d
 uv run pytest tests/e2e/ -v
-```
+```bash
 
 See `.github/workflows/ci.yml` lines 131-132 for CI configuration details.
 
@@ -372,7 +372,7 @@ Comprehensive E2E validation runs every 6 hours via `.github/workflows/e2e-valid
 
 ```bash
 docker compose up -d
-```
+```text
 
 ### ClickHouse Not Healthy
 
@@ -389,7 +389,7 @@ docker logs gapless-clickhouse
 
 # Restart container
 docker compose restart clickhouse
-```
+```text
 
 ### Playwright Browsers Not Installed
 
@@ -400,7 +400,7 @@ docker compose restart clickhouse
 ```bash
 # Install browsers with OS dependencies
 uv run playwright install chromium --with-deps
-```
+```text
 
 ### Port Conflicts
 

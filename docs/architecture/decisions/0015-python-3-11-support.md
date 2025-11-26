@@ -44,7 +44,7 @@ $ uv venv --python 3.11 /tmp/test-py311-venv
 $ source /tmp/test-py311-venv/bin/activate
 $ python -m compileall src/gapless_crypto_clickhouse/ -q
 ✅ All source files compile successfully with Python 3.11
-```
+```python
 
 **No Python 3.12-specific features found**:
 
@@ -111,7 +111,7 @@ target-version = ['py311']  # Changed from py312
 # Line 100: Update mypy target
 [tool.mypy]
 python_version = "3.11"  # Changed from 3.12
-```
+```text
 
 ### Phase 2: Validation (10 minutes)
 
@@ -126,7 +126,7 @@ pytest
 
 # Verify all dependencies install
 uv pip list | grep -E "clickhouse|pandas|pydantic|httpx"
-```
+```bash
 
 ### Phase 3: CI/CD Updates (10 minutes)
 
@@ -136,7 +136,7 @@ uv pip list | grep -E "clickhouse|pandas|pydantic|httpx"
 strategy:
   matrix:
     python-version: ["3.11", "3.12", "3.13"] # Added 3.11
-```
+```text
 
 ### Phase 4: Release (semantic-release)
 

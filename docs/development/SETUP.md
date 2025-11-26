@@ -25,14 +25,14 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Or via Homebrew
 brew install uv
-```
+```text
 
 **Git**: Version control
 
 ```bash
 # Verify installation
 git --version
-```
+```bash
 
 ### Optional Tools
 
@@ -41,7 +41,7 @@ git --version
 ```bash
 brew install colima docker
 colima start
-```
+```text
 
 ## Initial Setup
 
@@ -50,14 +50,14 @@ colima start
 ```bash
 git clone https://github.com/terrylica/gapless-crypto-data.git
 cd gapless-crypto-data
-```
+```text
 
 ### Install Dependencies
 
 ```bash
 # Install all dependencies including dev dependencies
 uv sync --dev
-```
+```bash
 
 **What this does**:
 
@@ -75,7 +75,7 @@ uv sync --dev
 uv run pytest
 uv run gapless-crypto-data --help
 uv run python examples/simple_api_examples.py
-```
+```text
 
 **Manual activation (Optional)**:
 
@@ -89,7 +89,7 @@ source .venv/bin/activate
 # Then run commands directly
 pytest
 gapless-crypto-data --help
-```
+```bash
 
 **Note**: `uv run` automatically uses the virtual environment, no activation needed.
 
@@ -106,7 +106,7 @@ uv run pytest -v
 
 # Run specific test file
 uv run pytest tests/test_binance_collector.py -v
-```
+```text
 
 **Expected**: All tests pass (30+ tests)
 
@@ -118,7 +118,7 @@ uv run gapless-crypto-data --help
 
 # Test basic collection (uses sample data)
 uv run gapless-crypto-data --symbol SOLUSDT --timeframes 1h --start 2024-01-01 --end 2024-01-02
-```
+```text
 
 **Expected**: CLI help output, sample data collection succeeds
 
@@ -133,7 +133,7 @@ uv tool install --editable .
 
 # Verify installed CLI
 gapless-crypto-data --version
-```
+```text
 
 **Expected**: Package builds successfully, CLI accessible globally
 
@@ -147,7 +147,7 @@ uv run ruff format .
 
 # Check formatting without changes
 uv run ruff format --check .
-```
+```text
 
 **Standard**: Ruff default formatting (PEP 8 compatible)
 
@@ -162,7 +162,7 @@ uv run ruff check .
 
 # Lint specific file
 uv run ruff check src/gapless_crypto_clickhouse/collectors/binance_public_data_collector.py
-```
+```text
 
 **Rules**: Ruff default ruleset (includes pycodestyle, pyflakes, isort)
 
@@ -174,7 +174,7 @@ uv run mypy src/
 
 # Type check specific module
 uv run mypy src/gapless_crypto_clickhouse/validation/
-```
+```text
 
 **Standard**: PEP 561 compliance via `py.typed` marker
 
@@ -185,7 +185,7 @@ Required for CI to pass:
 ```bash
 # Validate all Python and Markdown files are UTF-8
 find src/ tests/ examples/ -name "*.py" -o -name "*.md" | xargs file --mime-encoding
-```
+```bash
 
 **Expected**: All files report `us-ascii` or `utf-8`
 
@@ -207,7 +207,7 @@ Python version specification for `uv`:
 
 ```
 3.12
-```
+```bash
 
 **Effect**: `uv` automatically uses Python 3.12 for this project
 
@@ -290,7 +290,7 @@ Dependency lock file (auto-generated):
     "editor.defaultFormatter": "charliermarsh.ruff"
   }
 }
-```
+```sql
 
 ### PyCharm
 
@@ -316,7 +316,7 @@ Dependency lock file (auto-generated):
 
 ```bash
 uv sync --dev --reinstall
-```
+```text
 
 ### Issue: Virtual environment corrupted
 
@@ -325,7 +325,7 @@ uv sync --dev --reinstall
 ```bash
 rm -rf .venv
 uv sync --dev
-```
+```text
 
 ### Issue: Pre-commit hooks fail
 

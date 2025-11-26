@@ -129,7 +129,7 @@ This architecture ensures comprehensive validation across the data lifecycle: in
 
 ## Validation Flow Diagram
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                     Data Collection Phase                        │
 ├─────────────────────────────────────────────────────────────────┤

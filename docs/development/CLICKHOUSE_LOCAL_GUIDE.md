@@ -24,7 +24,7 @@
 ```bash
 # Already available in ClickHouse container
 docker exec gapless-clickhouse clickhouse-local --version
-```
+```text
 
 ### Native Binary
 
@@ -37,7 +37,7 @@ chmod +x ./clickhouse
 
 # Run
 ./clickhouse local --query "SELECT 1"
-```
+```text
 
 ## Quick Start
 
@@ -55,7 +55,7 @@ clickhouse-local --query "SELECT * FROM file('data.parquet', Parquet) LIMIT 10"
 
 # Multiple files (glob pattern)
 clickhouse-local --query "SELECT * FROM file('data/*.csv', CSV)"
-```
+```text
 
 ### Query Remote Files
 
@@ -72,7 +72,7 @@ clickhouse-local --query "
   FROM url('https://example.com/data.csv', CSV)
   LIMIT 10
 "
-```
+```text
 
 ## Common Workflows
 
@@ -86,7 +86,7 @@ clickhouse-local \
   --output-format Parquet \
   --query "SELECT * FROM table" \
   < data.csv > data.parquet
-```
+```text
 
 #### JSON to CSV
 
@@ -96,7 +96,7 @@ clickhouse-local \
   --output-format CSV \
   --query "SELECT * FROM table" \
   < data.jsonl > data.csv
-```
+```text
 
 #### Parquet to JSON
 
@@ -105,7 +105,7 @@ clickhouse-local --query "
   SELECT * FROM file('data.parquet', Parquet)
   FORMAT JSONEachRow
 " > data.jsonl
-```
+```text
 
 ### Data Validation
 
@@ -121,7 +121,7 @@ clickhouse-local --query "
 # timestamp  DateTime
 # symbol     String
 # close      Float64
-```
+```text
 
 #### Check for Duplicates
 
@@ -133,7 +133,7 @@ clickhouse-local --query "
     total_rows - unique_rows as duplicates
   FROM file('ohlcv.csv', CSV)
 "
-```
+```text
 
 #### Find Nulls/Invalid Data
 
@@ -145,7 +145,7 @@ clickhouse-local --query "
     countIf(volume < 0) as negative_volume
   FROM file('ohlcv.csv', CSV)
 "
-```
+```text
 
 ### Pre-Ingestion Validation
 
@@ -190,7 +190,7 @@ clickhouse-local --query "
   WHERE gap_hours > 1
   ORDER BY timestamp
 "
-```
+```text
 
 ### Aggregation and Analysis
 
@@ -207,7 +207,7 @@ clickhouse-local --query "
     sum(volume) as total_volume
   FROM file('btcusdt.csv', CSV)
 "
-```
+```text
 
 #### Time-Series Aggregation
 
@@ -225,7 +225,7 @@ clickhouse-local --query "
   GROUP BY date
   ORDER BY date
 " > daily.csv
-```
+```text
 
 #### Join Multiple Files
 
@@ -244,7 +244,7 @@ clickhouse-local --query "
     ON p.symbol = m.symbol
   ORDER BY p.timestamp
 "
-```
+```text
 
 ## Advanced Features
 
@@ -271,7 +271,7 @@ clickhouse-local --path /tmp/clickhouse_local_db --query "
 
 # Data persists across invocations
 clickhouse-local --path /tmp/clickhouse_local_db --query "SELECT * FROM mydb.test"
-```
+```text
 
 ### Stream Processing
 
@@ -284,7 +284,7 @@ cat large_file.csv | clickhouse-local --input-format CSV --query "
   FROM table
   GROUP BY symbol
 " --output-format PrettyCompact
-```
+```text
 
 ### Complex Transformations
 
@@ -300,7 +300,7 @@ clickhouse-local --query "
   FROM file('btcusdt.csv', CSV)
   ORDER BY timestamp
 " > btcusdt_indicators.csv
-```
+```sql
 
 ## File Formats
 
@@ -323,7 +323,7 @@ clickhouse-local --query "SELECT * FROM file('data.json')"  # Auto-detects JSON
 
 # Explicit format (recommended for clarity)
 clickhouse-local --query "SELECT * FROM file('data.txt', CSV)"
-```
+```sql
 
 ## Comparison with clickhouse-client
 
@@ -395,7 +395,7 @@ clickhouse-local --query "SELECT * FROM file('/full/path/to/data.csv', CSV)"
 # Or run from file directory
 cd /path/to/files
 clickhouse-local --query "SELECT * FROM file('data.csv', CSV)"
-```
+```text
 
 ### Schema Mismatch
 
@@ -407,7 +407,7 @@ clickhouse-local --query "DESCRIBE TABLE file('data.csv', CSV)"
 clickhouse-local --query "
   SELECT * FROM file('data.csv', CSV, 'timestamp DateTime, symbol String, close Float64')
 "
-```
+```text
 
 ### Memory Limits
 

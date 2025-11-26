@@ -37,7 +37,7 @@ $ python3.11 -m compileall src/gapless_crypto_clickhouse/ -q
 - ❌ PEP 695 type parameters
 - ✅ Standard typing (Literal, Optional, Union)
 - ✅ PEP 585 generics (tuple[str, str])
-```
+```bash
 
 ## Goals
 
@@ -97,7 +97,7 @@ target-version = ['py311']  # Was: ['py312']
 # 5. Update mypy target version (Line 100)
 [tool.mypy]
 python_version = "3.11"  # Was: 3.12
-```
+```bash
 
 **Rationale**:
 
@@ -117,7 +117,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11", "3.12", "3.13"] # Added 3.11
-```
+```bash
 
 **Validation**: Full test suite runs on all 3 Python versions on every commit.
 
@@ -135,7 +135,7 @@ dependencies = [
     "pyarrow>=16.0.0",           # Check: supports 3.11?
     "python-dotenv>=1.0.0",      # Check: supports 3.11?
 ]
-```
+```text
 
 **Validation Command**:
 
@@ -144,7 +144,7 @@ uv venv --python 3.11 /tmp/dep-check
 source /tmp/dep-check/bin/activate
 uv pip install clickhouse-driver duckdb httpx pandas pydantic pyarrow python-dotenv
 # If successful → all dependencies compatible
-```
+```python
 
 ### Phase 4: Testing Strategy
 

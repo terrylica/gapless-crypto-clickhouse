@@ -69,7 +69,7 @@ All 5 visualization tools are **implemented, documented, and validated** per ADR
 ```bash
 curl -sf http://localhost:8124/play | grep -q "ClickHouse"
 # Result: ✅ PASS - Play UI accessible
-```
+```bash
 
 **Evidence**:
 
@@ -86,7 +86,7 @@ curl -sf http://localhost:8124/play | grep -q "ClickHouse"
 ```bash
 docker exec gapless-clickhouse clickhouse-client --query "SELECT 1"
 # Result: ✅ PASS - Returns "1"
-```
+```text
 
 **Evidence**:
 
@@ -108,7 +108,7 @@ which chdig
 
 brew info chdig
 # Result: Formula available in Homebrew
-```
+```bash
 
 **Evidence**:
 
@@ -135,7 +135,7 @@ echo "1,2" >> /tmp/test_ch.csv
 docker exec gapless-clickhouse clickhouse-local \
   --query "SELECT * FROM file('/tmp/test_ch.csv', CSV)"
 # Result: ✅ PASS - Returns data
-```
+```text
 
 **Evidence**:
 
@@ -170,7 +170,7 @@ docker exec gapless-clickhouse clickhouse-local \
 [5/7] ✅ PASS - clickhouse-client functional (Docker exec)
 [6/7] ⚠️ WARN - chdig not installed (optional)
 [7/7] ✅ PASS - clickhouse-local functional
-```
+```python
 
 **Bugs Fixed During Validation**:
 
@@ -269,7 +269,7 @@ docker exec gapless-clickhouse clickhouse-local \
 ad72504 docs(adr): add ADR-0008 for ClickHouse visualization toolchain
 3371418 docs(viz): add comprehensive guides for 5 visualization tools
 b444e51 feat(viz): add CH-UI web interface via Docker Compose
-```
+```text
 
 **Validation**:
 
@@ -297,7 +297,7 @@ export CLICKHOUSE_HTTP_PORT=8124
 # Use existing containers
 # - ClickHouse: gapless-clickhouse (ports 9001, 8124)
 # - Tools: clickhouse-client, clickhouse-local, Play UI all work
-```
+```text
 
 **CH-UI Setup** (manual):
 
@@ -305,7 +305,7 @@ export CLICKHOUSE_HTTP_PORT=8124
 docker run --name gapless-ch-ui -p 5521:5521 \
   -e VITE_CLICKHOUSE_URL=http://localhost:8123 \
   ghcr.io/caioricciuti/ch-ui:latest
-```
+```text
 
 ### Option 2: Stop QuestDB, Use Standard Ports (Recommended)
 
@@ -326,7 +326,7 @@ docker compose -f docker-compose.yml up -d ch-ui
 
 # Validate
 bash scripts/validate-clickhouse-tools.sh
-```
+```text
 
 **Note**: QuestDB data persists, can be restarted later if needed.
 

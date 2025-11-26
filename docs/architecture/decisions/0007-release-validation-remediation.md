@@ -24,7 +24,7 @@ Comprehensive multi-agent parallel validation of v4.0.0 release candidate (post 
 
 **Validation Results** (5-agent parallel investigation):
 
-```
+```bash
 ✅ Code Quality: GO (Ruff/MyPy pass, 49 type errors documented as tech debt)
 ⚠️ Test Coverage: CAUTION (308/336 pass, 2 unexpected failures)
 ⚠️ Documentation: CAUTION (1 critical version mismatch in docstring)
@@ -98,7 +98,7 @@ CLI Usage (DEPRECATED - Will be removed in v4.0.0):
 # Line 66 - After
 CLI Removed in v4.0.0:
     ⚠️  The CLI was removed in v4.0.0. Please use the Python API instead.
-```
+```text
 
 **Rationale**: Module docstring is primary user-facing documentation
 
@@ -112,7 +112,7 @@ CLI Removed in v4.0.0:
 import gapless_crypto_clickhouse as gcd
 assert gcd.__version__ == "4.0.0"
 assert "v4.0.0" in gcd.__doc__
-```
+```text
 
 ### Fix 2: Test Assertion Update (MEDIUM)
 
@@ -126,7 +126,7 @@ assert info["version"] == "3.2.0"
 
 # After
 assert info["version"] == "4.0.0"
-```
+```text
 
 **Rationale**: Test assertion must match actual package version
 
@@ -138,7 +138,7 @@ assert info["version"] == "4.0.0"
 
 ```bash
 uv run pytest tests/test_api_edge_cases.py::test_get_info_structure -v
-```
+```text
 
 ### Fix 3: CHANGELOG Upgrade Instructions (MEDIUM)
 
@@ -187,7 +187,7 @@ pip install gapless-crypto-data==4.0.0
 
 - Version attribute now correctly reflects 4.0.0
 - Documentation consistency (all refs updated to v4.0.0)
-```
+```python
 
 **Rationale**: Users upgrading from v3.x need explicit guidance
 
@@ -200,7 +200,7 @@ pip install gapless-crypto-data==4.0.0
 ```bash
 grep -n "Upgrading from v3.x" CHANGELOG.md
 test -f CHANGELOG.md && echo "PASS" || echo "FAIL"
-```
+```text
 
 ## Validation
 
@@ -210,7 +210,7 @@ test -f CHANGELOG.md && echo "PASS" || echo "FAIL"
 
 ```bash
 uv run python -c "import gapless_crypto_clickhouse as gcd; assert gcd.__version__ == '4.0.0'; assert 'v4.0.0' in gcd.__doc__"
-```
+```text
 
 **Expected**: Exit code 0 (both assertions pass)
 
@@ -218,7 +218,7 @@ uv run python -c "import gapless_crypto_clickhouse as gcd; assert gcd.__version_
 
 ```bash
 uv run pytest tests/test_api_edge_cases.py::test_get_info_structure -v
-```
+```text
 
 **Expected**: 1 passed (no more version assertion failure)
 
@@ -227,7 +227,7 @@ uv run pytest tests/test_api_edge_cases.py::test_get_info_structure -v
 ```bash
 grep -c "v2.15.3" src/gapless_crypto_clickhouse/__init__.py
 grep -c "v4.0.0" src/gapless_crypto_clickhouse/__init__.py
-```
+```text
 
 **Expected**: 0 occurrences of v2.15.3, 1+ occurrences of v4.0.0
 

@@ -122,7 +122,7 @@ self.known_symbols = {
     "DOTUSDT": "2020-08-19",
     "LINKUSDT": "2019-01-16",
 }
-```
+```text
 
 **Updated Code**:
 
@@ -155,7 +155,7 @@ self.known_symbols = {
     "MANAUSDT": "2020-12-14",  # #42 market cap - Decentraland
     "APEUSDT": "2022-03-17",   # #48 market cap - ApeCoin
 }
-```
+```text
 
 **Validation**: Each listing date verified against Binance historical data availability.
 
@@ -175,7 +175,7 @@ SupportedSymbol = Literal[
     "LINKUSDT",
     # Limited to 6 symbols
 ]
-```
+```text
 
 **Updated Code**:
 
@@ -187,7 +187,7 @@ SupportedSymbol = Literal[
     "MATICUSDT", "LTCUSDT", "UNIUSDT", "ATOMUSDT", "FTMUSDT",
     "NEARUSDT", "ALGOUSDT", "SANDUSDT", "MANAUSDT", "APEUSDT",
 ]
-```
+```bash
 
 ### Phase 3: Update Documentation
 
@@ -214,7 +214,7 @@ for symbol in BTCUSDT ETHUSDT BNBUSDT SOLUSDT XRPUSDT DOGEUSDT ADAUSDT AVAXUSDT 
   echo "Testing $symbol futures..."
   curl -s "https://data.binance.vision/?prefix=data/futures/um/monthly/klines/${symbol}/1d/" | grep -q ".zip" && echo "✅ Futures available" || echo "❌ Futures missing"
 done
-```
+```bash
 
 **Expected Result**: All 20 symbols should show ✅ for both spot and futures.
 

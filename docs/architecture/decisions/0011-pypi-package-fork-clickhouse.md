@@ -65,14 +65,14 @@ cd gapless-crypto-clickhouse
 # Copy from main-clickhouse branch
 cp -r ../gapless-crypto-clickhouse/* .
 cp -r ../gapless-crypto-clickhouse/.github .
-```
+```text
 
 ### Module Rename
 
 ```bash
 # Rename Python package directory
 mv src/gapless_crypto_clickhouse src/gapless_crypto_clickhouse
-```
+```python
 
 **Files requiring import updates** (~150 files):
 
@@ -91,7 +91,7 @@ name = "gapless-crypto-clickhouse"  # Changed from gapless-crypto-data
 version = "1.0.0"  # Reset from 4.0.0
 description = "ClickHouse-based cryptocurrency data collection..."
 keywords = ["clickhouse", "cryptocurrency", "crypto", "binance", ...]
-```
+```bash
 
 **Dependencies**:
 
@@ -143,21 +143,21 @@ keywords = ["clickhouse", "cryptocurrency", "crypto", "binance", ...]
 ```bash
 grep -r "gapless-crypto-data" . --exclude-dir=.git --exclude-dir=.venv
 grep -r "gapless_crypto_clickhouse" . --exclude-dir=.git --exclude-dir=.venv
-```
+```python
 
 **Import validation**:
 
 ```bash
 python -c "import gapless_crypto_clickhouse; print(gapless_crypto_clickhouse.__version__)"
 # Expected: 1.0.0
-```
+```text
 
 **Test suite**:
 
 ```bash
 uv run pytest tests/ -v
 # Expected: All tests pass with new import paths
-```
+```text
 
 **TestPyPI installation**:
 

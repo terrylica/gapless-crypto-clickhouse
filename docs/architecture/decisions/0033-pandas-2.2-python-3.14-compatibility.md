@@ -53,7 +53,7 @@ Chosen option: **Upgrade pandas to 2.2+**
 
 # AFTER
 "pandas>=2.2.0,<3.0.0",  # Python 3.14 compatibility (pandas 2.2+ required)
-```
+```bash
 
 **Rationale**:
 
@@ -85,13 +85,13 @@ dependencies = [
     # ... other deps ...
     "pandas>=2.2.0,<3.0.0",  # Python 3.14 compatibility (C API fixes)
 ]
-```
+```text
 
 **Step 2**: Sync environment
 
 ```bash
 uv sync --upgrade-package pandas
-```
+```text
 
 **Step 3**: Run full test suite
 
@@ -99,7 +99,7 @@ uv sync --upgrade-package pandas
 uv run pytest tests/test_timeframe_constants.py -v
 uv run pytest -m unit -v
 uv run pytest --cov=src/gapless_crypto_clickhouse --cov-report=term -v
-```
+```bash
 
 **Step 4**: Validate no regressions
 
@@ -114,7 +114,7 @@ uv run pytest --cov=src/gapless_crypto_clickhouse --cov-report=term -v
 ```
 error: too few arguments to function call, expected 6, have 5
 _PyLong_AsByteArray((PyLongObject *)v, bytes, sizeof(val), is_little, !is_unsigned);
-```
+```bash
 
 **Python 3.14 + pandas 2.2+ (PASSES)**:
 

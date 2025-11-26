@@ -91,7 +91,7 @@ Add `instrument_type` parameter across API with enum-driven URL/endpoint routing
 
 ```sql
 timestamp DateTime64(3)  -- Millisecond precision
-```
+```text
 
 **Impact**: Spot data after Jan 1, 2025 has timestamps off by 1000x
 
@@ -100,7 +100,7 @@ timestamp DateTime64(3)  -- Millisecond precision
 ```sql
 -- New schema (CORRECT for both spot and futures)
 timestamp DateTime64(6)  -- Microsecond precision
-```
+```text
 
 **Format Detection**:
 
@@ -122,7 +122,7 @@ def detect_timestamp_precision(timestamp: int) -> str:
         return "microseconds"
     else:  # 13 digits
         return "milliseconds"
-```
+```text
 
 **Conversion Logic**:
 
@@ -146,7 +146,7 @@ def normalize_timestamp_to_microseconds(
         return timestamp * 1000  # ms → μs
     else:
         raise ValueError(f"Unknown precision: {source_precision}")
-```
+```text
 
 ### API Layer Changes
 
@@ -169,7 +169,7 @@ def _validate_instrument_type(instrument_type: str) -> None:
             f"Invalid instrument_type '{instrument_type}'. "
             f"Must be one of: {', '.join(sorted(valid_types))}"
         )
-```
+```text
 
 **Symbol Loading**:
 
@@ -187,7 +187,7 @@ def get_supported_symbols(
     else:
         collector = BinancePublicDataCollector()
         return list(collector.known_symbols.keys())  # 20 symbols
-```
+```text
 
 ### Collector Layer Changes
 
@@ -226,7 +226,7 @@ class BinancePublicDataCollector:
         )
 
         # Rest of initialization...
-```
+```text
 
 ### Gap Filler Layer Changes
 
@@ -251,7 +251,7 @@ class UniversalGapFiller:
             self.SPOT_API_URL if instrument_type == "spot"
             else self.FUTURES_API_URL
         )
-```
+```text
 
 ### ClickHouse Schema Changes
 
@@ -268,7 +268,7 @@ AFTER taker_buy_quote_asset_volume;
 
 -- Verification
 DESCRIBE TABLE ohlcv;
-```
+```sql
 
 **Column Characteristics**:
 
@@ -337,7 +337,7 @@ DESCRIBE TABLE ohlcv;
 
 ```bash
 uv run pytest tests/test_timestamp_utils.py -v
-```
+```python
 
 **Auto-Fix Strategy**: If tests fail, adjust magnitude threshold or conversion multiplier
 
@@ -368,7 +368,7 @@ uv run pytest tests/test_timestamp_utils.py -v
 
 ```bash
 uv run python -c "from binance_futures_availability.config.symbol_loader import load_symbols; assert len(load_symbols('perpetual')) == 713"
-```
+```sql
 
 **Auto-Fix Strategy**: If import fails, check package name spelling or version constraints
 
@@ -418,7 +418,7 @@ uv run python -c "from binance_futures_availability.config.symbol_loader import 
 
 ```bash
 uv run python scripts/verify_schema_migration.py
-```
+```bash
 
 **Auto-Fix Strategy**: If migration fails, check ClickHouse version compatibility or nullable constraints
 
@@ -483,7 +483,7 @@ uv run python scripts/verify_schema_migration.py
 
 ```bash
 uv run pytest tests/test_api.py -k instrument_type -v
-```
+```python
 
 **Auto-Fix Strategy**: If validation errors occur, check type hint imports and function signatures
 
@@ -531,7 +531,7 @@ uv run pytest tests/test_api.py -k instrument_type -v
 
 ```bash
 uv run pytest tests/test_binance_public_data_collector.py -v
-```
+```python
 
 **Auto-Fix Strategy**: If URL generation fails, check string formatting or base URL constants
 
@@ -571,7 +571,7 @@ uv run pytest tests/test_binance_public_data_collector.py -v
 
 ```bash
 uv run pytest tests/test_universal_gap_filler.py -v
-```
+```bash
 
 **Auto-Fix Strategy**: If endpoint selection fails, check URL constants or conditional logic
 
@@ -606,7 +606,7 @@ uv run pytest tests/test_universal_gap_filler.py -v
 
 ```bash
 uv run mypy src/gapless_crypto_clickhouse/ --strict
-```
+```python
 
 **Auto-Fix Strategy**: Add missing type hints or adjust Literal definitions
 
@@ -723,7 +723,7 @@ uv run pytest tests/test_um_futures_support.py -v
 # Run specific test categories
 uv run pytest tests/test_um_futures_support.py -k "blocker" -v
 uv run pytest tests/test_um_futures_support.py -k "high_priority" -v
-```
+```python
 
 **Auto-Fix Strategy**: If tests fail, fix implementation immediately before proceeding
 
@@ -838,7 +838,7 @@ gh release view v3.2.0
 
 # Verify PyPI
 curl -s https://pypi.org/pypi/gapless-crypto-clickhouse/json | python3 -c "import sys, json; print(json.load(sys.stdin)['info']['version'])"
-```
+```text
 
 **Task List Sync**: Tasks 12-13 in todo list
 
@@ -882,7 +882,7 @@ raise ValueError(
     f"Symbol '{symbol}' not available for futures-um. "
     f"Use get_supported_symbols('futures-um') for valid symbols."
 )
-```
+```text
 
 **Network Errors**:
 
@@ -896,7 +896,7 @@ raise DataCollectionError(
 # Rate limit from REST API
 # Let httpx retry logic handle (existing behavior)
 # No special futures-specific handling needed
-```
+```text
 
 ### Concurrency Considerations
 
@@ -916,14 +916,14 @@ raise DataCollectionError(
 
 ```
 1640995200000,46444.99,46445.00,46368.77,46393.00,45.33775,...
-```
+```text
 
 **Futures CSV** (with header, 12 columns):
 
 ```
 open_time,open,high,low,close,volume,close_time,quote_asset_volume,number_of_trades,taker_buy_base_asset_volume,taker_buy_quote_asset_volume,ignore
 1640995200000,46444.99,46445.00,46368.77,46393.00,45.33775,...,0
-```
+```text
 
 **Normalization Logic**:
 
@@ -934,7 +934,7 @@ if instrument_type == "futures-um":
 else:
     # Read without header, all 11 columns
     df = pd.read_csv(csv_path, header=None, names=[...])
-```
+```python
 
 ### Performance Characteristics
 
@@ -1088,14 +1088,14 @@ git log --oneline -5
 # Revert to v3.1.1
 git revert <v3.2.0-commit-hash>
 git push origin main
-```
+```text
 
 **Step 2: Users Downgrade**
 
 ```bash
 # Users can downgrade to v3.1.1
 pip install gapless-crypto-clickhouse==3.1.1
-```
+```text
 
 **Step 3: Schema Rollback (if needed)**
 
@@ -1105,7 +1105,7 @@ ALTER TABLE ohlcv MODIFY COLUMN timestamp DateTime64(3);
 
 -- Remove funding_rate column
 ALTER TABLE ohlcv DROP COLUMN funding_rate;
-```
+```bash
 
 **Step 4: Communicate**
 

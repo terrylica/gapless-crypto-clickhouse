@@ -45,7 +45,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
 
     # Same 713 symbols for both types
     return load_symbols("perpetual")
-```
+```python
 
 **Rationale**:
 

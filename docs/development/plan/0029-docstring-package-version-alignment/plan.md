@@ -96,13 +96,13 @@ grep -r "v[0-9]\.[0-9]" src/ | grep -v "__version__" | grep -v "ADR-"
 
 # Cache paths updated
 grep -r "\.cache/gapless-crypto-data" src/
-```
+```text
 
 **Tests**:
 
 ```bash
 uv run pytest -xvs  # All tests must pass
-```
+```text
 
 ### Phase 6: Documentation
 

@@ -14,7 +14,7 @@ The GitHub Actions `DOPPLER_TOKEN` secret only has access to the `aws-credential
 
 **Error**:
 
-```
+```bash
 Unable to fetch secrets
 Doppler Error: This token does not have access to requested project 'notifications'
 ---
@@ -99,7 +99,7 @@ The release-validation workflow needs access to **two projects**:
 
 **Expected Output**:
 
-```
+```text
 ✅ Pushover notification sent successfully
 ```
 

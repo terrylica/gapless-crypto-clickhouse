@@ -102,7 +102,7 @@ PRIMARY KEY (validation_timestamp, file_path)
 CREATE INDEX idx_symbol_timeframe ON validation_reports(symbol, timeframe);
 CREATE INDEX idx_validation_timestamp ON validation_reports(validation_timestamp DESC);
 CREATE INDEX idx_validation_summary ON validation_reports(validation_summary);
-```
+```bash
 
 ## Database Location
 
@@ -121,7 +121,7 @@ CREATE INDEX idx_validation_summary ON validation_reports(validation_summary);
 
 ```python
 storage.insert_report(report: ValidationReport) -> None
-```
+```sql
 
 Insert validation report into DuckDB.
 
@@ -139,7 +139,7 @@ storage.query_recent(
     symbol: Optional[str] = None,
     timeframe: Optional[str] = None
 ) -> List[Dict]
-```
+```text
 
 Query recent validation reports (newest first).
 
@@ -155,7 +155,7 @@ Query recent validation reports (newest first).
 
 ```python
 storage.query_by_status(status: str) -> List[Dict]
-```
+```text
 
 Query validations by status substring.
 
@@ -176,7 +176,7 @@ storage.query_by_date_range(
     symbol: Optional[str] = None,
     timeframe: Optional[str] = None
 ) -> List[Dict]
-```
+```text
 
 Query validations within date range.
 
@@ -196,7 +196,7 @@ storage.export_to_dataframe(
     symbol: Optional[str] = None,
     timeframe: Optional[str] = None
 ) -> pd.DataFrame
-```
+```bash
 
 Export validation history to pandas DataFrame.
 
@@ -213,7 +213,7 @@ Export validation history to pandas DataFrame.
 
 ```python
 storage.get_summary_stats() -> Dict[str, Any]
-```
+```text
 
 Get aggregate statistics across all validations.
 
@@ -228,7 +228,7 @@ Get aggregate statistics across all validations.
     'avg_warnings': float,
     'status_distribution': Dict[str, int]
 }
-```
+```bash
 
 ## Storage Characteristics
 
@@ -281,7 +281,7 @@ storage = ValidationStorage()
 
 # Assume `report` is a ValidationReport from CSVValidator
 storage.insert_report(report)
-```
+```text
 
 ### Query Recent Validations
 
@@ -291,7 +291,7 @@ recent = storage.query_recent(limit=5, symbol="BTCUSDT", timeframe="1h")
 
 for report in recent:
     print(f"{report['validation_timestamp']}: {report['validation_summary']}")
-```
+```bash
 
 ### Export for Analysis
 
@@ -309,7 +309,7 @@ print(error_stats)
 # Find problematic files
 problematic = df[df["total_errors"] > 0]
 print(f"Files with errors: {len(problematic)}")
-```
+```text
 
 ## Direct SQL Access
 

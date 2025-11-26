@@ -51,7 +51,7 @@ from gapless_crypto_clickhouse.collectors.questdb_bulk_loader import QuestDBBulk
 # v4.0.0 (ClickHouse - NEW)
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
-```
+```python
 
 **Rationale**: See [ADR-0005: ClickHouse Migration](architecture/decisions/0005-clickhouse-migration.md) for technical decision rationale (ecosystem maturity, scalability, future-proofing).
 
@@ -84,7 +84,7 @@ pip install --upgrade gapless-crypto-data
 
 # Or with UV
 uv pip install --upgrade gapless-crypto-data
-```
+```text
 
 **Verify upgrade**:
 
@@ -97,14 +97,14 @@ print(gcd.__version__)  # Should print "4.0.0"
 # Existing code works unchanged
 df = gcd.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-01-31")
 print(f"Downloaded {len(df)} bars")  # Zero code changes
-```
+```text
 
 **Rollback** (if issues arise):
 
 ```bash
 # Downgrade to v3.3.0
 pip install gapless-crypto-data==3.3.0
-```
+```bash
 
 ### Path 2: Adopt ClickHouse Database (New Users)
 
@@ -122,7 +122,7 @@ pip install gapless-crypto-data==3.3.0
 
 ```bash
 pip install --upgrade gapless-crypto-data
-```
+```text
 
 #### Step 2: Start ClickHouse Container
 
@@ -137,7 +137,7 @@ docker-compose up -d
 # Verify ClickHouse is running
 docker-compose ps
 docker-compose logs clickhouse | grep "Ready for connections"
-```
+```python
 
 **What happens**:
 
@@ -159,7 +159,7 @@ with ClickHouseConnection() as conn:
     # Test query
     result = conn.execute("SELECT count() FROM ohlcv")
     print(f"Total rows: {result[0][0]}")  # Should print 0 (empty database)
-```
+```text
 
 #### Step 4: Ingest Historical Data
 
@@ -182,7 +182,7 @@ with ClickHouseConnection() as conn:
         end_date="2024-03-31"
     )
     print(f"Ingested {total_rows:,} rows for ETHUSDT 4h (Q1 2024)")
-```
+```text
 
 **Zero-gap guarantee**: Re-running ingestion won't create duplicates (deterministic SHA256 versioning)
 
@@ -216,7 +216,7 @@ with ClickHouseConnection() as conn:
         end_date="2024-12-31"
     )
     print(f"Multi-symbol dataset: {df.shape}")
-```
+```python
 
 ### Path 3: Migrate from QuestDB (v3.x Dev Users)
 
@@ -244,13 +244,13 @@ with QuestDBConnection() as conn:
     df = query.get_all_data()  # Custom method or full table export
     df.to_csv("questdb_export.csv", index=False)
     print(f"Exported {len(df):,} rows from QuestDB")
-```
+```text
 
 #### Step 2: Upgrade to v4.0.0
 
 ```bash
 pip install --upgrade gapless-crypto-data
-```
+```python
 
 #### Step 3: Import CSV Data to ClickHouse
 
@@ -272,7 +272,7 @@ with ClickHouseConnection() as conn:
     for (symbol, timeframe), group in df.groupby(["symbol", "timeframe"]):
         rows = loader.ingest_from_dataframe(group, symbol=symbol, timeframe=timeframe)
         print(f"Imported {rows:,} rows for {symbol} {timeframe}")
-```
+```text
 
 #### Step 4: Verify Data Integrity
 
@@ -290,7 +290,7 @@ with ClickHouseConnection() as conn:
     # Verify sample data
     df_sample = query.get_latest("BTCUSDT", "1h", limit=10)
     print(f"Sample data:\n{df_sample[['timestamp', 'close']]}")
-```
+```text
 
 #### Step 5: Decommission QuestDB
 
@@ -305,7 +305,7 @@ docker-compose -f docker-compose-questdb.yml down
 
 # Optional: Archive QuestDB data directory
 tar -czf questdb_backup_$(date +%Y%m%d).tar.gz /path/to/questdb/data
-```
+```python
 
 **Rollback**: If migration fails, keep QuestDB running and stay on v3.3.0 until issues resolved.
 
@@ -331,14 +331,14 @@ Run tests while ignoring CLI test files:
 
 ```bash
 pytest tests/ --ignore=tests/test_cli.py --ignore=tests/test_cli_integration.py
-```
+```text
 
 **Alternative**:
 Run only non-CLI tests:
 
 ```bash
 pytest tests/ -k "not cli"
-```
+```text
 
 ## Configuration Changes
 
@@ -353,7 +353,7 @@ QUESTDB_PG_PORT=8812
 QUESTDB_PG_USER=admin
 QUESTDB_PG_PASSWORD=quest
 QUESTDB_PG_DATABASE=qdb
-```
+```text
 
 **v4.0.0 (ClickHouse - NEW)**:
 
@@ -364,7 +364,7 @@ CLICKHOUSE_HTTP_PORT=8123         # HTTP interface (default: 8123)
 CLICKHOUSE_USER=default           # Username (default: 'default')
 CLICKHOUSE_PASSWORD=              # Password (empty for local dev)
 CLICKHOUSE_DB=default             # Database name (default: 'default')
-```
+```bash
 
 **File location**: Create `.env` file in project root or set system environment variables
 
@@ -386,7 +386,7 @@ services:
       CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: ""
       CLICKHOUSE_DB: default
-```
+```bash
 
 **Schema auto-initialization**: The `schema.sql` file is automatically executed on first container start.
 
@@ -438,7 +438,7 @@ with ClickHouseConnection() as conn:
     print(f'ClickHouse connected: {conn.health_check()}')
 "
 # Expected output: ClickHouse connected: True
-```
+```python
 
 ### Common Migration Issues
 
@@ -462,7 +462,7 @@ pip install gapless-crypto-data==3.3.0
 # Verify downgrade
 python -c "import gapless_crypto_clickhouse as gcd; print(gcd.__version__)"
 # Expected output: 3.3.0
-```
+```text
 
 ### Step 2: Restore QuestDB (If Applicable)
 
@@ -472,7 +472,7 @@ tar -xzf questdb_backup_YYYYMMDD.tar.gz -C /path/to/restore
 
 # Restart QuestDB service
 sudo systemctl start questdb
-```
+```text
 
 ### Step 3: Verify Rollback
 

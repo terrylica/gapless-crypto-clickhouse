@@ -127,7 +127,7 @@ The `gapless-crypto-clickhouse` system consists of six primary components provid
 
 ## Component Relationships
 
-```
+```text
 BinancePublicDataCollector
     ↓ (generates)
 CSV Files

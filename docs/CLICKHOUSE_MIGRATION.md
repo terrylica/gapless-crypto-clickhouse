@@ -32,7 +32,7 @@ QuestDB → ClickHouse migration guide for gapless-crypto-data v4.0.0+.
 
 **Before (QuestDB)**:
 
-```
+```yaml
 Engine: QuestDB with DEDUP ENABLE UPSERT KEYS
 Protocol: PostgreSQL wire (queries) + ILP (ingestion)
 Deduplication: Immediate, at write time
@@ -41,7 +41,7 @@ Performance: 92K-208K rows/sec (ILP), <1s queries
 
 **After (ClickHouse)**:
 
-```
+```yaml
 Engine: ClickHouse with ReplacingMergeTree
 Protocol: Native protocol (port 9000) for all operations
 Deduplication: Eventual, via deterministic _version hash
@@ -78,7 +78,7 @@ CREATE TABLE ohlcv (
     ...
 ) TIMESTAMP(timestamp) PARTITION BY MONTH
 DEDUP ENABLE UPSERT KEYS(timestamp, symbol, timeframe, instrument_type);
-```
+```text
 
 - Duplicates rejected at write time
 - No query-time overhead
@@ -92,7 +92,7 @@ CREATE TABLE ohlcv (
     _sign Int8 DEFAULT 1
 ) ENGINE = ReplacingMergeTree(_version)
 ORDER BY (timestamp, symbol, timeframe, instrument_type)
-```
+```text
 
 - Duplicates written, merged asynchronously
 - Query with `FINAL` keyword to force deduplication
@@ -106,7 +106,7 @@ def _compute_version_hash(row):
     version_input = f"{row['timestamp']}{row['open']}{row['high']}{row['low']}{row['close']}{row['volume']}{row['symbol']}{row['timeframe']}{row['instrument_type']}"
     hash_bytes = hashlib.sha256(version_input.encode("utf-8")).digest()
     return int.from_bytes(hash_bytes[:8], byteorder="big", signed=False)
-```
+```text
 
 ## Code Migration
 
@@ -120,7 +120,7 @@ from gapless_crypto_clickhouse.questdb import QuestDBConnection
 with QuestDBConnection() as conn:
     # PostgreSQL queries
     result = conn.execute_query("SELECT * FROM ohlcv LIMIT 10")
-```
+```text
 
 **After (ClickHouse)**:
 
@@ -130,7 +130,7 @@ from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 with ClickHouseConnection() as conn:
     # Native protocol queries
     result = conn.execute("SELECT * FROM ohlcv LIMIT 10")
-```
+```text
 
 **Environment Variables**:
 
@@ -147,7 +147,7 @@ from gapless_crypto_clickhouse.collectors.questdb_bulk_loader import QuestDBBulk
 with QuestDBConnection() as conn:
     loader = QuestDBBulkLoader(conn, instrument_type="spot")
     rows = loader.ingest_month("BTCUSDT", "1h", 2024, 1)
-```
+```text
 
 **After (ClickHouse)**:
 
@@ -157,7 +157,7 @@ from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHou
 with ClickHouseConnection() as conn:
     loader = ClickHouseBulkLoader(conn, instrument_type="spot")
     rows = loader.ingest_month("BTCUSDT", "1h", 2024, 1)
-```
+```text
 
 **API Compatibility**: Method signatures unchanged, drop-in replacement.
 
@@ -171,7 +171,7 @@ from gapless_crypto_clickhouse.query import OHLCVQuery
 with QuestDBConnection() as conn:
     query = OHLCVQuery(conn)
     df = query.get_range("BTCUSDT", "1h", "2024-01-01", "2024-01-31")
-```
+```text
 
 **After (ClickHouse)**:
 
@@ -181,7 +181,7 @@ from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
 with ClickHouseConnection() as conn:
     query = OHLCVQuery(conn)
     df = query.get_range("BTCUSDT", "1h", "2024-01-01", "2024-01-31")
-```
+```bash
 
 **API Compatibility**: Method signatures unchanged, drop-in replacement.
 
@@ -208,14 +208,14 @@ services:
       CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: ""
       CLICKHOUSE_DB: default
-```
+```text
 
 **Start**:
 
 ```bash
 docker-compose up -d
 docker-compose logs -f  # View logs
-```
+```text
 
 **Schema Initialization**:
 
@@ -223,7 +223,7 @@ docker-compose logs -f  # View logs
 # Automatic via initdb.d
 # Or manual:
 docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_clickhouse/clickhouse/schema.sql
-```
+```python
 
 ### Production
 
@@ -276,7 +276,7 @@ docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_clickho
 ```bash
 # Export to CSV
 docker exec questdb clickhouse-client --query "SELECT * FROM ohlcv FORMAT CSV" > ohlcv_export.csv
-```
+```python
 
 ### Import to ClickHouse
 
@@ -294,7 +294,7 @@ df["_sign"] = 1
 # Import
 with ClickHouseConnection() as conn:
     conn.insert_dataframe(df, "ohlcv")
-```
+```python
 
 **Note**: For large datasets (>10M rows), use `clickhouse-client` batch import or `clickhouse-local` for faster ingestion.
 
@@ -320,7 +320,7 @@ Located in `tmp/`:
 # Run validation
 uv run --active python tmp/clickhouse_quick_validation.py
 uv run --active python tmp/clickhouse_futures_validation.py
-```
+```python
 
 ## Deprecation Timeline
 
@@ -362,7 +362,7 @@ docker-compose up -d
 
 # Use alternative port
 CLICKHOUSE_PORT=9001 docker-compose up -d
-```
+```text
 
 ### "Table ohlcv doesn't exist"
 
@@ -372,7 +372,7 @@ CLICKHOUSE_PORT=9001 docker-compose up -d
 
 ```bash
 docker exec -i gapless-clickhouse clickhouse-client < src/gapless_crypto_clickhouse/clickhouse/schema.sql
-```
+```text
 
 ### Slow queries with FINAL
 
@@ -389,7 +389,7 @@ SELECT table, sum(rows) as rows, count() as parts
 FROM system.parts
 WHERE table = 'ohlcv' AND active
 GROUP BY table;
-```
+```text
 
 ### Duplicates still visible after ingestion
 

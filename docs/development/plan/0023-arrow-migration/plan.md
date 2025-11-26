@@ -32,7 +32,7 @@ Migrate from clickhouse-driver to clickhouse-connect with Apache Arrow support t
 
 **Benchmark Analysis** (2025-11-20):
 
-```
+```python
 Current Performance (clickhouse-driver):
 - Query speed: 27,432 rows/sec (0.03s for 721 rows)
 - Download bottleneck: 96% of time downloading from CDN
@@ -58,7 +58,7 @@ Alpha Forge Misunderstanding:
 clickhouse-driver = ">=0.2.9"
 pandas = ">=2.0.0,<2.2.0"
 numpy = ">=1.23.2,<2.0.0"
-```
+```text
 
 **Architecture**:
 
@@ -83,7 +83,7 @@ clickhouse-connect = ">=0.7.0"  # Replaces clickhouse-driver
 pandas = ">=2.0.0,<2.2.0"
 numpy = ">=1.23.2,<2.0.0"
 pyarrow = ">=14.0.0"  # Arrow support
-```
+```python
 
 **Architecture**:
 
@@ -144,7 +144,7 @@ with ClickHouseConnection() as conn:
     print(f'Success: {df}')
     print(f'Arrow format: {type(df).__module__}')
 "
-```
+```python
 
 **Acceptance Criteria**:
 
@@ -221,7 +221,7 @@ print(f'Second query: {len(df)} rows')
 from gapless_crypto_clickhouse import probe
 print(probe.get_capabilities())
 "
-```
+```bash
 
 **Acceptance Criteria**:
 
@@ -260,7 +260,7 @@ print(probe.get_capabilities())
 # Driver: clickhouse-driver | Rows: 721 | Time: 0.03s | Speed: 27,432 rows/s | Memory: 5.2 MB
 # Driver: clickhouse-connect+Arrow | Rows: 721 | Time: 0.01s | Speed: 82,000 rows/s | Memory: 1.3 MB
 # Speedup: 2.99x | Memory reduction: 75%
-```
+```bash
 
 **Acceptance Criteria**:
 

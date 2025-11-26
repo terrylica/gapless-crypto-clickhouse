@@ -177,7 +177,7 @@ grep -r "v[0-9]\.[0-9]\.[0-9]" src/gapless_crypto_clickhouse/ | grep -v "__versi
 
 # Verify cache directory updated
 grep -r "\.cache/gapless-crypto-data" src/gapless_crypto_clickhouse/
-```
+```python
 
 ### Manual Review
 

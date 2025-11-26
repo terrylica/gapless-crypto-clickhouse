@@ -24,7 +24,7 @@ uv run pytest -v
 
 # Run with coverage report
 uv run pytest --cov=src/gapless_crypto_clickhouse --cov-report=html
-```
+```text
 
 **Expected**: 30+ tests pass, 85%+ coverage for SDK entry points
 
@@ -39,7 +39,7 @@ uv run pytest tests/test_gap_filler.py -v
 
 # Run validation tests
 uv run pytest tests/test_validation_storage.py -v
-```
+```text
 
 ### Test Markers
 
@@ -52,7 +52,7 @@ uv run pytest -m integration
 
 # Skip integration tests
 uv run pytest -m "not integration"
-```
+```text
 
 **Markers**:
 
@@ -77,7 +77,7 @@ uv run pytest tests/e2e/test_clickhouse_play.py -v
 
 # With screenshots and tracing
 uv run pytest tests/e2e/ -v --screenshot=only-on-failure --tracing=retain-on-failure
-```
+```text
 
 **Markers**: `@pytest.mark.e2e` - End-to-end tests requiring Playwright and running services
 
@@ -102,7 +102,7 @@ uv run gapless-crypto-data --fill-gaps --directory ./sample_data
 
 # Test multi-symbol support
 uv run gapless-crypto-data --symbol BTCUSDT,ETHUSDT --timeframes 1h,4h
-```
+```text
 
 ## Code Quality Commands
 
@@ -117,7 +117,7 @@ uv run ruff format --check .
 
 # Format specific directory
 uv run ruff format src/gapless_crypto_clickhouse/
-```
+```text
 
 **Standard**: Ruff default formatting (PEP 8 compatible, Black-style)
 
@@ -135,7 +135,7 @@ uv run ruff check src/gapless_crypto_clickhouse/collectors/binance_public_data_c
 
 # Show all violations (including fixed)
 uv run ruff check --diff .
-```
+```python
 
 **Ruleset**: Ruff default (pycodestyle, pyflakes, isort, pydocstyle subset)
 
@@ -160,7 +160,7 @@ uv run mypy src/gapless_crypto_clickhouse/validation/
 
 # Show error codes
 uv run mypy --show-error-codes src/
-```
+```text
 
 **Standard**: PEP 561 compliance via `py.typed` marker
 
@@ -173,7 +173,7 @@ Required for CI to pass:
 ```bash
 # Validate all Python and Markdown files are UTF-8
 find src/ tests/ examples/ -name "*.py" -o -name "*.md" | xargs file --mime-encoding
-```
+```text
 
 **Expected**: All files report `us-ascii` or `utf-8` (no `iso-8859-1` or other encodings)
 
@@ -191,7 +191,7 @@ uv run pre-commit run ruff --all-files
 
 # Update hook versions
 uv run pre-commit autoupdate
-```
+```text
 
 **Hooks**:
 
@@ -214,7 +214,7 @@ uv build --wheel
 
 # Build source distribution only
 uv build --sdist
-```
+```python
 
 **Output**: `dist/` directory with `.whl` and `.tar.gz` files
 
@@ -231,7 +231,7 @@ gapless-crypto-data --version
 
 # Uninstall
 uv tool uninstall gapless-crypto-data
-```
+```text
 
 **Use case**: Testing CLI before publishing
 
@@ -252,7 +252,7 @@ uv remove <package-name>
 
 # Lock dependencies without installing
 uv lock
-```
+```bash
 
 **Lock file**: `uv.lock` (auto-generated, committed to repo)
 
@@ -325,7 +325,7 @@ uv run mypy src/
 uv run pytest -v
 find src/ tests/ examples/ -name "*.py" -o -name "*.md" | xargs file --mime-encoding
 uv build
-```
+```text
 
 **Use case**: Verify changes before pushing (catch CI failures early)
 
@@ -341,7 +341,7 @@ git pull origin main
 
 # Publish using Doppler-managed credentials
 ./scripts/publish-to-pypi.sh
-```
+```bash
 
 **Key Points**:
 
@@ -362,7 +362,7 @@ uv add --dev memory-profiler
 
 # Profile script
 uv run python -m memory_profiler examples/complete_workflow.py
-```
+```text
 
 ### Time Profiling
 
@@ -373,7 +373,7 @@ uv run python -m cProfile -o profile.stats examples/complete_workflow.py
 # Analyze with snakeviz
 uv add --dev snakeviz
 uv run snakeviz profile.stats
-```
+```text
 
 ### Benchmark Collection
 
@@ -384,7 +384,7 @@ time uv run gapless-crypto-data --symbol BTCUSDT --timeframes 1h --start 2024-01
 # Compare CSV vs Parquet output
 time uv run gapless-crypto-data --output-format csv ...
 time uv run gapless-crypto-data --output-format parquet ...
-```
+```text
 
 ## Documentation Commands
 
@@ -399,14 +399,14 @@ uv run pdoc --html --output-dir docs/api src/gapless_crypto_clickhouse
 
 # Serve docs locally
 uv run pdoc --http localhost:8080 src/gapless_crypto_clickhouse
-```
+```text
 
 ### Validate Documentation Links
 
 ```bash
 # Check for broken links (requires npm/markdown-link-check)
 find docs/ -name "*.md" | xargs npx markdown-link-check
-```
+```text
 
 ## Cleanup Commands
 
@@ -424,7 +424,7 @@ rm -rf .ruff_cache/
 
 # Remove mypy cache
 rm -rf .mypy_cache/
-```
+```text
 
 ### Remove Virtual Environment
 
@@ -434,7 +434,7 @@ rm -rf .venv/
 
 # Recreate from scratch
 uv sync --dev
-```
+```text
 
 ### Clear Validation Database
 
@@ -444,7 +444,7 @@ rm ~/.cache/gapless-crypto-data/validation.duckdb
 
 # Verify removal
 ls ~/.cache/gapless-crypto-data/
-```
+```text
 
 ## Development Workflow
 

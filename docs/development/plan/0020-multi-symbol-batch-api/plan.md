@@ -26,7 +26,7 @@ dataframes = {}
 for symbol in ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"]:
     dataframes[symbol] = gcd.download(symbol, "1h", start_date="2024-01-01")
 # → 5x sequential time (no concurrency)
-```
+```bash
 
 **Alpha Forge Feedback**: "Need `fetch_data(symbols=[...])` - Most common use case but undocumented"
 
@@ -45,7 +45,7 @@ results = gcd.download_multiple(
 )
 # → ~1-2x sequential time (parallel download from CDN)
 # → 10-20x faster for 20 symbols
-```
+```python
 
 ## Goals
 
@@ -123,7 +123,7 @@ def download_multiple(
         >>> len(results)
         1  # Only BTCUSDT succeeded
     """
-```
+```text
 
 ### Implementation Strategy
 
@@ -203,7 +203,7 @@ def download_multiple(
         )
 
     return results
-```
+```text
 
 ### Error Handling Strategy
 
@@ -214,7 +214,7 @@ def download_multiple(
 results = download_multiple(["BTC", "ETH", "SOL", "INVALID", "BNB"])
 # → Returns: {"BTC": df1, "ETH": df2, "SOL": df3, "BNB": df4}
 # → Logs warning: "Failed to download 1 symbols: ['INVALID']"
-```
+```text
 
 **Fail Fast Mode**:
 
@@ -226,7 +226,7 @@ results = download_multiple(
 )
 # → Raises ValueError immediately on first failure
 # → Cancels remaining pending downloads
-```
+```text
 
 **Complete Failure**:
 
@@ -234,7 +234,7 @@ results = download_multiple(
 # All symbols fail
 results = download_multiple(["INVALID1", "INVALID2", "INVALID3"])
 # → Raises ValueError: "All 3 symbols failed. Errors: {...}"
-```
+```python
 
 ### Concurrency Parameters
 

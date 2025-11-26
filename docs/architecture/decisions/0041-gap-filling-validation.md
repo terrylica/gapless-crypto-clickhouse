@@ -44,7 +44,7 @@ ADR-0040 implemented gap filling via REST API in `query_ohlcv()`. The implementa
 
 ### Validation Architecture
 
-```
+```text
 Layer 1: Unit Tests
 ├── test_gap_filling_unit.py (query_api.py functions)
 └── test_rest_client_unit.py (rest_client.py functions)

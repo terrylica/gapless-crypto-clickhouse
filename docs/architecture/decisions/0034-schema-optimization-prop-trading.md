@@ -180,7 +180,7 @@ SETTINGS
     merge_with_ttl_timeout = 86400,
     -- 🟡 P1 FIX: Partition-aware FINAL optimization (reduces overhead from 10-30% to 2-5%)
     do_not_merge_across_partitions_select_final = 1;
-```
+```sql
 
 **Why `toStartOfHour(timestamp)` in ORDER BY?**
 
@@ -218,7 +218,7 @@ Update connection settings to enable partition-aware FINAL:
 DEFAULT_SETTINGS = {
     "do_not_merge_across_partitions_select_final": 1,  # Optimize FINAL queries
 }
-```
+```sql
 
 ---
 
@@ -251,7 +251,7 @@ ALTER TABLE ohlcv
 ADD INDEX idx_symbol_minmax symbol TYPE minmax GRANULARITY 4;
 
 ALTER TABLE ohlcv MATERIALIZE INDEX idx_symbol_minmax;
-```
+```sql
 
 **P2.2: Async Insert Configuration** (when hybrid write patterns are validated)
 
@@ -263,7 +263,7 @@ settings = {
     "async_insert_max_data_size": 10485760,  # 10MB
     "async_insert_busy_timeout_ms": 1000,     # 1 second
 }
-```
+```text
 
 **P2.3: Metadata Layer** (when on-demand cache architecture is live)
 
@@ -278,7 +278,7 @@ CREATE TABLE IF NOT EXISTS data_coverage (
     last_updated DateTime64(3) DEFAULT now64(3)
 ) ENGINE = ReplacingMergeTree(last_updated)
 ORDER BY (symbol, timeframe, instrument_type, date_covered);
-```
+```sql
 
 ---
 
@@ -332,7 +332,7 @@ SELECT * FROM ohlcv FINAL
 WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
   AND timestamp >= '2024-01-01' AND timestamp < '2024-02-01';
 -- Expected: 1000-5000ms (full scan)
-```
+```sql
 
 **After (symbol-first ORDER BY)**:
 
@@ -342,7 +342,7 @@ SELECT * FROM ohlcv FINAL
 WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
   AND timestamp >= '2024-01-01' AND timestamp < '2024-02-01';
 -- Expected: 10-50ms (indexed)
-```
+```text
 
 **FINAL overhead test**:
 

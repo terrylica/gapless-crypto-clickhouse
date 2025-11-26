@@ -51,7 +51,7 @@ Spawned 5 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 
 **Pattern**: Configuration simplification + defense-in-depth safeguards
 
-```
+```python
 GitHub Actions (.github/workflows/release.yml)
 ├─ ✅ Analyze commits (conventional commits)
 ├─ ✅ Determine next version (semantic versioning)

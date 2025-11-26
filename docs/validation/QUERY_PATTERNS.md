@@ -29,7 +29,7 @@ for report in recent:
     print(f"{report['validation_timestamp']}: {report['file_path']}")
     print(f"  Status: {report['validation_summary']}")
     print(f"  Errors: {report['total_errors']}, Warnings: {report['total_warnings']}")
-```
+```text
 
 ### Recent Validations for Specific Symbol
 
@@ -38,7 +38,7 @@ recent_btc = storage.query_recent(limit=10, symbol="BTCUSDT")
 
 for report in recent_btc:
     print(f"{report['timeframe']}: {report['validation_summary']}")
-```
+```text
 
 ### Recent Validations for Specific Timeframe
 
@@ -47,7 +47,7 @@ hourly_validations = storage.query_recent(limit=10, timeframe="1h")
 
 for report in hourly_validations:
     print(f"{report['symbol']}: {report['total_errors']} errors")
-```
+```text
 
 ## Status-Based Queries
 
@@ -64,7 +64,7 @@ for record in failed:
     print(f"{record['file_path']}: {record['validation_summary']}")
     print(f"  Errors: {record['total_errors']}")
     print(f"  Gaps: {record['gaps_found']}")
-```
+```text
 
 ### Perfect Validations
 
@@ -74,7 +74,7 @@ Find validations with no errors or warnings:
 perfect = storage.query_by_status("PERFECT")
 
 print(f"Found {len(perfect)} perfect validations")
-```
+```text
 
 ### Validations with Warnings
 
@@ -83,7 +83,7 @@ warnings_only = storage.query_by_status("GOOD")
 
 for record in warnings_only:
     print(f"{record['file_path']}: {record['total_warnings']} warnings")
-```
+```text
 
 ## Date Range Queries
 
@@ -98,7 +98,7 @@ start = end - timedelta(days=30)
 last_month = storage.query_by_date_range(start, end)
 
 print(f"Validations in last 30 days: {len(last_month)}")
-```
+```text
 
 ### Specific Month Analysis
 
@@ -111,7 +111,7 @@ end = datetime(2025, 10, 31)
 october = storage.query_by_date_range(start, end, symbol="BTCUSDT")
 
 print(f"BTCUSDT validations in October 2025: {len(october)}")
-```
+```text
 
 ### Symbol-Specific Date Range
 
@@ -123,7 +123,7 @@ btc_2025 = storage.query_by_date_range(start, end, symbol="BTCUSDT", timeframe="
 
 errors = sum(r['total_errors'] for r in btc_2025)
 print(f"Total errors in BTCUSDT-1h for 2025: {errors}")
-```
+```text
 
 ## Summary Statistics
 
@@ -138,7 +138,7 @@ print(f"Timeframes: {', '.join(stats['timeframes'])}")
 print(f"Average errors: {stats['avg_errors']:.2f}")
 print(f"Average warnings: {stats['avg_warnings']:.2f}")
 print(f"Status distribution: {stats['status_distribution']}")
-```
+```text
 
 ### Status Distribution Analysis
 
@@ -148,7 +148,7 @@ stats = storage.get_summary_stats()
 for status, count in stats['status_distribution'].items():
     percentage = (count / stats['total_validations']) * 100
     print(f"{status}: {count} ({percentage:.1f}%)")
-```
+```bash
 
 ## DataFrame Export Patterns
 
@@ -163,7 +163,7 @@ df = storage.export_to_dataframe()
 
 print(f"Total validations: {len(df)}")
 print(f"Columns: {df.columns.tolist()}")
-```
+```text
 
 ### Symbol-Specific Analysis
 
@@ -173,7 +173,7 @@ btc_df = storage.export_to_dataframe(symbol="BTCUSDT")
 # Analyze error distribution by timeframe
 error_stats = btc_df.groupby("timeframe")["total_errors"].describe()
 print(error_stats)
-```
+```text
 
 ### Timeframe-Specific Analysis
 
@@ -183,7 +183,7 @@ hourly_df = storage.export_to_dataframe(timeframe="1h")
 # Find files with low coverage
 low_coverage = hourly_df[hourly_df["coverage_percentage"] < 95.0]
 print(f"Files with <95% coverage: {len(low_coverage)}")
-```
+```text
 
 ### Correlation Analysis
 
@@ -193,7 +193,7 @@ df = storage.export_to_dataframe()
 # Correlation between coverage and errors
 correlation = df[["coverage_percentage", "total_errors"]].corr()
 print(correlation)
-```
+```text
 
 ### Identify Problematic Files
 
@@ -209,7 +209,7 @@ worst_files = problematic.sort_values("total_errors", ascending=False).head(10)
 print("\nWorst 10 files:")
 for idx, row in worst_files.iterrows():
     print(f"  {row['file_path']}: {row['total_errors']} errors")
-```
+```text
 
 ### Gap Analysis
 
@@ -223,7 +223,7 @@ print(f"Files with gaps: {len(files_with_gaps)}")
 # Average gap count
 avg_gaps = files_with_gaps["gaps_found"].mean()
 print(f"Average gaps (for files with gaps): {avg_gaps:.2f}")
-```
+```text
 
 ### Outlier Detection
 
@@ -237,7 +237,7 @@ print(f"Files with price outliers: {len(price_outliers)}")
 # Files with volume outliers
 volume_outliers = df[df["volume_outliers"] > 0]
 print(f"Files with volume outliers: {len(volume_outliers)}")
-```
+```text
 
 ## Advanced SQL Queries
 
@@ -267,7 +267,7 @@ with duckdb.connect(str(db_path)) as conn:
     """).fetchdf()
 
     print(result)
-```
+```text
 
 ### Time-Series Analysis
 
@@ -285,7 +285,7 @@ with duckdb.connect(str(db_path)) as conn:
     """).fetchdf()
 
     print(result)
-```
+```text
 
 ### Symbol Comparison
 
@@ -304,7 +304,7 @@ with duckdb.connect(str(db_path)) as conn:
     """).fetchdf()
 
     print(result)
-```
+```text
 
 ## Batch Validation Workflow
 
@@ -334,7 +334,7 @@ if failed:
     print(f"\nFailed validations: {len(failed)}")
     for f in failed:
         print(f"  {f['file_path']}")
-```
+```text
 
 ## Research Patterns
 
@@ -356,7 +356,7 @@ weekly_stats = df.groupby('week').agg({
 
 print("Weekly trends:")
 print(weekly_stats)
-```
+```text
 
 ### Quality Regression Detection
 

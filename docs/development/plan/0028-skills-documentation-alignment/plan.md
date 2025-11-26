@@ -50,7 +50,7 @@ Spawned 5 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 
 **Pattern**: Skills alignment + documentation cleanup
 
-```
+```bash
 Workspace Skills (~/.claude/skills/)
 ├─ semantic-release/
 │  └─ ✅ Already aligned (promotes local-first)

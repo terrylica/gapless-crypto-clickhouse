@@ -43,7 +43,7 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 
 **Pattern**: 3 atomic skills (modular, independently reusable)
 
-```
+```bash
 ./skills/
 ├── clickhouse-cloud-service-setup/
 │   ├── SKILL.md                 # API-driven service discovery

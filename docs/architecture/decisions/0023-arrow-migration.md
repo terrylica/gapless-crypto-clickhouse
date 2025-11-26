@@ -31,7 +31,7 @@ Alpha Forge team reported performance concerns with the current implementation, 
 
 ### Benchmark Results
 
-```
+```text
 Operation                  | Rows   | Time (s) | Rows/s  | Memory
 ---------------------------|--------|----------|---------|--------
 ClickHouse Query (current) | 721    | 0.03s    | 27,432  | Unknown
@@ -47,7 +47,7 @@ Comparative benchmarks validated Arrow performance across multiple dataset sizes
 
 **Scale Analysis Results**:
 
-```
+```text
 Scale      | Method    | Rows   | Time (s) | Rows/s  | Memory (MB) | Speedup
 -----------|-----------|--------|----------|---------|-------------|--------
 Small      | Arrow     | 721    | 0.0428s  | 16,844  | 1.29        | 1.21x

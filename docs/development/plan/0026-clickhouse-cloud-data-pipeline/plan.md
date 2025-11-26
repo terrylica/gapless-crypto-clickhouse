@@ -52,7 +52,7 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 
 **Pattern**: 3-component solution
 
-```
+```bash
 1. Code Fix (secure parameter)
    └── src/gapless_crypto_clickhouse/clickhouse/
        ├── config.py (add secure field)

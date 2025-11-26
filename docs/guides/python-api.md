@@ -34,7 +34,7 @@ print(f"{info['name']} v{info['version']}")
 # Available symbols and timeframes
 symbols = gcd.get_supported_symbols()      # ['BTCUSDT', 'ETHUSDT', ...]
 timeframes = gcd.get_supported_timeframes() # ['1s', '1m', '3m', '5m', ...]
-```
+```text
 
 ### Fetch Recent Data
 
@@ -45,7 +45,7 @@ df = gcd.fetch_data("BTCUSDT", "1h", limit=100)
 print(f"Fetched {len(df)} bars")
 print(f"Date range: {df['date'].min()} to {df['date'].max()}")
 print(f"Price range: ${df['low'].min():.2f} - ${df['high'].max():.2f}")
-```
+```text
 
 ### Download Date Range
 
@@ -63,7 +63,7 @@ print(f"Downloaded {len(df)} bars")
 # Microstructure analysis
 buy_ratio = df["taker_buy_base_asset_volume"].sum() / df["volume"].sum()
 print(f"Taker buy ratio: {buy_ratio:.1%}")
-```
+```text
 
 ### Gap Filling
 
@@ -75,7 +75,7 @@ print(f"Files processed: {results['files_processed']}")
 print(f"Gaps detected: {results['gaps_detected']}")
 print(f"Gaps filled: {results['gaps_filled']}")
 print(f"Success rate: {results['success_rate']:.1f}%")
-```
+```text
 
 ## Class-Based API (Advanced)
 
@@ -91,7 +91,7 @@ collector.collect_data(
     start_date="2023-01-01",
     end_date="2023-12-31"
 )
-```
+```text
 
 ### Custom Configuration
 
@@ -110,7 +110,7 @@ results = collector.collect_multiple_timeframes(timeframes)
 for timeframe, filepath in results.items():
     file_size = filepath.stat().st_size / (1024 * 1024)
     print(f"{timeframe}: {filepath.name} ({file_size:.1f} MB)")
-```
+```text
 
 ### Single Timeframe Collection
 
@@ -132,7 +132,7 @@ if result and "dataframe" in result:
     print(f"Date range: {df['date'].min()} to {df['date'].max()}")
     print(f"File saved: {filepath}")
     print(f"Collection stats: {stats}")
-```
+```bash
 
 ### Ultra-High Frequency Collection
 
@@ -150,7 +150,7 @@ uhf_result = uhf_collector.collect_timeframe_data("1s")
 if uhf_result and "dataframe" in uhf_result:
     df = uhf_result["dataframe"]
     print(f"1s data: {len(df)} bars (ultra-high frequency)")
-```
+```bash
 
 **Note**: All 16 timeframes supported with intelligent fallback:
 
@@ -170,7 +170,7 @@ symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
 for symbol in symbols:
     collector = BinancePublicDataCollector(symbol=symbol)
     collector.collect_multiple_timeframes(["1h", "4h"])
-```
+```text
 
 ## Gap Filling API
 
@@ -181,7 +181,7 @@ from gapless_crypto_clickhouse import UniversalGapFiller
 
 gap_filler = UniversalGapFiller()
 gap_filler.fill_gaps(directory="./data")
-```
+```text
 
 ### Gap Detection and Analysis
 
@@ -207,7 +207,7 @@ if gaps:
     result = gap_filler.process_file(csv_file, timeframe)
     print(f"Fill result: {result['gaps_filled']}/{result['gaps_detected']} gaps filled")
     print(f"Success rate: {result['success_rate']:.1f}%")
-```
+```text
 
 ## Validation API
 
@@ -227,7 +227,7 @@ print(f"Status: {report['validation_summary']}")
 print(f"Errors: {report['total_errors']}")
 print(f"Warnings: {report['total_warnings']}")
 print(f"File size: {report['file_size_mb']:.1f} MB")
-```
+```text
 
 ### Validation with DuckDB Persistence
 
@@ -250,7 +250,7 @@ stats = storage.get_summary_stats()
 
 # Export to pandas for analysis
 df = storage.export_to_dataframe()
-```
+```text
 
 **Storage Location**: `~/.cache/gapless-crypto-data/validation.duckdb`
 
@@ -274,7 +274,7 @@ test_data = [
 
 headers = ["date", "open", "high", "low", "close", "volume"]
 atomic_ops.write_csv_atomic(Path("data.csv"), test_data, headers)
-```
+```text
 
 **Guarantee**: Either complete file write or no file (no corruption on failure)
 
@@ -287,7 +287,7 @@ collector = BinancePublicDataCollector(
     symbol="BTCUSDT",
     output_format="csv"  # Default
 )
-```
+```text
 
 ### Parquet (5-10x Compression)
 
@@ -297,7 +297,7 @@ collector = BinancePublicDataCollector(
     output_format="parquet"  # 5-10x compression
 )
 collector.collect_timeframe_data("1h")
-```
+```text
 
 **Advantages**: Faster loading, type preservation, columnar storage
 
@@ -321,7 +321,7 @@ print(f"Close: ${df['close'].iloc[-1]:.2f}")
 # Price change percentage
 price_change = ((df["close"].iloc[-1] - df["close"].iloc[0]) / df["close"].iloc[0]) * 100
 print(f"Price change: {price_change:+.1f}%")
-```
+```text
 
 ### Microstructure Analysis
 
@@ -337,7 +337,7 @@ print(f"Average trades per bar: {avg_trades_per_bar:.0f}")
 # Volume analysis
 print(f"Total volume: {df['volume'].sum():,.0f}")
 print(f"Average volume: {df['volume'].mean():.2f}")
-```
+```text
 
 ### Coverage Validation
 
@@ -349,7 +349,7 @@ print(f"Date range: {df['date'].min()} to {df['date'].max()}")
 # Detect gaps
 gaps = gap_filler.detect_all_gaps(csv_file, timeframe)
 print(f"Gaps found: {len(gaps)}")
-```
+```text
 
 ## Batch Processing Workflow
 
@@ -379,7 +379,7 @@ if failed:
     print(f"\nFailed validations: {len(failed)}")
     for f in failed:
         print(f"  {f['file_path']}")
-```
+```python
 
 ## SLOs (Service Level Objectives)
 

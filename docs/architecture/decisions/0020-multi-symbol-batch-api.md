@@ -18,7 +18,7 @@ dataframes = {}
 for symbol in ["BTCUSDT", "ETHUSDT", "SOLUSDT"]:
     dataframes[symbol] = gcd.download(symbol, "1h", start_date="2024-01-01")
 # → Sequential execution, no concurrency
-```
+```python
 
 **Alpha Forge Feedback**: "Need `fetch_data(symbols=[...])` for 10-20x faster fetching"
 
@@ -73,7 +73,7 @@ def download_multiple(
         dict mapping symbol → DataFrame
         Example: {"BTCUSDT": df1, "ETHUSDT": df2, ...}
     """
-```
+```python
 
 ### Why Concurrent Execution
 
@@ -113,7 +113,7 @@ def download_multiple(symbols, timeframe, max_workers=5, **kwargs):
         raise ValueError(f"All {len(symbols)} symbols failed: {errors}")
 
     return results
-```
+```python
 
 **Error Handling Strategy**:
 
@@ -208,7 +208,7 @@ def download_multiple(
         >>> results["BTCUSDT"].shape
         (4344, 11)
     """
-```
+```text
 
 ### Error Handling
 
@@ -226,7 +226,7 @@ results = download_multiple(
     raise_on_partial_failure=True
 )
 # → Raises ValueError immediately
-```
+```text
 
 ### Integration
 
@@ -239,7 +239,7 @@ results = download_multiple(
 ```python
 from gapless_crypto_clickhouse.api import download_multiple
 __all__ = [..., "download_multiple"]
-```
+```bash
 
 ## Validation Criteria
 

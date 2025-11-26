@@ -95,7 +95,7 @@ services:
     restart: unless-stopped
     networks:
       - gapless-network
-```
+```text
 
 **Access**: `http://localhost:5521`
 
@@ -147,7 +147,7 @@ alias chq='docker exec -it gapless-clickhouse clickhouse-client --query'
 # Export formats
 alias ch-csv='docker exec -it gapless-clickhouse clickhouse-client --format CSV --query'
 alias ch-json='docker exec -it gapless-clickhouse clickhouse-client --format JSONEachRow --query'
-```
+```text
 
 **Features**:
 
@@ -170,7 +170,7 @@ alias ch-json='docker exec -it gapless-clickhouse clickhouse-client --format JSO
 
 ```bash
 brew install chdig
-```
+```text
 
 **Usage**:
 
@@ -180,7 +180,7 @@ chdig --host localhost --port 9000
 
 # Cluster monitoring
 chdig --cluster my_cluster
-```
+```python
 
 **Features**:
 
