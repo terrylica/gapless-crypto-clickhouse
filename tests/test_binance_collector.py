@@ -67,46 +67,8 @@ class TestBinancePublicDataCollector:
             assert len(date_str) == 10
             assert date_str.count("-") == 2
 
-    @pytest.mark.integration
-    def test_collect_small_dataset(self):
-        """Integration test for collecting a small dataset."""
-        collector = BinancePublicDataCollector(
-            symbol="BTCUSDT", start_date="2024-01-01", end_date="2024-01-02"
-        )
-
-        # Test with a very small date range to minimize download time
-        try:
-            collector.collect_timeframe_data("1h")
-
-            # Check that files were created in the collector's output directory
-            csv_files = list(Path(collector.output_dir).glob("*.csv"))
-
-            # If files were created, check their structure
-            if csv_files:
-                for csv_file in csv_files:
-                    df = pd.read_csv(csv_file)
-                    assert len(df.columns) == 11  # Full 11-column microstructure format
-                    assert len(df) > 0
-                    # Verify all expected columns are present
-                    expected_columns = [
-                        "date",
-                        "open",
-                        "high",
-                        "low",
-                        "close",
-                        "volume",
-                        "close_time",
-                        "quote_asset_volume",
-                        "number_of_trades",
-                        "taker_buy_base_asset_volume",
-                        "taker_buy_quote_asset_volume",
-                    ]
-                    for col in expected_columns:
-                        assert col in df.columns, f"Missing column: {col}"
-
-        except Exception as e:
-            # If network issues, skip the test
-            pytest.skip(f"Network-dependent test failed: {e}")
+    # NOTE: test_collect_small_dataset DELETED per ADR-0049
+    # 100% redundant with test_integration.py::test_complete_data_collection_and_gap_filling_workflow
 
     def test_output_filename_format(self):
         """Test output filename format."""

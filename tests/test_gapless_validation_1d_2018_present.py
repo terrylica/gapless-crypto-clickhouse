@@ -90,8 +90,7 @@ class TestGaplessValidation1d2018Present:
         assert date_diff <= 30, (
             f"End date should be within 30 days of {end_date}, got {max_date} (diff: {date_diff} days)"
         )
-
-        return result
+        # NOTE: 'return result' DELETED per ADR-0049 (PytestReturnNotNoneWarning fix)
 
     def test_validate_gapless_coverage(self, date_range, temp_output_dir):
         """Validate that 1d data has zero gaps from 2018 to present."""

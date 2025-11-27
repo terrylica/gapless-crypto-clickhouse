@@ -84,3 +84,6 @@ verify_cross_references.py
 
 # Test data files (downloaded during benchmarking)
 src/gapless_crypto_clickhouse/sample_data/
+
+# E2E test artifacts (ADR-0045)
+tests/screenshots/

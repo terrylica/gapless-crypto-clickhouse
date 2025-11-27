@@ -6,15 +6,16 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### Bug Fixes
 
-* **deps:** update BFA to 1.4.0 and fix package naming consistency ([2074305](https://github.com/terrylica/gapless-crypto-clickhouse/commit/20743054e41835674ec58a4e960593b9d44ce1c2))
+- **deps:** update BFA to 1.4.0 and fix package naming consistency ([2074305](https://github.com/terrylica/gapless-crypto-clickhouse/commit/20743054e41835674ec58a4e960593b9d44ce1c2))
 
 ## [15.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.8...v15.0.0) (2025-11-26)
 
 ### ⚠ BREAKING CHANGES
 
-* **cloud:** Local ClickHouse instances no longer supported
+- **cloud:** Local ClickHouse instances no longer supported
 
 Architecture Changes:
+
 - Remove docker-compose.yml and local deployment guides
 - Remove E2E tests for local ClickHouse Play/UI
 - Require CLICKHOUSE_HOST env var (no localhost fallback)
@@ -22,10 +23,12 @@ Architecture Changes:
 - Default secure=True (TLS required)
 
 Schema Validator Updates:
+
 - Accept SharedReplacingMergeTree (Cloud variant)
 - Update sorting key for ADR-0034 symbol-first indexing
 
 Test Suite Improvements:
+
 - Add test_config.py (19 tests) for ClickHouseConfig
 - Add test_clickhouse_query.py (29 tests) for OHLCVQuery
 - Remove destructive schema tests (protect production)
@@ -34,18 +37,19 @@ Test Suite Improvements:
 - Fix instrument_type values (um -> futures)
 
 Doppler Configuration:
+
 - CLICKHOUSE_HTTP_PORT: 8443 (was 8123)
 - CLICKHOUSE_PORT: 9440 (was 8443)
 
 ### Features
 
-* **cloud:** implement ClickHouse Cloud-only architecture (ADR-0043) ([64fb0ed](https://github.com/terrylica/gapless-crypto-clickhouse/commit/64fb0ed93082c867b045daad67e36be7bb054061))
+- **cloud:** implement ClickHouse Cloud-only architecture (ADR-0043) ([64fb0ed](https://github.com/terrylica/gapless-crypto-clickhouse/commit/64fb0ed93082c867b045daad67e36be7bb054061))
 
 ## [14.1.8](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.7...v14.1.8) (2025-11-26)
 
 ### Documentation
 
-* **readme:** sixth audit - PyPI landing page compliance ([378fd07](https://github.com/terrylica/gapless-crypto-clickhouse/commit/378fd078a7da23e9a8366c65dfe20e9c3683d836))
+- **readme:** sixth audit - PyPI landing page compliance ([378fd07](https://github.com/terrylica/gapless-crypto-clickhouse/commit/378fd078a7da23e9a8366c65dfe20e9c3683d836))
 
 ## [14.1.7](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v14.1.6...v14.1.7) (2025-11-26)
 

@@ -48,6 +48,7 @@ from pathlib import Path
 import pandas as pd
 
 from ..clickhouse.connection import ClickHouseConnection
+from ..constants import CSV_COLUMNS_BINANCE_RAW, CSV_COLUMNS_SPOT_OUTPUT
 
 logger = logging.getLogger(__name__)
 
@@ -271,10 +272,10 @@ class ClickHouseBulkLoader:
                 # Futures format: 12 columns with header
                 df = pd.read_csv(csv_path, header=0, index_col=False)
 
-                # Validate column count (expect 12 columns)
-                if len(df.columns) != 12:
+                # Validate column count (ADR-0048: use centralized constants)
+                if len(df.columns) != CSV_COLUMNS_BINANCE_RAW:
                     raise ValueError(
-                        f"Expected 12 columns for futures format, got {len(df.columns)}. "
+                        f"Expected {CSV_COLUMNS_BINANCE_RAW} columns for futures format, got {len(df.columns)}. "
                         f"Columns: {df.columns.tolist()}"
                     )
 
@@ -312,10 +313,10 @@ class ClickHouseBulkLoader:
                     ],
                 )
 
-                # Validate column count
-                if len(df.columns) != 11:
+                # Validate column count (ADR-0048: use centralized constants)
+                if len(df.columns) != CSV_COLUMNS_SPOT_OUTPUT:
                     raise ValueError(
-                        f"Expected 11 columns for spot format, got {len(df.columns)}. "
+                        f"Expected {CSV_COLUMNS_SPOT_OUTPUT} columns for spot format, got {len(df.columns)}. "
                         f"Columns: {df.columns.tolist()}"
                     )
 

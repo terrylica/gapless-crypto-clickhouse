@@ -136,12 +136,74 @@ fetch_data(
 - Deterministic versioning + ReplacingMergeTree deduplication
 - Query with FINAL keyword for deduplicated results
 
+## Deployment Modes
+
+This package supports TWO deployment modes (ADR-0044):
+
+### Cloud Mode (Production)
+- Connect to ClickHouse Cloud on AWS
+- Requires: CLICKHOUSE_HOST, CLICKHOUSE_PASSWORD environment variables
+- Best for: Multi-user access, production workloads, managed infrastructure
+
+### Local Mode (Development)
+- Install ClickHouse locally via Homebrew or apt
+- No credentials required
+- Best for: Backtesting, development, offline work, trying the package
+
+**Installation (Local Mode)**:
+
+macOS:
+```bash
+brew install clickhouse
+clickhouse server --daemon
+```
+
+Linux (EC2/Ubuntu):
+```bash
+curl https://clickhouse.com/ | sh
+./clickhouse server --daemon
+```
+
+**Mode Selection**:
+```bash
+# Explicit local mode
+export GCCH_MODE=local
+
+# Explicit cloud mode
+export GCCH_MODE=cloud
+
+# Auto-detect (default): localhost → local, remote → cloud
+export GCCH_MODE=auto
+```
+
+**Introspection**:
+```python
+from gapless_crypto_clickhouse import probe
+
+# Check available modes
+modes = probe.get_deployment_modes()
+
+# Check current mode
+current = probe.get_current_mode()  # "local" or "cloud"
+
+# Check if local ClickHouse is installed
+status = probe.check_local_clickhouse()
+```
+
 ## Configuration
 
-**Environment Variables**:
+### Cloud Mode (GCCH_MODE=cloud)
+```bash
+export CLICKHOUSE_HOST=your-instance.clickhouse.cloud
+export CLICKHOUSE_HTTP_PORT=8443      # Cloud HTTPS port
+export CLICKHOUSE_PASSWORD=your-password
+export CLICKHOUSE_SECURE=true         # TLS enabled
+```
+
+### Local Mode (GCCH_MODE=local)
 ```bash
 export CLICKHOUSE_HOST=localhost      # Default: localhost
-export CLICKHOUSE_HTTP_PORT=8123      # Default: 8123 (HTTP protocol)
+export CLICKHOUSE_HTTP_PORT=8123      # Default: 8123 (HTTP)
 export CLICKHOUSE_DATABASE=default    # Default: default
 export CLICKHOUSE_USER=default        # Default: default
 export CLICKHOUSE_PASSWORD=           # Default: empty

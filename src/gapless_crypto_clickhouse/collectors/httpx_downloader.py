@@ -27,6 +27,7 @@ from typing import Any, Callable, Dict, List, Optional
 
 import httpx
 
+from ..constants import HTTP_OK
 from .hybrid_url_generator import DownloadTask
 
 
@@ -285,7 +286,7 @@ class ConcurrentDownloadManager:
             # Download ZIP file
             response = await self.client.get(task.url)
 
-            if response.status_code != 200:
+            if response.status_code != HTTP_OK:
                 return DownloadResult(
                     task=task,
                     success=False,

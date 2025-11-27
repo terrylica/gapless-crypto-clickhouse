@@ -23,9 +23,32 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import pandas as pd
 
+from ..constants import (
+    CSV_COLUMNS_MINIMUM_OHLCV,
+    CSV_INDEX_CLOSE,
+    CSV_INDEX_CLOSE_TIME,
+    CSV_INDEX_HIGH,
+    CSV_INDEX_LOW,
+    CSV_INDEX_OPEN,
+    CSV_INDEX_QUOTE_VOLUME,
+    CSV_INDEX_TAKER_BUY_BASE,
+    CSV_INDEX_TAKER_BUY_QUOTE,
+    CSV_INDEX_TIMESTAMP,
+    CSV_INDEX_TRADE_COUNT,
+    CSV_INDEX_VOLUME,
+    HTTP_NOT_MODIFIED,
+    HTTP_OK,
+    MICROSECONDS_PER_MILLISECOND,
+    MILLISECONDS_PER_SECOND,
+    TIMEFRAME_TO_MINUTES,
+    TIMESTAMP_MICROSECONDS_DIGIT_COUNT,
+    TIMESTAMP_MICROSECONDS_MAX,
+    TIMESTAMP_MICROSECONDS_MIN,
+    TIMESTAMP_MILLISECONDS_MAX,
+    TIMESTAMP_MILLISECONDS_MIN,
+)
 from ..gap_filling.universal_gap_filler import UniversalGapFiller
 from ..utils.etag_cache import ETagCache
-from ..utils.timeframe_constants import TIMEFRAME_TO_MINUTES
 from ..utils.timestamp_format_analyzer import TimestampFormatAnalyzer
 from ..validation.csv_validator import CSVValidator
 
@@ -374,7 +397,7 @@ class BinancePublicDataCollector:
 
                 try:
                     with urllib.request.urlopen(request, timeout=60) as http_response:
-                        if http_response.status == 304:
+                        if http_response.status == HTTP_NOT_MODIFIED:
                             # 304 Not Modified - use cached ZIP file
                             print(
                                 f"    ✅ Cache HIT: {zip_filename} not modified (0 bytes downloaded)"
@@ -395,7 +418,7 @@ class BinancePublicDataCollector:
                                     # Cache corrupted, delete and re-download
                                     cache_zip_path.unlink()
                                     self.etag_cache.invalidate(binance_zip_url)
-                        elif http_response.status == 200:
+                        elif http_response.status == HTTP_OK:
                             # ETag changed - download new version
                             response_etag = http_response.headers.get("ETag")
                             content_length = http_response.headers.get("Content-Length", 0)
@@ -428,7 +451,7 @@ class BinancePublicDataCollector:
                             )
                             return []
                 except urllib.error.HTTPError as e:
-                    if e.code == 304:
+                    if e.code == HTTP_NOT_MODIFIED:
                         # Handle 304 explicitly - load from cache
                         print(f"    ✅ Cache HIT: {zip_filename} not modified (0 bytes downloaded)")
                         with zipfile.ZipFile(cache_zip_path, "r") as zip_file_handle:
@@ -554,7 +577,7 @@ class BinancePublicDataCollector:
             with tempfile.NamedTemporaryFile() as temporary_zip_file:
                 # Download daily ZIP file
                 with urllib.request.urlopen(daily_url, timeout=30) as http_response:
-                    if http_response.status == 200:
+                    if http_response.status == HTTP_OK:
                         shutil.copyfileobj(http_response, temporary_zip_file)
                         temporary_zip_file.flush()
                     else:
@@ -590,12 +613,12 @@ class BinancePublicDataCollector:
             first_field_value = int(first_csv_row[0])
 
             # ✅ BOUNDARY FIX: Support both milliseconds (13-digit) AND microseconds (16-digit) formats
-            # Valid timestamp ranges:
-            # Milliseconds: 1000000000000 (2001) to 9999999999999 (2286)
-            # Microseconds: 1000000000000000 (2001) to 9999999999999999 (2286)
-            is_valid_millisecond_timestamp = 1000000000000 <= first_field_value <= 9999999999999
+            # Valid timestamp ranges defined in constants/binance.py (ADR-0048)
+            is_valid_millisecond_timestamp = (
+                TIMESTAMP_MILLISECONDS_MIN <= first_field_value <= TIMESTAMP_MILLISECONDS_MAX
+            )
             is_valid_microsecond_timestamp = (
-                1000000000000000 <= first_field_value <= 9999999999999999
+                TIMESTAMP_MICROSECONDS_MIN <= first_field_value <= TIMESTAMP_MICROSECONDS_MAX
             )
 
             if is_valid_millisecond_timestamp or is_valid_microsecond_timestamp:
@@ -638,7 +661,7 @@ class BinancePublicDataCollector:
         for csv_row_index, csv_row_data in enumerate(
             raw_csv_data[data_start_row_index:], start=data_start_row_index
         ):
-            if len(csv_row_data) >= 6:  # Binance format has 12 columns but we need first 6
+            if len(csv_row_data) >= CSV_COLUMNS_MINIMUM_OHLCV:  # Need at least OHLCV columns
                 try:
                     # Binance format: [timestamp, open, high, low, close, volume, close_time, quote_volume, count, taker_buy_volume, taker_buy_quote_volume, ignore]
                     raw_timestamp_value = int(csv_row_data[0])
@@ -676,23 +699,29 @@ class BinancePublicDataCollector:
 
                     # ✅ BOUNDARY FIX: Don't filter per-monthly-file to preserve month boundaries
                     # Enhanced processing: capture all 11 essential Binance columns for complete microstructure analysis
+                    # Column indices from constants/binance.py (ADR-0048)
+                    close_time_raw = int(csv_row_data[CSV_INDEX_CLOSE_TIME])
+                    close_time_divisor = (
+                        MICROSECONDS_PER_MILLISECOND
+                        if len(str(close_time_raw)) >= TIMESTAMP_MICROSECONDS_DIGIT_COUNT
+                        else MILLISECONDS_PER_SECOND
+                    )
                     processed_candle_row = [
                         utc_datetime.strftime("%Y-%m-%d %H:%M:%S"),  # date (from open_time)
-                        float(csv_row_data[1]),  # open
-                        float(csv_row_data[2]),  # high
-                        float(csv_row_data[3]),  # low
-                        float(csv_row_data[4]),  # close
-                        float(csv_row_data[5]),  # volume (base asset volume)
+                        float(csv_row_data[CSV_INDEX_OPEN]),
+                        float(csv_row_data[CSV_INDEX_HIGH]),
+                        float(csv_row_data[CSV_INDEX_LOW]),
+                        float(csv_row_data[CSV_INDEX_CLOSE]),
+                        float(csv_row_data[CSV_INDEX_VOLUME]),  # base asset volume
                         # Additional microstructure columns for professional analysis
                         datetime.fromtimestamp(
-                            int(csv_row_data[6])
-                            / (1000000 if len(str(int(csv_row_data[6]))) >= 16 else 1000),
+                            close_time_raw / close_time_divisor,
                             timezone.utc,
                         ).strftime("%Y-%m-%d %H:%M:%S"),  # close_time
-                        float(csv_row_data[7]),  # quote_asset_volume
-                        int(csv_row_data[8]),  # number_of_trades
-                        float(csv_row_data[9]),  # taker_buy_base_asset_volume
-                        float(csv_row_data[10]),  # taker_buy_quote_asset_volume
+                        float(csv_row_data[CSV_INDEX_QUOTE_VOLUME]),
+                        int(csv_row_data[CSV_INDEX_TRADE_COUNT]),
+                        float(csv_row_data[CSV_INDEX_TAKER_BUY_BASE]),
+                        float(csv_row_data[CSV_INDEX_TAKER_BUY_QUOTE]),
                     ]
                     processed_candle_data.append(processed_candle_row)
 

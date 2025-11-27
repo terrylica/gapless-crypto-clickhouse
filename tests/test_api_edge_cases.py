@@ -2,6 +2,11 @@
 
 Targets uncovered lines in parameter validation, error handling, and
 deprecated parameter paths to reach 85%+ coverage.
+
+NOTE (ADR-0049): index_type deprecation tests removed per v3.0.0 deprecation plan (ADR-0023).
+Tests for valid index_type values (datetime, range, auto) were deleted since the parameter
+is deprecated. Only test_index_type_validation_none and test_index_type_validation_invalid
+remain to test boundary conditions.
 """
 
 import tempfile
@@ -51,20 +56,8 @@ class TestParameterValidation:
         # Should not raise
         _validate_index_type_parameter(None)
 
-    def test_index_type_validation_valid_datetime(self):
-        """Test index_type validation with valid 'datetime' value."""
-        with pytest.warns(DeprecationWarning, match="index_type.*deprecated"):
-            _validate_index_type_parameter("datetime")
-
-    def test_index_type_validation_valid_range(self):
-        """Test index_type validation with valid 'range' value."""
-        with pytest.warns(DeprecationWarning, match="index_type.*deprecated"):
-            _validate_index_type_parameter("range")
-
-    def test_index_type_validation_valid_auto(self):
-        """Test index_type validation with valid 'auto' value."""
-        with pytest.warns(DeprecationWarning, match="index_type.*deprecated"):
-            _validate_index_type_parameter("auto")
+    # NOTE: test_index_type_validation_valid_datetime, _valid_range, _valid_auto DELETED per ADR-0049
+    # index_type parameter deprecated per ADR-0023, removed in v3.0.0
 
     def test_index_type_validation_invalid(self):
         """Test index_type validation with invalid value."""

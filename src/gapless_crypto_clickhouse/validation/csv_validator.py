@@ -23,6 +23,7 @@ from typing import Any, Dict, Optional, Union
 
 import pandas as pd
 
+from ..constants import TIMEFRAME_TO_MINUTES
 from .models import ValidationReport
 from .storage import ValidationStorage, extract_symbol_timeframe_from_path
 
@@ -433,9 +434,8 @@ class CSVValidator:
         # Find gaps if we have expected timeframe
         gap_details = []
         if expected_timeframe and len(df) > 1:
-            # Calculate expected interval in minutes
-            interval_map = {"1m": 1, "3m": 3, "5m": 5, "15m": 15, "30m": 30, "1h": 60, "2h": 120}
-            expected_interval = interval_map.get(expected_timeframe, 0)
+            # Calculate expected interval in minutes (ADR-0048)
+            expected_interval = TIMEFRAME_TO_MINUTES.get(expected_timeframe, 0)
 
             if expected_interval > 0:
                 expected_delta = pd.Timedelta(minutes=expected_interval)
@@ -580,9 +580,8 @@ class CSVValidator:
         end_time = df["datetime"].max()
         duration = end_time - start_time
 
-        # Calculate expected number of bars
-        interval_map = {"1m": 1, "3m": 3, "5m": 5, "15m": 15, "30m": 30, "1h": 60, "2h": 120}
-        interval_minutes = interval_map.get(expected_timeframe, 0)
+        # Calculate expected number of bars (ADR-0048)
+        interval_minutes = TIMEFRAME_TO_MINUTES.get(expected_timeframe, 0)
 
         if interval_minutes > 0:
             expected_bars = int(duration.total_seconds() / (interval_minutes * 60)) + 1

@@ -388,7 +388,7 @@ wheels = [
 
 [[package]]
 name = "gapless-crypto-clickhouse"
-version = "15.0.0"
+version = "15.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "binance-futures-availability" },
@@ -422,7 +422,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "binance-futures-availability", specifier = ">=1.4.0" },
-    { name = "clickhouse-connect", specifier = ">=0.7.0" },
+    { name = "clickhouse-connect", specifier = ">=0.10.0,<1.0.0" },
     { name = "duckdb", specifier = ">=1.1.0" },
     { name = "httpx", specifier = ">=0.25.0" },
     { name = "numpy", specifier = ">=1.23.2,<2.0.0" },

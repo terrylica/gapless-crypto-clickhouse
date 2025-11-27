@@ -89,7 +89,7 @@ __email__ = "terry@eonlabs.com"
 # Enhanced DataFrame for domain-specific operations
 # Convenience functions (simple/intuitive API)
 # API-only probe hooks for AI coding agents
-from . import __probe__, probe
+from . import __probe__, constants, probe
 from .api import (
     InstrumentType,  # ADR-0021: Type alias for instrument type hints
     download,
@@ -104,6 +104,16 @@ from .api import (
     save_parquet,
 )
 from .collectors.binance_public_data_collector import BinancePublicDataCollector
+
+# Export key constants at top level (ADR-0046)
+from .constants import (
+    MODE_AUTO,
+    MODE_CLOUD,
+    MODE_LOCAL,
+    PORT_CLOUD_HTTP,
+    PORT_LOCAL_HTTP,
+    DeploymentMode,
+)
 from .exceptions import (
     DataCollectionError,
     GapFillingError,
@@ -128,8 +138,16 @@ __all__ = [
     "get_info",
     "save_parquet",
     "load_parquet",
-    # Type aliases (v3.2.0 - ADR-0021)
+    # Type aliases (v3.2.0 - ADR-0021, ADR-0046)
     "InstrumentType",  # Literal["spot", "futures-um"]
+    "DeploymentMode",  # Literal["local", "cloud", "auto"]
+    # Constants (ADR-0046)
+    "constants",  # Full constants module
+    "MODE_LOCAL",
+    "MODE_CLOUD",
+    "MODE_AUTO",
+    "PORT_LOCAL_HTTP",
+    "PORT_CLOUD_HTTP",
     # Advanced class-based API (for complex workflows)
     "BinancePublicDataCollector",
     "UniversalGapFiller",

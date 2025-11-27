@@ -6,6 +6,7 @@ Provides introspection capabilities for AI coding agents to discover:
 - Supported symbols, timeframes, instrument types
 - Performance characteristics (Arrow optimization)
 - Auto-ingestion capabilities
+- Deployment modes (Cloud vs Local) - ADR-0044
 
 Usage (for AI agents):
     from gapless_crypto_clickhouse import probe
@@ -19,14 +20,33 @@ Usage (for AI agents):
 
     # Get performance info
     perf = probe.get_performance_info()
+
+    # Get deployment modes (ADR-0044)
+    modes = probe.get_deployment_modes()
+    current = probe.get_current_mode()
+    status = probe.check_local_clickhouse()
 """
 
 import json
+import os
+import shutil
+import subprocess
 from typing import Any, Dict
 
 from . import __version__
-
 from .api import get_supported_symbols, get_supported_timeframes
+
+# Import semantic constants from centralized module (ADR-0046)
+from .constants import (
+    ENV_CLICKHOUSE_HOST,
+    ENV_GCCH_MODE,
+    LOCAL_HOSTS,
+    MODE_AUTO,
+    MODE_CLOUD,
+    MODE_LOCAL,
+    PORT_CLOUD_HTTP,
+    PORT_LOCAL_HTTP,
+)
 
 
 def get_capabilities() -> Dict[str, Any]:
@@ -231,6 +251,194 @@ def print_capabilities() -> None:
     """
     caps = get_capabilities()
     print(json.dumps(caps, indent=2))
+
+
+# ============================================================================
+# Deployment Mode Functions (ADR-0044)
+# ============================================================================
+
+
+def get_deployment_modes() -> Dict[str, Any]:
+    """
+    Get available deployment modes for AI agent discovery.
+
+    Returns:
+        Dictionary with available modes and their characteristics.
+
+    Example:
+        modes = probe.get_deployment_modes()
+        print(modes["local"]["description"])
+    """
+    return {
+        "available_modes": [MODE_LOCAL, MODE_CLOUD],
+        "default_mode": MODE_AUTO,
+        MODE_CLOUD: {
+            "description": "ClickHouse Cloud on AWS (production, multi-user)",
+            "port": PORT_CLOUD_HTTP,
+            "secure": True,
+            "requires_credentials": True,
+            "best_for": [
+                "Multi-user access",
+                "Production workloads",
+                "Managed infrastructure",
+            ],
+        },
+        MODE_LOCAL: {
+            "description": "Local ClickHouse installation (development, backtesting)",
+            "port": PORT_LOCAL_HTTP,
+            "secure": False,
+            "requires_credentials": False,
+            "best_for": [
+                "Backtesting (50-100x faster)",
+                "Development",
+                "Offline work",
+                "Trying the package",
+            ],
+        },
+        "mode_selection": {
+            "env_var": ENV_GCCH_MODE,
+            "values": {
+                MODE_LOCAL: "Force local mode",
+                MODE_CLOUD: "Force cloud mode (requires CLICKHOUSE_HOST)",
+                MODE_AUTO: "Auto-detect based on CLICKHOUSE_HOST",
+            },
+        },
+    }
+
+
+def get_current_mode() -> str:
+    """
+    Detect current deployment mode from environment.
+
+    Returns:
+        "local" or "cloud" based on environment configuration.
+
+    Example:
+        current = probe.get_current_mode()
+        print(f"Running in {current} mode")
+    """
+    mode = os.environ.get(ENV_GCCH_MODE, MODE_AUTO).lower()
+
+    if mode == MODE_LOCAL:
+        return MODE_LOCAL
+    elif mode == MODE_CLOUD:
+        return MODE_CLOUD
+    else:  # auto
+        host = os.environ.get(ENV_CLICKHOUSE_HOST, "")
+        if host in LOCAL_HOSTS:
+            return MODE_LOCAL
+        return MODE_CLOUD
+
+
+def get_local_installation_guide() -> Dict[str, Any]:
+    """
+    Get platform-specific installation guide for local ClickHouse.
+
+    Returns:
+        Dictionary with installation instructions per platform.
+
+    Example:
+        guide = probe.get_local_installation_guide()
+        print(guide["macos"]["commands"])
+    """
+    import platform
+
+    current_platform = platform.system().lower()
+
+    return {
+        "current_platform": current_platform,
+        "macos": {
+            "method": "Homebrew",
+            "commands": [
+                "brew install clickhouse",
+                "clickhouse server --daemon",
+            ],
+            "verify": "clickhouse client --query 'SELECT 1'",
+            "stop": "pkill -f clickhouse-server",
+        },
+        "linux": {
+            "method": "Official installer",
+            "commands": [
+                "curl https://clickhouse.com/ | sh",
+                "./clickhouse server --daemon",
+            ],
+            "verify": "./clickhouse client --query 'SELECT 1'",
+            "alternative": {
+                "method": "apt (Ubuntu/Debian)",
+                "commands": [
+                    "sudo apt-get install -y apt-transport-https ca-certificates",
+                    "curl -fsSL https://packages.clickhouse.com/deb/lts/clickhouse.gpg | sudo gpg --dearmor -o /usr/share/keyrings/clickhouse-keyring.gpg",
+                    'echo "deb [signed-by=/usr/share/keyrings/clickhouse-keyring.gpg] https://packages.clickhouse.com/deb stable main" | sudo tee /etc/apt/sources.list.d/clickhouse.list',
+                    "sudo apt-get update",
+                    "sudo apt-get install -y clickhouse-server clickhouse-client",
+                    "sudo service clickhouse-server start",
+                ],
+            },
+        },
+        "configuration": {
+            "env_vars": {
+                ENV_GCCH_MODE: MODE_LOCAL,
+                ENV_CLICKHOUSE_HOST: "localhost",
+                "CLICKHOUSE_HTTP_PORT": str(PORT_LOCAL_HTTP),
+            },
+            "example": f'export {ENV_GCCH_MODE}={MODE_LOCAL}',
+        },
+    }
+
+
+def check_local_clickhouse() -> Dict[str, Any]:
+    """
+    Check if local ClickHouse is installed and running.
+
+    Returns:
+        Dictionary with installation and running status.
+
+    Example:
+        status = probe.check_local_clickhouse()
+        if status["running"]:
+            print(f"ClickHouse running, version: {status['version']}")
+    """
+    result: Dict[str, Any] = {
+        "installed": False,
+        "running": False,
+        "binary_path": None,
+        "version": None,
+        "error": None,
+    }
+
+    # Check if clickhouse binary is available
+    binary_path = shutil.which("clickhouse")
+    if binary_path:
+        result["installed"] = True
+        result["binary_path"] = binary_path
+
+        # Try to get version
+        try:
+            version_output = subprocess.run(
+                ["clickhouse", "client", "--version"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            if version_output.returncode == 0:
+                result["version"] = version_output.stdout.strip()
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+
+    # Check if server is running by attempting connection
+    try:
+        import socket
+
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(2)
+        connect_result = sock.connect_ex(("localhost", PORT_LOCAL_HTTP))
+        sock.close()
+        if connect_result == 0:
+            result["running"] = True
+    except Exception as e:
+        result["error"] = str(e)
+
+    return result
 
 
 if __name__ == "__main__":

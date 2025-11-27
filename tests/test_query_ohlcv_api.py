@@ -90,19 +90,28 @@ def test_query_ohlcv_auto_ingestion_respects_date_range():
         "BTCUSDT",
         "1h",
         "2024-01-01",
-        "2024-01-03",  # 2 days
+        "2024-01-03",  # Inclusive: Jan 1 00:00 through Jan 3 00:00 = 49 bars
         auto_ingest=True,
     )
 
-    # Verify date range
+    # Verify date range (inclusive end boundary means 49 bars, not 48)
     assert len(df) > 0, "Should return data"
-    assert len(df) <= 48, f"2 days of 1h data should be ≤48 bars, got {len(df)}"
+    assert len(df) <= 49, f"Jan 1 00:00 to Jan 3 00:00 (1h) should be ≤49 bars, got {len(df)}"
 
-    # Verify timestamps within range
-    min_ts = pd.to_datetime("2024-01-01")
-    max_ts = pd.to_datetime("2024-01-04")  # Exclusive end
-    assert df["timestamp"].min() >= min_ts, f"Min timestamp {df['timestamp'].min()} before start"
-    assert df["timestamp"].max() < max_ts, f"Max timestamp {df['timestamp'].max()} after end"
+    # Verify timestamps within range (normalize to UTC for comparison)
+    min_ts = pd.Timestamp("2024-01-01", tz="UTC")
+    max_ts = pd.Timestamp("2024-01-04", tz="UTC")  # Exclusive end
+    # Convert df timestamps to pandas Timestamp then normalize to UTC
+    df_min = pd.Timestamp(df["timestamp"].min())
+    df_max = pd.Timestamp(df["timestamp"].max())
+    if df_min.tzinfo is not None:
+        df_min = df_min.tz_convert("UTC")
+        df_max = df_max.tz_convert("UTC")
+    else:
+        df_min = df_min.tz_localize("UTC")
+        df_max = df_max.tz_localize("UTC")
+    assert df_min >= min_ts, f"Min timestamp {df_min} before start"
+    assert df_max < max_ts, f"Max timestamp {df_max} after end"
 
 
 # ============================================================================

@@ -33,7 +33,12 @@ from typing import List, Optional, Union
 
 import pandas as pd
 
-from .api import InstrumentType
+from .api import (
+    InstrumentType,
+    _validate_date_format,
+    _validate_symbol,
+    _validate_timeframe_value,
+)
 from .clickhouse import ClickHouseConnection
 from .clickhouse.config import ClickHouseConfig
 from .clickhouse_query import OHLCVQuery
@@ -146,6 +151,17 @@ def query_ohlcv(
 
     if not start_date or not end_date:
         raise ValueError("start_date and end_date are required")
+
+    # Validate date format (YYYY-MM-DD) - fail fast before expensive operations
+    _validate_date_format(start_date, "start_date")
+    _validate_date_format(end_date, "end_date")
+
+    # Validate timeframe against supported timeframes
+    _validate_timeframe_value(timeframe)
+
+    # Validate symbols against supported symbols (with suggestions on error)
+    for sym in symbols:
+        _validate_symbol(sym, instrument_type=instrument_type)
 
     # Connect to ClickHouse
     config = clickhouse_config or ClickHouseConfig.from_env()

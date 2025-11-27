@@ -27,7 +27,7 @@ from typing import Dict, List, Optional
 import httpx
 import pandas as pd
 
-from ..utils.timeframe_constants import (
+from ..constants import (
     TIMEFRAME_TO_BINANCE_INTERVAL,
     TIMEFRAME_TO_PYTHON_TIMEDELTA,
     TIMEFRAME_TO_TIMEDELTA,

@@ -4,6 +4,10 @@ Test cases for the simple function-based API
 
 Ensures the convenience functions work correctly and provide
 the expected financial data library experience.
+
+NOTE (ADR-0049): index_type tests removed per v3.0.0 deprecation plan (ADR-0023).
+The index_type parameter was deprecated in v3.0.0 and RangeIndex is now the default.
+Tests using deprecated index_type parameter were deleted to eliminate warnings.
 """
 
 import pandas as pd
@@ -90,58 +94,30 @@ class TestSimpleAPI:
 
     def test_fetch_data_parameters(self):
         """Test fetch_data function parameter handling"""
-        # Test with minimal parameters (should not raise)
+        # Test with explicit date range (ADR-0049: avoid limit=N to prevent future date warnings)
         try:
-            df = gcch.fetch_data("BTCUSDT", "1h", limit=1)
+            df = gcch.fetch_data("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
             # Should return DataFrame even if empty
             assert isinstance(df, pd.DataFrame)
-            # With default datetime index, should have DatetimeIndex (if data available)
+            # Default is RangeIndex (DatetimeIndex is deprecated per ADR-0023)
             if not df.empty:
-                assert isinstance(df.index, pd.DatetimeIndex)
+                assert isinstance(df.index, pd.RangeIndex)
         except Exception as e:
             # Network issues are acceptable in tests
             pytest.skip(f"Network-dependent test failed: {e}")
 
-    def test_fetch_data_index_types(self):
-        """Test fetch_data function with different index_type parameters"""
-        try:
-            # Test datetime index (default)
-            df_datetime = gcch.fetch_data("BTCUSDT", "1h", limit=1, index_type="datetime")
-            assert isinstance(df_datetime, pd.DataFrame)
-            if not df_datetime.empty:
-                assert isinstance(df_datetime.index, pd.DatetimeIndex)
-
-            # Test range index (legacy)
-            df_range = gcch.fetch_data("BTCUSDT", "1h", limit=1, index_type="range")
-            assert isinstance(df_range, pd.DataFrame)
-            if not df_range.empty:
-                assert isinstance(df_range.index, pd.RangeIndex)
-                assert "date" in df_range.columns
-
-            # Test auto index (same as datetime)
-            df_auto = gcch.fetch_data("BTCUSDT", "1h", limit=1, index_type="auto")
-            assert isinstance(df_auto, pd.DataFrame)
-            if not df_auto.empty:
-                assert isinstance(df_auto.index, pd.DatetimeIndex)
-
-        except Exception as e:
-            # Network issues are acceptable in tests
-            pytest.skip(f"Network-dependent test failed: {e}")
-
-    def test_fetch_data_invalid_index_type(self):
-        """Test fetch_data function with invalid index_type parameter"""
-        with pytest.raises(ValueError, match="Invalid index_type"):
-            gcch.fetch_data("BTCUSDT", "1h", limit=1, index_type="invalid")
+    # NOTE: test_fetch_data_index_types and test_fetch_data_invalid_index_type DELETED per ADR-0049
+    # index_type parameter deprecated per ADR-0023, removed in v3.0.0
 
     def test_fetch_data_default_behavior(self):
-        """Test that fetch_data defaults to datetime index for better UX"""
+        """Test that fetch_data defaults to RangeIndex (DatetimeIndex is deprecated)."""
         try:
-            # Default behavior should be datetime index
+            # Default behavior is RangeIndex (ADR-0023: Arrow-optimized)
             df = gcch.fetch_data("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
             assert isinstance(df, pd.DataFrame)
             if not df.empty:
-                assert isinstance(df.index, pd.DatetimeIndex)
-                # Should STILL have 'date' column for backward compatibility
+                assert isinstance(df.index, pd.RangeIndex)
+                # Should have 'date' column for explicit time operations
                 assert "date" in df.columns
                 # Should have expected OHLCV columns
                 expected_cols = ["open", "high", "low", "close", "volume"]
@@ -152,24 +128,8 @@ class TestSimpleAPI:
             # Network issues are acceptable in tests
             pytest.skip(f"Network-dependent test failed: {e}")
 
-    def test_backward_compatibility_range_index(self):
-        """Test backward compatibility with range index"""
-        try:
-            # Explicit range index should work like before
-            df = gcch.fetch_data(
-                "BTCUSDT", "1h", start="2024-01-01", end="2024-01-02", index_type="range"
-            )
-            assert isinstance(df, pd.DataFrame)
-            if not df.empty:
-                assert isinstance(df.index, pd.RangeIndex)
-                assert "date" in df.columns
-                # Can manually set index like before
-                df_indexed = df.set_index("date")
-                assert isinstance(df_indexed.index, pd.DatetimeIndex)
-
-        except Exception as e:
-            # Network issues are acceptable in tests
-            pytest.skip(f"Network-dependent test failed: {e}")
+    # NOTE: test_backward_compatibility_range_index DELETED per ADR-0049
+    # index_type parameter deprecated per ADR-0023, removed in v3.0.0
 
     def test_download_alias(self):
         """Test that download is an alias for fetch_data"""
@@ -187,93 +147,9 @@ class TestSimpleAPI:
             # Network issues are acceptable in tests
             assert "network" in str(e).lower() or "timeout" in str(e).lower()
 
-    def test_download_index_type_support(self):
-        """Test that download function supports index_type parameter"""
-        try:
-            # Test datetime index (default)
-            df_datetime = gcch.download(
-                "BTCUSDT", "1h", start="2024-01-01", end="2024-01-02", index_type="datetime"
-            )
-            assert isinstance(df_datetime, pd.DataFrame)
-            if not df_datetime.empty:
-                assert isinstance(df_datetime.index, pd.DatetimeIndex)
-
-            # Test range index
-            df_range = gcch.download(
-                "BTCUSDT", "1h", start="2024-01-01", end="2024-01-02", index_type="range"
-            )
-            assert isinstance(df_range, pd.DataFrame)
-            if not df_range.empty:
-                assert isinstance(df_range.index, pd.RangeIndex)
-
-        except Exception as e:
-            # Network issues are acceptable in tests
-            pytest.skip(f"Network-dependent test failed: {e}")
-
-    def test_expected_dataframe_columns(self):
-        """Test that returned DataFrames have expected microstructure columns"""
-        try:
-            # Test with datetime index (default) - 'date' column still present
-            df_datetime = gcch.fetch_data("BTCUSDT", "1d", start="2024-01-01", end="2024-01-02")
-
-            if not df_datetime.empty:
-                # Expected columns when using datetime index (includes 'date' column for compatibility)
-                expected_datetime_columns = [
-                    "date",
-                    "open",
-                    "high",
-                    "low",
-                    "close",
-                    "volume",
-                    "close_time",
-                    "quote_asset_volume",
-                    "number_of_trades",
-                    "taker_buy_base_asset_volume",
-                    "taker_buy_quote_asset_volume",
-                ]
-
-                for col in expected_datetime_columns:
-                    assert col in df_datetime.columns
-
-                # Check index is datetime and data types
-                assert isinstance(df_datetime.index, pd.DatetimeIndex)
-                assert pd.api.types.is_datetime64_any_dtype(df_datetime["date"])
-                assert pd.api.types.is_numeric_dtype(df_datetime["open"])
-                assert pd.api.types.is_numeric_dtype(df_datetime["volume"])
-
-            # Test with range index (legacy) - same columns but RangeIndex
-            df_range = gcch.fetch_data(
-                "BTCUSDT", "1d", start="2024-01-01", end="2024-01-02", index_type="range"
-            )
-
-            if not df_range.empty:
-                # Expected columns when using range index (same as datetime)
-                expected_range_columns = [
-                    "date",
-                    "open",
-                    "high",
-                    "low",
-                    "close",
-                    "volume",
-                    "close_time",
-                    "quote_asset_volume",
-                    "number_of_trades",
-                    "taker_buy_base_asset_volume",
-                    "taker_buy_quote_asset_volume",
-                ]
-
-                for col in expected_range_columns:
-                    assert col in df_range.columns
-
-                # Check data types for range index version
-                assert isinstance(df_range.index, pd.RangeIndex)
-                assert pd.api.types.is_datetime64_any_dtype(df_range["date"])
-                assert pd.api.types.is_numeric_dtype(df_range["open"])
-                assert pd.api.types.is_numeric_dtype(df_range["volume"])
-
-        except Exception as e:
-            # Network issues are acceptable in tests
-            pytest.skip(f"Network-dependent test failed: {e}")
+    # NOTE: test_download_index_type_support and test_expected_dataframe_columns DELETED per ADR-0049
+    # index_type parameter deprecated per ADR-0023, removed in v3.0.0
+    # test_expected_dataframe_columns was also stale (expected DatetimeIndex as default)
 
     def test_fill_gaps_function_signature(self):
         """Test fill_gaps function parameter handling"""
@@ -309,10 +185,8 @@ class TestSimpleAPI:
         end = "2024-01-02"
 
         try:
-            # Function-based API with range index for consistency comparison
-            df_function = gcch.fetch_data(
-                symbol, timeframe, start=start, end=end, index_type="range"
-            )
+            # Function-based API (default RangeIndex per ADR-0023)
+            df_function = gcch.fetch_data(symbol, timeframe, start=start, end=end)
 
             # Class-based API
             collector = gcch.BinancePublicDataCollector(
@@ -323,18 +197,16 @@ class TestSimpleAPI:
             if result_class and "dataframe" in result_class:
                 df_class = result_class["dataframe"]
 
-                # Both should be DataFrames with same columns when using range index
+                # Both should be DataFrames with same columns
                 assert isinstance(df_function, pd.DataFrame)
                 assert isinstance(df_class, pd.DataFrame)
                 assert list(df_function.columns) == list(df_class.columns)
 
-                # Test that new default datetime index also works
-                df_function_datetime = gcch.fetch_data(symbol, timeframe, start=start, end=end)
-                assert isinstance(df_function_datetime, pd.DataFrame)
-                if not df_function_datetime.empty:
-                    assert isinstance(df_function_datetime.index, pd.DatetimeIndex)
-                    # Should have same columns (date column preserved for compatibility)
-                    assert len(df_function_datetime.columns) == len(df_class.columns)
+                # Verify default RangeIndex (ADR-0023)
+                if not df_function.empty:
+                    assert isinstance(df_function.index, pd.RangeIndex)
+                    # Should have same columns (date column preserved for explicit time ops)
+                    assert len(df_function.columns) == len(df_class.columns)
 
         except Exception as e:
             # Network issues are acceptable in tests
@@ -368,7 +240,8 @@ class TestAPIUsagePatterns:
         timeframe = timeframes[0] if "1d" not in timeframes else "1d"
 
         try:
-            df = gcch.fetch_data(symbol, timeframe, limit=1)
+            # Use explicit date range (ADR-0049: avoid limit=N to prevent future date warnings)
+            df = gcch.fetch_data(symbol, timeframe, start="2024-01-01", end="2024-01-02")
             assert isinstance(df, pd.DataFrame)
 
         except Exception as e:
@@ -377,7 +250,7 @@ class TestAPIUsagePatterns:
     def test_date_range_usage(self):
         """Test date range usage with start/end dates"""
         try:
-            # Test with default datetime index
+            # Test with default RangeIndex (ADR-0023)
             df = gcch.fetch_data(
                 symbol="ETHUSDT",
                 timeframe="1h",
@@ -388,23 +261,11 @@ class TestAPIUsagePatterns:
             assert isinstance(df, pd.DataFrame)
 
             if not df.empty:
-                # With default datetime index, index is datetime but date column preserved
-                assert isinstance(df.index, pd.DatetimeIndex)
+                # Default is RangeIndex; date column preserved for explicit time ops
+                assert isinstance(df.index, pd.RangeIndex)
                 assert "date" in df.columns
-
-            # Test with legacy range index
-            df_range = gcch.fetch_data(
-                symbol="ETHUSDT",
-                timeframe="1h",
-                start="2024-01-01",
-                end="2024-01-01",
-                index_type="range",
-            )
-
-            if not df_range.empty:
-                # With range index, should have date column as datetime
-                assert "date" in df_range.columns
-                assert pd.api.types.is_datetime64_any_dtype(df_range["date"])
+                # Date column should be datetime type
+                assert pd.api.types.is_datetime64_any_dtype(df["date"])
 
         except Exception as e:
             pytest.skip(f"Network-dependent test failed: {e}")
@@ -438,10 +299,15 @@ class TestAPIUsagePatterns:
     def test_fetch_data_auto_fill_parameter(self):
         """Test that fetch_data also supports auto_fill_gaps parameter"""
         try:
-            # fetch_data() should also have auto_fill_gaps parameter
-            df_with_fill = gcch.fetch_data("ETHUSDT", "1h", limit=48, auto_fill_gaps=True)
+            # Use explicit date range (ADR-0049: avoid limit=N to prevent future date warnings)
+            # 48 hours = 2 days of hourly data
+            df_with_fill = gcch.fetch_data(
+                "ETHUSDT", "1h", start="2024-01-01", end="2024-01-03", auto_fill_gaps=True
+            )
 
-            df_without_fill = gcch.fetch_data("ETHUSDT", "1h", limit=48, auto_fill_gaps=False)
+            df_without_fill = gcch.fetch_data(
+                "ETHUSDT", "1h", start="2024-01-01", end="2024-01-03", auto_fill_gaps=False
+            )
 
             assert isinstance(df_with_fill, pd.DataFrame)
             assert isinstance(df_without_fill, pd.DataFrame)

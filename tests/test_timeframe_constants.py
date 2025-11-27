@@ -19,7 +19,7 @@ from datetime import timedelta
 import pandas as pd
 import pytest
 
-from gapless_crypto_clickhouse.utils.timeframe_constants import (
+from gapless_crypto_clickhouse.constants import (
     TIMEFRAME_TO_BINANCE_INTERVAL,
     TIMEFRAME_TO_MINUTES,
     TIMEFRAME_TO_PYTHON_TIMEDELTA,

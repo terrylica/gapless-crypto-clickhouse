@@ -28,6 +28,7 @@ from typing import List, Literal, Optional, Union
 import pandas as pd
 
 from .collectors.binance_public_data_collector import BinancePublicDataCollector
+from .constants import TIMEFRAME_TO_MINUTES
 from .gap_filling.universal_gap_filler import UniversalGapFiller
 
 # Instrument type support (ADR-0021)
@@ -318,25 +319,9 @@ def _calculate_date_range_from_limit(
     if not limit:
         return start, end
 
-    # Calculate start date based on limit and interval
-    interval_minutes = {
-        "1s": 1 / 60,  # 1 second = 1/60 minute
-        "1m": 1,
-        "3m": 3,
-        "5m": 5,
-        "15m": 15,
-        "30m": 30,
-        "1h": 60,
-        "2h": 120,
-        "4h": 240,
-        "6h": 360,
-        "8h": 480,
-        "12h": 720,
-        "1d": 1440,
-    }
-
-    if period in interval_minutes:
-        minutes_total = limit * interval_minutes[period]
+    # Calculate start date based on limit and interval (ADR-0048)
+    if period in TIMEFRAME_TO_MINUTES:
+        minutes_total = limit * TIMEFRAME_TO_MINUTES[period]
         start_date = datetime.now() - timedelta(minutes=minutes_total)
         calculated_start = start_date.strftime("%Y-%m-%d")
         calculated_end = datetime.now().strftime("%Y-%m-%d")

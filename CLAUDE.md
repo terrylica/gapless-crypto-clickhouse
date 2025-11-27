@@ -91,6 +91,16 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 **Key principle**: Credentials proxied through Doppler/1Password, never hardcoded. Prescriptive workflows for repeatable cloud infrastructure setup.
 
+### Local ClickHouse Setup (ADR-0044, ADR-0045)
+
+**Development Infrastructure** - mise-installed ClickHouse for backtesting and offline development
+
+- [`local-clickhouse`](skills/local-clickhouse/SKILL.md) - Install, configure, and validate local ClickHouse (includes E2E scripts for start, deploy, ingest, screenshot, validate)
+
+**When to use**: Local development without Cloud credentials, backtesting (50-100x faster), offline mode, E2E validation
+
+**Key principle**: Same SQL dialect as Cloud (zero migration). Tests fail hard if mise ClickHouse not installed (no skip per ADR-0045).
+
 ### ClickHouse Schema Architecture
 
 **Schema Version**: v2 (ADR-0034 optimized for prop trading, deployed 2025-01-22)

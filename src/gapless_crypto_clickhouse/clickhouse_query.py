@@ -52,6 +52,7 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 
 from .clickhouse.connection import ClickHouseConnection
+from .constants import TIMEFRAME_TO_SECONDS, VALID_TIMEFRAMES
 
 logger = logging.getLogger(__name__)
 
@@ -186,6 +187,7 @@ class OHLCVQuery:
                 number_of_trades,
                 taker_buy_base_asset_volume,
                 taker_buy_quote_asset_volume,
+                funding_rate,
                 data_source
             FROM ohlcv FINAL
             WHERE symbol = %(symbol)s
@@ -306,6 +308,7 @@ class OHLCVQuery:
                 number_of_trades,
                 taker_buy_base_asset_volume,
                 taker_buy_quote_asset_volume,
+                funding_rate,
                 data_source
             FROM ohlcv FINAL
             WHERE symbol = %(symbol)s
@@ -434,6 +437,7 @@ class OHLCVQuery:
                 number_of_trades,
                 taker_buy_base_asset_volume,
                 taker_buy_quote_asset_volume,
+                funding_rate,
                 data_source
             FROM ohlcv FINAL
             WHERE symbol IN %(symbols)s
@@ -550,34 +554,15 @@ class OHLCVQuery:
                 print(f"Found {len(gaps)} gaps:")
                 print(gaps)
         """
-        # Map timeframe to seconds for gap detection
-        timeframe_to_seconds = {
-            "1s": 1,
-            "1m": 60,
-            "3m": 180,
-            "5m": 300,
-            "15m": 900,
-            "30m": 1800,
-            "1h": 3600,
-            "2h": 7200,
-            "4h": 14400,
-            "6h": 21600,
-            "8h": 28800,
-            "12h": 43200,
-            "1d": 86400,
-            "3d": 259200,
-            "1w": 604800,
-            "1mo": 2592000,  # Approximate: 30 days
-        }
-
-        if timeframe not in timeframe_to_seconds:
+        # Use centralized timeframe-to-seconds mapping (ADR-0048)
+        if timeframe not in VALID_TIMEFRAMES:
             raise ValueError(f"Unsupported timeframe for gap detection: {timeframe}")
         if instrument_type not in ("spot", "futures"):
             raise ValueError(
                 f"Invalid instrument_type: '{instrument_type}'. Must be 'spot' or 'futures'"
             )
 
-        interval_seconds = timeframe_to_seconds[timeframe]
+        interval_seconds = TIMEFRAME_TO_SECONDS[timeframe]
         symbol = symbol.upper()
 
         # SQL to detect gaps using lagInFrame window function

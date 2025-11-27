@@ -21,17 +21,30 @@ from tenacity import (
     wait_incrementing,
 )
 
+# Import constants from centralized module (ADR-0046, ADR-0048)
+from ..constants import (
+    API_CHUNK_SIZE,
+    BINANCE_API_FUTURES,
+    BINANCE_API_SPOT,
+    DEFAULT_RETRY_AFTER,
+    HTTP_IP_BANNED,
+    HTTP_OK,
+    HTTP_RATE_LIMITED,
+    RETRY_BASE_DELAY,
+    RETRY_MAX_ATTEMPTS,
+    TIMEOUT_API,
+    TIMEFRAME_TO_MILLISECONDS,
+)
+
 logger = logging.getLogger(__name__)
 
-# Constants
-REST_CHUNK_SIZE = 1000  # Binance API limit per request
-API_MAX_RETRIES = 3  # Number of retry attempts
-API_TIMEOUT = 30.0  # Request timeout in seconds
-API_BASE_DELAY = 1.0  # Base delay between retries
-
-# API endpoints
-SPOT_API_URL = "https://api.binance.com/api/v3/klines"
-FUTURES_API_URL = "https://fapi.binance.com/fapi/v1/klines"
+# Re-export for backward compatibility
+REST_CHUNK_SIZE = API_CHUNK_SIZE
+API_MAX_RETRIES = RETRY_MAX_ATTEMPTS
+API_TIMEOUT = TIMEOUT_API
+API_BASE_DELAY = RETRY_BASE_DELAY
+SPOT_API_URL = BINANCE_API_SPOT
+FUTURES_API_URL = BINANCE_API_FUTURES
 
 
 class RateLimitError(Exception):
@@ -85,14 +98,14 @@ def fetch_klines_with_retry(
     response = httpx.get(base_url, params=params, timeout=timeout)
 
     # Handle rate limiting (418 = IP banned, 429 = rate limited)
-    if response.status_code in (418, 429):
-        retry_after = int(response.headers.get("retry-after", 60))
+    if response.status_code in (HTTP_IP_BANNED, HTTP_RATE_LIMITED):
+        retry_after = int(response.headers.get("retry-after", DEFAULT_RETRY_AFTER))
         logger.warning(f"Rate limited (HTTP {response.status_code}), waiting {retry_after}s")
         time.sleep(retry_after)
         raise RateLimitError(retry_after=retry_after)
 
     # Handle other HTTP errors
-    if response.status_code != 200:
+    if response.status_code != HTTP_OK:
         raise APIError(response.status_code, response.text)
 
     data = response.json()
@@ -148,8 +161,10 @@ def calculate_chunks(
 def get_interval_ms(timeframe: str) -> int:
     """Get interval duration in milliseconds for a timeframe string.
 
+    Uses centralized TIMEFRAME_TO_MILLISECONDS mapping (ADR-0048).
+
     Args:
-        timeframe: Timeframe string (e.g., "1h", "4h", "1d")
+        timeframe: Timeframe string (e.g., "1h", "4h", "1d", "1M")
 
     Returns:
         Interval duration in milliseconds
@@ -157,29 +172,13 @@ def get_interval_ms(timeframe: str) -> int:
     Raises:
         ValueError: If timeframe is not recognized
     """
-    interval_map = {
-        "1s": 1000,
-        "1m": 60 * 1000,
-        "3m": 3 * 60 * 1000,
-        "5m": 5 * 60 * 1000,
-        "15m": 15 * 60 * 1000,
-        "30m": 30 * 60 * 1000,
-        "1h": 60 * 60 * 1000,
-        "2h": 2 * 60 * 60 * 1000,
-        "4h": 4 * 60 * 60 * 1000,
-        "6h": 6 * 60 * 60 * 1000,
-        "8h": 8 * 60 * 60 * 1000,
-        "12h": 12 * 60 * 60 * 1000,
-        "1d": 24 * 60 * 60 * 1000,
-        "3d": 3 * 24 * 60 * 60 * 1000,
-        "1w": 7 * 24 * 60 * 60 * 1000,
-        "1M": 30 * 24 * 60 * 60 * 1000,
-    }
+    # Handle Binance API notation for monthly (1M -> 1mo)
+    normalized = "1mo" if timeframe == "1M" else timeframe
 
-    if timeframe not in interval_map:
+    if normalized not in TIMEFRAME_TO_MILLISECONDS:
         raise ValueError(f"Unsupported timeframe: {timeframe}")
 
-    return interval_map[timeframe]
+    return TIMEFRAME_TO_MILLISECONDS[normalized]
 
 
 def fetch_gap_data(
