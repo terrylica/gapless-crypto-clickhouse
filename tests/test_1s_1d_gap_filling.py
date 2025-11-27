@@ -22,7 +22,7 @@ class Test1sGapFilling:
 
     def test_1s_timeframe_mapping(self):
         """Test that 1s timeframe is properly mapped in gap filler."""
-        from gapless_crypto_clickhouse.utils.timeframe_constants import (
+        from gapless_crypto_clickhouse.constants import (
             TIMEFRAME_TO_BINANCE_INTERVAL,
         )
 
@@ -262,7 +262,7 @@ class Test1dGapFilling:
 
     def test_1d_timeframe_mapping(self):
         """Test that 1d timeframe is properly mapped in gap filler."""
-        from gapless_crypto_clickhouse.utils.timeframe_constants import (
+        from gapless_crypto_clickhouse.constants import (
             TIMEFRAME_TO_BINANCE_INTERVAL,
         )
 

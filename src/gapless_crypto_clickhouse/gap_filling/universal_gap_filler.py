@@ -31,6 +31,7 @@ from ..constants import (
     TIMEFRAME_TO_BINANCE_INTERVAL,
     TIMEFRAME_TO_PYTHON_TIMEDELTA,
     TIMEFRAME_TO_TIMEDELTA,
+    VALID_INSTRUMENT_TYPES,
 )
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -119,10 +120,11 @@ class UniversalGapFiller:
         Raises:
             ValueError: If instrument_type is invalid
         """
-        # ADR-0021: Validate instrument type and set API endpoint
-        if instrument_type not in ("spot", "futures-um"):
+        # ADR-0050: Validate instrument type using centralized constants
+        if instrument_type not in VALID_INSTRUMENT_TYPES:
             raise ValueError(
-                f"Invalid instrument_type '{instrument_type}'. Must be 'spot' or 'futures-um'"
+                f"Invalid instrument_type '{instrument_type}'. "
+                f"Must be one of: {sorted(VALID_INSTRUMENT_TYPES)}"
             )
         self.instrument_type = instrument_type
 

@@ -198,7 +198,8 @@ class ClickHouseConnection:
             params: Query parameters (dict mapping placeholder names to values)
 
         Returns:
-            pandas DataFrame with query results (Arrow-optimized internally)
+            pandas DataFrame with query results (Arrow-optimized internally).
+            All timestamp columns are normalized to naive UTC for consistency.
 
         Raises:
             Exception: If query execution fails
@@ -222,10 +223,40 @@ class ClickHouseConnection:
             logger.debug(f"Executing query (DataFrame, Arrow-optimized): {query[:100]}...")
             # Use Arrow-optimized query method for 3x faster DataFrame creation
             df = self.client.query_df_arrow(query, parameters=params or {})
+
+            # Normalize timestamps to naive UTC for consistency
+            # clickhouse-connect's query_df_arrow() applies local timezone to Arrow timestamps,
+            # but our data is always UTC. Convert to naive UTC for consistent behavior.
+            df = self._normalize_timestamps_to_utc(df)
+
             logger.debug(f"Query returned {len(df)} rows (Arrow-optimized)")
             return df
         except Exception as e:
             raise Exception(f"Query execution failed: {query[:100]}...\nError: {e}") from e
+
+    def _normalize_timestamps_to_utc(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Normalize timezone-aware timestamps to naive UTC.
+
+        clickhouse-connect's query_df_arrow() applies the system's local timezone
+        to Arrow timestamp columns. Since our data is always UTC, we convert
+        timezone-aware columns to naive UTC for consistent behavior across systems.
+
+        Args:
+            df: DataFrame potentially containing timezone-aware timestamp columns
+
+        Returns:
+            DataFrame with all timestamps as naive UTC
+        """
+        for col in df.columns:
+            dtype_str = str(df[col].dtype)
+            # Handle Arrow-backed timezone-aware timestamps (e.g., "timestamp[us, tz=America/Vancouver][pyarrow]")
+            if "timestamp[" in dtype_str and "tz=" in dtype_str:
+                df[col] = pd.to_datetime(df[col].dt.tz_convert("UTC").dt.tz_localize(None))
+            # Handle pandas timezone-aware datetime
+            elif hasattr(df[col].dtype, "tz") and df[col].dtype.tz is not None:
+                df[col] = df[col].dt.tz_convert("UTC").dt.tz_localize(None)
+        return df
 
     def insert_dataframe(self, df: pd.DataFrame, table: str) -> int:
         """

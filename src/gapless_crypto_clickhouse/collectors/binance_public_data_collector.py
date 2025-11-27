@@ -46,6 +46,7 @@ from ..constants import (
     TIMESTAMP_MICROSECONDS_MIN,
     TIMESTAMP_MILLISECONDS_MAX,
     TIMESTAMP_MILLISECONDS_MIN,
+    VALID_INSTRUMENT_TYPES,
 )
 from ..gap_filling.universal_gap_filler import UniversalGapFiller
 from ..utils.etag_cache import ETagCache
@@ -247,10 +248,11 @@ class BinancePublicDataCollector:
             ...     output_format="parquet"
             ... )
         """
-        # ADR-0021: Validate instrument type first (fail fast)
-        if instrument_type not in ("spot", "futures-um"):
+        # ADR-0050: Validate instrument type using centralized constants
+        if instrument_type not in VALID_INSTRUMENT_TYPES:
             raise ValueError(
-                f"Invalid instrument_type '{instrument_type}'. Must be 'spot' or 'futures-um'"
+                f"Invalid instrument_type '{instrument_type}'. "
+                f"Must be one of: {sorted(VALID_INSTRUMENT_TYPES)}"
             )
         self.instrument_type = instrument_type
 

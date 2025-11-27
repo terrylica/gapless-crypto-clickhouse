@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### Features
 
-* **tests:** add comprehensive UM futures test suite and test cleanup (ADR-0044 to ADR-0049) ([1226818](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1226818bac0c8a3870e238778c85987453c8c8c9))
+- **tests:** add comprehensive UM futures test suite and test cleanup (ADR-0044 to ADR-0049) ([1226818](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1226818bac0c8a3870e238778c85987453c8c8c9))
 
 ## [15.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v15.0.0...v15.0.1) (2025-11-26)
 

@@ -48,7 +48,12 @@ from pathlib import Path
 import pandas as pd
 
 from ..clickhouse.connection import ClickHouseConnection
-from ..constants import CSV_COLUMNS_BINANCE_RAW, CSV_COLUMNS_SPOT_OUTPUT
+from ..constants import (
+    CDN_URL_BY_INSTRUMENT,
+    CSV_COLUMNS_BINANCE_RAW,
+    CSV_COLUMNS_SPOT_OUTPUT,
+    VALID_INSTRUMENT_TYPES,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -126,16 +131,18 @@ class ClickHouseBulkLoader:
         if not isinstance(connection, ClickHouseConnection):
             raise ValueError(f"Expected ClickHouseConnection, got {type(connection).__name__}")
 
-        if instrument_type not in ("spot", "futures"):
+        # ADR-0050: Use centralized validation, store exact API value
+        if instrument_type not in VALID_INSTRUMENT_TYPES:
             raise ValueError(
-                f"Invalid instrument_type: '{instrument_type}'. Must be 'spot' or 'futures'"
+                f"Invalid instrument_type: '{instrument_type}'. "
+                f"Must be one of: {sorted(VALID_INSTRUMENT_TYPES)}"
             )
 
         self.connection = connection
-        self.instrument_type = instrument_type
+        self.instrument_type = instrument_type  # Store exact API value (no normalization)
 
-        # Set base_url based on instrument_type
-        self.base_url = self.SPOT_BASE_URL if instrument_type == "spot" else self.FUTURES_BASE_URL
+        # Set base_url using centralized CDN URL mapping
+        self.base_url = CDN_URL_BY_INSTRUMENT[instrument_type]
 
         logger.info(
             f"ClickHouse bulk loader initialized (instrument_type={instrument_type}, base_url={self.base_url})"

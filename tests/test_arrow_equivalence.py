@@ -14,6 +14,32 @@ import pytest
 from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 
 
+def _normalize_for_comparison(df: pd.DataFrame) -> pd.DataFrame:
+    """Normalize DataFrame for Arrow vs standard query comparison.
+
+    Handles two issues with clickhouse-connect's query_df_arrow():
+    1. Applies local timezone to timestamps (vs naive UTC from query_df())
+    2. Returns Arrow-backed types that pandas convert_dtypes() can't handle
+
+    This helper converts all columns to standard pandas types for comparison.
+    """
+    df = df.copy()
+    for col in df.columns:
+        dtype_str = str(df[col].dtype)
+        # Handle Arrow-backed timestamp types (with or without timezone)
+        if "timestamp[" in dtype_str:
+            if "tz=" in dtype_str:
+                # Timezone-aware: convert to UTC then strip
+                df[col] = pd.to_datetime(df[col].dt.tz_convert("UTC").dt.tz_localize(None))
+            else:
+                # Naive Arrow timestamp: convert to pandas datetime
+                df[col] = pd.to_datetime(df[col])
+        # Handle pandas timezone-aware datetime
+        elif hasattr(df[col].dtype, "tz") and df[col].dtype.tz is not None:
+            df[col] = df[col].dt.tz_convert("UTC").dt.tz_localize(None)
+    return df
+
+
 @pytest.mark.integration
 @pytest.mark.slow
 def test_arrow_standard_query_equivalence_simple():
@@ -25,14 +51,14 @@ def test_arrow_standard_query_equivalence_simple():
         df_arrow = conn.client.query_df_arrow(query)
         df_standard = conn.client.query_df(query)
 
-    # Normalize NA/nan values before comparison (Arrow returns pd.NA, standard returns np.nan)
-    df_arrow_normalized = df_arrow.reset_index(drop=True).convert_dtypes(dtype_backend="numpy_nullable")
-    df_standard_normalized = df_standard.reset_index(drop=True).convert_dtypes(dtype_backend="numpy_nullable")
+    # Normalize for comparison (handles Arrow types and timezone differences)
+    df_arrow_norm = _normalize_for_comparison(df_arrow).reset_index(drop=True)
+    df_standard_norm = _normalize_for_comparison(df_standard).reset_index(drop=True)
 
     # Verify data equivalence (check_dtype=False because Arrow returns PyArrow-backed dtypes)
     pd.testing.assert_frame_equal(
-        df_arrow_normalized,
-        df_standard_normalized,
+        df_arrow_norm,
+        df_standard_norm,
         check_dtype=False,  # Arrow returns PyArrow dtypes, standard returns pandas dtypes
         check_exact=False,  # Allow floating point tolerance
         rtol=1e-10,
@@ -59,14 +85,14 @@ def test_arrow_standard_query_equivalence_large():
         f"Row count mismatch: Arrow={len(df_arrow)}, Standard={len(df_standard)}"
     )
 
-    # Normalize NA/nan values before comparison (Arrow returns pd.NA, standard returns np.nan)
-    df_arrow_normalized = df_arrow.reset_index(drop=True).convert_dtypes(dtype_backend="numpy_nullable")
-    df_standard_normalized = df_standard.reset_index(drop=True).convert_dtypes(dtype_backend="numpy_nullable")
+    # Normalize for comparison (handles Arrow types and timezone differences)
+    df_arrow_norm = _normalize_for_comparison(df_arrow).reset_index(drop=True)
+    df_standard_norm = _normalize_for_comparison(df_standard).reset_index(drop=True)
 
     # Verify data equivalence (check_dtype=False because Arrow returns PyArrow-backed dtypes)
     pd.testing.assert_frame_equal(
-        df_arrow_normalized,
-        df_standard_normalized,
+        df_arrow_norm,
+        df_standard_norm,
         check_dtype=False,  # Arrow returns PyArrow dtypes, standard returns pandas dtypes
         check_exact=False,
         rtol=1e-10,
@@ -205,14 +231,14 @@ def test_arrow_standard_single_row():
     assert len(df_arrow) == 1, f"Arrow returned {len(df_arrow)} rows, expected 1"
     assert len(df_standard) == 1, f"Standard returned {len(df_standard)} rows, expected 1"
 
-    # Normalize NA/nan values before comparison (Arrow returns pd.NA, standard returns np.nan)
-    df_arrow_normalized = df_arrow.reset_index(drop=True).convert_dtypes(dtype_backend="numpy_nullable")
-    df_standard_normalized = df_standard.reset_index(drop=True).convert_dtypes(dtype_backend="numpy_nullable")
+    # Normalize for comparison (handles Arrow types and timezone differences)
+    df_arrow_norm = _normalize_for_comparison(df_arrow).reset_index(drop=True)
+    df_standard_norm = _normalize_for_comparison(df_standard).reset_index(drop=True)
 
     # Verify data equivalence (check_dtype=False because Arrow returns PyArrow-backed dtypes)
     pd.testing.assert_frame_equal(
-        df_arrow_normalized,
-        df_standard_normalized,
+        df_arrow_norm,
+        df_standard_norm,
         check_dtype=False,  # Arrow returns PyArrow dtypes, standard returns pandas dtypes
         check_exact=False,
         rtol=1e-10,
@@ -237,10 +263,14 @@ def test_arrow_standard_special_characters():
         df_arrow = conn.client.query_df_arrow(query)
         df_standard = conn.client.query_df(query)
 
+    # Normalize for comparison (handles Arrow types and timezone differences)
+    df_arrow_norm = _normalize_for_comparison(df_arrow).reset_index(drop=True)
+    df_standard_norm = _normalize_for_comparison(df_standard).reset_index(drop=True)
+
     # Verify data equivalence (check_dtype=False because Arrow returns PyArrow-backed dtypes)
     pd.testing.assert_frame_equal(
-        df_arrow.reset_index(drop=True),
-        df_standard.reset_index(drop=True),
+        df_arrow_norm,
+        df_standard_norm,
         check_dtype=False,  # Arrow returns PyArrow dtypes, standard returns pandas dtypes
         check_exact=False,
         rtol=1e-10,

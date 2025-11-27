@@ -152,13 +152,10 @@ class TestFuturesUMQueryAPI:
         # Verify data returned
         assert len(df) > 0, "query_ohlcv with futures-um should return data"
 
-        # Verify instrument_type column value
+        # Verify instrument_type column value (ADR-0050: strict DB value)
         assert "instrument_type" in df.columns, "instrument_type column missing"
-        # Accept both 'futures-um' and 'um' for flexibility
-        valid_values = {"futures-um", "um"}
-        actual_values = set(df["instrument_type"].unique())
-        assert actual_values.issubset(valid_values), (
-            f"Expected instrument_type in {valid_values}, got: {actual_values}"
+        assert (df["instrument_type"] == "futures-um").all(), (
+            f"Expected all instrument_type='futures-um', got: {df['instrument_type'].unique()}"
         )
 
     @pytest.mark.integration
@@ -235,12 +232,10 @@ class TestFuturesUMSpecificFeatures:
             auto_ingest=True,
         )
 
-        # All rows should have futures instrument type
-        valid_futures_types = {"futures-um", "um"}
-        for idx, row in df.iterrows():
-            assert row["instrument_type"] in valid_futures_types, (
-                f"Row {idx}: Expected futures type, got '{row['instrument_type']}'"
-            )
+        # All rows should have futures instrument type (ADR-0050: strict DB value)
+        assert (df["instrument_type"] == "futures-um").all(), (
+            f"Expected all instrument_type='futures-um', got: {df['instrument_type'].unique()}"
+        )
 
 
 # ============================================================================
@@ -280,10 +275,9 @@ class TestFuturesSpotIsolation:
             "Spot query returned non-spot data"
         )
 
-        # Verify futures only returns futures
-        valid_futures_types = {"futures-um", "um"}
-        assert df_futures["instrument_type"].isin(valid_futures_types).all(), (
-            "Futures query returned non-futures data"
+        # Verify futures only returns futures (ADR-0050: strict DB value)
+        assert (df_futures["instrument_type"] == "futures-um").all(), (
+            f"Futures query returned non-futures data: {df_futures['instrument_type'].unique()}"
         )
 
     @pytest.mark.integration
@@ -300,8 +294,8 @@ class TestFuturesSpotIsolation:
             auto_ingest=True,
         )
 
-        # Verify no futures-um rows leaked into spot query
-        futures_rows = df_spot[df_spot["instrument_type"].isin(["futures-um", "um"])]
+        # Verify no futures-um rows leaked into spot query (ADR-0050: strict DB value)
+        futures_rows = df_spot[df_spot["instrument_type"] == "futures-um"]
         assert len(futures_rows) == 0, (
             f"Cross-contamination: Found {len(futures_rows)} futures rows in spot query"
         )

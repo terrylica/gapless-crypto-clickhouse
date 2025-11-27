@@ -1,17 +1,18 @@
 """E2E tests for local ClickHouse deployment (ADR-0044, ADR-0045).
 
 Real Binance data validation for local ClickHouse mode.
-Tests FAIL HARD if mise ClickHouse is not installed (no skip).
+Uses auto-start fixture from conftest.py for smooth new-user experience.
 
 Data Sources (ADR-0038: Real Binance Data Validation):
 - Spot: https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/
 - Futures UM: https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/
 
 Run Commands:
-    # Run E2E tests (requires mise ClickHouse installed)
+    # Run E2E tests (mise ClickHouse auto-starts if installed)
     uv run pytest tests/test_local_clickhouse_e2e.py -v
 
     # Tests will FAIL (not skip) if ClickHouse not available
+    # Auto-start happens via ensure_local_clickhouse fixture in conftest.py
 """
 
 from __future__ import annotations
@@ -44,24 +45,23 @@ def is_clickhouse_running() -> bool:
         return False
 
 
-def pytest_configure(config: pytest.Config) -> None:
-    """Fail hard if mise ClickHouse not available (ADR-0045: no skip)."""
-    if not MISE_CLICKHOUSE_SHIM.exists():
-        pytest.exit(
-            f"ERROR: mise ClickHouse required at {MISE_CLICKHOUSE_SHIM}\n"
-            "Install: mise install clickhouse\n"
-            "ADR-0045 requires fail-hard behavior (no skip)",
-            returncode=1,
-        )
+# NOTE: pytest_configure removed - use require_local_clickhouse fixture instead
+# The old pytest_configure called pytest.exit() which killed the ENTIRE test suite
+# Now tests use fixture-based approach for auto-start (ADR-0045 compliance maintained)
 
 
-# Mark all tests as integration (but NOT skipif - fail hard per ADR-0045)
+# Mark all tests as integration
 pytestmark = [pytest.mark.integration]
 
 
 @pytest.fixture(scope="module")
-def local_mode_env() -> Generator[None, None, None]:
-    """Set GCCH_MODE=local for all tests in this module."""
+def local_mode_env(require_local_clickhouse) -> Generator[None, None, None]:
+    """Set GCCH_MODE=local for all tests in this module.
+
+    Depends on require_local_clickhouse fixture which:
+    1. Auto-starts ClickHouse server if not running
+    2. Fails the test if ClickHouse is not available (ADR-0045)
+    """
     original_mode = os.environ.get("GCCH_MODE")
     original_host = os.environ.get("CLICKHOUSE_HOST")
 

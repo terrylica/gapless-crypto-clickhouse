@@ -28,11 +28,8 @@ from typing import List, Literal, Optional, Union
 import pandas as pd
 
 from .collectors.binance_public_data_collector import BinancePublicDataCollector
-from .constants import TIMEFRAME_TO_MINUTES
+from .constants import TIMEFRAME_TO_MINUTES, VALID_INSTRUMENT_TYPES, InstrumentType
 from .gap_filling.universal_gap_filler import UniversalGapFiller
-
-# Instrument type support (ADR-0021)
-InstrumentType = Literal["spot", "futures-um"]
 
 
 def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]:
@@ -121,7 +118,7 @@ SupportedTimeframe = Literal[
 
 
 def _validate_instrument_type(instrument_type: str) -> None:
-    """Validate instrument_type parameter.
+    """Validate instrument_type parameter (ADR-0050).
 
     Args:
         instrument_type: Instrument type to validate
@@ -135,13 +132,12 @@ def _validate_instrument_type(instrument_type: str) -> None:
         >>> _validate_instrument_type("futures")  # Invalid
         Traceback (most recent call last):
             ...
-        ValueError: Invalid instrument_type 'futures'. Must be 'spot' or 'futures-um'
+        ValueError: Invalid instrument_type 'futures'. Must be one of: ['futures-um', 'spot']
     """
-    valid_types = {"spot", "futures-um"}
-    if instrument_type not in valid_types:
+    if instrument_type not in VALID_INSTRUMENT_TYPES:
         raise ValueError(
             f"Invalid instrument_type '{instrument_type}'. "
-            f"Must be one of: {', '.join(sorted(valid_types))}. "
+            f"Must be one of: {sorted(VALID_INSTRUMENT_TYPES)}. "
             f"Use 'futures-um' for USDT-margined perpetual futures (715 symbols). "
             f"See get_supported_symbols(instrument_type='{instrument_type}') for available symbols."
         )

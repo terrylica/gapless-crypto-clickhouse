@@ -52,7 +52,7 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 
 from .clickhouse.connection import ClickHouseConnection
-from .constants import TIMEFRAME_TO_SECONDS, VALID_TIMEFRAMES
+from .constants import TIMEFRAME_TO_SECONDS, VALID_INSTRUMENT_TYPES, VALID_TIMEFRAMES
 
 logger = logging.getLogger(__name__)
 
@@ -164,9 +164,11 @@ class OHLCVQuery:
             raise ValueError("Timeframe cannot be empty")
         if limit <= 0:
             raise ValueError(f"Limit must be positive, got {limit}")
-        if instrument_type not in ("spot", "futures"):
+        # ADR-0050: Use centralized validation, store exact API value
+        if instrument_type not in VALID_INSTRUMENT_TYPES:
             raise ValueError(
-                f"Invalid instrument_type: '{instrument_type}'. Must be 'spot' or 'futures'"
+                f"Invalid instrument_type: '{instrument_type}'. "
+                f"Must be one of: {sorted(VALID_INSTRUMENT_TYPES)}"
             )
 
         symbol = symbol.upper()
@@ -273,9 +275,11 @@ class OHLCVQuery:
             raise ValueError("Symbol cannot be empty")
         if not timeframe:
             raise ValueError("Timeframe cannot be empty")
-        if instrument_type not in ("spot", "futures"):
+        # ADR-0050: Use centralized validation, store exact API value
+        if instrument_type not in VALID_INSTRUMENT_TYPES:
             raise ValueError(
-                f"Invalid instrument_type: '{instrument_type}'. Must be 'spot' or 'futures'"
+                f"Invalid instrument_type: '{instrument_type}'. "
+                f"Must be one of: {sorted(VALID_INSTRUMENT_TYPES)}"
             )
 
         symbol = symbol.upper()
@@ -401,9 +405,11 @@ class OHLCVQuery:
             raise ValueError("Symbols list cannot be empty")
         if not timeframe:
             raise ValueError("Timeframe cannot be empty")
-        if instrument_type not in ("spot", "futures"):
+        # ADR-0050: Use centralized validation, store exact API value
+        if instrument_type not in VALID_INSTRUMENT_TYPES:
             raise ValueError(
-                f"Invalid instrument_type: '{instrument_type}'. Must be 'spot' or 'futures'"
+                f"Invalid instrument_type: '{instrument_type}'. "
+                f"Must be one of: {sorted(VALID_INSTRUMENT_TYPES)}"
             )
 
         symbols = [s.upper() for s in symbols]
@@ -557,9 +563,11 @@ class OHLCVQuery:
         # Use centralized timeframe-to-seconds mapping (ADR-0048)
         if timeframe not in VALID_TIMEFRAMES:
             raise ValueError(f"Unsupported timeframe for gap detection: {timeframe}")
-        if instrument_type not in ("spot", "futures"):
+        # ADR-0050: Use centralized validation, store exact API value
+        if instrument_type not in VALID_INSTRUMENT_TYPES:
             raise ValueError(
-                f"Invalid instrument_type: '{instrument_type}'. Must be 'spot' or 'futures'"
+                f"Invalid instrument_type: '{instrument_type}'. "
+                f"Must be one of: {sorted(VALID_INSTRUMENT_TYPES)}"
             )
 
         interval_seconds = TIMEFRAME_TO_SECONDS[timeframe]

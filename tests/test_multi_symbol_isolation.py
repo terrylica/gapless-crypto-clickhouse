@@ -100,7 +100,7 @@ def test_spot_futures_isolation():
             timeframe="1h",
             start="2024-01-01",
             end="2024-01-07",
-            instrument_type="futures",  # USDT-Margined Futures
+            instrument_type="futures-um",  # USDT-Margined Futures (ADR-0050)
         )
 
         # Verify instrument_type isolation
@@ -110,7 +110,8 @@ def test_spot_futures_isolation():
             )
 
         if len(df_futures) > 0:
-            assert (df_futures["instrument_type"] == "futures").all(), (
+            # ADR-0050: Strict DB value check for 'futures-um'
+            assert (df_futures["instrument_type"] == "futures-um").all(), (
                 f"Futures query returned non-futures data: {df_futures['instrument_type'].unique()}"
             )
 

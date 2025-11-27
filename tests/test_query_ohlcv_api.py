@@ -20,7 +20,6 @@ from gapless_crypto_clickhouse import query_ohlcv
 
 @pytest.mark.integration
 @pytest.mark.slow
-@pytest.mark.slow
 def test_query_ohlcv_auto_ingestion_downloads_missing_data():
     """Verify query_ohlcv() downloads data if missing (auto-ingestion)."""
     # Query a small date range that might not exist
@@ -83,7 +82,6 @@ def test_query_ohlcv_auto_ingest_false_raises_on_missing_data():
 
 @pytest.mark.integration
 @pytest.mark.slow
-@pytest.mark.slow
 def test_query_ohlcv_auto_ingestion_respects_date_range():
     """Verify query_ohlcv() only downloads requested date range."""
     df = query_ohlcv(
@@ -120,7 +118,6 @@ def test_query_ohlcv_auto_ingestion_respects_date_range():
 
 
 @pytest.mark.integration
-@pytest.mark.slow
 @pytest.mark.slow
 def test_query_ohlcv_multi_symbol_list():
     """Verify query_ohlcv() handles list of symbols."""
@@ -160,12 +157,11 @@ def test_query_ohlcv_multi_symbol_empty_list_raises():
 
 
 # ============================================================================
-# Instrument Type Tests (3 tests)
+# Instrument Type Tests (1 test - comprehensive futures tests in test_futures_um.py)
 # ============================================================================
 
 
 @pytest.mark.integration
-@pytest.mark.slow
 @pytest.mark.slow
 def test_query_ohlcv_spot_instrument_type():
     """Verify query_ohlcv() defaults to spot instrument type."""
@@ -178,39 +174,6 @@ def test_query_ohlcv_spot_instrument_type():
 
     # Verify funding_rate is NULL for spot
     assert df["funding_rate"].isna().all(), "funding_rate should be NULL for spot"
-
-
-@pytest.mark.integration
-@pytest.mark.slow
-@pytest.mark.skipif(True, reason="Futures data might not be available in test environment")
-@pytest.mark.slow
-def test_query_ohlcv_futures_instrument_type():
-    """Verify query_ohlcv() handles futures-um instrument type."""
-    df = query_ohlcv(
-        "BTCUSDT", "1h", "2024-01-01", "2024-01-07", instrument_type="futures-um", auto_ingest=True
-    )
-
-    # Verify instrument_type is futures-um
-    assert (df["instrument_type"] == "futures-um").all() or (df["instrument_type"] == "um").all(), (
-        f"Expected 'futures-um' or 'um', got: {df['instrument_type'].unique()}"
-    )
-
-    # Verify funding_rate column exists (might be NULL or have values)
-    assert "funding_rate" in df.columns, "funding_rate column missing for futures"
-
-
-@pytest.mark.integration
-@pytest.mark.slow
-@pytest.mark.slow
-def test_query_ohlcv_instrument_type_isolation():
-    """Verify query_ohlcv() isolates spot vs futures data."""
-    # Query spot
-    df_spot = query_ohlcv(
-        "BTCUSDT", "1h", "2024-01-01", "2024-01-07", instrument_type="spot", auto_ingest=True
-    )
-
-    # Verify all spot
-    assert (df_spot["instrument_type"] == "spot").all(), "Spot query returned non-spot data"
 
 
 # ============================================================================
@@ -281,7 +244,6 @@ def test_query_ohlcv_empty_result_set():
 @pytest.mark.integration
 @pytest.mark.slow
 @pytest.mark.timeout(10)
-@pytest.mark.slow
 def test_query_ohlcv_large_date_range_performance():
     """Verify query_ohlcv() completes large queries in reasonable time (<10s)."""
     # Query a full year (should complete quickly with Arrow optimization)

@@ -16,7 +16,7 @@ Usage:
     )
 """
 
-from typing import Dict, Final, Literal
+from typing import Dict, Final, FrozenSet, Literal
 
 # =============================================================================
 # TYPE DEFINITIONS
@@ -24,6 +24,31 @@ from typing import Dict, Final, Literal
 
 InstrumentType = Literal["spot", "futures-um"]
 """Type alias for valid instrument types (spot or USDT-margined futures)."""
+
+# =============================================================================
+# INSTRUMENT TYPE CONSTANTS (ADR-0050)
+# =============================================================================
+
+INSTRUMENT_SPOT: Final[str] = "spot"
+"""Spot market instrument type."""
+
+INSTRUMENT_FUTURES_UM: Final[str] = "futures-um"
+"""USDT-margined perpetual futures instrument type."""
+
+INSTRUMENT_FUTURES_CM: Final[str] = "futures-cm"
+"""COIN-margined perpetual futures instrument type (reserved for future use)."""
+
+VALID_INSTRUMENT_TYPES: Final[FrozenSet[str]] = frozenset({
+    INSTRUMENT_SPOT,
+    INSTRUMENT_FUTURES_UM,
+})
+"""Valid instrument types for API validation (O(1) membership testing)."""
+
+IMPLEMENTED_INSTRUMENT_TYPES: Final[FrozenSet[str]] = frozenset({
+    INSTRUMENT_SPOT,
+    INSTRUMENT_FUTURES_UM,
+})
+"""Currently implemented instrument types with working pipelines."""
 
 # =============================================================================
 # CDN BASE URLS (data.binance.vision)
@@ -156,15 +181,14 @@ API_URL_BY_INSTRUMENT: Final[Dict[str, str]] = {
 # SELF-VALIDATING ASSERTIONS
 # =============================================================================
 
-# Verify URL mappings cover all instrument types
-_EXPECTED_INSTRUMENTS = {"spot", "futures-um"}
-assert set(CDN_URL_BY_INSTRUMENT.keys()) == _EXPECTED_INSTRUMENTS, (
+# Verify URL mappings cover all implemented instrument types
+assert set(CDN_URL_BY_INSTRUMENT.keys()) == VALID_INSTRUMENT_TYPES, (
     f"CDN_URL_BY_INSTRUMENT missing instruments: "
-    f"{_EXPECTED_INSTRUMENTS - set(CDN_URL_BY_INSTRUMENT.keys())}"
+    f"{VALID_INSTRUMENT_TYPES - set(CDN_URL_BY_INSTRUMENT.keys())}"
 )
-assert set(API_URL_BY_INSTRUMENT.keys()) == _EXPECTED_INSTRUMENTS, (
+assert set(API_URL_BY_INSTRUMENT.keys()) == VALID_INSTRUMENT_TYPES, (
     f"API_URL_BY_INSTRUMENT missing instruments: "
-    f"{_EXPECTED_INSTRUMENTS - set(API_URL_BY_INSTRUMENT.keys())}"
+    f"{VALID_INSTRUMENT_TYPES - set(API_URL_BY_INSTRUMENT.keys())}"
 )
 
 # Verify API limits are sane
@@ -184,6 +208,12 @@ assert BINANCE_API_FUTURES.startswith("https://"), "Futures API URL must use HTT
 __all__ = [
     # Type definitions
     "InstrumentType",
+    # Instrument type constants (ADR-0050)
+    "INSTRUMENT_SPOT",
+    "INSTRUMENT_FUTURES_UM",
+    "INSTRUMENT_FUTURES_CM",
+    "VALID_INSTRUMENT_TYPES",
+    "IMPLEMENTED_INSTRUMENT_TYPES",
     # CDN URLs
     "BINANCE_CDN_BASE",
     "BINANCE_CDN_SPOT",

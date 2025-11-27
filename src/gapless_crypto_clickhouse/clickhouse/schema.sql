@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS ohlcv (
     -- Metadata columns (low-cardinality, optimized for indexing)
     symbol LowCardinality(String) CODEC(ZSTD(3)),           -- Trading pair (e.g., "BTCUSDT")
     timeframe LowCardinality(String) CODEC(ZSTD(3)),       -- Timeframe (e.g., "1h", "1mo")
-    instrument_type LowCardinality(String) CODEC(ZSTD(3)), -- 'spot' or 'futures-um' (ADR-0004, ADR-0021)
+    instrument_type LowCardinality(String) CODEC(ZSTD(3)), -- 'spot', 'futures-um', or 'futures-cm' (ADR-0050)
     data_source LowCardinality(String) CODEC(ZSTD(3)),     -- 'cloudfront'
 
     -- OHLCV data (core price/volume metrics)

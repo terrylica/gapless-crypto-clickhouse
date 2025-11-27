@@ -4,13 +4,149 @@ Pytest configuration and shared fixtures for gapless-crypto-data tests.
 Session-scoped fixtures download real Binance data once per test session
 and cache for reuse across all tests. This eliminates synthetic data usage
 in integration tests while maintaining fast test execution.
+
+ClickHouse Auto-Start (ADR-0044, ADR-0045):
+    The `ensure_local_clickhouse` fixture automatically starts the local
+    ClickHouse server if mise is installed. This provides a smooth new-user
+    experience without manual server management.
 """
 
+import socket
+import subprocess
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
 import pytest
+
+# =============================================================================
+# LOCAL CLICKHOUSE AUTO-START (ADR-0044, ADR-0045)
+# =============================================================================
+
+MISE_CLICKHOUSE_SHIM = Path.home() / ".local/share/mise/shims/clickhouse"
+PORT_LOCAL_HTTP = 8123
+STARTUP_TIMEOUT_SEC = 15
+
+
+def _is_clickhouse_installed() -> bool:
+    """Check if mise ClickHouse is installed."""
+    return MISE_CLICKHOUSE_SHIM.exists() and MISE_CLICKHOUSE_SHIM.is_file()
+
+
+def _is_clickhouse_running() -> bool:
+    """Check if local ClickHouse server is running on port 8123."""
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(2)
+        result = sock.connect_ex(("localhost", PORT_LOCAL_HTTP))
+        sock.close()
+        return result == 0
+    except Exception:
+        return False
+
+
+def _start_clickhouse_server() -> bool:
+    """Start local ClickHouse server in daemon mode.
+
+    Returns:
+        True if server started successfully, False otherwise.
+    """
+    if not _is_clickhouse_installed():
+        return False
+
+    if _is_clickhouse_running():
+        return True  # Already running
+
+    try:
+        # Start server in daemon mode
+        subprocess.run(
+            [str(MISE_CLICKHOUSE_SHIM), "server", "--daemon"],
+            check=True,
+            capture_output=True,
+            timeout=10,
+        )
+
+        # Wait for server to be ready
+        for _ in range(STARTUP_TIMEOUT_SEC):
+            if _is_clickhouse_running():
+                return True
+            time.sleep(1)
+
+        return False
+    except (subprocess.SubprocessError, OSError):
+        return False
+
+
+@pytest.fixture(scope="session")
+def ensure_local_clickhouse():
+    """Session-scoped fixture that auto-starts local ClickHouse if available.
+
+    This fixture provides a smooth new-user experience:
+    - If mise ClickHouse is installed: auto-starts server if not running
+    - If not installed: returns status dict (tests can skip based on this)
+
+    Usage in tests:
+        def test_something(ensure_local_clickhouse):
+            if not ensure_local_clickhouse["available"]:
+                pytest.skip("Local ClickHouse not available")
+            # ... test code ...
+
+    Returns:
+        dict: Status with keys:
+            - installed: bool - mise ClickHouse is installed
+            - running: bool - server is running (or was started)
+            - available: bool - ready for use (installed AND running)
+            - error: str | None - error message if startup failed
+    """
+    status = {
+        "installed": _is_clickhouse_installed(),
+        "running": False,
+        "available": False,
+        "error": None,
+    }
+
+    if not status["installed"]:
+        status["error"] = (
+            f"mise ClickHouse not installed at {MISE_CLICKHOUSE_SHIM}. "
+            "Install with: mise install clickhouse"
+        )
+        return status
+
+    # Try to start if not running
+    if _is_clickhouse_running():
+        status["running"] = True
+        status["available"] = True
+    else:
+        if _start_clickhouse_server():
+            status["running"] = True
+            status["available"] = True
+        else:
+            status["error"] = (
+                f"Failed to start ClickHouse server within {STARTUP_TIMEOUT_SEC}s"
+            )
+
+    return status
+
+
+@pytest.fixture(scope="session")
+def require_local_clickhouse(ensure_local_clickhouse):
+    """Session-scoped fixture that REQUIRES local ClickHouse to be available.
+
+    Fails the test immediately if ClickHouse is not available.
+    Use this for tests that absolutely require ClickHouse.
+
+    Usage:
+        def test_database_query(require_local_clickhouse):
+            # This test will fail (not skip) if ClickHouse unavailable
+            # ... test code ...
+    """
+    if not ensure_local_clickhouse["available"]:
+        pytest.fail(
+            f"Local ClickHouse required but not available: "
+            f"{ensure_local_clickhouse.get('error', 'Unknown error')}"
+        )
+    return ensure_local_clickhouse
 
 
 @pytest.fixture

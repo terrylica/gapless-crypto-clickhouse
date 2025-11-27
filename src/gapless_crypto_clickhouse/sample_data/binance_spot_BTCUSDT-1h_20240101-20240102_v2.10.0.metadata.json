@@ -1,7 +1,7 @@
 {
   "version": "v2.10.0",
   "generator": "BinancePublicDataCollector",
-  "generation_timestamp": "2025-11-26T23:26:16.241416+00:00Z",
+  "generation_timestamp": "2025-11-27T04:59:14.313015+00:00Z",
   "data_source": "Binance Public Data Repository",
   "data_source_url": "https://data.binance.vision/data/spot/monthly/klines",
   "market_type": "spot",
@@ -19,10 +19,10 @@
     "end": "2024-01-02 23:00:00"
   },
   "statistics": {
-    "price_min": 42180.77,
-    "price_max": 45879.63,
-    "volume_total": 92320.70564,
-    "volume_mean": 1923.3480341666666
+    "price_min": 42207.9,
+    "price_max": 45950.0,
+    "volume_total": 666222.667,
+    "volume_mean": 13879.638895833334
   },
   "collection_performance": {
     "method": "direct_download",
@@ -32,14 +32,21 @@
   },
   "data_integrity": {
     "chronological_order": true,
-    "data_hash": "5fba9d2e5d3db849c27124002860a1d4ad344b6bc9329d1b67a96ed9b3453696",
+    "data_hash": "e57971c1110188d4cfd8070afba52c07de3740cc71fcf2a67fe361161054200f",
     "corruption_detected": false,
     "corrupted_rows_count": 0,
     "corruption_details": [],
     "header_detection": {
-      "header_found": false,
-      "header_content": null,
-      "data_start_row": 0
+      "header_found": true,
+      "header_content": [
+        "open_time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "data_start_row": 1
     }
   },
   "timestamp_format_analysis": {
@@ -81,7 +88,7 @@
     "total_missing_bars": 0,
     "gap_filling_method": "authentic_binance_api",
     "data_completeness_score": 1.0,
-    "analysis_timestamp": "2025-11-26T23:26:16.241404+00:00Z",
+    "analysis_timestamp": "2025-11-27T04:59:14.312996+00:00Z",
     "analysis_parameters": {
       "timeframe": "1h",
       "expected_interval_minutes": 60,

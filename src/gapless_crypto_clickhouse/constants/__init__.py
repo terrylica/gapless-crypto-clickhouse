@@ -41,6 +41,12 @@ from .binance import (
     BINANCE_CDN_SPOT,
     # Derived mappings
     CDN_URL_BY_INSTRUMENT,
+    # Instrument type constants (ADR-0050)
+    IMPLEMENTED_INSTRUMENT_TYPES,
+    INSTRUMENT_FUTURES_CM,
+    INSTRUMENT_FUTURES_UM,
+    INSTRUMENT_SPOT,
+    VALID_INSTRUMENT_TYPES,
     # Type definitions
     InstrumentType,
     # CSV format constants
@@ -215,6 +221,12 @@ __all__ = [
     # === Binance ===
     # Type definitions
     "InstrumentType",
+    # Instrument type constants (ADR-0050)
+    "INSTRUMENT_SPOT",
+    "INSTRUMENT_FUTURES_UM",
+    "INSTRUMENT_FUTURES_CM",
+    "VALID_INSTRUMENT_TYPES",
+    "IMPLEMENTED_INSTRUMENT_TYPES",
     # CDN URLs
     "BINANCE_CDN_BASE",
     "BINANCE_CDN_SPOT",
