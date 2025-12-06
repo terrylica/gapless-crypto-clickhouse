@@ -302,11 +302,11 @@ for symbol in symbols:
         df = gcch.fetch_data(symbol, timeframe=tf, limit=1000)
         results[symbol][tf] = {
             'bars': len(df),
-            'first_date': df['date'].min(),
-            'last_date': df['date'].max(),
+            'first_date': df['timestamp'].min(),
+            'last_date': df['timestamp'].max(),
         }
 
-        print(f"  ✅ {len(df)} bars ({df['date'].min()} to {df['date'].max()})")
+        print(f"  ✅ {len(df)} bars ({df['timestamp'].min()} to {df['timestamp'].max()})")
 
 print("\n📊 Collection Summary:")
 for symbol, tfs in results.items():

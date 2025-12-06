@@ -120,7 +120,7 @@ class TestAtomicCSVOperations:
         """Test DataFrame validation with valid data."""
         valid_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=3, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=3, freq="1h"),
                 "open": [100.0, 101.0, 102.0],
                 "high": [105.0, 106.0, 107.0],
                 "low": [95.0, 96.0, 97.0],
@@ -149,7 +149,7 @@ class TestAtomicCSVOperations:
         """Test DataFrame validation with missing required columns."""
         incomplete_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=3, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=3, freq="1h"),
                 "price": [100.0, 101.0, 102.0],  # Missing OHLCV columns
             }
         )
@@ -164,7 +164,7 @@ class TestAtomicCSVOperations:
         """Test DataFrame validation with duplicate timestamps."""
         duplicate_df = pd.DataFrame(
             {
-                "date": ["2024-01-01 00:00:00", "2024-01-01 00:00:00", "2024-01-01 02:00:00"],
+                "timestamp": ["2024-01-01 00:00:00", "2024-01-01 00:00:00", "2024-01-01 02:00:00"],
                 "open": [100.0, 101.0, 102.0],
                 "high": [105.0, 106.0, 107.0],
                 "low": [95.0, 96.0, 97.0],
@@ -183,7 +183,7 @@ class TestAtomicCSVOperations:
         """Test DataFrame validation with non-numeric data in numeric columns."""
         invalid_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=3, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=3, freq="1h"),
                 "open": ["invalid", "data", "here"],  # Non-numeric
                 "high": [105.0, 106.0, 107.0],
                 "low": [95.0, 96.0, 97.0],
@@ -205,7 +205,7 @@ class TestAtomicCSVOperations:
 
             valid_df = pd.DataFrame(
                 {
-                    "date": pd.date_range("2024-01-01", periods=3, freq="1h"),
+                    "timestamp": pd.date_range("2024-01-01", periods=3, freq="1h"),
                     "open": [100.0, 101.0, 102.0],
                     "high": [105.0, 106.0, 107.0],
                     "low": [95.0, 96.0, 97.0],
@@ -256,7 +256,7 @@ class TestAtomicCSVOperations:
 
             valid_df = pd.DataFrame(
                 {
-                    "date": pd.date_range("2024-01-01", periods=3, freq="1h"),
+                    "timestamp": pd.date_range("2024-01-01", periods=3, freq="1h"),
                     "open": [100.0, 101.0, 102.0],
                     "high": [105.0, 106.0, 107.0],
                     "low": [95.0, 96.0, 97.0],
@@ -356,7 +356,7 @@ class TestSafeCSVMerger:
             # Create original CSV with gaps
             original_df = pd.DataFrame(
                 {
-                    "date": [
+                    "timestamp": [
                         "2024-01-01 00:00:00",
                         "2024-01-01 01:00:00",
                         # Gap: 02:00:00 and 03:00:00 missing
@@ -380,7 +380,7 @@ class TestSafeCSVMerger:
             # Create gap data
             gap_data = pd.DataFrame(
                 {
-                    "date": ["2024-01-01 02:00:00", "2024-01-01 03:00:00"],
+                    "timestamp": ["2024-01-01 02:00:00", "2024-01-01 03:00:00"],
                     "open": [102.5, 103.5],
                     "high": [107.0, 108.0],
                     "low": [97.0, 98.0],
@@ -402,7 +402,7 @@ class TestSafeCSVMerger:
             assert len(merged_df) == 6  # Original 4 + Gap 2
 
             # Verify timestamps are sorted
-            dates = pd.to_datetime(merged_df["date"])
+            dates = pd.to_datetime(merged_df["timestamp"])
             assert dates.is_monotonic_increasing
 
             # Verify gap data is present
@@ -417,7 +417,7 @@ class TestSafeCSVMerger:
             # Create original CSV with data that overlaps gap range
             original_df = pd.DataFrame(
                 {
-                    "date": [
+                    "timestamp": [
                         "2024-01-01 00:00:00",
                         "2024-01-01 01:00:00",
                         "2024-01-01 02:00:00",  # Will be replaced
@@ -436,7 +436,7 @@ class TestSafeCSVMerger:
             # Create gap data that overlaps - must have all required columns
             gap_data = pd.DataFrame(
                 {
-                    "date": [
+                    "timestamp": [
                         "2024-01-01 02:00:00",  # Replaces existing
                         "2024-01-01 03:00:00",  # New data
                     ],
@@ -466,7 +466,7 @@ class TestSafeCSVMerger:
             assert len(merged_df) == 5  # Original 4 - 1 replaced + 2 gap = 5
 
             # Verify the 02:00:00 data was replaced with gap data
-            row_02 = merged_df[merged_df["date"] == "2024-01-01 02:00:00"].iloc[0]
+            row_02 = merged_df[merged_df["timestamp"] == "2024-01-01 02:00:00"].iloc[0]
             assert row_02["open"] == 102.5  # From gap data, not original 102.0
 
     def test_merge_gap_data_safe_validation_failure(self):
@@ -477,7 +477,7 @@ class TestSafeCSVMerger:
             # Create original CSV
             original_df = pd.DataFrame(
                 {
-                    "date": ["2024-01-01 00:00:00", "2024-01-01 01:00:00"],
+                    "timestamp": ["2024-01-01 00:00:00", "2024-01-01 01:00:00"],
                     "open": [100.0, 101.0],
                     "high": [105.0, 106.0],
                     "low": [95.0, 96.0],
@@ -514,7 +514,7 @@ class TestSafeCSVMerger:
             # Create original CSV
             original_df = pd.DataFrame(
                 {
-                    "date": ["2024-01-01 00:00:00"],
+                    "timestamp": ["2024-01-01 00:00:00"],
                     "open": [100.0],
                     "high": [105.0],
                     "low": [95.0],
@@ -528,7 +528,7 @@ class TestSafeCSVMerger:
 
             gap_data = pd.DataFrame(
                 {
-                    "date": ["2024-01-01 01:00:00"],
+                    "timestamp": ["2024-01-01 01:00:00"],
                     "open": [101.0],
                     "high": [106.0],
                     "low": [96.0],

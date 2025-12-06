@@ -206,16 +206,16 @@ class UniversalGapFiller:
 
         # Load CSV data
         ohlcv_dataframe = pd.read_csv(csv_path, comment="#")
-        ohlcv_dataframe["date"] = pd.to_datetime(ohlcv_dataframe["date"])
-        ohlcv_dataframe = ohlcv_dataframe.sort_values("date")
+        ohlcv_dataframe["timestamp"] = pd.to_datetime(ohlcv_dataframe["timestamp"])
+        ohlcv_dataframe = ohlcv_dataframe.sort_values("timestamp")
 
         # Calculate expected interval using centralized constants
         expected_interval = TIMEFRAME_TO_PYTHON_TIMEDELTA[timeframe]
 
         detected_gaps = []
         for row_index in range(1, len(ohlcv_dataframe)):
-            current_time = ohlcv_dataframe.iloc[row_index]["date"]
-            previous_time = ohlcv_dataframe.iloc[row_index - 1]["date"]
+            current_time = ohlcv_dataframe.iloc[row_index]["timestamp"]
+            previous_time = ohlcv_dataframe.iloc[row_index - 1]["timestamp"]
             actual_gap_duration = current_time - previous_time
 
             if actual_gap_duration > expected_interval:
@@ -333,7 +333,7 @@ class UniversalGapFiller:
             tuple: (is_enhanced_format, is_legacy_format)
         """
         enhanced_columns = [
-            "date",
+            "timestamp",
             "open",
             "high",
             "low",
@@ -345,7 +345,7 @@ class UniversalGapFiller:
             "taker_buy_base_asset_volume",
             "taker_buy_quote_asset_volume",
         ]
-        legacy_columns = ["date", "open", "high", "low", "close", "volume"]
+        legacy_columns = ["timestamp", "open", "high", "low", "close", "volume"]
 
         is_enhanced = all(col in existing_data.columns for col in enhanced_columns)
         is_legacy = all(col in existing_data.columns for col in legacy_columns)
@@ -460,11 +460,11 @@ class UniversalGapFiller:
             DataFrame with selected columns
         """
         df = pd.DataFrame(authentic_api_data)
-        df["date"] = pd.to_datetime(df["timestamp"])
+        df["timestamp"] = pd.to_datetime(df["timestamp"])
 
         if is_enhanced_format:
             # Enhanced format: include all microstructure columns
-            columns = ["date", "open", "high", "low", "close", "volume"]
+            columns = ["timestamp", "open", "high", "low", "close", "volume"]
             if "close_time" in df.columns:
                 columns.extend(
                     [
@@ -478,7 +478,7 @@ class UniversalGapFiller:
             return df[columns]
         else:
             # Legacy format: only basic OHLCV columns
-            return df[["date", "open", "high", "low", "close", "volume"]]
+            return df[["timestamp", "open", "high", "low", "close", "volume"]]
 
     def _filter_to_gap_period(
         self,
@@ -497,7 +497,7 @@ class UniversalGapFiller:
         gap_start = pd.to_datetime(timestamp_gap_info["start_time"])
         gap_end = pd.to_datetime(timestamp_gap_info["end_time"])
 
-        time_filter = (api_dataframe["date"] >= gap_start) & (api_dataframe["date"] < gap_end)
+        time_filter = (api_dataframe["timestamp"] >= gap_start) & (api_dataframe["timestamp"] < gap_end)
         filtered = api_dataframe[time_filter].copy()
 
         if len(filtered) == 0:
@@ -524,7 +524,7 @@ class UniversalGapFiller:
         combined = pd.concat([existing_data, filtered_api_data], ignore_index=True)
 
         pre_dedup = len(combined)
-        combined = combined.sort_values("date").drop_duplicates(subset=["date"], keep="first")
+        combined = combined.sort_values("timestamp").drop_duplicates(subset=["timestamp"], keep="first")
         duplicates = pre_dedup - len(combined)
 
         if duplicates > 0:
@@ -548,12 +548,12 @@ class UniversalGapFiller:
         gap_start = pd.to_datetime(timestamp_gap_info["start_time"])
         gap_end = pd.to_datetime(timestamp_gap_info["end_time"])
 
-        sorted_data = combined_data.sort_values("date").reset_index(drop=True)
+        sorted_data = combined_data.sort_values("timestamp").reset_index(drop=True)
         remaining_gaps = []
 
         for i in range(1, len(sorted_data)):
-            current = sorted_data.iloc[i]["date"]
-            previous = sorted_data.iloc[i - 1]["date"]
+            current = sorted_data.iloc[i]["timestamp"]
+            previous = sorted_data.iloc[i - 1]["timestamp"]
             expected_interval = TIMEFRAME_TO_TIMEDELTA[trading_timeframe]
             actual_diff = current - previous
 
@@ -605,7 +605,7 @@ class UniversalGapFiller:
 
         # Load and detect format
         existing_data = pd.read_csv(csv_path, comment="#")
-        existing_data["date"] = pd.to_datetime(existing_data["date"])
+        existing_data["timestamp"] = pd.to_datetime(existing_data["timestamp"])
 
         is_enhanced, is_legacy = self._detect_csv_format(existing_data)
         if not is_enhanced and not is_legacy:

@@ -69,7 +69,7 @@ class Test1sGapFilling:
         df = pd.DataFrame(
             test_data,
             columns=[
-                "date",
+                "timestamp",
                 "open",
                 "high",
                 "low",
@@ -84,7 +84,7 @@ class Test1sGapFilling:
         )
 
         # Convert date column to datetime
-        df["date"] = pd.to_datetime(df["date"], unit="ms")
+        df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
             df.to_csv(f.name, index=False)
@@ -169,7 +169,7 @@ class Test1sGapFilling:
         with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
             # Create minimal test CSV
             f.write(
-                "date,open,high,low,close,volume,close_time,quote_asset_volume,number_of_trades,taker_buy_base_asset_volume,taker_buy_quote_asset_volume\n"
+                "timestamp,open,high,low,close,volume,close_time,quote_asset_volume,number_of_trades,taker_buy_base_asset_volume,taker_buy_quote_asset_volume\n"
             )
             f.write(
                 "2025-09-18 12:00:00,100.0,101.0,99.0,100.0,1000.0,2025-09-18 12:00:00.999,50000.0,100,500.0,25000.0\n"
@@ -226,7 +226,7 @@ class Test1sGapFilling:
         df = pd.DataFrame(
             large_data,
             columns=[
-                "date",
+                "timestamp",
                 "open",
                 "high",
                 "low",
@@ -240,7 +240,7 @@ class Test1sGapFilling:
             ],
         )
 
-        df["date"] = pd.to_datetime(df["date"], unit="ms")
+        df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
             df.to_csv(f.name, index=False)
@@ -311,7 +311,7 @@ class Test1dGapFilling:
         df = pd.DataFrame(
             test_data,
             columns=[
-                "date",
+                "timestamp",
                 "open",
                 "high",
                 "low",
@@ -326,7 +326,7 @@ class Test1dGapFilling:
         )
 
         # Convert date column to datetime
-        df["date"] = pd.to_datetime(df["date"], unit="ms")
+        df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
             df.to_csv(f.name, index=False)
@@ -413,7 +413,7 @@ class Test1dGapFilling:
         with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
             # Create minimal test CSV
             f.write(
-                "date,open,high,low,close,volume,close_time,quote_asset_volume,number_of_trades,taker_buy_base_asset_volume,taker_buy_quote_asset_volume\n"
+                "timestamp,open,high,low,close,volume,close_time,quote_asset_volume,number_of_trades,taker_buy_base_asset_volume,taker_buy_quote_asset_volume\n"
             )
             f.write(
                 "2025-09-13 00:00:00,45000.0,46000.0,44000.0,45500.0,1000000.0,2025-09-13 23:59:59.999,45500000000.0,50000,500000.0,22750000000.0\n"
@@ -479,7 +479,7 @@ class Test1dGapFilling:
         df = pd.DataFrame(
             test_data,
             columns=[
-                "date",
+                "timestamp",
                 "open",
                 "high",
                 "low",
@@ -493,7 +493,7 @@ class Test1dGapFilling:
             ],
         )
 
-        df["date"] = pd.to_datetime(df["date"], unit="ms")
+        df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
             df.to_csv(f.name, index=False)
@@ -576,7 +576,7 @@ class TestDataIntegrityFor1sAnd1d:
 
         # Test data structure expectations
         expected_columns = [
-            "date",
+            "timestamp",
             "open",
             "high",
             "low",
@@ -614,7 +614,7 @@ class TestDataIntegrityFor1sAnd1d:
     def test_1d_data_authenticity_structure(self):
         """Test that 1d data maintains authentic 11-column structure."""
         expected_columns = [
-            "date",
+            "timestamp",
             "open",
             "high",
             "low",

@@ -84,7 +84,7 @@ class TestEndToEndIntegration:
 
                 # Basic validation checks
                 assert len(final_df) > 0
-                assert "date" in final_df.columns
+                assert "timestamp" in final_df.columns
                 assert "open" in final_df.columns
                 assert "high" in final_df.columns
                 assert "low" in final_df.columns

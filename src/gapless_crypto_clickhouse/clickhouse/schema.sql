@@ -20,7 +20,10 @@ CREATE TABLE IF NOT EXISTS ohlcv (
     symbol LowCardinality(String) CODEC(ZSTD(3)),           -- Trading pair (e.g., "BTCUSDT")
     timeframe LowCardinality(String) CODEC(ZSTD(3)),       -- Timeframe (e.g., "1h", "1mo")
     instrument_type LowCardinality(String) CODEC(ZSTD(3)), -- 'spot', 'futures-um', or 'futures-cm' (ADR-0050)
-    data_source LowCardinality(String) CODEC(ZSTD(3)),     -- 'cloudfront'
+    -- Production values:
+    --   'cloudfront' = Binance Public Data Repository (CloudFront CDN)
+    --   'rest_api' = Binance REST API (gap filling operations)
+    data_source LowCardinality(String) CODEC(ZSTD(3)),
 
     -- OHLCV data (core price/volume metrics)
     open Float64 CODEC(Gorilla, LZ4),

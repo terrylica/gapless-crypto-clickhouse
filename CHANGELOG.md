@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ### Bug Fixes
 
-* **clickhouse:** normalize Arrow timestamps to naive UTC for consistency ([54be633](https://github.com/terrylica/gapless-crypto-clickhouse/commit/54be633e9861ad0a17a8f17210defd0f4e72be45))
+- **clickhouse:** normalize Arrow timestamps to naive UTC for consistency ([54be633](https://github.com/terrylica/gapless-crypto-clickhouse/commit/54be633e9861ad0a17a8f17210defd0f4e72be45))
 
 ## [15.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v15.0.1...v15.1.0) (2025-11-27)
 

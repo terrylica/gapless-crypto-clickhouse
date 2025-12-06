@@ -134,7 +134,7 @@ class OHLCVQuery:
             symbol: Trading pair symbol (e.g., "BTCUSDT")
             timeframe: Timeframe string (e.g., "1h")
             limit: Number of bars to retrieve (default: 1000)
-            instrument_type: Instrument type ("spot" or "futures"), defaults to "spot"
+            instrument_type: Instrument type ("spot" or "futures-um"), defaults to "spot"
 
         Returns:
             pandas DataFrame with OHLCV data, sorted by timestamp (oldest first)
@@ -149,7 +149,7 @@ class OHLCVQuery:
             df = query.get_latest("BTCUSDT", "1h", limit=100)
 
             # Futures data
-            df = query.get_latest("BTCUSDT", "1h", limit=100, instrument_type="futures")
+            df = query.get_latest("BTCUSDT", "1h", limit=100, instrument_type="futures-um")
 
             print(df.columns)
             # ['timestamp', 'symbol', 'timeframe', 'instrument_type', 'open', 'high', 'low',
@@ -240,7 +240,7 @@ class OHLCVQuery:
             timeframe: Timeframe string (e.g., "1h")
             start: Start date in "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS" format
             end: End date in "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS" format
-            instrument_type: Instrument type ("spot" or "futures"), defaults to "spot"
+            instrument_type: Instrument type ("spot" or "futures-um"), defaults to "spot"
 
         Returns:
             pandas DataFrame with OHLCV data, sorted by timestamp
@@ -263,7 +263,7 @@ class OHLCVQuery:
                 "BTCUSDT", "1h",
                 start="2024-01-01",
                 end="2024-01-31",
-                instrument_type="futures"
+                instrument_type="futures-um"
             )
 
             print(f"Total bars: {len(df)}")
@@ -365,7 +365,7 @@ class OHLCVQuery:
             timeframe: Timeframe string (e.g., "1h")
             start: Start date in "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS" format
             end: End date in "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS" format
-            instrument_type: Instrument type ("spot" or "futures"), defaults to "spot"
+            instrument_type: Instrument type ("spot" or "futures-um"), defaults to "spot"
 
         Returns:
             pandas DataFrame with OHLCV data for all symbols, sorted by symbol then timestamp
@@ -390,7 +390,7 @@ class OHLCVQuery:
                 "1h",
                 start="2024-01-01",
                 end="2024-01-31",
-                instrument_type="futures"
+                instrument_type="futures-um"
             )
 
             # Group by symbol for analysis
@@ -540,7 +540,7 @@ class OHLCVQuery:
             timeframe: Timeframe string (e.g., "1h")
             start: Start date in "YYYY-MM-DD" format
             end: End date in "YYYY-MM-DD" format
-            instrument_type: Instrument type ("spot" or "futures"), defaults to "spot"
+            instrument_type: Instrument type ("spot" or "futures-um"), defaults to "spot"
 
         Returns:
             pandas DataFrame with gap information:

@@ -274,7 +274,7 @@ def test_futures_data_fetch_new_symbols():
     from gapless_crypto_clickhouse.collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 
     with ClickHouseConnection() as conn:
-        loader = ClickHouseBulkLoader(conn, instrument_type="futures")
+        loader = ClickHouseBulkLoader(conn, instrument_type="futures-um")
         rows = loader.ingest_month("BNBUSDT", "1d", year=2024, month=1)
         assert rows > 0  # Should successfully ingest futures data
 ````

@@ -62,7 +62,7 @@ def main():
             df = pd.read_csv(filepath)
             print(f"    Rows: {len(df)}")
             print(f"    Columns: {len(df.columns)} (Full 11-column microstructure format)")
-            print(f"    Date range: {df.iloc[0]['date']} to {df.iloc[-1]['date']}")
+            print(f"    Date range: {df.iloc[0]['timestamp']} to {df.iloc[-1]['timestamp']}")
             print()
     else:
         print("❌ Collection failed")

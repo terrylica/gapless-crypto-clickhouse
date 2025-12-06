@@ -18,7 +18,7 @@ flowchart TD
     %% Load and Analyze
     UseEnhanced --> LoadData[Load CSV into DataFrame]
     UseLegacy --> LoadData
-    LoadData --> ParseDates[Parse 'date' column<br/>to datetime]
+    LoadData --> ParseDates[Parse 'timestamp' column<br/>to datetime]
 
     ParseDates --> SortCheck{Data sorted<br/>chronologically?}
     SortCheck --> SortData[Sort by timestamp]

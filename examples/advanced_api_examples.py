@@ -129,7 +129,7 @@ def example_single_timeframe_collection():
 
             print("✅ Collection successful!")
             print(f"  DataFrame shape: {df.shape}")
-            print(f"  Date range: {df['date'].min()} to {df['date'].max()}")
+            print(f"  Date range: {df['timestamp'].min()} to {df['timestamp'].max()}")
             print(f"  File saved: {filepath}")
             print(f"  Collection stats: {stats}")
 
@@ -242,7 +242,7 @@ def example_atomic_operations():
         atomic_ops = AtomicCSVOperations()
 
         # Write test data atomically
-        headers = ["date", "open", "high", "low", "close", "volume"]
+        headers = ["timestamp", "open", "high", "low", "close", "volume"]
         atomic_ops.write_csv_atomic(test_file, test_data, headers)
         print(f"✅ Atomic write successful: {test_file}")
 

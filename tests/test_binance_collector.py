@@ -268,7 +268,7 @@ class TestBinancePublicDataCollector:
         # Create valid 11-column DataFrame
         valid_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=5, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=5, freq="1h"),
                 "open": [100.0, 101.0, 102.0, 103.0, 104.0],
                 "high": [105.0, 106.0, 107.0, 108.0, 109.0],
                 "low": [95.0, 96.0, 97.0, 98.0, 99.0],
@@ -302,7 +302,7 @@ class TestBinancePublicDataCollector:
         # Create DataFrame missing required columns
         incomplete_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=5, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=5, freq="1h"),
                 "open": [100.0, 101.0, 102.0, 103.0, 104.0],
                 "high": [105.0, 106.0, 107.0, 108.0, 109.0],
                 # Missing: low, close, volume, and others
@@ -324,7 +324,7 @@ class TestBinancePublicDataCollector:
         # Create DataFrame with valid hourly sequence
         valid_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=5, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=5, freq="1h"),
                 "open": [100.0, 101.0, 102.0, 103.0, 104.0],
                 "high": [105.0, 106.0, 107.0, 108.0, 109.0],
                 "low": [95.0, 96.0, 97.0, 98.0, 99.0],
@@ -354,7 +354,7 @@ class TestBinancePublicDataCollector:
 
         gapped_df = pd.DataFrame(
             {
-                "date": pd.to_datetime(timestamps),
+                "timestamp": pd.to_datetime(timestamps),
                 "open": [100.0, 101.0, 103.0, 104.0],
                 "high": [105.0, 106.0, 108.0, 109.0],
                 "low": [95.0, 96.0, 98.0, 99.0],
@@ -383,7 +383,7 @@ class TestBinancePublicDataCollector:
 
         duplicate_df = pd.DataFrame(
             {
-                "date": pd.to_datetime(timestamps),
+                "timestamp": pd.to_datetime(timestamps),
                 "open": [100.0, 101.0, 101.5, 102.0],
                 "high": [105.0, 106.0, 106.5, 107.0],
                 "low": [95.0, 96.0, 96.5, 97.0],
@@ -407,7 +407,7 @@ class TestBinancePublicDataCollector:
         # Create DataFrame with valid OHLCV relationships
         valid_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=5, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=5, freq="1h"),
                 "open": [100.0, 102.0, 104.0, 106.0, 108.0],
                 "high": [105.0, 107.0, 109.0, 111.0, 113.0],  # High >= Open, Close
                 "low": [95.0, 97.0, 99.0, 101.0, 103.0],  # Low <= Open, Close
@@ -429,7 +429,7 @@ class TestBinancePublicDataCollector:
         # Create DataFrame with invalid OHLCV relationships
         invalid_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=3, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=3, freq="1h"),
                 "open": [100.0, 102.0, 104.0],
                 "high": [95.0, 97.0, 99.0],  # High < Open (invalid)
                 "low": [105.0, 107.0, 109.0],  # Low > Open (invalid)
@@ -452,7 +452,7 @@ class TestBinancePublicDataCollector:
         # Create DataFrame with NaN values
         nan_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=3, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=3, freq="1h"),
                 "open": [100.0, None, 104.0],  # NaN value
                 "high": [105.0, 107.0, None],  # NaN value
                 "low": [95.0, 97.0, 99.0],
@@ -476,7 +476,7 @@ class TestBinancePublicDataCollector:
         # Create DataFrame with full 24-hour coverage
         full_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=24, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=24, freq="1h"),
                 "open": [100.0 + i for i in range(24)],
                 "high": [105.0 + i for i in range(24)],
                 "low": [95.0 + i for i in range(24)],
@@ -498,7 +498,7 @@ class TestBinancePublicDataCollector:
         # Create DataFrame with only 12 hours out of expected 24
         partial_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=12, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=12, freq="1h"),
                 "open": [100.0 + i for i in range(12)],
                 "high": [105.0 + i for i in range(12)],
                 "low": [95.0 + i for i in range(12)],
@@ -523,7 +523,7 @@ class TestBinancePublicDataCollector:
         # Create DataFrame with normal price movements
         normal_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=100, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=100, freq="1h"),
                 "open": [100.0 + i * 0.1 for i in range(100)],  # Gradual increase
                 "high": [105.0 + i * 0.1 for i in range(100)],
                 "low": [95.0 + i * 0.1 for i in range(100)],
@@ -548,7 +548,7 @@ class TestBinancePublicDataCollector:
 
         extreme_df = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=100, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=100, freq="1h"),
                 "open": extreme_data,
                 "high": [x * 1.05 for x in extreme_data],
                 "low": [x * 0.95 for x in extreme_data],

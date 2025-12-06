@@ -39,7 +39,7 @@ class TestUniversalGapFiller:
             # Create sample CSV with gaps
             sample_data = pd.DataFrame(
                 {
-                    "date": pd.date_range("2024-01-01", periods=100, freq="1h"),
+                    "timestamp": pd.date_range("2024-01-01", periods=100, freq="1h"),
                     "open": [100.0] * 100,
                     "high": [105.0] * 100,
                     "low": [95.0] * 100,
@@ -72,7 +72,7 @@ class TestUniversalGapFiller:
             # Create complete data without gaps
             sample_data = pd.DataFrame(
                 {
-                    "date": pd.date_range("2024-01-01", periods=24, freq="1h"),
+                    "timestamp": pd.date_range("2024-01-01", periods=24, freq="1h"),
                     "open": [100.0] * 24,
                     "high": [105.0] * 24,
                     "low": [95.0] * 24,
@@ -105,7 +105,7 @@ class TestUniversalGapFiller:
             # Create invalid CSV (missing required columns)
             invalid_data = pd.DataFrame(
                 {
-                    "date": pd.date_range("2024-01-01", periods=10, freq="1h"),
+                    "timestamp": pd.date_range("2024-01-01", periods=10, freq="1h"),
                     "price": [100.0] * 10,  # Missing OHLCV columns
                 }
             )
@@ -248,7 +248,7 @@ class TestUniversalGapFiller:
         # Test data with 1-hour intervals
         hourly_data = pd.DataFrame(
             {
-                "date": pd.date_range("2024-01-01", periods=24, freq="1h"),
+                "timestamp": pd.date_range("2024-01-01", periods=24, freq="1h"),
                 "open": [100.0] * 24,
                 "high": [105.0] * 24,
                 "low": [95.0] * 24,
@@ -269,7 +269,7 @@ class TestUniversalGapFiller:
             timestamps = pd.date_range("2024-01-01", periods=48, freq="1h")
             full_data = pd.DataFrame(
                 {
-                    "date": timestamps,
+                    "timestamp": timestamps,
                     "open": [100.0 + i for i in range(48)],
                     "high": [105.0 + i for i in range(48)],
                     "low": [95.0 + i for i in range(48)],

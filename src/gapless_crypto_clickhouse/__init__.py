@@ -38,7 +38,7 @@ Usage:
     max_drawdown = (df['close'] / df['close'].cummax() - 1).min()  # Drawdown
 
     # Resampling with pandas
-    df_resampled = df.set_index('date').resample('4H').agg({
+    df_resampled = df.set_index('timestamp').resample('4H').agg({
         'open': 'first', 'high': 'max', 'low': 'min',
         'close': 'last', 'volume': 'sum'
     })

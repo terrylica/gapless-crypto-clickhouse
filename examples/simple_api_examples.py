@@ -40,7 +40,7 @@ def example_fetch_recent_data():
 
     if not df.empty:
         print(f"✅ Fetched {len(df)} bars")
-        print(f"Date range: {df['date'].min()} to {df['date'].max()}")
+        print(f"Date range: {df['timestamp'].min()} to {df['timestamp'].max()}")
         print(f"Price range: ${df['low'].min():.2f} - ${df['high'].max():.2f}")
         print(f"Average volume: {df['volume'].mean():.2f}")
         print(f"Total trades: {df['number_of_trades'].sum():,}")
@@ -60,7 +60,7 @@ def example_download_date_range():
 
     if not df.empty:
         print(f"✅ Downloaded {len(df)} bars")
-        print(f"Date range: {df['date'].min()} to {df['date'].max()}")
+        print(f"Date range: {df['timestamp'].min()} to {df['timestamp'].max()}")
         print("Price statistics:")
         print(f"  Open: ${df['open'].iloc[0]:.2f}")
         print(f"  Close: ${df['close'].iloc[-1]:.2f}")

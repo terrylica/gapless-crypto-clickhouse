@@ -43,7 +43,7 @@ timeframes = gcch.get_supported_timeframes() # ['1s', '1m', '3m', '5m', ...]
 df = gcch.fetch_data("BTCUSDT", "1h", limit=100)
 
 print(f"Fetched {len(df)} bars")
-print(f"Date range: {df['date'].min()} to {df['date'].max()}")
+print(f"Date range: {df['timestamp'].min()} to {df['timestamp'].max()}")
 print(f"Price range: ${df['low'].min():.2f} - ${df['high'].max():.2f}")
 ```text
 
@@ -129,7 +129,7 @@ if result and "dataframe" in result:
     stats = result["stats"]
 
     print(f"DataFrame shape: {df.shape}")
-    print(f"Date range: {df['date'].min()} to {df['date'].max()}")
+    print(f"Date range: {df['timestamp'].min()} to {df['timestamp'].max()}")
     print(f"File saved: {filepath}")
     print(f"Collection stats: {stats}")
 ```bash
@@ -272,7 +272,7 @@ test_data = [
     ["2024-01-01 01:00:00", 42050.0, 42200.0, 42000.0, 42150.0, 150.3],
 ]
 
-headers = ["date", "open", "high", "low", "close", "volume"]
+headers = ["timestamp", "open", "high", "low", "close", "volume"]
 atomic_ops.write_csv_atomic(Path("data.csv"), test_data, headers)
 ```text
 
@@ -344,7 +344,7 @@ print(f"Average volume: {df['volume'].mean():.2f}")
 ```python
 # Check data completeness
 print(f"Total bars: {len(df)}")
-print(f"Date range: {df['date'].min()} to {df['date'].max()}")
+print(f"Date range: {df['timestamp'].min()} to {df['timestamp'].max()}")
 
 # Detect gaps
 gaps = gap_filler.detect_all_gaps(csv_file, timeframe)

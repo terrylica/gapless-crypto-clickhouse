@@ -65,9 +65,16 @@ class ClickHouseBulkLoader:
     Downloads monthly ZIP archives from CloudFront CDN, extracts to temporary location,
     parses CSV, adds deterministic _version for deduplication, and ingests to ClickHouse.
 
+    Note on Terminology:
+        The class name uses "Loader" while method names use "ingest" terminology
+        (e.g., ingest_month, _ingest_dataframe). Both "Loader" and "Ingester" are
+        industry-standard synonymous terms for bulk data loading operations. This naming
+        convention is intentional and reflects common usage in data engineering where
+        "loader" describes the component and "ingest" describes the action.
+
     Attributes:
         connection: ClickHouse connection for bulk inserts
-        instrument_type: 'spot' or 'futures' (ADR-0004)
+        instrument_type: 'spot' or 'futures-um' (ADR-0004)
         base_url: Binance Public Data Repository base URL
 
     Error Handling:
@@ -89,7 +96,7 @@ class ClickHouseBulkLoader:
 
         # Single month ingestion (futures)
         with ClickHouseConnection() as conn:
-            loader = ClickHouseBulkLoader(conn, instrument_type="futures")
+            loader = ClickHouseBulkLoader(conn, instrument_type="futures-um")
             loader.ingest_month(symbol="BTCUSDT", timeframe="1h", year=2024, month=1)
     """
 
@@ -123,7 +130,7 @@ class ClickHouseBulkLoader:
 
         Args:
             connection: Active ClickHouse connection
-            instrument_type: Instrument type ("spot" or "futures"), defaults to "spot"
+            instrument_type: Instrument type ("spot" or "futures-um"), defaults to "spot"
 
         Raises:
             ValueError: If connection or instrument_type is invalid

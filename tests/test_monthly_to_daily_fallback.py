@@ -176,7 +176,7 @@ class TestMonthlyToDailyFallback:
 
                 # Verify chronological order
                 if len(df) > 1:
-                    dates = df["date"]
+                    dates = df["timestamp"]
                     for i in range(1, len(dates)):
                         prev_date = dates.iloc[i - 1]
                         curr_date = dates.iloc[i]

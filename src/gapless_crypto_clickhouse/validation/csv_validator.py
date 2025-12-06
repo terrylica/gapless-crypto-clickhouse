@@ -356,7 +356,7 @@ class CSVValidator:
         """
         # Enhanced expected columns for complete microstructure data
         expected_columns = [
-            "date",
+            "timestamp",
             "open",
             "high",
             "low",
@@ -370,7 +370,7 @@ class CSVValidator:
         ]
 
         # Legacy format for backward compatibility
-        legacy_columns = ["date", "open", "high", "low", "close", "volume"]
+        legacy_columns = ["timestamp", "open", "high", "low", "close", "volume"]
 
         errors = []
         warnings = []
@@ -408,7 +408,7 @@ class CSVValidator:
         """Validate datetime sequence is complete and chronological.
 
         Args:
-            df: DataFrame with 'date' column to validate
+            df: DataFrame with 'timestamp' column to validate
             expected_timeframe: Expected timeframe for gap detection (e.g., '1h', '30m')
 
         Returns:
@@ -421,11 +421,11 @@ class CSVValidator:
         warnings = []
         gaps_found = 0
 
-        # Convert date column to datetime
+        # Convert timestamp column to datetime
         try:
-            df["datetime"] = pd.to_datetime(df["date"])
+            df["datetime"] = pd.to_datetime(df["timestamp"])
         except Exception as e:
-            errors.append(f"Failed to parse dates: {e}")
+            errors.append(f"Failed to parse timestamps: {e}")
             return {"status": "INVALID", "errors": errors, "warnings": warnings}
 
         # Check chronological order
@@ -560,7 +560,7 @@ class CSVValidator:
         """Validate data coverage matches expected timeframe and duration.
 
         Args:
-            df: DataFrame with 'date' column
+            df: DataFrame with 'timestamp' column
             expected_timeframe: Expected timeframe for coverage calculation (e.g., '1h')
 
         Returns:
@@ -574,8 +574,8 @@ class CSVValidator:
         if not expected_timeframe or len(df) == 0:
             return {"status": "SKIPPED", "warnings": ["Cannot validate coverage without timeframe"]}
 
-        # Calculate expected bars based on timeframe and actual date range
-        df["datetime"] = pd.to_datetime(df["date"])
+        # Calculate expected bars based on timeframe and actual timestamp range
+        df["datetime"] = pd.to_datetime(df["timestamp"])
         start_time = df["datetime"].min()
         end_time = df["datetime"].max()
         duration = end_time - start_time

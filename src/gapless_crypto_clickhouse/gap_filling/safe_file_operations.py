@@ -118,14 +118,14 @@ class AtomicCSVOperations:
             return False, "DataFrame is None or empty"
 
         # Check required columns for OHLCV data
-        required_cols = ["date", "open", "high", "low", "close", "volume"]
+        required_cols = ["timestamp", "open", "high", "low", "close", "volume"]
         missing_cols = [col for col in required_cols if col not in df.columns]
         if missing_cols:
             return False, f"Missing required columns: {missing_cols}"
 
         # Check for duplicate timestamps
-        if "date" in df.columns:
-            duplicates = df["date"].duplicated().sum()
+        if "timestamp" in df.columns:
+            duplicates = df["timestamp"].duplicated().sum()
             if duplicates > 0:
                 return False, f"Found {duplicates} duplicate timestamps"
 
@@ -257,7 +257,7 @@ class SafeCSVMerger:
         >>>
         >>> # Create gap data to fill missing period
         >>> gap_data = pd.DataFrame({
-        ...     "date": ["2024-01-01 12:00:00", "2024-01-01 13:00:00"],
+        ...     "timestamp": ["2024-01-01 12:00:00", "2024-01-01 13:00:00"],
         ...     "open": [100.0, 101.0],
         ...     "high": [102.0, 103.0],
         ...     "low": [99.0, 100.0],
@@ -302,7 +302,7 @@ class SafeCSVMerger:
         Args:
             gap_data (pd.DataFrame): DataFrame containing gap data to merge.
                 Must have columns matching the existing CSV structure.
-                Timestamp column must be named 'date'.
+                Timestamp column must be named 'timestamp'.
             gap_start (datetime): Start timestamp of the gap being filled.
                 Used for validation and boundary checking.
             gap_end (datetime): End timestamp of the gap being filled.
@@ -345,17 +345,17 @@ class SafeCSVMerger:
             # Step 2: Load existing data
             logger.info("📄 Loading existing CSV data...")
             existing_df = pd.read_csv(self.csv_path, comment="#")
-            existing_df["date"] = pd.to_datetime(existing_df["date"])
+            existing_df["timestamp"] = pd.to_datetime(existing_df["timestamp"])
 
             original_count = len(existing_df)
             logger.info(f"📊 Original data: {original_count} rows")
 
             # Step 3: Prepare gap data
             gap_data = gap_data.copy()
-            gap_data["date"] = pd.to_datetime(gap_data["date"])
+            gap_data["timestamp"] = pd.to_datetime(gap_data["timestamp"])
 
             # Step 4: Remove existing data in gap range
-            gap_mask = (existing_df["date"] >= gap_start) & (existing_df["date"] <= gap_end)
+            gap_mask = (existing_df["timestamp"] >= gap_start) & (existing_df["timestamp"] <= gap_end)
             removed_count = gap_mask.sum()
 
             logger.info(f"🗑️ Removing {removed_count} existing rows in gap range")
@@ -365,15 +365,15 @@ class SafeCSVMerger:
             logger.info("🔧 Merging gap data...")
             merged_df = pd.concat([df_cleaned, gap_data], ignore_index=True)
 
-            # Step 6: Sort by date
-            merged_df = merged_df.sort_values("date").reset_index(drop=True)
+            # Step 6: Sort by timestamp
+            merged_df = merged_df.sort_values("timestamp").reset_index(drop=True)
             final_count = len(merged_df)
 
             logger.info(f"📊 Merged result: {final_count} rows")
             logger.info(f"📈 Net change: {final_count - original_count:+d} rows")
 
             # Step 7: Validate merge
-            gap_check = ((merged_df["date"] >= gap_start) & (merged_df["date"] <= gap_end)).sum()
+            gap_check = ((merged_df["timestamp"] >= gap_start) & (merged_df["timestamp"] <= gap_end)).sum()
             expected_gap_rows = len(gap_data)
 
             if gap_check != expected_gap_rows:

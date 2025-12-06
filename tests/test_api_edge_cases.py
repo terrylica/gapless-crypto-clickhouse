@@ -137,7 +137,7 @@ class TestFillGaps:
             csv_file = Path(tmpdir) / "BTCUSDT-1h_2024-01-01.csv"
             df = pd.DataFrame(
                 {
-                    "date": ["2024-01-01 00:00:00", "2024-01-01 01:00:00"],
+                    "timestamp": ["2024-01-01 00:00:00", "2024-01-01 01:00:00"],
                     "open": [100.0, 101.0],
                     "high": [102.0, 103.0],
                     "low": [99.0, 100.0],

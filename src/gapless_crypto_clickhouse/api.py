@@ -418,18 +418,18 @@ def _apply_limit_and_index(
 
     # Handle deprecated index_type parameter for backward compatibility
     if index_type in ("datetime", "auto"):
-        if "date" in df.columns:
+        if "timestamp" in df.columns:
             # For deprecated datetime mode, return DataFrame with DatetimeIndex
-            return df.set_index("date", drop=False)
+            return df.set_index("timestamp", drop=False)
         else:
-            # Handle edge case where date column is missing
+            # Handle edge case where timestamp column is missing
             return df
     elif index_type == "range":
         # For deprecated range mode, return DataFrame with RangeIndex (default)
         return df
     else:
         # Default behavior: return standard pandas DataFrame with RangeIndex
-        # Users can use df.set_index('date') for DatetimeIndex operations
+        # Users can use df.set_index('timestamp') for DatetimeIndex operations
         return df
 
 
@@ -440,7 +440,7 @@ def _create_empty_dataframe() -> pd.DataFrame:
         Empty DataFrame with standard columns
     """
     columns = [
-        "date",
+        "timestamp",
         "open",
         "high",
         "low",
@@ -477,6 +477,9 @@ def fetch_data(
 
     By default, automatically detects and fills gaps using authentic Binance API data
     to deliver on the "zero gaps guarantee" promise.
+
+    Note: Despite the name 'fetch', this function primarily uses bulk downloads from
+    CloudFront CDN (22x faster than API). REST API is only used for gap filling operations.
 
     **⚠️ IMPORTANT - funding_rate Column (v3.2.0+)**:
     The DataFrame includes a `funding_rate` column for futures data, but it is **NULL**

@@ -142,7 +142,7 @@ df = gcch.download("BTCUSDT", timeframe="1h", start="2024-01-01", end="2024-06-3
 
 # DataFrame columns (microstructure format)
 print(df.columns.tolist())
-# ['date', 'open', 'high', 'low', 'close', 'volume',
+# ['timestamp', 'open', 'high', 'low', 'close', 'volume',
 #  'close_time', 'quote_asset_volume', 'number_of_trades',
 #  'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume']
 
@@ -337,14 +337,14 @@ with ClickHouseConnection() as conn:
 ```python
 # Ingest futures data (same format as spot)
 with ClickHouseConnection() as conn:
-    loader = ClickHouseBulkLoader(conn, instrument_type="futures")
+    loader = ClickHouseBulkLoader(conn, instrument_type="futures-um")
     rows = loader.ingest_month("BTCUSDT", "1h", 2024, 1)
     print(f"Futures data: {rows:,} rows")
 
     # Query futures data (isolated from spot)
     query = OHLCVQuery(conn)
     df_spot = query.get_latest("BTCUSDT", "1h", instrument_type="spot", limit=10)
-    df_futures = query.get_latest("BTCUSDT", "1h", instrument_type="futures", limit=10)
+    df_futures = query.get_latest("BTCUSDT", "1h", instrument_type="futures-um", limit=10)
 
     print(f"Spot data: {len(df_spot)} bars")
     print(f"Futures data: {len(df_futures)} bars")

@@ -62,7 +62,7 @@ class TestFuturesUMDataCollection:
             assert len(df) > 0, "No futures data collected"
 
             # Verify expected columns present
-            expected_cols = ["date", "open", "high", "low", "close", "volume"]
+            expected_cols = ["timestamp", "open", "high", "low", "close", "volume"]
             for col in expected_cols:
                 assert col in df.columns, f"Missing column in futures data: {col}"
 
@@ -111,7 +111,7 @@ class TestFuturesUMDataCollection:
 
             # Standard Binance 11-column format (12 with header/index)
             expected_columns = [
-                "date",
+                "timestamp",
                 "open",
                 "high",
                 "low",

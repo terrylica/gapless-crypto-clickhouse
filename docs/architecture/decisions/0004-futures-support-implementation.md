@@ -100,7 +100,7 @@ def _parse_csv(self, csv_path: Path, symbol: str, timeframe: str) -> pd.DataFram
         has_header = first_line.startswith("open_time")  # Futures CSV header
 
     # Conditional parsing
-    if self.instrument_type == "futures":
+    if self.instrument_type == "futures-um":
         df = pd.read_csv(csv_path, header=0)  # 12 columns with header
         # Futures has additional 'ignore' column (always empty)
     else:

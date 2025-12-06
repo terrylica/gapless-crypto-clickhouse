@@ -23,7 +23,7 @@ flowchart TD
     ValidStructure --> Layer2[LAYER 2:<br/>DateTime Validation]
     LegacyStructure --> Layer2
 
-    Layer2 --> ParseDateTime[Parse 'date' column<br/>to datetime objects]
+    Layer2 --> ParseDateTime[Parse 'timestamp' column<br/>to datetime objects]
     ParseDateTime --> ParseSuccess{Parse<br/>successful?}
 
     ParseSuccess --> ErrorDateTime[❌ DateTime Error:<br/>Invalid timestamp format]

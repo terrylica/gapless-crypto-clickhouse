@@ -395,7 +395,7 @@ class TestDataSaving:
             # Verify CSV can be read back
             df = pd.read_csv(filepath, comment="#")
             assert len(df) == 2
-            assert "date" in df.columns
+            assert "timestamp" in df.columns
             assert "open" in df.columns
 
     def test_save_data_parquet_format(self):
@@ -454,7 +454,7 @@ class TestDataSaving:
             # Verify Parquet can be read back
             df = pd.read_parquet(filepath)
             assert len(df) == 2
-            assert "date" in df.columns
+            assert "timestamp" in df.columns
             assert "open" in df.columns
 
     def test_save_data_empty_dataset(self):

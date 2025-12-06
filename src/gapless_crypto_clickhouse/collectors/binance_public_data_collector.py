@@ -881,7 +881,7 @@ class BinancePublicDataCollector:
 
                 # Convert to DataFrame for Python API users
                 columns = [
-                    "date",
+                    "timestamp",
                     "open",
                     "high",
                     "low",
@@ -910,8 +910,8 @@ class BinancePublicDataCollector:
                 for col in numeric_cols:
                     df[col] = pd.to_numeric(df[col], errors="coerce")
 
-                # Convert date columns to datetime
-                df["date"] = pd.to_datetime(df["date"])
+                # Convert timestamp columns to datetime
+                df["timestamp"] = pd.to_datetime(df["timestamp"])
                 df["close_time"] = pd.to_datetime(df["close_time"])
 
                 return {"dataframe": df, "filepath": filepath, "stats": collection_stats}
@@ -933,7 +933,7 @@ class BinancePublicDataCollector:
 
             # Convert to DataFrame for Python API users
             columns = [
-                "date",
+                "timestamp",
                 "open",
                 "high",
                 "low",
@@ -962,8 +962,8 @@ class BinancePublicDataCollector:
             for col in numeric_cols:
                 df[col] = pd.to_numeric(df[col], errors="coerce")
 
-            # Convert date columns to datetime
-            df["date"] = pd.to_datetime(df["date"])
+            # Convert timestamp columns to datetime
+            df["timestamp"] = pd.to_datetime(df["timestamp"])
             df["close_time"] = pd.to_datetime(df["close_time"])
 
             return {"dataframe": df, "filepath": filepath, "stats": collection_stats}
@@ -1176,7 +1176,7 @@ class BinancePublicDataCollector:
         df = pd.DataFrame(
             data,
             columns=[
-                "date",
+                "timestamp",
                 "open",
                 "high",
                 "low",
@@ -1190,8 +1190,8 @@ class BinancePublicDataCollector:
             ],
         )
 
-        # Convert date column to datetime
-        df["date"] = pd.to_datetime(df["date"])
+        # Convert timestamp column to datetime
+        df["timestamp"] = pd.to_datetime(df["timestamp"])
 
         if self.output_format == "parquet":
             # Save as Parquet with metadata
@@ -1424,7 +1424,7 @@ class BinancePublicDataCollector:
 
                 # Convert to DataFrame
                 columns = [
-                    "date",
+                    "timestamp",
                     "open",
                     "high",
                     "low",
@@ -1453,8 +1453,8 @@ class BinancePublicDataCollector:
                 for col in numeric_cols:
                     df[col] = pd.to_numeric(df[col], errors="coerce")
 
-                # Convert date columns
-                df["date"] = pd.to_datetime(df["date"])
+                # Convert timestamp columns
+                df["timestamp"] = pd.to_datetime(df["timestamp"])
                 df["close_time"] = pd.to_datetime(df["close_time"])
 
                 print("\n✅ CONCURRENT COLLECTION SUCCESS")

@@ -21,7 +21,7 @@ def create_sample_data_with_gaps():
     dates = pd.date_range("2024-01-01", periods=48, freq="1h")
     data = pd.DataFrame(
         {
-            "date": dates,
+            "timestamp": dates,
             "open": [100.0 + i for i in range(48)],
             "high": [105.0 + i for i in range(48)],
             "low": [95.0 + i for i in range(48)],

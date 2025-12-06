@@ -45,7 +45,7 @@ def collect_data_sample():
         print(f"   File: {csv_file.name} ({file_size_mb:.2f} MB)")
         print(f"   Data points: {len(df)}")
         print(f"   Columns: {len(df.columns)} (Full 11-column microstructure format)")
-        print(f"   Date range: {df.iloc[0]['date']} to {df.iloc[-1]['date']}")
+        print(f"   Date range: {df.iloc[0]['timestamp']} to {df.iloc[-1]['timestamp']}")
         print()
 
         return csv_file
@@ -68,15 +68,15 @@ def analyze_data_quality(csv_file):
     print(f"Total records: {len(df)}")
 
     # Convert dates and analyze time series
-    df["date"] = pd.to_datetime(df["date"])
-    df = df.sort_values("date")
+    df["timestamp"] = pd.to_datetime(df["timestamp"])
+    df = df.sort_values("timestamp")
 
     # Check for basic data quality issues
-    print(f"Date range: {df['date'].min()} to {df['date'].max()}")
-    print(f"Time span: {df['date'].max() - df['date'].min()}")
+    print(f"Date range: {df['timestamp'].min()} to {df['timestamp'].max()}")
+    print(f"Time span: {df['timestamp'].max() - df['timestamp'].min()}")
 
     # Expected vs actual data points (assuming 1-hour intervals)
-    expected_hours = int((df["date"].max() - df["date"].min()).total_seconds() / 3600) + 1
+    expected_hours = int((df["timestamp"].max() - df["timestamp"].min()).total_seconds() / 3600) + 1
     actual_points = len(df)
 
     print(f"Expected data points (1h intervals): {expected_hours}")
@@ -145,16 +145,16 @@ def validate_final_data(csv_file):
 
     # Load final data
     df = pd.read_csv(csv_file)
-    df["date"] = pd.to_datetime(df["date"])
-    df = df.sort_values("date")
+    df["timestamp"] = pd.to_datetime(df["timestamp"])
+    df = df.sort_values("timestamp")
 
     print(f"Final dataset: {csv_file.name}")
     print(f"Total records: {len(df)}")
     print(f"Columns: {len(df.columns)} (Full 11-column microstructure format)")
-    print(f"Date range: {df['date'].min()} to {df['date'].max()}")
+    print(f"Date range: {df['timestamp'].min()} to {df['timestamp'].max()}")
 
     # Check data completeness
-    expected_hours = int((df["date"].max() - df["date"].min()).total_seconds() / 3600) + 1
+    expected_hours = int((df["timestamp"].max() - df["timestamp"].min()).total_seconds() / 3600) + 1
     completeness = len(df) / expected_hours * 100
 
     print(f"Data completeness: {completeness:.1f}%")

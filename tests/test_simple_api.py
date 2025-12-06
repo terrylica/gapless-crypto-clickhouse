@@ -118,7 +118,7 @@ class TestSimpleAPI:
             if not df.empty:
                 assert isinstance(df.index, pd.RangeIndex)
                 # Should have 'date' column for explicit time operations
-                assert "date" in df.columns
+                assert "timestamp" in df.columns
                 # Should have expected OHLCV columns
                 expected_cols = ["open", "high", "low", "close", "volume"]
                 for col in expected_cols:
@@ -263,9 +263,9 @@ class TestAPIUsagePatterns:
             if not df.empty:
                 # Default is RangeIndex; date column preserved for explicit time ops
                 assert isinstance(df.index, pd.RangeIndex)
-                assert "date" in df.columns
+                assert "timestamp" in df.columns
                 # Date column should be datetime type
-                assert pd.api.types.is_datetime64_any_dtype(df["date"])
+                assert pd.api.types.is_datetime64_any_dtype(df["timestamp"])
 
         except Exception as e:
             pytest.skip(f"Network-dependent test failed: {e}")
@@ -331,12 +331,12 @@ class TestAPIUsagePatterns:
                 pytest.skip("No data returned for test period")
 
             # Convert date column to datetime if needed
-            if "date" in df.columns:
-                df["date"] = pd.to_datetime(df["date"])
-                df_sorted = df.sort_values("date").reset_index(drop=True)
+            if "timestamp" in df.columns:
+                df["timestamp"] = pd.to_datetime(df["timestamp"])
+                df_sorted = df.sort_values("timestamp").reset_index(drop=True)
 
                 # Check for gaps (5-minute timeframe = 5 min expected)
-                time_diffs = df_sorted["date"].diff()
+                time_diffs = df_sorted["timestamp"].diff()
                 expected_interval = pd.Timedelta(minutes=5)
 
                 # Allow 1.5x the expected interval as tolerance for minor variations

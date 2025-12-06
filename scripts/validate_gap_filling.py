@@ -255,7 +255,7 @@ class GapFillingValidator:
         log_with_timestamp(f"Stage 2: Fetched {len(raw_klines)} klines")
         self.results["stages"][f"{format_name}_fetch"] = {
             "status": "passed",
-            "date": self.test_date,
+            "timestamp": self.test_date,
             "rows": len(raw_klines),
         }
 

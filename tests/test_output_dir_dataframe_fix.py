@@ -69,7 +69,7 @@ def test_dataframe_return_functionality():
 
         # Check columns
         expected_columns = [
-            "date",
+            "timestamp",
             "open",
             "high",
             "low",
@@ -84,7 +84,7 @@ def test_dataframe_return_functionality():
         assert list(df.columns) == expected_columns, f"Unexpected columns: {list(df.columns)}"
 
         # Check data types
-        assert pd.api.types.is_datetime64_any_dtype(df["date"]), "date column should be datetime"
+        assert pd.api.types.is_datetime64_any_dtype(df["timestamp"]), "date column should be datetime"
         assert pd.api.types.is_datetime64_any_dtype(df["close_time"]), (
             "close_time column should be datetime"
         )

@@ -9,14 +9,14 @@ def test_legacy_start_end_parameters_download():
     """Legacy start/end parameters continue working in download()."""
     df = gcch.download("BTCUSDT", "1h", start="2024-01-01", end="2024-01-02")
     assert len(df) > 0
-    assert "date" in df.columns
+    assert "timestamp" in df.columns
 
 
 def test_new_start_date_end_date_aliases_download():
     """New start_date/end_date aliases work correctly in download()."""
     df = gcch.download("BTCUSDT", "1h", start_date="2024-01-01", end_date="2024-01-02")
     assert len(df) > 0
-    assert "date" in df.columns
+    assert "timestamp" in df.columns
 
 
 def test_both_forms_produce_same_results_download():
@@ -26,8 +26,8 @@ def test_both_forms_produce_same_results_download():
 
     assert len(df1) == len(df2)
     # Both should have same data
-    assert df1["date"].min() == df2["date"].min()
-    assert df1["date"].max() == df2["date"].max()
+    assert df1["timestamp"].min() == df2["timestamp"].min()
+    assert df1["timestamp"].max() == df2["timestamp"].max()
 
 
 def test_conflict_start_and_start_date_raises_error_download():
@@ -46,14 +46,14 @@ def test_legacy_start_end_parameters_fetch_data():
     """Legacy start/end parameters continue working in fetch_data()."""
     df = gcch.fetch_data("ETHUSDT", "4h", start="2024-01-01", end="2024-01-02")
     assert len(df) > 0
-    assert "date" in df.columns
+    assert "timestamp" in df.columns
 
 
 def test_new_start_date_end_date_aliases_fetch_data():
     """New start_date/end_date aliases work correctly in fetch_data()."""
     df = gcch.fetch_data("ETHUSDT", "4h", start_date="2024-01-01", end_date="2024-01-02")
     assert len(df) > 0
-    assert "date" in df.columns
+    assert "timestamp" in df.columns
 
 
 def test_both_forms_produce_same_results_fetch_data():
@@ -62,8 +62,8 @@ def test_both_forms_produce_same_results_fetch_data():
     df2 = gcch.fetch_data("SOLUSDT", "1d", start_date="2024-01-01", end_date="2024-01-02")
 
     assert len(df1) == len(df2)
-    assert df1["date"].min() == df2["date"].min()
-    assert df1["date"].max() == df2["date"].max()
+    assert df1["timestamp"].min() == df2["timestamp"].min()
+    assert df1["timestamp"].max() == df2["timestamp"].max()
 
 
 def test_conflict_start_and_start_date_raises_error_fetch_data():

@@ -75,8 +75,8 @@ class TestGaplessValidation1d2018Present:
         print(f"✅ Collected {len(df)} daily bars")
 
         # Validate date range coverage
-        min_date = df["date"].min()
-        max_date = df["date"].max()
+        min_date = df["timestamp"].min()
+        max_date = df["timestamp"].max()
 
         print(f"📊 Date range: {min_date} to {max_date}")
 
@@ -151,7 +151,7 @@ class TestGaplessValidation1d2018Present:
 
         # Validate required columns
         expected_columns = [
-            "date",
+            "timestamp",
             "open",
             "high",
             "low",
@@ -168,7 +168,7 @@ class TestGaplessValidation1d2018Present:
             assert col in df.columns, f"Missing required column: {col}"
 
         # Validate no null values in critical columns
-        critical_columns = ["date", "open", "high", "low", "close", "volume"]
+        critical_columns = ["timestamp", "open", "high", "low", "close", "volume"]
         for col in critical_columns:
             null_count = df[col].isnull().sum()
             assert null_count == 0, f"Found {null_count} null values in {col}"
@@ -187,7 +187,7 @@ class TestGaplessValidation1d2018Present:
         )
 
         # Validate chronological order
-        date_series = pd.to_datetime(df["date"])
+        date_series = pd.to_datetime(df["timestamp"])
         assert date_series.is_monotonic_increasing, "Dates are not in chronological order"
 
         # Validate daily intervals
@@ -233,7 +233,7 @@ class TestGaplessValidation1d2018Present:
         df = result["dataframe"]
 
         # Convert to datetime and add weekday information
-        df["datetime"] = pd.to_datetime(df["date"])
+        df["datetime"] = pd.to_datetime(df["timestamp"])
         df["weekday"] = df["datetime"].dt.day_name()
         df["is_weekend"] = df["datetime"].dt.weekday >= 5  # Saturday=5, Sunday=6
 
