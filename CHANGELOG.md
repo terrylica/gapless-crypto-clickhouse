@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [16.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v15.1.1...v16.0.0) (2025-12-06)
+
+### ⚠ BREAKING CHANGES
+
+* **api:** The DataFrame column previously named `date` is now `timestamp`.
+This affects all API functions returning DataFrames and CSV output files.
+
+Migration guide:
+```python
+# Before:
+df['date'].min()
+df.set_index('date')
+
+# After:
+df['timestamp'].min()
+df.set_index('timestamp')
+```
+
+Rationale:
+- `date` was misleading (contained full datetime, not just date)
+- `timestamp` is industry standard for OHLCV data
+- Aligns with ClickHouse schema (already uses `timestamp`)
+
+Also includes terminology alignment fixes:
+- instrument_type: "futures" → "futures-um" in all docs (8 locations)
+- fetch_data() docstring: clarifies CloudFront CDN usage (not REST API)
+- schema.sql: added data_source value documentation
+- ClickHouseBulkLoader: added Loader/Ingester terminology note
+
+47 files modified across source, tests, docs, and examples.
+
+### Features
+
+* **api:** rename `date` column to `timestamp` for semantic clarity ([cf7d0d5](https://github.com/terrylica/gapless-crypto-clickhouse/commit/cf7d0d5f2a05a61510ac70791ab73d3ed1f5172a))
+
 ## [15.1.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v15.1.0...v15.1.1) (2025-11-27)
 
 ### Bug Fixes
