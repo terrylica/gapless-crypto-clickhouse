@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS ohlcv (
     -- Additional microstructure metrics (Binance 11-column format)
     close_time DateTime64(6) CODEC(DoubleDelta, LZ4),  -- Upgraded to microsecond precision
     quote_asset_volume Float64 CODEC(Gorilla, LZ4),
-    number_of_trades Int64 CODEC(Delta, LZ4),
+    number_of_trades Int64 CODEC(T64, ZSTD),
     taker_buy_base_asset_volume Float64 CODEC(Gorilla, LZ4),
     taker_buy_quote_asset_volume Float64 CODEC(Gorilla, LZ4),
 
@@ -87,7 +87,7 @@ SETTINGS
 -- 5. CODEC compression:
 --    - DoubleDelta: Optimized for timestamps (sequential values)
 --    - Gorilla: Optimized for float values (OHLCV data)
---    - Delta: Optimized for integer sequences (number_of_trades)
+--    - T64 + ZSTD: Optimized for integer counters (number_of_trades) per ClickHouse Architect skill
 --    - ZSTD: General-purpose compression for string columns
 --
 -- 6. DateTime64(6): Microsecond precision (ADR-0021)
