@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [16.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v16.0.0...v16.1.0) (2025-12-10)
+
+### Features
+
+* **toolchain:** add mise toolchain with ClickHouse lifecycle management ([2a4a901](https://github.com/terrylica/gapless-crypto-clickhouse/commit/2a4a901ffdd585d466711081f5c81d7984df71b3))
+
 ## [16.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v15.1.1...v16.0.0) (2025-12-06)
 
 ### ⚠ BREAKING CHANGES
