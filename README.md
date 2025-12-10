@@ -44,6 +44,38 @@ Both packages share the same performance optimization via Binance public reposit
 - Compressed storage (DoubleDelta timestamps, Gorilla OHLCV)
 - AI agent integration via probe hooks
 
+## Breaking Changes
+
+### v17.0.0 - ClickHouse Codec Optimization
+
+**Requires table recreation** - The `number_of_trades` column codec changed from `CODEC(Delta, LZ4)` to `CODEC(T64, ZSTD)` for 5-10% better compression. ClickHouse doesn't support ALTER CODEC, so existing tables must be dropped and recreated:
+
+```bash
+# Local ClickHouse
+clickhouse client -q "DROP TABLE IF EXISTS default.ohlcv"
+mise run local-init
+
+# Cloud ClickHouse (via Doppler)
+doppler run --project aws-credentials --config prd -- \
+  clickhouse-client -q "DROP TABLE IF EXISTS default.ohlcv"
+doppler run --project aws-credentials --config prd -- \
+  clickhouse-client --multiquery < src/gapless_crypto_clickhouse/clickhouse/schema.sql
+```
+
+Data can be re-ingested from Binance CDN after schema recreation.
+
+### v16.0.0 - Column Rename
+
+The `date` column was renamed to `timestamp` for semantic clarity. Update any code referencing the old column name:
+
+```python
+# Before (v15.x)
+df.set_index('date')
+
+# After (v16.0.0+)
+df.set_index('timestamp')
+```
+
 ## Quick Start
 
 ### Installation (UV)
@@ -980,7 +1012,7 @@ CSV files include header comments with metadata followed by data:
 # Data Hash: 5fba9d2e5d3db849...
 # Compliance: Zero-Magic-Numbers, Temporal-Integrity, Official-Binance-Source
 #
-date,open,high,low,close,volume,close_time,quote_asset_volume,number_of_trades,taker_buy_base_asset_volume,taker_buy_quote_asset_volume
+timestamp,open,high,low,close,volume,close_time,quote_asset_volume,number_of_trades,taker_buy_base_asset_volume,taker_buy_quote_asset_volume
 2024-01-01 00:00:00,42283.58,42554.57,42261.02,42475.23,1271.68108,2024-01-01 00:59:59,53957248.973789,47134,682.57581,28957416.819645
 ```
 
