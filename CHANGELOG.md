@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.0.1...v17.0.2) (2025-12-10)
+
+### Documentation
+
+* align documentation with v17.0.0 release ([5081a14](https://github.com/terrylica/gapless-crypto-clickhouse/commit/5081a1446c19f7160ed78ae2f0450be4703dc466))
+
 ## [17.0.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.0.0...v17.0.1) (2025-12-10)
 
 ### Documentation
