@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.0.3...v17.0.4) (2025-12-10)
+
+### Bug Fixes
+
+* **mise:** bypass env file override in production validation ([02f2278](https://github.com/terrylica/gapless-crypto-clickhouse/commit/02f2278cbb31bd9ccf7d58f819a8a747da344c7e))
+
 ## [17.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.0.2...v17.0.3) (2025-12-10)
 
 ### Bug Fixes
