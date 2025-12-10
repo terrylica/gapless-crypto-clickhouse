@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.0.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v16.1.0...v17.0.0) (2025-12-10)
+
+### ⚠ BREAKING CHANGES
+
+* **schema:** Tables must be recreated as ClickHouse does not support
+ALTER CODEC on existing columns.
+
+Refs: ADR-2025-12-10-clickhouse-codec-t64-optimization
+
+### Features
+
+* **schema:** optimize number_of_trades codec from Delta+LZ4 to T64+ZSTD ([a869f60](https://github.com/terrylica/gapless-crypto-clickhouse/commit/a869f60ff3795db00d12cddbdcdc04a7e335f7a4))
+
 ## [16.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v16.0.0...v16.1.0) (2025-12-10)
 
 ### Features
