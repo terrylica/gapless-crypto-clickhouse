@@ -176,7 +176,7 @@ All functions return pandas DataFrames with complete microstructure data:
 
 | Column                         | Type     | Description            | Example               |
 | ------------------------------ | -------- | ---------------------- | --------------------- |
-| `date`                         | datetime | Open timestamp         | `2024-01-01 12:00:00` |
+| `timestamp`                    | datetime | Open timestamp         | `2024-01-01 12:00:00` |
 | `open`                         | float    | Opening price          | `42150.50`            |
 | `high`                         | float    | Highest price          | `42200.00`            |
 | `low`                          | float    | Lowest price           | `42100.25`            |
@@ -338,7 +338,7 @@ def prepare_backtest_data(symbol, timeframe, start, end):
         raise ValueError(f"No data available for {symbol} {timeframe}")
 
     # Check for gaps (should be zero)
-    time_diff = df['date'].diff().dropna()
+    time_diff = df['timestamp'].diff().dropna()
     expected_interval = pd.Timedelta(hours=1) if timeframe == '1h' else pd.Timedelta(minutes=5)
     gaps = time_diff[time_diff > expected_interval * 1.5]
 

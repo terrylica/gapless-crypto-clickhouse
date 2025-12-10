@@ -215,9 +215,7 @@ class TestFuturesUMSpecificFeatures:
             auto_ingest=True,
         )
 
-        assert "funding_rate" in df.columns, (
-            "funding_rate column must be present for futures data"
-        )
+        assert "funding_rate" in df.columns, "funding_rate column must be present for futures data"
 
     @pytest.mark.integration
     @pytest.mark.slow
@@ -271,9 +269,7 @@ class TestFuturesSpotIsolation:
         )
 
         # Verify spot only returns spot
-        assert (df_spot["instrument_type"] == "spot").all(), (
-            "Spot query returned non-spot data"
-        )
+        assert (df_spot["instrument_type"] == "spot").all(), "Spot query returned non-spot data"
 
         # Verify futures only returns futures (ADR-0050: strict DB value)
         assert (df_futures["instrument_type"] == "futures-um").all(), (
@@ -427,9 +423,7 @@ class TestFuturesUMValidation:
         )
 
         negative_volume = df[df["volume"] < 0]
-        assert len(negative_volume) == 0, (
-            f"Found {len(negative_volume)} bars with negative volume"
-        )
+        assert len(negative_volume) == 0, f"Found {len(negative_volume)} bars with negative volume"
 
     @pytest.mark.integration
     @pytest.mark.slow
@@ -441,9 +435,7 @@ class TestFuturesUMValidation:
             symbols = get_supported_symbols(instrument_type="futures-um")
 
             # CLAUDE.md states: "715 validated USDT-margined futures symbols"
-            assert len(symbols) >= 700, (
-                f"Expected ~715 futures symbols, got {len(symbols)}"
-            )
+            assert len(symbols) >= 700, f"Expected ~715 futures symbols, got {len(symbols)}"
 
             # Verify major symbols present
             major_symbols = ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT"]

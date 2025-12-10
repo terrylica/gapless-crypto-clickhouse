@@ -101,6 +101,52 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 **Key principle**: Same SQL dialect as Cloud (zero migration). Tests fail hard if mise ClickHouse not installed (no skip per ADR-0045).
 
+### mise Toolchain (ADR-0051)
+
+**Unified Development Environment** - Single `mise install` command sets up complete toolchain
+
+**Quick Start**:
+
+```bash
+# Install all tools (Python, uv, ClickHouse, Node.js)
+mise install
+
+# Start local development environment
+mise run dev  # Starts ClickHouse + deploys schema
+
+# Run validation
+mise run validate-local
+```
+
+**Key Tasks**:
+
+| Task                           | Description                           |
+| ------------------------------ | ------------------------------------- |
+| `mise run ch-start`            | Start local ClickHouse server         |
+| `mise run ch-stop`             | Stop local ClickHouse server          |
+| `mise run ch-status`           | Check ClickHouse server status        |
+| `mise run local-init`          | Deploy schema to local ClickHouse     |
+| `mise run seed-local`          | Seed with sample BTCUSDT data         |
+| `mise run validate-local`      | Full local validation                 |
+| `mise run validate-cloud`      | Full cloud validation                 |
+| `mise run validate-production` | Doppler-wrapped production validation |
+
+**Dual-Mode Support** (GCCH_MODE environment variable):
+
+- `auto` (default): Detects local vs cloud based on CLICKHOUSE_HOST
+- `local`: Forces local ClickHouse (localhost:8123)
+- `cloud`: Forces ClickHouse Cloud (requires credentials)
+
+**Credential Strategy**:
+
+| Context    | Method                                           |
+| ---------- | ------------------------------------------------ |
+| Local dev  | `_.file = '.env'` auto-loads credentials         |
+| Cloud      | Environment variables (CLICKHOUSE_HOST, etc.)    |
+| Production | `mise run validate-production` (Doppler wrapper) |
+
+**Reference**: [ADR-0051](docs/architecture/decisions/0051-mise-toolchain-implementation.md) - mise toolchain implementation
+
 ### ClickHouse Schema Architecture
 
 **Schema Version**: v2 (ADR-0034 optimized for prop trading, deployed 2025-01-22)

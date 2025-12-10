@@ -355,7 +355,9 @@ class SafeCSVMerger:
             gap_data["timestamp"] = pd.to_datetime(gap_data["timestamp"])
 
             # Step 4: Remove existing data in gap range
-            gap_mask = (existing_df["timestamp"] >= gap_start) & (existing_df["timestamp"] <= gap_end)
+            gap_mask = (existing_df["timestamp"] >= gap_start) & (
+                existing_df["timestamp"] <= gap_end
+            )
             removed_count = gap_mask.sum()
 
             logger.info(f"🗑️ Removing {removed_count} existing rows in gap range")
@@ -373,7 +375,9 @@ class SafeCSVMerger:
             logger.info(f"📈 Net change: {final_count - original_count:+d} rows")
 
             # Step 7: Validate merge
-            gap_check = ((merged_df["timestamp"] >= gap_start) & (merged_df["timestamp"] <= gap_end)).sum()
+            gap_check = (
+                (merged_df["timestamp"] >= gap_start) & (merged_df["timestamp"] <= gap_end)
+            ).sum()
             expected_gap_rows = len(gap_data)
 
             if gap_check != expected_gap_rows:

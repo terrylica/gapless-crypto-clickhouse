@@ -34,9 +34,22 @@ import pandas as pd
 # =============================================================================
 
 Timeframe = Literal[
-    "1s", "1m", "3m", "5m", "15m", "30m",
-    "1h", "2h", "4h", "6h", "8h", "12h",
-    "1d", "3d", "1w", "1mo"
+    "1s",
+    "1m",
+    "3m",
+    "5m",
+    "15m",
+    "30m",
+    "1h",
+    "2h",
+    "4h",
+    "6h",
+    "8h",
+    "12h",
+    "1d",
+    "3d",
+    "1w",
+    "1mo",
 ]
 """Type alias for valid timeframes (16 total: 13 standard + 3 exotic)."""
 
@@ -57,10 +70,10 @@ TIMEFRAME_TO_MINUTES: Final[Dict[str, float]] = {
     "6h": 360,
     "8h": 480,
     "12h": 720,
-    "1d": 1440,   # 24 hours = 1440 minutes
-    "3d": 4320,   # 3 days = 72 hours = 4320 minutes
+    "1d": 1440,  # 24 hours = 1440 minutes
+    "3d": 4320,  # 3 days = 72 hours = 4320 minutes
     "1w": 10080,  # 7 days = 168 hours = 10080 minutes
-    "1mo": 43200, # 30 days = 720 hours = 43200 minutes (approximate)
+    "1mo": 43200,  # 30 days = 720 hours = 43200 minutes (approximate)
 }
 """Timeframe to minutes mapping (single source of truth)."""
 
@@ -89,26 +102,22 @@ TIMEFRAME_TO_BINANCE_INTERVAL: Final[Dict[str, str]] = {
 # =============================================================================
 
 TIMEFRAME_TO_MILLISECONDS: Final[Dict[str, int]] = {
-    timeframe: int(minutes * 60 * 1000)
-    for timeframe, minutes in TIMEFRAME_TO_MINUTES.items()
+    timeframe: int(minutes * 60 * 1000) for timeframe, minutes in TIMEFRAME_TO_MINUTES.items()
 }
 """Timeframe to milliseconds for REST API calculations."""
 
 TIMEFRAME_TO_SECONDS: Final[Dict[str, int]] = {
-    timeframe: int(minutes * 60)
-    for timeframe, minutes in TIMEFRAME_TO_MINUTES.items()
+    timeframe: int(minutes * 60) for timeframe, minutes in TIMEFRAME_TO_MINUTES.items()
 }
 """Timeframe to seconds for ClickHouse gap detection queries."""
 
 TIMEFRAME_TO_TIMEDELTA: Final[Dict[str, pd.Timedelta]] = {
-    timeframe: pd.Timedelta(minutes=minutes)
-    for timeframe, minutes in TIMEFRAME_TO_MINUTES.items()
+    timeframe: pd.Timedelta(minutes=minutes) for timeframe, minutes in TIMEFRAME_TO_MINUTES.items()
 }
 """Pandas Timedelta mapping for DataFrame operations."""
 
 TIMEFRAME_TO_PYTHON_TIMEDELTA: Final[Dict[str, timedelta]] = {
-    timeframe: timedelta(minutes=minutes)
-    for timeframe, minutes in TIMEFRAME_TO_MINUTES.items()
+    timeframe: timedelta(minutes=minutes) for timeframe, minutes in TIMEFRAME_TO_MINUTES.items()
 }
 """Python timedelta mapping for non-pandas contexts."""
 
@@ -119,10 +128,9 @@ TIMEFRAME_TO_PYTHON_TIMEDELTA: Final[Dict[str, timedelta]] = {
 VALID_TIMEFRAMES: Final[FrozenSet[str]] = frozenset(TIMEFRAME_TO_MINUTES.keys())
 """Frozenset of valid timeframes for O(1) membership testing."""
 
-STANDARD_TIMEFRAMES: Final[FrozenSet[str]] = frozenset({
-    "1s", "1m", "3m", "5m", "15m", "30m",
-    "1h", "2h", "4h", "6h", "8h", "12h", "1d"
-})
+STANDARD_TIMEFRAMES: Final[FrozenSet[str]] = frozenset(
+    {"1s", "1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d"}
+)
 """Standard timeframes (1s through 1d) - available for all symbols."""
 
 EXOTIC_TIMEFRAMES: Final[FrozenSet[str]] = frozenset({"3d", "1w", "1mo"})
@@ -133,9 +141,22 @@ EXOTIC_TIMEFRAMES: Final[FrozenSet[str]] = frozenset({"3d", "1w", "1mo"})
 # =============================================================================
 
 _EXPECTED_TIMEFRAMES = {
-    "1s", "1m", "3m", "5m", "15m", "30m",
-    "1h", "2h", "4h", "6h", "8h", "12h",
-    "1d", "3d", "1w", "1mo",
+    "1s",
+    "1m",
+    "3m",
+    "5m",
+    "15m",
+    "30m",
+    "1h",
+    "2h",
+    "4h",
+    "6h",
+    "8h",
+    "12h",
+    "1d",
+    "3d",
+    "1w",
+    "1mo",
 }
 
 # Verify all mappings cover all timeframes

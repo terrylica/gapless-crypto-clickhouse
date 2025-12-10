@@ -277,9 +277,7 @@ class TestFetchKlinesWithRetry:
 class TestFetchGapData:
     """Tests for fetch_gap_data() high-level function."""
 
-    @patch(
-        "gapless_crypto_clickhouse.gap_filling.rest_client.fetch_klines_with_retry"
-    )
+    @patch("gapless_crypto_clickhouse.gap_filling.rest_client.fetch_klines_with_retry")
     def test_spot_uses_correct_endpoint(self, mock_fetch, sample_api_kline_response):
         """Spot instrument uses api.binance.com endpoint."""
         from gapless_crypto_clickhouse.gap_filling.rest_client import (
@@ -300,9 +298,7 @@ class TestFetchGapData:
         call_args = mock_fetch.call_args
         assert call_args.args[0] == SPOT_API_URL
 
-    @patch(
-        "gapless_crypto_clickhouse.gap_filling.rest_client.fetch_klines_with_retry"
-    )
+    @patch("gapless_crypto_clickhouse.gap_filling.rest_client.fetch_klines_with_retry")
     def test_futures_uses_correct_endpoint(self, mock_fetch, sample_api_kline_response):
         """Futures instrument uses fapi.binance.com endpoint."""
         from gapless_crypto_clickhouse.gap_filling.rest_client import (
@@ -336,17 +332,13 @@ class TestFetchGapData:
                 instrument_type="invalid",
             )
 
-    @patch(
-        "gapless_crypto_clickhouse.gap_filling.rest_client.fetch_klines_with_retry"
-    )
+    @patch("gapless_crypto_clickhouse.gap_filling.rest_client.fetch_klines_with_retry")
     def test_boundary_filtering(self, mock_fetch):
         """Only candles within requested range are returned."""
         from gapless_crypto_clickhouse.gap_filling.rest_client import fetch_gap_data
 
         # API returns data outside requested range (common with Binance)
-        base_time = int(
-            datetime(2024, 11, 1, 0, 0, 0, tzinfo=timezone.utc).timestamp() * 1000
-        )
+        base_time = int(datetime(2024, 11, 1, 0, 0, 0, tzinfo=timezone.utc).timestamp() * 1000)
         hour_ms = 3600 * 1000
 
         # Return 5 hours of data (00:00 to 04:00)
@@ -380,9 +372,7 @@ class TestFetchGapData:
         # Should only get 3 candles (00:00, 01:00, 02:00)
         assert len(result) == 3
 
-    @patch(
-        "gapless_crypto_clickhouse.gap_filling.rest_client.fetch_klines_with_retry"
-    )
+    @patch("gapless_crypto_clickhouse.gap_filling.rest_client.fetch_klines_with_retry")
     def test_returns_none_on_empty_response(self, mock_fetch):
         """Returns None when API returns no data."""
         from gapless_crypto_clickhouse.gap_filling.rest_client import fetch_gap_data
@@ -399,9 +389,7 @@ class TestFetchGapData:
 
         assert result is None
 
-    @patch(
-        "gapless_crypto_clickhouse.gap_filling.rest_client.fetch_klines_with_retry"
-    )
+    @patch("gapless_crypto_clickhouse.gap_filling.rest_client.fetch_klines_with_retry")
     def test_candle_dict_structure(self, mock_fetch, sample_api_kline_response):
         """Returned candle dictionaries have correct structure."""
         from gapless_crypto_clickhouse.gap_filling.rest_client import fetch_gap_data

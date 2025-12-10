@@ -102,9 +102,7 @@ class TestConvertApiDataToDataframe:
         """DataFrame has exactly 18 columns matching ClickHouse schema."""
         from gapless_crypto_clickhouse.query_api import _convert_api_data_to_dataframe
 
-        df = _convert_api_data_to_dataframe(
-            sample_api_candle_dicts, "BTCUSDT", "1h", "spot"
-        )
+        df = _convert_api_data_to_dataframe(sample_api_candle_dicts, "BTCUSDT", "1h", "spot")
 
         assert len(df.columns) == 18, f"Expected 18 columns, got {len(df.columns)}"
 
@@ -133,9 +131,7 @@ class TestConvertApiDataToDataframe:
             "_sign",
         ]
 
-        df = _convert_api_data_to_dataframe(
-            sample_api_candle_dicts, "BTCUSDT", "1h", "spot"
-        )
+        df = _convert_api_data_to_dataframe(sample_api_candle_dicts, "BTCUSDT", "1h", "spot")
 
         assert list(df.columns) == expected_columns
 
@@ -143,9 +139,7 @@ class TestConvertApiDataToDataframe:
         """All rows have data_source='rest_api'."""
         from gapless_crypto_clickhouse.query_api import _convert_api_data_to_dataframe
 
-        df = _convert_api_data_to_dataframe(
-            sample_api_candle_dicts, "BTCUSDT", "1h", "spot"
-        )
+        df = _convert_api_data_to_dataframe(sample_api_candle_dicts, "BTCUSDT", "1h", "spot")
 
         assert (df["data_source"] == "rest_api").all()
 
@@ -153,9 +147,7 @@ class TestConvertApiDataToDataframe:
         """Timestamps are UTC-aware."""
         from gapless_crypto_clickhouse.query_api import _convert_api_data_to_dataframe
 
-        df = _convert_api_data_to_dataframe(
-            sample_api_candle_dicts, "BTCUSDT", "1h", "spot"
-        )
+        df = _convert_api_data_to_dataframe(sample_api_candle_dicts, "BTCUSDT", "1h", "spot")
 
         assert df["timestamp"].dt.tz is not None, "timestamp must be timezone-aware"
         assert str(df["timestamp"].dt.tz) == "UTC", "timestamp must be UTC"
@@ -166,9 +158,7 @@ class TestConvertApiDataToDataframe:
         """number_of_trades column is int64 dtype."""
         from gapless_crypto_clickhouse.query_api import _convert_api_data_to_dataframe
 
-        df = _convert_api_data_to_dataframe(
-            sample_api_candle_dicts, "BTCUSDT", "1h", "spot"
-        )
+        df = _convert_api_data_to_dataframe(sample_api_candle_dicts, "BTCUSDT", "1h", "spot")
 
         assert df["number_of_trades"].dtype == "int64"
 
@@ -176,9 +166,7 @@ class TestConvertApiDataToDataframe:
         """Each row has unique _version hash."""
         from gapless_crypto_clickhouse.query_api import _convert_api_data_to_dataframe
 
-        df = _convert_api_data_to_dataframe(
-            sample_api_candle_dicts, "BTCUSDT", "1h", "spot"
-        )
+        df = _convert_api_data_to_dataframe(sample_api_candle_dicts, "BTCUSDT", "1h", "spot")
 
         assert df["_version"].nunique() == len(df), "All _version hashes must be unique"
 
@@ -186,9 +174,7 @@ class TestConvertApiDataToDataframe:
         """All rows have _sign=1 (active rows)."""
         from gapless_crypto_clickhouse.query_api import _convert_api_data_to_dataframe
 
-        df = _convert_api_data_to_dataframe(
-            sample_api_candle_dicts, "BTCUSDT", "1h", "spot"
-        )
+        df = _convert_api_data_to_dataframe(sample_api_candle_dicts, "BTCUSDT", "1h", "spot")
 
         assert (df["_sign"] == 1).all()
 
@@ -196,9 +182,7 @@ class TestConvertApiDataToDataframe:
         """funding_rate is NULL for gap-filled data."""
         from gapless_crypto_clickhouse.query_api import _convert_api_data_to_dataframe
 
-        df = _convert_api_data_to_dataframe(
-            sample_api_candle_dicts, "BTCUSDT", "1h", "spot"
-        )
+        df = _convert_api_data_to_dataframe(sample_api_candle_dicts, "BTCUSDT", "1h", "spot")
 
         assert df["funding_rate"].isna().all()
 
@@ -213,9 +197,7 @@ class TestConvertApiDataToDataframe:
         """Symbol, timeframe, instrument_type are correctly set."""
         from gapless_crypto_clickhouse.query_api import _convert_api_data_to_dataframe
 
-        df = _convert_api_data_to_dataframe(
-            sample_api_candle_dicts, "ETHUSDT", "4h", "futures-um"
-        )
+        df = _convert_api_data_to_dataframe(sample_api_candle_dicts, "ETHUSDT", "4h", "futures-um")
 
         assert (df["symbol"] == "ETHUSDT").all()
         assert (df["timeframe"] == "4h").all()
@@ -233,9 +215,7 @@ class TestFillGapsFromApi:
         empty_gaps = pd.DataFrame(columns=["gap_start", "gap_end", "missing_rows"])
         mock_connection = MagicMock()
 
-        rows = _fill_gaps_from_api(
-            mock_connection, empty_gaps, "BTCUSDT", "1h", "spot"
-        )
+        rows = _fill_gaps_from_api(mock_connection, empty_gaps, "BTCUSDT", "1h", "spot")
 
         mock_fetch.assert_not_called()
         assert rows == 0
@@ -249,9 +229,7 @@ class TestFillGapsFromApi:
         mock_connection = MagicMock()
 
         # Should not raise, just skip
-        rows = _fill_gaps_from_api(
-            mock_connection, sample_gap_dataframe, "BTCUSDT", "1h", "spot"
-        )
+        rows = _fill_gaps_from_api(mock_connection, sample_gap_dataframe, "BTCUSDT", "1h", "spot")
 
         assert rows == 0
         assert mock_fetch.call_count == 2  # Called for each gap
@@ -267,9 +245,7 @@ class TestFillGapsFromApi:
         mock_connection = MagicMock()
         mock_connection.insert_dataframe.return_value = 3  # 3 rows per insert
 
-        rows = _fill_gaps_from_api(
-            mock_connection, sample_gap_dataframe, "BTCUSDT", "1h", "spot"
-        )
+        rows = _fill_gaps_from_api(mock_connection, sample_gap_dataframe, "BTCUSDT", "1h", "spot")
 
         assert rows == 6  # 3 rows x 2 gaps
         assert mock_connection.insert_dataframe.call_count == 2
@@ -285,9 +261,7 @@ class TestFillGapsFromApi:
         mock_connection = MagicMock()
         mock_connection.insert_dataframe.return_value = 3
 
-        _fill_gaps_from_api(
-            mock_connection, sample_gap_dataframe, "BTCUSDT", "1h", "spot"
-        )
+        _fill_gaps_from_api(mock_connection, sample_gap_dataframe, "BTCUSDT", "1h", "spot")
 
         # Verify table name in call
         call_args = mock_connection.insert_dataframe.call_args

@@ -62,7 +62,9 @@ VOLUME_OUTLIER_THRESHOLD: Final[float] = 0.02
 
 # Verify coverage thresholds make sense
 assert 0 < COVERAGE_LOW_THRESHOLD < 100, f"COVERAGE_LOW_THRESHOLD invalid: {COVERAGE_LOW_THRESHOLD}"
-assert COVERAGE_HIGH_THRESHOLD > 100, f"COVERAGE_HIGH_THRESHOLD must be > 100: {COVERAGE_HIGH_THRESHOLD}"
+assert COVERAGE_HIGH_THRESHOLD > 100, (
+    f"COVERAGE_HIGH_THRESHOLD must be > 100: {COVERAGE_HIGH_THRESHOLD}"
+)
 assert COVERAGE_LOW_THRESHOLD < COVERAGE_HIGH_THRESHOLD, "Low threshold must be < high threshold"
 
 # Verify gap threshold is positive
@@ -75,9 +77,15 @@ assert IQR_LOWER_QUANTILE < IQR_UPPER_QUANTILE, "Lower quantile must be < upper 
 assert IQR_MULTIPLIER > 0, f"IQR_MULTIPLIER must be positive: {IQR_MULTIPLIER}"
 
 # Verify anomaly thresholds are valid percentages
-assert 0 < REPEATED_VALUE_THRESHOLD <= 1, f"REPEATED_VALUE_THRESHOLD invalid: {REPEATED_VALUE_THRESHOLD}"
-assert 0 < PRICE_OUTLIER_THRESHOLD <= 1, f"PRICE_OUTLIER_THRESHOLD invalid: {PRICE_OUTLIER_THRESHOLD}"
-assert 0 < VOLUME_OUTLIER_THRESHOLD <= 1, f"VOLUME_OUTLIER_THRESHOLD invalid: {VOLUME_OUTLIER_THRESHOLD}"
+assert 0 < REPEATED_VALUE_THRESHOLD <= 1, (
+    f"REPEATED_VALUE_THRESHOLD invalid: {REPEATED_VALUE_THRESHOLD}"
+)
+assert 0 < PRICE_OUTLIER_THRESHOLD <= 1, (
+    f"PRICE_OUTLIER_THRESHOLD invalid: {PRICE_OUTLIER_THRESHOLD}"
+)
+assert 0 < VOLUME_OUTLIER_THRESHOLD <= 1, (
+    f"VOLUME_OUTLIER_THRESHOLD invalid: {VOLUME_OUTLIER_THRESHOLD}"
+)
 
 # =============================================================================
 # MODULE EXPORTS

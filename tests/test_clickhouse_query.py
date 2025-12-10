@@ -154,9 +154,7 @@ class TestGetMultiSymbolValidation:
     def test_empty_timeframe_raises(self, mock_query):
         """Empty timeframe raises ValueError."""
         with pytest.raises(ValueError, match="Timeframe cannot be empty"):
-            mock_query.get_multi_symbol(
-                ["BTCUSDT"], "", start="2024-01-01", end="2024-01-02"
-            )
+            mock_query.get_multi_symbol(["BTCUSDT"], "", start="2024-01-01", end="2024-01-02")
 
     def test_invalid_instrument_type_raises(self, mock_query):
         """Invalid instrument_type raises ValueError."""
@@ -229,7 +227,21 @@ class TestDetectGapsValidation:
 
     def test_supported_timeframes(self, mock_query):
         """All standard timeframes are supported."""
-        supported = ["1s", "1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d"]
+        supported = [
+            "1s",
+            "1m",
+            "3m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "4h",
+            "6h",
+            "8h",
+            "12h",
+            "1d",
+        ]
         for tf in supported:
             # Should not raise
             mock_query.detect_gaps("BTCUSDT", tf, start="2024-01-01", end="2024-01-02")
@@ -249,10 +261,12 @@ class TestQueryResults:
     def test_get_latest_reverses_order(self, mock_query):
         """get_latest reverses results to chronological order."""
         # Mock returns descending order (newest first)
-        mock_df = pd.DataFrame({
-            "timestamp": pd.date_range("2024-01-01", periods=3, freq="1h")[::-1],
-            "close": [103, 102, 101],
-        })
+        mock_df = pd.DataFrame(
+            {
+                "timestamp": pd.date_range("2024-01-01", periods=3, freq="1h")[::-1],
+                "close": [103, 102, 101],
+            }
+        )
         mock_query.connection.query_dataframe.return_value = mock_df
 
         result = mock_query.get_latest("BTCUSDT", "1h", limit=3)

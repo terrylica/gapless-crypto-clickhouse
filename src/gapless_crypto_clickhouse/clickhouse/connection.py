@@ -101,6 +101,9 @@ class ClickHouseConnection:
                 # Performance settings
                 settings={
                     "max_block_size": 100000,  # Batch size for queries
+                    # ADR-0034: Partition-aware FINAL optimization
+                    # Reduces FINAL query overhead from 10-30% to 2-5%
+                    "do_not_merge_across_partitions_select_final": 1,
                 },
             )
         except Exception as e:

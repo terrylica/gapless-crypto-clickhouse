@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simple API Examples for gapless-crypto-data
+Simple API Examples for gapless-crypto-clickhouse
 
 Demonstrates the function-based API for common use cases.
 Familiar patterns for intuitive cryptocurrency data collection.

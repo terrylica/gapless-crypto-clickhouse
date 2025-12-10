@@ -122,9 +122,7 @@ def ensure_local_clickhouse():
             status["running"] = True
             status["available"] = True
         else:
-            status["error"] = (
-                f"Failed to start ClickHouse server within {STARTUP_TIMEOUT_SEC}s"
-            )
+            status["error"] = f"Failed to start ClickHouse server within {STARTUP_TIMEOUT_SEC}s"
 
     return status
 

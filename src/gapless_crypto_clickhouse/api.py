@@ -48,7 +48,7 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
         instrument_type: Type of instrument ("spot" or "futures-um"). Default: "spot"
 
     Returns:
-        List of 713 supported perpetual symbols (same for both spot and futures)
+        List of 715 supported perpetual symbols (same for both spot and futures)
 
     Raises:
         ValueError: If instrument_type is invalid
@@ -57,12 +57,12 @@ def get_supported_symbols(instrument_type: InstrumentType = "spot") -> List[str]
         >>> # Get spot symbols (default) - returns 715 symbols
         >>> symbols = get_supported_symbols()
         >>> print(f"Found {len(symbols)} spot symbols")
-        Found 713 spot symbols
+        Found 715 spot symbols
 
         >>> # Get futures symbols - returns same 715 symbols
         >>> futures = get_supported_symbols(instrument_type="futures-um")
         >>> print(f"Found {len(futures)} futures symbols")
-        Found 713 futures symbols
+        Found 715 futures symbols
 
         >>> # Verify alignment
         >>> get_supported_symbols("spot") == get_supported_symbols("futures-um")
@@ -113,7 +113,22 @@ def get_supported_timeframes() -> List[str]:
 # Note: Spot and futures now both support 715 symbols (up from 20 spot symbols)
 
 SupportedTimeframe = Literal[
-    "1s", "1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d"
+    "1s",
+    "1m",
+    "3m",
+    "5m",
+    "15m",
+    "30m",
+    "1h",
+    "2h",
+    "4h",
+    "6h",
+    "8h",
+    "12h",
+    "1d",
+    "3d",
+    "1w",
+    "1mo",
 ]
 
 
@@ -648,8 +663,15 @@ def download(
         interval: Legacy parameter name for timeframe (deprecated)
 
     Returns:
-        pd.DataFrame with complete OHLCV and microstructure data (gapless by default).
-        Includes funding_rate column (⚠️ NULL in v3.2.0, populated in future release).
+        pd.DataFrame with complete OHLCV and microstructure data (gapless by default):
+        - timestamp: Open time (datetime64[ns])
+        - open, high, low, close: Price data (float64)
+        - volume: Base asset volume (float64)
+        - close_time: Close timestamp (datetime64[ns])
+        - quote_asset_volume: Quote asset volume (float64)
+        - number_of_trades: Trade count (int64)
+        - taker_buy_base_asset_volume, taker_buy_quote_asset_volume: Taker volumes (float64)
+        - funding_rate: Funding rate (⚠️ NULL in v3.2.0, populated in future release)
 
     Raises:
         ValueError: If instrument_type is invalid (must be "spot" or "futures-um")

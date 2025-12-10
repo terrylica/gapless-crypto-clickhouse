@@ -1,0 +1,429 @@
+# ADR-0051: mise toolchain implementation
+# Follows gapless-deribit-clickhouse exemplar pattern
+min_version = "2024.9.5"
+
+[env]
+# Automatic venv activation - mise will use uv to create it
+_.python.venv = { path = ".venv", create = true }
+# Load credentials from .env (local development)
+_.file = '.env'
+
+# Dual-mode: "auto" (default), "local" for backtesting, "cloud" for production
+# ADR-0044: Local ClickHouse as Alternative Deployment Mode
+GCCH_MODE = "auto"
+
+# Database configuration
+CLICKHOUSE_DATABASE = "default"
+
+# Local ClickHouse (when GCCH_MODE=local or localhost detected)
+CLICKHOUSE_LOCAL_HOST = "localhost"
+CLICKHOUSE_LOCAL_PORT = "8123"
+
+# ClickHouse Server Configuration (local development)
+# ADR-0044, ADR-0045: Local ClickHouse E2E validation
+CLICKHOUSE_DATA_DIR = "{{config_root}}/tmp/clickhouse/data"
+CLICKHOUSE_LOG_DIR = "{{config_root}}/tmp/clickhouse/logs"
+CLICKHOUSE_PID_FILE = "{{config_root}}/tmp/clickhouse/clickhouse.pid"
+
+[tools]
+# Flexible Python: accept any 3.11+ (matches pyproject.toml requires-python)
+python = "3"
+uv = "latest"
+clickhouse = "latest"  # mise-managed (replaces Homebrew)
+node = "latest"        # For semantic-release
+
+# =============================================================================
+# Core Development Tasks
+# =============================================================================
+
+[tasks.install]
+description = "Install dependencies with uv"
+alias = "i"
+run = "uv sync --all-extras"
+
+[tasks.venv-recreate]
+description = "Recreate virtual environment from scratch"
+run = """
+rm -rf .venv
+uv venv .venv
+uv sync --all-extras
+"""
+
+[tasks.test]
+description = "Run all tests"
+run = "uv run pytest tests/ -v"
+
+[tasks.test-unit]
+description = "Run unit tests only (no external dependencies)"
+depends = ["lint"]
+run = "uv run pytest tests/ -v -m 'not slow and not e2e and not integration'"
+
+[tasks.lint]
+description = "Run ruff linting"
+run = "uv run ruff check src/"
+
+[tasks.format]
+description = "Format code"
+run = "uv run ruff format src/ tests/"
+
+[tasks.type-check]
+description = "Run mypy type checking"
+run = "uv run mypy src/"
+
+[tasks.lint-all]
+description = "Run all linting (ruff + mypy)"
+depends = ["lint", "type-check"]
+run = "echo '✓ All linting passed'"
+
+# =============================================================================
+# ClickHouse Server Management Tasks
+# ADR-0044, ADR-0045: Local ClickHouse E2E Validation
+# =============================================================================
+
+[tasks._ch-dirs]
+description = "Create ClickHouse data directories"
+hide = true
+run = 'mkdir -p "$CLICKHOUSE_DATA_DIR" "$CLICKHOUSE_LOG_DIR"'
+
+[tasks.ch-start]
+description = "Start local ClickHouse server"
+depends = ["_ch-dirs"]
+run = """
+if [ -f "$CLICKHOUSE_PID_FILE" ] && kill -0 $(cat "$CLICKHOUSE_PID_FILE") 2>/dev/null; then
+  echo "✓ ClickHouse already running (PID $(cat $CLICKHOUSE_PID_FILE))"
+else
+  clickhouse server --daemon \\
+    --pid-file="$CLICKHOUSE_PID_FILE" \\
+    --path="$CLICKHOUSE_DATA_DIR" \\
+    -- --logger.log="$CLICKHOUSE_LOG_DIR/clickhouse-server.log" \\
+       --logger.errorlog="$CLICKHOUSE_LOG_DIR/clickhouse-server.err.log"
+  sleep 2
+  curl -s http://localhost:8123/ping && echo "✓ ClickHouse started"
+fi
+"""
+
+[tasks.ch-stop]
+description = "Stop local ClickHouse server"
+run = """
+if [ -f "$CLICKHOUSE_PID_FILE" ]; then
+  kill $(cat "$CLICKHOUSE_PID_FILE") 2>/dev/null && echo "✓ ClickHouse stopped"
+  rm -f "$CLICKHOUSE_PID_FILE"
+else
+  echo "ClickHouse not running"
+fi
+"""
+
+[tasks.ch-status]
+description = "Check ClickHouse server status"
+run = 'curl -s http://localhost:8123/ping && echo "✓ ClickHouse running" || echo "❌ ClickHouse not running"'
+
+[tasks.ch-logs]
+description = "Tail ClickHouse server logs"
+run = "tail -f $CLICKHOUSE_LOG_DIR/clickhouse-server.log"
+
+[tasks.ch-client]
+description = "Open ClickHouse client connected to local server"
+run = "clickhouse client --host localhost --port 9000"
+
+# =============================================================================
+# Hidden Helper Tasks
+# =============================================================================
+
+[tasks._check-local-server]
+description = "Verify local ClickHouse is running"
+hide = true
+run = """
+curl -s http://localhost:8123/ping > /dev/null 2>&1 || {
+  echo "❌ Local ClickHouse not running. Start with: mise run ch-start"
+  exit 1
+}
+echo "✓ Local ClickHouse running"
+"""
+
+[tasks._check-credentials]
+description = "Verify ClickHouse Cloud credentials are set"
+hide = true
+run = """
+if [ -z "$CLICKHOUSE_HOST" ]; then
+  echo "❌ CLICKHOUSE_HOST not set. Configure .env or set environment variables"
+  exit 1
+fi
+echo "✓ Cloud credentials configured"
+"""
+
+[tasks._check-binance-cdn]
+description = "Verify Binance CDN is reachable"
+hide = true
+run = """
+curl -sf "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01.zip" -o /dev/null && \\
+  echo "✓ Binance CDN reachable" || \\
+  { echo "❌ Binance CDN unreachable"; exit 1; }
+"""
+
+[tasks._check-binance-api]
+description = "Verify Binance REST API is reachable"
+hide = true
+run = """
+curl -sf "https://api.binance.com/api/v3/ping" > /dev/null && \\
+  echo "✓ Binance REST API reachable" || \\
+  { echo "❌ Binance REST API unreachable"; exit 1; }
+"""
+
+# =============================================================================
+# Database Schema Tasks
+# =============================================================================
+
+[tasks.db-init]
+description = "Deploy schema to ClickHouse (local or cloud based on GCCH_MODE)"
+depends = ["_check-local-server"]
+run = """
+clickhouse client --host localhost --port 9000 --multiquery < src/gapless_crypto_clickhouse/clickhouse/schema.sql
+echo "✓ Schema deployed"
+"""
+
+[tasks.local-init]
+description = "Initialize local ClickHouse with schema"
+env = { GCCH_MODE = "local" }
+depends = ["_check-local-server"]
+depends_post = ["local-validate"]
+run = """
+clickhouse client --host localhost --port 9000 --multiquery < src/gapless_crypto_clickhouse/clickhouse/schema.sql
+echo "✓ Local schema deployed"
+"""
+
+[tasks.local-validate]
+description = "Validate local ClickHouse schema"
+env = { GCCH_MODE = "local" }
+run = """
+uv run python -c "
+from gapless_crypto_clickhouse.clickhouse.connection import get_client
+client = get_client()
+tables = client.command('SHOW TABLES')
+if 'ohlcv' in tables:
+    print('✓ Schema validated: ohlcv table exists')
+else:
+    print('❌ Schema validation failed: ohlcv table missing')
+    exit(1)
+"
+"""
+
+[tasks.cloud-validate]
+description = "Validate cloud ClickHouse schema"
+env = { GCCH_MODE = "cloud" }
+depends = ["_check-credentials"]
+run = """
+uv run python -c "
+from gapless_crypto_clickhouse.clickhouse.connection import get_client
+client = get_client()
+tables = client.command('SHOW TABLES')
+if 'ohlcv' in tables:
+    print('✓ Cloud schema validated: ohlcv table exists')
+else:
+    print('❌ Cloud schema validation failed: ohlcv table missing')
+    exit(1)
+"
+"""
+
+# =============================================================================
+# Data Seeding Tasks
+# =============================================================================
+
+[tasks.seed-local]
+description = "Seed local ClickHouse with sample BTCUSDT data"
+env = { GCCH_MODE = "local" }
+depends = ["_check-local-server", "_check-binance-cdn", "local-init"]
+run = """
+uv run python -c "
+from gapless_crypto_clickhouse import download
+import logging
+logging.basicConfig(level=logging.INFO)
+
+print('Seeding local ClickHouse with BTCUSDT 1h data (2024-01)...')
+df = download(
+    symbols=['BTCUSDT'],
+    timeframes=['1h'],
+    start='2024-01-01',
+    end='2024-01-31'
+)
+print(f'✓ Local seeded with {len(df):,} rows')
+"
+"""
+
+[tasks.seed-cloud]
+description = "Seed cloud ClickHouse with sample BTCUSDT data"
+env = { GCCH_MODE = "cloud" }
+depends = ["_check-credentials", "_check-binance-cdn"]
+run = """
+uv run python -c "
+from gapless_crypto_clickhouse import download
+import logging
+logging.basicConfig(level=logging.INFO)
+
+print('Seeding cloud ClickHouse with BTCUSDT 1h data (2024-01)...')
+df = download(
+    symbols=['BTCUSDT'],
+    timeframes=['1h'],
+    start='2024-01-01',
+    end='2024-01-31'
+)
+print(f'✓ Cloud seeded with {len(df):,} rows')
+"
+"""
+
+# =============================================================================
+# Data Validation Tasks
+# =============================================================================
+
+[tasks._check-local-data]
+description = "Verify local ClickHouse has data"
+hide = true
+env = { GCCH_MODE = "local" }
+depends = ["_check-local-server"]
+run = """
+uv run python -c "
+from gapless_crypto_clickhouse.clickhouse.connection import get_client
+client = get_client()
+count = client.command('SELECT count() FROM ohlcv')
+if count < 100:
+    print(f'⚠️  Local: insufficient data ({count} rows)')
+    print('   Run: mise run seed-local')
+    exit(1)
+print(f'✓ Local ClickHouse: {count:,} rows')
+"
+"""
+
+[tasks._check-cloud-data]
+description = "Verify cloud ClickHouse has data"
+hide = true
+env = { GCCH_MODE = "cloud" }
+depends = ["_check-credentials"]
+run = """
+uv run python -c "
+from gapless_crypto_clickhouse.clickhouse.connection import get_client
+client = get_client()
+count = client.command('SELECT count() FROM ohlcv')
+if count < 100:
+    print(f'❌ Cloud: insufficient data ({count} rows)')
+    exit(1)
+print(f'✓ Cloud ClickHouse: {count:,} rows')
+"
+"""
+
+# =============================================================================
+# E2E Validation Tasks
+# =============================================================================
+
+[tasks.validate-local]
+description = "Full validation of local ClickHouse"
+env = { GCCH_MODE = "local" }
+depends = ["_check-binance-cdn", "_check-local-server", "local-validate", "_check-local-data"]
+run = """
+echo ""
+echo "═══════════════════════════════════════════════════════════"
+echo "  ✓ Local Validation Passed"
+echo "═══════════════════════════════════════════════════════════"
+echo "  • Binance CDN: reachable"
+echo "  • Local ClickHouse: running"
+echo "  • Schema: ohlcv table exists"
+echo "  • Data: sufficient rows"
+echo "═══════════════════════════════════════════════════════════"
+"""
+
+[tasks.validate-cloud]
+description = "Full validation of cloud ClickHouse"
+env = { GCCH_MODE = "cloud" }
+depends = ["_check-binance-cdn", "_check-credentials", "cloud-validate", "_check-cloud-data"]
+run = """
+echo ""
+echo "═══════════════════════════════════════════════════════════"
+echo "  ✓ Cloud Validation Passed"
+echo "═══════════════════════════════════════════════════════════"
+echo "  • Binance CDN: reachable"
+echo "  • Cloud credentials: configured"
+echo "  • Schema: ohlcv table exists"
+echo "  • Data: sufficient rows"
+echo "═══════════════════════════════════════════════════════════"
+"""
+
+[tasks.validate-full]
+description = "Full validation: Local + Cloud (both environments)"
+depends = ["_check-binance-cdn", "_check-binance-api", "validate-local", "validate-cloud"]
+run = """
+echo ""
+echo "═══════════════════════════════════════════════════════════"
+echo "  ✓ FULL DUAL-MODE VALIDATION PASSED"
+echo "═══════════════════════════════════════════════════════════"
+echo "  • Binance CDN: reachable"
+echo "  • Binance REST API: reachable"
+echo "  • Local ClickHouse: schema ✓ | data ✓"
+echo "  • Cloud ClickHouse: schema ✓ | data ✓"
+echo "═══════════════════════════════════════════════════════════"
+"""
+
+[tasks.validate-production]
+description = "Production validation (Doppler-wrapped cloud access)"
+run = """
+echo "Running production validation with Doppler credentials..."
+doppler run --project aws-credentials --config prd -- mise run validate-cloud
+"""
+
+# =============================================================================
+# E2E Test Tasks
+# =============================================================================
+
+[tasks.test-e2e-local]
+description = "Run E2E tests against local ClickHouse"
+env = { GCCH_MODE = "local" }
+depends = ["_check-binance-cdn", "_check-local-server", "_check-local-data"]
+run = "uv run pytest tests/ -v -m e2e"
+
+[tasks.test-e2e-cloud]
+description = "Run E2E tests against cloud ClickHouse"
+env = { GCCH_MODE = "cloud" }
+depends = ["_check-binance-cdn", "_check-credentials", "_check-cloud-data"]
+run = "uv run pytest tests/ -v -m e2e"
+
+# =============================================================================
+# Development Workflow Tasks
+# =============================================================================
+
+[tasks.dev]
+description = "Start development environment (local ClickHouse)"
+depends = ["ch-start", "local-init"]
+run = "echo '✓ Development environment ready (local ClickHouse)'"
+
+[tasks.ci]
+description = "Full CI pipeline (lint + unit tests)"
+depends = ["lint", "test-unit"]
+run = "echo '✓ CI pipeline passed'"
+
+[tasks.pre-release]
+description = "Pre-release validation (lint + tests)"
+depends = ["lint-all", "test-unit", "validate-local"]
+run = "echo '✓ Ready for release'"
+
+# =============================================================================
+# Connection Info Tasks
+# =============================================================================
+
+[tasks.db-connect-info]
+description = "Print connection settings for any GUI tool"
+run = """
+echo "=== ClickHouse Connection Settings ==="
+echo ""
+echo "LOCAL (development):"
+echo "  Host:     localhost"
+echo "  Port:     8123 (HTTP) / 9000 (Native)"
+echo "  Database: default"
+echo "  User:     default"
+echo "  Password: (empty)"
+echo "  SSL:      No"
+echo ""
+echo "CLOUD (production):"
+echo "  Host:     (from CLICKHOUSE_HOST env var)"
+echo "  Port:     8443 (HTTPS)"
+echo "  Database: default"
+echo "  User:     (from CLICKHOUSE_USER env var)"
+echo "  Password: (from CLICKHOUSE_PASSWORD env var)"
+echo "  SSL:      Yes"
+"""

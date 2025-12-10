@@ -32,8 +32,8 @@ from ..constants import (
     HTTP_RATE_LIMITED,
     RETRY_BASE_DELAY,
     RETRY_MAX_ATTEMPTS,
-    TIMEOUT_API,
     TIMEFRAME_TO_MILLISECONDS,
+    TIMEOUT_API,
 )
 
 logger = logging.getLogger(__name__)

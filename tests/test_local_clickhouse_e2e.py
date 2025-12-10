@@ -202,9 +202,7 @@ class TestLocalClickHouseSchemaCreation:
         client.command("CREATE DATABASE IF NOT EXISTS test_local_e2e")
 
         # Verify database exists
-        result = client.query(
-            "SELECT name FROM system.databases WHERE name = 'test_local_e2e'"
-        )
+        result = client.query("SELECT name FROM system.databases WHERE name = 'test_local_e2e'")
         assert len(result.result_rows) == 1
         assert result.result_rows[0][0] == "test_local_e2e"
 
@@ -321,7 +319,9 @@ class TestLocalClickHouseRealBinanceData:
         import pandas as pd
 
         # Download real data from Binance CDN (spot)
-        url = "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01.zip"
+        url = (
+            "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01.zip"
+        )
 
         try:
             with urllib.request.urlopen(url, timeout=30) as response:
@@ -414,7 +414,9 @@ class TestLocalClickHouseRealBinanceData:
         import pandas as pd
 
         # Download data
-        url = "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01.zip"
+        url = (
+            "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01.zip"
+        )
 
         try:
             with urllib.request.urlopen(url, timeout=30) as response:
@@ -452,9 +454,7 @@ class TestLocalClickHouseRealBinanceData:
         df["close_time"] = pd.to_datetime(df["close_time"], unit="ms")
 
         # Compute deterministic _version hash
-        version_hash = int(
-            hashlib.md5("BTCUSDT-1h-2024-01-spot".encode()).hexdigest()[:16], 16
-        )
+        version_hash = int(hashlib.md5("BTCUSDT-1h-2024-01-spot".encode()).hexdigest()[:16], 16)
         df["_version"] = version_hash
 
         # Drop ignore column
@@ -502,9 +502,7 @@ class TestLocalClickHouseRealBinanceData:
         count = result.result_rows[0][0]
         assert count == 744, f"Expected 744 rows, got {count}"
 
-    def test_query_with_final_deduplication(
-        self, local_mode_env: None, test_database: str
-    ) -> None:
+    def test_query_with_final_deduplication(self, local_mode_env: None, test_database: str) -> None:
         """Verify FINAL query returns deduplicated results."""
         import hashlib
         import io
@@ -515,7 +513,9 @@ class TestLocalClickHouseRealBinanceData:
         import pandas as pd
 
         # Download and ingest data twice (simulating re-ingestion)
-        url = "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01.zip"
+        url = (
+            "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-01.zip"
+        )
 
         try:
             with urllib.request.urlopen(url, timeout=30) as response:
@@ -549,9 +549,7 @@ class TestLocalClickHouseRealBinanceData:
         df["timeframe"] = "1h"
         df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
         df["close_time"] = pd.to_datetime(df["close_time"], unit="ms")
-        version_hash = int(
-            hashlib.md5("BTCUSDT-1h-2024-01-spot".encode()).hexdigest()[:16], 16
-        )
+        version_hash = int(hashlib.md5("BTCUSDT-1h-2024-01-spot".encode()).hexdigest()[:16], 16)
         df["_version"] = version_hash
         df = df.drop(columns=["ignore"])
 

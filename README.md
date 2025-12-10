@@ -953,7 +953,7 @@ Returns pandas DataFrame with microstructure format (see [Data Structure](#data-
 
 | Column                         | Type           | Description            | Example               |
 | ------------------------------ | -------------- | ---------------------- | --------------------- |
-| `date`                         | datetime64[ns] | Open timestamp         | `2024-01-01 12:00:00` |
+| `timestamp`                    | datetime64[ns] | Open timestamp         | `2024-01-01 12:00:00` |
 | `open`                         | float64        | Opening price          | `42150.50`            |
 | `high`                         | float64        | Highest price          | `42200.00`            |
 | `low`                          | float64        | Lowest price           | `42100.25`            |

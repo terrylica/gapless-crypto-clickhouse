@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS ohlcv (
     -- Metadata columns (low-cardinality, optimized for indexing)
     symbol LowCardinality(String) CODEC(ZSTD(3)),           -- Trading pair (e.g., "BTCUSDT")
     timeframe LowCardinality(String) CODEC(ZSTD(3)),       -- Timeframe (e.g., "1h", "1mo")
-    instrument_type LowCardinality(String) CODEC(ZSTD(3)), -- 'spot', 'futures-um', or 'futures-cm' (ADR-0050)
+    instrument_type LowCardinality(String) CODEC(ZSTD(3)), -- 'spot' or 'futures-um' (futures-cm planned per ADR-0050)
     -- Production values:
     --   'cloudfront' = Binance Public Data Repository (CloudFront CDN)
     --   'rest_api' = Binance REST API (gap filling operations)

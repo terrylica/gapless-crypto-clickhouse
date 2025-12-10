@@ -137,9 +137,13 @@ assert MODE_AUTO in VALID_MODES, "MODE_AUTO must be in VALID_MODES"
 
 # Verify port ranges
 assert PORT_MIN <= PORT_LOCAL_HTTP <= PORT_MAX, f"PORT_LOCAL_HTTP out of range: {PORT_LOCAL_HTTP}"
-assert PORT_MIN <= PORT_LOCAL_NATIVE <= PORT_MAX, f"PORT_LOCAL_NATIVE out of range: {PORT_LOCAL_NATIVE}"
+assert PORT_MIN <= PORT_LOCAL_NATIVE <= PORT_MAX, (
+    f"PORT_LOCAL_NATIVE out of range: {PORT_LOCAL_NATIVE}"
+)
 assert PORT_MIN <= PORT_CLOUD_HTTP <= PORT_MAX, f"PORT_CLOUD_HTTP out of range: {PORT_CLOUD_HTTP}"
-assert PORT_MIN <= PORT_CLOUD_NATIVE <= PORT_MAX, f"PORT_CLOUD_NATIVE out of range: {PORT_CLOUD_NATIVE}"
+assert PORT_MIN <= PORT_CLOUD_NATIVE <= PORT_MAX, (
+    f"PORT_CLOUD_NATIVE out of range: {PORT_CLOUD_NATIVE}"
+)
 
 # Verify environment variable names are non-empty
 assert all(env for env in CLICKHOUSE_ENV_VARS), "All environment variable names must be non-empty"

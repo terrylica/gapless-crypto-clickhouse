@@ -64,7 +64,7 @@ class ValidationReport(BaseModel):
             "Inherited from gapless-crypto-data v2.15.0 during fork. "
             "Bump when: add/remove validation layers, change algorithms, modify report schema. "
             "Do NOT bump for: bug fixes, package version changes, non-validation features."
-        )
+        ),
     )
 
     # Extracted context from file path

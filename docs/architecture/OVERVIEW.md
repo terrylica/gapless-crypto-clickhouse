@@ -127,7 +127,7 @@ ClickHouse serves as the primary storage backend for `gapless-crypto-clickhouse`
 
 - `symbol` (LowCardinality(String)): Trading pair (e.g., "BTCUSDT")
 - `timeframe` (LowCardinality(String)): Candle interval (e.g., "1m", "1h")
-- `instrument_type` (LowCardinality(String)): Market type ("spot" or "futures-um")
+- `instrument_type` (LowCardinality(String)): Market type ("spot" or "futures-um"; futures-cm planned per ADR-0050)
 - `data_source` (LowCardinality(String)): Source identifier ("cloudfront")
 - `timestamp` (DateTime64(6)): Candle open time in UTC with microsecond precision
 

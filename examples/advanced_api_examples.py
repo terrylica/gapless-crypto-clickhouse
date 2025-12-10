@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Advanced API Examples for gapless-crypto-data
+Advanced API Examples for gapless-crypto-clickhouse
 
 Demonstrates the class-based API for complex workflows and power users.
 Shows how to use the full capabilities of the library.

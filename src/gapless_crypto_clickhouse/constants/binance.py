@@ -38,16 +38,20 @@ INSTRUMENT_FUTURES_UM: Final[str] = "futures-um"
 INSTRUMENT_FUTURES_CM: Final[str] = "futures-cm"
 """COIN-margined perpetual futures instrument type (reserved for future use)."""
 
-VALID_INSTRUMENT_TYPES: Final[FrozenSet[str]] = frozenset({
-    INSTRUMENT_SPOT,
-    INSTRUMENT_FUTURES_UM,
-})
+VALID_INSTRUMENT_TYPES: Final[FrozenSet[str]] = frozenset(
+    {
+        INSTRUMENT_SPOT,
+        INSTRUMENT_FUTURES_UM,
+    }
+)
 """Valid instrument types for API validation (O(1) membership testing)."""
 
-IMPLEMENTED_INSTRUMENT_TYPES: Final[FrozenSet[str]] = frozenset({
-    INSTRUMENT_SPOT,
-    INSTRUMENT_FUTURES_UM,
-})
+IMPLEMENTED_INSTRUMENT_TYPES: Final[FrozenSet[str]] = frozenset(
+    {
+        INSTRUMENT_SPOT,
+        INSTRUMENT_FUTURES_UM,
+    }
+)
 """Currently implemented instrument types with working pipelines."""
 
 # =============================================================================

@@ -40,7 +40,6 @@ def test_output_dir_bug_fix():
         assert len(metadata_files) == 1, f"Expected 1 metadata file, found {len(metadata_files)}"
 
 
-
 def test_dataframe_return_functionality():
     """Test that collect_timeframe_data returns proper DataFrame and metadata."""
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -84,7 +83,9 @@ def test_dataframe_return_functionality():
         assert list(df.columns) == expected_columns, f"Unexpected columns: {list(df.columns)}"
 
         # Check data types
-        assert pd.api.types.is_datetime64_any_dtype(df["timestamp"]), "date column should be datetime"
+        assert pd.api.types.is_datetime64_any_dtype(df["timestamp"]), (
+            "date column should be datetime"
+        )
         assert pd.api.types.is_datetime64_any_dtype(df["close_time"]), (
             "close_time column should be datetime"
         )
@@ -106,7 +107,6 @@ def test_dataframe_return_functionality():
             f"Expected 'direct_download', got {stats['method']}"
         )
         assert stats["total_bars"] > 0, f"Expected positive bars, got {stats['total_bars']}"
-
 
 
 def test_backwards_compatibility():
@@ -135,4 +135,3 @@ def test_backwards_compatibility():
         # Users can read the CSV file independently
         df_from_file = pd.read_csv(filepath, comment="#")
         assert len(df_from_file) == len(df), "DataFrame and file should have same length"
-

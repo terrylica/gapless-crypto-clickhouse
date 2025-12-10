@@ -41,14 +41,6 @@ from .binance import (
     BINANCE_CDN_SPOT,
     # Derived mappings
     CDN_URL_BY_INSTRUMENT,
-    # Instrument type constants (ADR-0050)
-    IMPLEMENTED_INSTRUMENT_TYPES,
-    INSTRUMENT_FUTURES_CM,
-    INSTRUMENT_FUTURES_UM,
-    INSTRUMENT_SPOT,
-    VALID_INSTRUMENT_TYPES,
-    # Type definitions
-    InstrumentType,
     # CSV format constants
     CSV_COLUMNS_BINANCE_RAW,
     CSV_COLUMNS_MINIMUM_OHLCV,
@@ -65,6 +57,11 @@ from .binance import (
     CSV_INDEX_TRADE_COUNT,
     CSV_INDEX_VOLUME,
     DATE_STRING_LENGTH,
+    # Instrument type constants (ADR-0050)
+    IMPLEMENTED_INSTRUMENT_TYPES,
+    INSTRUMENT_FUTURES_CM,
+    INSTRUMENT_FUTURES_UM,
+    INSTRUMENT_SPOT,
     # Timestamp constants
     MICROSECONDS_PER_MILLISECOND,
     MILLISECONDS_PER_SECOND,
@@ -73,6 +70,9 @@ from .binance import (
     TIMESTAMP_MICROSECONDS_MIN,
     TIMESTAMP_MILLISECONDS_MAX,
     TIMESTAMP_MILLISECONDS_MIN,
+    VALID_INSTRUMENT_TYPES,
+    # Type definitions
+    InstrumentType,
 )
 from .deployment import (
     CLICKHOUSE_ENV_VARS,
@@ -143,8 +143,6 @@ from .network import (
 from .timeframes import (
     EXOTIC_TIMEFRAMES,
     STANDARD_TIMEFRAMES,
-    # Type definitions
-    Timeframe,
     # Primary mappings
     TIMEFRAME_TO_BINANCE_INTERVAL,
     TIMEFRAME_TO_MILLISECONDS,
@@ -155,6 +153,8 @@ from .timeframes import (
     TIMEFRAME_TO_TIMEDELTA,
     # Validation sets
     VALID_TIMEFRAMES,
+    # Type definitions
+    Timeframe,
 )
 
 # =============================================================================

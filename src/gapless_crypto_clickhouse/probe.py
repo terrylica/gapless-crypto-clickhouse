@@ -381,7 +381,7 @@ def get_local_installation_guide() -> Dict[str, Any]:
                 ENV_CLICKHOUSE_HOST: "localhost",
                 "CLICKHOUSE_HTTP_PORT": str(PORT_LOCAL_HTTP),
             },
-            "example": f'export {ENV_GCCH_MODE}={MODE_LOCAL}',
+            "example": f"export {ENV_GCCH_MODE}={MODE_LOCAL}",
         },
     }
 

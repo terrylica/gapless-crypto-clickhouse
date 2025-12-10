@@ -497,7 +497,9 @@ class UniversalGapFiller:
         gap_start = pd.to_datetime(timestamp_gap_info["start_time"])
         gap_end = pd.to_datetime(timestamp_gap_info["end_time"])
 
-        time_filter = (api_dataframe["timestamp"] >= gap_start) & (api_dataframe["timestamp"] < gap_end)
+        time_filter = (api_dataframe["timestamp"] >= gap_start) & (
+            api_dataframe["timestamp"] < gap_end
+        )
         filtered = api_dataframe[time_filter].copy()
 
         if len(filtered) == 0:
@@ -524,7 +526,9 @@ class UniversalGapFiller:
         combined = pd.concat([existing_data, filtered_api_data], ignore_index=True)
 
         pre_dedup = len(combined)
-        combined = combined.sort_values("timestamp").drop_duplicates(subset=["timestamp"], keep="first")
+        combined = combined.sort_values("timestamp").drop_duplicates(
+            subset=["timestamp"], keep="first"
+        )
         duplicates = pre_dedup - len(combined)
 
         if duplicates > 0:
