@@ -366,7 +366,38 @@ echo "════════════════════════�
 description = "Production validation (Doppler-wrapped cloud access)"
 run = """
 echo "Running production validation with Doppler credentials..."
-doppler run --project aws-credentials --config prd -- mise run validate-cloud
+
+# Direct Python execution bypasses mise _.file='.env' override
+doppler run --project aws-credentials --config prd -- uv run python -c "
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+import os
+
+# Verify Doppler credentials are injected
+host = os.environ.get('CLICKHOUSE_HOST', '')
+if not host or 'clickhouse.cloud' not in host:
+    print(f'❌ Invalid CLICKHOUSE_HOST: {host}')
+    print('   Ensure Doppler credentials are configured')
+    exit(1)
+
+print(f'✓ Doppler credentials: {host}')
+
+with ClickHouseConnection() as conn:
+    # Validate schema
+    tables = conn.client.command('SHOW TABLES')
+    if 'ohlcv' not in tables:
+        print('❌ Schema validation failed: ohlcv table missing')
+        exit(1)
+    print('✓ Schema validated: ohlcv table exists')
+
+    # Validate data
+    count = conn.client.command('SELECT count() FROM ohlcv')
+    print(f'✓ Cloud ClickHouse: {count:,} rows')
+
+print('')
+print('═══════════════════════════════════════════════════════════')
+print('  ✓ Production Validation Passed')
+print('═══════════════════════════════════════════════════════════')
+"
 """
 
 # =============================================================================
