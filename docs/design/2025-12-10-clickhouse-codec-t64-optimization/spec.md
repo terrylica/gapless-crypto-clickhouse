@@ -1,8 +1,9 @@
 ---
 adr: 2025-12-10-clickhouse-codec-t64-optimization
 source: ~/.claude/plans/golden-foraging-tulip.md
-implementation-status: completed
-phase: phase-2
+implementation-status: released
+phase: phase-3
+release-version: v17.0.0
 last-updated: 2025-12-10
 ---
 
