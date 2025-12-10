@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.0.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.0.2...v17.0.3) (2025-12-10)
+
+### Bug Fixes
+
+* **mise:** align E2E tasks with current API ([449fee6](https://github.com/terrylica/gapless-crypto-clickhouse/commit/449fee614f396f13951606618a7bd9764e616b79))
+
 ## [17.0.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.0.1...v17.0.2) (2025-12-10)
 
 ### Documentation
