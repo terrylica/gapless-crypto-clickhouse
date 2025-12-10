@@ -1,14 +1,16 @@
-# gapless-crypto-data: Complete API Documentation
+# gapless-crypto-clickhouse: Complete API Documentation
 
-Cryptocurrency data collection with function-based API and 11-column microstructure format. Includes gap detection and filling capabilities.
+ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x faster via Binance Public Data Repository with persistent database storage.
+
+> **Note**: This documentation provides supplementary API reference. For the primary guide, see the [README](../../README.md) which is deployed to PyPI.
 
 ## Quick Start
 
 ### Installation
 
-````bash
-pip install gapless-crypto-data
-```text
+```bash
+pip install gapless-crypto-clickhouse
+```
 
 ### Simple API (Recommended for Most Users)
 
@@ -27,7 +29,7 @@ timeframes = gcch.get_supported_timeframes()
 
 # Fill gaps in existing data
 results = gcch.fill_gaps("./data")
-```bash
+```
 
 ## Core Features
 
@@ -59,7 +61,7 @@ Fetch cryptocurrency data with simple function-based API.
 
 **Examples:**
 
-```python
+````python
 # Recent 1000 hourly bars
 df = gcch.fetch_data("BTCUSDT", "1h", limit=1000)
 

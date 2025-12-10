@@ -518,7 +518,7 @@ def fetch_data(
 
     Returns:
         pd.DataFrame with OHLCV data and microstructure columns:
-        - date: Timestamp (open time)
+        - timestamp: Open time (datetime64[ns])
         - open, high, low, close: Price data
         - volume: Base asset volume
         - close_time: Close timestamp
@@ -545,7 +545,7 @@ def fetch_data(
         # Standard pandas operations for analysis
         returns = df['close'].pct_change()                    # Returns calculation
         rolling_vol = df['close'].rolling(20).std()           # Rolling volatility
-        df_resampled = df.set_index('date').resample('4H').agg({
+        df_resampled = df.set_index('timestamp').resample('4H').agg({
             'open': 'first', 'high': 'max', 'low': 'min',
             'close': 'last', 'volume': 'sum'
         })  # OHLCV resampling

@@ -71,6 +71,7 @@ class ExpectedSchema:
             "taker_buy_base_asset_volume": "Gorilla",
             "taker_buy_quote_asset_volume": "Gorilla",
             "funding_rate": "Gorilla",
+            "number_of_trades": "T64",  # v17.0.0: T64+ZSTD per ClickHouse Architect skill
         }
     )
 

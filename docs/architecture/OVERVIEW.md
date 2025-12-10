@@ -192,7 +192,7 @@ Binance Public Repository (monthly/daily ZIPs)
            ↓
    ClickHouse ReplacingMergeTree
       - Automatic deduplication on background merges
-      - Compressed storage (DoubleDelta + LZ4)
+      - Compressed storage (codec per type: DoubleDelta, Gorilla, T64+ZSTD)
            ↓
    Query API (ClickHouseQuery)
       - Time-range queries
