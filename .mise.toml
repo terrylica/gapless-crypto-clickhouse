@@ -196,14 +196,14 @@ description = "Validate local ClickHouse schema"
 env = { GCCH_MODE = "local" }
 run = """
 uv run python -c "
-from gapless_crypto_clickhouse.clickhouse.connection import get_client
-client = get_client()
-tables = client.command('SHOW TABLES')
-if 'ohlcv' in tables:
-    print('✓ Schema validated: ohlcv table exists')
-else:
-    print('❌ Schema validation failed: ohlcv table missing')
-    exit(1)
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+with ClickHouseConnection() as conn:
+    tables = conn.client.command('SHOW TABLES')
+    if 'ohlcv' in tables:
+        print('✓ Schema validated: ohlcv table exists')
+    else:
+        print('❌ Schema validation failed: ohlcv table missing')
+        exit(1)
 "
 """
 
@@ -213,14 +213,14 @@ env = { GCCH_MODE = "cloud" }
 depends = ["_check-credentials"]
 run = """
 uv run python -c "
-from gapless_crypto_clickhouse.clickhouse.connection import get_client
-client = get_client()
-tables = client.command('SHOW TABLES')
-if 'ohlcv' in tables:
-    print('✓ Cloud schema validated: ohlcv table exists')
-else:
-    print('❌ Cloud schema validation failed: ohlcv table missing')
-    exit(1)
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+with ClickHouseConnection() as conn:
+    tables = conn.client.command('SHOW TABLES')
+    if 'ohlcv' in tables:
+        print('✓ Cloud schema validated: ohlcv table exists')
+    else:
+        print('❌ Cloud schema validation failed: ohlcv table missing')
+        exit(1)
 "
 """
 
@@ -234,16 +234,17 @@ env = { GCCH_MODE = "local" }
 depends = ["_check-local-server", "_check-binance-cdn", "local-init"]
 run = """
 uv run python -c "
-from gapless_crypto_clickhouse import download
+from gapless_crypto_clickhouse import query_ohlcv
 import logging
 logging.basicConfig(level=logging.INFO)
 
 print('Seeding local ClickHouse with BTCUSDT 1h data (2024-01)...')
-df = download(
-    symbols=['BTCUSDT'],
-    timeframes=['1h'],
-    start='2024-01-01',
-    end='2024-01-31'
+df = query_ohlcv(
+    symbol='BTCUSDT',
+    timeframe='1h',
+    start_date='2024-01-01',
+    end_date='2024-01-31',
+    auto_ingest=True
 )
 print(f'✓ Local seeded with {len(df):,} rows')
 "
@@ -255,16 +256,17 @@ env = { GCCH_MODE = "cloud" }
 depends = ["_check-credentials", "_check-binance-cdn"]
 run = """
 uv run python -c "
-from gapless_crypto_clickhouse import download
+from gapless_crypto_clickhouse import query_ohlcv
 import logging
 logging.basicConfig(level=logging.INFO)
 
 print('Seeding cloud ClickHouse with BTCUSDT 1h data (2024-01)...')
-df = download(
-    symbols=['BTCUSDT'],
-    timeframes=['1h'],
-    start='2024-01-01',
-    end='2024-01-31'
+df = query_ohlcv(
+    symbol='BTCUSDT',
+    timeframe='1h',
+    start_date='2024-01-01',
+    end_date='2024-01-31',
+    auto_ingest=True
 )
 print(f'✓ Cloud seeded with {len(df):,} rows')
 "
@@ -281,14 +283,14 @@ env = { GCCH_MODE = "local" }
 depends = ["_check-local-server"]
 run = """
 uv run python -c "
-from gapless_crypto_clickhouse.clickhouse.connection import get_client
-client = get_client()
-count = client.command('SELECT count() FROM ohlcv')
-if count < 100:
-    print(f'⚠️  Local: insufficient data ({count} rows)')
-    print('   Run: mise run seed-local')
-    exit(1)
-print(f'✓ Local ClickHouse: {count:,} rows')
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+with ClickHouseConnection() as conn:
+    count = conn.client.command('SELECT count() FROM ohlcv')
+    if count < 100:
+        print(f'⚠️  Local: insufficient data ({count} rows)')
+        print('   Run: mise run seed-local')
+        exit(1)
+    print(f'✓ Local ClickHouse: {count:,} rows')
 "
 """
 
@@ -299,13 +301,13 @@ env = { GCCH_MODE = "cloud" }
 depends = ["_check-credentials"]
 run = """
 uv run python -c "
-from gapless_crypto_clickhouse.clickhouse.connection import get_client
-client = get_client()
-count = client.command('SELECT count() FROM ohlcv')
-if count < 100:
-    print(f'❌ Cloud: insufficient data ({count} rows)')
-    exit(1)
-print(f'✓ Cloud ClickHouse: {count:,} rows')
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+with ClickHouseConnection() as conn:
+    count = conn.client.command('SELECT count() FROM ohlcv')
+    if count < 100:
+        print(f'❌ Cloud: insufficient data ({count} rows)')
+        exit(1)
+    print(f'✓ Cloud ClickHouse: {count:,} rows')
 "
 """
 
