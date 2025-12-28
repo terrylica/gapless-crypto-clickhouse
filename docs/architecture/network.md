@@ -71,6 +71,6 @@ The package uses two different HTTP clients optimized for different use cases:
 
 ## Related Documentation
 
-- [Architecture Overview](OVERVIEW.md) - Complete system architecture
-- [Core Components](CORE_COMPONENTS.md) - Component descriptions and data flow
-- [Data Collection Guide](../guides/DATA_COLLECTION.md) - Usage and troubleshooting
+- [Architecture Overview](/docs/architecture/OVERVIEW.md) - Complete system architecture
+- [Core Components](/docs/architecture/CORE_COMPONENTS.md) - Component descriptions and data flow
+- [Data Collection Guide](/docs/guides/DATA_COLLECTION.md) - Usage and troubleshooting

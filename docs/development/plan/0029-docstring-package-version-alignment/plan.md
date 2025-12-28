@@ -1,6 +1,6 @@
 # Implementation Plan: Docstring and Package Version Alignment
 
-**ADR**: [0029-docstring-package-version-alignment](../../../architecture/decisions/0029-docstring-package-version-alignment.md)
+**ADR**: [0029-docstring-package-version-alignment](/docs/architecture/decisions/0029-docstring-package-version-alignment.md)
 **Created**: 2025-01-21
 **Status**: In Progress
 

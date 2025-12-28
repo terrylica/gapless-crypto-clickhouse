@@ -2,7 +2,7 @@
 
 **Version**: 6.0.0
 **Last Updated**: 2025-11-20
-**ADR**: [ADR-0013](../architecture/decisions/0013-autonomous-validation-framework.md)
+**ADR**: [ADR-0013](/docs/architecture/decisions/0013-autonomous-validation-framework.md)
 
 ---
 
@@ -397,8 +397,8 @@ await expect(page).to_have_screenshot(
 
 ## Related Documentation
 
-- [E2E Testing Guide](./E2E_TESTING_GUIDE.md)
-- [ADR-0013: Autonomous Validation Framework](../architecture/decisions/0013-autonomous-validation-framework.md)
+- [E2E Testing Guide](/docs/validation/E2E_TESTING_GUIDE.md)
+- [ADR-0013: Autonomous Validation Framework](/docs/architecture/decisions/0013-autonomous-validation-framework.md)
 - [Playwright Screenshot Testing Docs](https://playwright.dev/docs/test-snapshots)
 
 ---

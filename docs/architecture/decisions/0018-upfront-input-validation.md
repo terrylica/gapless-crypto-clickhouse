@@ -4,7 +4,7 @@
 **Date**: 2025-11-19
 **Deciders**: Terry Li
 **Related ADRs**: None
-**Related Plans**: [0018-upfront-input-validation](../../development/plan/0018-upfront-input-validation/plan.md)
+**Related Plans**: [0018-upfront-input-validation](/docs/development/plan/0018-upfront-input-validation/plan.md)
 
 ## Context and Problem Statement
 

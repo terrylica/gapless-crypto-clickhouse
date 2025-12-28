@@ -3,8 +3,8 @@
 **Status**: Accepted
 **Date**: 2025-11-20
 **Deciders**: Terry Li
-**Related ADRs**: [ADR-0021 (UM Futures Support)](0021-um-futures-support.md)
-**Related Plans**: [0022-spot-futures-symbol-alignment](../../development/plan/0022-spot-futures-symbol-alignment/plan.md)
+**Related ADRs**: [ADR-0021 (UM Futures Support)](/docs/architecture/decisions/0021-um-futures-support.md)
+**Related Plans**: [0022-spot-futures-symbol-alignment](/docs/development/plan/0022-spot-futures-symbol-alignment/plan.md)
 
 ## Context and Problem Statement
 

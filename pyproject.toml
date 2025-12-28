@@ -48,6 +48,7 @@ dependencies = [
     "pydantic>=2.0.0",  # Data validation and OpenAPI schema generation for validation reports
     "pyarrow>=14.0.0",  # Apache Arrow for zero-copy DataFrame creation (ADR-0023: 4x less memory)
     "tenacity>=8.0.0",  # Retry logic for REST API gap filling (ADR-0040)
+    "click>=8.0.0",  # CLI framework for gcch commands (ADR: 2025-12-21-sdk-first-run-experience)
 ]
 
 [project.urls]
@@ -57,8 +58,9 @@ Repository = "https://github.com/terrylica/gapless-crypto-clickhouse.git"
 Issues = "https://github.com/terrylica/gapless-crypto-clickhouse/issues"
 Changelog = "https://github.com/terrylica/gapless-crypto-clickhouse/blob/main/CHANGELOG.md"
 
-# No CLI - machine interface only (use Python API for programmatic access)
-# This package never had a CLI, unlike parent package gapless-crypto-data
+# CLI commands for setup and diagnostics (ADR: 2025-12-21-sdk-first-run-experience)
+[project.scripts]
+gcch = "gapless_crypto_clickhouse.cli:main"
 
 [build-system]
 requires = ["hatchling"]

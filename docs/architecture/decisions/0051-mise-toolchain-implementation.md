@@ -136,5 +136,5 @@ GitHub Actions retained for scheduled cron monitoring. Local mise tasks handle d
 - ADR-0034: Schema Optimization for Prop Trading (FINAL setting source)
 - ADR-0044: Local ClickHouse as Alternative Deployment Mode
 - ADR-0045: Local ClickHouse E2E Validation
-- [mise Configuration Skill](~/.claude/plugins/marketplaces/cc-skills/plugins/itp/skills/mise-configuration/SKILL.md)
-- [mise Tasks Skill](~/.claude/plugins/marketplaces/cc-skills/plugins/itp/skills/mise-tasks/SKILL.md)
+- mise Configuration Skill: `Skill(itp:mise-configuration)`
+- mise Tasks Skill: `Skill(itp:mise-tasks)`

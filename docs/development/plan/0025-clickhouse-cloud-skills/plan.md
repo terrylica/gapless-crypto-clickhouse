@@ -74,93 +74,93 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 
 #### Phase 2: Skill Initialization
 
-6. Create project-local skills directory: `./skills/`
-7. Initialize 3 skills using marketplace script:
+1. Create project-local skills directory: `./skills/`
+2. Initialize 3 skills using marketplace script:
    - `clickhouse-cloud-service-setup`
    - `clickhouse-cloud-credentials`
    - `clickhouse-cloud-connection`
 
 #### Phase 3: Skill Content Creation
 
-8. Write `clickhouse-cloud-service-setup/SKILL.md`:
+1. Write `clickhouse-cloud-service-setup/SKILL.md`:
    - Extract API-driven service discovery workflow
    - Document authentication (API Key ID + Secret from Doppler)
    - Document organization resolution (`GET /v1/organizations`)
    - Document service details fetch (`GET /v1/organizations/{org_id}/services/{service_id}`)
    - Document endpoint extraction (HTTPS 8443, Native 9440)
 
-9. Write `clickhouse-cloud-service-setup/references/api-endpoints.md`:
+2. Write `clickhouse-cloud-service-setup/references/api-endpoints.md`:
    - ClickHouse Cloud API base URL
    - Authentication scheme (HTTP Basic Auth)
    - Organization and service endpoints
    - Response schema examples
 
-10. Write `clickhouse-cloud-credentials/SKILL.md`:
-    - Extract dual credential storage workflow
-    - Document 8 Doppler secrets (project: `aws-credentials/prd`)
-    - Document 8 1Password fields (vault: Engineering `fnzrqcsl3pl3bcdojrxf46whnu`, item: "ClickHouse Cloud - gapless-crypto-cli")
-    - Credential naming convention
+3. Write `clickhouse-cloud-credentials/SKILL.md`:
+   - Extract dual credential storage workflow
+   - Document 8 Doppler secrets (project: `aws-credentials/prd`)
+   - Document 8 1Password fields (vault: Engineering `fnzrqcsl3pl3bcdojrxf46whnu`, item: "ClickHouse Cloud - gapless-crypto-cli")
+   - Credential naming convention
 
-11. Write `clickhouse-cloud-credentials/references/doppler-schema.md`:
-    - Required Doppler project structure
-    - 8 required secrets with descriptions
-    - No actual secret values
+4. Write `clickhouse-cloud-credentials/references/doppler-schema.md`:
+   - Required Doppler project structure
+   - 8 required secrets with descriptions
+   - No actual secret values
 
-12. Write `clickhouse-cloud-credentials/references/onepassword-schema.md`:
-    - Required 1Password vault and item structure
-    - 8 required fields with types
-    - No actual secret values
+5. Write `clickhouse-cloud-credentials/references/onepassword-schema.md`:
+   - Required 1Password vault and item structure
+   - 8 required fields with types
+   - No actual secret values
 
-13. Write `clickhouse-cloud-connection/SKILL.md`:
-    - Extract connection validation workflow
-    - Document clickhouse-connect client configuration (`secure=True`)
-    - Document Doppler environment loading
-    - Document test queries (version, user, table count)
+6. Write `clickhouse-cloud-connection/SKILL.md`:
+   - Extract connection validation workflow
+   - Document clickhouse-connect client configuration (`secure=True`)
+   - Document Doppler environment loading
+   - Document test queries (version, user, table count)
 
-14. Write `clickhouse-cloud-connection/references/connection-test.py`:
-    - Example Python test script (reference, not executed)
-    - Shows clickhouse-connect usage pattern
-    - Shows Doppler integration pattern
+7. Write `clickhouse-cloud-connection/references/connection-test.py`:
+   - Example Python test script (reference, not executed)
+   - Shows clickhouse-connect usage pattern
+   - Shows Doppler integration pattern
 
 #### Phase 4: Validation
 
-15. Validate each skill with marketplace validator:
+1. Validate each skill with marketplace validator:
 
-    ```bash
-    quick_validate.py skills/clickhouse-cloud-service-setup/
-    quick_validate.py skills/clickhouse-cloud-credentials/
-    quick_validate.py skills/clickhouse-cloud-connection/
-    ```
+   ```bash
+   quick_validate.py skills/clickhouse-cloud-service-setup/
+   quick_validate.py skills/clickhouse-cloud-credentials/
+   quick_validate.py skills/clickhouse-cloud-connection/
+   ```
 
-16. Verify no secrets exposed (grep for actual values)
+2. Verify no secrets exposed (grep for actual values)
 
 #### Phase 5: Integration
 
-17. Update `CLAUDE.md`:
-    - Add "ClickHouse Cloud Setup" section after line 49
-    - Use Link Farm pattern (absolute paths)
-    - Follow Hub-and-Spoke progressive disclosure
-    - Include "When to use" and "Key principle"
+1. Update `CLAUDE.md`:
+   - Add "ClickHouse Cloud Setup" section after line 49
+   - Use Link Farm pattern (absolute paths)
+   - Follow Hub-and-Spoke progressive disclosure
+   - Include "When to use" and "Key principle"
 
-18. Run build validation (if applicable)
+2. Run build validation (if applicable)
 
 #### Phase 6: Commit
 
-19. Create conventional commit:
+1. Create conventional commit:
 
-    ```
-    docs(skills): extract ClickHouse Cloud setup workflows into atomic skills
+   ```
+   docs(skills): extract ClickHouse Cloud setup workflows into atomic skills
 
-    - Add clickhouse-cloud-service-setup skill (API-driven service discovery)
-    - Add clickhouse-cloud-credentials skill (Doppler + 1Password storage)
-    - Add clickhouse-cloud-connection skill (connection validation)
-    - Update CLAUDE.md with ClickHouse Cloud Setup section
-    - Add ADR-0025 for skills extraction decision
+   - Add clickhouse-cloud-service-setup skill (API-driven service discovery)
+   - Add clickhouse-cloud-credentials skill (Doppler + 1Password storage)
+   - Add clickhouse-cloud-connection skill (connection validation)
+   - Update CLAUDE.md with ClickHouse Cloud Setup section
+   - Add ADR-0025 for skills extraction decision
 
-    Refs: ADR-0025, /tmp/clickhouse_setup_final_summary.md (validated production setup)
-    ```
+   Refs: ADR-0025, /tmp/clickhouse_setup_final_summary.md (validated production setup)
+   ```
 
-20. Log completion to `logs/0025-clickhouse-cloud-skills-20251121_124019.log`
+2. Log completion to `logs/0025-clickhouse-cloud-skills-20251121_124019.log`
 
 ### Success Criteria
 
@@ -194,9 +194,9 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 
 ### Related Work
 
-- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](~/.claude/skills/skill-architecture/SKILL.md)
-- **Marketplace validator**: `~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py`
-- **semantic-release**: [`~/.claude/skills/semantic-release/SKILL.md`](~/.claude/skills/semantic-release/SKILL.md)
+- **skill-architecture**: `Skill(plugin-dev:skill-architecture)`
+- **Marketplace validator**: `Skill(plugin-dev:plugin-validator)`
+- **semantic-release**: `Skill(itp:semantic-release)`
 
 ### Constraints
 
@@ -254,7 +254,7 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 
 ## References
 
-- **ADR-0025**: [`docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md`](docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md)
+- **ADR-0025**: [`docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md`](/docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md)
 - **Source**: `/tmp/clickhouse_setup_final_summary.md`
-- **Project Memory**: [`CLAUDE.md`](CLAUDE.md)
-- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](~/.claude/skills/skill-architecture/SKILL.md)
+- **Project Memory**: [`CLAUDE.md`](/docs/development/plan/0025-clickhouse-cloud-skills/CLAUDE.md)
+- **skill-architecture**: `Skill(plugin-dev:skill-architecture)`

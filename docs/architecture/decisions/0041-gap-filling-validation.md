@@ -4,7 +4,7 @@
 
 **Date**: 2025-11-25
 
-**Context**: [Plan 0041](../../development/plan/0041-gap-filling-validation/plan.md)
+**Context**: [Plan 0041](/docs/development/plan/0041-gap-filling-validation/plan.md)
 
 ## Context and Problem Statement
 
@@ -99,6 +99,6 @@ Leave data permanently (ADR-0038 pattern). Benefits:
 
 ## Links
 
-- [Plan 0041](../../development/plan/0041-gap-filling-validation/plan.md)
-- [ADR-0038](0038-real-binance-data-validation.md) - Real Binance data validation pattern
-- [ADR-0040](0040-query-ohlcv-gap-filling.md) - Gap filling implementation
+- [Plan 0041](/docs/development/plan/0041-gap-filling-validation/plan.md)
+- [ADR-0038](/docs/architecture/decisions/0038-real-binance-data-validation.md) - Real Binance data validation pattern
+- [ADR-0040](/docs/architecture/decisions/0040-query-ohlcv-gap-filling.md) - Gap filling implementation

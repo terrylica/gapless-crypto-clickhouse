@@ -6,7 +6,7 @@
 
 **Implemented**: 2025-01-25
 
-**Context**: [Plan 0037](../../development/plan/0037-release-validation/plan.md)
+**Context**: [Plan 0037](/docs/development/plan/0037-release-validation/plan.md)
 
 ## Context and Problem Statement
 
@@ -361,7 +361,7 @@ earthly --strict \
 
 ## Links
 
-- [Plan 0037](../../development/plan/0037-release-validation/plan.md) - Implementation plan with production findings
-- [ADR-0035](0035-cicd-production-validation.md) - CI/CD production validation policy (scheduled monitoring)
-- [ADR-0036](0036-cicd-dry-refactoring.md) - CI/CD workflow DRY refactoring (shared e2e_core module)
+- [Plan 0037](/docs/development/plan/0037-release-validation/plan.md) - Implementation plan with production findings
+- [ADR-0035](/docs/architecture/decisions/0035-cicd-production-validation.md) - CI/CD production validation policy (scheduled monitoring)
+- [ADR-0036](/docs/architecture/decisions/0036-cicd-dry-refactoring.md) - CI/CD workflow DRY refactoring (shared e2e_core module)
 - [Agent 5 Investigation](/tmp/release-validation-test/DCTL-JOURNEY-REPORT.md) - GitHub Release validation research

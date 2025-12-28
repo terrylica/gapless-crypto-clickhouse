@@ -4,7 +4,7 @@
 
 **Date**: 2025-11-25
 
-**Context**: [Plan 0038](../../development/plan/0038-real-binance-data-validation/plan.md)
+**Context**: [Plan 0038](/docs/development/plan/0038-real-binance-data-validation/plan.md)
 
 ## Context and Problem Statement
 
@@ -119,6 +119,6 @@ Existing validation scripts (`validate_clickhouse_cloud.py`, `validate_e2e_simpl
 
 ## Links
 
-- [Plan 0038](../../development/plan/0038-real-binance-data-validation/plan.md)
-- [ADR-0035](0035-cicd-production-validation.md) - CI/CD production validation policy
-- [ADR-0037](0037-release-validation-observability.md) - Release validation observability flow
+- [Plan 0038](/docs/development/plan/0038-real-binance-data-validation/plan.md)
+- [ADR-0035](/docs/architecture/decisions/0035-cicd-production-validation.md) - CI/CD production validation policy
+- [ADR-0037](/docs/architecture/decisions/0037-release-validation-observability.md) - Release validation observability flow

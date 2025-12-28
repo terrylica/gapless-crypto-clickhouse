@@ -3,8 +3,8 @@
 **Status**: Accepted
 **Date**: 2025-11-19
 **Deciders**: Terry Li
-**Related ADRs**: [ADR-0004 (Superseded QuestDB Futures)](0004-futures-support-implementation.md), [ADR-0020 (Multi-Symbol Batch API)](0020-multi-symbol-batch-api.md)
-**Related Plans**: [0021-um-futures-support](../../development/plan/0021-um-futures-support/plan.md)
+**Related ADRs**: [ADR-0004 (Superseded QuestDB Futures)](/docs/architecture/decisions/0004-futures-support-implementation.md), [ADR-0020 (Multi-Symbol Batch API)](/docs/architecture/decisions/0020-multi-symbol-batch-api.md)
+**Related Plans**: [0021-um-futures-support](/docs/development/plan/0021-um-futures-support/plan.md)
 
 ## Context and Problem Statement
 

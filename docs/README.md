@@ -6,22 +6,22 @@ This directory contains comprehensive documentation for the gapless-crypto-data 
 
 ### API Documentation
 
-- [`api/quick-start.md`](api/quick-start.md) - API quick start guide
-- [`api/dual-parameter-enhancement.yaml`](api/dual-parameter-enhancement.yaml) - OpenAPI specification
+- [`api/quick-start.md`](/docs/api/quick-start.md) - API quick start guide
+- [`api/dual-parameter-enhancement.yaml`](/docs/api/dual-parameter-enhancement.yaml) - OpenAPI specification
 
 ### User Guides
 
-- [`guides/pypi-documentation.md`](guides/pypi-documentation.md) - Complete API documentation for PyPI users
+- [`guides/pypi-documentation.md`](/docs/guides/pypi-documentation.md) - Complete API documentation for PyPI users
 
 ### Development Documentation
 
-- [`development/PUBLISHING.md`](development/PUBLISHING.md) - Package publishing guidelines
-- [`CURRENT_ARCHITECTURE_STATUS.yaml`](CURRENT_ARCHITECTURE_STATUS.yaml) - Current system architecture
+- [`development/PUBLISHING.md`](/docs/development/PUBLISHING.md) - Package publishing guidelines
+- [`CURRENT_ARCHITECTURE_STATUS.yaml`](/docs/CURRENT_ARCHITECTURE_STATUS.yaml) - Current system architecture
 
 ### Release Documentation
 
-- [`release-notes.md`](release-notes.md) - Release notes and announcements
-- [`milestones/`](milestones/) - Version milestone documentation
+- [`release-notes.md`](/docs/release-notes.md) - Release notes and announcements
+- [`milestones/`](/docs/milestones/) - Version milestone documentation
 
 ### Project Milestones
 
@@ -34,17 +34,17 @@ The `milestones/` directory contains detailed documentation for each version rel
 
 For new users, we recommend starting with:
 
-1. **[Project README](../README.md)** - Overview and installation
-2. **[API Quick Start](api/quick-start.md)** - Basic usage examples
-3. **[PyPI Documentation](guides/pypi-documentation.md)** - Complete API reference
+1. **[Project README](/README.md)** - Overview and installation
+2. **[API Quick Start](/docs/api/quick-start.md)** - Basic usage examples
+3. **[PyPI Documentation](/docs/guides/pypi-documentation.md)** - Complete API reference
 
 ### Database Integration (v4.0.0+)
 
 For users leveraging ClickHouse database features:
 
-1. **[ClickHouse Migration Guide](CLICKHOUSE_MIGRATION.md)** - Migrating from v3.x file-based to v4.0.0 database integration
-2. **[ADR-0005: ClickHouse Migration Decision](architecture/decisions/0005-clickhouse-migration.md)** - Technical rationale and implementation details
-3. **[ADR-0043: ClickHouse Cloud-Only Policy](architecture/decisions/0043-clickhouse-cloud-only-policy.md)** - Cloud-only architecture decision
+1. **[ClickHouse Migration Guide](/docs/CLICKHOUSE_MIGRATION.md)** - Migrating from v3.x file-based to v4.0.0 database integration
+2. **[ADR-0005: ClickHouse Migration Decision](/docs/architecture/decisions/0005-clickhouse-migration.md)** - Technical rationale and implementation details
+3. **[ADR-0043: ClickHouse Cloud-Only Policy](/docs/architecture/decisions/0043-clickhouse-cloud-only-policy.md)** - Cloud-only architecture decision
 
 **Breaking Changes**: v4.0.0 introduces optional ClickHouse database support. File-based workflows remain supported for backward compatibility.
 
@@ -52,18 +52,18 @@ For users leveraging ClickHouse database features:
 
 Comprehensive data quality validation framework:
 
-1. **[Validation Architecture](validation/ARCHITECTURE.md)** - Three-layer validation system (CSV, ClickHouse, Performance)
-2. **[Validation Overview](validation/OVERVIEW.md)** - 5-layer CSV validation pipeline with DuckDB persistence
-3. **[E2E Testing Guide](validation/E2E_TESTING_GUIDE.md)** - Playwright E2E validation with visual regression
-4. **[ADR-0024: Validation Canonicity](architecture/decisions/0024-comprehensive-validation-canonicity.md)** - v6.0.0 comprehensive validation update
+1. **[Validation Architecture](/docs/validation/ARCHITECTURE.md)** - Three-layer validation system (CSV, ClickHouse, Performance)
+2. **[Validation Overview](/docs/validation/OVERVIEW.md)** - 5-layer CSV validation pipeline with DuckDB persistence
+3. **[E2E Testing Guide](/docs/validation/E2E_TESTING_GUIDE.md)** - Playwright E2E validation with visual regression
+4. **[ADR-0024: Validation Canonicity](/docs/architecture/decisions/0024-comprehensive-validation-canonicity.md)** - v6.0.0 comprehensive validation update
 
 ## Development
 
 For contributors and developers:
 
-1. **[Contributing Guidelines](../CONTRIBUTING.md)** - How to contribute
-2. **[Publishing Documentation](development/PUBLISHING.md)** - Release process
-3. **[Architecture Status](CURRENT_ARCHITECTURE_STATUS.yaml)** - Technical overview
+1. **[Contributing Guidelines](/CONTRIBUTING.md)** - How to contribute
+2. **[Publishing Documentation](/docs/development/PUBLISHING.md)** - Release process
+3. **[Architecture Status](/docs/CURRENT_ARCHITECTURE_STATUS.yaml)** - Technical overview
 
 ## Support
 

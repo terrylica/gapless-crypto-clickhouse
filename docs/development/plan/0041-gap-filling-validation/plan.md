@@ -1,6 +1,6 @@
 # Plan 0041: Gap Filling Validation Design
 
-**ADR**: [ADR-0041](../../../architecture/decisions/0041-gap-filling-validation.md)
+**ADR**: [ADR-0041](/docs/architecture/decisions/0041-gap-filling-validation.md)
 
 **Status**: Complete
 

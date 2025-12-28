@@ -1,6 +1,6 @@
-# Contributing to Gapless Crypto Data
+# Contributing to Gapless Crypto ClickHouse
 
-Thank you for your interest in contributing to gapless-crypto-data! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to gapless-crypto-clickhouse! This document provides guidelines for contributing to the project.
 
 ## Development Setup
 
@@ -15,8 +15,8 @@ Thank you for your interest in contributing to gapless-crypto-data! This documen
 1. **Fork and clone the repository:**
 
    ```bash
-   git clone https://github.com/terrylica/gapless-crypto-data.git
-   cd gapless-crypto-data
+   git clone https://github.com/terrylica/gapless-crypto-clickhouse.git
+   cd gapless-crypto-clickhouse
    ```
 
 2. **Set up development environment:**
@@ -34,6 +34,7 @@ Thank you for your interest in contributing to gapless-crypto-data! This documen
    ```
 
 3. **Install pre-commit hooks (mandatory):**
+
    ```bash
    uv run pre-commit install
    ```
@@ -86,10 +87,11 @@ Thank you for your interest in contributing to gapless-crypto-data! This documen
    uv run pytest tests/test_specific.py -v
 
    # Run with coverage
-   uv run pytest --cov=src/gapless_crypto_data
+   uv run pytest --cov=src/gapless_crypto_clickhouse
    ```
 
 3. **Pre-commit validation:**
+
    ```bash
    # Run all pre-commit hooks
    uv run pre-commit run --all-files
@@ -240,15 +242,15 @@ Pull requests are reviewed for:
 
 - **GitHub Issues**: For bug reports and feature requests
 - **GitHub Discussions**: For questions and general discussion
-- **Email**: technical questions to terry@eonlabs.com
+- **Email**: technical questions to <terry@eonlabs.com>
 
 ### Resources
 
-- **Documentation**: [Project README](README.md)
+- **Documentation**: [Project README](/README.md)
 - **API Reference**: See docstrings in source code
 - **Examples**: Check `examples/` directory
 - **Tests**: Review existing tests for usage patterns
 
 ## License
 
-By contributing to gapless-crypto-data, you agree that your contributions will be licensed under the MIT License.
+By contributing to gapless-crypto-clickhouse, you agree that your contributions will be licensed under the MIT License.

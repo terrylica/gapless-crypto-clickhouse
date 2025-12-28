@@ -107,14 +107,48 @@ class ClickHouseConnection:
                 },
             )
         except Exception as e:
-            raise Exception(
-                f"Failed to connect to ClickHouse at {self.config.host}:{self.config.http_port}: {e}"
-            ) from e
+            # ADR: 2025-12-21-sdk-first-run-experience
+            # Provide actionable error message with probe module guidance
+            error_msg = f"""Failed to connect to ClickHouse at {self.config.host}:{self.config.http_port}
+
+Debug steps:
+1. Check if ClickHouse is running:
+   from gapless_crypto_clickhouse import probe
+   status = probe.check_local_clickhouse()
+   print(f"Installed: {{status['installed']}}, Running: {{status['running']}}")
+
+2. For local development:
+   export GCCH_MODE=local
+   # Then start ClickHouse: clickhouse server --daemon
+
+3. For ClickHouse Cloud:
+   export CLICKHOUSE_HOST=your-instance.clickhouse.cloud
+   export CLICKHOUSE_PASSWORD=your-password
+
+4. Installation help:
+   from gapless_crypto_clickhouse import probe
+   guide = probe.get_local_installation_guide()
+   print(guide)
+
+Original error: {e}"""
+            raise Exception(error_msg) from e
 
     def __enter__(self) -> "ClickHouseConnection":
-        """Context manager entry with schema validation."""
+        """Context manager entry with auto-schema creation and validation.
+
+        ADR: 2025-12-21-sdk-first-run-experience
+
+        Auto-creates ohlcv table from bundled schema.sql if missing,
+        then validates schema matches expectations.
+        """
         if not self.health_check():
             raise Exception("ClickHouse health check failed during context manager entry")
+
+        # Auto-create schema if table missing (ADR: 2025-12-21-sdk-first-run-experience)
+        if not self._table_exists("ohlcv"):
+            logger.info("Table 'ohlcv' not found in database - auto-creating schema...")
+            self.ensure_schema()
+            logger.info("Schema auto-created successfully")
 
         # Schema validation (ADR-0024)
         from .schema_validator import SchemaValidationError, SchemaValidator
@@ -158,6 +192,65 @@ class ClickHouseConnection:
         except Exception as e:
             logger.error(f"ClickHouse health check failed: {e}")
             return False
+
+    def _table_exists(self, table: str) -> bool:
+        """
+        Check if table exists in current database.
+
+        ADR: 2025-12-21-sdk-first-run-experience
+
+        Args:
+            table: Table name to check
+
+        Returns:
+            True if table exists, False otherwise
+
+        Example:
+            if not conn._table_exists("ohlcv"):
+                conn.ensure_schema()
+        """
+        result = self.execute(
+            "SELECT 1 FROM system.tables WHERE database = currentDatabase() AND name = {table:String}",
+            params={"table": table},
+        )
+        return len(result) > 0
+
+    def ensure_schema(self) -> None:
+        """
+        Create ohlcv table from bundled schema.sql if not exists.
+
+        ADR: 2025-12-21-sdk-first-run-experience
+
+        This method is called automatically by __enter__() when the ohlcv table
+        is missing, enabling zero-configuration first-run experience.
+
+        Raises:
+            Exception: If schema creation fails
+
+        Example:
+            conn = ClickHouseConnection()
+            if not conn._table_exists("ohlcv"):
+                conn.ensure_schema()
+        """
+        from pathlib import Path
+
+        schema_path = Path(__file__).parent / "schema.sql"
+        if not schema_path.exists():
+            raise Exception(f"Schema file not found: {schema_path}")
+
+        schema_sql = schema_path.read_text()
+        logger.info("Creating ohlcv table from bundled schema.sql...")
+
+        # Execute each statement separately (schema.sql may have multiple statements)
+        for statement in schema_sql.split(";"):
+            statement = statement.strip()
+            if statement and not statement.startswith("--"):
+                try:
+                    self.client.command(statement)
+                except Exception as e:
+                    raise Exception(f"Failed to execute schema statement: {e}") from e
+
+        logger.info("Schema created successfully from bundled schema.sql")
 
     def execute(self, query: str, params: Optional[Dict[str, Any]] = None) -> List[Tuple[Any, ...]]:
         """

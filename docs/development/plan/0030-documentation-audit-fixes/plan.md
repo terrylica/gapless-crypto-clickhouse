@@ -1,6 +1,6 @@
 # Implementation Plan: Documentation Audit Immediate Fixes
 
-**ADR**: [0030-documentation-cleanup-deferred](../../../architecture/decisions/0030-documentation-cleanup-deferred.md)
+**ADR**: [0030-documentation-cleanup-deferred](/docs/architecture/decisions/0030-documentation-cleanup-deferred.md)
 **Created**: 2025-11-22
 **Status**: In Progress
 

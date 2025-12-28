@@ -251,11 +251,13 @@ print(f'✓ Local seeded with {len(df):,} rows')
 """
 
 [tasks.seed-cloud]
-description = "Seed cloud ClickHouse with sample BTCUSDT data"
-env = { GCCH_MODE = "cloud" }
-depends = ["_check-credentials", "_check-binance-cdn"]
+description = "Seed cloud ClickHouse with sample BTCUSDT data (Doppler-wrapped)"
+depends = ["_check-binance-cdn"]
 run = """
-uv run python -c "
+echo "Seeding cloud ClickHouse with Doppler credentials..."
+
+# Direct Python execution bypasses mise _.file='.env' override
+doppler run --project aws-credentials --config prd -- uv run python -c "
 from gapless_crypto_clickhouse import query_ohlcv
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -401,20 +403,195 @@ print('════════════════════════�
 """
 
 # =============================================================================
-# E2E Test Tasks
+# E2E Test Tasks (colon-prefixed namespacing per mise-tasks skill)
 # =============================================================================
 
-[tasks.test-e2e-local]
+[tasks."test:e2e:local"]
 description = "Run E2E tests against local ClickHouse"
 env = { GCCH_MODE = "local" }
 depends = ["_check-binance-cdn", "_check-local-server", "_check-local-data"]
-run = "uv run pytest tests/ -v -m e2e"
+run = "uv run pytest tests/ -v -m integration"
 
-[tasks.test-e2e-cloud]
+[tasks."test:e2e:cloud"]
 description = "Run E2E tests against cloud ClickHouse"
 env = { GCCH_MODE = "cloud" }
 depends = ["_check-binance-cdn", "_check-credentials", "_check-cloud-data"]
-run = "uv run pytest tests/ -v -m e2e"
+run = "uv run pytest tests/ -v -m integration"
+
+# =============================================================================
+# Data Quality Validation Tasks (ADR-0048: ClickHouse-native validation)
+# =============================================================================
+
+[tasks."validate:ohlc-constraints"]
+description = "Validate OHLC constraints (high >= open/close/low, volume >= 0)"
+env = { GCCH_MODE = "local" }
+depends = ["_check-local-server"]
+run = """
+uv run python -c "
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+
+with ClickHouseConnection() as conn:
+    # Check OHLC constraint violations
+    violations = conn.client.command('''
+        SELECT COUNT(*) FROM ohlcv FINAL
+        WHERE high < open OR high < close OR high < low
+           OR low > open OR low > close
+           OR volume < 0
+    ''')
+
+    if violations > 0:
+        # Get sample violations for debugging
+        samples = conn.client.query('''
+            SELECT symbol, timeframe, timestamp, open, high, low, close, volume
+            FROM ohlcv FINAL
+            WHERE high < open OR high < close OR high < low
+               OR low > open OR low > close
+               OR volume < 0
+            LIMIT 5
+        ''')
+        print(f'❌ OHLC constraint violations: {violations}')
+        print('Sample violations:')
+        for row in samples.result_rows:
+            print(f'  {row}')
+        exit(1)
+
+    total = conn.client.command('SELECT COUNT(*) FROM ohlcv FINAL')
+    print(f'✓ OHLC constraints valid ({total:,} rows, 0 violations)')
+"
+"""
+
+[tasks."validate:gap-detection"]
+description = "Detect gaps in OHLCV data for BTCUSDT 1h"
+env = { GCCH_MODE = "local" }
+depends = ["_check-local-server", "_check-local-data"]
+run = """
+uv run python -c "
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+from gapless_crypto_clickhouse.clickhouse_query import OHLCVQuery
+
+with ClickHouseConnection() as conn:
+    query = OHLCVQuery(conn)
+
+    # Get date range
+    result = conn.client.query('''
+        SELECT MIN(timestamp), MAX(timestamp)
+        FROM ohlcv FINAL
+        WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
+    ''')
+    min_ts, max_ts = result.result_rows[0]
+
+    if min_ts is None:
+        print('⚠️  No BTCUSDT 1h data found')
+        exit(0)
+
+    # Detect gaps using OHLCVQuery
+    gaps = query.detect_gaps(
+        symbol='BTCUSDT',
+        timeframe='1h',
+        start=min_ts.strftime('%Y-%m-%d'),
+        end=max_ts.strftime('%Y-%m-%d'),
+        instrument_type='spot'
+    )
+
+    if len(gaps) > 0:
+        print(f'⚠️  Detected {len(gaps)} gaps in BTCUSDT 1h data:')
+        for _, gap in gaps.head(5).iterrows():
+            print(f'  {gap[\"gap_start\"]} to {gap[\"gap_end\"]}')
+        if len(gaps) > 5:
+            print(f'  ... and {len(gaps) - 5} more')
+    else:
+        print(f'✓ Zero gaps detected (BTCUSDT 1h: {min_ts} to {max_ts})')
+"
+"""
+
+[tasks."validate:dedup-monitoring"]
+description = "Monitor deduplication status (FINAL vs non-FINAL row counts)"
+env = { GCCH_MODE = "local" }
+depends = ["_check-local-server", "_check-local-data"]
+run = """
+uv run python -c "
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+
+with ClickHouseConnection() as conn:
+    # Count with FINAL (deduplicated)
+    final_count = conn.client.command('SELECT COUNT(*) FROM ohlcv FINAL')
+
+    # Count without FINAL (includes pending merges)
+    raw_count = conn.client.command('SELECT COUNT(*) FROM ohlcv')
+
+    # Calculate duplication ratio
+    if final_count > 0:
+        dup_ratio = (raw_count - final_count) / final_count * 100
+    else:
+        dup_ratio = 0
+
+    # Alert if duplication exceeds 5%
+    if dup_ratio > 5:
+        print(f'⚠️  High duplication detected: {dup_ratio:.1f}%')
+        print(f'   Raw: {raw_count:,} | Deduplicated: {final_count:,}')
+        print('   Consider running OPTIMIZE TABLE ohlcv FINAL')
+    else:
+        print(f'✓ Deduplication healthy: {dup_ratio:.2f}% pending merge')
+        print(f'  Raw: {raw_count:,} | Deduplicated: {final_count:,}')
+"
+"""
+
+[tasks."validate:performance"]
+description = "Benchmark query latency and insert throughput"
+env = { GCCH_MODE = "local" }
+depends = ["_check-local-server", "_check-local-data"]
+run = """
+uv run python -c "
+import time
+from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
+
+with ClickHouseConnection() as conn:
+    print('Running performance benchmarks...')
+    print('')
+
+    # Benchmark 1: Simple SELECT with FINAL
+    start = time.perf_counter()
+    conn.client.query('''
+        SELECT * FROM ohlcv FINAL
+        WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
+        LIMIT 1000
+    ''')
+    simple_ms = (time.perf_counter() - start) * 1000
+
+    # Benchmark 2: Aggregation query
+    start = time.perf_counter()
+    conn.client.query('''
+        SELECT symbol, timeframe, COUNT(*), AVG(close), SUM(volume)
+        FROM ohlcv FINAL
+        WHERE symbol = 'BTCUSDT'
+        GROUP BY symbol, timeframe
+    ''')
+    agg_ms = (time.perf_counter() - start) * 1000
+
+    # Benchmark 3: Date range query
+    start = time.perf_counter()
+    conn.client.query('''
+        SELECT * FROM ohlcv FINAL
+        WHERE symbol = 'BTCUSDT' AND timeframe = '1h'
+          AND timestamp >= now() - INTERVAL 30 DAY
+        ORDER BY timestamp
+    ''')
+    range_ms = (time.perf_counter() - start) * 1000
+
+    # Report results
+    print('Query Latency Benchmarks:')
+    print(f'  Simple SELECT (1K rows): {simple_ms:.1f}ms')
+    print(f'  Aggregation query:       {agg_ms:.1f}ms')
+    print(f'  Date range (30 days):    {range_ms:.1f}ms')
+    print('')
+
+    # Alert if any query exceeds 100ms threshold
+    if max(simple_ms, agg_ms, range_ms) > 100:
+        print(f'⚠️  Some queries exceed 100ms threshold')
+    else:
+        print(f'✓ All queries under 100ms threshold')
+"
+"""
 
 # =============================================================================
 # Development Workflow Tasks

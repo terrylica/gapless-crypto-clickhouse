@@ -4,7 +4,7 @@
 **Date**: 2025-11-19
 **Deciders**: Terry Li
 **Related ADRs**: ADR-0004 (USDT-Margined Futures Support)
-**Related Plans**: [0016-symbol-coverage-expansion](../../development/plan/0016-symbol-coverage-expansion/plan.md)
+**Related Plans**: [0016-symbol-coverage-expansion](/docs/development/plan/0016-symbol-coverage-expansion/plan.md)
 
 ## Context and Problem Statement
 

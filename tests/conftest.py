@@ -337,44 +337,48 @@ def sample_api_candle_dicts():
     Returns structured dictionaries matching the output of fetch_gap_data()
     after conversion from raw API response.
 
+    Note: Timestamps are naive UTC (codebase convention per connection.py:205).
+    fetch_gap_data() returns naive UTC datetimes.
+
     Returns:
-        List[dict]: Candle dictionaries with datetime objects
+        List[dict]: Candle dictionaries with naive UTC datetime objects
     """
+    # Naive UTC datetimes (no tzinfo) - matches fetch_gap_data() output
     return [
         {
-            "timestamp": datetime(2024, 11, 1, 0, 0, 0, tzinfo=timezone.utc),
+            "timestamp": datetime(2024, 11, 1, 0, 0, 0),  # naive UTC
             "open": 95000.00,
             "high": 95500.00,
             "low": 94800.00,
             "close": 95200.00,
             "volume": 1234.567,
-            "close_time": datetime(2024, 11, 1, 0, 59, 59, tzinfo=timezone.utc),
+            "close_time": datetime(2024, 11, 1, 0, 59, 59),  # naive UTC
             "quote_asset_volume": 117300000.00,
             "number_of_trades": 50000,
             "taker_buy_base_asset_volume": 600.123,
             "taker_buy_quote_asset_volume": 57000000.00,
         },
         {
-            "timestamp": datetime(2024, 11, 1, 1, 0, 0, tzinfo=timezone.utc),
+            "timestamp": datetime(2024, 11, 1, 1, 0, 0),  # naive UTC
             "open": 95200.00,
             "high": 95800.00,
             "low": 95100.00,
             "close": 95600.00,
             "volume": 1456.789,
-            "close_time": datetime(2024, 11, 1, 1, 59, 59, tzinfo=timezone.utc),
+            "close_time": datetime(2024, 11, 1, 1, 59, 59),  # naive UTC
             "quote_asset_volume": 139200000.00,
             "number_of_trades": 52000,
             "taker_buy_base_asset_volume": 700.456,
             "taker_buy_quote_asset_volume": 66900000.00,
         },
         {
-            "timestamp": datetime(2024, 11, 1, 2, 0, 0, tzinfo=timezone.utc),
+            "timestamp": datetime(2024, 11, 1, 2, 0, 0),  # naive UTC
             "open": 95600.00,
             "high": 96000.00,
             "low": 95400.00,
             "close": 95900.00,
             "volume": 1678.901,
-            "close_time": datetime(2024, 11, 1, 2, 59, 59, tzinfo=timezone.utc),
+            "close_time": datetime(2024, 11, 1, 2, 59, 59),  # naive UTC
             "quote_asset_volume": 161200000.00,
             "number_of_trades": 55000,
             "taker_buy_base_asset_volume": 800.789,

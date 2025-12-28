@@ -90,6 +90,16 @@ RETRY_MAX_DELAY: Final[int] = 3
 DEFAULT_RETRY_AFTER: Final[int] = 60
 """Default retry-after for rate limits when not specified."""
 
+# Exponential backoff with jitter (ADR: 2025-12-27-cache-first-recent-data-fallback)
+RETRY_JITTER: Final[float] = 5.0
+"""Random jitter added to retry delays (±seconds) to prevent thundering herd."""
+
+RETRY_EXP_MAX: Final[int] = 60
+"""Maximum delay cap for exponential backoff in seconds."""
+
+RETRY_EXP_ATTEMPTS: Final[int] = 5
+"""Number of retry attempts for exponential backoff (more resilient than linear)."""
+
 # =============================================================================
 # SELF-VALIDATING ASSERTIONS
 # =============================================================================
@@ -107,6 +117,9 @@ assert all(100 <= code <= 599 for code in HTTP_RATE_LIMIT_CODES), "Rate limit co
 # Verify retry configuration is sane
 assert RETRY_MAX_ATTEMPTS >= 1, f"RETRY_MAX_ATTEMPTS must be >= 1: {RETRY_MAX_ATTEMPTS}"
 assert RETRY_BASE_DELAY >= 0, f"RETRY_BASE_DELAY must be >= 0: {RETRY_BASE_DELAY}"
+assert RETRY_JITTER >= 0, f"RETRY_JITTER must be >= 0: {RETRY_JITTER}"
+assert RETRY_EXP_MAX >= 1, f"RETRY_EXP_MAX must be >= 1: {RETRY_EXP_MAX}"
+assert RETRY_EXP_ATTEMPTS >= 1, f"RETRY_EXP_ATTEMPTS must be >= 1: {RETRY_EXP_ATTEMPTS}"
 
 # =============================================================================
 # MODULE EXPORTS
@@ -137,4 +150,8 @@ __all__ = [
     "RETRY_MULTIPLIER",
     "RETRY_MAX_DELAY",
     "DEFAULT_RETRY_AFTER",
+    # Exponential backoff with jitter (ADR: 2025-12-27-cache-first-recent-data-fallback)
+    "RETRY_JITTER",
+    "RETRY_EXP_MAX",
+    "RETRY_EXP_ATTEMPTS",
 ]

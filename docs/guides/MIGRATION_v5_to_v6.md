@@ -1,7 +1,7 @@
 # Migration Guide: v5.0.0 → v6.0.0
 
 **Release Date**: 2025-11-20
-**ADR**: [0023-arrow-migration](../architecture/decisions/0023-arrow-migration.md)
+**ADR**: [0023-arrow-migration](/docs/architecture/decisions/0023-arrow-migration.md)
 
 ---
 
@@ -415,8 +415,8 @@ docker-compose restart clickhouse
 
 ## Getting Help
 
-- **Documentation**: [README.md](../../README.md)
-- **Architecture**: [ADR-0023](../architecture/decisions/0023-arrow-migration.md)
+- **Documentation**: [README.md](/README.md)
+- **Architecture**: [ADR-0023](/docs/architecture/decisions/0023-arrow-migration.md)
 - **Performance**: See `benchmark_arrow_scale_analysis.py` in repository root
 - **Issues**: [GitHub Issues](https://github.com/terrylica/gapless-crypto-clickhouse/issues)
 

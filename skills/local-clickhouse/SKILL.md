@@ -10,6 +10,7 @@ Install, configure, and validate local ClickHouse as an alternative to ClickHous
 ## Purpose
 
 Enable local ClickHouse deployment for:
+
 1. **Backtesting**: 50-100x faster queries (no network round-trip)
 2. **Development**: Offline work without Cloud credentials
 3. **Evaluation**: Try package before Cloud commitment
@@ -18,6 +19,7 @@ Enable local ClickHouse deployment for:
 ## When to Use
 
 Use this skill when:
+
 - **Local development**: Setting up development environment without Cloud
 - **Backtesting optimization**: Need faster query performance
 - **Offline mode**: Working without network access
@@ -28,6 +30,7 @@ Triggers: User mentions "local ClickHouse", "install clickhouse", "backtesting s
 ## Prerequisites
 
 **System Requirements**:
+
 - macOS (Homebrew) or Linux (apt/installer)
 - 2-4GB RAM minimum
 - 10GB+ disk space for data
@@ -39,6 +42,7 @@ Triggers: User mentions "local ClickHouse", "install clickhouse", "backtesting s
 ### Step 1: Install ClickHouse
 
 **macOS (Homebrew)**:
+
 ```bash
 # Install ClickHouse
 brew install clickhouse
@@ -48,6 +52,7 @@ clickhouse --version
 ```
 
 **Linux (Ubuntu/Debian)**:
+
 ```bash
 # Quick installer (recommended)
 curl https://clickhouse.com/ | sh
@@ -64,6 +69,7 @@ sudo apt-get install -y clickhouse-server clickhouse-client
 ### Step 2: Start ClickHouse Server
 
 **macOS (Homebrew)**:
+
 ```bash
 # Start server in background
 clickhouse server --daemon
@@ -73,6 +79,7 @@ clickhouse client --query "SELECT 1"
 ```
 
 **Linux (systemd)**:
+
 ```bash
 # Start and enable service
 sudo service clickhouse-server start
@@ -85,6 +92,7 @@ clickhouse-client --query "SELECT 1"
 ### Step 3: Configure Environment
 
 **Set Local Mode**:
+
 ```bash
 # Explicit local mode (recommended)
 export GCCH_MODE=local
@@ -94,6 +102,7 @@ export CLICKHOUSE_HOST=localhost
 ```
 
 **Environment Variables**:
+
 ```bash
 # Full local configuration
 export GCCH_MODE=local
@@ -107,6 +116,7 @@ export CLICKHOUSE_PASSWORD=
 ### Step 4: Verify Connection
 
 **Using Python**:
+
 ```python
 from gapless_crypto_clickhouse import probe
 
@@ -122,6 +132,7 @@ print(f"Mode: {mode}")  # Should be "local"
 ```
 
 **Using CLI**:
+
 ```bash
 # Quick connection test
 GCCH_MODE=local python -c "
@@ -136,6 +147,7 @@ print(f'Secure: {config.secure}')
 ### Step 5: Test with Real Data
 
 **Query with Auto-Ingestion**:
+
 ```python
 import os
 os.environ["GCCH_MODE"] = "local"
@@ -168,6 +180,7 @@ GCCH_MODE=auto        → Auto-detect:
 ```
 
 **Introspection**:
+
 ```python
 from gapless_crypto_clickhouse import probe
 
@@ -193,7 +206,9 @@ print(guide["macos"]["commands"])
 ## Troubleshooting
 
 **Issue**: "Connection refused" on port 8123
+
 - **Check**: Is ClickHouse server running?
+
   ```bash
   # macOS
   ps aux | grep clickhouse
@@ -201,45 +216,51 @@ print(guide["macos"]["commands"])
   # Linux
   sudo service clickhouse-server status
   ```
+
 - **Action**: Start server with `clickhouse server --daemon`
 
 **Issue**: "Command not found: clickhouse"
+
 - **Check**: Was ClickHouse installed correctly?
 - **macOS**: Run `brew install clickhouse`
 - **Linux**: Run `curl https://clickhouse.com/ | sh`
 
 **Issue**: Mode detected as "cloud" instead of "local"
+
 - **Check**: Is `CLICKHOUSE_HOST` set to a remote hostname?
 - **Action**: Set `export GCCH_MODE=local` explicitly
 
 **Issue**: Server crashes with memory error
+
 - **Check**: System has 2-4GB RAM available
 - **Action**: Increase available memory or reduce concurrent queries
 
 **Issue**: Permission denied errors
+
 - **Check**: ClickHouse data directory permissions
 - **Action**: Ensure user has write access to `/var/lib/clickhouse` (Linux)
 
 ## Port Reference
 
-| Mode | HTTP Port | Native Port | Secure |
-|------|-----------|-------------|--------|
-| Local | 8123 | 9000 | False |
-| Cloud | 8443 | 9440 | True |
+| Mode  | HTTP Port | Native Port | Secure |
+| ----- | --------- | ----------- | ------ |
+| Local | 8123      | 9000        | False  |
+| Cloud | 8443      | 9440        | True   |
 
 ## Performance Comparison
 
-| Metric | Local | Cloud |
-|--------|-------|-------|
-| Query latency | 50ms | 100-500ms |
-| First query (cold) | 50ms | 5-10s (idle resume) |
-| Network dependency | None | Required |
-| Credentials | None | Required |
-| Best for | Backtesting | Production |
+| Metric             | Local       | Cloud               |
+| ------------------ | ----------- | ------------------- |
+| Query latency      | 50ms        | 100-500ms           |
+| First query (cold) | 50ms        | 5-10s (idle resume) |
+| Network dependency | None        | Required            |
+| Credentials        | None        | Required            |
+| Best for           | Backtesting | Production          |
 
 ## Server Management
 
 **Start Server**:
+
 ```bash
 # macOS
 clickhouse server --daemon
@@ -249,6 +270,7 @@ sudo service clickhouse-server start
 ```
 
 **Stop Server**:
+
 ```bash
 # macOS
 pkill -f clickhouse-server
@@ -258,6 +280,7 @@ sudo service clickhouse-server stop
 ```
 
 **Check Logs**:
+
 ```bash
 # macOS (Homebrew)
 tail -f /opt/homebrew/var/log/clickhouse-server/clickhouse-server.log
@@ -272,17 +295,18 @@ This skill includes executable scripts for end-to-end validation of local ClickH
 
 ### Scripts Directory
 
-| Script | Purpose |
-|--------|---------|
-| `scripts/start-clickhouse.sh` | Start mise-installed ClickHouse server |
-| `scripts/deploy-schema.sh` | Deploy production schema (calls existing script) |
-| `scripts/ingest-sample-data.py` | Ingest real Binance data via `query_ohlcv()` |
-| `scripts/take-screenshot.py` | Capture Play UI screenshot via Playwright |
-| `scripts/validate-data.py` | Validate data integrity, output JSON evidence |
+| Script                          | Purpose                                          |
+| ------------------------------- | ------------------------------------------------ |
+| `scripts/start-clickhouse.sh`   | Start mise-installed ClickHouse server           |
+| `scripts/deploy-schema.sh`      | Deploy production schema (calls existing script) |
+| `scripts/ingest-sample-data.py` | Ingest real Binance data via `query_ohlcv()`     |
+| `scripts/take-screenshot.py`    | Capture Play UI screenshot via Playwright        |
+| `scripts/validate-data.py`      | Validate data integrity, output JSON evidence    |
 
 ### Running E2E Validation
 
 **Full workflow (manual)**:
+
 ```bash
 # 1. Start ClickHouse
 ./skills/local-clickhouse/scripts/start-clickhouse.sh
@@ -301,6 +325,7 @@ uv run python skills/local-clickhouse/scripts/validate-data.py
 ```
 
 **Via pytest (automated)**:
+
 ```bash
 # Run E2E tests (requires mise ClickHouse installed)
 uv run pytest tests/test_local_clickhouse_e2e.py -v
@@ -311,21 +336,23 @@ uv run pytest tests/test_local_clickhouse_e2e.py -v
 ### Evidence Output
 
 Scripts output evidence to `tests/screenshots/` (gitignored):
+
 - `play-ui-{timestamp}.png` - Playwright screenshots
 - `validation-{timestamp}.json` - Structured validation results
 
 ## References
 
-- **ADR-0044**: [Local ClickHouse Option](../../../docs/architecture/decisions/0044-local-clickhouse-option.md)
-- **ADR-0045**: [Local ClickHouse E2E Validation](../../../docs/architecture/decisions/0045-local-clickhouse-e2e-validation.md)
-- **Plan 0044**: [Implementation Plan](../../../docs/development/plan/0044-local-clickhouse-option/plan.md)
-- **Plan 0045**: [E2E Validation Plan](../../../docs/development/plan/0045-local-clickhouse-e2e/plan.md)
+- **ADR-0044**: [Local ClickHouse Option](/docs/architecture/decisions/0044-local-clickhouse-option.md)
+- **ADR-0045**: [Local ClickHouse E2E Validation](/docs/architecture/decisions/0045-local-clickhouse-e2e-validation.md)
+- **Plan 0044**: [Implementation Plan](/docs/development/plan/0044-local-clickhouse-option/plan.md)
+- **Plan 0045**: [E2E Validation Plan](/docs/development/plan/0045-local-clickhouse-e2e/plan.md)
 - **llms.txt**: AI agent documentation with deployment modes
 - **probe.py**: `get_deployment_modes()`, `check_local_clickhouse()`
 
 ## Next Steps
 
 After successful local setup:
+
 1. **Schema Creation**: Tables created automatically on first query
 2. **Data Ingestion**: Use `query_ohlcv()` with `auto_ingest=True`
 3. **E2E Validation**: Run `uv run pytest tests/test_local_clickhouse_e2e.py -v`

@@ -2,7 +2,7 @@
 
 **Version**: 6.0.0
 **Last Updated**: 2025-11-20
-**ADR**: [ADR-0013](../architecture/decisions/0013-autonomous-validation-framework.md)
+**ADR**: [ADR-0013](/docs/architecture/decisions/0013-autonomous-validation-framework.md)
 
 ---
 
@@ -273,7 +273,7 @@ def browser_context_args(browser_context_args):
 
 ## Screenshot Management
 
-See: [Screenshot Baseline Guide](./SCREENSHOT_BASELINE.md) for baseline management process.
+See: [Screenshot Baseline Guide](/docs/validation/SCREENSHOT_BASELINE.md) for baseline management process.
 
 ### Screenshot Capture Patterns
 
@@ -441,9 +441,9 @@ lsof -i :8123
 
 ## Related Documentation
 
-- [ADR-0013: Autonomous Validation Framework](../architecture/decisions/0013-autonomous-validation-framework.md)
-- [Screenshot Baseline Guide](./SCREENSHOT_BASELINE.md)
-- [Validation Overview](./OVERVIEW.md)
+- [ADR-0013: Autonomous Validation Framework](/docs/architecture/decisions/0013-autonomous-validation-framework.md)
+- [Screenshot Baseline Guide](/docs/validation/SCREENSHOT_BASELINE.md)
+- [Validation Overview](/docs/validation/OVERVIEW.md)
 - [Playwright Python Docs](https://playwright.dev/python/docs/intro)
 
 ---

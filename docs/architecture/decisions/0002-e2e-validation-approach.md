@@ -248,11 +248,11 @@ See `docs/development/plan/0002-e2e-validation/plan.yaml` for detailed execution
 
 ## References
 
-- [ADR-0001: QuestDB as Single Source of Truth](0001-questdb-single-source-truth.md)
-- [Implementation Plan Phase 1-3](../../development/plan/0001-questdb-refactor/plan.yaml)
+- [ADR-0001: QuestDB as Single Source of Truth](/docs/architecture/decisions/0001-questdb-single-source-truth.md)
+- [Implementation Plan Phase 1-3](/docs/development/plan/0001-questdb-refactor/plan.yaml)
 - Test Fixtures: `tests/conftest.py` (see repository root)
 
-> **Note**: This ADR references QuestDB, which was later replaced with ClickHouse. See [E2E Testing Guide](../../validation/E2E_TESTING_GUIDE.md) for current validation approach.
+> **Note**: This ADR references QuestDB, which was later replaced with ClickHouse. See [E2E Testing Guide](/docs/validation/E2E_TESTING_GUIDE.md) for current validation approach.
 
 ## Metadata
 

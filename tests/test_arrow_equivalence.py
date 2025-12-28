@@ -8,6 +8,7 @@ Critical for proving v6.0.0 correctness (ADR-0023 performance optimization).
 **ADR**: ADR-0024 (Comprehensive Validation Canonicity)
 """
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -17,13 +18,27 @@ from gapless_crypto_clickhouse.clickhouse import ClickHouseConnection
 def _normalize_for_comparison(df: pd.DataFrame) -> pd.DataFrame:
     """Normalize DataFrame for Arrow vs standard query comparison.
 
-    Handles two issues with clickhouse-connect's query_df_arrow():
+    Handles three issues with clickhouse-connect's query_df_arrow():
     1. Applies local timezone to timestamps (vs naive UTC from query_df())
     2. Returns Arrow-backed types that pandas convert_dtypes() can't handle
+    3. Returns pd.NA for nulls (vs np.nan from standard queries)
 
     This helper converts all columns to standard pandas types for comparison.
+    Fixes FutureWarning about NA/nan comparison that will break in pandas 3.x.
     """
     df = df.copy()
+
+    # First pass: normalize null values (pd.NA → np.nan)
+    # Arrow returns pd.NA, standard returns np.nan - must unify before comparison
+    for col in df.columns:
+        if df[col].isna().any():
+            # Convert column to object first, replace NA with nan, then back to original-compatible type
+            if pd.api.types.is_float_dtype(df[col]) or df[col].isna().all():
+                df[col] = df[col].astype("float64")  # float64 handles np.nan natively
+            elif pd.api.types.is_integer_dtype(df[col]):
+                df[col] = df[col].astype("Int64").astype("float64")  # Int64 → float64 for nan
+
+    # Second pass: normalize timestamps and Arrow-backed types
     for col in df.columns:
         dtype_str = str(df[col].dtype)
         # Handle Arrow-backed timestamp types (with or without timezone)

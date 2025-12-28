@@ -4,7 +4,7 @@
 **Date**: 2025-11-19
 **Deciders**: Terry Li
 **Related ADRs**: None
-**Related Plans**: [0017-parameter-aliases](../../development/plan/0017-parameter-aliases/plan.md)
+**Related Plans**: [0017-parameter-aliases](/docs/development/plan/0017-parameter-aliases/plan.md)
 
 ## Context and Problem Statement
 

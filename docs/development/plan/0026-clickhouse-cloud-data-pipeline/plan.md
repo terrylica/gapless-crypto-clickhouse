@@ -85,16 +85,16 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 
 #### Phase 2: Code Fix (secure Parameter)
 
-6. Add `secure` field to `ClickHouseConfig`:
+1. Add `secure` field to `ClickHouseConfig`:
    - Add `secure: bool = False` to dataclass
    - Load from `CLICKHOUSE_SECURE` environment variable in `from_env()`
    - Document in docstring
 
-7. Pass `secure` to clickhouse-connect client:
+2. Pass `secure` to clickhouse-connect client:
    - Modify `connection.py` line 93 to include `secure=self.config.secure`
    - Update connection error messages with Cloud troubleshooting
 
-8. Create `.env.cloud` template:
+3. Create `.env.cloud` template:
    - ClickHouse Cloud-specific configuration
    - Service hostname pattern
    - Port 8443 (HTTPS)
@@ -103,89 +103,90 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 
 #### Phase 3: Onboarding Skill Creation
 
-9. Initialize skill using marketplace script:
+1. Initialize skill using marketplace script:
 
    ```bash
    ~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/init_skill.py gapless-crypto-clickhouse-onboarding --path ./skills/
    ```
 
-10. Write `SKILL.md` (Workflow Pattern):
-    - YAML frontmatter with trigger phrases
-    - Step-by-step onboarding workflow (<5 minutes)
-    - When to use this skill
-    - How Claude should use bundled resources
+2. Write `SKILL.md` (Workflow Pattern):
+   - YAML frontmatter with trigger phrases
+   - Step-by-step onboarding workflow (<5 minutes)
+   - When to use this skill
+   - How Claude should use bundled resources
 
-11. Create `scripts/test_connection_cloud.py`:
-    - Connection validator with diagnostics
-    - Doppler environment check
-    - Test queries (version, user, table count)
-    - Actionable error messages
+3. Create `scripts/test_connection_cloud.py`:
+   - Connection validator with diagnostics
+   - Doppler environment check
+   - Test queries (version, user, table count)
+   - Actionable error messages
 
-12. Create `references/troubleshooting.md`:
-    - Common errors (connection refused, SSL/TLS, auth failed, timeout)
-    - Actionable fixes for each error
-    - ClickHouse Cloud-specific guidance
+4. Create `references/troubleshooting.md`:
+   - Common errors (connection refused, SSL/TLS, auth failed, timeout)
+   - Actionable fixes for each error
+   - ClickHouse Cloud-specific guidance
 
-13. Create `references/doppler-setup.md`:
-    - Doppler CLI installation
-    - Access verification (`doppler secrets --project aws-credentials --config prd`)
-    - Running scripts with Doppler (`doppler run --`)
+5. Create `references/doppler-setup.md`:
+   - Doppler CLI installation
+   - Access verification (`doppler secrets --project aws-credentials --config prd`)
+   - Running scripts with Doppler (`doppler run --`)
 
-14. Create `references/env-setup.md`:
-    - Local `.env` file creation (fallback)
-    - `.env.cloud` template usage
-    - Security warnings (never commit credentials)
+6. Create `references/env-setup.md`:
+   - Local `.env` file creation (fallback)
+   - `.env.cloud` template usage
+   - Security warnings (never commit credentials)
 
 #### Phase 4: Validation
 
-15. Validate skill with marketplace validator:
+1. Validate skill with marketplace validator:
 
-    ```bash
-    ~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py ./skills/gapless-crypto-clickhouse-onboarding/
-    ```
+   ```bash
+   ~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py ./skills/gapless-crypto-clickhouse-onboarding/
+   ```
 
-16. Test `secure` parameter with local Docker:
-    - Set `CLICKHOUSE_SECURE=false`
-    - Verify connection works as before
-    - Confirm backward compatibility
+2. Test `secure` parameter with local Docker:
+   - Set `CLICKHOUSE_SECURE=false`
+   - Verify connection works as before
+   - Confirm backward compatibility
 
-17. Update CLAUDE.md:
-    - Add "Company Employee Onboarding" section after "ClickHouse Cloud Setup"
-    - Use Link Farm pattern (absolute path to skill)
-    - Include "When to use" and "Key principle"
+3. Update CLAUDE.md:
+   - Add "Company Employee Onboarding" section after "ClickHouse Cloud Setup"
+   - Use Link Farm pattern (absolute path to skill)
+   - Include "When to use" and "Key principle"
 
 #### Phase 5: Testing
 
-18. Run tests with Cloud configuration:
+1. Run tests with Cloud configuration:
 
-    ```bash
-    uv run pytest tests/ -v
-    ```
+   ```bash
+   uv run pytest tests/ -v
+   ```
 
-19. Verify build succeeds:
-    ```bash
-    uv build
-    ```
+2. Verify build succeeds:
+
+   ```bash
+   uv build
+   ```
 
 #### Phase 6: Commit
 
-20. Create conventional commit:
+1. Create conventional commit:
 
-    ```
-    feat(cloud): add secure parameter + onboarding skill for company ClickHouse Cloud access
+   ```
+   feat(cloud): add secure parameter + onboarding skill for company ClickHouse Cloud access
 
-    - Add CLICKHOUSE_SECURE env var support for TLS/SSL connections
-    - Create gapless-crypto-clickhouse-onboarding skill (Claude Code CLI optimized)
-    - Add .env.cloud template for ClickHouse Cloud configuration
-    - Update CLAUDE.md with Company Employee Onboarding section
+   - Add CLICKHOUSE_SECURE env var support for TLS/SSL connections
+   - Create gapless-crypto-clickhouse-onboarding skill (Claude Code CLI optimized)
+   - Add .env.cloud template for ClickHouse Cloud configuration
+   - Update CLAUDE.md with Company Employee Onboarding section
 
-    Fixes critical bug preventing ClickHouse Cloud connections (missing secure=True).
-    Enables <15 minute onboarding for 3-10 company employees via Doppler or .env.
+   Fixes critical bug preventing ClickHouse Cloud connections (missing secure=True).
+   Enables <15 minute onboarding for 3-10 company employees via Doppler or .env.
 
-    Refs: ADR-0026
-    ```
+   Refs: ADR-0026
+   ```
 
-21. Log completion to `logs/0026-clickhouse-cloud-data-pipeline-20251121_234121.log`
+2. Log completion to `logs/0026-clickhouse-cloud-data-pipeline-20251121_234121.log`
 
 ### Success Criteria
 
@@ -230,8 +231,8 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 ### Related Work
 
 - **ADR-0025**: ClickHouse Cloud skills extraction (infrastructure workflows)
-- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](~/.claude/skills/skill-architecture/SKILL.md)
-- **Marketplace validator**: `~/.claude/plugins/marketplaces/anthropic-agent-skills/skill-creator/scripts/quick_validate.py`
+- **skill-architecture**: `Skill(plugin-dev:skill-architecture)`
+- **Marketplace validator**: `Skill(plugin-dev:plugin-validator)`
 
 ### Constraints
 
@@ -293,7 +294,7 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 
 ## References
 
-- **ADR-0026**: [`docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md`](docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md)
-- **Project Memory**: [`CLAUDE.md`](CLAUDE.md)
-- **skill-architecture**: [`~/.claude/skills/skill-architecture/SKILL.md`](~/.claude/skills/skill-architecture/SKILL.md)
+- **ADR-0026**: [`docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md`](/docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md)
+- **Project Memory**: [`CLAUDE.md`](/docs/development/plan/0026-clickhouse-cloud-data-pipeline/CLAUDE.md)
+- **skill-architecture**: `Skill(plugin-dev:skill-architecture)`
 - **Sub-Agent Reports**: tmp/data-pipeline-design/ (ephemeral)

@@ -4,7 +4,7 @@
 **Date**: 2025-11-19
 **Deciders**: Terry Li
 **Related ADRs**: None
-**Related Plans**: [0019-numpy-1x-compatibility](../../development/plan/0019-numpy-1x-compatibility/plan.md)
+**Related Plans**: [0019-numpy-1x-compatibility](/docs/development/plan/0019-numpy-1x-compatibility/plan.md)
 
 ## Context and Problem Statement
 

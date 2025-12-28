@@ -1,6 +1,6 @@
 # Plan 0039: Validation System Redundancy Cleanup
 
-**ADR**: [ADR-0039](../../../architecture/decisions/0039-validation-redundancy-cleanup.md)
+**ADR**: [ADR-0039](/docs/architecture/decisions/0039-validation-redundancy-cleanup.md)
 
 **Status**: Complete
 

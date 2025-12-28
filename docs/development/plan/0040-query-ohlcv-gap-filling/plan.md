@@ -1,6 +1,6 @@
 # Plan 0040: query_ohlcv() Gap Filling Implementation
 
-**ADR**: [ADR-0040](../../../architecture/decisions/0040-query-ohlcv-gap-filling.md)
+**ADR**: [ADR-0040](/docs/architecture/decisions/0040-query-ohlcv-gap-filling.md)
 
 **Status**: Complete
 

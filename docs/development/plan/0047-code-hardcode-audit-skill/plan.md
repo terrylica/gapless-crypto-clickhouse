@@ -1,6 +1,6 @@
 # Code Hardcode Audit Skill
 
-**ADR**: [0047](docs/architecture/decisions/0047-code-hardcode-audit-skill.md)
+**ADR**: [0047](/docs/architecture/decisions/0047-code-hardcode-audit-skill.md)
 **adr-id**: 0047
 **Status**: Completed
 **Last Updated**: 2025-11-26

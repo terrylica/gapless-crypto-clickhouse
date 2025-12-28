@@ -116,7 +116,7 @@ For local `.mmd` files, include them inline:
 ```markdown
 # Data Collection Pipeline
 
-See the complete flow in [01-collection-pipeline.mmd](./docs/diagrams/01-collection-pipeline.mmd)
+See the complete flow in [01-collection-pipeline.mmd](/docs/diagrams/docs/diagrams/01-collection-pipeline.mmd)
 ```
 
 ### Method 2: Inline Embedding
@@ -149,7 +149,7 @@ flowchart TD
 4. Embed image:
 
 ```markdown
-![Collection Pipeline](./assets/collection-pipeline.png)
+![Collection Pipeline](/docs/diagrams/assets/collection-pipeline.png)
 ```
 
 ### Method 4: VS Code Preview

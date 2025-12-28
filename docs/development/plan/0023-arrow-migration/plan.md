@@ -2,7 +2,7 @@
 
 **Author**: Claude Code
 **Created**: 2025-11-20
-**ADR**: [0023-arrow-migration](../../../architecture/decisions/0023-arrow-migration.md)
+**ADR**: [0023-arrow-migration](/docs/architecture/decisions/0023-arrow-migration.md)
 **Status**: In Progress
 
 ---

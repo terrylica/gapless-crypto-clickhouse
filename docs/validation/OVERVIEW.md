@@ -13,13 +13,13 @@ supersedes: ["1.0.0"]
 
 **Version**: v3.3.0+ (DuckDB persistence added)
 
-**v6.0.0 Compatibility**: CSV validation system unchanged in v6.0.0. The Apache Arrow migration ([ADR-0023](../architecture/decisions/0023-arrow-migration.md)) only affected ClickHouse query layer. CSV validation continues to use DuckDB persistence with identical API and performance characteristics.
+**v6.0.0 Compatibility**: CSV validation system unchanged in v6.0.0. The Apache Arrow migration ([ADR-0023](/docs/architecture/decisions/0023-arrow-migration.md)) only affected ClickHouse query layer. CSV validation continues to use DuckDB persistence with identical API and performance characteristics.
 
 **Related Validation Layers**:
 
-- For ClickHouse query validation, see [E2E Testing Guide](E2E_TESTING_GUIDE.md)
-- For query performance validation, see [ADR-0023](../architecture/decisions/0023-arrow-migration.md) and `benchmark_arrow_scale_analysis.py`
-- For validation architecture overview, see [Validation Architecture](ARCHITECTURE.md)
+- For ClickHouse query validation, see [E2E Testing Guide](/docs/validation/E2E_TESTING_GUIDE.md)
+- For query performance validation, see [ADR-0023](/docs/architecture/decisions/0023-arrow-migration.md) and `benchmark_arrow_scale_analysis.py`
+- For validation architecture overview, see [Validation Architecture](/docs/validation/ARCHITECTURE.md)
 
 ## Architecture Components
 
@@ -84,7 +84,7 @@ supersedes: ["1.0.0"]
 
 **Interface**: SQL query interface for flexible data exploration
 
-See [Storage Specification](STORAGE.md) for complete schema details.
+See [Storage Specification](/docs/validation/STORAGE.md) for complete schema details.
 
 ## Storage Backend
 
@@ -170,7 +170,7 @@ print(f"Total: {stats['total_validations']}")
 print(f"Avg errors: {stats['avg_errors']}")
 ```bash
 
-See [Query Patterns Guide](QUERY_PATTERNS.md) for complete examples.
+See [Query Patterns Guide](/docs/validation/QUERY_PATTERNS.md) for complete examples.
 
 ## Design Principles
 
@@ -297,7 +297,7 @@ correlation = df[["coverage_percentage", "total_errors"]].corr()
 
 ## Related Documentation
 
-- **Storage Specification**: [STORAGE.md](STORAGE.md)
-- **Query Patterns**: [QUERY_PATTERNS.md](QUERY_PATTERNS.md)
-- **Architecture Overview**: [OVERVIEW.md](../architecture/OVERVIEW.md)
-- **Test Suite**: [test_validation_storage.py](../../tests/test_validation_storage.py)
+- **Storage Specification**: [STORAGE.md](/docs/validation/STORAGE.md)
+- **Query Patterns**: [QUERY_PATTERNS.md](/docs/validation/QUERY_PATTERNS.md)
+- **Architecture Overview**: [OVERVIEW.md](/docs/architecture/OVERVIEW.md)
+- **Test Suite**: [test_validation_storage.py](/tests/test_validation_storage.py)

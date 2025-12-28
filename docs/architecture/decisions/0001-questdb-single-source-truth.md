@@ -2,7 +2,7 @@
 
 ## Status
 
-**Superseded by [ADR-0005: ClickHouse Migration](0005-clickhouse-migration.md)** (2025-11-17)
+**Superseded by [ADR-0005: ClickHouse Migration](/docs/architecture/decisions/0005-clickhouse-migration.md)** (2025-11-17)
 
 Originally: Accepted
 
@@ -217,7 +217,7 @@ See `docs/development/plan/0001-questdb-refactor/plan.yaml` for detailed impleme
 - [Colima vs Docker Desktop](https://github.com/abiosoft/colima)
 - [QuestDB Official Documentation](https://questdb.com/docs/)
 
-> **Note**: This ADR references QuestDB, which was later replaced with ClickHouse. See current architecture in [CURRENT_ARCHITECTURE_STATUS.yaml](../../CURRENT_ARCHITECTURE_STATUS.yaml).
+> **Note**: This ADR references QuestDB, which was later replaced with ClickHouse. See current architecture in [CURRENT_ARCHITECTURE_STATUS.yaml](/docs/CURRENT_ARCHITECTURE_STATUS.yaml).
 
 - [uv Python Package Manager](https://github.com/astral-sh/uv)
 

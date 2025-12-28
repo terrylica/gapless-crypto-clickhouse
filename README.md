@@ -94,6 +94,56 @@ uv tool install gapless-crypto-clickhouse
 pip install gapless-crypto-clickhouse
 ```
 
+### First Time? Start Here
+
+New to the package? Follow these steps to get started quickly:
+
+**1. Check your setup** (recommended):
+
+```python
+import gapless_crypto_clickhouse as gcch
+
+status = gcch.check_setup()
+print(f"Ready: {status['ready']}, Mode: {status['mode']}")
+
+# If issues found, print actionable fixes
+if not status["ready"]:
+    for issue in status["issues"]:
+        print(f"Issue: {issue['message']}")
+        print(f"Fix: {issue['fix']}")
+```
+
+**2. Initialize the database** (if needed):
+
+```bash
+gcch init    # Deploy schema to ClickHouse
+gcch check   # Verify everything works
+gcch status  # Show connection info and data counts
+```
+
+**3. Fetch your first data**:
+
+```python
+import gapless_crypto_clickhouse as gcch
+
+# Auto-downloads from Binance CDN if not cached
+df = gcch.query_ohlcv("BTCUSDT", "1h", "2024-01-01", "2024-01-31")
+print(df.head())
+```
+
+#### Deployment Modes
+
+- **Local** (development): `export GCCH_MODE=local` - Uses localhost ClickHouse
+- **Cloud** (production): Set `CLICKHOUSE_HOST` and `CLICKHOUSE_PASSWORD`
+- **Auto** (default): Detects based on environment
+
+For local ClickHouse installation help:
+
+```python
+from gapless_crypto_clickhouse import probe
+print(probe.get_local_installation_guide())
+```
+
 ### Database Setup (ClickHouse Cloud)
 
 This package uses **ClickHouse Cloud** as the single source of truth for persistent storage. Configure credentials via environment variables or Doppler:

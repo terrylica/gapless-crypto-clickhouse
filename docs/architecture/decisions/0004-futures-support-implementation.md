@@ -2,7 +2,7 @@
 
 ## Status
 
-**Superseded by [ADR-0005: ClickHouse Migration](0005-clickhouse-migration.md)** (2025-11-17)
+**Superseded by [ADR-0005: ClickHouse Migration](/docs/architecture/decisions/0005-clickhouse-migration.md)** (2025-11-17)
 
 Originally: Proposed (futures support with `instrument_type` column ported to ClickHouse)
 

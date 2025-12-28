@@ -124,6 +124,10 @@ from .network import (
     # Connection pool
     MAX_CONCURRENT_DOWNLOADS,
     RETRY_BASE_DELAY,
+    # Exponential backoff with jitter (ADR: 2025-12-27-cache-first-recent-data-fallback)
+    RETRY_EXP_ATTEMPTS,
+    RETRY_EXP_MAX,
+    RETRY_JITTER,
     # Retry configuration
     RETRY_MAX_ATTEMPTS,
     RETRY_MAX_DELAY,
@@ -218,6 +222,10 @@ __all__ = [
     "RETRY_MULTIPLIER",
     "RETRY_MAX_DELAY",
     "DEFAULT_RETRY_AFTER",
+    # Exponential backoff with jitter (ADR: 2025-12-27-cache-first-recent-data-fallback)
+    "RETRY_JITTER",
+    "RETRY_EXP_MAX",
+    "RETRY_EXP_ATTEMPTS",
     # === Binance ===
     # Type definitions
     "InstrumentType",

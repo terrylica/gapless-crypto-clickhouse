@@ -18,7 +18,7 @@ pip install gapless-crypto-clickhouse
 
 ## 📁 Example Files
 
-### 1. [simple_api_examples.py](simple_api_examples.py) ⭐ **NEW**
+### 1. [simple_api_examples.py](/examples/simple_api_examples.py) ⭐ **NEW**
 
 **Demonstrates:** Function-based API for simple data collection
 
@@ -35,7 +35,7 @@ pip install gapless-crypto-clickhouse
 uv run python examples/simple_api_examples.py
 ```
 
-### 2. [advanced_api_examples.py](advanced_api_examples.py) ⭐ **NEW**
+### 2. [advanced_api_examples.py](/examples/advanced_api_examples.py) ⭐ **NEW**
 
 **Demonstrates:** Class-based API for complex workflows
 
@@ -52,7 +52,7 @@ uv run python examples/simple_api_examples.py
 uv run python examples/advanced_api_examples.py
 ```
 
-### 3. [basic_data_collection.py](basic_data_collection.py)
+### 3. [basic_data_collection.py](/examples/basic_data_collection.py)
 
 **Demonstrates:** Basic data collection workflow
 
@@ -68,7 +68,7 @@ uv run python examples/advanced_api_examples.py
 uv run python examples/basic_data_collection.py
 ```
 
-### 4. [gap_filling_example.py](gap_filling_example.py)
+### 4. [gap_filling_example.py](/examples/gap_filling_example.py)
 
 **Demonstrates:** Gap detection and filling
 
@@ -85,7 +85,7 @@ uv run python examples/basic_data_collection.py
 uv run python examples/gap_filling_example.py
 ```
 
-### 3. [complete_workflow.py](complete_workflow.py)
+### 3. [complete_workflow.py](/examples/complete_workflow.py)
 
 **Demonstrates:** End-to-end data pipeline
 
@@ -175,8 +175,8 @@ All examples can be customized by modifying:
 
 ## 📚 Further Reading
 
-- [Main README](../README.md) - Package overview and installation
-- [API Documentation](../docs/) - Detailed API reference
+- [Main README](/README.md) - Package overview and installation
+- [API Documentation](/docs) - Detailed API reference
 - [GitHub Issues](https://github.com/terrylica/gapless-crypto-clickhouse/issues) - Report problems or request features
 
 ## 🤝 Contributing

@@ -2,7 +2,7 @@
 
 ClickHouse-based cryptocurrency data collection with zero-gap guarantee. 22x faster via Binance Public Data Repository with persistent database storage.
 
-> **Note**: This documentation provides supplementary API reference. For the primary guide, see the [README](../../README.md) which is deployed to PyPI.
+> **Note**: This documentation provides supplementary API reference. For the primary guide, see the [README](/README.md) which is deployed to PyPI.
 
 ## Quick Start
 

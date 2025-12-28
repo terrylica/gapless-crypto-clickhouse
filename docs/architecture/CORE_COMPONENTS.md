@@ -62,7 +62,7 @@ The `gapless-crypto-clickhouse` system consists of six primary components provid
 
 **Location**: `src/gapless_crypto_clickhouse/validation/csv_validator.py`
 
-**Documentation**: See [Validation Overview](../validation/OVERVIEW.md)
+**Documentation**: See [Validation Overview](/docs/validation/OVERVIEW.md)
 
 ## ValidationStorage
 
@@ -81,7 +81,7 @@ The `gapless-crypto-clickhouse` system consists of six primary components provid
 - AI agent-friendly structured output
 - Automatic schema migrations
 
-**Documentation**: See [Validation Storage Specification](../validation/STORAGE.md)
+**Documentation**: See [Validation Storage Specification](/docs/validation/STORAGE.md)
 
 ## AtomicCSVOperations
 
@@ -143,7 +143,7 @@ AtomicCSVOperations & SafeCSVMerger
 
 ## References
 
-- [Architecture Overview](OVERVIEW.md) - Complete architecture documentation
-- [Data Format Specification](DATA_FORMAT.md) - 11-column format details
-- [Validation System](../validation/OVERVIEW.md) - Complete validation pipeline
-- [ClickHouse Integration](OVERVIEW.md#clickhouse-integration-primary-storage-mode) - Database storage mode
+- [Architecture Overview](/docs/architecture/OVERVIEW.md) - Complete architecture documentation
+- [Data Format Specification](/docs/architecture/DATA_FORMAT.md) - 11-column format details
+- [Validation System](/docs/validation/OVERVIEW.md) - Complete validation pipeline
+- [ClickHouse Integration](/docs/architecture/OVERVIEW.md#clickhouse-integration-primary-storage-mode) - Database storage mode

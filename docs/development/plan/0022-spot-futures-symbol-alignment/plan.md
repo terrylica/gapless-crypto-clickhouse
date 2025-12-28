@@ -5,8 +5,8 @@
 **Status**: In Progress
 **Author**: Terry Li
 **Date**: 2025-11-20
-**Related ADR**: [ADR-0022 (Spot/Futures Symbol Alignment)](../../../architecture/decisions/0022-spot-futures-symbol-alignment.md)
-**Related ADR**: [ADR-0021 (UM Futures Support)](../../../architecture/decisions/0021-um-futures-support.md)
+**Related ADR**: [ADR-0022 (Spot/Futures Symbol Alignment)](/docs/architecture/decisions/0022-spot-futures-symbol-alignment.md)
+**Related ADR**: [ADR-0021 (UM Futures Support)](/docs/architecture/decisions/0021-um-futures-support.md)
 
 ---
 
@@ -29,7 +29,7 @@ Align spot and futures symbol coverage to 713 symbols each by using `binance-fut
 
 ### v4.0.0 Implementation Gap
 
-After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architecture/decisions/0021-um-futures-support.md)), a critical misalignment was identified:
+After implementing UM futures support in v4.0.0 ([ADR-0021](/docs/architecture/decisions/0021-um-futures-support.md)), a critical misalignment was identified:
 
 - **Spot**: 20 hardcoded USDT pairs in `BinancePublicDataCollector.known_symbols`
 - **Futures**: 713 validated symbols from `binance-futures-availability` package
@@ -119,7 +119,7 @@ After implementing UM futures support in v4.0.0 ([ADR-0021](../../../architectur
 
 - **Rejected**: Over-engineering, duplication, maintenance burden
 
-**See**: [ADR-0022](../../../architecture/decisions/0022-spot-futures-symbol-alignment.md) for complete analysis
+**See**: [ADR-0022](/docs/architecture/decisions/0022-spot-futures-symbol-alignment.md) for complete analysis
 
 ### Current State (v4.0.0)
 

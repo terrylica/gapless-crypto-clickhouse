@@ -1,6 +1,6 @@
 # Plan 0042: Documentation Rectification
 
-**ADR**: [ADR-0042](../../../architecture/decisions/0042-documentation-rectification.md)
+**ADR**: [ADR-0042](/docs/architecture/decisions/0042-documentation-rectification.md)
 
 **Status**: Complete
 

@@ -2,7 +2,7 @@
 
 **Version**: 6.0.0
 **Last Updated**: 2025-11-20
-**ADR**: [ADR-0024](../architecture/decisions/0024-comprehensive-validation-canonicity.md)
+**ADR**: [ADR-0024](/docs/architecture/decisions/0024-comprehensive-validation-canonicity.md)
 
 ---
 
@@ -46,9 +46,9 @@ This architecture ensures comprehensive validation across the data lifecycle: in
 
 **Documentation**:
 
-- [Validation Overview](OVERVIEW.md) - 5-layer pipeline details
-- [ValidationStorage Specification](STORAGE.md) - DuckDB schema and API
-- [Query Patterns](QUERY_PATTERNS.md) - Common validation queries
+- [Validation Overview](/docs/validation/OVERVIEW.md) - 5-layer pipeline details
+- [ValidationStorage Specification](/docs/validation/STORAGE.md) - DuckDB schema and API
+- [Query Patterns](/docs/validation/QUERY_PATTERNS.md) - Common validation queries
 
 ---
 
@@ -85,8 +85,8 @@ This architecture ensures comprehensive validation across the data lifecycle: in
 
 **Documentation**:
 
-- [E2E Testing Guide](E2E_TESTING_GUIDE.md) - Test writing, execution, debugging
-- [Screenshot Baseline Management](SCREENSHOT_BASELINE.md) - Visual regression workflow
+- [E2E Testing Guide](/docs/validation/E2E_TESTING_GUIDE.md) - Test writing, execution, debugging
+- [Screenshot Baseline Management](/docs/validation/SCREENSHOT_BASELINE.md) - Visual regression workflow
 
 ---
 
@@ -218,8 +218,8 @@ All validation layers align with project SLOs:
 
 ## References
 
-- [ADR-0013: Autonomous Validation Framework](../architecture/decisions/0013-autonomous-validation-framework.md) - E2E test design
-- [ADR-0023: Arrow Migration](../architecture/decisions/0023-arrow-migration.md) - Performance validation
-- [ADR-0024: Comprehensive Validation Canonicity](../architecture/decisions/0024-comprehensive-validation-canonicity.md) - This architecture
-- [Validation Overview](OVERVIEW.md) - Layer 1 details
-- [E2E Testing Guide](E2E_TESTING_GUIDE.md) - Layer 2 details
+- [ADR-0013: Autonomous Validation Framework](/docs/architecture/decisions/0013-autonomous-validation-framework.md) - E2E test design
+- [ADR-0023: Arrow Migration](/docs/architecture/decisions/0023-arrow-migration.md) - Performance validation
+- [ADR-0024: Comprehensive Validation Canonicity](/docs/architecture/decisions/0024-comprehensive-validation-canonicity.md) - This architecture
+- [Validation Overview](/docs/validation/OVERVIEW.md) - Layer 1 details
+- [E2E Testing Guide](/docs/validation/E2E_TESTING_GUIDE.md) - Layer 2 details

@@ -18,7 +18,7 @@ from tenacity import (
     retry,
     retry_if_exception_type,
     stop_after_attempt,
-    wait_incrementing,
+    wait_exponential_jitter,
 )
 
 # Import constants from centralized module (ADR-0046, ADR-0048)
@@ -31,6 +31,9 @@ from ..constants import (
     HTTP_OK,
     HTTP_RATE_LIMITED,
     RETRY_BASE_DELAY,
+    RETRY_EXP_ATTEMPTS,
+    RETRY_EXP_MAX,
+    RETRY_JITTER,
     RETRY_MAX_ATTEMPTS,
     TIMEFRAME_TO_MILLISECONDS,
     TIMEOUT_API,
@@ -66,11 +69,15 @@ class APIError(Exception):
 
 
 @retry(
-    stop=stop_after_attempt(API_MAX_RETRIES),
-    wait=wait_incrementing(start=1, increment=1, max=3),
+    stop=stop_after_attempt(RETRY_EXP_ATTEMPTS),
+    wait=wait_exponential_jitter(
+        initial=RETRY_BASE_DELAY,
+        max=RETRY_EXP_MAX,
+        jitter=RETRY_JITTER,
+    ),
     retry=retry_if_exception_type((httpx.TimeoutException, httpx.NetworkError, RateLimitError)),
     before_sleep=lambda retry_state: logger.warning(
-        f"Retry attempt {retry_state.attempt_number}/{API_MAX_RETRIES} "
+        f"Retry attempt {retry_state.attempt_number}/{RETRY_EXP_ATTEMPTS} "
         f"after error: {retry_state.outcome.exception()}"
     ),
 )
@@ -196,8 +203,8 @@ def fetch_gap_data(
     Args:
         symbol: Trading pair symbol (e.g., "BTCUSDT")
         timeframe: Timeframe string (e.g., "1h")
-        start_time: Gap start time
-        end_time: Gap end time
+        start_time: Gap start time (naive or aware UTC accepted)
+        end_time: Gap end time (naive or aware UTC accepted)
         instrument_type: "spot" or "futures-um"
 
     Returns:
@@ -208,6 +215,13 @@ def fetch_gap_data(
         ValueError: If instrument_type is invalid
         APIError: If API returns error response
     """
+    # Normalize timezone-aware inputs to naive UTC (codebase convention)
+    # Accepts both aware UTC and naive (assumed UTC) datetimes
+    if start_time.tzinfo is not None:
+        start_time = start_time.replace(tzinfo=None)
+    if end_time.tzinfo is not None:
+        end_time = end_time.replace(tzinfo=None)
+
     # Select API endpoint
     if instrument_type == "spot":
         base_url = SPOT_API_URL
@@ -249,7 +263,10 @@ def fetch_gap_data(
             # [10] taker_buy_quote, [11] ignore
 
             open_time_ms = int(kline[0])
-            open_time = datetime.fromtimestamp(open_time_ms / 1000, tz=timezone.utc)
+            # Convert to naive UTC: fromtimestamp with UTC tz, then strip tzinfo
+            open_time = datetime.fromtimestamp(open_time_ms / 1000, tz=timezone.utc).replace(
+                tzinfo=None
+            )
 
             # Only include candles within requested range
             if start_time <= open_time < end_time:
@@ -260,7 +277,10 @@ def fetch_gap_data(
                     "low": float(kline[3]),
                     "close": float(kline[4]),
                     "volume": float(kline[5]),
-                    "close_time": datetime.fromtimestamp(int(kline[6]) / 1000, tz=timezone.utc),
+                    # Convert close_time to naive UTC
+                    "close_time": datetime.fromtimestamp(
+                        int(kline[6]) / 1000, tz=timezone.utc
+                    ).replace(tzinfo=None),
                     "quote_asset_volume": float(kline[7]),
                     "number_of_trades": int(kline[8]),
                     "taker_buy_base_asset_volume": float(kline[9]),

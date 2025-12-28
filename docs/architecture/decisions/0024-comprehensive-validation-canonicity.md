@@ -11,7 +11,7 @@
 
 ## Implementation
 
-See [COMPLETION_REPORT.md](../../development/plan/0024-comprehensive-validation-canonicity/COMPLETION_REPORT.md) for full CI validation results and deliverables.
+See [COMPLETION_REPORT.md](/docs/development/plan/0024-comprehensive-validation-canonicity/COMPLETION_REPORT.md) for full CI validation results and deliverables.
 
 ## Context
 

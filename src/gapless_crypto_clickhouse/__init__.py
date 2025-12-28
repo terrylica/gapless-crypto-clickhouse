@@ -125,8 +125,100 @@ from .gap_filling.safe_file_operations import AtomicCSVOperations, SafeCSVMerger
 from .gap_filling.universal_gap_filler import UniversalGapFiller
 from .query_api import query_ohlcv  # v6.0.0: Unified query API with auto-ingestion (ADR-0023)
 
+
+def check_setup() -> dict:
+    """Verify SDK is ready to use.
+
+    ADR: 2025-12-21-sdk-first-run-experience
+
+    Single function that validates all prerequisites for using gapless-crypto-clickhouse.
+    Call this before your first query to catch configuration issues early.
+
+    Returns:
+        dict with keys:
+            - ready (bool): True if all checks pass
+            - mode (str): "local" or "cloud"
+            - clickhouse_running (bool): ClickHouse server reachable
+            - schema_exists (bool): ohlcv table exists
+            - data_count (int): Number of rows in ohlcv table
+            - issues (list): List of {"message": str, "fix": str} dicts
+
+    Example:
+        >>> import gapless_crypto_clickhouse as gcch
+        >>> status = gcch.check_setup()
+        >>> if not status["ready"]:
+        ...     for issue in status["issues"]:
+        ...         print(f"Issue: {issue['message']}")
+        ...         print(f"Fix: {issue['fix']}")
+    """
+    from .clickhouse import ClickHouseConfig, ClickHouseConnection
+
+    result: dict = {
+        "ready": True,
+        "mode": probe.get_current_mode(),
+        "clickhouse_running": False,
+        "schema_exists": False,
+        "data_count": 0,
+        "issues": [],
+    }
+
+    # Check connectivity
+    try:
+        config = ClickHouseConfig.from_env()
+        conn = ClickHouseConnection(config)
+
+        if conn.health_check():
+            result["clickhouse_running"] = True
+
+            # Check schema
+            if conn._table_exists("ohlcv"):
+                result["schema_exists"] = True
+                # Check data count
+                rows = conn.execute("SELECT COUNT(*) FROM ohlcv")
+                result["data_count"] = rows[0][0] if rows else 0
+            else:
+                result["ready"] = False
+                result["issues"].append({
+                    "message": "ohlcv table not found",
+                    "fix": "Run: gcch init (CLI) or use auto_ingest=True in query_ohlcv()",
+                })
+        else:
+            result["ready"] = False
+            result["issues"].append({
+                "message": "ClickHouse health check failed",
+                "fix": "Check ClickHouse server status and connectivity",
+            })
+
+        conn.client.close()
+
+    except Exception as e:
+        result["ready"] = False
+        result["clickhouse_running"] = False
+
+        # Provide specific guidance based on error type
+        error_str = str(e)
+        if "CLICKHOUSE_HOST" in error_str:
+            result["issues"].append({
+                "message": "ClickHouse credentials not configured",
+                "fix": "Set CLICKHOUSE_HOST and CLICKHOUSE_PASSWORD env vars, or use GCCH_MODE=local",
+            })
+        elif "NameResolutionError" in error_str or "Max retries" in error_str:
+            result["issues"].append({
+                "message": "Cannot reach ClickHouse server",
+                "fix": "Start ClickHouse: clickhouse server --daemon (local) or check Cloud credentials",
+            })
+        else:
+            result["issues"].append({
+                "message": f"Connection failed: {e}",
+                "fix": "Check probe.check_local_clickhouse() and probe.get_deployment_modes()",
+            })
+
+    return result
+
+
 __all__ = [
     # Simple function-based API (recommended for most users)
+    "check_setup",  # v17.1.0: Unified setup check (ADR: 2025-12-21-sdk-first-run-experience)
     "query_ohlcv",  # v6.0.0: Unified query API with auto-ingestion (ADR-0023)
     "fetch_data",
     "download",

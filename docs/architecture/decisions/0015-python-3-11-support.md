@@ -4,7 +4,7 @@
 **Date**: 2025-11-19
 **Deciders**: Terry Li
 **Related ADRs**: None
-**Related Plans**: [0015-python-3-11-support](../../development/plan/0015-python-3-11-support/plan.md)
+**Related Plans**: [0015-python-3-11-support](/docs/development/plan/0015-python-3-11-support/plan.md)
 
 ## Context and Problem Statement
 

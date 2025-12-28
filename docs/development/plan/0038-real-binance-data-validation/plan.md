@@ -1,6 +1,6 @@
 # Plan 0038: Real Binance Data Validation
 
-**ADR**: [ADR-0038](../../../architecture/decisions/0038-real-binance-data-validation.md)
+**ADR**: [ADR-0038](/docs/architecture/decisions/0038-real-binance-data-validation.md)
 
 **Status**: Complete
 

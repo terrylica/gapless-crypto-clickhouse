@@ -4,7 +4,7 @@
 
 **Date**: 2025-11-25
 
-**Context**: [Plan 0040](../../development/plan/0040-query-ohlcv-gap-filling/plan.md)
+**Context**: [Plan 0040](/docs/development/plan/0040-query-ohlcv-gap-filling/plan.md)
 
 ## Context and Problem Statement
 
@@ -99,6 +99,6 @@ Key components:
 
 ## Links
 
-- [Plan 0040](../../development/plan/0040-query-ohlcv-gap-filling/plan.md)
-- [ADR-0023](0023-arrow-migration.md) - Arrow optimization (confirmed working)
-- [ADR-0039](0039-validation-redundancy-cleanup.md) - e2e_core removal
+- [Plan 0040](/docs/development/plan/0040-query-ohlcv-gap-filling/plan.md)
+- [ADR-0023](/docs/architecture/decisions/0023-arrow-migration.md) - Arrow optimization (confirmed working)
+- [ADR-0039](/docs/architecture/decisions/0039-validation-redundancy-cleanup.md) - e2e_core removal

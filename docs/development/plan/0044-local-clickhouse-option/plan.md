@@ -1,6 +1,6 @@
 # Plan 0044: Local ClickHouse Deployment Option
 
-**ADR**: [ADR-0044](../../../architecture/decisions/0044-local-clickhouse-option.md)
+**ADR**: [ADR-0044](/docs/architecture/decisions/0044-local-clickhouse-option.md)
 
 **Status**: Done (pending commit)
 

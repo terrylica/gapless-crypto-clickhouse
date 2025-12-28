@@ -4,7 +4,7 @@
 **Created**: 2025-11-19
 **Updated**: 2025-11-19
 **Status**: Ready for Implementation
-**ADR**: [ADR-0012](../../../architecture/decisions/0012-documentation-accuracy-remediation.md) (adr-id=0012)
+**ADR**: [ADR-0012](/docs/architecture/decisions/0012-documentation-accuracy-remediation.md) (adr-id=0012)
 
 ---
 
@@ -805,7 +805,7 @@ grep -r "gapless_crypto_clickhouse" docs/ examples/ | \
 
 ## References
 
-- **ADR-0012**: [Documentation Accuracy Remediation Post-Fork](../../../architecture/decisions/0012-documentation-accuracy-remediation.md)
+- **ADR-0012**: [Documentation Accuracy Remediation Post-Fork](/docs/architecture/decisions/0012-documentation-accuracy-remediation.md)
 - **Agent Reports**: `/tmp/doc-audit/` (5-agent parallel investigation, 2025-11-19)
 - **ADR-0011**: PyPI Package Fork (context for fork transition)
 - **ADR-0005**: ClickHouse Migration (ClickHouse architecture background)

@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted
+Amended by [ADR-0044: Local ClickHouse Option](/docs/architecture/decisions/0044-local-clickhouse-option.md) (2025-11-26)
+
+Originally: Accepted
 
 ## Date
 

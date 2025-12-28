@@ -111,7 +111,7 @@ Using PYPI_TOKEN from Doppler
 ✅ Published to PyPI
 
 🔍 Step 5: Verifying on PyPI...
-✅ Verified: https://pypi.org/project/gapless-crypto-clickhouse/7.1.0/
+✅ Verified: <https://pypi.org/project/gapless-crypto-clickhouse/7.1.0/>
 
 ✅ Complete! Published v7.1.0 to PyPI in 28 seconds
 
@@ -440,10 +440,10 @@ uv publish --token "${PYPI_TOKEN}"
 
 ## Related Documentation
 
-- **ADR-0027**: [0027-local-only-pypi-publishing.md](../architecture/decisions/0027-local-only-pypi-publishing.md) - Architectural decision record
-- **Plan**: [plan.md](plan/0027-local-only-pypi-publishing/plan.md) - Implementation plan
-- **semantic-release Skill**: `~/.claude/skills/semantic-release/SKILL.md` - Local-first release workflow
-- **pypi-doppler Skill**: Doppler-based PyPI publishing (credential management)
+- **ADR-0027**: [0027-local-only-pypi-publishing.md](/docs/architecture/decisions/0027-local-only-pypi-publishing.md) - Architectural decision record
+- **Plan**: [plan.md](/docs/development/plan/0027-local-only-pypi-publishing/plan.md) - Implementation plan
+- **semantic-release Skill**: `Skill(itp:semantic-release)` - Local-first release workflow
+- **pypi-doppler Skill**: `Skill(itp:pypi-doppler)` - Doppler-based PyPI publishing (credential management)
 
 ---
 

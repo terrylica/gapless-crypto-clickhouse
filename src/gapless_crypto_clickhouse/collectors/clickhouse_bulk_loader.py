@@ -5,15 +5,16 @@ Ultra-fast historical data ingestion from Binance Public Data Repository to Clic
 Preserves 22x speedup advantage of CloudFront CDN + zero-gap guarantee via deterministic versioning.
 
 Architecture:
-    CloudFront ZIP → Extract (temp) → Parse (pandas) → Add _version → ClickHouse (Arrow) → Delete temp
+    CloudFront ZIP → Extract (temp) → Parse (pandas) → ClickHouse (Arrow) → Delete temp
+    ADR-0048: _version computed by ClickHouse-native cityHash64() DEFAULT (100x faster than Python SHA256)
 
 Performance:
     - Download: 22x faster than REST API (CloudFront CDN, unchanged from QuestDB)
-    - Ingestion: >100K rows/sec via clickhouse-connect Arrow bulk insert (ADR-0023)
+    - Ingestion: >1M rows/sec via clickhouse-connect Arrow bulk insert + native hashing (ADR-0048)
     - Storage: No persistent intermediate files (transient extraction only)
 
 Zero-Gap Guarantee:
-    - Deterministic _version hash ensures identical writes → identical versions
+    - Deterministic _version via cityHash64(timestamp, symbol, timeframe, instrument_type, OHLCV)
     - ReplacingMergeTree merges duplicate rows with same _version
     - Query with FINAL keyword returns deduplicated results
 
@@ -38,7 +39,6 @@ Usage:
         loader.ingest_month(symbol="BTCUSDT", timeframe="1h", year=2024, month=1)
 """
 
-import hashlib
 import logging
 import tempfile
 import urllib.request
@@ -51,7 +51,6 @@ from ..clickhouse.connection import ClickHouseConnection
 from ..constants import (
     CDN_URL_BY_INSTRUMENT,
     CSV_COLUMNS_BINANCE_RAW,
-    CSV_COLUMNS_SPOT_OUTPUT,
     VALID_INSTRUMENT_TYPES,
 )
 
@@ -307,7 +306,8 @@ class ClickHouseBulkLoader:
                 )
 
             else:
-                # Spot format: 11 columns, no header
+                # Spot format: 12 columns raw, no header (12th is "ignore" - always empty)
+                # ADR-0048: Parse all 12 columns to prevent silent data loss (ParserWarning fix)
                 df = pd.read_csv(
                     csv_path,
                     header=None,
@@ -324,15 +324,19 @@ class ClickHouseBulkLoader:
                         "number_of_trades",
                         "taker_buy_base_asset_volume",
                         "taker_buy_quote_asset_volume",
+                        "ignore",  # 12th column - always empty in spot CSV
                     ],
                 )
 
-                # Validate column count (ADR-0048: use centralized constants)
-                if len(df.columns) != CSV_COLUMNS_SPOT_OUTPUT:
+                # Validate raw column count BEFORE dropping (ADR-0048: use centralized constants)
+                if len(df.columns) != CSV_COLUMNS_BINANCE_RAW:
                     raise ValueError(
-                        f"Expected {CSV_COLUMNS_SPOT_OUTPUT} columns for spot format, got {len(df.columns)}. "
+                        f"Expected {CSV_COLUMNS_BINANCE_RAW} raw columns for spot format, got {len(df.columns)}. "
                         f"Columns: {df.columns.tolist()}"
                     )
+
+                # Drop the "ignore" column (consistent with futures handling)
+                df = df.drop(columns=["ignore"])
 
             # Convert timestamps (ms → datetime)
             df["timestamp"] = pd.to_datetime(df["open_time"], unit="ms", utc=True)
@@ -355,44 +359,12 @@ class ClickHouseBulkLoader:
         except pd.errors.ParserError as e:
             raise pd.errors.ParserError(f"Failed to parse CSV {csv_path}: {e}") from e
 
-    def _compute_version_hash(self, row: pd.Series) -> int:
-        """
-        Compute deterministic _version hash for ReplacingMergeTree deduplication.
-
-        Creates hash from (timestamp, OHLCV, symbol, timeframe, instrument_type).
-        Ensures identical writes → identical _version → consistent merge outcome.
-
-        Args:
-            row: pandas Series with OHLCV data
-
-        Returns:
-            UInt64 hash value (0 to 2^64-1)
-
-        Example:
-            row = pd.Series({'timestamp': ..., 'open': 50000, ...})
-            version = self._compute_version_hash(row)  # e.g., 1234567890
-        """
-        # Create deterministic string from row content
-        version_input = (
-            f"{row['timestamp']}"
-            f"{row['open']}{row['high']}{row['low']}{row['close']}{row['volume']}"
-            f"{row['symbol']}{row['timeframe']}{row['instrument_type']}"
-        )
-
-        # Use SHA256 for cryptographic hash (deterministic, collision-resistant)
-        hash_bytes = hashlib.sha256(version_input.encode("utf-8")).digest()
-
-        # Convert first 8 bytes to UInt64
-        version = int.from_bytes(hash_bytes[:8], byteorder="big", signed=False)
-
-        return version
-
     def _ingest_dataframe(self, df: pd.DataFrame) -> int:
         """
-        Ingest DataFrame to ClickHouse with deterministic versioning.
+        Ingest DataFrame to ClickHouse.
 
-        Adds _version (deterministic hash) and _sign (1 for active rows) columns
-        for ReplacingMergeTree deduplication.
+        ADR-0048: _version computed by ClickHouse-native cityHash64() DEFAULT expression.
+        _sign defaults to 1 in schema. No Python-side hash computation needed.
 
         Args:
             df: DataFrame with OHLCV data
@@ -413,13 +385,6 @@ class ClickHouseBulkLoader:
             # Prepare DataFrame for bulk ingestion
             df_ingest = df.copy()
 
-            # Add deterministic _version hash (row-by-row)
-            logger.debug("Computing deterministic _version hashes...")
-            df_ingest["_version"] = df_ingest.apply(self._compute_version_hash, axis=1)
-
-            # Add _sign column (1 for all active rows)
-            df_ingest["_sign"] = 1
-
             # Convert number_of_trades to integer (schema requires Int64)
             df_ingest["number_of_trades"] = df_ingest["number_of_trades"].astype("int64")
 
@@ -429,6 +394,7 @@ class ClickHouseBulkLoader:
                 df_ingest["funding_rate"] = None
 
             # Reorder columns to match ClickHouse schema
+            # Note: _version and _sign omitted - computed by ClickHouse DEFAULT expressions (ADR-0048)
             column_order = [
                 "timestamp",
                 "symbol",
@@ -446,12 +412,11 @@ class ClickHouseBulkLoader:
                 "taker_buy_base_asset_volume",
                 "taker_buy_quote_asset_volume",
                 "funding_rate",
-                "_version",
-                "_sign",
             ]
             df_ingest = df_ingest[column_order]
 
             # Bulk insert to ClickHouse
+            # _version computed by cityHash64() DEFAULT, _sign defaults to 1
             rows_inserted = self.connection.insert_dataframe(df_ingest, table="ohlcv")
 
             logger.info(f"Successfully ingested {rows_inserted} rows")

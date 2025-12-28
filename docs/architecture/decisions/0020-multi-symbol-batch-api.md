@@ -4,7 +4,7 @@
 **Date**: 2025-11-19
 **Deciders**: Terry Li
 **Related ADRs**: None
-**Related Plans**: [0020-multi-symbol-batch-api](../../development/plan/0020-multi-symbol-batch-api/plan.md)
+**Related Plans**: [0020-multi-symbol-batch-api](/docs/development/plan/0020-multi-symbol-batch-api/plan.md)
 
 ## Context and Problem Statement
 

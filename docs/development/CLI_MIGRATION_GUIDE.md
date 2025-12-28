@@ -476,8 +476,8 @@ if __name__ == '__main__':
 
 ## Need Help?
 
-- **Documentation**: [README.md](../../README.md)
-- **Examples**: [examples/](../../examples/)
+- **Documentation**: [README.md](/README.md)
+- **Examples**: [examples/](/examples)
 - **Issues**: [GitHub Issues](https://github.com/terrylica/gapless-crypto-clickhouse/issues)
 
 ---

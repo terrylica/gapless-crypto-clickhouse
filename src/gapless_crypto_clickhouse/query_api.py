@@ -26,10 +26,10 @@ Usage:
     df = query_ohlcv("BTCUSDT", "1h", "2024-01-01", "2024-01-31", instrument_type="futures-um")
 """
 
-import hashlib
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Optional, Union
+from urllib.error import HTTPError
 
 import pandas as pd
 
@@ -46,6 +46,123 @@ from .collectors.clickhouse_bulk_loader import ClickHouseBulkLoader
 from .gap_filling.rest_client import fetch_gap_data
 
 logger = logging.getLogger(__name__)
+
+
+# =============================================================================
+# HELPER FUNCTIONS (ADR: 2025-12-27-cache-first-recent-data-fallback)
+# =============================================================================
+
+
+def _is_recent_month(year: int, month: int, lookback_days: int = 2) -> bool:
+    """Check if month is within recent window where CDN archives may not exist.
+
+    CDN publishes monthly/daily archives with a lag. This function identifies
+    months that should fallback to REST API on HTTP 404.
+
+    Args:
+        year: Year to check
+        month: Month to check (1-12)
+        lookback_days: Days of CDN publication lag (default: 2)
+
+    Returns:
+        True if month is recent (within lookback window)
+
+    Examples:
+        >>> from datetime import datetime
+        >>> now = datetime.now()
+        >>> _is_recent_month(now.year, now.month)  # Current month
+        True
+        >>> _is_recent_month(2020, 1)  # Old month
+        False
+    """
+    now = datetime.now()
+
+    # Current month is always recent
+    if year == now.year and month == now.month:
+        return True
+
+    # Get last day of the specified month
+    if month == 12:
+        next_month_start = datetime(year + 1, 1, 1)
+    else:
+        next_month_start = datetime(year, month + 1, 1)
+    month_end = next_month_start - timedelta(seconds=1)
+
+    # Calculate cutoff (now - lookback)
+    cutoff = now - timedelta(days=lookback_days)
+
+    # Month is "recent" if it ends after the cutoff
+    return month_end >= cutoff
+
+
+def _ingest_recent_from_api(
+    connection: ClickHouseConnection,
+    symbol: str,
+    timeframe: str,
+    year: int,
+    month: int,
+    instrument_type: InstrumentType,
+) -> int:
+    """Ingest recent data from REST API when CDN unavailable.
+
+    Called as fallback when CDN returns HTTP 404 for recent months.
+    Reuses existing fetch_gap_data() infrastructure.
+
+    Args:
+        connection: Active ClickHouse connection
+        symbol: Trading pair symbol
+        timeframe: Timeframe string
+        year: Year to ingest
+        month: Month to ingest (1-12)
+        instrument_type: "spot" or "futures-um"
+
+    Returns:
+        Number of rows ingested
+
+    Raises:
+        Exception: If API fetch or insertion fails
+    """
+    # Calculate month boundaries
+    start_time = datetime(year, month, 1)
+    if month == 12:
+        end_time = datetime(year + 1, 1, 1)
+    else:
+        end_time = datetime(year, month + 1, 1)
+
+    # Cap end_time at current time for current month
+    now = datetime.now()
+    if end_time > now:
+        end_time = now
+
+    logger.info(
+        f"Ingesting {symbol} {timeframe} via REST API: "
+        f"{start_time.strftime('%Y-%m-%d')} to {end_time.strftime('%Y-%m-%d')}"
+    )
+
+    # Reuse existing REST client
+    api_data = fetch_gap_data(
+        symbol=symbol,
+        timeframe=timeframe,
+        start_time=start_time,
+        end_time=end_time,
+        instrument_type=instrument_type,
+    )
+
+    if not api_data:
+        logger.warning(f"No data from REST API for {symbol} {year}-{month:02d}")
+        return 0
+
+    # Convert to ClickHouse format and insert
+    df = _convert_api_data_to_dataframe(api_data, symbol, timeframe, instrument_type)
+    rows = connection.insert_dataframe(df, table="ohlcv")
+
+    logger.info(f"Ingested {rows} rows from REST API for {symbol} {year}-{month:02d}")
+    return rows
+
+
+# =============================================================================
+# PUBLIC API
+# =============================================================================
 
 
 def query_ohlcv(
@@ -197,7 +314,7 @@ def query_ohlcv(
                     f"(found {existing_count}/{expected_count} rows)"
                 )
                 _auto_ingest_date_range(
-                    loader, sym, timeframe, start_date, end_date, instrument_type
+                    loader, conn, sym, timeframe, start_date, end_date, instrument_type
                 )
             elif existing_count == 0:
                 logger.warning(f"{sym}: No data found in ClickHouse and auto_ingest={auto_ingest}")
@@ -347,17 +464,21 @@ def _estimate_expected_rows(start_date: str, end_date: str, timeframe: str) -> i
 
 def _auto_ingest_date_range(
     loader: ClickHouseBulkLoader,
+    connection: ClickHouseConnection,
     symbol: str,
     timeframe: str,
     start_date: str,
     end_date: str,
     instrument_type: InstrumentType,
 ) -> int:
-    """
-    Auto-ingest data for date range by month.
+    """Auto-ingest data for date range by month.
+
+    Falls back to REST API for recent months when CDN returns HTTP 404.
+    ADR: 2025-12-27-cache-first-recent-data-fallback
 
     Args:
         loader: ClickHouseBulkLoader instance
+        connection: Active ClickHouse connection (for REST API fallback)
         symbol: Trading pair symbol
         timeframe: Timeframe string
         start_date: Start date string
@@ -368,7 +489,7 @@ def _auto_ingest_date_range(
         Total rows ingested
 
     Raises:
-        Exception: If ingestion fails
+        Exception: If ingestion fails for non-recent months
     """
     start = pd.to_datetime(start_date)
     end = pd.to_datetime(end_date)
@@ -387,6 +508,23 @@ def _auto_ingest_date_range(
             rows = loader.ingest_month(symbol, timeframe, year, month)
             total_rows += rows
             logger.info(f"Ingested {rows} rows for {symbol} {year}-{month:02d}")
+        except HTTPError as e:
+            if e.code == 404 and _is_recent_month(year, month):
+                # Fallback to REST API for recent data (ADR: 2025-12-27)
+                logger.info(
+                    f"CDN archive unavailable for {symbol} {year}-{month:02d} "
+                    f"(HTTP 404), falling back to REST API"
+                )
+                rows = _ingest_recent_from_api(
+                    connection, symbol, timeframe, year, month, instrument_type
+                )
+                total_rows += rows
+            else:
+                # Log warning for historical data 404s or other HTTP errors
+                logger.warning(
+                    f"Failed to ingest {symbol} {year}-{month:02d}: {e} "
+                    f"(month may not exist yet)"
+                )
         except Exception as e:
             logger.warning(
                 f"Failed to ingest {symbol} {year}-{month:02d}: {e} (month may not exist yet)"
@@ -468,10 +606,10 @@ def _convert_api_data_to_dataframe(
     instrument_type: InstrumentType,
 ) -> pd.DataFrame:
     """
-    Convert REST API response to ClickHouse-ready DataFrame with _version hash.
+    Convert REST API response to ClickHouse-ready DataFrame.
 
-    Matches the exact column order and format used by ClickHouseBulkLoader
-    to ensure consistent _version hashes for ReplacingMergeTree deduplication.
+    ADR-0048: _version and _sign computed by ClickHouse DEFAULT expressions
+    (cityHash64 for _version, 1 for _sign). No Python-side hash computation needed.
 
     Args:
         api_data: List of candle dictionaries from REST API
@@ -500,23 +638,11 @@ def _convert_api_data_to_dataframe(
     # Add funding_rate (NULL for gap filling)
     df["funding_rate"] = None
 
-    # Compute deterministic _version hash (matches ClickHouseBulkLoader)
-    df["_version"] = df.apply(
-        lambda row: _compute_version_hash(row, symbol, timeframe, instrument_type),
-        axis=1,
-    )
-
-    # Add _sign column (1 for active rows)
-    df["_sign"] = 1
-
     # Convert number_of_trades to int64 (schema requirement)
     df["number_of_trades"] = df["number_of_trades"].astype("int64")
 
-    # Ensure timestamps are timezone-aware UTC
-    df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
-    df["close_time"] = pd.to_datetime(df["close_time"], utc=True)
-
     # Reorder columns to match ClickHouse schema
+    # Note: _version and _sign omitted - computed by ClickHouse DEFAULT expressions (ADR-0048)
     column_order = [
         "timestamp",
         "symbol",
@@ -534,45 +660,6 @@ def _convert_api_data_to_dataframe(
         "taker_buy_base_asset_volume",
         "taker_buy_quote_asset_volume",
         "funding_rate",
-        "_version",
-        "_sign",
     ]
 
     return df[column_order]
-
-
-def _compute_version_hash(
-    row: pd.Series,
-    symbol: str,
-    timeframe: str,
-    instrument_type: str,
-) -> int:
-    """
-    Compute deterministic _version hash for ReplacingMergeTree deduplication.
-
-    Uses same algorithm as ClickHouseBulkLoader._compute_version_hash()
-    to ensure identical data → identical _version → proper deduplication.
-
-    Args:
-        row: pandas Series with OHLCV data
-        symbol: Trading pair symbol
-        timeframe: Timeframe string
-        instrument_type: Instrument type
-
-    Returns:
-        UInt64 hash value (0 to 2^64-1)
-    """
-    # Create deterministic string from row content
-    version_input = (
-        f"{row['timestamp']}"
-        f"{row['open']}{row['high']}{row['low']}{row['close']}{row['volume']}"
-        f"{symbol}{timeframe}{instrument_type}"
-    )
-
-    # Use SHA256 for cryptographic hash (deterministic, collision-resistant)
-    hash_bytes = hashlib.sha256(version_input.encode("utf-8")).digest()
-
-    # Convert first 8 bytes to UInt64
-    version = int.from_bytes(hash_bytes[:8], byteorder="big", signed=False)
-
-    return version

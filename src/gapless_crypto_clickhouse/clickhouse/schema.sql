@@ -42,8 +42,19 @@ CREATE TABLE IF NOT EXISTS ohlcv (
     -- Futures-specific data (ADR-0021, v3.2.0+)
     funding_rate Nullable(Float64) CODEC(Gorilla, LZ4),  -- NULL for spot, initially NULL for futures
 
-    -- Deduplication support (application-level, preserves zero-gap guarantee)
-    _version UInt64 CODEC(Delta, LZ4),  -- Deterministic hash of row content
+    -- Deduplication support (ClickHouse-native, preserves zero-gap guarantee)
+    -- ADR-0048: cityHash64() computed at INSERT time (100x faster than Python SHA256)
+    _version UInt64 DEFAULT cityHash64(
+        toString(timestamp),
+        symbol,
+        timeframe,
+        instrument_type,
+        toString(open),
+        toString(high),
+        toString(low),
+        toString(close),
+        toString(volume)
+    ) CODEC(Delta, LZ4),  -- Deterministic hash of row content
     _sign Int8 DEFAULT 1                -- ReplacingMergeTree sign (1 for active rows)
 
 ) ENGINE = ReplacingMergeTree(_version)
@@ -64,8 +75,10 @@ SETTINGS
 
 -- Rationale:
 -- 1. ReplacingMergeTree(_version): Handles duplicates via background merges
---    - _version is deterministic hash of (timestamp, OHLCV, symbol, timeframe, instrument_type)
+--    - _version computed via ClickHouse-native cityHash64() at INSERT time (ADR-0048)
+--    - Input: (timestamp, symbol, timeframe, instrument_type, OHLCV prices)
 --    - Identical writes → identical _version → consistent merge outcome
+--    - 100x faster than Python-side SHA256 (previous approach)
 --    - Preserves zero-gap guarantee via deterministic deduplication
 --
 -- 2. ORDER BY composite key: (symbol, timeframe, toStartOfHour(timestamp), timestamp) [ADR-0034]

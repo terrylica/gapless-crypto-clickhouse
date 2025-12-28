@@ -2,7 +2,7 @@
 
 ## Status
 
-**Superseded by [ADR-0005: ClickHouse Migration](0005-clickhouse-migration.md)** (2025-11-17)
+**Superseded by [ADR-0005: ClickHouse Migration](/docs/architecture/decisions/0005-clickhouse-migration.md)** (2025-11-17)
 
 Originally: Proposed (validated at 53.7M rows with QuestDB, findings ported to ClickHouse)
 
@@ -761,7 +761,7 @@ This ADR does NOT trigger a semantic release (documentation-only change).
 
 ## Implementation Plan
 
-See detailed plan: [docs/development/plan/0003-questdb-schema-robustness/plan.yaml](../../development/plan/0003-questdb-schema-robustness/plan.yaml)
+See detailed plan: [docs/development/plan/0003-questdb-schema-robustness/plan.yaml](/docs/development/plan/0003-questdb-schema-robustness/plan.yaml)
 
 **High-level timeline**:
 
@@ -774,12 +774,12 @@ See detailed plan: [docs/development/plan/0003-questdb-schema-robustness/plan.ya
 
 ## References
 
-- [ADR-0001: QuestDB Single Source of Truth](./0001-questdb-single-source-truth.md) - Established single unified table design
-- [ADR-0002: E2E Validation Approach](./0002-e2e-validation-approach.md) - Defined validation pipeline structure
-- [Architecture Overview](../OVERVIEW.md) - SLO definitions and data flow
-- [Data Format Specification](../DATA_FORMAT.md) - 11-column OHLCV format
-- [Validation Storage Specification](../../validation/STORAGE.md) - DuckDB persistence for validation results
-- [Current Architecture Status](../../CURRENT_ARCHITECTURE_STATUS.yaml) - Current production state
+- [ADR-0001: QuestDB Single Source of Truth](/docs/architecture/decisions/0001-questdb-single-source-truth.md) - Established single unified table design
+- [ADR-0002: E2E Validation Approach](/docs/architecture/decisions/0002-e2e-validation-approach.md) - Defined validation pipeline structure
+- [Architecture Overview](/docs/architecture/OVERVIEW.md) - SLO definitions and data flow
+- [Data Format Specification](/docs/architecture/DATA_FORMAT.md) - 11-column OHLCV format
+- [Validation Storage Specification](/docs/validation/STORAGE.md) - DuckDB persistence for validation results
+- [Current Architecture Status](/docs/CURRENT_ARCHITECTURE_STATUS.yaml) - Current production state
 
 > **Note**: This ADR references QuestDB, which was later replaced with ClickHouse. Futures support was successfully implemented in ClickHouse with 12-column format.
 
@@ -789,7 +789,7 @@ See detailed plan: [docs/development/plan/0003-questdb-schema-robustness/plan.ya
 - **Date**: 2025-01-15
 - **Authors**: gapless-crypto-data team
 - **Status**: Proposed
-- **Related Plans**: [docs/development/plan/0003-questdb-schema-robustness/plan.yaml](../../development/plan/0003-questdb-schema-robustness/plan.yaml)
+- **Related Plans**: [docs/development/plan/0003-questdb-schema-robustness/plan.yaml](/docs/development/plan/0003-questdb-schema-robustness/plan.yaml)
 - **Depends On**: ADR-0001 (QuestDB single table design), ADR-0002 (validation pipeline)
 - **Supersedes**: None
 - **Superseded By**: None

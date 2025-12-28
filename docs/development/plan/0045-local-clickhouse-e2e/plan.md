@@ -1,6 +1,6 @@
 # Plan 0045: Local ClickHouse E2E Validation Workflow
 
-**ADR**: [ADR-0045](../../../architecture/decisions/0045-local-clickhouse-e2e-validation.md)
+**ADR**: [ADR-0045](/docs/architecture/decisions/0045-local-clickhouse-e2e-validation.md)
 
 **Status**: Done
 

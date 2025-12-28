@@ -88,101 +88,102 @@ Local Machine (scripts/publish-to-pypi.sh)
 
 #### Phase 2: Configuration Simplification
 
-6. Remove `publishCmd` from `.releaserc.json`:
+1. Remove `publishCmd` from `.releaserc.json`:
    - Delete lines 97-98: `"publishCmd": "UV_PUBLISH_TOKEN..."`
    - Add `_comment` field explaining local-only publishing
 
-7. Remove `uv build` from `prepareCmd`:
+2. Remove `uv build` from `prepareCmd`:
    - Line 96: Remove `&& uv build` from command chain
    - Versions update only, building happens locally
 
 #### Phase 3: Script Safeguards
 
-8. Add CI detection guards to `scripts/publish-to-pypi.sh`:
+1. Add CI detection guards to `scripts/publish-to-pypi.sh`:
    - After line 6 (`set -e`)
    - Check for CI environment variables (CI, GITHUB_ACTIONS, GITLAB_CI, JENKINS_URL, CIRCLECI)
    - Exit with error if CI detected
 
-9. Add repository verification:
+2. Add repository verification:
    - After CI guards
    - Check GITHUB_REPOSITORY matches expected value
    - Prevent fork abuse
 
 #### Phase 4: Documentation Updates
 
-10. Update `docs/development/PUBLISHING.md`:
-    - Add critical warning banner at top
-    - Add "Why Local-Only Publishing?" section
-    - Add "Complete Release Workflow" section
-    - Add "Safety Mechanisms" section
-    - Update troubleshooting
+1. Update `docs/development/PUBLISHING.md`:
+   - Add critical warning banner at top
+   - Add "Why Local-Only Publishing?" section
+   - Add "Complete Release Workflow" section
+   - Add "Safety Mechanisms" section
+   - Update troubleshooting
 
-11. Update `CLAUDE.md`:
-    - Add "PyPI Publishing Architecture" section
-    - Document workspace-wide policy
-    - Reference PUBLISHING.md
+2. Update `CLAUDE.md`:
+   - Add "PyPI Publishing Architecture" section
+   - Document workspace-wide policy
+   - Reference PUBLISHING.md
 
-12. Add comment to `.github/workflows/release.yml`:
-    - After `semantic-release` step
-    - Explain no PyPI publishing happens in CI
+3. Add comment to `.github/workflows/release.yml`:
+   - After `semantic-release` step
+   - Explain no PyPI publishing happens in CI
 
 #### Phase 5: Validation
 
-13. Test GitHub Actions workflow:
+1. Test GitHub Actions workflow:
 
-    ```bash
-    # Push a test commit, verify GitHub release created
-    # Check workflow logs for no publishing attempt
-    ```
+   ```bash
+   # Push a test commit, verify GitHub release created
+   # Check workflow logs for no publishing attempt
+   ```
 
-14. Test local publishing script:
+2. Test local publishing script:
 
-    ```bash
-    ./scripts/publish-to-pypi.sh
-    # Verify executes successfully
-    ```
+   ```bash
+   ./scripts/publish-to-pypi.sh
+   # Verify executes successfully
+   ```
 
-15. Test CI detection:
+3. Test CI detection:
 
-    ```bash
-    CI=true ./scripts/publish-to-pypi.sh
-    # Verify blocks with error message
-    ```
+   ```bash
+   CI=true ./scripts/publish-to-pypi.sh
+   # Verify blocks with error message
+   ```
 
-16. Verify existing workflows unchanged:
-    ```bash
-    # CI tests, E2E validation should continue working
-    ```
+4. Verify existing workflows unchanged:
+
+   ```bash
+   # CI tests, E2E validation should continue working
+   ```
 
 #### Phase 6: Commit
 
-17. Create conventional commit:
+1. Create conventional commit:
 
-    ```
-    feat(publish): enforce local-only PyPI publishing workspace-wide
+   ```
+   feat(publish): enforce local-only PyPI publishing workspace-wide
 
-    Remove all CI/CD publishing capability to guarantee local-only workflow:
-    - DELETE publishCmd from .releaserc.json (cleanest configuration)
-    - REMOVE uv build from prepareCmd (versioning-only in CI)
-    - ADD CI detection guards to scripts/publish-to-pypi.sh
-    - ADD repository verification (prevent fork abuse)
-    - UPDATE PUBLISHING.md with local-only architecture
-    - UPDATE CLAUDE.md with workspace policy
-    - ADD release.yml comment explaining no CI publishing
+   Remove all CI/CD publishing capability to guarantee local-only workflow:
+   - DELETE publishCmd from .releaserc.json (cleanest configuration)
+   - REMOVE uv build from prepareCmd (versioning-only in CI)
+   - ADD CI detection guards to scripts/publish-to-pypi.sh
+   - ADD repository verification (prevent fork abuse)
+   - UPDATE PUBLISHING.md with local-only architecture
+   - UPDATE CLAUDE.md with workspace policy
+   - ADD release.yml comment explaining no CI publishing
 
-    This enforces workspace-wide policy: NO CI/CD for PyPI publishing.
-    All repos use pypi-doppler skill for local publishing only.
+   This enforces workspace-wide policy: NO CI/CD for PyPI publishing.
+   All repos use pypi-doppler skill for local publishing only.
 
-    Benefits:
-    - Guaranteed local-only (no config for CI publishing exists)
-    - 20-30s faster CI (no building/publishing)
-    - Cleanest config (minimal complexity)
-    - Defense-in-depth (multiple safeguards)
+   Benefits:
+   - Guaranteed local-only (no config for CI publishing exists)
+   - 20-30s faster CI (no building/publishing)
+   - Cleanest config (minimal complexity)
+   - Defense-in-depth (multiple safeguards)
 
-    Refs: ADR-0027
-    ```
+   Refs: ADR-0027
+   ```
 
-18. Log completion to `logs/0027-local-only-pypi-publishing-20251122_005327.log`
+2. Log completion to `logs/0027-local-only-pypi-publishing-20251122_005327.log`
 
 ### Success Criteria
 
@@ -240,8 +241,8 @@ Local Machine (scripts/publish-to-pypi.sh)
 ### Related Work
 
 - **ADR-0026**: ClickHouse Cloud data pipeline (hybrid workflow origin)
-- **semantic-release Skill**: [`~/.claude/skills/semantic-release/SKILL.md`](~/.claude/skills/semantic-release/SKILL.md)
-- **pypi-doppler Skill**: Local PyPI publishing with Doppler credential management
+- **semantic-release Skill**: `Skill(itp:semantic-release)`
+- **pypi-doppler Skill**: `Skill(itp:pypi-doppler)` - Local PyPI publishing with Doppler credential management
 
 ### Constraints
 
@@ -299,7 +300,7 @@ Local Machine (scripts/publish-to-pypi.sh)
 
 ## References
 
-- **ADR-0027**: [`docs/architecture/decisions/0027-local-only-pypi-publishing.md`](docs/architecture/decisions/0027-local-only-pypi-publishing.md)
-- **Project Memory**: [`CLAUDE.md`](CLAUDE.md)
-- **semantic-release Skill**: [`~/.claude/skills/semantic-release/SKILL.md`](~/.claude/skills/semantic-release/SKILL.md)
+- **ADR-0027**: [`docs/architecture/decisions/0027-local-only-pypi-publishing.md`](/docs/architecture/decisions/0027-local-only-pypi-publishing.md)
+- **Project Memory**: [`CLAUDE.md`](/docs/development/plan/0027-local-only-pypi-publishing/CLAUDE.md)
+- **semantic-release Skill**: `Skill(itp:semantic-release)`
 - **Sub-Agent Reports**: Ephemeral (in-memory during planning)

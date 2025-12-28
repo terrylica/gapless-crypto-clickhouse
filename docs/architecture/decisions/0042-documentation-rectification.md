@@ -52,7 +52,7 @@ Implement systematic documentation rectification with:
 
 ## References
 
-- [ADR-0011](0011-pypi-package-fork-clickhouse.md): PyPI package fork
-- [ADR-0012](0012-documentation-accuracy-remediation.md): Cache path preservation
-- [ADR-0034](0034-schema-optimization-prop-trading.md): Schema optimization
-- [Plan-0042](../../development/plan/0042-documentation-rectification/plan.md): Implementation plan
+- [ADR-0011](/docs/architecture/decisions/0011-pypi-package-fork-clickhouse.md): PyPI package fork
+- [ADR-0012](/docs/architecture/decisions/0012-documentation-accuracy-remediation.md): Cache path preservation
+- [ADR-0034](/docs/architecture/decisions/0034-schema-optimization-prop-trading.md): Schema optimization
+- [Plan-0042](/docs/development/plan/0042-documentation-rectification/plan.md): Implementation plan

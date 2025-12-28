@@ -170,8 +170,8 @@ If you prefer not to use a single Doppler token with access to multiple projects
 
 - [Doppler Service Tokens Documentation](https://docs.doppler.com/docs/service-tokens)
 - [GitHub Actions Secrets Documentation](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
-- [ADR-0037 Production Validation](../../architecture/decisions/0037-release-validation-observability.md) - Issue #5
-- [Plan 0037](plan.md) - Full implementation plan
+- [ADR-0037 Production Validation](/docs/development/architecture/decisions/0037-release-validation-observability.md) - Issue #5
+- [Plan 0037](/docs/development/plan/0037-release-validation/plan.md) - Full implementation plan
 
 ---
 

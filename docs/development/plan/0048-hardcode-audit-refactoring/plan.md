@@ -1,6 +1,6 @@
 # Hardcode Audit and Refactoring Plan
 
-**ADR**: [0048](../../../architecture/decisions/0048-hardcode-audit-refactoring.md)
+**ADR**: [0048](/docs/architecture/decisions/0048-hardcode-audit-refactoring.md)
 **adr-id**: 0048
 **Status**: Complete
 **Last Updated**: 2025-11-26
