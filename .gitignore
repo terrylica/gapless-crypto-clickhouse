@@ -87,3 +87,9 @@ src/gapless_crypto_clickhouse/sample_data/
 
 # E2E test artifacts (ADR-0045)
 tests/screenshots/
+
+# Local Claude Code config
+.claude/
+
+# Linting tool output
+.lint-relative-paths-results.txt
