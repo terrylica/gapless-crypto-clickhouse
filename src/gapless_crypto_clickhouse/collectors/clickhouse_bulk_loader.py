@@ -338,9 +338,13 @@ class ClickHouseBulkLoader:
                 # Drop the "ignore" column (consistent with futures handling)
                 df = df.drop(columns=["ignore"])
 
-            # Convert timestamps (ms → datetime)
-            df["timestamp"] = pd.to_datetime(df["open_time"], unit="ms", utc=True)
-            df["close_time"] = pd.to_datetime(df["close_time"], unit="ms", utc=True)
+            # Convert timestamps (auto-detect unit: ms for pre-2025, µs for 2025+)
+            # Binance changed CSV format from milliseconds to microseconds starting 2025
+            # Milliseconds: ~1e12 (13 digits), Microseconds: ~1e15 (16 digits)
+            open_time_sample = df["open_time"].iloc[0]
+            timestamp_unit = "us" if open_time_sample > 1e14 else "ms"
+            df["timestamp"] = pd.to_datetime(df["open_time"], unit=timestamp_unit, utc=True)
+            df["close_time"] = pd.to_datetime(df["close_time"], unit=timestamp_unit, utc=True)
 
             # Drop open_time (redundant with timestamp)
             df = df.drop(columns=["open_time"])
