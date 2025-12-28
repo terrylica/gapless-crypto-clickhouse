@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.0.4...v17.1.0) (2025-12-28)
+
+### Features
+
+* **query:** add REST API fallback for recent data when CDN unavailable ([8edb4b0](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8edb4b0f110f7427d28ce797478e3d745fdddfef))
+
 ## [17.0.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.0.3...v17.0.4) (2025-12-10)
 
 ### Bug Fixes
