@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.2.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.2.1...v17.2.2) (2025-12-28)
+
+### Bug Fixes
+
+* **docs:** fix 51 broken links found by lychee ([40403f8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/40403f8412c84776d60e31262df09b3948cdb3ff)), closes [DATA_COLLECTION.md#gap-detection](https://github.com/terrylica/DATA_COLLECTION.md/issues/gap-detection)
+
 ## [17.2.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.2.0...v17.2.1) (2025-12-28)
 
 ### Bug Fixes
