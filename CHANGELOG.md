@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.2.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.1.0...v17.2.0) (2025-12-28)
+
+### Features
+
+* use importlib.metadata for version management ([da938e9](https://github.com/terrylica/gapless-crypto-clickhouse/commit/da938e9f384f4ea763126406e368c8f173d5652e))
+
 ## [17.1.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.0.4...v17.1.0) (2025-12-28)
 
 ### Features
