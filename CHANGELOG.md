@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.2.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.2.0...v17.2.1) (2025-12-28)
+
+### Bug Fixes
+
+* **loader:** auto-detect timestamp unit for Binance 2025 format change ([c638ad3](https://github.com/terrylica/gapless-crypto-clickhouse/commit/c638ad3a3683349c0b42f1e1ea570ddeab61b695))
+
+### Documentation
+
+* update coverage targets and CLI note ([8d40546](https://github.com/terrylica/gapless-crypto-clickhouse/commit/8d405460c240273685c35f4f08264498e919fd9a))
+
 ## [17.2.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.1.0...v17.2.0) (2025-12-28)
 
 ### Features
