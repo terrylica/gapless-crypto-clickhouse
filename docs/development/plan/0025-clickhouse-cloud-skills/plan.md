@@ -256,5 +256,5 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 
 - **ADR-0025**: [`docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md`](/docs/architecture/decisions/0025-clickhouse-cloud-skills-extraction.md)
 - **Source**: `/tmp/clickhouse_setup_final_summary.md`
-- **Project Memory**: [`CLAUDE.md`](/docs/development/plan/0025-clickhouse-cloud-skills/CLAUDE.md)
+- **Project Memory**: [`CLAUDE.md`](/CLAUDE.md)
 - **skill-architecture**: `Skill(plugin-dev:skill-architecture)`

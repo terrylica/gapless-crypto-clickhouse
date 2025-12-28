@@ -401,4 +401,4 @@ ClickHouseConfig(host='localhost', port=9000, ..., secure=False)
 ---
 
 **Last Updated**: 2025-11-21 (ADR-0026)
-**Related**: [`SKILL.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md), [`doppler-setup.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/doppler-setup.md), [`env-setup.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/env-setup.md)
+**Related**: [`SKILL.md`](../SKILL.md), [`doppler-setup.md`](./doppler-setup.md), [`env-setup.md`](./env-setup.md)

@@ -453,11 +453,11 @@ pip install python-dotenv
 After setting up .env file:
 
 1. **Test connection**: `python skills/gapless-crypto-clickhouse-onboarding/scripts/test_connection_cloud.py`
-2. **Run first query**: See [`SKILL.md` Step 5](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md#step-5-run-first-query-5-minutes)
-3. **If errors**: See [`troubleshooting.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/troubleshooting.md)
-4. **Consider migrating to Doppler**: See [`doppler-setup.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/doppler-setup.md)
+2. **Run first query**: See [`SKILL.md` Step 5](../SKILL.md#step-5-run-first-query-5-minutes)
+3. **If errors**: See [`troubleshooting.md`](./troubleshooting.md)
+4. **Consider migrating to Doppler**: See [`doppler-setup.md`](./doppler-setup.md)
 
 ---
 
 **Last Updated**: 2025-11-21 (ADR-0026)
-**Related**: [`SKILL.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md), [`doppler-setup.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/doppler-setup.md), [`troubleshooting.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/troubleshooting.md)
+**Related**: [`SKILL.md`](../SKILL.md), [`doppler-setup.md`](./doppler-setup.md), [`troubleshooting.md`](./troubleshooting.md)

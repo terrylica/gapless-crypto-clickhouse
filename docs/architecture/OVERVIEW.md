@@ -326,6 +326,6 @@ See [Data Format Specification](/docs/architecture/DATA_FORMAT.md) for detailed 
 ## Related Documentation
 
 - **Data Collection Guide**: [DATA_COLLECTION.md](/docs/guides/DATA_COLLECTION.md)
-- **Gap Filling Operations**: [GAP_FILLING.md](/docs/guides/GAP_FILLING.md)
+- **Gap Filling Operations**: [DATA_COLLECTION.md#gap-detection](/docs/guides/DATA_COLLECTION.md#gap-detection)
 - **Validation System**: [OVERVIEW.md](/docs/validation/OVERVIEW.md)
 - **Python API Reference**: [quick-start.md](/docs/api/quick-start.md)

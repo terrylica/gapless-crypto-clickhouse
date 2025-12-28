@@ -165,4 +165,4 @@ See: [`docs/development/plan/0026-clickhouse-cloud-data-pipeline/plan.md`](/docs
 - **Sub-agent Reports**: Infrastructure, Package Architecture, User Experience, Security agents
 - **Skill Architecture**: `Skill(plugin-dev:skill-architecture)`
 - **Marketplace Validator**: `Skill(plugin-dev:plugin-validator)`
-- **Project Memory**: [`CLAUDE.md`](/docs/architecture/decisions/CLAUDE.md)
+- **Project Memory**: [`CLAUDE.md`](/CLAUDE.md)

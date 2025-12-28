@@ -73,7 +73,7 @@ curl -s -u "$KEY_ID:$KEY_SECRET" \
   "https://api.clickhouse.cloud/v1/organizations/$ORG_ID/services/$SERVICE_ID" | jq '.'
 ```
 
-**Response Schema**: See [`references/api-endpoints.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-service-setup/references/api-endpoints.md)
+**Response Schema**: See [`references/api-endpoints.md`](./references/api-endpoints.md)
 
 ### Step 4: Extract Connection Endpoints
 
@@ -129,7 +129,7 @@ doppler secrets set CLICKHOUSE_USER "default" --project aws-credentials --config
 
 ## References
 
-- **API Documentation**: [`references/api-endpoints.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-service-setup/references/api-endpoints.md)
+- **API Documentation**: [`references/api-endpoints.md`](./references/api-endpoints.md)
 - **ClickHouse Cloud Console**: https://clickhouse.cloud/
 - **Organization Settings**: https://clickhouse.cloud/organizations/2404d339-6921-4f1c-bf80-b07d5e23b91a
 - **Service Dashboard**: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2
@@ -137,5 +137,5 @@ doppler secrets set CLICKHOUSE_USER "default" --project aws-credentials --config
 ## Next Steps
 
 After service setup, proceed to:
-1. [`clickhouse-cloud-credentials`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/SKILL.md) - Store all credentials in Doppler + 1Password
-2. [`clickhouse-cloud-connection`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/SKILL.md) - Test connection to ClickHouse Cloud
+1. [`clickhouse-cloud-credentials`](../clickhouse-cloud-credentials/SKILL.md) - Store all credentials in Doppler + 1Password
+2. [`clickhouse-cloud-connection`](../clickhouse-cloud-connection/SKILL.md) - Test connection to ClickHouse Cloud

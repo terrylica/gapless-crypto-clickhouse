@@ -54,7 +54,7 @@ Triggers: User mentions "store credentials", "Doppler", "1Password", "ClickHouse
 | `CLICKHOUSE_USER` | Database user | `default` |
 | `CLICKHOUSE_PASSWORD` | Database password | (secured, from console) |
 
-**See**: [`references/doppler-schema.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/references/doppler-schema.md) for detailed descriptions
+**See**: [`references/doppler-schema.md`](./references/doppler-schema.md) for detailed descriptions
 
 ### 1Password Item (Engineering Vault)
 
@@ -74,7 +74,7 @@ Triggers: User mentions "store credentials", "Doppler", "1Password", "ClickHouse
 | `database_password` | password | Database password |
 | `console_url` | url | https://clickhouse.cloud/ |
 
-**See**: [`references/onepassword-schema.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/references/onepassword-schema.md) for detailed specifications
+**See**: [`references/onepassword-schema.md`](./references/onepassword-schema.md) for detailed specifications
 
 ## Workflow
 
@@ -163,12 +163,12 @@ op item get "ClickHouse Cloud - gapless-crypto-cli" --vault Engineering
 
 ## References
 
-- **Doppler Schema**: [`references/doppler-schema.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/references/doppler-schema.md)
-- **1Password Schema**: [`references/onepassword-schema.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/references/onepassword-schema.md)
+- **Doppler Schema**: [`references/doppler-schema.md`](./references/doppler-schema.md)
+- **1Password Schema**: [`references/onepassword-schema.md`](./references/onepassword-schema.md)
 - **Doppler Dashboard**: https://dashboard.doppler.com/workplace/13e9e4203ede563b1d37/projects/aws-credentials
 - **ClickHouse Console**: https://clickhouse.cloud/ (API Keys → Settings)
 
 ## Next Steps
 
 After credential storage, proceed to:
-1. [`clickhouse-cloud-connection`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/SKILL.md) - Test connection using stored credentials
+1. [`clickhouse-cloud-connection`](../clickhouse-cloud-connection/SKILL.md) - Test connection using stored credentials

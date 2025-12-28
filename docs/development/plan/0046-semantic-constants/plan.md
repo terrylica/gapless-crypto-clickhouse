@@ -1,6 +1,6 @@
 # Semantic Constants Abstraction
 
-**ADR**: [0046](/docs/development/architecture/decisions/0046-semantic-constants-abstraction.md)
+**ADR**: [0046](/docs/architecture/decisions/0046-semantic-constants-abstraction.md)
 **Status**: Completed
 **Last Updated**: 2025-11-26
 

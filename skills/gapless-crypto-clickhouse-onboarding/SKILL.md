@@ -79,7 +79,7 @@ CLICKHOUSE_PASSWORD
 
 **If missing** → User needs Doppler access from DevOps team
 
-**Reference**: [`references/doppler-setup.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/doppler-setup.md)
+**Reference**: [`references/doppler-setup.md`](./references/doppler-setup.md)
 
 ### Step 3B: Configure Local .env File (If Option B)
 
@@ -100,7 +100,7 @@ grep "^\.env$" .gitignore
 ```
 Expected: `.env` is in `.gitignore` (NEVER commit credentials)
 
-**Reference**: [`references/env-setup.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/env-setup.md)
+**Reference**: [`references/env-setup.md`](./references/env-setup.md)
 
 ### Step 4: Test Connection (2 minutes)
 
@@ -125,7 +125,7 @@ python skills/gapless-crypto-clickhouse-onboarding/scripts/test_connection_cloud
 
 **If errors** → Guide user through troubleshooting (see Step 6)
 
-**Test script**: [`scripts/test_connection_cloud.py`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/scripts/test_connection_cloud.py)
+**Test script**: [`scripts/test_connection_cloud.py`](./scripts/test_connection_cloud.py)
 
 ### Step 5: Run First Query (5 minutes)
 
@@ -183,7 +183,7 @@ print(df.head())
 - **Cause**: Database schema not yet created on Cloud service
 - **Fix**: Expected for new service, `query_ohlcv()` will auto-create schema
 
-**Complete troubleshooting guide**: [`references/troubleshooting.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/troubleshooting.md)
+**Complete troubleshooting guide**: [`references/troubleshooting.md`](./references/troubleshooting.md)
 
 ## Binary Access Model
 
@@ -208,9 +208,9 @@ print(df.head())
 
 ## Next Steps After Onboarding
 
-1. **Explore examples**: Review `/Users/terryli/eon/gapless-crypto-clickhouse/examples/`
-2. **Read API docs**: `/Users/terryli/eon/gapless-crypto-clickhouse/docs/guides/python-api.md`
-3. **Review architecture**: `/Users/terryli/eon/gapless-crypto-clickhouse/docs/architecture/OVERVIEW.md`
+1. **Explore examples**: Review `/examples/`
+2. **Read API docs**: `/docs/guides/python-api.md`
+3. **Review architecture**: `/docs/architecture/OVERVIEW.md`
 4. **Join support channel**: #data-engineering Slack
 
 ## Service Details
@@ -224,6 +224,6 @@ print(df.head())
 
 ## Related Skills
 
-- [`clickhouse-cloud-service-setup`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-service-setup/SKILL.md): Infrastructure-focused (API-driven service discovery)
-- [`clickhouse-cloud-credentials`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-credentials/SKILL.md): Credential storage (Doppler + 1Password)
-- [`clickhouse-cloud-connection`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/SKILL.md): Connection validation + troubleshooting
+- [`clickhouse-cloud-service-setup`](../clickhouse-cloud-service-setup/SKILL.md): Infrastructure-focused (API-driven service discovery)
+- [`clickhouse-cloud-credentials`](../clickhouse-cloud-credentials/SKILL.md): Credential storage (Doppler + 1Password)
+- [`clickhouse-cloud-connection`](../clickhouse-cloud-connection/SKILL.md): Connection validation + troubleshooting

@@ -295,6 +295,6 @@ Spawned 4 parallel sub-agents using DCTL (Dynamic Todo List Creation) pattern to
 ## References
 
 - **ADR-0026**: [`docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md`](/docs/architecture/decisions/0026-clickhouse-cloud-data-pipeline.md)
-- **Project Memory**: [`CLAUDE.md`](/docs/development/plan/0026-clickhouse-cloud-data-pipeline/CLAUDE.md)
+- **Project Memory**: [`CLAUDE.md`](/CLAUDE.md)
 - **skill-architecture**: `Skill(plugin-dev:skill-architecture)`
 - **Sub-Agent Reports**: tmp/data-pipeline-design/ (ephemeral)

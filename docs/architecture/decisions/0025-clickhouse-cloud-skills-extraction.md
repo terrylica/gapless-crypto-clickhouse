@@ -146,4 +146,4 @@ See: [`docs/development/plan/0025-clickhouse-cloud-skills/plan.md`](/docs/develo
 - Source: `/tmp/clickhouse_setup_final_summary.md` (validated production setup)
 - Skill Architecture: `Skill(plugin-dev:skill-architecture)`
 - Marketplace Validator: `Skill(plugin-dev:plugin-validator)`
-- Project Memory: [`CLAUDE.md`](/docs/architecture/decisions/CLAUDE.md) (Link Farm pattern)
+- Project Memory: [`CLAUDE.md`](/CLAUDE.md) (Link Farm pattern)

@@ -301,6 +301,6 @@ Local Machine (scripts/publish-to-pypi.sh)
 ## References
 
 - **ADR-0027**: [`docs/architecture/decisions/0027-local-only-pypi-publishing.md`](/docs/architecture/decisions/0027-local-only-pypi-publishing.md)
-- **Project Memory**: [`CLAUDE.md`](/docs/development/plan/0027-local-only-pypi-publishing/CLAUDE.md)
+- **Project Memory**: [`CLAUDE.md`](/CLAUDE.md)
 - **semantic-release Skill**: `Skill(itp:semantic-release)`
 - **Sub-Agent Reports**: Ephemeral (in-memory during planning)

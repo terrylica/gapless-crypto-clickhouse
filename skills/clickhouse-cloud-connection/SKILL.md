@@ -115,7 +115,7 @@ except Exception as e:
 
 ## Example Connection Test Script
 
-**See**: [`references/connection-test.py`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/references/connection-test.py) for complete executable example
+**See**: [`references/connection-test.py`](./references/connection-test.py) for complete executable example
 
 **Quick Test** (one-liner):
 ```bash
@@ -186,7 +186,7 @@ print('✅ Connected:', client.query('SELECT version()').result_rows[0][0])
 
 ## References
 
-- **Connection Test Script**: [`references/connection-test.py`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/clickhouse-cloud-connection/references/connection-test.py)
+- **Connection Test Script**: [`references/connection-test.py`](./references/connection-test.py)
 - **clickhouse-connect Documentation**: https://clickhouse.com/docs/en/integrations/python
 - **ClickHouse Cloud Console**: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2
 - **Doppler Dashboard**: https://dashboard.doppler.com/workplace/13e9e4203ede563b1d37/projects/aws-credentials

@@ -1,0 +1,43 @@
+# lychee link checker configuration
+# https://lychee.cli.rs/usage/config/
+
+# Exclude patterns
+exclude = [
+    # Local development servers
+    "localhost",
+    "127\\.0\\.0\\.1",
+
+    # Temporary files
+    "tmp/",
+
+    # Claude plan files (external references)
+    "~/.claude/",
+    "Users/terryli/.claude/",
+
+    # cc-skills plugin references (external)
+    "cc-skills/quality-tools",
+]
+
+# Exclude paths from scanning
+exclude_path = [
+    "tmp/",
+    ".git/",
+    "node_modules/",
+    "dist/",
+    ".venv/",
+]
+
+# Accept these status codes as valid
+accept = [200, 204, 206, 301, 302, 304, 307, 308]
+
+# Skip these file types
+exclude_all_private = true
+
+# Timeout for requests
+timeout = 30
+
+# Max retries
+max_retries = 3
+
+# Require HTTPS
+require_https = false

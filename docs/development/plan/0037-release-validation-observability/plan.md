@@ -4,7 +4,7 @@
 **Status**: In Progress
 **Created**: 2025-11-24
 **Owner**: terryli
-**ADR**: [ADR-0037](/docs/development/architecture/decisions/0037-release-validation-observability.md)
+**ADR**: [ADR-0037](/docs/architecture/decisions/0037-release-validation-observability.md)
 
 ---
 
@@ -381,9 +381,9 @@ Implement non-blocking, observability-first release validation flow that verifie
 
 ## References
 
-- [ADR-0037](/docs/development/architecture/decisions/0037-release-validation-observability.md) - Architecture decision record
-- [ADR-0035](/docs/development/architecture/decisions/0035-cicd-production-validation.md) - CI/CD production validation policy
-- [ADR-0036](/docs/development/architecture/decisions/0036-cicd-dry-refactoring.md) - CI/CD workflow DRY refactoring
+- [ADR-0037](/docs/architecture/decisions/0037-release-validation-observability.md) - Architecture decision record
+- [ADR-0035](/docs/architecture/decisions/0035-cicd-production-validation.md) - CI/CD production validation policy
+- [ADR-0036](/docs/architecture/decisions/0036-cicd-dry-refactoring.md) - CI/CD workflow DRY refactoring
 - [Agent 5 Investigation](/tmp/release-validation-test/DCTL-JOURNEY-REPORT.md) - GitHub Release validation research
 - [ClickHouse Observability Best Practices](https://clickhouse.com/docs/en/observability) - System table patterns
 - [Earthly Documentation](https://docs.earthly.dev/) - RUN --secret patterns

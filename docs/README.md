@@ -20,7 +20,7 @@ This directory contains comprehensive documentation for the gapless-crypto-data 
 
 ### Release Documentation
 
-- [`release-notes.md`](/docs/release-notes.md) - Release notes and announcements
+- [`CHANGELOG.md`](/CHANGELOG.md) - Release history and changelog
 - [`milestones/`](/docs/milestones/) - Version milestone documentation
 
 ### Project Milestones

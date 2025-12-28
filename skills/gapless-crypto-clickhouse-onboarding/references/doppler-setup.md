@@ -287,10 +287,10 @@ bash: doppler: command not found
 After verifying Doppler access:
 
 1. **Test connection**: `doppler run --project aws-credentials --config prd -- python skills/gapless-crypto-clickhouse-onboarding/scripts/test_connection_cloud.py`
-2. **Run first query**: See [`SKILL.md` Step 5](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md#step-5-run-first-query-5-minutes)
-3. **If errors**: See [`troubleshooting.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/troubleshooting.md)
+2. **Run first query**: See [`SKILL.md` Step 5](../SKILL.md#step-5-run-first-query-5-minutes)
+3. **If errors**: See [`troubleshooting.md`](./troubleshooting.md)
 
 ---
 
 **Last Updated**: 2025-11-21 (ADR-0026)
-**Related**: [`SKILL.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/SKILL.md), [`env-setup.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/env-setup.md), [`troubleshooting.md`](/Users/terryli/eon/gapless-crypto-clickhouse/skills/gapless-crypto-clickhouse-onboarding/references/troubleshooting.md)
+**Related**: [`SKILL.md`](../SKILL.md), [`env-setup.md`](./env-setup.md), [`troubleshooting.md`](./troubleshooting.md)

@@ -534,7 +534,7 @@ A: Follow the rollback procedure (downgrade to v3.3.0) and report the issue on G
 - **[ADR-0005: ClickHouse Migration](/docs/architecture/decisions/0005-clickhouse-migration.md)** - Decision rationale and architecture details
 - **[ADR-0043: ClickHouse Cloud-Only Policy](/docs/architecture/decisions/0043-clickhouse-cloud-only-policy.md)** - Cloud-only architecture decision
 - **[GitHub Issues](https://github.com/terrylica/gapless-crypto-clickhouse/issues)** - Bug reports and feature requests
-- **[Release Notes](/docs/release-notes.md)** - Complete v4.0.0 changelog
+- **[Release Notes](/CHANGELOG.md)** - Complete v4.0.0 changelog
 
 ## Support
 
