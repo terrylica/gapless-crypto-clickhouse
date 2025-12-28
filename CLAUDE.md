@@ -362,7 +362,7 @@ ORDER BY last_validation DESC
 - **Type Safety**: PEP 561 compliance via py.typed marker
 - **AI Discoverability**: **probe** module, llms.txt
 - **Structured Exceptions**: Machine-parseable error context
-- **Coverage Strategy**: SDK entry points (85%+) > Core engines (70%+)
+- **Coverage Strategy**: SDK entry points (70% current → 85% target) > Core engines (17-60% current → 70% target)
 
 ## Network Architecture
 
@@ -381,9 +381,9 @@ ORDER BY last_validation DESC
 - NOT used for CloudFront downloads (each request routed to different edge server)
 - Configuration: `max_keepalive_connections=20, max_connections=30, keepalive_expiry=30.0`
 
-**Retry Logic**: CloudFront handles failover automatically (0% failure rate in production)
+**Retry Logic**: Exponential backoff with jitter via tenacity (5 attempts, 60s max delay)
 
-**Optimization Opportunity**: ETag-based caching for bandwidth reduction
+**ETag Caching**: Implemented for bandwidth reduction (304 Not Modified responses)
 
 ## Authentication
 

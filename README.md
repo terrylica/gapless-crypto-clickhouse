@@ -210,7 +210,7 @@ gap_filler = UniversalGapFiller()
 gaps = gap_filler.detect_all_gaps("BTCUSDT_1h_data.csv", "1h")
 ```
 
-> **Note**: This package never included a CLI interface (unlike parent package `gapless-crypto-data`). It provides a Python API only for programmatic access. See examples above for usage patterns.
+> **Note**: This package includes CLI commands for setup and diagnostics (`gcch init`, `gcch status`, `gcch check`). For data collection, use the Python API as shown in examples above.
 
 ## Data Structure
 
