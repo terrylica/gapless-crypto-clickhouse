@@ -71,7 +71,11 @@ Package Relationship:
 
     Migrating from gapless-crypto-data:
         See docs/development/CLI_MIGRATION_GUIDE.md for migration guide.
-        Note: This package never had a CLI (Python API only).
+
+    CLI Commands:
+        gcch init    - Deploy ClickHouse schema
+        gcch status  - Check ClickHouse connectivity
+        gcch check   - Validate complete setup
 
 Supported Symbols (715 perpetual symbols - Spot + Futures Aligned):
     Both spot and futures-um support 715 validated perpetual symbols
@@ -81,7 +85,16 @@ Supported Symbols (715 perpetual symbols - Spot + Futures Aligned):
     Major pairs: BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, XRPUSDT, and 708 more.
 """
 
-__version__ = "17.0.0"
+# ADR: 2025-12-27-importlib-metadata-version-management
+# Read version from package metadata at runtime (single source of truth: pyproject.toml)
+from importlib.metadata import PackageNotFoundError, version
+
+try:
+    __version__ = version("gapless-crypto-clickhouse")
+except PackageNotFoundError:
+    # Development mode or editable install without metadata
+    __version__ = "0.0.0+dev"
+
 __author__ = "Eon Labs"
 __email__ = "terry@eonlabs.com"
 
