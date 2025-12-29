@@ -185,7 +185,7 @@ Return Polars instead of pandas.
 
 - [Apache Arrow Documentation](https://arrow.apache.org/docs/python/pandas.html)
 - [clickhouse-connect GitHub](https://github.com/ClickHouse/clickhouse-connect)
-- [Alpha Forge Feature Request](https://github.com/gapless-crypto/gapless-crypto-clickhouse/issues/XXX)
+- Alpha Forge Feature Request (internal)
 - Benchmark Results: `benchmark_gapless_clickhouse.py` (2025-11-20)
 - ADR-0005: ClickHouse Migration (established database choice)
 - ADR-0021: Microsecond Precision (schema context)
