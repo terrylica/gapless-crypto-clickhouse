@@ -210,6 +210,48 @@ def get_capabilities() -> Dict[str, Any]:
                 "status": "not_implemented",
             },
         },
+        # v17.3.0: API discoverability for AI agents
+        "discoverability": {
+            "class_aliases": {
+                "description": "Deprecated aliases for users expecting different naming patterns",
+                "aliases": {
+                    "GaplessCollector": {
+                        "native": "BinancePublicDataCollector",
+                        "reason": "Package name pattern expectation",
+                        "deprecated": True,
+                    },
+                    "BinanceSpotData": {
+                        "native": "BinancePublicDataCollector",
+                        "reason": "Crypto library pattern expectation",
+                        "deprecated": True,
+                    },
+                },
+                "recommendation": "Use native names (BinancePublicDataCollector) in new code",
+            },
+            "column_naming": {
+                "description": "Column name mappings (package vs Binance native)",
+                "mappings": {
+                    "timestamp": {
+                        "binance_native": "open_time",
+                        "description": "Candle open time",
+                    },
+                },
+                "utilities": {
+                    "to_binance_columns": "Convert timestamp → open_time",
+                    "to_package_columns": "Convert open_time → timestamp",
+                },
+                "recommendation": "Use package names (timestamp) in new code",
+            },
+            "primary_entry_points": [
+                {
+                    "name": "query_ohlcv",
+                    "purpose": "Query data from ClickHouse with auto-ingestion",
+                },
+                {"name": "fetch_data", "purpose": "Download data from Binance CDN (no database)"},
+                {"name": "check_setup", "purpose": "Verify SDK is ready to use"},
+                {"name": "probe.get_capabilities", "purpose": "Machine-readable API discovery"},
+            ],
+        },
     }
 
 

@@ -518,7 +518,7 @@ def fetch_data(
 
     Returns:
         pd.DataFrame with OHLCV data and microstructure columns:
-        - timestamp: Open time (datetime64[ns])
+        - timestamp: Open time (datetime64[ns]) - Binance native: "open_time"
         - open, high, low, close: Price data
         - volume: Base asset volume
         - close_time: Close timestamp
@@ -527,6 +527,9 @@ def fetch_data(
         - taker_buy_base_asset_volume: Taker buy base volume
         - taker_buy_quote_asset_volume: Taker buy quote volume
         - funding_rate: Funding rate (⚠️ NULL in v3.2.0, will be populated in v3.3.0)
+
+        Column Naming: This package uses "timestamp" instead of Binance's native
+        "open_time" for API consistency. Use to_binance_columns(df) to convert.
 
     Raises:
         ValueError: If both 'start' and 'start_date' specified, or both 'end' and 'end_date' specified
@@ -1036,3 +1039,64 @@ def load_parquet(path: str) -> pd.DataFrame:
         >>> print(f"Loaded {len(df)} bars")
     """
     return pd.read_parquet(path, engine="pyarrow")
+
+
+# =============================================================================
+# COLUMN NAMING UTILITIES (v17.3.0)
+# =============================================================================
+# Helpers for users who expect Binance's native column names
+
+
+# Column mapping: package names → Binance native names
+BINANCE_COLUMN_MAP = {
+    "timestamp": "open_time",  # Primary timestamp column
+}
+
+# Reverse mapping: Binance native names → package names
+PACKAGE_COLUMN_MAP = {v: k for k, v in BINANCE_COLUMN_MAP.items()}
+
+
+def to_binance_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Convert DataFrame columns to Binance's native naming convention.
+
+    This package uses "timestamp" for the open time column, while Binance's
+    native API and CSV exports use "open_time". This helper renames columns
+    for compatibility with scripts expecting Binance's native format.
+
+    Args:
+        df: DataFrame from fetch_data(), download(), or query_ohlcv()
+
+    Returns:
+        DataFrame with Binance-native column names (timestamp → open_time)
+
+    Example:
+        >>> df = gcch.fetch_data("BTCUSDT", "1h", limit=100)
+        >>> df_binance = gcch.to_binance_columns(df)
+        >>> print(df_binance.columns[0])  # 'open_time' instead of 'timestamp'
+
+    Note:
+        The native package column names are recommended for new code.
+        This helper exists for compatibility with existing Binance scripts.
+    """
+    rename_map = {k: v for k, v in BINANCE_COLUMN_MAP.items() if k in df.columns}
+    return df.rename(columns=rename_map)
+
+
+def to_package_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Convert DataFrame columns from Binance's native names to package names.
+
+    Reverse of to_binance_columns(). Converts "open_time" → "timestamp".
+
+    Args:
+        df: DataFrame with Binance-native column names
+
+    Returns:
+        DataFrame with package-native column names (open_time → timestamp)
+
+    Example:
+        >>> # If you have a DataFrame from Binance API with 'open_time'
+        >>> df_native = gcch.to_package_columns(binance_df)
+        >>> print(df_native.columns[0])  # 'timestamp'
+    """
+    rename_map = {k: v for k, v in PACKAGE_COLUMN_MAP.items() if k in df.columns}
+    return df.rename(columns=rename_map)

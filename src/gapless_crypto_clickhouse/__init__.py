@@ -104,6 +104,8 @@ __email__ = "terry@eonlabs.com"
 # API-only probe hooks for AI coding agents
 from . import __probe__, constants, probe
 from .api import (
+    BINANCE_COLUMN_MAP,  # v17.3.0: Column name mappings
+    PACKAGE_COLUMN_MAP,  # v17.3.0: Reverse column name mappings
     InstrumentType,  # ADR-0021: Type alias for instrument type hints
     download,
     download_multiple,
@@ -115,6 +117,8 @@ from .api import (
     get_supported_timeframes,
     load_parquet,
     save_parquet,
+    to_binance_columns,  # v17.3.0: Convert timestamp → open_time
+    to_package_columns,  # v17.3.0: Convert open_time → timestamp
 )
 from .collectors.binance_public_data_collector import BinancePublicDataCollector
 
@@ -137,6 +141,58 @@ from .exceptions import (
 from .gap_filling.safe_file_operations import AtomicCSVOperations, SafeCSVMerger
 from .gap_filling.universal_gap_filler import UniversalGapFiller
 from .query_api import query_ohlcv  # v6.0.0: Unified query API with auto-ingestion (ADR-0023)
+
+# =============================================================================
+# BACKWARD-COMPATIBLE ALIASES (v17.3.0)
+# =============================================================================
+# These aliases exist for discoverability - users who expect these names based on
+# package naming patterns or other crypto data libraries. Native names are preferred.
+#
+# ADR: 2025-12-31-api-discoverability-aliases
+
+
+def _create_deprecated_alias(native_class, alias_name: str, native_name: str):
+    """Create a class alias that warns on first instantiation."""
+    import warnings
+
+    class AliasClass(native_class):
+        _warned = False
+
+        def __new__(cls, *args, **kwargs):
+            if not cls._warned:
+                warnings.warn(
+                    f"{alias_name} is a deprecated alias. Use {native_name} instead. "
+                    f"Example: from gapless_crypto_clickhouse import {native_name}",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                cls._warned = True
+            return super().__new__(cls)
+
+    AliasClass.__name__ = alias_name
+    AliasClass.__qualname__ = alias_name
+    AliasClass.__doc__ = f"""Deprecated alias for {native_name}.
+
+    .. deprecated:: 17.3.0
+        Use :class:`{native_name}` instead.
+
+    This alias exists for discoverability. Users expecting class names based on
+    package naming patterns (e.g., "GaplessCollector") are guided to the native API.
+    """
+    return AliasClass
+
+
+# GaplessCollector → BinancePublicDataCollector
+# Users expect "Gapless*" classes based on package name "gapless-crypto-clickhouse"
+GaplessCollector = _create_deprecated_alias(
+    BinancePublicDataCollector, "GaplessCollector", "BinancePublicDataCollector"
+)
+
+# BinanceSpotData → BinancePublicDataCollector
+# Users from other crypto libraries expect "*SpotData" pattern
+BinanceSpotData = _create_deprecated_alias(
+    BinancePublicDataCollector, "BinanceSpotData", "BinancePublicDataCollector"
+)
 
 
 def check_setup() -> dict:
@@ -191,16 +247,20 @@ def check_setup() -> dict:
                 result["data_count"] = rows[0][0] if rows else 0
             else:
                 result["ready"] = False
-                result["issues"].append({
-                    "message": "ohlcv table not found",
-                    "fix": "Run: gcch init (CLI) or use auto_ingest=True in query_ohlcv()",
-                })
+                result["issues"].append(
+                    {
+                        "message": "ohlcv table not found",
+                        "fix": "Run: gcch init (CLI) or use auto_ingest=True in query_ohlcv()",
+                    }
+                )
         else:
             result["ready"] = False
-            result["issues"].append({
-                "message": "ClickHouse health check failed",
-                "fix": "Check ClickHouse server status and connectivity",
-            })
+            result["issues"].append(
+                {
+                    "message": "ClickHouse health check failed",
+                    "fix": "Check ClickHouse server status and connectivity",
+                }
+            )
 
         conn.client.close()
 
@@ -211,20 +271,26 @@ def check_setup() -> dict:
         # Provide specific guidance based on error type
         error_str = str(e)
         if "CLICKHOUSE_HOST" in error_str:
-            result["issues"].append({
-                "message": "ClickHouse credentials not configured",
-                "fix": "Set CLICKHOUSE_HOST and CLICKHOUSE_PASSWORD env vars, or use GCCH_MODE=local",
-            })
+            result["issues"].append(
+                {
+                    "message": "ClickHouse credentials not configured",
+                    "fix": "Set CLICKHOUSE_HOST and CLICKHOUSE_PASSWORD env vars, or use GCCH_MODE=local",
+                }
+            )
         elif "NameResolutionError" in error_str or "Max retries" in error_str:
-            result["issues"].append({
-                "message": "Cannot reach ClickHouse server",
-                "fix": "Start ClickHouse: clickhouse server --daemon (local) or check Cloud credentials",
-            })
+            result["issues"].append(
+                {
+                    "message": "Cannot reach ClickHouse server",
+                    "fix": "Start ClickHouse: clickhouse server --daemon (local) or check Cloud credentials",
+                }
+            )
         else:
-            result["issues"].append({
-                "message": f"Connection failed: {e}",
-                "fix": "Check probe.check_local_clickhouse() and probe.get_deployment_modes()",
-            })
+            result["issues"].append(
+                {
+                    "message": f"Connection failed: {e}",
+                    "fix": "Check probe.check_local_clickhouse() and probe.get_deployment_modes()",
+                }
+            )
 
     return result
 
@@ -243,6 +309,11 @@ __all__ = [
     "get_info",
     "save_parquet",
     "load_parquet",
+    # Column naming utilities (v17.3.0)
+    "to_binance_columns",  # timestamp → open_time
+    "to_package_columns",  # open_time → timestamp
+    "BINANCE_COLUMN_MAP",
+    "PACKAGE_COLUMN_MAP",
     # Type aliases (v3.2.0 - ADR-0021, ADR-0046)
     "InstrumentType",  # Literal["spot", "futures-um"]
     "DeploymentMode",  # Literal["local", "cloud", "auto"]
@@ -267,4 +338,7 @@ __all__ = [
     # AI agent probe hooks (v6.0.0)
     "__probe__",
     "probe",
+    # Discoverability aliases (v17.3.0 - deprecated, use native names)
+    "GaplessCollector",  # → BinancePublicDataCollector
+    "BinanceSpotData",  # → BinancePublicDataCollector
 ]
