@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.3.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.2.3...v17.3.0) (2026-01-02)
+
+### Features
+
+* **api:** add discoverability aliases and query documentation ([9a078f8](https://github.com/terrylica/gapless-crypto-clickhouse/commit/9a078f8a2b3f11ede7e309f96512bc895bad1aa6))
+
 ## [17.2.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.2.2...v17.2.3) (2025-12-29)
 
 ### Bug Fixes
