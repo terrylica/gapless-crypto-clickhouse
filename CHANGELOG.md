@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.4.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.3.0...v17.4.0) (2026-01-24)
+
+### Features
+
+* **deps:** support NumPy 2.0+ ([1770cdb](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1770cdb5ee8365b5c621a992a187253b3c829b19)), closes [#8](https://github.com/terrylica/gapless-crypto-clickhouse/issues/8)
+
 ## [17.3.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.2.3...v17.3.0) (2026-01-02)
 
 ### Features
