@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.4.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.4.0...v17.4.1) (2026-06-01)
+
+### Bug Fixes
+
+* **notify:** route Pushover to dedicated "gapless-ch" app ([4353f99](https://github.com/terrylica/gapless-crypto-clickhouse/commit/4353f996510615f77f1f4652379458daca50397c))
+
 ## [17.4.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.3.0...v17.4.0) (2026-01-24)
 
 ### Features
