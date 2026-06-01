@@ -132,7 +132,7 @@ jobs:
             --secret CLICKHOUSE_PORT="${{ secrets.CLICKHOUSE_PORT }}" \
             --secret CLICKHOUSE_USER="${{ secrets.CLICKHOUSE_USER }}" \
             --secret CLICKHOUSE_PASSWORD="${{ secrets.CLICKHOUSE_PASSWORD }}" \
-            --secret PUSHOVER_APP_TOKEN="${{ secrets.PUSHOVER_APP_TOKEN }}" \
+            --secret PUSHOVER_APP_TOKEN="${{ secrets.PUSHOVER_APP_TOKEN_GAPLESS_CLICKHOUSE }}" \
             --secret PUSHOVER_USER_KEY="${{ secrets.PUSHOVER_USER_KEY }}" \
             +send-pushover-alert \
             --RELEASE_VERSION="${{ steps.release_info.outputs.release_version }}" \
