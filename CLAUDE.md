@@ -41,6 +41,8 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 **WORKSPACE-WIDE POLICY** (ADR-0027): All repositories enforce **local-only PyPI publishing**, never through CI/CD.
 
+🔴 **63 of 105 git tags have no PyPI artifact, and that is NOT a defect — do not "fix" it (ADR-0053).** They are rapid-iteration tags: every one was superseded within 22 h (median ~7 min, none ever current for a full day), whereas 7 published versions stood as newest for over 24 h and one for ~128 days. The two populations are cleanly distinct. Only the **current** line must be complete, and `17.x` is. A PyPI version can never be re-uploaded or corrected, so backfilling is irreversible and unwarranted. **Verify PyPI against the simple index polled with a retry — never the JSON API, which lags at both endpoints and has disagreed with reality in both directions.**
+
 **GitHub Actions Role** (Versioning Only):
 
 - ✅ Analyze conventional commits → determine version
