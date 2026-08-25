@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.5.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.4.1...v17.5.0) (2026-08-25)
+
+### Features
+
+* **publish:** allow backfill from a detached release tag, guarded on tag/version identity ([719eba4](https://github.com/terrylica/gapless-crypto-clickhouse/commit/719eba47861b8394a59dbebfed7b61938da1114b))
+
+### Bug Fixes
+
+* **ci:** pin the semantic-release toolchain so releases stop depending on npm's mood ([3efab75](https://github.com/terrylica/gapless-crypto-clickhouse/commit/3efab75e9899374b7b415c426c554aa09441afd7))
+
 ## [17.4.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.4.0...v17.4.1) (2026-06-01)
 
 ### Bug Fixes
