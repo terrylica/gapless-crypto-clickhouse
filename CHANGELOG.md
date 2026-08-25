@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.5.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.1...v17.5.2) (2026-08-25)
+
+### Bug Fixes
+
+* **release:** keep uv.lock in step with the released version ([1db0e3c](https://github.com/terrylica/gapless-crypto-clickhouse/commit/1db0e3c721a84d246442b7463e4e417db2efc5b5))
+
 ## [17.5.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.0...v17.5.1) (2026-08-25)
 
 ### Documentation
