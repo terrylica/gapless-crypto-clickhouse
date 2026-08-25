@@ -192,14 +192,49 @@ detect_ci_environment
 # the version tagged by semantic-release.
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-if [[ "${CURRENT_BRANCH}" != "main" && "${CURRENT_BRANCH}" != "master" ]]; then
+if [[ "${CURRENT_BRANCH}" == "main" || "${CURRENT_BRANCH}" == "master" ]]; then
+    :  # normal path: publishing the current release from the default branch
+elif [[ "${CURRENT_BRANCH}" == "HEAD" ]]; then
+    # BACKFILL PATH (added 2026-08-25). Detached HEAD is allowed ONLY when it sits exactly on an
+    # annotated release tag whose name matches the version pyproject.toml declares here.
+    #
+    # This does not weaken the guard, it tightens it. The guard's own stated purpose is "to ensure
+    # released code matches the version tagged by semantic-release" — and being ON the tag proves
+    # that identity directly, whereas being on `main` only implies it (main drifts ahead of the tag
+    # the moment anything else merges). Historical versions therefore CANNOT be published from main
+    # at all: main's tree is not what those tags contained.
+    #
+    # Needed because 9 of 14 tags had a GitHub Release but no PyPI artifact — publishing is a
+    # deliberate manual step (ADR-0027) and it gets skipped. Backfilling them safely requires
+    # building each from its own tag; a PyPI version can never be re-uploaded or corrected, so
+    # building from the wrong tree would be a permanent, unfixable error.
+    _head_sha="$(git rev-parse HEAD)"
+    _tag="$(git describe --exact-match --tags "${_head_sha}" 2>/dev/null || true)"
+    _declared="$(grep '^version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/' | head -1)"
+    if [[ -z "${_tag}" ]]; then
+        echo "" >&2
+        echo " ERROR: detached HEAD is not on any tag — refusing to publish." >&2
+        echo "   HEAD ${_head_sha}" >&2
+        exit 1
+    fi
+    if [[ "${_tag}" != "v${_declared}" ]]; then
+        echo "" >&2
+        echo " ERROR: tag/version mismatch — refusing to publish." >&2
+        echo "   tag at HEAD          : ${_tag}" >&2
+        echo "   pyproject.toml says  : ${_declared}  (expected tag v${_declared})" >&2
+        echo "   Publishing this would put an artifact on PyPI under a version its source" >&2
+        echo "   never claimed, and PyPI uploads are permanent." >&2
+        exit 1
+    fi
+    echo "   ℹ BACKFILL: detached at ${_tag}, pyproject declares ${_declared} — tag/version verified"
+else
     echo ""
     echo "==============================================================="
     echo " ERROR: This script must ONLY be run on main/master branch"
     echo "==============================================================="
     echo ""
     echo "   Current branch: ${CURRENT_BRANCH}"
-    echo "   Required branch: main or master"
+    echo "   Required branch: main or master (or detached exactly on a release tag)"
     echo ""
     echo "   To publish, switch to main and pull latest:"
     echo "     git checkout main"
