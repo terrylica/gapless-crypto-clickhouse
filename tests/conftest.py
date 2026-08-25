@@ -15,6 +15,7 @@ ClickHouse Auto-Start (ADR-0044, ADR-0045):
     previously pinned to a mise shim path that ceased to exist.
 """
 
+import os
 import shutil
 import socket
 import subprocess
@@ -98,6 +99,19 @@ def _start_clickhouse_server() -> bool:
     if _is_clickhouse_running():
         return True  # Already running
 
+    # `clickhouse server` writes its data tree (store/, metadata/, metadata_dropped/,
+    # cores/, status, uuid) relative to the working directory and offers no --path flag.
+    # Started from the repo checkout it litters the repo root with untracked server state
+    # -- which is exactly what happened the first time these tests actually ran. Give it a
+    # directory of its own outside the repo.
+    data_dir = Path(
+        os.environ.get("CLICKHOUSE_DATA_DIR")
+        or Path(os.environ.get("XDG_DATA_HOME") or Path.home() / ".local/share")
+        / "gapless-crypto-clickhouse"
+        / "server"
+    )
+    data_dir.mkdir(parents=True, exist_ok=True)
+
     try:
         # Start server in daemon mode
         subprocess.run(
@@ -105,6 +119,7 @@ def _start_clickhouse_server() -> bool:
             check=True,
             capture_output=True,
             timeout=10,
+            cwd=data_dir,
         )
 
         # Wait for server to be ready

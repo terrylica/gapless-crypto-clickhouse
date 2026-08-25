@@ -51,9 +51,18 @@ if nc -z localhost "${PORT_LOCAL_HTTP}" 2>/dev/null; then
     exit 0
 fi
 
-# Start server in daemon mode
-echo "Starting ClickHouse server..."
-"${CLICKHOUSE_BIN}" server --daemon
+# Start server in daemon mode, from a data directory OUTSIDE the repository.
+#
+# `clickhouse server` writes its data tree (store/, metadata/, metadata_dropped/, cores/,
+# status, uuid) relative to the working directory, and exposes no --path flag to redirect
+# it. Launched from a repo checkout it therefore litters the repo root with ~650 KB of
+# untracked server state that is not in .gitignore -- observed the first time these tests
+# actually ran. Setting the cwd is the whole fix.
+CLICKHOUSE_DATA_DIR="${CLICKHOUSE_DATA_DIR:-${XDG_DATA_HOME:-${HOME}/.local/share}/gapless-crypto-clickhouse/server}"
+mkdir -p "${CLICKHOUSE_DATA_DIR}"
+
+echo "Starting ClickHouse server (data dir: ${CLICKHOUSE_DATA_DIR})..."
+( cd "${CLICKHOUSE_DATA_DIR}" && "${CLICKHOUSE_BIN}" server --daemon )
 
 # Wait for server to be ready
 for i in $(seq 1 "${STARTUP_TIMEOUT_SEC}"); do
