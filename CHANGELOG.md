@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.5.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.2...v17.5.3) (2026-08-25)
+
+### Bug Fixes
+
+* **tests:** resolve the clickhouse binary from PATH instead of a dead mise shim ([204eedb](https://github.com/terrylica/gapless-crypto-clickhouse/commit/204eedbf071c1997ad72f323887db965deec0b59))
+
 ## [17.5.2](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.1...v17.5.2) (2026-08-25)
 
 ### Bug Fixes
