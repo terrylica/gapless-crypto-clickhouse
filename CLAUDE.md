@@ -263,6 +263,7 @@ doppler run --project aws-credentials --config prd -- uv run scripts/validate_bi
    - Generate CHANGELOG.md
    - Create git tags + GitHub releases
    - **NO** package building or PyPI publishing (handled locally per ADR-0027)
+   - 🔴 **Its npm install list is version-pinned on purpose (ADR-0052) — do not "modernize" it to unpinned names.** It was unpinned until 2026-08-25, when a new `conventional-changelog-conventionalcommits` major silently made the repo unreleasable. The local `release:dry` script resolves a different dependency tree and kept reporting success throughout, so **a green local dry-run is not evidence the CI release works**. Bump `@semantic-release/release-notes-generator` and the preset together, and verify with the `--global` replay documented in the workflow.
 
 2. **Production Validation Workflow** (`.github/workflows/production-validation.yml`):
    - Real Binance data validation via Earthly (9-stage pipeline)
@@ -272,7 +273,7 @@ doppler run --project aws-credentials --config prd -- uv run scripts/validate_bi
 
 - `setup-python-uv`: Python 3.12 + UV installation with dependency caching
 
-**Reference**: [ADR-0039](/docs/architecture/decisions/0039-validation-redundancy-cleanup.md) - Validation Redundancy Cleanup
+**Reference**: [ADR-0039](/docs/architecture/decisions/0039-validation-redundancy-cleanup.md) - Validation Redundancy Cleanup · [ADR-0052](/docs/architecture/decisions/0052-pin-semantic-release-toolchain-versions.md) - Pinned semantic-release toolchain
 
 ### Release Validation Observability
 
