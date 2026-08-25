@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.5.1](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.0...v17.5.1) (2026-08-25)
+
+### Documentation
+
+* record ADR-0052 for the pinned semantic-release toolchain ([866ca88](https://github.com/terrylica/gapless-crypto-clickhouse/commit/866ca888845c52430ffcdf1f8c604a73c4990e13))
+
 ## [17.5.0](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.4.1...v17.5.0) (2026-08-25)
 
 ### Features
