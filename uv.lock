@@ -400,7 +400,7 @@ wheels = [
 
 [[package]]
 name = "gapless-crypto-clickhouse"
-version = "17.2.1"
+version = "17.4.0"
 source = { editable = "." }
 dependencies = [
     { name = "binance-futures-availability" },
@@ -439,7 +439,7 @@ requires-dist = [
     { name = "clickhouse-connect", specifier = ">=0.10.0,<1.0.0" },
     { name = "duckdb", specifier = ">=1.1.0" },
     { name = "httpx", specifier = ">=0.25.0" },
-    { name = "numpy", specifier = ">=1.23.2,<2.0.0" },
+    { name = "numpy", specifier = ">=1.23.2,<3.0.0" },
     { name = "pandas", specifier = ">=2.2.0,<3.0.0" },
     { name = "pyarrow", specifier = ">=14.0.0" },
     { name = "pydantic", specifier = ">=2.0.0" },
