@@ -94,7 +94,8 @@
       "@semantic-release/exec",
       {
         "_comment": "LOCAL-ONLY PUBLISHING: prepareCmd updates versions only (no building in CI). PyPI publishing happens locally via scripts/publish-to-pypi.sh using pypi-doppler skill. See docs/development/PUBLISHING.md for complete workflow.",
-        "prepareCmd": "sed -i.bak 's/^version = \".*\"/version = \"${nextRelease.version}\"/' pyproject.toml && sed -i.bak 's/\"version\": \".*\"/\"version\": \"${nextRelease.version}\"/' package.json && rm -f pyproject.toml.bak package.json.bak"
+        "_comment_uv_lock": "The trailing `uv lock` keeps uv.lock's own version entry in step with pyproject.toml. Without it the lock trailed one release behind forever, because it is regenerated only when someone happens to run uv. Verified in a clean detached worktree at v17.5.1: after bumping only the pyproject version, `uv lock` changed exactly ONE line (the self-version) and did NOT re-resolve dependencies, so this cannot silently drift the dependency set during a release. It fails loudly if uv is missing rather than skipping, because a silent skip is what produced the original drift.",
+        "prepareCmd": "sed -i.bak 's/^version = \".*\"/version = \"${nextRelease.version}\"/' pyproject.toml && sed -i.bak 's/\"version\": \".*\"/\"version\": \"${nextRelease.version}\"/' package.json && rm -f pyproject.toml.bak package.json.bak && { command -v uv >/dev/null || { echo 'uv not on PATH - the release job must run .github/actions/setup-python-uv before semantic-release'; exit 1; }; } && uv lock --quiet"
       }
     ],
     [
@@ -116,7 +117,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["CHANGELOG.md", "pyproject.toml", "package.json"],
+        "assets": ["CHANGELOG.md", "pyproject.toml", "package.json", "uv.lock"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ]
