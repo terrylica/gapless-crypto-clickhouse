@@ -7,10 +7,15 @@ in integration tests while maintaining fast test execution.
 
 ClickHouse Auto-Start (ADR-0044, ADR-0045):
     The `ensure_local_clickhouse` fixture automatically starts the local
-    ClickHouse server if mise is installed. This provides a smooth new-user
-    experience without manual server management.
+    ClickHouse server if a clickhouse binary can be found. This provides a
+    smooth new-user experience without manual server management.
+
+    Discovery is PATH-first and toolchain-agnostic; see `_clickhouse_binary`.
+    It is deliberately not tied to any one toolchain manager, because it was
+    previously pinned to a mise shim path that ceased to exist.
 """
 
+import shutil
 import socket
 import subprocess
 import time
@@ -24,14 +29,48 @@ import pytest
 # LOCAL CLICKHOUSE AUTO-START (ADR-0044, ADR-0045)
 # =============================================================================
 
-MISE_CLICKHOUSE_SHIM = Path.home() / ".local/share/mise/shims/clickhouse"
 PORT_LOCAL_HTTP = 8123
 STARTUP_TIMEOUT_SEC = 15
 
+# Where to look for the clickhouse binary, in order.
+#
+# This used to be a single hardcoded constant pointing at mise's shim directory
+# (`~/.local/share/mise/shims/clickhouse`). mise was retired machine-wide -- proto is the
+# only toolchain manager -- so that path stopped existing and `_is_clickhouse_installed()`
+# became permanently False. The result was not a skip but 12 hard ERRORs out of
+# tests/test_local_clickhouse_e2e.py (ADR-0045 mandates fail-hard, and
+# `require_local_clickhouse` honours it), on a machine where ClickHouse was installed all
+# along at /opt/homebrew/bin/clickhouse. The error even told the reader to fix it by
+# installing a tool this machine deliberately does not have.
+#
+# PATH first, because that is what proto's shims, Homebrew, and a plain system install all
+# feed into -- it is the tool-agnostic answer and needs no updating when the toolchain
+# manager changes again. The explicit paths afterwards are a fallback for a shell whose
+# PATH has not been through profile activation (a bare pytest run from an IDE, say). The
+# mise entry is retained ONLY so a machine that still has one keeps working; it is
+# deliberately last and must not be reinstated as the primary.
+_CLICKHOUSE_FALLBACK_PATHS = (
+    Path.home() / ".proto/shims/clickhouse",
+    Path("/opt/homebrew/bin/clickhouse"),
+    Path("/usr/local/bin/clickhouse"),
+    Path.home() / ".local/share/mise/shims/clickhouse",
+)
+
+
+def _clickhouse_binary() -> Path | None:
+    """Resolve the clickhouse binary, or None if it is not installed anywhere we look."""
+    found = shutil.which("clickhouse")
+    if found:
+        return Path(found)
+    for candidate in _CLICKHOUSE_FALLBACK_PATHS:
+        if candidate.is_file():
+            return candidate
+    return None
+
 
 def _is_clickhouse_installed() -> bool:
-    """Check if mise ClickHouse is installed."""
-    return MISE_CLICKHOUSE_SHIM.exists() and MISE_CLICKHOUSE_SHIM.is_file()
+    """Check whether a clickhouse binary is available by any means."""
+    return _clickhouse_binary() is not None
 
 
 def _is_clickhouse_running() -> bool:
@@ -52,7 +91,8 @@ def _start_clickhouse_server() -> bool:
     Returns:
         True if server started successfully, False otherwise.
     """
-    if not _is_clickhouse_installed():
+    binary = _clickhouse_binary()
+    if binary is None:
         return False
 
     if _is_clickhouse_running():
@@ -61,7 +101,7 @@ def _start_clickhouse_server() -> bool:
     try:
         # Start server in daemon mode
         subprocess.run(
-            [str(MISE_CLICKHOUSE_SHIM), "server", "--daemon"],
+            [str(binary), "server", "--daemon"],
             check=True,
             capture_output=True,
             timeout=10,
@@ -107,9 +147,10 @@ def ensure_local_clickhouse():
     }
 
     if not status["installed"]:
+        searched = ", ".join(str(p) for p in _CLICKHOUSE_FALLBACK_PATHS)
         status["error"] = (
-            f"mise ClickHouse not installed at {MISE_CLICKHOUSE_SHIM}. "
-            "Install with: mise install clickhouse"
+            "clickhouse binary not found on PATH or at any known location "
+            f"({searched}). Install it (e.g. `brew install clickhouse`) or put it on PATH."
         )
         return status
 

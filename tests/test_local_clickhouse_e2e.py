@@ -27,7 +27,9 @@ from typing import Generator
 import pytest
 
 # Semantic constants (ADR-0045)
-MISE_CLICKHOUSE_SHIM = Path.home() / ".local/share/mise/shims/clickhouse"
+# NOTE: a MISE_CLICKHOUSE_SHIM constant used to live here. It was already dead code --
+# defined and never referenced -- and it pointed at a mise path that no longer exists.
+# Binary discovery belongs to conftest._clickhouse_binary(), which resolves PATH first.
 SKILL_SCRIPTS_DIR = Path(__file__).parent.parent / "skills/local-clickhouse/scripts"
 SCREENSHOTS_DIR = Path(__file__).parent / "screenshots"
 PORT_LOCAL_HTTP = 8123

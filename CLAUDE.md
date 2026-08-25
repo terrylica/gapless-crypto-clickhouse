@@ -93,13 +93,15 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 ### Local ClickHouse Setup (ADR-0044, ADR-0045)
 
-**Development Infrastructure** - mise-installed ClickHouse for backtesting and offline development
+**Development Infrastructure** - a locally-installed ClickHouse for backtesting and offline development
 
 - [`local-clickhouse`](/skills/local-clickhouse/SKILL.md) - Install, configure, and validate local ClickHouse (includes E2E scripts for start, deploy, ingest, screenshot, validate)
 
 **When to use**: Local development without Cloud credentials, backtesting (50-100x faster), offline mode, E2E validation
 
-**Key principle**: Same SQL dialect as Cloud (zero migration). Tests fail hard if mise ClickHouse not installed (no skip per ADR-0045).
+**Key principle**: Same SQL dialect as Cloud (zero migration). Tests fail hard if ClickHouse is not installed (no skip, per ADR-0045).
+
+🔴 **Binary discovery is PATH-first and toolchain-agnostic — do not re-pin it to a toolchain manager's shim path.** It was hardcoded to `~/.local/share/mise/shims/clickhouse`; when mise was retired machine-wide, all 12 tests in `tests/test_local_clickhouse_e2e.py` hard-ERRORed even though ClickHouse was installed at `/opt/homebrew/bin/clickhouse` the whole time, and the error told the reader to run `mise install clickhouse` — a command that cannot work here. Fail-hard is what surfaced it; the bug was the hardcoded path, not the policy. Resolution now lives in `conftest._clickhouse_binary()` and the matching block in `skills/local-clickhouse/scripts/start-clickhouse.sh`.
 
 ### mise Toolchain (ADR-0051)
 
