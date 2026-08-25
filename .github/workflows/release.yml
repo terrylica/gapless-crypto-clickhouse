@@ -31,17 +31,44 @@ jobs:
         uses: ./.github/actions/setup-python-uv
 
       - name: Install semantic-release
+        # 🔴 VERSIONS ARE PINNED DELIBERATELY — DO NOT REPLACE WITH UNPINNED NAMES.
+        #
+        # This install was unpinned until 2026-08-25, which made every release depend on
+        # whatever npm happened to publish that day. It broke: `conventional-changelog-
+        # conventionalcommits` shipped a 10.x major that refuses to render unless
+        # `conventional-changelog-writer@9+` is loaded, but `@semantic-release/release-notes-
+        # generator@14.1.1` nests writer 8.4.0. Every push to main then died with:
+        #
+        #   Missing helper: "conventional-changelog-conventionalcommits requires
+        #   conventional-changelog-writer@9 or newer ..."
+        #
+        # The repo was silently unreleasable — the failure is in Actions, not in any local
+        # gate, so nothing on the developer machine reports it.
+        #
+        # Reproduced and fixed empirically, not by reading version ranges: the current list
+        # was replayed with `npm install --global --prefix <tmp>` (flat, exactly as CI
+        # resolves) against this repo's real .releaserc.json, which failed with the error
+        # above; the pinned list below then rendered `17.5.0` correctly.
+        #
+        # The preset pin is the load-bearing one — 9.3.1 is the newest major that renders
+        # against the writer 8.x that release-notes-generator nests. A top-level
+        # `conventional-changelog-writer` pin was TESTED AND DELIBERATELY OMITTED: forcing
+        # writer 7.0.1 at the top level changed nothing, because the generator's nested copy
+        # is what actually resolves. Adding it would be a pin that looks protective and is not.
+        #
+        # When bumping: bump `@semantic-release/release-notes-generator` and the preset
+        # TOGETHER, and verify with the --global replay above before pushing.
         run: |
           npm install --global \
-            semantic-release \
-            @semantic-release/changelog \
-            @semantic-release/commit-analyzer \
-            @semantic-release/release-notes-generator \
-            @semantic-release/github \
-            @semantic-release/git \
-            @semantic-release/npm \
-            @semantic-release/exec \
-            conventional-changelog-conventionalcommits
+            semantic-release@25.0.9 \
+            @semantic-release/changelog@6.0.3 \
+            @semantic-release/commit-analyzer@13.0.1 \
+            @semantic-release/release-notes-generator@14.1.1 \
+            @semantic-release/github@12.0.9 \
+            @semantic-release/git@10.0.1 \
+            @semantic-release/npm@12.0.2 \
+            @semantic-release/exec@7.1.0 \
+            conventional-changelog-conventionalcommits@9.3.1
 
       - name: Verify semantic-release installation
         run: semantic-release --version
