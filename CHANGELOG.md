@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.5.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.4...v17.5.5) (2026-08-25)
+
+### Documentation
+
+* record ADR-0053 -- the unpublished historical tags are deliberate ([6ab1f12](https://github.com/terrylica/gapless-crypto-clickhouse/commit/6ab1f129251d4f4a938858551881c63745b23fa2))
+
 ## [17.5.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.3...v17.5.4) (2026-08-25)
 
 ### Bug Fixes
