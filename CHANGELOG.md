@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.5.4](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.3...v17.5.4) (2026-08-25)
+
+### Bug Fixes
+
+* **tests:** start ClickHouse in its own data dir, not the repo root ([0a54c01](https://github.com/terrylica/gapless-crypto-clickhouse/commit/0a54c0127fe3076dbbcb3257e8acaa3eba66a746))
+
 ## [17.5.3](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.2...v17.5.3) (2026-08-25)
 
 ### Bug Fixes
