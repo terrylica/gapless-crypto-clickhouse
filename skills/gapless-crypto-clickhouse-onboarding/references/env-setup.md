@@ -24,8 +24,8 @@ Complete guide for local `.env` file configuration (fallback method when Doppler
 ### Step 1: Copy Cloud Template
 
 ```bash
-# Copy .env.cloud template to .env
-cp .env.cloud .env
+# Copy .env.cloud.example template to .env
+cp .env.cloud.example .env
 
 # Verify .env created
 ls -la .env
@@ -328,7 +328,7 @@ FileNotFoundError: [Errno 2] No such file or directory: '.env'
 ls -la .env
 
 # If missing, copy template
-cp .env.cloud .env
+cp .env.cloud.example .env
 # Edit .env with your credentials
 ```
 

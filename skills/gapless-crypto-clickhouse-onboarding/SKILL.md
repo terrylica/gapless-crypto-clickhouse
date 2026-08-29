@@ -85,7 +85,7 @@ CLICKHOUSE_PASSWORD
 
 **Copy Cloud template**:
 ```bash
-cp .env.cloud .env
+cp .env.cloud.example .env
 ```
 
 **Edit .env with credentials**:
