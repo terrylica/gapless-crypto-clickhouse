@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.5.6](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.5...v17.5.6) (2026-08-29)
+
+### Documentation
+
+* replace absolute home paths with ~ in documentation ([5d2dc45](https://github.com/terrylica/gapless-crypto-clickhouse/commit/5d2dc456904e899c603f62a863794ef88e6b711e))
+* **skills:** redact ClickHouse Cloud org display name ([c87a806](https://github.com/terrylica/gapless-crypto-clickhouse/commit/c87a8066fc68898fd571c7a5d3ce2dee795d3e20))
+
 ## [17.5.5](https://github.com/terrylica/gapless-crypto-clickhouse/compare/v17.5.4...v17.5.5) (2026-08-25)
 
 ### Documentation
