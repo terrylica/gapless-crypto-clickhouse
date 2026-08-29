@@ -376,4 +376,4 @@ After (same-day query):
 ## More Information
 
 - [Implementation Spec](/docs/design/2025-12-27-cache-first-recent-data-fallback/spec.md)
-- [Global Plan](/Users/terryli/.claude/plans/idempotent-humming-eich.md) (ephemeral)
+- [Global Plan](~/.claude/plans/idempotent-humming-eich.md) (ephemeral)

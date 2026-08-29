@@ -1,9 +1,9 @@
 # Git History Validation Report
 
-**Agent**: Git History Validation Agent  
-**Target**: gapless-crypto-data v4.0.0 release candidate  
-**Branch**: feat/questdb-single-source-truth  
-**Date**: 2025-11-17  
+**Agent**: Git History Validation Agent
+**Target**: gapless-crypto-data v4.0.0 release candidate
+**Branch**: feat/questdb-single-source-truth
+**Date**: 2025-11-17
 **Validation Scope**: Last 15 commits (from ADR-0006 audit remediation)
 
 ---
@@ -385,7 +385,7 @@ Refs: ADR-0002 (E2E Validation), ADR-0001 (QuestDB Refactor)
 
 ### Validation Artifacts
 
-All validation artifacts stored in: `/Users/terryli/eon/gapless-crypto-data/tmp/full-validation/git-history/`
+All validation artifacts stored in: `~/eon/gapless-crypto-data/tmp/full-validation/git-history/`
 
 1. **commit-subjects.txt**: All commit subject lines
 2. **commit-details.txt**: Full commit messages with bodies
@@ -438,6 +438,6 @@ Refs: ADR-XXXX [, ADR-YYYY]
 
 ---
 
-**Report Generated**: 2025-11-17  
-**Validation Agent**: Git History Validation Agent  
+**Report Generated**: 2025-11-17
+**Validation Agent**: Git History Validation Agent
 **Status**: ✅ COMPLETE

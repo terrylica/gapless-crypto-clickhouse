@@ -1,7 +1,7 @@
 # Agent 1: PyPI Publishing Strategy Investigation Report
 
-**Investigation Date**: 2025-11-18  
-**Methodology**: DCTL (Dynamic CTL) - 4 TLIs completed iteratively  
+**Investigation Date**: 2025-11-18
+**Methodology**: DCTL (Dynamic CTL) - 4 TLIs completed iteratively
 **Agent Role**: Publishing Strategy Investigator
 
 ## Executive Summary
@@ -411,6 +411,6 @@ PyPI Packages:
 
 **Existing Infrastructure**:
 
-- ADR-0005: ClickHouse Migration - `/Users/terryli/eon/gapless-crypto-data/docs/decisions/0005-clickhouse-migration.md`
-- Publish workflow - `/Users/terryli/eon/gapless-crypto-data/.github/workflows/publish.yml`
-- Release workflow - `/Users/terryli/eon/gapless-crypto-data/.github/workflows/release.yml`
+- ADR-0005: ClickHouse Migration - `~/eon/gapless-crypto-data/docs/decisions/0005-clickhouse-migration.md`
+- Publish workflow - `~/eon/gapless-crypto-data/.github/workflows/publish.yml`
+- Release workflow - `~/eon/gapless-crypto-data/.github/workflows/release.yml`

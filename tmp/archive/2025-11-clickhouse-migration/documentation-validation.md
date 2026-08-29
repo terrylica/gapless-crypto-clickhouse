@@ -22,7 +22,7 @@
 
 ### Issue 1: `__init__.py` Docstring Version Mismatch (CRITICAL)
 
-**Location**: `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py:2`
+**Location**: `~/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py:2`
 
 **Current State**:
 
@@ -325,21 +325,21 @@ Refs: Documentation Consistency Validation (2025-11-17)
 
 **Core Files** (8):
 
-- `/Users/terryli/eon/gapless-crypto-data/pyproject.toml`
-- `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py`
-- `/Users/terryli/eon/gapless-crypto-data/CLAUDE.md`
-- `/Users/terryli/eon/gapless-crypto-data/README.md`
-- `/Users/terryli/eon/gapless-crypto-data/docs/MIGRATION_v3_to_v4.md`
-- `/Users/terryli/eon/gapless-crypto-data/docs/decisions/0006-v4-audit-remediation.md`
-- `/Users/terryli/eon/gapless-crypto-data/docs/plan/0006-v4-audit-remediation/plan.yaml`
-- `/Users/terryli/eon/gapless-crypto-data/docs/development/CLI_MIGRATION_GUIDE.md`
+- `~/eon/gapless-crypto-data/pyproject.toml`
+- `~/eon/gapless-crypto-data/src/gapless_crypto_data/__init__.py`
+- `~/eon/gapless-crypto-data/CLAUDE.md`
+- `~/eon/gapless-crypto-data/README.md`
+- `~/eon/gapless-crypto-data/docs/MIGRATION_v3_to_v4.md`
+- `~/eon/gapless-crypto-data/docs/decisions/0006-v4-audit-remediation.md`
+- `~/eon/gapless-crypto-data/docs/plan/0006-v4-audit-remediation/plan.yaml`
+- `~/eon/gapless-crypto-data/docs/development/CLI_MIGRATION_GUIDE.md`
 
 **ClickHouse Modules** (5):
 
-- `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/clickhouse/connection.py`
-- `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/clickhouse/config.py`
-- `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/clickhouse/schema.sql`
-- `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/clickhouse_query.py`
-- `/Users/terryli/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/clickhouse_bulk_loader.py`
+- `~/eon/gapless-crypto-data/src/gapless_crypto_data/clickhouse/connection.py`
+- `~/eon/gapless-crypto-data/src/gapless_crypto_data/clickhouse/config.py`
+- `~/eon/gapless-crypto-data/src/gapless_crypto_data/clickhouse/schema.sql`
+- `~/eon/gapless-crypto-data/src/gapless_crypto_data/clickhouse_query.py`
+- `~/eon/gapless-crypto-data/src/gapless_crypto_data/collectors/clickhouse_bulk_loader.py`
 
 **Total**: 13 files, 40+ cross-references validated

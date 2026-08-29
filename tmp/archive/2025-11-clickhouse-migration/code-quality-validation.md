@@ -194,7 +194,7 @@ clickhouse_query.py:53: Missing library stubs
 All validation artifacts stored in:
 
 ```
-/Users/terryli/eon/gapless-crypto-data/tmp/full-validation/code-quality/
+~/eon/gapless-crypto-data/tmp/full-validation/code-quality/
 ├── ruff-check.txt          # Ruff linting output
 ├── ruff-format.txt         # Ruff formatting output
 ├── mypy-check.txt          # MyPy type checking output (49 errors)

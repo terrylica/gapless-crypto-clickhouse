@@ -1,9 +1,9 @@
 # Test Coverage Validation Report
 
-**v4.0.0 Release Candidate**  
-**Agent**: Test Coverage Validation  
-**Date**: 2025-11-17  
-**Validation Directory**: `/Users/terryli/eon/gapless-crypto-data/tmp/full-validation/test-coverage/`
+**v4.0.0 Release Candidate**
+**Agent**: Test Coverage Validation
+**Date**: 2025-11-17
+**Validation Directory**: `~/eon/gapless-crypto-data/tmp/full-validation/test-coverage/`
 
 ---
 
@@ -39,8 +39,8 @@ All CLI-related tests fail as expected due to CLI removal in v4.0.0 (per ADR-000
 
 #### 1. BLOCKER: Old CLI Entry Point Conflict
 
-**Test**: `tests/test_cli_integration.py::test_legacy_cli_btcusdt_single_day` (and others)  
-**Error**: `ModuleNotFoundError: No module named 'pydantic'`  
+**Test**: `tests/test_cli_integration.py::test_legacy_cli_btcusdt_single_day` (and others)
+**Error**: `ModuleNotFoundError: No module named 'pydantic'`
 **Root Cause**:
 
 - Old CLI script still exists at `~/.local/bin/gapless-crypto-data`
@@ -66,10 +66,10 @@ uv pip install --reinstall .
 
 #### 2. TRIVIAL: Version Assertion Outdated
 
-**Test**: `tests/test_api_edge_cases.py::TestGetInfo::test_get_info_structure`  
-**Error**: `AssertionError: assert '4.0.0' == '3.2.0'`  
-**Root Cause**: Test hardcoded version '3.2.0' instead of reading from package  
-**Impact**: LOW - Test assertion needs update  
+**Test**: `tests/test_api_edge_cases.py::TestGetInfo::test_get_info_structure`
+**Error**: `AssertionError: assert '4.0.0' == '3.2.0'`
+**Root Cause**: Test hardcoded version '3.2.0' instead of reading from package
+**Impact**: LOW - Test assertion needs update
 **Fix**: Update line 184 in `tests/test_api_edge_cases.py`:
 
 ```python
@@ -251,8 +251,8 @@ The test suite is in **excellent health** for v4.0.0 release. The 22 failures br
 - **1 environment issue** (old CLI script conflict - easily mitigated)
 - **1 trivial** (version assertion - one-line fix)
 
-**Core SDK functionality**: ✅ Fully validated (91% coverage)  
-**Release readiness**: ⚠️ CAUTION - Apply recommended mitigations  
+**Core SDK functionality**: ✅ Fully validated (91% coverage)
+**Release readiness**: ⚠️ CAUTION - Apply recommended mitigations
 **User impact**: LOW - Clear upgrade path documented
 
 **Final Assessment**: **APPROVE for release** after:

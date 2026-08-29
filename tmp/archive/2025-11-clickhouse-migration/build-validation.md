@@ -328,7 +328,7 @@ gapless_crypto_data-4.0.0.dist-info/
 All validation artifacts saved to:
 
 ```
-/Users/terryli/eon/gapless-crypto-data/tmp/full-validation/build-distribution/
+~/eon/gapless-crypto-data/tmp/full-validation/build-distribution/
 ├── METADATA.txt              # Extracted wheel metadata
 ├── wheel-contents.txt        # Complete wheel file listing
 ├── dependencies-check.txt    # Dependency version check

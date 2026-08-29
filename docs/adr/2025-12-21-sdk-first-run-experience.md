@@ -301,5 +301,5 @@ First Query (after):
 ## More Information
 
 - [Implementation Spec](/docs/design/2025-12-21-sdk-first-run-experience/spec.md)
-- [Global Plan](/Users/terryli/.claude/plans/bubbly-tumbling-twilight.md) (ephemeral)
+- [Global Plan](~/.claude/plans/bubbly-tumbling-twilight.md) (ephemeral)
 - [Alpha-Forge Integration Feedback](#context-and-problem-statement)
