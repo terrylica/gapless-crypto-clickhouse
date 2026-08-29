@@ -179,7 +179,7 @@ print('✅ Connected:', client.query('SELECT version()').result_rows[0][0])
 ## Service Details
 
 - **Service ID**: `<CLICKHOUSE_SERVICE_ID>`
-- **Organization**: "TE's Organization" (`<CLICKHOUSE_ORG_ID>`)
+- **Organization**: "<CLICKHOUSE_ORG_NAME>" (`<CLICKHOUSE_ORG_ID>`)
 - **Region**: us-west-2 (AWS)
 - **Idle Scaling**: Enabled (15 minutes)
 - **Expected latency**: <100ms (active), 5-10s (resuming from idle)

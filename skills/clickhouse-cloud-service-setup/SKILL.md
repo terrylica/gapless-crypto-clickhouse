@@ -34,7 +34,7 @@ Triggers: User mentions "ClickHouse Cloud service", "fetch service details", "or
 
 **Service Context**:
 - Service ID: `<CLICKHOUSE_SERVICE_ID>` (gapless-crypto-clickhouse service)
-- Organization: "TE's Organization"
+- Organization: "<CLICKHOUSE_ORG_NAME>"
 
 ## Workflow
 

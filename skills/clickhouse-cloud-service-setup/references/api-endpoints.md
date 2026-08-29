@@ -17,7 +17,7 @@ GET /organizations
 [
   {
     "id": "<CLICKHOUSE_ORG_ID>",
-    "name": "TE's Organization",
+    "name": "<CLICKHOUSE_ORG_NAME>",
     "createdAt": "2025-11-21T06:12:07Z",
     "privateEndpoints": []
   }

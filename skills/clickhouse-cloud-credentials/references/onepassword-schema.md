@@ -12,7 +12,7 @@
 | `username` | text | API Key ID | `xnIdJM3n42LDImsZ9zzg` |
 | `credential` | concealed | API Key Secret | (secured, ~40 chars) |
 | `organization_id` | text | Organization UUID | `<CLICKHOUSE_ORG_ID>` |
-| `organization_name` | text | Organization name | `TE's Organization` |
+| `organization_name` | text | Organization name | `<CLICKHOUSE_ORG_NAME>` |
 | `service_id` | text | Service UUID | `<CLICKHOUSE_SERVICE_ID>` |
 | `service_name` | text | Service name | `gapless-crypto-cli` |
 | `database_password` | password | ClickHouse database password | (secured) |
@@ -28,7 +28,7 @@ op item create --vault Engineering \
   username="<key_id>" \
   credential="<key_secret>" \
   "organization_id[text]=<org_id>" \
-  "organization_name[text]=TE's Organization" \
+  "organization_name[text]=<CLICKHOUSE_ORG_NAME>" \
   "service_id[text]=<CLICKHOUSE_SERVICE_ID>" \
   "service_name[text]=gapless-crypto-cli" \
   "database_password[password]=<db_password>" \
@@ -72,7 +72,7 @@ op item get "<OP_ITEM_TITLE>" --vault Engineering | grep -E "service_id|organiza
 #   service_id:           <CLICKHOUSE_SERVICE_ID>
 #   service_name:         gapless-crypto-cli
 #   organization_id:      <CLICKHOUSE_ORG_ID>
-#   organization_name:    TE's Organization
+#   organization_name:    <CLICKHOUSE_ORG_NAME>
 #   console_url:          https://clickhouse.cloud/
 ```
 

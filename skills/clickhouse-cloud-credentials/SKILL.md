@@ -68,7 +68,7 @@ Triggers: User mentions "store credentials", "Doppler", "1Password", "ClickHouse
 | `username` | text | API Key ID |
 | `credential` | concealed | API Key Secret |
 | `organization_id` | text | Organization UUID |
-| `organization_name` | text | "TE's Organization" |
+| `organization_name` | text | "<CLICKHOUSE_ORG_NAME>" |
 | `service_id` | text | Service UUID |
 | `service_name` | text | "gapless-crypto-cli" |
 | `database_password` | password | Database password |
@@ -114,7 +114,7 @@ op item create --vault Engineering \
   username="<key_id>" \
   credential="<key_secret>" \
   "organization_id[text]=<org_id>" \
-  "organization_name[text]=TE's Organization" \
+  "organization_name[text]=<CLICKHOUSE_ORG_NAME>" \
   "service_id[text]=<CLICKHOUSE_SERVICE_ID>" \
   "service_name[text]=gapless-crypto-cli" \
   "database_password[password]=<db_password>" \
