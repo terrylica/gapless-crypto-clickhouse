@@ -216,9 +216,9 @@ print(df.head())
 ## Service Details
 
 **ClickHouse Cloud Service**:
-- **Service ID**: `a3163f31-21f4-4e22-844e-ef3fbc26ace2`
+- **Service ID**: `<CLICKHOUSE_SERVICE_ID>`
 - **Region**: us-west-2 (AWS)
-- **Console**: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2
+- **Console**: https://clickhouse.cloud/services/<CLICKHOUSE_SERVICE_ID>
 - **Idle scaling**: 15 minutes (first query may take 10s to resume)
 - **Credentials**: Stored in Doppler (`aws-credentials/prd`) + 1Password (Engineering vault)
 

@@ -271,9 +271,9 @@ bash: doppler: command not found
 |-------------|-------------|---------------|
 | `CLICKHOUSE_CLOUD_KEY_ID` | ClickHouse Cloud API Key ID | `xnIdJM3n42LDImsZ9zzg` |
 | `CLICKHOUSE_CLOUD_KEY_SECRET` | ClickHouse Cloud API Key Secret | (secured, ~40 chars) |
-| `CLICKHOUSE_CLOUD_ORG_ID` | Organization UUID | `2404d339-6921-4f1c-bf80-b07d5e23b91a` |
-| `CLICKHOUSE_CLOUD_SERVICE_ID` | Service UUID | `a3163f31-21f4-4e22-844e-ef3fbc26ace2` |
-| `CLICKHOUSE_HOST` | Service hostname | `ebmf8f35lu.us-west-2.aws.clickhouse.cloud` |
+| `CLICKHOUSE_CLOUD_ORG_ID` | Organization UUID | `<CLICKHOUSE_ORG_ID>` |
+| `CLICKHOUSE_CLOUD_SERVICE_ID` | Service UUID | `<CLICKHOUSE_SERVICE_ID>` |
+| `CLICKHOUSE_HOST` | Service hostname | `<CLICKHOUSE_SERVICE_HOST>` |
 | `CLICKHOUSE_HTTP_PORT` | HTTPS port | `8443` |
 | `CLICKHOUSE_USER` | Database user | `default` |
 | `CLICKHOUSE_PASSWORD` | Database password | (secured, from console) |

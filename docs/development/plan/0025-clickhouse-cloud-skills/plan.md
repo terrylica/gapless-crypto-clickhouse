@@ -15,7 +15,7 @@ Extract validated ClickHouse Cloud setup workflows from production session (`/tm
 
 During ClickHouse Cloud migration (2025-11-20 22:49 PST):
 
-- Successfully provisioned ClickHouse Cloud service (service ID: `a3163f31-21f4-4e22-844e-ef3fbc26ace2`)
+- Successfully provisioned ClickHouse Cloud service (service ID: `<CLICKHOUSE_SERVICE_ID>`)
 - Stored credentials in Doppler (`aws-credentials/prd` project) + 1Password (Engineering vault)
 - Validated connection to ClickHouse Cloud (version: 25.8.1.8702)
 - Total setup time: 15 minutes, 100% success rate, $0 cost (using $300 free credits)
@@ -98,7 +98,7 @@ Workflows are **prescriptive and repeatable**—ideal for codification as skills
 3. Write `clickhouse-cloud-credentials/SKILL.md`:
    - Extract dual credential storage workflow
    - Document 8 Doppler secrets (project: `aws-credentials/prd`)
-   - Document 8 1Password fields (vault: Engineering `fnzrqcsl3pl3bcdojrxf46whnu`, item: "ClickHouse Cloud - gapless-crypto-cli")
+   - Document 8 1Password fields (vault: Engineering `<OP_VAULT_ID>`, item: "<OP_ITEM_TITLE>")
    - Credential naming convention
 
 4. Write `clickhouse-cloud-credentials/references/doppler-schema.md`:

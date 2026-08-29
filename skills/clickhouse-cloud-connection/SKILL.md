@@ -28,7 +28,7 @@ Triggers: User mentions "test connection", "connection failed", "ClickHouse unre
 ## Prerequisites
 
 **Required Environment Variables** (loaded from Doppler `aws-credentials/prd`):
-- `CLICKHOUSE_HOST`: Service hostname (e.g., `ebmf8f35lu.us-west-2.aws.clickhouse.cloud`)
+- `CLICKHOUSE_HOST`: Service hostname (e.g., `<CLICKHOUSE_SERVICE_HOST>`)
 - `CLICKHOUSE_PORT`: HTTPS port (`8443`)
 - `CLICKHOUSE_USER`: Database user (`default`)
 - `CLICKHOUSE_PASSWORD`: Database password
@@ -170,7 +170,7 @@ print('✅ Connected:', client.query('SELECT version()').result_rows[0][0])
 
 | Parameter | Value | Description |
 |-----------|-------|-------------|
-| `host` | `ebmf8f35lu.us-west-2.aws.clickhouse.cloud` | Service hostname (us-west-2) |
+| `host` | `<CLICKHOUSE_SERVICE_HOST>` | Service hostname (us-west-2) |
 | `port` | `8443` | HTTPS port (not 8123) |
 | `username` | `default` | Default database user |
 | `password` | (from Doppler) | Database password |
@@ -178,8 +178,8 @@ print('✅ Connected:', client.query('SELECT version()').result_rows[0][0])
 
 ## Service Details
 
-- **Service ID**: `a3163f31-21f4-4e22-844e-ef3fbc26ace2`
-- **Organization**: "TE's Organization" (`2404d339-6921-4f1c-bf80-b07d5e23b91a`)
+- **Service ID**: `<CLICKHOUSE_SERVICE_ID>`
+- **Organization**: "TE's Organization" (`<CLICKHOUSE_ORG_ID>`)
 - **Region**: us-west-2 (AWS)
 - **Idle Scaling**: Enabled (15 minutes)
 - **Expected latency**: <100ms (active), 5-10s (resuming from idle)
@@ -188,7 +188,7 @@ print('✅ Connected:', client.query('SELECT version()').result_rows[0][0])
 
 - **Connection Test Script**: [`references/connection-test.py`](./references/connection-test.py)
 - **clickhouse-connect Documentation**: https://clickhouse.com/docs/en/integrations/python
-- **ClickHouse Cloud Console**: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2
+- **ClickHouse Cloud Console**: https://clickhouse.cloud/services/<CLICKHOUSE_SERVICE_ID>
 - **Doppler Dashboard**: https://dashboard.doppler.com/workplace/13e9e4203ede563b1d37/projects/aws-credentials
 
 ## Next Steps

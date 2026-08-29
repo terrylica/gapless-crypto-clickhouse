@@ -41,6 +41,10 @@ def test_connection():
         "CLICKHOUSE_SECURE": os.getenv("CLICKHOUSE_SECURE", "true"),
     }
 
+    # Service/console identifiers are read from the environment, never hardcoded here.
+    service_id = os.getenv("CLICKHOUSE_CLOUD_SERVICE_ID", "<CLICKHOUSE_SERVICE_ID>")
+    console_url = f"https://clickhouse.cloud/services/{service_id}"
+
     missing = [k for k, v in required_vars.items() if not v]
     if missing or not required_vars["CLICKHOUSE_PASSWORD"]:
         print("❌ Error: Missing required environment variables")
@@ -95,9 +99,9 @@ def test_connection():
 
         print("\n🎉 All connection tests passed!")
         print("\n📋 Service Details:")
-        print("   Service ID: a3163f31-21f4-4e22-844e-ef3fbc26ace2")
+        print(f"   Service ID: {service_id}")
         print("   Region: us-west-2 (AWS)")
-        print("   Console: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2")
+        print(f"   Console: {console_url}")
 
         print("\n🚀 Next Steps:")
         print("   1. Run your first query: python examples/simple_api_examples.py")
@@ -125,9 +129,7 @@ def test_connection():
             print("     → Check CLICKHOUSE_HOST ends with '.aws.clickhouse.cloud'")
             print("     → Verify CLICKHOUSE_HTTP_PORT=8443 (not 8123)")
             print("     → Service may be resuming from idle (15min timeout), retry in 30s")
-            print(
-                "     → Verify service status: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2"
-            )
+            print(f"     → Verify service status: {console_url}")
 
         elif "ssl" in error_msg or "tls" in error_msg or "certificate" in error_msg:
             print("  ❌ SSL/TLS Error")

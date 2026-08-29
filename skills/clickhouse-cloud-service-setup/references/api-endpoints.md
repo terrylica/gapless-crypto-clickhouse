@@ -16,7 +16,7 @@ GET /organizations
 ```json
 [
   {
-    "id": "2404d339-6921-4f1c-bf80-b07d5e23b91a",
+    "id": "<CLICKHOUSE_ORG_ID>",
     "name": "TE's Organization",
     "createdAt": "2025-11-21T06:12:07Z",
     "privateEndpoints": []
@@ -34,13 +34,13 @@ GET /organizations/{org_id}/services/{service_id}
 
 **Parameters**:
 - `org_id`: Organization UUID
-- `service_id`: Service UUID (gapless-crypto-clickhouse: `a3163f31-21f4-4e22-844e-ef3fbc26ace2`)
+- `service_id`: Service UUID (gapless-crypto-clickhouse: `<CLICKHOUSE_SERVICE_ID>`)
 
 **Response Schema**:
 ```json
 {
   "result": {
-    "id": "a3163f31-21f4-4e22-844e-ef3fbc26ace2",
+    "id": "<CLICKHOUSE_SERVICE_ID>",
     "name": "My first service",
     "provider": "aws",
     "region": "us-west-2",
@@ -48,12 +48,12 @@ GET /organizations/{org_id}/services/{service_id}
     "endpoints": [
       {
         "protocol": "nativesecure",
-        "host": "ebmf8f35lu.us-west-2.aws.clickhouse.cloud",
+        "host": "<CLICKHOUSE_SERVICE_HOST>",
         "port": 9440
       },
       {
         "protocol": "https",
-        "host": "ebmf8f35lu.us-west-2.aws.clickhouse.cloud",
+        "host": "<CLICKHOUSE_SERVICE_HOST>",
         "port": 8443
       }
     ],

@@ -47,9 +47,9 @@ Triggers: User mentions "store credentials", "Doppler", "1Password", "ClickHouse
 |-------------|-------------|----------------|
 | `CLICKHOUSE_CLOUD_KEY_ID` | API Key ID | `xnIdJM3n42LDImsZ9zzg` |
 | `CLICKHOUSE_CLOUD_KEY_SECRET` | API Key Secret | (secured, ~40 chars) |
-| `CLICKHOUSE_CLOUD_ORG_ID` | Organization UUID | `2404d339-6921-4f1c-bf80-b07d5e23b91a` |
-| `CLICKHOUSE_CLOUD_SERVICE_ID` | Service UUID | `a3163f31-21f4-4e22-844e-ef3fbc26ace2` |
-| `CLICKHOUSE_HOST` | Service hostname | `ebmf8f35lu.us-west-2.aws.clickhouse.cloud` |
+| `CLICKHOUSE_CLOUD_ORG_ID` | Organization UUID | `<CLICKHOUSE_ORG_ID>` |
+| `CLICKHOUSE_CLOUD_SERVICE_ID` | Service UUID | `<CLICKHOUSE_SERVICE_ID>` |
+| `CLICKHOUSE_HOST` | Service hostname | `<CLICKHOUSE_SERVICE_HOST>` |
 | `CLICKHOUSE_PORT` | HTTPS port | `8443` |
 | `CLICKHOUSE_USER` | Database user | `default` |
 | `CLICKHOUSE_PASSWORD` | Database password | (secured, from console) |
@@ -58,8 +58,8 @@ Triggers: User mentions "store credentials", "Doppler", "1Password", "ClickHouse
 
 ### 1Password Item (Engineering Vault)
 
-**Vault**: Engineering (`fnzrqcsl3pl3bcdojrxf46whnu`)
-**Item Title**: "ClickHouse Cloud - gapless-crypto-cli"
+**Vault**: Engineering (`<OP_VAULT_ID>`)
+**Item Title**: "<OP_ITEM_TITLE>"
 
 8 required fields:
 
@@ -91,14 +91,14 @@ doppler secrets set CLICKHOUSE_CLOUD_KEY_SECRET "<key_secret>" --project aws-cre
 ```bash
 # Store IDs
 doppler secrets set CLICKHOUSE_CLOUD_ORG_ID "<org_id>" --project aws-credentials --config prd
-doppler secrets set CLICKHOUSE_CLOUD_SERVICE_ID "a3163f31-21f4-4e22-844e-ef3fbc26ace2" --project aws-credentials --config prd
+doppler secrets set CLICKHOUSE_CLOUD_SERVICE_ID "<CLICKHOUSE_SERVICE_ID>" --project aws-credentials --config prd
 ```
 
 ### Step 3: Store Connection Details in Doppler
 
 ```bash
 # Store connection parameters
-doppler secrets set CLICKHOUSE_HOST "ebmf8f35lu.us-west-2.aws.clickhouse.cloud" --project aws-credentials --config prd
+doppler secrets set CLICKHOUSE_HOST "<CLICKHOUSE_SERVICE_HOST>" --project aws-credentials --config prd
 doppler secrets set CLICKHOUSE_PORT "8443" --project aws-credentials --config prd
 doppler secrets set CLICKHOUSE_USER "default" --project aws-credentials --config prd
 doppler secrets set CLICKHOUSE_PASSWORD "<db_password>" --project aws-credentials --config prd
@@ -110,12 +110,12 @@ doppler secrets set CLICKHOUSE_PASSWORD "<db_password>" --project aws-credential
 # Create 1Password item with all fields
 op item create --vault Engineering \
   --category "API Credential" \
-  --title "ClickHouse Cloud - gapless-crypto-cli" \
+  --title "<OP_ITEM_TITLE>" \
   username="<key_id>" \
   credential="<key_secret>" \
   "organization_id[text]=<org_id>" \
   "organization_name[text]=TE's Organization" \
-  "service_id[text]=a3163f31-21f4-4e22-844e-ef3fbc26ace2" \
+  "service_id[text]=<CLICKHOUSE_SERVICE_ID>" \
   "service_name[text]=gapless-crypto-cli" \
   "database_password[password]=<db_password>" \
   "console_url[url]=https://clickhouse.cloud/"
@@ -128,7 +128,7 @@ op item create --vault Engineering \
 doppler secrets --project aws-credentials --config prd --only-names | grep CLICKHOUSE
 
 # Verify 1Password item
-op item get "ClickHouse Cloud - gapless-crypto-cli" --vault Engineering
+op item get "<OP_ITEM_TITLE>" --vault Engineering
 ```
 
 ## Success Criteria
@@ -154,7 +154,7 @@ op item get "ClickHouse Cloud - gapless-crypto-cli" --vault Engineering
 - **Verify**: `doppler projects list` shows project exists
 
 **Issue**: "1Password vault not accessible"
-- **Check**: Engineering vault ID: `fnzrqcsl3pl3bcdojrxf46whnu`
+- **Check**: Engineering vault ID: `<OP_VAULT_ID>`
 - **Verify**: `op vault list` shows Engineering vault
 
 **Issue**: "Credential format incorrect"

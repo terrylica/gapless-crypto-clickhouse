@@ -1,8 +1,8 @@
 # 1Password Item Schema for ClickHouse Cloud Credentials
 
 **Vault**: Engineering
-**Vault ID**: `fnzrqcsl3pl3bcdojrxf46whnu`
-**Item Title**: "ClickHouse Cloud - gapless-crypto-cli"
+**Vault ID**: `<OP_VAULT_ID>`
+**Item Title**: "<OP_ITEM_TITLE>"
 **Category**: API Credential
 
 ## Required Fields (8 total)
@@ -11,9 +11,9 @@
 |------------|------------|-------------|---------------|
 | `username` | text | API Key ID | `xnIdJM3n42LDImsZ9zzg` |
 | `credential` | concealed | API Key Secret | (secured, ~40 chars) |
-| `organization_id` | text | Organization UUID | `2404d339-6921-4f1c-bf80-b07d5e23b91a` |
+| `organization_id` | text | Organization UUID | `<CLICKHOUSE_ORG_ID>` |
 | `organization_name` | text | Organization name | `TE's Organization` |
-| `service_id` | text | Service UUID | `a3163f31-21f4-4e22-844e-ef3fbc26ace2` |
+| `service_id` | text | Service UUID | `<CLICKHOUSE_SERVICE_ID>` |
 | `service_name` | text | Service name | `gapless-crypto-cli` |
 | `database_password` | password | ClickHouse database password | (secured) |
 | `console_url` | url | ClickHouse Cloud console | `https://clickhouse.cloud/` |
@@ -24,12 +24,12 @@
 # Create 1Password item
 op item create --vault Engineering \
   --category "API Credential" \
-  --title "ClickHouse Cloud - gapless-crypto-cli" \
+  --title "<OP_ITEM_TITLE>" \
   username="<key_id>" \
   credential="<key_secret>" \
   "organization_id[text]=<org_id>" \
   "organization_name[text]=TE's Organization" \
-  "service_id[text]=a3163f31-21f4-4e22-844e-ef3fbc26ace2" \
+  "service_id[text]=<CLICKHOUSE_SERVICE_ID>" \
   "service_name[text]=gapless-crypto-cli" \
   "database_password[password]=<db_password>" \
   "console_url[url]=https://clickhouse.cloud/"
@@ -39,25 +39,25 @@ op item create --vault Engineering \
 
 ```bash
 # View item (non-sensitive fields)
-op item get "ClickHouse Cloud - gapless-crypto-cli" --vault Engineering
+op item get "<OP_ITEM_TITLE>" --vault Engineering
 
 # Get specific field value
-op item get "ClickHouse Cloud - gapless-crypto-cli" --vault Engineering --fields username
+op item get "<OP_ITEM_TITLE>" --vault Engineering --fields username
 
 # Reveal concealed/password fields
-op item get "ClickHouse Cloud - gapless-crypto-cli" --vault Engineering --reveal
+op item get "<OP_ITEM_TITLE>" --vault Engineering --reveal
 ```
 
 ## Update Commands
 
 ```bash
 # Update organization ID
-op item edit "ClickHouse Cloud - gapless-crypto-cli" \
+op item edit "<OP_ITEM_TITLE>" \
   "organization_id[text]=<new_org_id>" \
   --vault Engineering
 
 # Update database password
-op item edit "ClickHouse Cloud - gapless-crypto-cli" \
+op item edit "<OP_ITEM_TITLE>" \
   "database_password[password]=<new_password>" \
   --vault Engineering
 ```
@@ -66,12 +66,12 @@ op item edit "ClickHouse Cloud - gapless-crypto-cli" \
 
 ```bash
 # List fields (non-sensitive)
-op item get "ClickHouse Cloud - gapless-crypto-cli" --vault Engineering | grep -E "service_id|organization_id|console_url"
+op item get "<OP_ITEM_TITLE>" --vault Engineering | grep -E "service_id|organization_id|console_url"
 
 # Expected output includes:
-#   service_id:           a3163f31-21f4-4e22-844e-ef3fbc26ace2
+#   service_id:           <CLICKHOUSE_SERVICE_ID>
 #   service_name:         gapless-crypto-cli
-#   organization_id:      2404d339-6921-4f1c-bf80-b07d5e23b91a
+#   organization_id:      <CLICKHOUSE_ORG_ID>
 #   organization_name:    TE's Organization
 #   console_url:          https://clickhouse.cloud/
 ```

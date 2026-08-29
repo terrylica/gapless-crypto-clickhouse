@@ -20,7 +20,7 @@ OSError: [Errno 61] Connection refused
 1. **Verify hostname** ends with `.aws.clickhouse.cloud`:
    ```bash
    echo $CLICKHOUSE_HOST
-   # Expected: ebmf8f35lu.us-west-2.aws.clickhouse.cloud
+   # Expected: <CLICKHOUSE_SERVICE_HOST>
    # NOT: localhost or clickhouse.example.com
    ```
 
@@ -32,7 +32,7 @@ OSError: [Errno 61] Connection refused
    ```
 
 3. **Check service status** in ClickHouse Cloud console:
-   - Visit: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2
+   - Visit: https://clickhouse.cloud/services/<CLICKHOUSE_SERVICE_ID>
    - Status should be "Running" (green)
    - If "Paused" or "Idle", service resuming takes ~10-30 seconds
 
@@ -121,11 +121,11 @@ Access denied for user 'default'
    ```
 
 3. **Reset password in ClickHouse Cloud console**:
-   - Visit: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2
+   - Visit: https://clickhouse.cloud/services/<CLICKHOUSE_SERVICE_ID>
    - Navigate to: Settings → Reset Password
    - Copy new password immediately
    - Update Doppler: `doppler secrets set CLICKHOUSE_PASSWORD "<new_password>" --project aws-credentials --config prd`
-   - Update 1Password: Engineering vault → "ClickHouse Cloud - gapless-crypto-cli" item
+   - Update 1Password: Engineering vault → "<OP_ITEM_TITLE>" item
 
 4. **Check for trailing whitespace**:
    ```bash
@@ -164,11 +164,11 @@ Connection timeout after 10 seconds
 2. **Verify network connectivity**:
    ```bash
    # Test DNS resolution
-   nslookup ebmf8f35lu.us-west-2.aws.clickhouse.cloud
+   nslookup <CLICKHOUSE_SERVICE_HOST>
    # Expected: IP address returned
 
    # Test HTTPS connectivity
-   curl -I https://ebmf8f35lu.us-west-2.aws.clickhouse.cloud:8443
+   curl -I https://<CLICKHOUSE_SERVICE_HOST>:8443
    # Expected: HTTP response (even if 400/401)
    ```
 
@@ -369,7 +369,7 @@ ClickHouseConfig(host='localhost', port=9000, ..., secure=False)
    ```
 
 3. **Check ClickHouse Cloud console**:
-   - Service status: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2
+   - Service status: https://clickhouse.cloud/services/<CLICKHOUSE_SERVICE_ID>
    - Verify service is "Running" (green)
    - Check idle timeout settings (15 minutes default)
 

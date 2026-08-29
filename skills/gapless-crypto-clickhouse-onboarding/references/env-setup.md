@@ -37,7 +37,7 @@ Open `.env` in your editor and fill in the required credentials:
 
 ```bash
 # Required fields (MUST be filled in)
-CLICKHOUSE_HOST=ebmf8f35lu.us-west-2.aws.clickhouse.cloud
+CLICKHOUSE_HOST=<CLICKHOUSE_SERVICE_HOST>
 CLICKHOUSE_HTTP_PORT=8443
 CLICKHOUSE_DATABASE=default
 CLICKHOUSE_USER=default
@@ -47,8 +47,8 @@ CLICKHOUSE_SECURE=true
 # Optional fields (for advanced use cases)
 CLICKHOUSE_CLOUD_KEY_ID=<API_KEY_ID>
 CLICKHOUSE_CLOUD_KEY_SECRET=<API_KEY_SECRET>
-CLICKHOUSE_CLOUD_ORG_ID=2404d339-6921-4f1c-bf80-b07d5e23b91a
-CLICKHOUSE_CLOUD_SERVICE_ID=a3163f31-21f4-4e22-844e-ef3fbc26ace2
+CLICKHOUSE_CLOUD_ORG_ID=<CLICKHOUSE_ORG_ID>
+CLICKHOUSE_CLOUD_SERVICE_ID=<CLICKHOUSE_SERVICE_ID>
 ```
 
 **Where to get password**:
@@ -59,7 +59,7 @@ doppler secrets get CLICKHOUSE_PASSWORD --project aws-credentials --config prd -
 ```
 
 **Option B: From ClickHouse Cloud console**:
-1. Visit: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2
+1. Visit: https://clickhouse.cloud/services/<CLICKHOUSE_SERVICE_ID>
 2. Navigate to: Settings → Reset Password
 3. Copy new password
 4. Paste into `.env` file
@@ -70,12 +70,12 @@ doppler secrets get CLICKHOUSE_PASSWORD --project aws-credentials --config prd -
 
 ❌ **Wrong**: Spaces around `=`
 ```bash
-CLICKHOUSE_HOST = ebmf8f35lu.us-west-2.aws.clickhouse.cloud
+CLICKHOUSE_HOST = <CLICKHOUSE_SERVICE_HOST>
 ```
 
 ✅ **Correct**: No spaces
 ```bash
-CLICKHOUSE_HOST=ebmf8f35lu.us-west-2.aws.clickhouse.cloud
+CLICKHOUSE_HOST=<CLICKHOUSE_SERVICE_HOST>
 ```
 
 ❌ **Wrong**: Quotes (usually not needed)

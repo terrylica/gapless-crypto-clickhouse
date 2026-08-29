@@ -106,7 +106,7 @@ ORDER BY event_time DESC;
 
 -- Results:
 -- github_release   | passed | 226ms  | {"tag_name": "v12.0.1", "published_at": "2025-11-25T01:13:21Z"}
--- production_health | passed | 1110ms | {"host": "ebmf8f35lu...clickhouse.cloud", "ohlcv_row_count": "0"}
+-- production_health | passed | 1110ms | {"host": "<CLICKHOUSE_SERVICE_HOST>", "ohlcv_row_count": "0"}
 -- pypi_version      | failed | 23ms   | {"expected_version": "12.0.1", "actual_version": "8.0.0"}
 ```text
 

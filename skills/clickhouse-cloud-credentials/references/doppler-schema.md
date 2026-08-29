@@ -19,8 +19,8 @@
 
 | Secret Name | Description | Format | Example |
 |-------------|-------------|--------|---------|
-| `CLICKHOUSE_CLOUD_ORG_ID` | Organization UUID | UUID (8-4-4-4-12) | `2404d339-6921-4f1c-bf80-b07d5e23b91a` |
-| `CLICKHOUSE_CLOUD_SERVICE_ID` | Service UUID (gapless-crypto-clickhouse) | UUID (8-4-4-4-12) | `a3163f31-21f4-4e22-844e-ef3fbc26ace2` |
+| `CLICKHOUSE_CLOUD_ORG_ID` | Organization UUID | UUID (8-4-4-4-12) | `<CLICKHOUSE_ORG_ID>` |
+| `CLICKHOUSE_CLOUD_SERVICE_ID` | Service UUID (gapless-crypto-clickhouse) | UUID (8-4-4-4-12) | `<CLICKHOUSE_SERVICE_ID>` |
 
 **Source**: ClickHouse Cloud API (`GET /organizations`, service dashboard)
 **Usage**: API endpoints for service management
@@ -29,7 +29,7 @@
 
 | Secret Name | Description | Format | Example |
 |-------------|-------------|--------|---------|
-| `CLICKHOUSE_HOST` | Service hostname | FQDN | `ebmf8f35lu.us-west-2.aws.clickhouse.cloud` |
+| `CLICKHOUSE_HOST` | Service hostname | FQDN | `<CLICKHOUSE_SERVICE_HOST>` |
 | `CLICKHOUSE_PORT` | HTTPS port | Integer | `8443` |
 | `CLICKHOUSE_USER` | Database username | String | `default` |
 | `CLICKHOUSE_PASSWORD` | Database password | Alphanumeric | (secured in Doppler) |
@@ -46,10 +46,10 @@ doppler secrets set CLICKHOUSE_CLOUD_KEY_SECRET "<key_secret>" --project aws-cre
 
 # Service Metadata
 doppler secrets set CLICKHOUSE_CLOUD_ORG_ID "<org_id>" --project aws-credentials --config prd
-doppler secrets set CLICKHOUSE_CLOUD_SERVICE_ID "a3163f31-21f4-4e22-844e-ef3fbc26ace2" --project aws-credentials --config prd
+doppler secrets set CLICKHOUSE_CLOUD_SERVICE_ID "<CLICKHOUSE_SERVICE_ID>" --project aws-credentials --config prd
 
 # Connection Parameters
-doppler secrets set CLICKHOUSE_HOST "ebmf8f35lu.us-west-2.aws.clickhouse.cloud" --project aws-credentials --config prd
+doppler secrets set CLICKHOUSE_HOST "<CLICKHOUSE_SERVICE_HOST>" --project aws-credentials --config prd
 doppler secrets set CLICKHOUSE_PORT "8443" --project aws-credentials --config prd
 doppler secrets set CLICKHOUSE_USER "default" --project aws-credentials --config prd
 doppler secrets set CLICKHOUSE_PASSWORD "<db_password>" --project aws-credentials --config prd

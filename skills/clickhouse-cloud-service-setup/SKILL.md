@@ -33,7 +33,7 @@ Triggers: User mentions "ClickHouse Cloud service", "fetch service details", "or
 - `CLICKHOUSE_CLOUD_KEY_SECRET`: API Key Secret (secured in Doppler)
 
 **Service Context**:
-- Service ID: `a3163f31-21f4-4e22-844e-ef3fbc26ace2` (gapless-crypto-clickhouse service)
+- Service ID: `<CLICKHOUSE_SERVICE_ID>` (gapless-crypto-clickhouse service)
 - Organization: "TE's Organization"
 
 ## Workflow
@@ -55,7 +55,7 @@ KEY_SECRET=$(doppler secrets get CLICKHOUSE_CLOUD_KEY_SECRET --project aws-crede
 curl -s -u "$KEY_ID:$KEY_SECRET" https://api.clickhouse.cloud/v1/organizations | jq -r '.[0].id'
 ```
 
-**Expected Output**: UUID format (e.g., `2404d339-6921-4f1c-bf80-b07d5e23b91a`)
+**Expected Output**: UUID format (e.g., `<CLICKHOUSE_ORG_ID>`)
 
 **Store in Doppler**:
 ```bash
@@ -66,7 +66,7 @@ doppler secrets set CLICKHOUSE_CLOUD_ORG_ID "<org_id>" --project aws-credentials
 
 ```bash
 # Get service metadata
-SERVICE_ID="a3163f31-21f4-4e22-844e-ef3fbc26ace2"  # gapless-crypto-clickhouse service
+SERVICE_ID="<CLICKHOUSE_SERVICE_ID>"  # gapless-crypto-clickhouse service
 ORG_ID=$(doppler secrets get CLICKHOUSE_CLOUD_ORG_ID --project aws-credentials --config prd --plain)
 
 curl -s -u "$KEY_ID:$KEY_SECRET" \
@@ -80,16 +80,16 @@ curl -s -u "$KEY_ID:$KEY_SECRET" \
 From API response, extract:
 
 **HTTPS Endpoint** (recommended for clickhouse-connect):
-- Host: `ebmf8f35lu.us-west-2.aws.clickhouse.cloud`
+- Host: `<CLICKHOUSE_SERVICE_HOST>`
 - Port: `8443`
 
 **Native Protocol Endpoint** (for clickhouse-client):
-- Host: `ebmf8f35lu.us-west-2.aws.clickhouse.cloud`
+- Host: `<CLICKHOUSE_SERVICE_HOST>`
 - Port: `9440`
 
 **Store in Doppler**:
 ```bash
-doppler secrets set CLICKHOUSE_HOST "ebmf8f35lu.us-west-2.aws.clickhouse.cloud" --project aws-credentials --config prd
+doppler secrets set CLICKHOUSE_HOST "<CLICKHOUSE_SERVICE_HOST>" --project aws-credentials --config prd
 doppler secrets set CLICKHOUSE_PORT "8443" --project aws-credentials --config prd
 doppler secrets set CLICKHOUSE_USER "default" --project aws-credentials --config prd
 ```
@@ -121,18 +121,18 @@ doppler secrets set CLICKHOUSE_USER "default" --project aws-credentials --config
 
 **Issue**: "Service not found"
 - **Check**: Verify service ID matches gapless-crypto-clickhouse service
-- **Expected**: `a3163f31-21f4-4e22-844e-ef3fbc26ace2`
+- **Expected**: `<CLICKHOUSE_SERVICE_ID>`
 
 **Issue**: "Service state is not running"
-- **Action**: Check ClickHouse Cloud console (https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2)
+- **Action**: Check ClickHouse Cloud console (https://clickhouse.cloud/services/<CLICKHOUSE_SERVICE_ID>)
 - **Possible causes**: Service paused (idle scaling), payment issue, manual stop
 
 ## References
 
 - **API Documentation**: [`references/api-endpoints.md`](./references/api-endpoints.md)
 - **ClickHouse Cloud Console**: https://clickhouse.cloud/
-- **Organization Settings**: https://clickhouse.cloud/organizations/2404d339-6921-4f1c-bf80-b07d5e23b91a
-- **Service Dashboard**: https://clickhouse.cloud/services/a3163f31-21f4-4e22-844e-ef3fbc26ace2
+- **Organization Settings**: https://clickhouse.cloud/organizations/<CLICKHOUSE_ORG_ID>
+- **Service Dashboard**: https://clickhouse.cloud/services/<CLICKHOUSE_SERVICE_ID>
 
 ## Next Steps
 
