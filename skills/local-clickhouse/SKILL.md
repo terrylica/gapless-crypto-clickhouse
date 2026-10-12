@@ -1,6 +1,6 @@
 ---
 name: local-clickhouse
-description: Install, configure, and validate local ClickHouse for gapless-crypto-clickhouse development and backtesting. Use when setting up local development environment, enabling offline mode, improving query performance for backtesting, or running E2E validation. Includes mise/Homebrew/apt installation, mode detection, connection validation, and E2E workflow scripts.
+description: Install, configure, and validate local ClickHouse for gapless-crypto-clickhouse development and backtesting. Use when setting up local development environment, enabling offline mode, improving query performance for backtesting, or running E2E validation. Includes Homebrew/apt installation, mode detection, connection validation, and E2E workflow scripts.
 ---
 
 # Local ClickHouse
@@ -297,7 +297,7 @@ This skill includes executable scripts for end-to-end validation of local ClickH
 
 | Script                          | Purpose                                          |
 | ------------------------------- | ------------------------------------------------ |
-| `scripts/start-clickhouse.sh`   | Start mise-installed ClickHouse server           |
+| `scripts/start-clickhouse.sh`   | Start the ClickHouse server found on PATH        |
 | `scripts/deploy-schema.sh`      | Deploy production schema (calls existing script) |
 | `scripts/ingest-sample-data.py` | Ingest real Binance data via `query_ohlcv()`     |
 | `scripts/take-screenshot.py`    | Capture Play UI screenshot via Playwright        |
@@ -327,7 +327,7 @@ uv run python skills/local-clickhouse/scripts/validate-data.py
 **Via pytest (automated)**:
 
 ```bash
-# Run E2E tests (requires mise ClickHouse installed)
+# Run E2E tests (requires a clickhouse binary on PATH)
 uv run pytest tests/test_local_clickhouse_e2e.py -v
 
 # Tests will FAIL (not skip) if ClickHouse not available

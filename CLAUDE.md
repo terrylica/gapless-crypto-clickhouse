@@ -105,35 +105,26 @@ Gapless Crypto ClickHouse is a ClickHouse-based cryptocurrency data collection t
 
 🔴 **Binary discovery is PATH-first and toolchain-agnostic — do not re-pin it to a toolchain manager's shim path.** It was hardcoded to `~/.local/share/mise/shims/clickhouse`; when mise was retired machine-wide, all 12 tests in `tests/test_local_clickhouse_e2e.py` hard-ERRORed even though ClickHouse was installed at `/opt/homebrew/bin/clickhouse` the whole time, and the error told the reader to run `mise install clickhouse` — a command that cannot work here. Fail-hard is what surfaced it; the bug was the hardcoded path, not the policy. Resolution now lives in `conftest._clickhouse_binary()` and the matching block in `skills/local-clickhouse/scripts/start-clickhouse.sh`.
 
-### mise Toolchain (ADR-0051)
+### Toolchain (proto + moon)
 
-**Unified Development Environment** - Single `mise install` command sets up complete toolchain
-
-**Quick Start**:
+proto pins the tools (`.prototools`: `uv`, and `node` for semantic-release); uv owns Python (`.python-version`). ClickHouse is the `clickhouse` binary on PATH (Homebrew on macOS), never a pinned toolchain-manager shim. moon runs the quality gate:
 
 ```bash
-# Install all tools (Python, uv, ClickHouse, Node.js)
-mise install
-
-# Start local development environment
-mise run dev  # Starts ClickHouse + deploys schema
-
-# Run validation
-mise run validate-local
+moon run repo:check              # lint (ruff) + typecheck (mypy) + unit tests
+moon run repo:test-integration   # pytest -m integration with GCCH_MODE=local; conftest starts ClickHouse if needed
 ```
 
-**Key Tasks**:
+**Local ClickHouse workflow** (scripts in `skills/local-clickhouse/scripts/`):
 
-| Task                           | Description                           |
-| ------------------------------ | ------------------------------------- |
-| `mise run ch-start`            | Start local ClickHouse server         |
-| `mise run ch-stop`             | Stop local ClickHouse server          |
-| `mise run ch-status`           | Check ClickHouse server status        |
-| `mise run local-init`          | Deploy schema to local ClickHouse     |
-| `mise run seed-local`          | Seed with sample BTCUSDT data         |
-| `mise run validate-local`      | Full local validation                 |
-| `mise run validate-cloud`      | Full cloud validation                 |
-| `mise run validate-production` | Doppler-wrapped production validation |
+```bash
+./skills/local-clickhouse/scripts/start-clickhouse.sh          # start the server (data in ~/.local/share/gapless-crypto-clickhouse/server)
+./skills/local-clickhouse/scripts/deploy-schema.sh             # deploy schema.sql to the local server
+uv run python skills/local-clickhouse/scripts/ingest-sample-data.py   # seed sample BTCUSDT data
+uv run python skills/local-clickhouse/scripts/validate-data.py        # validate data integrity
+curl -s http://localhost:8123/ping                             # server status
+```
+
+**Shared port**: `exness-data-preprocess` runs its own local ClickHouse server on the same `localhost:8123` with a different data directory. Only one of the two can be up at a time, and tests here will talk to whichever server holds the port.
 
 **Dual-Mode Support** (GCCH_MODE environment variable):
 
@@ -143,13 +134,11 @@ mise run validate-local
 
 **Credential Strategy**:
 
-| Context    | Method                                           |
-| ---------- | ------------------------------------------------ |
-| Local dev  | `_.file = '.env'` auto-loads credentials         |
-| Cloud      | Environment variables (CLICKHOUSE_HOST, etc.)    |
-| Production | `mise run validate-production` (Doppler wrapper) |
-
-**Reference**: [ADR-0051](/docs/architecture/decisions/0051-mise-toolchain-implementation.md) - mise toolchain implementation
+| Context    | Method                                                                                 |
+| ---------- | -------------------------------------------------------------------------------------- |
+| Local dev  | Defaults (localhost:8123, no password); `.env.example` lists the variables             |
+| Cloud      | Environment variables (CLICKHOUSE_HOST, etc.); template in `.env.cloud.example`        |
+| Production | With cloud credentials in the environment: `uv run python scripts/validate_production_health.py --release-version <tag> --output <file>.json` |
 
 ### ClickHouse Schema Architecture
 

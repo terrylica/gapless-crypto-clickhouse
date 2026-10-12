@@ -53,7 +53,7 @@ Both packages share the same performance optimization via Binance public reposit
 ```bash
 # Local ClickHouse
 clickhouse client -q "DROP TABLE IF EXISTS default.ohlcv"
-mise run local-init
+./skills/local-clickhouse/scripts/deploy-schema.sh
 
 # Cloud ClickHouse (via Doppler)
 doppler run --project aws-credentials --config prd -- \

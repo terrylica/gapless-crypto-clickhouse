@@ -1,0 +1,5 @@
+# proto — repo-local toolchain versions.
+# uv owns Python: the interpreter version is .python-version. node is here for semantic-release
+# (`npm run release`). ClickHouse comes from the system PATH (e.g. Homebrew), not from proto.
+uv = "latest"
+node = "lts"

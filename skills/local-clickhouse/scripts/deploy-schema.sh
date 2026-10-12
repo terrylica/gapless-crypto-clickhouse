@@ -8,7 +8,6 @@ set -euo pipefail
 # Semantic constants (ADR-0045)
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 DEPLOY_SCRIPT="${REPO_ROOT}/scripts/deploy-clickhouse-schema.py"
-MISE_UV_SHIM="${HOME}/.local/share/mise/shims/uv"
 
 # Verify deploy script exists (no duplication - use existing)
 if [[ ! -f "${DEPLOY_SCRIPT}" ]]; then
@@ -25,11 +24,8 @@ echo "Deploying schema to local ClickHouse..."
 echo "Mode: ${GCCH_MODE}"
 echo "Host: ${CLICKHOUSE_HOST}:${CLICKHOUSE_HTTP_PORT}"
 
-# Run deployment script
-if [[ -x "${MISE_UV_SHIM}" ]]; then
-    "${MISE_UV_SHIM}" run python "${DEPLOY_SCRIPT}"
-else
-    python "${DEPLOY_SCRIPT}"
-fi
+# Run deployment script in the project environment (uv resolves .venv from the repo root)
+cd "${REPO_ROOT}"
+uv run python "${DEPLOY_SCRIPT}"
 
 echo "Schema deployment completed"

@@ -8,7 +8,7 @@ Data Sources (ADR-0038: Real Binance Data Validation):
 - Futures UM: https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/
 
 Run Commands:
-    # Run E2E tests (mise ClickHouse auto-starts if installed)
+    # Run E2E tests (ClickHouse auto-starts if the binary is on PATH)
     uv run pytest tests/test_local_clickhouse_e2e.py -v
 
     # Tests will FAIL (not skip) if ClickHouse not available

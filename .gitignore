@@ -95,3 +95,7 @@ tests/screenshots/
 
 # Linting tool output
 .lint-relative-paths-results.txt
+
+# moon (task runner) local cache
+.moon/cache/
+.moon/docker/

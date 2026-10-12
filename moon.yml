@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://moonrepo.dev/schemas/project.json
+# gapless-crypto-clickhouse — repo tasks.
+#
+#   moon run repo:check              offline gate: lint + typecheck + unit tests
+#   moon run repo:test-integration   integration tests against a local ClickHouse
+#                                    (tests/conftest.py starts the server if it is not running)
+layer: 'library'
+language: 'python'
+
+tasks:
+  lint:
+    script: 'uv run ruff check src/'
+    inputs: ['src/**/*', 'pyproject.toml']
+  typecheck:
+    script: 'uv run mypy src/'
+    inputs: ['src/**/*', 'pyproject.toml', 'uv.lock']
+  test-unit:
+    script: "uv run pytest tests/ -m 'not slow and not e2e and not integration'"
+    inputs: ['src/**/*', 'tests/**/*', 'pytest.ini', 'pyproject.toml', 'uv.lock']
+  test-integration:
+    script: 'uv run pytest tests/ -m integration'
+    env:
+      GCCH_MODE: 'local'
+    options: { cache: false }
+  check:
+    deps: ['~:lint', '~:typecheck', '~:test-unit']
+    script: "echo 'repo:check passed'"
+    options: { cache: false }
